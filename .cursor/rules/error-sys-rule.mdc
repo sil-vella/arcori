@@ -1,0 +1,76 @@
+---
+description: Always use the shared error envelope, AppError/ApiError, and error_policy — never ad-hoc error strings or bare try/catch at boundaries.
+alwaysApply: true
+---
+
+# Error system (HTTP, WebSocket, Flutter)
+
+Full reference: [ERROR_SYSTEM.md](Documentation/03_Base/ERROR_SYSTEM.md).
+
+## Agent policy
+
+When implementing or modifying handlers, API clients, state notifiers, or WS code:
+
+- **Use the shared envelope** — `{ "ok": false, "error": { "code", "message" } }` on HTTP and WS. Success: `{ "ok": true, "data": { ... } }`.
+- **Never throw raw strings** or invent one-off error codes at call sites.
+- **Never swallow errors** in empty `catch` blocks. Catch only to map to the system (see below) or to add context before rethrow.
+- **Branch on `error.code`**, not HTTP status alone (WS has no status).
+- **Do not bypass** `AppError` / `ApiError` / `error_policy` with hardcoded user messages like `'Something failed'` unless mapping through the policy helpers below.
+
+## Server (Python FastAPI / Dart Shelf)
+
+| Do | Don't |
+|----|-------|
+| `raise AppError(MODULE_SPEC)` or `raise AppError(CORE_SPEC)` | `raise HTTPException(...)`, `return {"error": "..."}`, bare `Exception` |
+| Declare module codes in `{module}_errors.py` / `.dart`, register in `module_registry` | Reuse core code strings in modules |
+| Let boundary middleware handle uncaught `AppError` | Manual JSON error bodies in every handler |
+
+Module code shape: `{module}/{reason}` (e.g. `auth/invalid_credentials`).
+
+```python
+# ✅
+raise AppError(INVALID_CREDENTIALS)
+
+# ❌
+raise HTTPException(status_code=401, detail="bad password")
+```
+
+## Flutter client
+
+| File | Role |
+|------|------|
+| `lib/core/errors/api_error.dart` | Parse wire envelope → `ApiError` |
+| `lib/core/errors/error_policy.dart` | `actionFor` / `actionForApiError` → retry, re-login, show message, reconnect WS |
+| `lib/core/errors/auth_error_messages.dart` | Auth UI text from `ApiError` + policy (extend pattern for other features) |
+
+**HTTP clients:** parse `{ok: false}` into `ApiError`; return structured outcomes (e.g. `AuthApiOutcome<T>` with `networkFailure()`), not bare `null`.
+
+**State / UI:** map failures with `actionForApiError` (or feature helper like `userMessageForAuthFailure`); set `errorMessage` or SnackBar from policy — do not invent parallel error UX.
+
+**WebSocket:** handle `ApiError` frames in `ws_client.dart`; reconnect/backoff via `ws_connection_manager.dart` + `ErrorAction.reconnectWs`.
+
+```dart
+// ✅
+final outcome = await _api.login(...);
+if (!outcome.isSuccess) {
+  errorMessage = userMessageForAuthFailure(
+    apiError: outcome.error,
+    isNetworkError: outcome.isNetworkError,
+  );
+}
+
+// ❌
+if (result == null) errorMessage = 'Login failed';
+```
+
+## Try/catch rules
+
+- **Handlers / dispatchers:** catch `AppError` → emit envelope; uncaught → `internal_error` at boundary.
+- **Flutter API calls:** catch network exceptions (`SocketException`, `ClientException`, `TimeoutException`) → `AuthApiOutcome.networkFailure()` or equivalent; do not fall through to unrelated recovery (e.g. do not auto-create guest on login failure).
+- **Logging:** follow [logging-rule.mdc](logging-rule.mdc). Log `code=` and context; never log tokens or secrets.
+
+## Before finishing a change
+
+- New feature errors registered in module error catalog?
+- Client parses envelope and uses `error_policy`?
+- Tests cover wire parse + policy where behavior is non-obvious?

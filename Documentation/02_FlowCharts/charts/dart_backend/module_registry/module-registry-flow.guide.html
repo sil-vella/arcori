@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module Registry Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html" class="active">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="module-registry-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../../index.html">All charts</a>
+  </p>
+  <h1>Module Registry Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows <strong>module_registry.dart</strong> — the single place where feature modules plug into the Dart backend.</p>
+<h2>Why one registry file?</h2>
+<p>Instead of scattering imports across <code>app.dart</code>, you add new features in one composition root:</p>
+<ul><li>Easier code review (“what routes exist?”)</li><li>Same pattern for HTTP today and WebSocket / jobs later</li></ul>
+<h2>What runs today</h2>
+<p><code>registerApplicationRoutes()</code> in <code>bin/modules/module_registry.dart</code>:</p>
+<ol><li><code>requireSecretsForProduction()</code> — fail closed if prod secrets are missing</li><li><code>registerUserRoutes</code> — public <code>/</code>, <code>/health</code>, authuser profile</li><li><code>registerServiceRoutes</code> — service-tier health</li><li><code>registerAuthRoutes</code> — dev-login, refresh, validate</li></ol>
+<h2>Add a new HTTP module (copy-paste pattern)</h2>
+<p><strong>1. Create</strong> <code>bin/modules/widgets/widget_app.dart</code>:</p>
+<pre><code class="language-dart">void registerWidgetRoutes(
+  ApplicationRouteSink routes,
+  HttpResponseContract res,
+) {
+  routes.publicGet(
+    &#x27;/widgets/list&#x27;,
+    (Request request) async =&gt; res.jsonOk({&#x27;widgets&#x27;: []}),
+  );
+}</code></pre>
+<p><strong>2. Wire it</strong> in <code>module_registry.dart</code>:</p>
+<pre><code class="language-dart">import &#x27;widgets/widget_app.dart&#x27;;
+
+void registerApplicationRoutes() {
+  requireSecretsForProduction();
+  registerUserRoutes(applicationRoutes, httpResponses);
+  registerServiceRoutes(applicationRoutes, httpResponses);
+  registerAuthRoutes(applicationRoutes, httpResponses);
+  registerWidgetRoutes(applicationRoutes, httpResponses); // add this
+}</code></pre>
+<p><strong>3. Test:</strong></p>
+<pre><code class="language-bash">dart run bin/app.dart
+curl -s http://127.0.0.1:8080/widgets/list | jq .</code></pre>
+<h2>WebSocket (implemented)</h2>
+<p><code>registerApplicationWsChannels()</code> wires <code>modules/ws/</code> demo channels. HTTP and WS share <code>core/auth</code> only — no game logic yet.</p>
+<p>See <a href="../../../03_Base/WS_SYSTEM.md">WS_SYSTEM.md</a>.</p>
+<h2>FastAPI parity</h2>
+<p>Python uses the same idea: <code>bin/modules/module_registry.py</code> calls each <code>register_*_routes</code> function. Keep Dart and FastAPI route names aligned when both expose the same API.</p>
+  </div>
+</main>
+</body>
+</html>

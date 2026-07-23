@@ -1,0 +1,48 @@
+flowchart TD
+  T["Arcori production runtime<br/>python_base_05 · Base / Docker"]
+
+  subgraph clients["Clients"]
+    W["Chat widget / browser"]
+    D["Internal service tier<br/>optional"]
+  end
+
+  subgraph edge["Edge"]
+    C["Caddy :443 SSL"]
+  end
+
+  subgraph api["FastAPI container :8000"]
+    G["Gunicorn UvicornWorker"]
+    A["asgi:app → createHttpHandler()"]
+    H["configure_production<br/>slow_request · 500 handler"]
+    R["Route tiers: public · /authuser · /service"]
+    G --> A --> H --> R
+  end
+
+  subgraph health["Health & observability"]
+    P["GET /health — public<br/>Docker HEALTHCHECK · DB ping"]
+    S["GET /service/health — service key"]
+    L["stdout access log duration_us=%(D)s"]
+    SL["slow_request WARNING ≥ SLOW_REQUEST_THRESHOLD_MS"]
+    G --> L
+    A --> SL
+  end
+
+  subgraph cache["Read cache optional"]
+    RC["read_cache.get_or_load NoOp by default"]
+    EX["GET /example/cached"]
+    EX --> RC
+  end
+
+  subgraph data["Data plane"]
+    PG["PostgreSQL"]
+    AD["Adminer dev only"]
+  end
+
+  W --> C
+  C -->|"REST"| G
+  D -->|"internal /service/*"| G
+  R --> EX
+  R --> PG
+  AD -.-> PG
+  P -.-> C
+  S -.-> D

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ws System Flow — FlowCharts</title>
+  <link rel="stylesheet" href="../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../charts/base/ws-system-flow.html" class="active">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main">
+  <h1>Ws System Flow</h1>
+  <p class="chart-guide-link"><a href="ws-system-flow.guide.html">Plain English guide &amp; examples →</a></p>
+  <div class="mermaid">flowchart TD
+  T[&quot;arcori WebSocket system&quot;]
+
+  subgraph flutter[&quot;Flutter — core/ws client only&quot;]
+    MGR[&quot;WsConnectionManager&lt;br/&gt;drop reconnect + onWsReconnect&quot;]
+    RTR[&quot;WsChannelRouter&lt;br/&gt;Ref-backed handlers&quot;]
+    MGR --&gt; RTR
+  end
+
+  subgraph tiers[&quot;Tier endpoints&quot;]
+    P[&quot;/ws/public&quot;]
+    A[&quot;/ws/authuser&quot;]
+    S[&quot;/ws/service&quot;]
+  end
+
+  subgraph auth[&quot;core/auth reuse&quot;]
+    JWT[&quot;verify_access JWT&quot;]
+    SK[&quot;SERVICE_KEY compare&quot;]
+  end
+
+  subgraph channels[&quot;modules/ws demo channels&quot;]
+    SYS[&quot;system ping/pong&quot;]
+    ECHO[&quot;demo/echo&quot;]
+    ROOM[&quot;demo/room subscribe/broadcast&quot;]
+  end
+
+  subgraph backends[&quot;Backends — accept new sockets&quot;]
+    API[&quot;FastAPI Uvicorn WS&quot;]
+    DART[&quot;Dart shelf_web_socket&quot;]
+  end
+
+  MGR --&gt; P
+  MGR --&gt; A
+  MGR --&gt; API
+  MGR --&gt; DART
+  A --&gt; JWT
+  S --&gt; SK
+  P --&gt; SYS
+  A --&gt; SYS
+  A --&gt; ECHO
+  A --&gt; ROOM
+  SYS --&gt; API
+  SYS --&gt; DART
+  ROOM --&gt; API
+  ROOM --&gt; DART
+  RTR -.-&gt;|&quot;demo/* example/*&quot;| MOD[&quot;module notifiers&quot;]</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, securityLevel: "loose" });
+</script>
+</body>
+</html>

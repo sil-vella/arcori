@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>State Module Registration Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/flutter/state/state-module-registration-flow.html" class="active">State Module Registration Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="state-module-registration-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../../index.html">All charts</a>
+  </p>
+  <h1>State Module Registration Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows how to <strong>add a new feature module&#x27;s state</strong> the same way you add routes and drawer rows.</p>
+<h2>Pattern (mirror routes)</h2>
+<table><thead><tr><th>Concern</th><th>File</th><th>Register function</th></tr></thead><tbody><tr><td>Routes</td><td><code>my_feature_routes.dart</code></td><td><code>registerMyFeatureRoutes(routes)</code></td></tr><tr><td>Drawer</td><td><code>my_feature_drawer.dart</code></td><td><code>registerMyFeatureDrawer(drawer)</code></td></tr><tr><td>State / WS</td><td><code>register_my_feature_state.dart</code></td><td><code>registerMyFeatureState(state)</code></td></tr><tr><td>Screen</td><td><code>my_feature_screen.dart</code></td><td><code>ConsumerWidget</code> + providers</td></tr></tbody></table>
+<h2>Step-by-step: add <code>inventory</code> module state</h2>
+<p><strong>1. Create notifier</strong> <code>modules/inventory/state/inventory_notifier.dart</code>:</p>
+<pre><code class="language-dart">class InventoryState {
+  const InventoryState({this.items = const []});
+  final List&lt;String&gt; items;
+}
+
+class InventoryNotifier extends Notifier&lt;InventoryState&gt; {
+  @override
+  InventoryState build() =&gt; const InventoryState();
+
+  void applyWsPatch(String connectionId, Map&lt;String, dynamic&gt; data) {
+    // parse payload, update state
+  }
+}
+
+final inventoryProvider =
+    NotifierProvider&lt;InventoryNotifier, InventoryState&gt;(InventoryNotifier.new);</code></pre>
+<p>Use <code>NotifierProvider.autoDispose</code> if state should die when leaving the route. Add a replay notifier if WS can arrive before the screen mounts.</p>
+<p><strong>2. WS handler</strong> <code>register_inventory_state.dart</code>:</p>
+<pre><code class="language-dart">void registerInventoryState(AppStateSink state) {
+  state.onWsReady((registrar, ref) {
+    registrar.onPrefix(&#x27;inventory&#x27;, (connectionId, data) {
+      ref.read(inventoryProvider.notifier).applyWsPatch(connectionId, data);
+    });
+  });
+}</code></pre>
+<p>No static bridges — <code>Ref</code> is passed when the router is built at WS manager start.</p>
+<p><strong>Optional — reconnect hook</strong> (Flutter only; server forgets room membership on disconnect):</p>
+<pre><code class="language-dart">void registerInventoryState(AppStateSink state) {
+  state.onWsReady((registrar, ref) { /* … */ });
+
+  state.onWsReconnect((connectionId, ref, send) async {
+    final rooms = ref.read(inventorySubscriptionsProvider)[connectionId];
+    if (rooms == null) return;
+    for (final roomId in rooms) {
+      await send(type: &#x27;subscribe&#x27;, channel: &#x27;demo/room&#x27;, payload: {&#x27;room_id&#x27;: roomId});
+    }
+  });
+}</code></pre>
+<p>See <a href="state-ws-reconnect-flow.html">state-ws-reconnect-flow</a>.</p>
+<p><strong>3. Wire</strong> <code>module_registry.dart</code>:</p>
+<pre><code class="language-dart">registerInventoryState(state);
+registerInventoryRoutes(routes);
+registerInventoryDrawer(drawer);</code></pre>
+<p><strong>4. Screen</strong>:</p>
+<pre><code class="language-dart">class InventoryScreen extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final items = ref.watch(inventoryProvider.select((s) =&gt; s.items));
+    return ListView(children: items.map(Text.new).toList());
+  }
+}</code></pre>
+<h2>Realtime feature checklist (short)</h2>
+<p>See <a href="../../../../03_Base/Flutter/STATE_SYSTEM.md">STATE_SYSTEM.md</a> for the full list. In order:</p>
+<ol><li>Notifier + provider (+ optional replay for autoDispose)</li><li><code>register_*_state.dart</code> with <code>onWsReady((registrar, ref) { … })</code></li><li>Optional <code>onWsReconnect</code> if module uses subscribe/rooms</li><li><code>module_registry.dart</code></li><li>Routes + drawer</li><li><code>ConsumerWidget</code> screen — connect via <code>wsConnectionManagerProvider</code>, not <code>WsClient</code></li><li><code>select()</code> for hot fields</li><li>Align channel prefix with backend</li><li>Tests: notifier unit + <code>buildWsChannelRouter(ref)</code> dispatch</li></ol>
+<h2>What NOT to put in AppStateSink</h2>
+<ul><li>Screen form fields (tier 4 — local <code>setState</code>)</li><li>AppBar titles (use <code>AppBarRegistrar</code>)</li><li>A global map like <code>state.get(&#x27;foo&#x27;)</code> — use typed providers instead</li><li>Static bridge globals — use <code>ref.read(...)</code> in handlers</li></ul>
+<h2>Tests</h2>
+<pre><code class="language-dart">await bootTestApp(tester, overrides: [
+  authProvider.overrideWith(() =&gt; FakeAuthNotifier()),
+]);</code></pre>
+<p>Handler integration:</p>
+<pre><code class="language-dart">late Ref ref;
+container.read(Provider((r) { ref = r; return 0; }));
+final router = buildWsChannelRouter(ref);
+router.dispatch(&#x27;dart&#x27;, {&#x27;channel&#x27;: &#x27;inventory/sync&#x27;, &#x27;payload&#x27;: {...}});</code></pre>
+<p>Helper: <code>test/helpers/app_test_boot.dart</code></p>
+<h2>Parity with Dart backend</h2>
+<p>Dart uses <code>module_registry.dart</code> + <code>registerApplicationWsChannels()</code>. Flutter uses <code>AppStateSink.onWsReady</code>. Keep <strong>channel prefix names</strong> aligned (<code>example/*</code>, <code>demo/*</code>, etc.).</p>
+<h2>Related</h2>
+<ul><li><a href="state-system-flow.html">state-system-flow</a> — tiers and Riverpod overview</li><li><a href="state-ws-reconnect-flow.html">state-ws-reconnect-flow</a> — drop reconnect (Flutter only)</li><li><a href="../../dart_backend/module_registry/module-registry-flow.html">module-registry-flow</a> — Dart backend registry</li></ul>
+  </div>
+</main>
+</body>
+</html>

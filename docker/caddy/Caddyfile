@@ -1,0 +1,23 @@
+{
+	# Local compose: plain HTTP on :80. Production VPS: set CADDY_DOMAIN / CADDY_GAME_DOMAIN in .env.prod.
+	auto_https off
+}
+
+# API — REST + /ws/* on FastAPI
+:80 {
+	reverse_proxy Arcori_api:8000 {
+		transport http {
+			read_timeout 3600s
+		}
+	}
+}
+
+# Optional game / realtime server — set CADDY_GAME_DOMAIN in .env.prod (e.g. game.example.com).
+# When unset, Caddy ignores this site block.
+{$CADDY_GAME_DOMAIN} {
+	reverse_proxy Arcori_dart:8080 {
+		transport http {
+			read_timeout 3600s
+		}
+	}
+}

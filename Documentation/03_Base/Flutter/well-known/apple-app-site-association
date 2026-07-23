@@ -1,0 +1,24 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "TEAMID.com.reignofplay.wf-template"
+        ],
+        "paths": [
+          "/wf-template-verify-email",
+          "/wf-template-verify-email/*"
+        ],
+        "components": [
+          {
+            "/": "/wf-template-verify-email"
+          },
+          {
+            "/": "/wf-template-verify-email/*"
+          }
+        ]
+      }
+    ]
+  }
+}

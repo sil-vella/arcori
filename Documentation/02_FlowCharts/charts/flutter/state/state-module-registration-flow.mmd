@@ -1,0 +1,45 @@
+flowchart TD
+  T["Flutter — register state for a new module"]
+
+  subgraph existing["Already wired in module_registry.dart"]
+    E1["registerCoreState"]
+    E2["registerWsDemoState"]
+    E3["registerExampleModuleState"]
+    E4["registerHomeRoutes · registerSampleRoutes · …"]
+  end
+
+  subgraph newMod["Add modules/my_feature/"]
+    F1["state/my_feature_notifier.dart<br/>NotifierProvider"]
+    F2["register_my_feature_state.dart<br/>onWsReady registrar + Ref"]
+    F3["my_feature_screen.dart<br/>ConsumerWidget"]
+    F4["optional contracts/my_feature_reader.dart"]
+    F5["optional replay notifier for autoDispose"]
+  end
+
+  subgraph wire["Wire in module_registry.dart"]
+    W1["registerMyFeatureState(state)"]
+    W2["registerMyFeatureRoutes(routes)"]
+    W3["registerMyFeatureDrawer(drawer)"]
+  end
+
+  subgraph sink["AppStateSink — bootstrap only"]
+    S1["onWsReady stores handler factory"]
+    S2["onWsReconnect stores re-subscribe hook"]
+    S3["buildWsChannelRouter(ref) at WS manager start"]
+    S4["runWsReconnectHooks after (re)connect"]
+    S1 --> S3
+    S2 --> S4
+  end
+
+  subgraph test["Tests"]
+    T1["resetAppStateRegistry()"]
+    T2["bootTestApp(tester, overrides: …)"]
+    T3["buildWsChannelRouter(ref) + dispatch"]
+  end
+
+  T --> existing
+  newMod --> wire
+  W1 --> S1
+  W1 --> S2
+  S3 --> S4
+  wire --> test

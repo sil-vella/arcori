@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Security Auth Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../charts/base/security-auth-flow.html" class="active">Security Auth Flow</a></li>
+<li><a href="../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="security-auth-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../index.html">All charts</a>
+  </p>
+  <h1>Security Auth Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows how <strong>Arcori</strong> checks who is calling the API: app users (JWT), internal services (service key), and public health checks.</p>
+<h2>The three route tiers</h2>
+<table><thead><tr><th>Tier</th><th>Who uses it</th><th>What you send</th></tr></thead><tbody><tr><td><strong>Public</strong></td><td>Anyone on the internet (via Caddy)</td><td>No auth for <code>/health</code> and <code>/media/*</code>; register/login/refresh on <code>/public/auth/*</code></td></tr><tr><td><strong>Auth user</strong></td><td>Authenticated clients</td><td><code>Authorization: Bearer &lt;access_token&gt;</code></td></tr><tr><td><strong>Service</strong></td><td>Internal service → FastAPI</td><td><code>X-Service-Key: &lt;SERVICE_KEY&gt;</code></td></tr></tbody></table>
+<p>Full URLs always include the tier prefix, for example <code>/authuser/user/profile</code> or <code>/service/auth/validate</code>.</p>
+<h2>User account endpoints (authuser)</h2>
+<table><thead><tr><th>Path</th><th>Purpose</th></tr></thead><tbody><tr><td><code>GET /authuser/user/profile</code></td><td>Profile (all signed-in users)</td></tr><tr><td><code>POST /authuser/user/profile/avatar</code></td><td>Upload avatar (full accounts only)</td></tr><tr><td><code>DELETE /authuser/user/profile/avatar</code></td><td>Remove avatar (full accounts only)</td></tr><tr><td><code>POST /authuser/user/account/convert-guest</code></td><td>Guest → full in-place upgrade</td></tr><tr><td><code>POST /authuser/user/account/delete</code></td><td>Delete full account</td></tr></tbody></table>
+<p>See <a href="../../../01_Active_Plans/guest-login-system.md">guest-login-system.md</a> for Flutter Account screen behaviour and guest vs regular rules.</p>
+<h2>Secrets live in env files</h2>
+<p>Copy <a href="../../../../.env.local.sample"><code>.env.local.sample</code></a> to <code>.env.local</code> for development. On the VPS use <code>.env.prod</code> from <a href="../../../../.env.prod.sample"><code>.env.prod.sample</code></a>.</p>
+<table><thead><tr><th>Variable</th><th>Plain English</th></tr></thead><tbody><tr><td><code>ARCORI_ENV</code></td><td><code>local</code> on your machine, <code>production</code> on the server</td></tr><tr><td><code>JWT_SECRET</code></td><td>Signs short-lived <strong>access</strong> tokens</td></tr><tr><td><code>JWT_REFRESH_SECRET</code></td><td>Signs longer <strong>refresh</strong> tokens</td></tr><tr><td><code>SERVICE_KEY</code></td><td>Shared password for <code>/service/*</code> routes</td></tr><tr><td><code>DATABASE_URL</code></td><td>PostgreSQL connection string</td></tr><tr><td><code>ARCORI_ALLOW_DEV_LOGIN</code></td><td><code>true</code> only locally — fake login without real credentials</td></tr><tr><td><code>UPLOAD_ROOT</code></td><td>Avatar files on disk (Docker volume in compose)</td></tr></tbody></table>
+<p>Flutter client URLs live in <a href="../../../../.env.dart.defines.local.sample"><code>.env.dart.defines.local.sample</code></a> (not in <code>.env.local</code>).</p>
+<p>More detail: <a href="../../../00_System_Wide/wfsecrets.md">wfsecrets.md</a> and <a href="../../../03_Base/SECURITY_SYSTEM.md">SECURITY_SYSTEM.md</a>.</p>
+<h2>Example: register and profile (local debug compose)</h2>
+<p>Start debug compose (loads <code>.env.local</code>, API on port <strong>8000</strong>):</p>
+<pre><code class="language-bash">cd docker
+docker compose --env-file ../.env.local -f docker-compose.debug.yml up -d</code></pre>
+<pre><code class="language-bash"># 1. Register a full account
+curl -s -X POST http://127.0.0.1:8000/public/auth/register \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{&quot;username&quot;:&quot;demo&quot;,&quot;email&quot;:&quot;demo@example.com&quot;,&quot;password&quot;:&quot;demo123456&quot;,&quot;is_guest&quot;:false}&#x27; | jq .
+
+# 2. Profile — paste access_token from step 1
+curl -s http://127.0.0.1:8000/authuser/user/profile \
+  -H &quot;Authorization: Bearer &lt;access_token&gt;&quot; | jq .
+
+# 3. Upload avatar (multipart)
+curl -s -X POST http://127.0.0.1:8000/authuser/user/profile/avatar \
+  -H &quot;Authorization: Bearer &lt;access_token&gt;&quot; \
+  -F &quot;avatar=@/path/to/photo.png&quot; | jq .
+
+# 4. Refresh access token
+curl -s -X POST http://127.0.0.1:8000/public/auth/refresh \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{&quot;refresh_token&quot;:&quot;&lt;refresh_token&gt;&quot;}&#x27; | jq .</code></pre>
+<p>Local-only shortcut:</p>
+<pre><code class="language-bash">curl -s -X POST http://127.0.0.1:8000/public/auth/dev-login \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{&quot;user_id&quot;:&quot;test-user-1&quot;}&#x27; | jq .</code></pre>
+<h2>Example: validate a user token (service tier)</h2>
+<pre><code class="language-bash">curl -s -X POST http://127.0.0.1:8000/service/auth/validate \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -H &#x27;X-Service-Key: dev-service-key-change-me&#x27; \
+  -d &#x27;{&quot;access_token&quot;:&quot;&lt;access_token&gt;&quot;}&#x27; | jq .</code></pre>
+<p>Use the <code>SERVICE_KEY</code> value from your <code>.env.local</code> (sample default shown above). Wrong service key → <strong>403</strong>. Bad or expired JWT → <strong>401</strong>.</p>
+<h2>What is not built yet</h2>
+<p>Google Sign-In → JWT exchange is planned. Email verification and rate limiting on auth routes are deferred.</p>
+  </div>
+</main>
+</body>
+</html>

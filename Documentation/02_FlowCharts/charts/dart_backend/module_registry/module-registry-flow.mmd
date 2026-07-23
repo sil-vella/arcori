@@ -1,0 +1,45 @@
+flowchart TD
+  T["Dart backend — module registry flow<br/>dart_bkend_base_02 / bin / modules"]
+
+  subgraph httpPath["HTTP — wired today"]
+    A1["http_app.dart — createHttpHandler()"]
+    A2["HttpModule"]
+    A3["registerApplicationRoutes(http)"]
+    A1 --> A2 --> A3
+  end
+
+  subgraph wsPath["WebSocket — wired"]
+    W1["app_init → createCombinedHandler"]
+    W2["registerApplicationWsChannels()"]
+    W1 --> W2
+  end
+
+  subgraph reg["module_registry.dart — composition root"]
+    D["Import feature modules here<br/>call their register* functions"]
+    E["registerUserRoutes(http)"]
+    F["registerServiceRoutes(http)"]
+    G["registerAuthRoutes(http)"]
+    H["registerApplicationWsChannels()"]
+    A3 --> D
+    W2 -.-> D
+    D --> E
+    D --> F
+    D --> G
+    D --> H
+  end
+
+  subgraph feat["Feature modules (examples)"]
+    U["user/user_app.dart — HTTP<br/>addGet RouterType.authUser …"]
+    S["service/service_app.dart — HTTP<br/>addGet RouterType.service …"]
+    WS["ws/… — WebSocket<br/>e.g. subscribe handlers / rooms"]
+    E --> U
+    F --> S
+    G -.-> WS
+  end
+
+  subgraph note["Intent"]
+    N["One file to import all module wiring<br/>HTTP now · extend with WS / jobs / …"]
+  end
+
+  T --> A1
+  D -.-> N

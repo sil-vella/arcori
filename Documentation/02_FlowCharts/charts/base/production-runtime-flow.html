@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Production Runtime Flow — FlowCharts</title>
+  <link rel="stylesheet" href="../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../charts/base/production-runtime-flow.html" class="active">Production Runtime Flow</a></li>
+<li><a href="../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main">
+  <h1>Production Runtime Flow</h1>
+  <p class="chart-guide-link"><a href="production-runtime-flow.guide.html">Plain English guide &amp; examples →</a></p>
+  <div class="mermaid">flowchart TD
+  T[&quot;Arcori production runtime&lt;br/&gt;python_base_05 · Base / Docker&quot;]
+
+  subgraph clients[&quot;Clients&quot;]
+    W[&quot;Chat widget / browser&quot;]
+    D[&quot;Internal service tier&lt;br/&gt;optional&quot;]
+  end
+
+  subgraph edge[&quot;Edge&quot;]
+    C[&quot;Caddy :443 SSL&quot;]
+  end
+
+  subgraph api[&quot;FastAPI container :8000&quot;]
+    G[&quot;Gunicorn UvicornWorker&quot;]
+    A[&quot;asgi:app → createHttpHandler()&quot;]
+    H[&quot;configure_production&lt;br/&gt;slow_request · 500 handler&quot;]
+    R[&quot;Route tiers: public · /authuser · /service&quot;]
+    G --&gt; A --&gt; H --&gt; R
+  end
+
+  subgraph health[&quot;Health &amp; observability&quot;]
+    P[&quot;GET /health — public&lt;br/&gt;Docker HEALTHCHECK · DB ping&quot;]
+    S[&quot;GET /service/health — service key&quot;]
+    L[&quot;stdout access log duration_us=%(D)s&quot;]
+    SL[&quot;slow_request WARNING ≥ SLOW_REQUEST_THRESHOLD_MS&quot;]
+    G --&gt; L
+    A --&gt; SL
+  end
+
+  subgraph cache[&quot;Read cache optional&quot;]
+    RC[&quot;read_cache.get_or_load NoOp by default&quot;]
+    EX[&quot;GET /example/cached&quot;]
+    EX --&gt; RC
+  end
+
+  subgraph data[&quot;Data plane&quot;]
+    PG[&quot;PostgreSQL&quot;]
+    AD[&quot;Adminer dev only&quot;]
+  end
+
+  W --&gt; C
+  C --&gt;|&quot;REST&quot;| G
+  D --&gt;|&quot;internal /service/*&quot;| G
+  R --&gt; EX
+  R --&gt; PG
+  AD -.-&gt; PG
+  P -.-&gt; C
+  S -.-&gt; D</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, securityLevel: "loose" });
+</script>
+</body>
+</html>

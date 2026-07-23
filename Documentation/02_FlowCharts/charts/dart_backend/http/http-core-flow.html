@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Http Core Flow — FlowCharts</title>
+  <link rel="stylesheet" href="../../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../../charts/dart_backend/http/http-core-flow.html" class="active">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main">
+  <h1>Http Core Flow</h1>
+  <p class="chart-guide-link"><a href="http-core-flow.guide.html">Plain English guide &amp; examples →</a></p>
+  <div class="mermaid">flowchart TD
+  T[&quot;Dart backend — HTTP core flow&lt;br/&gt;dart_bkend_base_02 / bin&quot;]
+
+  subgraph e1[&quot;1. Entry&quot;]
+    A1[&quot;app.dart — main()&quot;]
+    A2[&quot;startApp — app_init.dart&quot;]
+    A1 --&gt; A2
+  end
+
+  subgraph e2[&quot;2. http_app.dart&quot;]
+    B1[&quot;createHttpHandler()&quot;]
+    B2[&quot;HttpModule&quot;]
+    B3[&quot;registerApplicationRoutes(http)&lt;br/&gt;module_registry.dart&quot;]
+    B4[&quot;buildRootHandler()&quot;]
+    B1 --&gt; B2 --&gt; B3 --&gt; B4
+  end
+
+  subgraph e3[&quot;3. Registry → feature modules&quot;]
+    C1[&quot;registerUserRoutes&quot;]
+    C2[&quot;registerServiceRoutes&quot;]
+    B3 --&gt; C1
+    B3 --&gt; C2
+  end
+
+  subgraph e4[&quot;4. HttpModule internals&quot;]
+    D1[&quot;RouterType: public · authUser · service&quot;]
+    D2[&quot;3 × shelf_router.Router&quot;]
+    D3[&quot;Public: GET / and GET /health — user routes&quot;]
+    D4[&quot;Features: addGet / addPost&quot;]
+    D5[&quot;HttpAction → ShelfHttpRequest + ShelfHttpResponse&lt;br/&gt;HttpRequest · HttpResponse contracts&quot;]
+    D1 --&gt; D2 --&gt; D3
+    D2 --&gt; D4 --&gt; D5
+  end
+
+  subgraph e5[&quot;5. Mounts — same prefix strip for all&quot;]
+    E1[&quot;mount /public/ · /authuser/ · /service/&quot;]
+    E2[&quot;(prefix stripped)&quot;]
+    E1 --&gt; E2
+  end
+
+  subgraph e6[&quot;6. app_init — server&quot;]
+    F1[&quot;Pipeline + logRequests&quot;]
+    F2[&quot;serve · PORT env&quot;]
+    F1 --&gt; F2
+  end
+
+  subgraph ex[&quot;Example&quot;]
+    X1[&quot;GET /authuser/user/profile&quot;]
+    X2[&quot;inner path /user/profile&quot;]
+    X1 -.-&gt; X2
+  end
+
+  T --&gt; A1
+  A2 --&gt; B1
+  B2 --&gt; D1
+  C1 -.-&gt;|&quot;addGet(...)&quot;| D4
+  C2 -.-&gt;|&quot;addGet(...)&quot;| D4
+  B4 --&gt; E1
+  A2 --&gt; F1</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, securityLevel: "loose" });
+</script>
+</body>
+</html>

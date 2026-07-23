@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>State Module Registration Flow — FlowCharts</title>
+  <link rel="stylesheet" href="../../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/flutter/state/state-module-registration-flow.html" class="active">State Module Registration Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main">
+  <h1>State Module Registration Flow</h1>
+  <p class="chart-guide-link"><a href="state-module-registration-flow.guide.html">Plain English guide &amp; examples →</a></p>
+  <div class="mermaid">flowchart TD
+  T[&quot;Flutter — register state for a new module&quot;]
+
+  subgraph existing[&quot;Already wired in module_registry.dart&quot;]
+    E1[&quot;registerCoreState&quot;]
+    E2[&quot;registerWsDemoState&quot;]
+    E3[&quot;registerExampleModuleState&quot;]
+    E4[&quot;registerHomeRoutes · registerSampleRoutes · …&quot;]
+  end
+
+  subgraph newMod[&quot;Add modules/my_feature/&quot;]
+    F1[&quot;state/my_feature_notifier.dart&lt;br/&gt;NotifierProvider&quot;]
+    F2[&quot;register_my_feature_state.dart&lt;br/&gt;onWsReady registrar + Ref&quot;]
+    F3[&quot;my_feature_screen.dart&lt;br/&gt;ConsumerWidget&quot;]
+    F4[&quot;optional contracts/my_feature_reader.dart&quot;]
+    F5[&quot;optional replay notifier for autoDispose&quot;]
+  end
+
+  subgraph wire[&quot;Wire in module_registry.dart&quot;]
+    W1[&quot;registerMyFeatureState(state)&quot;]
+    W2[&quot;registerMyFeatureRoutes(routes)&quot;]
+    W3[&quot;registerMyFeatureDrawer(drawer)&quot;]
+  end
+
+  subgraph sink[&quot;AppStateSink — bootstrap only&quot;]
+    S1[&quot;onWsReady stores handler factory&quot;]
+    S2[&quot;onWsReconnect stores re-subscribe hook&quot;]
+    S3[&quot;buildWsChannelRouter(ref) at WS manager start&quot;]
+    S4[&quot;runWsReconnectHooks after (re)connect&quot;]
+    S1 --&gt; S3
+    S2 --&gt; S4
+  end
+
+  subgraph test[&quot;Tests&quot;]
+    T1[&quot;resetAppStateRegistry()&quot;]
+    T2[&quot;bootTestApp(tester, overrides: …)&quot;]
+    T3[&quot;buildWsChannelRouter(ref) + dispatch&quot;]
+  end
+
+  T --&gt; existing
+  newMod --&gt; wire
+  W1 --&gt; S1
+  W1 --&gt; S2
+  S3 --&gt; S4
+  wire --&gt; test</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, securityLevel: "loose" });
+</script>
+</body>
+</html>

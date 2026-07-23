@@ -1,0 +1,30 @@
+flowchart TD
+  T["Flutter — WS message routing to state"]
+
+  subgraph transport["Tier 2 — core/ws"]
+    CLI["WsClient<br/>messages + connectionClosed"]
+    MGR["WsConnectionManager<br/>backoff reconnect · onWsReconnect"]
+    RTR["WsChannelRouter<br/>Ref-backed handlers"]
+    CLI --> MGR
+    MGR --> RTR
+  end
+
+  subgraph modules["Tier 3 — module notifiers"]
+    N1["wsDemoLogProvider"]
+    N2["exampleModuleProvider"]
+    R2["exampleModuleReplayProvider"]
+    H1["demo/* handler"]
+    H2["example/* handler"]
+    H1 --> N1
+    H2 --> R2
+    R2 -->|"listen + build"| N2
+  end
+
+  subgraph ui["Screens"]
+    U1["WsDemoScreen"]
+    U2["ExampleModuleScreen"]
+    N1 --> U1
+    N2 --> U2
+  end
+
+  U1 -->|"send"| MGR

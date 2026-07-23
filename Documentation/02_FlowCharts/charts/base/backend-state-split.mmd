@@ -1,0 +1,25 @@
+flowchart TD
+  T["Backend state split — arcori"]
+
+  subgraph dartHot["Dart :8080 — hot module state"]
+    ES["ExampleModuleStore"]
+    EWS["example/state WS"]
+    EWS --> ES
+  end
+
+  subgraph pyDurable["FastAPI :8000 — durable + cache"]
+    AUTH["auth JWT"]
+    REC["POST /service/example_module/record"]
+    PG[(Postgres example_module_records)]
+    RC["Redis read-through"]
+    REC --> PG
+    RC --> PG
+  end
+
+  subgraph flutter ["Flutter example_module"]
+    EP["exampleModuleProvider"]
+    EP -->|"WS example/*"| EWS
+  end
+
+  ES -->|"optional record"| REC
+  AUTH --> EP

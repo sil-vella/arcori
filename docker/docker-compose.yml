@@ -1,0 +1,139 @@
+# Production stack — all services load env from ../.env.prod (copy from .env.prod.sample).
+# Run from docker/:
+#   docker compose --env-file ../.env.prod -f docker-compose.yml up -d --build
+name: arcori_fastapi_dart_flutter
+
+x-env-file: &env_file
+  - ../.env.prod
+
+services:
+  Arcori_postgres:
+    image: postgres:16
+    container_name: Arcori_postgres
+    env_file: *env_file
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - arcori_pg_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  Arcori_adminer:
+    image: adminer:latest
+    container_name: Arcori_adminer
+    env_file: *env_file
+    ports:
+      - "8081:8080"
+    depends_on:
+      Arcori_postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  Arcori_redis:
+    image: redis:7-alpine
+    container_name: Arcori_redis
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  Arcori_api:
+    build:
+      context: ../app_codebase/python_base_05
+      dockerfile: Dockerfile
+    image: silvella/arcori_api:latest
+    container_name: Arcori_api
+    env_file: *env_file
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_APP_USER:-arcori_app}:${POSTGRES_APP_PASSWORD}@Arcori_postgres:5432/${POSTGRES_DB:-arcori}
+      MIGRATION_DATABASE_URL: postgresql://${POSTGRES_USER:-arcori}:${POSTGRES_PASSWORD}@Arcori_postgres:5432/${POSTGRES_DB:-arcori}
+      DART_SERVICE_URL: http://Arcori_dart:8080
+      REDIS_HOST: Arcori_redis
+    depends_on:
+      Arcori_postgres:
+        condition: service_healthy
+      Arcori_redis:
+        condition: service_healthy
+    volumes:
+      - arcori_uploads:/data/uploads
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  Arcori_dart:
+    build:
+      context: ../app_codebase/dart_bkend_base_02
+      dockerfile: Dockerfile
+      target: prod
+    image: silvella/arcori_dart:latest
+    container_name: Arcori_dart
+    env_file: *env_file
+    environment:
+      PORT: "8080"
+      FASTAPI_SERVICE_URL: http://Arcori_api:8000
+    depends_on:
+      Arcori_api:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  Arcori_caddy:
+    image: caddy:2-alpine
+    container_name: Arcori_caddy
+    env_file: *env_file
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - Arcori_api
+      - Arcori_dart
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  arcori_pg_data:
+  caddy_data:
+  caddy_config:
+  arcori_uploads:

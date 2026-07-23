@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>State System Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-system-flow.html" class="active">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="state-system-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../../index.html">All charts</a>
+  </p>
+  <h1>State System Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows how <strong>flutter_base_06</strong> manages shared app state with <strong>Riverpod</strong> and the same <strong>sink + contract</strong> pattern used for routes and drawer.</p>
+<h2>What problem does this solve?</h2>
+<p>Without a plan, each screen keeps its own token, WebSocket clients, and game data in <code>setState</code>. That leads to duplicate connections, stale UI, and modules that cannot talk to each other safely.</p>
+<p>This template splits state into <strong>four tiers</strong> and uses <strong>one bootstrap registry</strong> so modules plug in cleanly.</p>
+<h2>The four tiers (simple version)</h2>
+<table><thead><tr><th>Tier</th><th>What it is</th><th>Example</th><th>How long it lives</th></tr></thead><tbody><tr><td>1 — Session</td><td>Who is logged in</td><td>JWT, user id</td><td>Whole app</td></tr><tr><td>2 — Transport</td><td>How we talk to the server</td><td>WS connect / reconnect / backoff</td><td>Whole app</td></tr><tr><td>3 — Domain</td><td>Feature data</td><td>Example revision, message</td><td>While on that screen/route</td></tr><tr><td>4 — UI fluff</td><td>Form fields, animations</td><td>Text field value</td><td>While widget is on screen</td></tr></tbody></table>
+<p><strong>Rule of thumb:</strong> hot domain data is tier 3; login token is tier 1; never put tier 3 in a global singleton unless you mean to.</p>
+<h2>What runs at startup</h2>
+<p><code>startApp()</code> in <code>app_init.dart</code>:</p>
+<ol><li>Reset registries (routes, drawer, app bar, <strong>state</strong>)</li><li><code>registerApplicationModules(..., appStateSink)</code> — each module registers WS handlers</li><li>Wrap the app in <code>AppProviderScope</code> (Riverpod)</li></ol>
+<h2>Read state in a screen</h2>
+<p>Use <code>ConsumerWidget</code> and <code>ref.watch</code>:</p>
+<pre><code class="language-dart">class MyScreen extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.watch(authProvider);
+    if (!auth.isAuthenticated) {
+      return const Text(&#x27;Please log in&#x27;);
+    }
+    return Text(&#x27;Hello ${auth.userId}&#x27;);
+  }
+}</code></pre>
+<h2>Cross-module reads (use contracts)</h2>
+<p>Other modules should not import <code>AuthNotifier</code> directly:</p>
+<pre><code class="language-dart">final session = ref.watch(authSessionReaderProvider);
+if (session.isAuthenticated) {
+  final token = session.accessToken;
+}</code></pre>
+<h2>Try it in the app</h2>
+<ol><li><code>wfrun</code> → launch Flutter (Chrome)</li><li>Drawer → <strong>WS Demo</strong> — connect + optional room subscribe (uses tier 1 + 2; drop reconnect is Flutter-only)</li><li>Drawer → <strong>Example module</strong> — send <code>example/state</code> (uses tier 3)</li></ol>
+<h2>More detail</h2>
+<ul><li><a href="../../../../03_Base/Flutter/STATE_SYSTEM.md">STATE_SYSTEM.md</a> — full technical doc + <strong>Add a realtime feature</strong> checklist</li><li><a href="state-ws-routing-flow.html">state-ws-routing-flow</a> — how WS messages reach notifiers via <code>Ref</code></li><li><a href="state-module-registration-flow.html">state-module-registration-flow</a> — add a new module&#x27;s state</li></ul>
+  </div>
+</main>
+</body>
+</html>

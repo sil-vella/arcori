@@ -1,0 +1,41 @@
+flowchart TD
+  T["Flutter only — WS drop reconnect + re-subscribe"]
+
+  subgraph client["core/ws — WsClient"]
+    SOCK["WebSocket stream"]
+    DONE["onDone unexpected"]
+    CLOSED["connectionClosed event"]
+    SOCK --> DONE --> CLOSED
+  end
+
+  subgraph mgr["core/ws — WsConnectionManager"]
+    EP["_endpoints kept until disconnect()"]
+    BO["WsReconnectPolicy<br/>1s → 2s → 4s … cap 30s"]
+    OPEN["_openConnection()"]
+    HOOKS["runWsReconnectHooks()"]
+    CLOSED --> BO
+    BO --> OPEN
+    OPEN --> HOOKS
+    EP -.-> OPEN
+  end
+
+  subgraph authPath["Also reconnects"]
+    JWT["auth token change"]
+    ERR["token_expired → refresh"]
+    JWT --> OPEN
+    ERR --> OPEN
+  end
+
+  subgraph modules["AppStateSink.onWsReconnect"]
+    DEMO["ws_demo — re-subscribe demo/room"]
+    FEAT["your module — rooms, channels, …"]
+  end
+
+  HOOKS --> DEMO
+  HOOKS --> FEAT
+
+  subgraph server["Backends — no client reconnect"]
+    SRV["wait for new WS + auth + subscribe"]
+  end
+
+  OPEN -->|"new socket"| SRV

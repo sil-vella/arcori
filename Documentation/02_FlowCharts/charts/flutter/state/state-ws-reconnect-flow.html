@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>State Ws Reconnect Flow — FlowCharts</title>
+  <link rel="stylesheet" href="../../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html" class="active">State Ws Reconnect Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main">
+  <h1>State Ws Reconnect Flow</h1>
+  <p class="chart-guide-link"><a href="state-ws-reconnect-flow.guide.html">Plain English guide &amp; examples →</a></p>
+  <div class="mermaid">flowchart TD
+  T[&quot;Flutter only — WS drop reconnect + re-subscribe&quot;]
+
+  subgraph client[&quot;core/ws — WsClient&quot;]
+    SOCK[&quot;WebSocket stream&quot;]
+    DONE[&quot;onDone unexpected&quot;]
+    CLOSED[&quot;connectionClosed event&quot;]
+    SOCK --&gt; DONE --&gt; CLOSED
+  end
+
+  subgraph mgr[&quot;core/ws — WsConnectionManager&quot;]
+    EP[&quot;_endpoints kept until disconnect()&quot;]
+    BO[&quot;WsReconnectPolicy&lt;br/&gt;1s → 2s → 4s … cap 30s&quot;]
+    OPEN[&quot;_openConnection()&quot;]
+    HOOKS[&quot;runWsReconnectHooks()&quot;]
+    CLOSED --&gt; BO
+    BO --&gt; OPEN
+    OPEN --&gt; HOOKS
+    EP -.-&gt; OPEN
+  end
+
+  subgraph authPath[&quot;Also reconnects&quot;]
+    JWT[&quot;auth token change&quot;]
+    ERR[&quot;token_expired → refresh&quot;]
+    JWT --&gt; OPEN
+    ERR --&gt; OPEN
+  end
+
+  subgraph modules[&quot;AppStateSink.onWsReconnect&quot;]
+    DEMO[&quot;ws_demo — re-subscribe demo/room&quot;]
+    FEAT[&quot;your module — rooms, channels, …&quot;]
+  end
+
+  HOOKS --&gt; DEMO
+  HOOKS --&gt; FEAT
+
+  subgraph server[&quot;Backends — no client reconnect&quot;]
+    SRV[&quot;wait for new WS + auth + subscribe&quot;]
+  end
+
+  OPEN --&gt;|&quot;new socket&quot;| SRV</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, securityLevel: "loose" });
+</script>
+</body>
+</html>

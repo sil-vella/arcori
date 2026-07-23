@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Error Handling Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/error-handling-flow.html" class="active">Error Handling Flow</a></li>
+<li><a href="../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="error-handling-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../index.html">All charts</a>
+  </p>
+  <h1>Error Handling Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows how <strong>Arcori</strong> turns failures into one JSON shape on HTTP and WebSocket, and splits <strong>core</strong> vs <strong>module</strong> error codes.</p>
+<h2>One envelope everywhere</h2>
+<p>Success and failure use the same JSON on REST and WebSocket:</p>
+<pre><code class="language-json">{ &quot;ok&quot;: false, &quot;error&quot;: { &quot;code&quot;: &quot;token_expired&quot;, &quot;message&quot;: &quot;Access token expired&quot; } }</code></pre>
+<p>HTTP also sets a status code (401, 404, 500, …). WebSocket sends the same body as a <strong>frame</strong> — clients must read <code>error.code</code>, not status alone.</p>
+<h2>Two tiers of error codes</h2>
+<table><thead><tr><th>Tier</th><th>Where defined</th><th>Code shape</th><th>Example</th></tr></thead><tbody><tr><td><strong>Core</strong></td><td><code>core/errors/error_codes.*</code></td><td>short snake_case</td><td><code>token_expired</code>, <code>not_found</code></td></tr><tr><td><strong>Module</strong></td><td><code>modules/{x}/{x}_errors.*</code></td><td><code>{module}/{reason}</code></td><td><code>ws/demo_room/not_implemented</code></td></tr></tbody></table>
+<p>Modules register codes at startup through <code>ModuleErrorRegistrar</code> (same moment as routes and WS channels in <code>module_registry</code>).</p>
+<p>Handlers raise <code>AppError(spec)</code> — never inline <code>&quot;some_random_code&quot;</code> strings.</p>
+<h2>Server flow</h2>
+<ol><li><strong>HTTP</strong> — <code>authuser_guard</code> / <code>service_guard</code> call shared <code>verify_*</code> helpers → <code>AppError</code> → JSON response.</li><li><strong>WebSocket</strong> — dispatcher runs auth handshake with the same verify helpers; channel handlers raise <code>AppError</code>; fatal auth errors close the socket after the error frame.</li><li><strong>500</strong> — FastAPI exception handlers map unknown exceptions to <code>internal_error</code>.</li></ol>
+<p>Structured logs use <code>code=</code> and <code>reason=</code> — never JWT or service keys.</p>
+<h2>Flutter client</h2>
+<p><code>ApiError.fromEnvelope</code> parses the wire format. <code>error_policy.dart</code> maps <strong>core</strong> codes to actions (refresh, re-login, reconnect WS, show message).</p>
+<p>Full catalog: <a href="../../../03_Base/ERROR_SYSTEM.md">ERROR_SYSTEM.md</a>. WS tiers: <a href="ws-system-flow.html">ws-system-flow</a>.</p>
+<h2>Try it locally</h2>
+<pre><code class="language-bash"># Missing Bearer on protected route → unauthorized
+curl -s http://127.0.0.1:8000/authuser/user/profile | jq .
+
+# WebSocket ping after dev-login (see PYTHON_DART_BACKEND.md smoke test)</code></pre>
+<p>Related: <a href="../../../03_Base/SECURITY_SYSTEM.md">SECURITY_SYSTEM.md</a> (auth codes).</p>
+  </div>
+</main>
+</body>
+</html>

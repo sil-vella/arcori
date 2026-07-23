@@ -1,0 +1,99 @@
+---
+description: Dev logging uses customlog only, each call gated by if LOGGING_SWITCH. One switch per file—no alternate gate names.
+globs:
+  - app_codebase/**/*
+alwaysApply: false
+---
+
+# Dev logging (`customlog`, `LOGGING_SWITCH`, `global.log`)
+
+Full reference: [LOGGING_SYSTEM.md](Documentation/03_Base/LOGGING_SYSTEM.md).
+
+## Two layers
+
+1. **Dev logging** — `customlog()` with `[dev]` prefix, gated by per-file `LOGGING_SWITCH` then `DUTCH_DEV_LOG`.
+2. **Production logging** — Python stdlib `logging` and Shelf `logRequests()` — separate; **do not replace** production / structured logging with `customlog`.
+
+## Agent policy
+
+- **`customlog` is allowed** in any change **as long as** every call sits inside an **`if (LOGGING_SWITCH)`** block (see [Mandatory callsite shape](#mandatory-callsite-shape)). That gate may be a **logging-only** `if (LOGGING_SWITCH) { ... }`; it does **not** have to be nested inside another condition.
+- **One switch per file:** the **only** compile-time gate for calling `customlog` is **`LOGGING_SWITCH`**. See [One switch method (strict)](#one-switch-method-strict).
+- **Reuse** an existing file-level **`LOGGING_SWITCH`** when present. If the file has **none**, add it near the top (Dart / Python patterns below).
+- **When adding new `customlog` calls**, set **`LOGGING_SWITCH = true`** in that file so traces are visible immediately. The user flips back to **`false`** when done debugging.
+- **Do not add logging wrappers** (`logX`, `_fooDebug`, `devLogSwitch`, `dev_log_switch`, `Logger`, etc.). The **only** dev trace API is **`customlog`**.
+- **Do not re-enable** logging you removed in the same task unless the user asks.
+- Prefer fixing bugs without unnecessary trace noise; add logs when they help trace a flow or debug.
+
+## What to use
+
+| Stack | API | Import |
+|-------|-----|--------|
+| Flutter | `customlog('message')` | `utils/dev_logger.dart` (path varies) |
+| Dart WS | `customlog('message')` | `utils/dev_logger.dart` (path varies) |
+| Python | `customlog("message")` | `from core.utils.dev_logger import customlog` |
+
+`customlog` emits **`[dev] …`**. Do **not** prefix messages with `[dev]` manually.
+
+## One switch method (strict)
+
+There is exactly **one** switch name that may gate `customlog` calls: **`LOGGING_SWITCH`**.
+
+**Forbidden (never add or use):**
+
+- Extra or alias switches: `devLogSwitch`, `dev_log_switch`, `_devLog`, `loggingEnabled`, `kDevLog`, etc.
+- Combined gates: `if (LOGGING_SWITCH || somethingElse)`, `if (devLogSwitch)`, `if (kDebugMode && …)` for `customlog`.
+- Shared modules that export a **second** switch constant for logging.
+- Env / define wiring for **`LOGGING_SWITCH`**: `String.fromEnvironment('DUTCH_DEV_LOG')`, `bool.fromEnvironment('DUTCH_DEV_LOG')`, `os.environ.get("DUTCH_DEV_LOG")` for the switch itself, etc. **`LOGGING_SWITCH` is always a plain `true` or `false`.**
+
+### Dart — file-level `LOGGING_SWITCH`
+
+Use a single file-level const — **`true`** while tracing, **`false`** when off:
+
+```dart
+const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
+```
+
+Call sites always use **`if (LOGGING_SWITCH) { customlog(...); }`** only.
+
+### Python — file-level `LOGGING_SWITCH`
+
+Use a single file-level bool — **`True`** while tracing, **`False`** when off:
+
+```python
+LOGGING_SWITCH = True
+```
+
+Call sites: **`if LOGGING_SWITCH:`** then **`customlog(...)`** only.
+
+## Mandatory callsite shape
+
+**Every** `customlog` must be invoked only from inside **`if (LOGGING_SWITCH)`** (Dart: braced `{ }`; Python: indented suite). No bare `customlog`, no helper that hides the switch.
+
+```dart
+if (LOGGING_SWITCH) {
+  customlog('ModuleName: detail');
+}
+```
+
+```python
+if LOGGING_SWITCH:
+    customlog("module: detail")
+```
+
+## Two gates (both required for output)
+
+1. **`LOGGING_SWITCH`** — file-level: if `false`, **do not call** `customlog` in that block.
+2. **`DUTCH_DEV_LOG`** — inside `customlog`: if off, `customlog` no-ops even when called.
+
+Truthy: `1`, `true`, `yes` (case-insensitive).
+
+- Flutter: `--dart-define=DUTCH_DEV_LOG=1` via `.env.dart.defines.local`.
+- Python / Dart backend: `DUTCH_DEV_LOG=1` in `.env.local` (Docker compose `env_file`).
+
+Launch via **`automation/frontend/launch_chrome.sh`** (Flutter, mirrors to `global.log`), **`automation/frontend/run_chrome_to_global_log.sh`** (VS Code), or **`automation/backend/docker_logs_to_global_log.sh`** (Docker backends) so **`DUTCH_DEV_LOG=1`** and `global.log` filtering work.
+
+## Agent behavior
+
+- **New trace calls → `LOGGING_SWITCH = true`** in that file (unless the user explicitly asked for `false`).
+- If logs do not show: **`LOGGING_SWITCH`** must be **`true`** for that file, launch must pass **`DUTCH_DEV_LOG=1`** (or use the global-log scripts), and lines must contain **`[dev]`** for `global.log`.
+- Tail merged file: `tail -f global.log` from repo root.

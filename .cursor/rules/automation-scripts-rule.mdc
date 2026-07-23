@@ -1,0 +1,60 @@
+---
+description: Automation scripts need a # dash description; helpers go in wfrun_excluded_scripts.txt.
+globs:
+  - automation/**/*
+alwaysApply: false
+---
+
+# Automation scripts (`automation/`)
+
+Full runner docs: [wfrun.md](Documentation/00_System_Wide/wfrun.md).
+
+## Agent policy — new or moved scripts
+
+When adding any file under `automation/` that is a script (`.sh`, `.py`, `.yml`, `.yaml`) or a helper consumed by scripts:
+
+### 1. Add a `# dash` short description
+
+Put one line near the top (directly after shebang for shell/Python runners):
+
+```bash
+#!/usr/bin/env bash
+# dash Build and start Docker backend stack
+```
+
+```python
+#!/usr/bin/env python3
+# dash Sync global notification campaigns from JSON seed
+```
+
+- **One line**, plain language, states what the script does.
+- Shown in the arcori dashboard sidebar between filename and path.
+- Keep existing longer header comments below the dash line if useful.
+
+### 2. Exclude helpers from wfrun / dashboard menus
+
+If the file is **not** meant to be run standalone via `wfrun`, add its path to
+[`automation/wfrun_excluded_scripts.txt`](automation/wfrun_excluded_scripts.txt)
+— one path per line, **relative to `automation/`** (no `automation/` prefix).
+
+Add to the exclude list when the file is:
+
+- **Sourced** by other scripts (e.g. `dart_defines_from_env.sh`, `*_common.sh`, `load_*_args.sh`)
+- A **dashboard internal** module (everything under `dashboard/` except the entry runner `serve.py`)
+- **Static assets**, `requirements.txt`, `__init__.py`, or other non-runners
+- A **thin wrapper** that only delegates to another listed script (optional — exclude if it clutters the menu)
+
+Do **not** exclude standalone runners (launch scripts, docker up, sync tools, prod installers, etc.).
+
+Example exclude entry:
+
+```text
+frontend/dart_defines_from_env.sh
+```
+
+Group new entries with a `# comment` in the exclude file when adding a new area.
+
+## Before finishing
+
+- New standalone runner has `# dash …` and is **not** in `wfrun_excluded_scripts.txt`
+- New helper/module is in `wfrun_excluded_scripts.txt` and still has `# dash …` for documentation

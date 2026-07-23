@@ -1,0 +1,36 @@
+flowchart TD
+  T["Arcori error system"]
+
+  subgraph wire["Wire envelope (HTTP + WS)"]
+    ENV["{ ok: false, error: { code, message } }"]
+  end
+
+  subgraph tiers["Two-tier codes"]
+    CORE["core/errors — frozen catalog"]
+    MOD["modules/*_errors — namespaced"]
+    REG["ModuleErrorRegistrar at startup"]
+    MOD --> REG
+  end
+
+  subgraph server["Server layers"]
+    HTTP["HTTP guards + FastAPI handlers"]
+    WS["WS dispatcher auth + channels"]
+    APP["AppError → JSON / WS frame"]
+    INF["500 / uncaught → internal_error"]
+  end
+
+  subgraph client["Flutter client"]
+    PARSE["ApiError.fromEnvelope"]
+    POL["error_policy.actionFor"]
+    ACT["retry | refresh | reLogin | reconnectWs | showMessage"]
+  end
+
+  CORE --> APP
+  REG --> APP
+  HTTP --> APP
+  WS --> APP
+  APP --> ENV
+  INF --> ENV
+  ENV --> PARSE
+  PARSE --> POL
+  POL --> ACT

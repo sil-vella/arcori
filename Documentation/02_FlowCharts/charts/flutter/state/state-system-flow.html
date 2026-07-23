@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>State System Flow — FlowCharts</title>
+  <link rel="stylesheet" href="../../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-system-flow.html" class="active">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main">
+  <h1>State System Flow</h1>
+  <p class="chart-guide-link"><a href="state-system-flow.guide.html">Plain English guide &amp; examples →</a></p>
+  <div class="mermaid">flowchart TD
+  T[&quot;Flutter — modular state system&lt;br/&gt;flutter_base_06 · Riverpod&quot;]
+
+  subgraph boot[&quot;Startup — sinks wire modules&quot;]
+    A1[&quot;main() → startApp()&quot;]
+    A2[&quot;resetAppStateRegistry()&quot;]
+    A3[&quot;registerApplicationModules&lt;br/&gt;routes · drawer · appBar · state&quot;]
+    A4[&quot;registerCoreState(state)&quot;]
+    A5[&quot;registerWsDemoState(state)&quot;]
+    A6[&quot;registerExampleModuleState(state)&quot;]
+    A7[&quot;AppProviderScope → MaterialApp.router&quot;]
+    A1 --&gt; A2 --&gt; A3
+    A3 --&gt; A4
+    A3 --&gt; A5
+    A3 --&gt; A6
+    A3 --&gt; A7
+  end
+
+  subgraph tiers[&quot;Four state tiers&quot;]
+    T1[&quot;Tier 1 — Core session&lt;br/&gt;authProvider · token · userId&quot;]
+    T2[&quot;Tier 2 — Transport&lt;br/&gt;wsConnectionManagerProvider&quot;]
+    T3[&quot;Tier 3 — Feature domain&lt;br/&gt;exampleModuleProvider&quot;]
+    T4[&quot;Tier 4 — Ephemeral UI&lt;br/&gt;setState on screen&quot;]
+  end
+
+  subgraph runtime[&quot;Runtime — screens read via Riverpod&quot;]
+    S1[&quot;ConsumerWidget / ref.watch&quot;]
+    S1 --&gt; T1
+    S1 --&gt; T2
+    S1 --&gt; T3
+  end
+
+  T --&gt; A1
+  A7 --&gt; runtime
+  boot -.-&gt; tiers</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, securityLevel: "loose" });
+</script>
+</body>
+</html>

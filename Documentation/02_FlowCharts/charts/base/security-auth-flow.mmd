@@ -1,0 +1,46 @@
+flowchart TD
+  T["Arcori security auth flow<br/>FastAPI"]
+
+  subgraph env["Secrets — .env.local vs .env.prod"]
+    E1["JWT_SECRET · JWT_REFRESH_SECRET"]
+    E2["SERVICE_KEY"]
+    E3["ARCORI_ALLOW_DEV_LOGIN local only"]
+  end
+
+  subgraph publicTier["Public tier"]
+    DL["POST /public/auth/dev-login"]
+    RF["POST /public/auth/refresh"]
+    HC["GET /health"]
+  end
+
+  subgraph authuserTier["Authuser tier"]
+    PR["GET /authuser/user/profile"]
+    BG["Bearer access JWT verify"]
+    PR --> BG
+  end
+
+  subgraph serviceTier["Service tier"]
+    VL["POST /service/auth/validate"]
+    SK["X-Service-Key constant-time compare"]
+    VL --> SK
+  end
+
+  subgraph jwt["core/auth"]
+    ISS["issue access + refresh"]
+    VER["verify typ access or refresh"]
+  end
+
+  App["Chat widget / client"] --> DL
+  App --> RF
+  App --> PR
+  Svc["Internal service"] --> VL
+
+  DL -->|"ARCORI_ALLOW_DEV_LOGIN"| ISS
+  RF --> VER
+  BG --> VER
+  VL --> VER
+  SK --> E2
+  ISS --> E1
+  VER --> E1
+
+  HC -.->|"never cached"| T

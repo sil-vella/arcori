@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notification System Flow — FlowCharts</title>
+  <link rel="stylesheet" href="../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../charts/base/notification-system-flow.html" class="active">Notification System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main">
+  <h1>Notification System Flow</h1>
+  <p class="chart-guide-link"><a href="notification-system-flow.guide.html">Plain English guide &amp; examples →</a></p>
+  <div class="mermaid">flowchart TB
+  T[&quot;arcori Notification system&quot;]
+
+  subgraph author [Authors]
+    JSON[&quot;global_notifications.json&quot;]
+    Sync[&quot;wfrun → sync_global_notifications.py&quot;]
+    ModCreate[&quot;module create_for_user&quot;]
+    SubtypeReg[&quot;subtype_registry register&quot;]
+    Demo[&quot;POST /example_module/demo-notifications&quot;]
+  end
+
+  subgraph db [PostgreSQL]
+    UN[(user_notifications)]
+    GN[(global_notifications)]
+    GR[(global_notification_reads)]
+  end
+
+  subgraph fastapi [FastAPI python_base_05]
+    Validate[&quot;response_config + subtype validate&quot;]
+    Svc[&quot;notification_service&quot;]
+    ReplyReg[&quot;reply_registry&quot;]
+    Handler[&quot;module reply handler&quot;]
+    REST[&quot;GET /authuser/notifications/*&quot;]
+    RespPOST[&quot;POST /authuser/notifications/response&quot;]
+    Broadcaster[&quot;InboxBroadcaster&quot;]
+    UserReg[&quot;UserConnectionRegistry&quot;]
+  end
+
+  subgraph flutter [Flutter flutter_base_06]
+    Parse[&quot;NotificationResponseConfig&quot;]
+    SubtypeDart[&quot;subtype_registry&quot;]
+    ScreenSink[&quot;NotificationScreenSink&quot;]
+    Host[&quot;NotificationHost&quot;]
+    ModalSeq[&quot;showNotificationModalSequence&quot;]
+    NavExec[&quot;executeNavigate&quot;]
+    ReplyExec[&quot;executeReply&quot;]
+    Router[&quot;go_router Nav.push&quot;]
+    Inbox[&quot;NotificationsScreen&quot;]
+  end
+
+  SubtypeReg --&gt; Validate
+  JSON --&gt; Sync --&gt; GN
+  ModCreate --&gt; SubtypeReg --&gt; Validate --&gt; Svc --&gt; UN
+  Demo --&gt; Svc
+  Svc --&gt; Broadcaster --&gt; UserReg
+  REST --&gt; UN
+  REST --&gt; GN
+  REST --&gt; GR
+  UserReg --&gt;|&quot;WS inbox_changed&quot;| Host
+  REST --&gt; Host
+  Host --&gt; ModalSeq
+  SubtypeDart --&gt; ModalSeq
+  Parse --&gt; ModalSeq
+  ModalSeq --&gt;|navigate| NavExec
+  ModalSeq --&gt;|reply| ReplyExec
+  ScreenSink --&gt; NavExec
+  SubtypeDart --&gt; NavExec
+  NavExec --&gt; Router
+  ReplyExec --&gt; RespPOST --&gt; Svc --&gt; ReplyReg --&gt; Handler
+  Handler --&gt;|success| GR
+  Handler --&gt;|success| UN
+  REST --&gt; Inbox</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, securityLevel: "loose" });
+</script>
+</body>
+</html>

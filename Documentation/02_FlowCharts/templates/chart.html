@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{CHART_TITLE}} — FlowCharts</title>
+  <link rel="stylesheet" href="{{ROOT_REL}}css/flowcharts.css">
+</head>
+<body>
+{{HEADER}}
+<main class="flowcharts-main">
+  <h1>{{CHART_TITLE}}</h1>
+  {{GUIDE_LINK}}
+  <div class="mermaid">{{MERMAID_SOURCE}}</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, securityLevel: "loose" });
+</script>
+</body>
+</html>

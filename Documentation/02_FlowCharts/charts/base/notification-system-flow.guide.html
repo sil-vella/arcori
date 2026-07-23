@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notification System Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../charts/base/notification-system-flow.html" class="active">Notification System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="notification-system-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../index.html">All charts</a>
+  </p>
+  <h1>Notification System Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows how <strong>arcori</strong> stores notifications in Postgres, pushes inbox updates over WebSocket, and renders <strong>navigate</strong> / <strong>reply</strong> modals in Flutter.</p>
+<h2>What is it?</h2>
+<p>Notifications are <strong>in-app only</strong> (no OS push). Two scopes:</p>
+<table><thead><tr><th>Scope</th><th>Table</th><th>Meaning</th></tr></thead><tbody><tr><td><strong>User</strong></td><td><code>user_notifications</code></td><td>One row per user (module-created)</td></tr><tr><td><strong>Global</strong></td><td><code>global_notifications</code></td><td>One campaign row for everyone; per-user read in <code>global_notification_reads</code></td></tr></tbody></table>
+<p><strong>Delivery</strong> (<code>type</code>): <code>instant</code> auto-modals when unread; <code>inbox</code> is list-only.</p>
+<p><strong>Semantics</strong> (<code>category</code> + <code>subtype</code>): what the message *is* and which rules apply (allowed screens, reply keys, modal priority, 700ms gap). Both required on create; must be registered in the subtype registry.</p>
+<h2>In-modal sequence</h2>
+<p><code>NotificationHost</code> opens <strong>one</strong> modal session via <code>showNotificationModalSequence(pending)</code>.</p>
+<p>Inside <code>notification_modal.dart</code>:</p>
+<ol><li>Show first pending unread instant</li><li>User acts or dismisses → mark shown / mark read</li><li>Wait <strong>700ms</strong> (subtype may override)</li><li>Show next message in the <strong>same shell</strong> until list is done</li></ol>
+<p>Inbox list still uses batch <code>GET</code>; only modal presentation is sequential.</p>
+<h2>Subtype registry</h2>
+<p>Modules register <code>(source, category, subtype)</code> specs at bootstrap (Python + Flutter):</p>
+<table><thead><tr><th>Rule</th><th>Example</th></tr></thead><tbody><tr><td><code>allowed_screens</code></td><td>Navigate buttons must use these slugs</td></tr><tr><td><code>reply_option_keys</code></td><td>Reply keys must match exactly</td></tr><tr><td><code>modal_priority</code></td><td>Lower = shown first in pending list</td></tr><tr><td><code>inter_modal_delay_ms</code></td><td>Gap before next message (default 700)</td></tr></tbody></table>
+<p>Unknown subtypes are rejected on <code>create_for_user</code> and global sync.</p>
+<h2>Response framework (<code>data.response</code>)</h2>
+<table><thead><tr><th>Type</th><th>What JSON sets</th><th>What code does</th></tr></thead><tbody><tr><td><strong><code>navigate</code></strong></td><td>Button labels + <code>screen</code> or <code>to_path</code></td><td>Client: resolve slug → <code>Nav.push</code>, optional mark-read</td></tr><tr><td><strong><code>reply</code></strong></td><td>Option <code>key</code> + <code>label</code></td><td>Client: POST response → module handler → mark-read</td></tr></tbody></table>
+<p>Legacy <code>responses[]</code> (no <code>data.response</code>): single OK, dismiss → mark-read.</p>
+<h2>Screen slugs (Flutter)</h2>
+<p><code>&quot;screen&quot;: &quot;example_module&quot;</code> → modules register via <strong><code>NotificationScreenSink</code></strong> beside routes. Subtype spec may further restrict which screens are allowed.</p>
+<h2>Global campaigns (ops)</h2>
+<pre><code class="language-bash">wfrun   # → automation/backend/sync_global_notifications.py</code></pre>
+<p>Seed: <code>automation/backend/files/global_notifications.json</code> — requires <code>category</code> + <code>subtype</code>.</p>
+<h2>Try it locally</h2>
+<ol><li><code>wfrun</code> → docker up</li><li><code>wfrun</code> → sync global notifications (fresh DB)</li><li>Flutter dev login → <strong>Example module</strong> → <strong>Send demo notifications</strong></li><li>Or open <strong>Notifications</strong> inbox</li></ol>
+<p>Example reply handler branches on <code>subtype = example_reply_demo</code>, keys <code>accept</code> / <code>decline</code>.</p>
+<h2>Key endpoints</h2>
+<table><thead><tr><th>Method</th><th>Path</th><th>Role</th></tr></thead><tbody><tr><td><code>POST</code></td><td><code>/service/notifications/create</code></td><td>Create user row (<code>category</code> + <code>subtype</code> required)</td></tr><tr><td><code>GET</code></td><td><code>/authuser/notifications/messages</code></td><td>User inbox</td></tr><tr><td><code>GET</code></td><td><code>/authuser/notifications/globals</code></td><td>Global campaigns</td></tr><tr><td><code>POST</code></td><td><code>/authuser/notifications/response</code></td><td>Reply option dispatch</td></tr></tbody></table>
+<h2>While app is open</h2>
+<p>Insert → <code>inbox_changed</code> WS → Flutter refetch → <code>NotificationHost</code> → <code>showNotificationModalSequence</code>.</p>
+<h2>Related docs</h2>
+<ul><li><a href="../../../03_Base/NOTIFICATION_SYSTEM.md">NOTIFICATION_SYSTEM.md</a> — full schema, registry, tests</li><li><a href="../../../03_Base/WS_SYSTEM.md">WS_SYSTEM.md</a></li><li><a href="../../../03_Base/Flutter/MODAL_SYSTEM.md">MODAL_SYSTEM.md</a></li></ul>
+  </div>
+</main>
+</body>
+</html>

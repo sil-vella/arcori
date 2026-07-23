@@ -1,0 +1,67 @@
+#!/bin/bash
+# Xcode Cloud post-clone hook.
+# Copy entire ci_scripts/ dir to flutter_app/ios/ci_scripts/
+set -euo pipefail
+
+echo "===> Xcode Cloud post-clone start"
+echo "CI_WORKSPACE: ${CI_WORKSPACE:-"(not set)"}"
+echo "PWD: $(pwd)"
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+IOS_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+FLUTTER_APP_DIR="$(cd "${IOS_DIR}/.." && pwd)"
+REPO_ROOT="$(cd "${FLUTTER_APP_DIR}/.." && pwd)"
+
+echo "SCRIPT_DIR: ${SCRIPT_DIR}"
+echo "IOS_DIR: ${IOS_DIR}"
+echo "FLUTTER_APP_DIR: ${FLUTTER_APP_DIR}"
+echo "REPO_ROOT: ${REPO_ROOT}"
+
+if [ ! -f "${FLUTTER_APP_DIR}/pubspec.yaml" ]; then
+  echo "ERROR: pubspec.yaml not found at ${FLUTTER_APP_DIR}"
+  exit 1
+fi
+
+cd "${FLUTTER_APP_DIR}"
+
+if ! command -v flutter >/dev/null 2>&1; then
+  echo "Flutter not found; installing stable channel..."
+  git clone https://github.com/flutter/flutter.git --depth 1 -b stable "${HOME}/flutter"
+  export PATH="${HOME}/flutter/bin:${PATH}"
+fi
+
+flutter --version
+flutter config --no-analytics
+flutter config --no-enable-swift-package-manager
+flutter pub get
+flutter precache --ios
+
+# Dart-defines + Generated.xcconfig: ci_pre_xcodebuild.sh (ios_release_prebuild.sh)
+
+cd ios
+rm -rf Pods .symlinks
+
+if pod install; then
+  echo "pod install succeeded without repo update"
+else
+  echo "pod install failed; retrying with --repo-update"
+  attempts=0
+  max_attempts=4
+  sleep_seconds=5
+  until [ "$attempts" -ge "$max_attempts" ]; do
+    if pod install --repo-update; then
+      echo "pod install --repo-update succeeded"
+      break
+    fi
+    attempts=$((attempts + 1))
+    if [ "$attempts" -ge "$max_attempts" ]; then
+      echo "ERROR: pod install failed after ${max_attempts} attempts"
+      exit 1
+    fi
+    echo "Retry ${attempts}/${max_attempts} after ${sleep_seconds}s..."
+    sleep "$sleep_seconds"
+    sleep_seconds=$((sleep_seconds * 2))
+  done
+fi
+
+echo "===> Post-clone complete"

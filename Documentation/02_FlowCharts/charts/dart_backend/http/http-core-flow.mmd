@@ -1,0 +1,59 @@
+flowchart TD
+  T["Dart backend — HTTP core flow<br/>dart_bkend_base_02 / bin"]
+
+  subgraph e1["1. Entry"]
+    A1["app.dart — main()"]
+    A2["startApp — app_init.dart"]
+    A1 --> A2
+  end
+
+  subgraph e2["2. http_app.dart"]
+    B1["createHttpHandler()"]
+    B2["HttpModule"]
+    B3["registerApplicationRoutes(http)<br/>module_registry.dart"]
+    B4["buildRootHandler()"]
+    B1 --> B2 --> B3 --> B4
+  end
+
+  subgraph e3["3. Registry → feature modules"]
+    C1["registerUserRoutes"]
+    C2["registerServiceRoutes"]
+    B3 --> C1
+    B3 --> C2
+  end
+
+  subgraph e4["4. HttpModule internals"]
+    D1["RouterType: public · authUser · service"]
+    D2["3 × shelf_router.Router"]
+    D3["Public: GET / and GET /health — user routes"]
+    D4["Features: addGet / addPost"]
+    D5["HttpAction → ShelfHttpRequest + ShelfHttpResponse<br/>HttpRequest · HttpResponse contracts"]
+    D1 --> D2 --> D3
+    D2 --> D4 --> D5
+  end
+
+  subgraph e5["5. Mounts — same prefix strip for all"]
+    E1["mount /public/ · /authuser/ · /service/"]
+    E2["(prefix stripped)"]
+    E1 --> E2
+  end
+
+  subgraph e6["6. app_init — server"]
+    F1["Pipeline + logRequests"]
+    F2["serve · PORT env"]
+    F1 --> F2
+  end
+
+  subgraph ex["Example"]
+    X1["GET /authuser/user/profile"]
+    X2["inner path /user/profile"]
+    X1 -.-> X2
+  end
+
+  T --> A1
+  A2 --> B1
+  B2 --> D1
+  C1 -.->|"addGet(...)"| D4
+  C2 -.->|"addGet(...)"| D4
+  B4 --> E1
+  A2 --> F1

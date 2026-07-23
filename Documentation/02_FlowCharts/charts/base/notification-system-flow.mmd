@@ -1,0 +1,62 @@
+flowchart TB
+  T["arcori Notification system"]
+
+  subgraph author [Authors]
+    JSON["global_notifications.json"]
+    Sync["wfrun → sync_global_notifications.py"]
+    ModCreate["module create_for_user"]
+    SubtypeReg["subtype_registry register"]
+    Demo["POST /example_module/demo-notifications"]
+  end
+
+  subgraph db [PostgreSQL]
+    UN[(user_notifications)]
+    GN[(global_notifications)]
+    GR[(global_notification_reads)]
+  end
+
+  subgraph fastapi [FastAPI python_base_05]
+    Validate["response_config + subtype validate"]
+    Svc["notification_service"]
+    ReplyReg["reply_registry"]
+    Handler["module reply handler"]
+    REST["GET /authuser/notifications/*"]
+    RespPOST["POST /authuser/notifications/response"]
+    Broadcaster["InboxBroadcaster"]
+    UserReg["UserConnectionRegistry"]
+  end
+
+  subgraph flutter [Flutter flutter_base_06]
+    Parse["NotificationResponseConfig"]
+    SubtypeDart["subtype_registry"]
+    ScreenSink["NotificationScreenSink"]
+    Host["NotificationHost"]
+    ModalSeq["showNotificationModalSequence"]
+    NavExec["executeNavigate"]
+    ReplyExec["executeReply"]
+    Router["go_router Nav.push"]
+    Inbox["NotificationsScreen"]
+  end
+
+  SubtypeReg --> Validate
+  JSON --> Sync --> GN
+  ModCreate --> SubtypeReg --> Validate --> Svc --> UN
+  Demo --> Svc
+  Svc --> Broadcaster --> UserReg
+  REST --> UN
+  REST --> GN
+  REST --> GR
+  UserReg -->|"WS inbox_changed"| Host
+  REST --> Host
+  Host --> ModalSeq
+  SubtypeDart --> ModalSeq
+  Parse --> ModalSeq
+  ModalSeq -->|navigate| NavExec
+  ModalSeq -->|reply| ReplyExec
+  ScreenSink --> NavExec
+  SubtypeDart --> NavExec
+  NavExec --> Router
+  ReplyExec --> RespPOST --> Svc --> ReplyReg --> Handler
+  Handler -->|success| GR
+  Handler -->|success| UN
+  REST --> Inbox

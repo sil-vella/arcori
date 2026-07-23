@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>State Ws Routing Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-routing-flow.html" class="active">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="state-ws-routing-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../../index.html">All charts</a>
+  </p>
+  <h1>State Ws Routing Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows what happens when a <strong>WebSocket message arrives</strong> and how it updates the right <strong>Riverpod notifier</strong> without every screen owning its own socket.</p>
+<h2>The old way (avoid)</h2>
+<p><code>WsDemoScreen</code> used to create two <code>WsClient()</code> instances inside the widget. That does not scale: duplicate connections, no shared reconnect, and game modules cannot receive server events.</p>
+<p>Static <strong>bridges</strong> (globals wired in notifier <code>build()</code>) were a temporary glue layer. They are replaced by <strong><code>Ref</code>-backed handlers</strong> registered at bootstrap and applied when <code>WsConnectionManager</code> starts.</p>
+<h2>The new way (three steps)</h2>
+<ol><li><strong><code>WsConnectionManager</code></strong> (core) — owns connections named <code>dart</code>, <code>api</code>, etc.</li><li><strong><code>WsChannelRouter</code></strong> (core) — looks at the message <code>channel</code> and forwards to the right handler</li><li><strong>Module notifiers</strong> — handlers call <code>ref.read(myProvider.notifier)</code>; screens <code>ref.watch</code> slices</li></ol>
+<h2>Register a channel handler (module bootstrap)</h2>
+<p>In <code>registerMyFeatureState</code>:</p>
+<pre><code class="language-dart">void registerMyFeatureState(AppStateSink state) {
+  state.onWsReady((registrar, ref) {
+    registrar.onPrefix(&#x27;myfeature&#x27;, (connectionId, data) {
+      ref.read(myFeatureProvider.notifier).applyWsPatch(connectionId, data);
+    });
+  });
+}</code></pre>
+<p>Prefix <code>myfeature</code> matches <code>myfeature</code> and <code>myfeature/anything</code>.</p>
+<p><strong>Replay tip:</strong> if your provider is <code>autoDispose</code> and the screen may mount after messages arrive, add a replay notifier (see <code>example_module_replay.dart</code>). The WS handler only <strong>stores</strong> on replay; the notifier <strong>listens</strong> for live updates while mounted and applies pending replay on first <code>build()</code>.</p>
+<h2>Connect and send from a screen</h2>
+<pre><code class="language-dart">final auth = ref.read(authProvider);
+final manager = ref.read(wsConnectionManagerProvider.notifier);
+
+await manager.connect(
+  &#x27;dart&#x27;,
+  url: WsConfig.dartAuthuserUrl,
+  accessToken: auth.accessToken,
+);
+
+await manager.send(
+  &#x27;dart&#x27;,
+  type: &#x27;event&#x27;,
+  channel: &#x27;demo/echo&#x27;,
+  payload: {&#x27;text&#x27;: &#x27;hello&#x27;},
+);</code></pre>
+<h2>Auth and reconnect (Flutter client only)</h2>
+<p>When the JWT changes (login / refresh), <code>WsConnectionManager</code> <strong>reconnects</strong> open sockets with the new token.</p>
+<p>When the user logs out, it <strong>disconnects all</strong> (no auto-reconnect).</p>
+<p><strong>Unexpected socket drop:</strong> <code>WsClient.connectionClosed</code> → exponential backoff (1s–30s) → reconnect. Endpoints stay registered until intentional <code>disconnect()</code>.</p>
+<p>WS errors like <code>token_expired</code>: refresh access token → reconnect.</p>
+<p><strong>Re-subscribe:</strong> after each (re)connect, <code>AppStateSink.onWsReconnect</code> hooks run (e.g. WS Demo re-sends <code>demo/room</code> subscribe). Backends do not reconnect — they wait for the new socket. See <a href="state-ws-reconnect-flow.html">state-ws-reconnect-flow</a>.</p>
+<h2>Selective rebuild tip</h2>
+<p>On a high-frequency screen, watch only what you need:</p>
+<pre><code class="language-dart">final slice = ref.watch(
+  exampleModuleProvider.select((s) =&gt; (s.revision, s.message)),
+);</code></pre>
+<p>That avoids rebuilding the whole screen on every WS tick.</p>
+<h2>Try it</h2>
+<ol><li>Login at <code>/login</code> if prompted → drawer <strong>WS Demo</strong> → <strong>Connect both WS</strong> → <strong>Subscribe room (Dart)</strong></li><li>Connection log fills from <code>wsConnectionManagerProvider</code></li><li>Demo channel log fills from <code>wsDemoLogProvider</code> when <code>demo/*</code> frames arrive</li><li>Restart Dart/API container — log should show backoff reconnect + re-subscribe</li></ol>
+<h2>Related</h2>
+<ul><li><a href="../../base/ws-system-flow.html">ws-system-flow</a> — server-side WS tiers (FastAPI + Dart)</li><li><a href="../../../../03_Base/WS_SYSTEM.md">WS_SYSTEM.md</a> — full technical doc</li><li><a href="state-ws-reconnect-flow.html">state-ws-reconnect-flow</a> — drop reconnect + re-subscribe hooks (Flutter only)</li><li><a href="../../../../03_Base/Flutter/STATE_SYSTEM.md">STATE_SYSTEM.md</a> — full checklist: <strong>Add a realtime feature</strong></li></ul>
+  </div>
+</main>
+</body>
+</html>

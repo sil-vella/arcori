@@ -1,0 +1,35 @@
+flowchart TD
+  T["Flutter — modular state system<br/>flutter_base_06 · Riverpod"]
+
+  subgraph boot["Startup — sinks wire modules"]
+    A1["main() → startApp()"]
+    A2["resetAppStateRegistry()"]
+    A3["registerApplicationModules<br/>routes · drawer · appBar · state"]
+    A4["registerCoreState(state)"]
+    A5["registerWsDemoState(state)"]
+    A6["registerExampleModuleState(state)"]
+    A7["AppProviderScope → MaterialApp.router"]
+    A1 --> A2 --> A3
+    A3 --> A4
+    A3 --> A5
+    A3 --> A6
+    A3 --> A7
+  end
+
+  subgraph tiers["Four state tiers"]
+    T1["Tier 1 — Core session<br/>authProvider · token · userId"]
+    T2["Tier 2 — Transport<br/>wsConnectionManagerProvider"]
+    T3["Tier 3 — Feature domain<br/>exampleModuleProvider"]
+    T4["Tier 4 — Ephemeral UI<br/>setState on screen"]
+  end
+
+  subgraph runtime["Runtime — screens read via Riverpod"]
+    S1["ConsumerWidget / ref.watch"]
+    S1 --> T1
+    S1 --> T2
+    S1 --> T3
+  end
+
+  T --> A1
+  A7 --> runtime
+  boot -.-> tiers

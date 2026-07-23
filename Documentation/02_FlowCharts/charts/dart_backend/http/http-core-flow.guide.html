@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Http Core Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../../charts/dart_backend/http/http-core-flow.html" class="active">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="http-core-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../../index.html">All charts</a>
+  </p>
+  <h1>Http Core Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows how a request moves through <strong>dart_bkend_base_02</strong> from <code>app.dart</code> to your feature handler.</p>
+<h2>Start here — one sentence</h2>
+<p>The server builds a <strong>route table</strong> at startup, then every HTTP request is matched by method + path and run through the right guard (public, JWT, or service key).</p>
+<h2>Startup order</h2>
+<ol><li><strong><code>app.dart</code></strong> → <code>startApp()</code> in <code>app_init.dart</code></li><li><strong><code>createHttpHandler()</code></strong> in <code>core/http/http_app.dart</code>:</li></ol>
+<p>   - Clears old routes (<code>resetRouteRegistry</code>)    - Calls <code>registerApplicationRoutes()</code> from <code>module_registry.dart</code>    - Returns <code>buildApplicationHandler()</code> — the Shelf dispatcher</p>
+<ol><li><strong><code>serve()</code></strong> binds to <code>PORT</code> (default <strong>8080</strong>)</li></ol>
+<h2>Three route tiers (same idea as FastAPI)</h2>
+<p>Register paths <strong>without</strong> the tier prefix in your module code:</p>
+<table><thead><tr><th>You register</th><th>Visitors call</th></tr></thead><tbody><tr><td><code>publicGet(&#x27;/&#x27;, …)</code></td><td><code>GET /</code></td></tr><tr><td><code>authuserGet(&#x27;/user/profile&#x27;, …)</code></td><td><code>GET /authuser/user/profile</code></td></tr><tr><td><code>servicePost(&#x27;/auth/validate&#x27;, …)</code></td><td><code>POST /service/auth/validate</code></td></tr></tbody></table>
+<p>Guards run automatically for authuser and service routes.</p>
+<h2>Example: add a public route</h2>
+<p>In your feature module:</p>
+<pre><code class="language-dart">routes.publicGet(
+  &#x27;/hello&#x27;,
+  (Request request) async =&gt; res.jsonOk({&#x27;message&#x27;: &#x27;hello&#x27;}),
+);</code></pre>
+<p>Test (with debug compose running — Dart on <code>:8080</code>):</p>
+<pre><code class="language-bash">curl -s http://127.0.0.1:8080/health | jq .
+curl -s http://127.0.0.1:8080/hello | jq .</code></pre>
+<p>Local backends are started via <code>docker compose -f docker/docker-compose.debug.yml</code> (see <a href="../../../../00_Active_Plans/00_MASTER_PLAN.md">00_MASTER_PLAN.md</a>), not host <code>dart run</code>.</p>
+<h2>Where to look in the repo</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>bin/app_init.dart</code></td><td>Starts Shelf server</td></tr><tr><td><code>bin/core/http/http_app.dart</code></td><td>Wires registry + handler</td></tr><tr><td><code>bin/core/http/service/routes.dart</code></td><td>Route table + tier prefixes</td></tr><tr><td><code>bin/modules/module_registry.dart</code></td><td>Imports all feature modules</td></tr></tbody></table>
+  </div>
+</main>
+</body>
+</html>

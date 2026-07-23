@@ -1,0 +1,43 @@
+flowchart TB
+  T["User presence — FastAPI authuser WS"]
+
+  subgraph flutter [Flutter]
+    AppWs["AppWsCoordinator api WS"]
+  end
+
+  subgraph ws [ws_dispatcher]
+    Auth[auth success]
+    Frame[inbound frame]
+    Close[disconnect]
+  end
+
+  subgraph local [Per-worker transport]
+    ConnReg["ConnectionRegistry send"]
+    UserConn["UserConnectionRegistry"]
+  end
+
+  subgraph redis [Redis presence]
+    UserSet["SET user:{user_id}"]
+    SessionHash["HASH session:{session_id} + TTL"]
+  end
+
+  subgraph core [Core API]
+    Presence["UserPresenceService"]
+    HTTP["GET /authuser/presence"]
+  end
+
+  subgraph modules [Feature modules]
+    Game["game invite flow"]
+  end
+
+  AppWs --> Auth
+  Auth --> UserConn
+  Auth --> Presence
+  Presence --> SessionHash
+  Presence --> UserSet
+  Frame --> Presence
+  Close --> UserConn
+  Close --> Presence
+  UserConn --> ConnReg
+  Game --> Presence
+  HTTP --> Presence

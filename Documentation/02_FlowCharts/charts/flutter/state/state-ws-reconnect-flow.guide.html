@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>State Ws Reconnect Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html" class="active">State Ws Reconnect Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="state-ws-reconnect-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../../index.html">All charts</a>
+  </p>
+  <h1>State Ws Reconnect Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p><strong>Flutter client only.</strong> FastAPI and Dart backends do not reconnect — they accept a new socket when the client comes back.</p>
+<h2>What triggers reconnect?</h2>
+<table><thead><tr><th>Trigger</th><th>Behavior</th></tr></thead><tbody><tr><td><strong>Socket drop</strong></td><td><code>WsClient.onDone</code> (not intentional <code>disconnect()</code>) → <code>connectionClosed</code> → backoff → reconnect</td></tr><tr><td><strong>Connect failure</strong></td><td>Same backoff loop</td></tr><tr><td><strong>JWT changes</strong> (login / refresh)</td><td>Immediate <code>reconnectAll()</code> with new token</td></tr><tr><td><strong><code>token_expired</code> WS error</strong></td><td>Refresh access token → reconnect that connection</td></tr><tr><td><strong>Logout / <code>disconnect()</code></strong></td><td>Cancel timers; endpoint removed — <strong>no</strong> auto-reconnect</td></tr></tbody></table>
+<h2>Backoff</h2>
+<p><code>WsReconnectPolicy</code>: starts at <strong>1s</strong>, doubles each attempt, caps at <strong>30s</strong>. Attempt counter resets on successful connect.</p>
+<p>Endpoints (<code>url</code> per <code>connectionId</code>) stay registered until you call <code>disconnect()</code> — so a drop does not forget which servers to rejoin.</p>
+<h2>Re-subscribe hooks</h2>
+<p>After every successful (re)connect, the manager runs <strong><code>AppStateSink.onWsReconnect</code></strong> hooks registered at bootstrap:</p>
+<pre><code class="language-dart">void registerMyFeatureState(AppStateSink state) {
+  state.onWsReady((registrar, ref) { /* inbound handlers */ });
+
+  state.onWsReconnect((connectionId, ref, send) async {
+    // Re-send subscribe frames the server forgot on disconnect
+    await send(
+      type: &#x27;subscribe&#x27;,
+      channel: &#x27;demo/room&#x27;,
+      payload: {&#x27;room_id&#x27;: &#x27;demo&#x27;},
+    );
+  });
+}</code></pre>
+<p>Track what to restore in <strong>module state</strong> (e.g. <code>wsDemoSubscriptionsProvider</code>). The server cleans room membership on disconnect; the client must subscribe again.</p>
+<h2>WS Demo try-it</h2>
+<ol><li>Login → WS Demo → <strong>Connect both WS</strong> → <strong>Subscribe room (Dart)</strong></li><li>Restart Dart container or kill network briefly</li><li>Connection log shows <code>socket closed — scheduling reconnect</code></li><li>After backoff, reconnect + hook re-sends subscribe</li></ol>
+<h2>Related</h2>
+<ul><li><a href="state-ws-routing-flow.html">state-ws-routing-flow</a> — inbound message routing</li><li><a href="../../../../03_Base/Flutter/STATE_SYSTEM.md">STATE_SYSTEM.md</a> — tier 2 transport</li><li><a href="../../../../03_Base/WS_SYSTEM.md">WS_SYSTEM.md</a> — server tiers + demo/room</li></ul>
+  </div>
+</main>
+</body>
+</html>

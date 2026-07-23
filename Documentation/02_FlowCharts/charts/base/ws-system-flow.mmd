@@ -1,0 +1,46 @@
+flowchart TD
+  T["arcori WebSocket system"]
+
+  subgraph flutter["Flutter — core/ws client only"]
+    MGR["WsConnectionManager<br/>drop reconnect + onWsReconnect"]
+    RTR["WsChannelRouter<br/>Ref-backed handlers"]
+    MGR --> RTR
+  end
+
+  subgraph tiers["Tier endpoints"]
+    P["/ws/public"]
+    A["/ws/authuser"]
+    S["/ws/service"]
+  end
+
+  subgraph auth["core/auth reuse"]
+    JWT["verify_access JWT"]
+    SK["SERVICE_KEY compare"]
+  end
+
+  subgraph channels["modules/ws demo channels"]
+    SYS["system ping/pong"]
+    ECHO["demo/echo"]
+    ROOM["demo/room subscribe/broadcast"]
+  end
+
+  subgraph backends["Backends — accept new sockets"]
+    API["FastAPI Uvicorn WS"]
+    DART["Dart shelf_web_socket"]
+  end
+
+  MGR --> P
+  MGR --> A
+  MGR --> API
+  MGR --> DART
+  A --> JWT
+  S --> SK
+  P --> SYS
+  A --> SYS
+  A --> ECHO
+  A --> ROOM
+  SYS --> API
+  SYS --> DART
+  ROOM --> API
+  ROOM --> DART
+  RTR -.->|"demo/* example/*"| MOD["module notifiers"]

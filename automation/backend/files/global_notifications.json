@@ -1,0 +1,23 @@
+{
+  "messages": [
+    {
+      "id": "65f0a1b2-c3d4-e5f6-0718-290200000001",
+      "title": "Welcome to Arcori",
+      "body": "Explore the example module or open your inbox.",
+      "type": "instant",
+      "category": "system",
+      "subtype": "welcome",
+      "msg_id": "global_welcome_v1",
+      "is_active": true,
+      "data": {
+        "response": {
+          "type": "navigate",
+          "buttons": [
+            { "label": "Explore", "screen": "example_module" },
+            { "label": "Notifications", "screen": "notifications" }
+          ]
+        }
+      }
+    }
+  ]
+}

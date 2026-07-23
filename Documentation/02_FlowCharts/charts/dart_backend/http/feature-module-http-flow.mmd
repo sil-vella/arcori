@@ -1,0 +1,54 @@
+flowchart TD
+  T["Feature module uses HttpModule — end-to-end<br/>dart_bkend_base_02"]
+
+  subgraph NOVICE["Start here — simple story"]
+    N1["1. You write a small function:<br/>what to return for one URL path"]
+    N2["2. You say which area it belongs to<br/>(public, logged-in user, or internal service)"]
+    N3["3. The registry plugs your function into the app<br/>when the server starts"]
+    N4["4. Visitors use a full web address<br/>the first part of the path groups routes —<br/>your code only names the short path inside that group"]
+    N5["5. When a request comes in,<br/>the server finds your function, runs it,<br/>and sends the answer back"]
+    N1 --> N2 --> N3 --> N4 --> N5
+  end
+
+  subgraph A["1. Registration — who calls what"]
+    A0["module_registry → registerUserRoutes(http)"]
+    A1["user/user_app.dart"]
+    A2["http.addGet(<br/>RouterType.authUser,<br/>'/user/profile',<br/>(req, res) async { res.text('OK'); })"]
+    A0 --> A1 --> A2
+  end
+
+  subgraph B["2. HttpModule — bind route"]
+    B1["addGet picks shelf Router for RouterType.authUser"]
+    B2["inner.get('/user/profile', _wrapAction(HttpAction))"]
+    B3["Inner shelf_router stores one Shelf Handler per route"]
+    A2 --> B1 --> B2 --> B3
+  end
+
+  subgraph C["3. _wrapAction — contracts ↔ Shelf"]
+    C1["Incoming Shelf Request"]
+    C2["ShelfHttpRequest(req) · ShelfHttpResponse()"]
+    C3["HttpAction(req, res) — feature sees HttpRequest · HttpResponse only"]
+    C4["res.toShelfResponse()"]
+    B2 -.-> C1
+    C1 --> C2 --> C3 --> C4
+  end
+
+  subgraph D["4. Expose tree — buildRootHandler"]
+    D1["Root Router"]
+    D2["mount '/authuser/' on authUser inner .call"]
+    D3["Full URL prefix is only here — not in feature path strings"]
+    B3 --> D1
+    D1 --> D2 --> D3
+  end
+
+  subgraph E["5. Runtime request"]
+    E1["GET /authuser/user/profile"]
+    E2["Prefix removed → match inner GET /user/profile"]
+    E3["Run stored Handler → steps in §3"]
+    E4["Bytes to client"]
+    D2 -.-> E1
+    E1 --> E2 --> E3 --> E4
+  end
+
+  T --> N1
+  N5 --> A0

@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Arcori: Flutter (Chrome) — global.log",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "/bin/bash \"${workspaceFolder}/automation/frontend/run_chrome_to_global_log.sh\"",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

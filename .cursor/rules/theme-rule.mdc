@@ -1,0 +1,71 @@
+---
+description: Flutter screens and widgets must use lib/core/theme SSOT; add new styles to theme modules before screens.
+globs:
+  - app_codebase/flutter_base_06/lib/**/*.dart
+alwaysApply: false
+---
+
+# Flutter theme system (strict)
+
+Full reference: [THEME_SYSTEM.md](Documentation/03_Base/Flutter/THEME_SYSTEM.md).
+
+## Agent policy
+
+When adding or changing **colors, typography, spacing, buttons, or any visual styling** in Flutter UI code:
+
+1. **Use the theme module** — never invent one-off styles in screens, widgets, or shell chrome.
+2. **Extend the theme first** — if no token or style exists yet, add it under `lib/core/theme/` **before** using it in a screen.
+3. **One import** — `import 'package:arcori/core/theme/theme.dart';`
+
+## Required APIs
+
+| Need | Use |
+|------|-----|
+| Colors | `AppColors.*`, `context.appColors.*`, `context.appColorScheme.*` |
+| Text | `context.appTypography.*`, `context.appTextTheme.*` |
+| Spacing | `AppSpacing.*` |
+| Buttons | `context.appButtons.*` (or default Material buttons without inline `style`) |
+| Modals | `AppModal.*`, `AppCenteredModal`, `AppFullScreenModal` — see [MODAL_SYSTEM.md](Documentation/03_Base/Flutter/MODAL_SYSTEM.md) |
+| Theme | `AppTheme.light` / `AppTheme.dark` in bootstrap only |
+
+## Forbidden in screens / modules / shell UI
+
+- `Colors.red`, `Colors.deepPurple`, `Color(0xFF…)` literals
+- Inline `TextStyle(fontSize: …, color: …, fontWeight: …)`
+- `FilledButton.styleFrom(…)`, `OutlinedButton.styleFrom(…)`, `TextButton.styleFrom(…)` in feature or shell code
+- Duplicated `EdgeInsets.all(24)` / magic layout numbers — use `AppSpacing`
+- `showDialog`, `showGeneralDialog`, raw `Dialog` / `AlertDialog` in modules — use `AppModal` from `lib/core/modal/`
+
+## Adding a new style (order of work)
+
+1. **Color** → `app_colors.dart` (+ `app_theme.dart` / `AppThemeExtension` if needed)
+2. **Text** → `app_typography.dart` (`AppFontSizes`, `AppTypographyExtension`)
+3. **Spacing** → `app_spacing.dart`
+4. **Button** → `app_buttons.dart` (+ wire default in `app_theme.dart` if global)
+5. **Modal chrome** → `app_modal_theme.dart` (+ shells in `lib/core/modal/` if new layout)
+6. **Screen** → consume via `context.appTypography`, `context.appButtons`, `AppModal`, etc.
+
+Do not ship a screen change that introduces styling the theme module does not expose.
+
+## Examples
+
+```dart
+// ❌ BAD — inline style in screen
+Text('Error', style: TextStyle(color: Colors.red, fontSize: 14))
+FilledButton.styleFrom(backgroundColor: Color(0xFF88C49A))
+
+// ✅ GOOD — theme tokens
+Text('Error', style: context.appTypography.body.copyWith(color: context.appColors.red))
+FilledButton(style: context.appButtons.success.filled, onPressed: …, child: …)
+Padding(padding: AppSpacing.screenPadding, child: …)
+```
+
+## Exceptions
+
+- `lib/core/theme/**` — this is where tokens and `ThemeData` are defined.
+- `lib/core/modal/**` — modal shells and `AppModal` API (styling still from theme tokens).
+- Third-party widgets that accept only raw values may be wrapped; prefer theming the wrapper once in `core/theme/` if reused.
+
+## Docs
+
+Update [THEME_SYSTEM.md](Documentation/03_Base/Flutter/THEME_SYSTEM.md) and [MODAL_SYSTEM.md](Documentation/03_Base/Flutter/MODAL_SYSTEM.md) when adding new token categories or conventions.

@@ -1,0 +1,138 @@
+# Local dev stack — all services load env from ../.env.local (copy from .env.local.sample).
+# Run from repo root via wfrun:
+#   wfrun → automation/backend/docker_up_build.sh
+# Manual from docker/:
+#   docker compose --env-file ../.env.local -f docker-compose.debug.yml up --build -d
+# Rebuild API only:
+#   docker compose --env-file ../.env.local -f docker-compose.debug.yml up --build -d Arcori_api
+name: arcori_fastapi_dart_flutter
+
+x-env-file: &env_file
+  - ../.env.local
+
+services:
+  Arcori_postgres:
+    image: postgres:16
+    container_name: Arcori_postgres
+    env_file: *env_file
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - arcori_pg_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  Arcori_adminer:
+    image: adminer:latest
+    container_name: Arcori_adminer
+    env_file: *env_file
+    ports:
+      - "8081:8080"
+    depends_on:
+      Arcori_postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  Arcori_redis:
+    image: redis:7-alpine
+    container_name: Arcori_redis
+    ports:
+      - "127.0.0.1:6379:6379"
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  Arcori_api:
+    build:
+      context: ../app_codebase/python_base_05
+      dockerfile: Dockerfile
+    image: silvella/arcori_api:dev
+    container_name: Arcori_api
+    env_file: *env_file
+    environment:
+      # Override host URLs (127.0.0.1:5433) with Docker network hostname.
+      DATABASE_URL: postgresql://${POSTGRES_APP_USER:-arcori}:${POSTGRES_APP_PASSWORD:-devpassword}@Arcori_postgres:5432/${POSTGRES_DB:-arcori}
+      MIGRATION_DATABASE_URL: postgresql://${POSTGRES_USER:-arcori}:${POSTGRES_PASSWORD:-devpassword}@Arcori_postgres:5432/${POSTGRES_DB:-arcori}
+      DART_SERVICE_URL: http://Arcori_dart:8080
+      REDIS_HOST: Arcori_redis
+      ARCORI_PRESENCE_ENABLED: "true"
+      ARCORI_RATE_LIMIT_ENABLED: "true"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../app_codebase/python_base_05/bin:/app/bin
+      - ../app_codebase/python_base_05/alembic:/app/alembic
+      - ../app_codebase/python_base_05/alembic.ini:/app/alembic.ini:ro
+      - arcori_uploads:/data/uploads
+    command: ["./entrypoint.dev.sh"]
+    depends_on:
+      Arcori_postgres:
+        condition: service_healthy
+      Arcori_redis:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  Arcori_dart:
+    build:
+      context: ../app_codebase/dart_bkend_base_02
+      dockerfile: Dockerfile
+      target: dev
+    image: silvella/arcori_dart:dev
+    container_name: Arcori_dart
+    env_file: *env_file
+    environment:
+      PORT: "8080"
+      FASTAPI_SERVICE_URL: http://Arcori_api:8000
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../app_codebase/dart_bkend_base_02/bin:/app/bin
+    depends_on:
+      Arcori_api:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 25s
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  arcori_pg_data:
+  arcori_uploads:

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Presence System Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html" class="active">Presence System Flow</a></li>
+<li><a href="../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="presence-system-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../index.html">All charts</a>
+  </p>
+  <h1>Presence System Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows how <strong>arcori</strong> tracks whether a user has an active <strong>FastAPI authuser WebSocket</strong> session, and how feature modules query that state.</p>
+<h2>What is it?</h2>
+<p>When the Flutter app is logged in, <code>AppWsCoordinator</code> keeps a connection to <code>/ws/authuser</code>. On auth success the API registers <strong>two mappings</strong>:</p>
+<ol><li><strong>Transport (local, per worker)</strong> — <code>user_id</code> ↔ <code>connection_id</code> so this worker can send WS frames (e.g. <code>inbox_changed</code>)</li><li><strong>Presence (shared)</strong> — <code>user_id</code> → session metadata (Redis or in-memory) so <strong>any Gunicorn worker</strong> can answer “is user B online?”</li></ol>
+<h2>Two layers — do not mix them up</h2>
+<table><thead><tr><th>Layer</th><th>Purpose</th><th>Storage</th><th>Module API</th></tr></thead><tbody><tr><td><strong>Transport</strong></td><td>Deliver WS frames to open sockets on <strong>this worker</strong></td><td>In-memory <code>UserConnectionRegistry</code></td><td>Core only — <code>UserConnectionReader</code></td></tr><tr><td><strong>Presence</strong></td><td>Online status, session count, which worker holds the socket</td><td>Redis SET + HASH (or in-memory when disabled)</td><td><strong><code>UserPresenceReader</code></strong></td></tr></tbody></table>
+<p>Redis does <strong>not</strong> replace local send callbacks — each worker still delivers only to connections it holds.</p>
+<h3>In-memory structures (reference)</h3>
+<p><strong>Transport</strong> (<code>user_connection_registry.py</code>):</p>
+<ul><li><code>_user_to_connections[user_id]</code> → set of <code>connection_id</code></li><li><code>_connection_to_user[connection_id]</code> → <code>user_id</code></li></ul>
+<p><strong>Presence — in-memory</strong> (<code>in_memory_presence_store.py</code>):</p>
+<ul><li><code>_user_to_sessions[user_id]</code> → set of <code>session_id</code></li><li><code>_sessions[session_id]</code> → <code>UserSession</code> metadata</li></ul>
+<p><strong>Presence — Redis</strong> (<code>redis_presence_store.py</code>):</p>
+<ul><li><code>Arcori:presence:user:{user_id}</code> — SET of session ids</li><li><code>Arcori:presence:session:{session_id}</code> — HASH + TTL (default 90s, refreshed on each WS frame)</li></ul>
+<h2>Module contract</h2>
+<p>Feature modules import the <strong>presence reader</strong>, not Redis or the transport registry:</p>
+<pre><code class="language-python">from core.presence import UserPresenceReader, UserSession, user_presence_reader
+
+if user_presence_reader.is_online(target_user_id):
+    sessions: list[UserSession] = user_presence_reader.sessions_for_user(target_user_id)</code></pre>
+<p>Or HTTP batch query:</p>
+<pre><code class="language-http">GET /authuser/presence?user_ids=uuid1,uuid2
+Authorization: Bearer …</code></pre>
+<p><strong>Do not</strong> use <code>UserConnectionRegistry</code> for “is user online?” — it only sees sockets on the current worker.</p>
+<p>To push WS traffic, use core delivery paths (e.g. notifications → <code>inbox_changed</code>), not raw connection ids.</p>
+<h2>Local dev</h2>
+<p>Debug compose includes <code>Arcori_redis</code>. API container sets <code>REDIS_HOST=Arcori_redis</code> and <code>ARCORI_PRESENCE_ENABLED=true</code>.</p>
+<p>Host pytest uses <code>REDIS_HOST=127.0.0.1</code> from <code>.env.local</code> (port <code>6379</code>).</p>
+<h2>Limits (v1)</h2>
+<ul><li><strong>FastAPI app WS only</strong> — Dart game WS not tracked</li><li><strong>InboxBroadcaster</strong> still sends only to <strong>local</strong> connections; cross-worker WS delivery is a follow-up (Redis pub/sub)</li><li>No Postgres presence table</li></ul>
+<h2>Related</h2>
+<ul><li><a href="../../../03_Base/PRESENCE_SYSTEM.md">PRESENCE_SYSTEM.md</a></li><li><a href="../../../03_Base/NOTIFICATION_SYSTEM.md">NOTIFICATION_SYSTEM.md</a></li><li><a href="../../../03_Base/WS_SYSTEM.md">WS_SYSTEM.md</a></li></ul>
+  </div>
+</main>
+</body>
+</html>

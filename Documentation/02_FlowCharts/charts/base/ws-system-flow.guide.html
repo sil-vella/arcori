@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ws System Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../charts/base/ws-system-flow.html" class="active">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="ws-system-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../index.html">All charts</a>
+  </p>
+  <h1>Ws System Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows how <strong>arcori</strong> real-time messaging works across Flutter, FastAPI, and Dart.</p>
+<h2>What is it?</h2>
+<p>WebSockets keep a <strong>live connection</strong> open (unlike REST where each request is separate). Both backends speak the <strong>same JSON message format</strong> as HTTP: <code>{ok, data}</code> or <code>{ok, error}</code>.</p>
+<p>On Flutter, <strong><code>WsConnectionManager</code></strong> owns shared sockets. It reconnects on auth change, on <code>token_expired</code>, and on <strong>unexpected drops</strong> (exponential backoff). Inbound frames demux by channel prefix into module notifiers — see <a href="../../flutter/state/state-ws-routing-flow.html">state-ws-routing-flow</a>. Drop reconnect and room re-subscribe are <strong>Flutter-only</strong> — <a href="../../flutter/state/state-ws-reconnect-flow.html">state-ws-reconnect-flow</a>.</p>
+<h2>Three tiers (same idea as HTTP)</h2>
+<table><thead><tr><th>URL</th><th>Who</th><th>Login</th></tr></thead><tbody><tr><td><code>/ws/public</code></td><td>Anyone</td><td>Connected immediately</td></tr><tr><td><code>/ws/authuser</code></td><td>Logged-in app user</td><td>First message: send JWT</td></tr><tr><td><code>/ws/service</code></td><td>Internal servers</td><td>First message: send service key</td></tr></tbody></table>
+<h2>Try it locally</h2>
+<ol><li>Start debug compose (loads <code>.env.local</code>):</li></ol>
+<p>   ``<code>bash    cd docker    docker compose --env-file ../.env.local -f docker-compose.debug.yml up -d    </code>``</p>
+<ol><li>Flutter: <code>wfrun</code> → launch → login if prompted → drawer <strong>WS Demo</strong></li><li><strong>Connect both WS</strong> → <strong>Subscribe room</strong> → <strong>Ping</strong> / <strong>Echo</strong></li><li>Restart <code>Arcori_dart</code> — client should backoff-reconnect and re-subscribe</li></ol>
+<p>Or use curl REST for token, then a WS client:</p>
+<pre><code class="language-bash">TOKEN=$(curl -s -X POST http://127.0.0.1:8000/public/auth/dev-login \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{&quot;user_id&quot;:&quot;test&quot;}&#x27; | jq -r &#x27;.data.access_token&#x27;)
+
+# Use wscat or Flutter demo with ws://127.0.0.1:8080/ws/authuser
+# First frame:
+# {&quot;type&quot;:&quot;auth&quot;,&quot;channel&quot;:&quot;system&quot;,&quot;payload&quot;:{&quot;access_token&quot;:&quot;&lt;TOKEN&gt;&quot;}}
+# Then:
+# {&quot;type&quot;:&quot;ping&quot;,&quot;channel&quot;:&quot;system&quot;}</code></pre>
+<h2>Demo channels</h2>
+<ul><li><strong><code>system</code></strong> — <code>ping</code> → <code>pong</code> (health check for WS)</li><li><strong><code>demo/echo</code></strong> — send <code>{text}</code> → get <code>{echo: text}</code> back</li><li><strong><code>demo/room</code></strong> — <code>subscribe</code> / <code>unsubscribe</code> / <code>event</code> — room join/leave + broadcast (both backends). Client must re-subscribe after reconnect.</li></ul>
+<h2>Production</h2>
+<ul><li><strong>Dart :8080</strong> — primary game / realtime (<code>CADDY_GAME_DOMAIN</code> → <code>wss://game.example/ws/authuser</code>)</li><li><strong>FastAPI :8000</strong> — app API + WS (<code>CADDY_DOMAIN</code> → <code>wss://api.example/ws/authuser</code>)</li><li>FastAPI Gunicorn uses <strong>UvicornWorker</strong> (<code>uvicorn.workers.UvicornWorker</code>) for WebSocket — not gevent</li></ul>
+<p>More: <a href="../../../03_Base/WS_SYSTEM.md">WS_SYSTEM.md</a>, <a href="../../../03_Base/PRODUCTION_SYSTEM.md">PRODUCTION_SYSTEM.md</a></p>
+  </div>
+</main>
+</body>
+</html>

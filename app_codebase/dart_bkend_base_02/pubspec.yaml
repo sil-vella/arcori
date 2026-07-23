@@ -1,0 +1,19 @@
+name: dart_bkend_base_02
+description: Shelf HTTP backend template.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.4.0
+
+dependencies:
+  dart_jsonwebtoken: ^3.1.1
+  http: ^1.2.2
+  shelf: ^1.4.2
+  shelf_web_socket: ^2.0.1
+  web_socket_channel: ^3.0.2
+
+dev_dependencies:
+  http: ^1.2.2
+  lints: ^5.0.0
+  test: ^1.25.8

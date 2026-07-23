@@ -1,0 +1,21 @@
+flowchart TD
+  T["Dart — example_module state flow"]
+
+  subgraph client ["Client"]
+    EVT["example/state event"]
+  end
+
+  subgraph mod ["modules/example_module"]
+    H["handleExampleState"]
+    SVC["ExampleModuleService"]
+    STORE["ExampleModuleStore"]
+  end
+
+  subgraph persist ["Optional durable"]
+    API["FastAPI POST /service/example_module/record"]
+    DB[(Postgres)]
+  end
+
+  EVT --> H --> SVC --> STORE
+  SVC -->|"record: true"| API --> DB
+  H -->|"WS response"| client

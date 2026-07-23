@@ -1,0 +1,19 @@
+"""Room membership — subscribe / unsubscribe / list connections in a room."""
+
+from __future__ import annotations
+
+from typing import Protocol
+
+
+class RoomMembershipContract(Protocol):
+    def subscribe(self, room_id: str, connection_id: str, *, user_id: str | None = None) -> None: ...
+
+    def unsubscribe(self, room_id: str, connection_id: str) -> None: ...
+
+    def connection_ids(self, room_id: str) -> set[str]: ...
+
+    def user_id_for(self, connection_id: str) -> str | None: ...
+
+    def on_connection_closed(self, connection_id: str) -> None: ...
+
+    def clear(self) -> None: ...
