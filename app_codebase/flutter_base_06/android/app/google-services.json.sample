@@ -1,8 +1,8 @@
 {
   "project_info": {
     "project_number": "000000000000",
-    "project_id": "wf-template-example",
-    "storage_bucket": "wf-template-example.appspot.com"
+    "project_id": "arcori-example",
+    "storage_bucket": "arcori-example.appspot.com"
   },
   "client": [
     {

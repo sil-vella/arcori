@@ -41,7 +41,7 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- App Links: https://YOUR_DOMAIN/wf-template-verify-email?token=… -->
+            <!-- App Links: https://YOUR_DOMAIN/arcori-verify-email?token=… -->
             <!-- Replace host with ARCORI_PUBLIC_APP_URL host after rename. -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -50,7 +50,7 @@
                 <data
                     android:scheme="https"
                     android:host="your-domain.example"
-                    android:pathPrefix="/wf-template-verify-email" />
+                    android:pathPrefix="/arcori-verify-email" />
             </intent-filter>
             <!-- Custom scheme (Safari same-site cannot use Universal Links) -->
             <intent-filter>
@@ -59,7 +59,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="arcori"
-                    android:host="wf-template-verify-email" />
+                    android:host="arcori-verify-email" />
             </intent-filter>
         </activity>
         <!-- Flutter built-in deep linking (go_router) -->

@@ -44,7 +44,7 @@ Dart does not talk to Postgres directly; only **FastAPI** and **operator/automat
 | TLS directory (host) | `/opt/apps/arcori/data/postgres/tls` |
 | In-container mount | `/etc/postgres-tls/` (read-only) |
 | Postgres service name | `Arcori_postgres` (Docker DNS — must appear in cert SANs) |
-| CA common name | `wf-template-pg-ca` |
+| CA common name | `arcori-pg-ca` |
 
 Set `APP_ROOT` in `.env.prod` if your deploy path differs.
 
@@ -81,7 +81,7 @@ Run on the **production VPS as root** (not on your laptop — the private keys s
 export TLS_DIR=/opt/apps/arcori/data/postgres/tls
 export DAYS_CA=3650
 export DAYS_SERVER=825
-export TLS_CA_CN=wf-template-pg-ca
+export TLS_CA_CN=arcori-pg-ca
 
 WORK=$(mktemp -d)
 trap 'rm -rf "${WORK}"' EXIT

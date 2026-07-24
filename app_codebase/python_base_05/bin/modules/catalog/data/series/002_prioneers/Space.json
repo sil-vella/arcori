@@ -1,0 +1,48 @@
+{
+  "catalog": "Space Pioneers Series",
+  "theme": "Space",
+  "themeCode": "SPC",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "SPC-DSR-GEN002-0008",
+      "themeCode": "SPC",
+      "designCode": "DSR",
+      "designFamily": "DUST_ROVER",
+      "design": "Dust Rover",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Space",
+      "subtheme": "Planets",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "effect": "None",
+      "printedRarity": "Common",
+      "series": "Pioneers Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a dust rover in minimalist style with a chrome finish and no effect. Use a background that is visually related to the dust rover. No borders, no frames. The dust rover should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-DSR-GEN002-0008.webp",
+      "loreDescription": "A collectible Dust Rover Arcori generation I from the Space Pioneers Series.",
+      "legacy": {
+        "preservationRequirement": 100,
+        "closureMilestone": 200
+      }
+    }
+  ]
+}

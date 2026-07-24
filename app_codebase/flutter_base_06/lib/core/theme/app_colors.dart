@@ -2,53 +2,56 @@ import 'package:flutter/material.dart';
 
 /// Single source of truth for app colors.
 ///
+/// Brand tokens are sampled from `assets/images/branding/logo.jpg`
+/// (purple field, gold wordmark/emblem, green gem accents). Prefer semantic
+/// tokens (`green`, `red`, `amber`) for status UI and brand tokens
+/// (`primary`, `secondary`, `tertiary`, `accent`) for chrome and accents.
+///
 /// All screens should read colors from here or from [Theme.of] / [ColorScheme]
-/// built by [AppTheme]. Prefer semantic tokens (`green`, `red`, `amber`) for
-/// status UI and brand tokens (`primary`, `secondary`, `tertiary`, `accent`) for
-/// chrome and accents.
+/// built by [AppTheme].
 abstract final class AppColors {
   AppColors._();
 
-  // ── Brand ────────────────────────────────────────────────────────────────
+  // ── Brand (from logo.jpg) ──────────────────────────────────────────────────
 
-  /// Muted sage — main brand / primary actions.
-  static const Color primary = Color(0xFF8FB5A0);
+  /// Arcori purple — main brand / primary actions.
+  static const Color primary = Color(0xFF6D2885);
 
-  /// Light sage — primary containers, chips, highlights.
-  static const Color primaryPastel = Color(0xFFD4E8DC);
+  /// Light lavender — primary containers, chips, highlights.
+  static const Color primaryPastel = Color(0xFFD6C2DC);
 
-  /// Muted lavender — secondary actions and supporting UI.
-  static const Color secondary = Color(0xFFA89BC4);
+  /// Arcori gold — secondary actions, wordmark-aligned accents.
+  static const Color secondary = Color(0xFFFAB537);
 
-  /// Light lavender — secondary containers.
-  static const Color secondaryPastel = Color(0xFFE4DCF0);
+  /// Light gold — secondary containers.
+  static const Color secondaryPastel = Color(0xFFFDEAC7);
 
-  /// Dusty peach — tertiary accents and decorative elements.
-  static const Color tertiary = Color(0xFFD4A89A);
+  /// Metallic bronze — tertiary accents (emblem mid-tone).
+  static const Color tertiary = Color(0xFFD39F57);
 
-  /// Light peach — tertiary containers.
-  static const Color tertiaryPastel = Color(0xFFF5E0D8);
+  /// Light bronze — tertiary containers.
+  static const Color tertiaryPastel = Color(0xFFF3E4CF);
 
-  /// Muted sky blue — accent highlights, links, focus rings.
-  static const Color accent = Color(0xFF7BAFC4);
+  /// Logo green — accent highlights, links, focus rings.
+  static const Color accent = Color(0xFF6FB52A);
 
-  /// Light sky — accent containers.
-  static const Color accentPastel = Color(0xFFD0E8F0);
+  /// Light green — accent containers.
+  static const Color accentPastel = Color(0xFFD6EAC3);
 
   // ── Semantic status ────────────────────────────────────────────────────────
 
-  /// Success / positive state.
-  static const Color green = Color(0xFF88C49A);
+  /// Success / positive state (aligned with brand green).
+  static const Color green = Color(0xFF6FB52A);
 
-  static const Color greenPastel = Color(0xFFD4F0DC);
+  static const Color greenPastel = Color(0xFFD6EAC3);
 
   /// Error / destructive state.
   static const Color red = Color(0xFFD49090);
 
   static const Color redPastel = Color(0xFFF5D8D8);
 
-  /// Warning / caution state.
-  static const Color amber = Color(0xFFD4B878);
+  /// Warning / caution state (aligned with brand gold).
+  static const Color amber = Color(0xFFE0A83A);
 
   static const Color amberPastel = Color(0xFFF5ECD0);
 
@@ -59,47 +62,67 @@ abstract final class AppColors {
 
   // ── Neutrals (light) ─────────────────────────────────────────────────────
 
-  static const Color background = Color(0xFFF8F6F4);
+  /// Soft lavender-tinted canvas.
+  static const Color background = Color(0xFFF7F4F8);
 
   static const Color surface = Color(0xFFFFFFFF);
 
-  static const Color onSurface = Color(0xFF3D3D3D);
+  static const Color onSurface = Color(0xFF2E2433);
 
-  static const Color onSurfaceMuted = Color(0xFF6B6B6B);
+  static const Color onSurfaceMuted = Color(0xFF6B616F);
 
-  static const Color outline = Color(0xFFC8C4C0);
+  static const Color outline = Color(0xFFC9C0CE);
 
-  static const Color divider = Color(0xFFE8E4E0);
+  static const Color divider = Color(0xFFE8E2EC);
 
   // ── Neutrals (dark) ────────────────────────────────────────────────────────
 
-  static const Color backgroundDark = Color(0xFF1E1E1E);
+  static const Color backgroundDark = Color(0xFF1A121E);
 
-  static const Color surfaceDark = Color(0xFF2A2A2A);
+  static const Color surfaceDark = Color(0xFF261C2C);
 
-  static const Color onSurfaceDark = Color(0xFFE8E4E0);
+  static const Color onSurfaceDark = Color(0xFFEDE6F0);
 
-  static const Color onSurfaceMutedDark = Color(0xFFB0ACA8);
+  static const Color onSurfaceMutedDark = Color(0xFFB5AAB8);
 
-  static const Color outlineDark = Color(0xFF4A4A4A);
+  static const Color outlineDark = Color(0xFF4A3F52);
 
-  static const Color dividerDark = Color(0xFF3A3A3A);
+  static const Color dividerDark = Color(0xFF372E3E);
 
   // ── On-color (text/icons on filled tokens) ─────────────────────────────────
 
-  static const Color onPrimary = Color(0xFF1E3D2E);
+  /// Light text on saturated purple.
+  static const Color onPrimary = Color(0xFFFFFFFF);
 
-  static const Color onSecondary = Color(0xFF2E2840);
+  /// Dark text on [primaryPastel] containers / tonal primary.
+  static const Color onPrimaryContainer = Color(0xFF270C30);
 
-  static const Color onTertiary = Color(0xFF4A3028);
+  /// Dark text on bright gold.
+  static const Color onSecondary = Color(0xFF553700);
 
-  static const Color onAccent = Color(0xFF1E3440);
+  /// Dark text on bronze.
+  static const Color onTertiary = Color(0xFF3D2A12);
 
-  static const Color onGreen = Color(0xFF1E4030);
+  /// Dark text on brand green.
+  static const Color onAccent = Color(0xFF1F3409);
+
+  static const Color onGreen = Color(0xFF1F3409);
 
   static const Color onRed = Color(0xFF4A2020);
 
   static const Color onAmber = Color(0xFF4A3A18);
 
   static const Color onBlue = Color(0xFF1E3040);
+
+  // ── Dark-mode containers (brand-tinted) ────────────────────────────────────
+
+  static const Color primaryContainerDark = Color(0xFF42224D);
+
+  static const Color secondaryContainerDark = Color(0xFF5D4312);
+
+  static const Color tertiaryContainerDark = Color(0xFF5A4224);
+
+  static const Color accentContainerDark = Color(0xFF37501F);
+
+  static const Color errorContainerDark = Color(0xFF5C3030);
 }

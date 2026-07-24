@@ -7,7 +7,7 @@ abstract final class AppPaths {
   static const login = '/login';
   static const register = '/register';
   /// Android/iOS App Link path (not a Flutter web UI).
-  static const verifyEmail = '/wf-template-verify-email';
+  static const verifyEmail = '/arcori-verify-email';
   static const wsDemo = '/ws-demo';
   static const exampleModule = '/example-module';
   static const notifications = '/notifications';

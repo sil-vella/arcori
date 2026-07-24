@@ -1,0 +1,488 @@
+{
+  "catalog": "Horror Genesis Series",
+  "theme": "Horror",
+  "themeCode": "HOR",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "HOR-GHO-GEN001-0001",
+      "themeCode": "HOR",
+      "designCode": "GHO",
+      "designFamily": "PHANTOM_SPIRIT",
+      "design": "Phantom Spirit",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Ghosts",
+      "style": "Watercolor",
+      "finish": "Transparent",
+      "effect": "Smoke",
+      "printedRarity": "Epic",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a phantom spirit in watercolor style with a transparent finish and smoke effect. Use a background that is visually related to the phantom spirit. No borders, no frames. The phantom spirit should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-GHO-GEN001-0001.webp",
+      "loreDescription": "A collectible Phantom Spirit Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-WRA-GEN001-0002",
+      "themeCode": "HOR",
+      "designCode": "WRA",
+      "designFamily": "WRAITH",
+      "design": "Wraith",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Ghosts",
+      "style": "Realistic",
+      "finish": "Chrome",
+      "effect": "Glow",
+      "printedRarity": "Rare",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a wraith in realistic style with a chrome finish and glow effect. Use a background that is visually related to the wraith. No borders, no frames. The wraith should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-WRA-GEN001-0002.webp",
+      "loreDescription": "A collectible Wraith Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-VAM-GEN001-0003",
+      "themeCode": "HOR",
+      "designCode": "VAM",
+      "designFamily": "BLOOD_COUNT",
+      "design": "Blood Count",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Vampires",
+      "style": "Anime",
+      "finish": "Foil",
+      "effect": "Fire",
+      "printedRarity": "Legendary",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a blood count in anime style with a foil finish and fire effect. Use a background that is visually related to the blood count. No borders, no frames. The blood count should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-VAM-GEN001-0003.webp",
+      "loreDescription": "A collectible Blood Count Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-DRA-GEN001-0004",
+      "themeCode": "HOR",
+      "designCode": "DRA",
+      "designFamily": "DARK_NOBLE",
+      "design": "Dark Noble",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Vampires",
+      "style": "Comic",
+      "finish": "Gloss",
+      "effect": "Pulse",
+      "printedRarity": "Rare",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a dark noble in comic style with a gloss finish and pulse effect. Use a background that is visually related to the dark noble. No borders, no frames. The dark noble should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-DRA-GEN001-0004.webp",
+      "loreDescription": "A collectible Dark Noble Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-ZOM-GEN001-0005",
+      "themeCode": "HOR",
+      "designCode": "ZOM",
+      "designFamily": "UNDEAD_WALKER",
+      "design": "Undead Walker",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Zombies",
+      "style": "Comic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a undead walker in comic style with a standard finish and no effect. Use a background that is visually related to the undead walker. No borders, no frames. The undead walker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-ZOM-GEN001-0005.webp",
+      "loreDescription": "A collectible Undead Walker Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-INF-GEN001-0006",
+      "themeCode": "HOR",
+      "designCode": "INF",
+      "designFamily": "INFECTED",
+      "design": "Infected",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Zombies",
+      "style": "Realistic",
+      "finish": "Matte",
+      "effect": "Smoke",
+      "printedRarity": "Uncommon",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a infected in realistic style with a matte finish and smoke effect. Use a background that is visually related to the infected. No borders, no frames. The infected should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-INF-GEN001-0006.webp",
+      "loreDescription": "A collectible Infected Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-WWF-GEN001-0007",
+      "themeCode": "HOR",
+      "designCode": "WWF",
+      "designFamily": "MOON_FANG",
+      "design": "Moon Fang",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Werewolves",
+      "style": "Anime",
+      "finish": "Metallic",
+      "effect": "Glow",
+      "printedRarity": "Epic",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a moon fang in anime style with a metallic finish and glow effect. Use a background that is visually related to the moon fang. No borders, no frames. The moon fang should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-WWF-GEN001-0007.webp",
+      "loreDescription": "A collectible Moon Fang Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-ALP-GEN001-0008",
+      "themeCode": "HOR",
+      "designCode": "ALP",
+      "designFamily": "ALPHA_WOLF",
+      "design": "Alpha Wolf",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Werewolves",
+      "style": "Realistic",
+      "finish": "Chrome",
+      "effect": "Motion",
+      "printedRarity": "Rare",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a alpha wolf in realistic style with a chrome finish and motion effect. Use a background that is visually related to the alpha wolf. No borders, no frames. The alpha wolf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-ALP-GEN001-0008.webp",
+      "loreDescription": "A collectible Alpha Wolf Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-DOL-GEN001-0009",
+      "themeCode": "HOR",
+      "designCode": "DOL",
+      "designFamily": "HAUNTED_DOLL",
+      "design": "Haunted Doll",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Haunted Objects",
+      "style": "Cartoon",
+      "finish": "Gloss",
+      "effect": "Sparkle",
+      "printedRarity": "Uncommon",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a haunted doll in cartoon style with a gloss finish and sparkle effect. Use a background that is visually related to the haunted doll. No borders, no frames. The haunted doll should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-DOL-GEN001-0009.webp",
+      "loreDescription": "A collectible Haunted Doll Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-MIR-GEN001-0010",
+      "themeCode": "HOR",
+      "designCode": "MIR",
+      "designFamily": "CURSED_MIRROR",
+      "design": "Cursed Mirror",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Haunted Objects",
+      "style": "Minimalist",
+      "finish": "Prismatic",
+      "effect": "Glow",
+      "printedRarity": "Epic",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a cursed mirror in minimalist style with a prismatic finish and glow effect. Use a background that is visually related to the cursed mirror. No borders, no frames. The cursed mirror should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-MIR-GEN001-0010.webp",
+      "loreDescription": "A collectible Cursed Mirror Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-NMR-GEN001-0011",
+      "themeCode": "HOR",
+      "designCode": "NMR",
+      "designFamily": "NIGHT_TERROR",
+      "design": "Night Terror",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Nightmares",
+      "style": "Neon",
+      "finish": "Chrome",
+      "effect": "Pulse",
+      "printedRarity": "Legendary",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a night terror in neon style with a chrome finish and pulse effect. Use a background that is visually related to the night terror. No borders, no frames. The night terror should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-NMR-GEN001-0011.webp",
+      "loreDescription": "A collectible Night Terror Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "HOR-SLP-GEN001-0012",
+      "themeCode": "HOR",
+      "designCode": "SLP",
+      "designFamily": "SLEEP_WALKER",
+      "design": "Sleep Walker",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Horror",
+      "subtheme": "Nightmares",
+      "style": "Comic",
+      "finish": "Matte",
+      "effect": "None",
+      "printedRarity": "Common",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a sleep walker in comic style with a matte finish and no effect. Use a background that is visually related to the sleep walker. No borders, no frames. The sleep walker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-SLP-GEN001-0012.webp",
+      "loreDescription": "A collectible Sleep Walker Arcori generation I from the Horror Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    }
+  ]
+}

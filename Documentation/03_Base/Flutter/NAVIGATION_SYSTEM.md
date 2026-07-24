@@ -314,5 +314,5 @@ Coverage includes: root chrome (menu, no back), push/pop, drawer stack unwind, a
 | Nested module routes (`/sample/:id`) | Keep flat routes or nest under each module's `GoRoute` |
 | Drawer as section tabs (no cross-section back) | `StatefulShellRoute.indexedStack` + `goBranch` |
 | Auth guards | `GoRouter.redirect` + `Nav.go` after login/logout |
-| Deep links / web URL sync | See [DEEP_LINKS.md](DEEP_LINKS.md) for App/Universal Links (`/wf-template-verify-email`); keep browser-only paths out of AASA |
+| Deep links / web URL sync | See [DEEP_LINKS.md](DEEP_LINKS.md) for App/Universal Links (`/arcori-verify-email`); keep browser-only paths out of AASA |
 | Injectable navigation for tests | Implement `AppNavigation` on a concrete class; inject via provider |

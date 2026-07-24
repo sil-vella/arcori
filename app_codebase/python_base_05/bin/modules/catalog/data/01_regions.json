@@ -1,0 +1,17 @@
+{
+  "catalog": "Launch Regions",
+  "version": 1,
+  "regions": [
+    {
+      "regionCode": "HTW",
+      "relationships": {
+        "affinity": [
+          "NAT-FOR-GEN001-0001"
+        ],
+        "hostility": [
+          "FAN-OBR-GEN001-0014"
+        ]
+      }
+    }
+  ]
+}

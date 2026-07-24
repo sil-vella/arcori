@@ -9,13 +9,13 @@ Open the **native Android/iOS app** from the email verification HTTPS link. Ther
 Mail link (server):
 
 ```text
-{ARCORI_PUBLIC_APP_URL}/wf-template-verify-email?token=…
+{ARCORI_PUBLIC_APP_URL}/arcori-verify-email?token=…
 ```
 
 Custom scheme (secondary / Safari same-site):
 
 ```text
-arcori://wf-template-verify-email?token=…
+arcori://arcori-verify-email?token=…
 ```
 
 App calls `POST /public/auth/verify-email` then navigates to Account.
@@ -24,7 +24,7 @@ App calls `POST /public/auth/verify-email` then navigates to Account.
 
 | Path | Opens |
 |------|--------|
-| `/wf-template-verify-email` | **App only** (claimed in AASA + Android intent-filter) |
+| `/arcori-verify-email` | **App only** (claimed in AASA + Android intent-filter) |
 | Future `/rl/…` or marketing | **Browser** — do **not** add to AASA / App Links |
 | Future `/gotoapp/…` | App — add a **separate** claim when referrals land |
 
@@ -44,7 +44,7 @@ Requirements:
 
 ## Flutter / OS flags
 
-- Android: `flutter_deeplinking_enabled`, App Link `pathPrefix="/wf-template-verify-email"`, scheme `arcori`
+- Android: `flutter_deeplinking_enabled`, App Link `pathPrefix="/arcori-verify-email"`, scheme `arcori`
 - iOS: `FlutterDeepLinkingEnabled`, URL scheme `arcori`, `Runner.entitlements` associated domains
 
 ## Branding rename
@@ -52,7 +52,7 @@ Requirements:
 After [`rename_arcori_branding.py`](../../../automation/local/rename_arcori_branding.py):
 
 - Scheme `arcori` → product flat name
-- Path `wf-template-verify-email` → `{kebab}-verify-email`
+- Path `arcori-verify-email` → `{kebab}-verify-email`
 - Update AndroidManifest host, entitlements, and deployed `.well-known` files
 
 ## Local debug
@@ -60,11 +60,11 @@ After [`rename_arcori_branding.py`](../../../automation/local/rename_arcori_bran
 ```bash
 # Android
 adb shell am start -a android.intent.action.VIEW \
-  -d 'arcori://wf-template-verify-email?token=TEST_TOKEN'
+  -d 'arcori://arcori-verify-email?token=TEST_TOKEN'
 
 # iOS Simulator
 xcrun simctl openurl booted \
-  'arcori://wf-template-verify-email?token=TEST_TOKEN'
+  'arcori://arcori-verify-email?token=TEST_TOKEN'
 ```
 
 Set `ARCORI_PUBLIC_APP_URL` to the real App Link domain in prod (not Flutter web `localhost:3002`).

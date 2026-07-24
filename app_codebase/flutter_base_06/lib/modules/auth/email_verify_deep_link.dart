@@ -10,7 +10,7 @@ import '../../core/navigation/app_paths.dart';
 /// Feedback after a verify deep link (SnackBar on Account / root).
 final ValueNotifier<String?> emailVerifyDeepLinkMessage = ValueNotifier(null);
 
-/// Captures `/wf-template-verify-email?token=` (HTTPS App Link or custom scheme).
+/// Captures `/arcori-verify-email?token=` (HTTPS App Link or custom scheme).
 ///
 /// Mirrors Dutch referral deep-link capture: fire-and-forget from go_router
 /// redirect; no dedicated verify screen.
@@ -62,10 +62,10 @@ class EmailVerifyDeepLinkHandler {
 
     if (uri.scheme == 'arcori') {
       final host = uri.host.toLowerCase();
-      if (host == 'wf-template-verify-email') return token;
+      if (host == 'arcori-verify-email') return token;
       if (uri.pathSegments.isNotEmpty &&
           uri.pathSegments.first.toLowerCase() ==
-              'wf-template-verify-email') {
+              'arcori-verify-email') {
         return token;
       }
       return null;

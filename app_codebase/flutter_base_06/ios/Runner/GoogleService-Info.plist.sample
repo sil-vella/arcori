@@ -9,11 +9,11 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.reignofplay.wf-template</string>
+	<string>com.reignofplay.arcori</string>
 	<key>PROJECT_ID</key>
-	<string>wf-template-example</string>
+	<string>arcori-example</string>
 	<key>STORAGE_BUCKET</key>
-	<string>wf-template-example.appspot.com</string>
+	<string>arcori-example.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>

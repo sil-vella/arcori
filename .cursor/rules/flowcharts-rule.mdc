@@ -1,0 +1,82 @@
+---
+description: Create Mermaid flowcharts + plain-English guides under Documentation/02_FlowCharts. Use only when the user explicitly asks for a flowchart or chart guide—never auto-create.
+alwaysApply: false
+---
+
+# FlowCharts (`.mmd` + `.guide.md`)
+
+Full system: [Documentation/02_FlowCharts](Documentation/02_FlowCharts/), builder [build_nav_and_charts.py](automation/backend/build_nav_and_charts.py), open via `wfcharts` ([wfcharts.md](Documentation/00_System_Wide/wfcharts.md)).
+
+## Hard gate — do not auto-create
+
+**Never** create, update, or regenerate flowcharts unless the user **explicitly** asks (e.g. “add a flowchart for X”, “document this flow as a chart”, “update the auth flowchart”).
+
+Do **not** add charts as a side effect of implementing features, writing plans, or editing base docs.
+
+## What each chart is
+
+Every chart is a **paired artifact** (same stem, same directory):
+
+| File | Role | Edit? |
+|------|------|--------|
+| `{name}.mmd` | Mermaid diagram source | Yes — author this |
+| `{name}.guide.md` | Plain-English explanation + copy-paste examples | Yes — author this |
+| `{name}.html` | Diagram page (nav + embedded Mermaid) | No — generated |
+| `{name}.guide.html` | Guide page | No — generated |
+
+- Chart page links to **“Plain English guide & examples →”** only if `{name}.guide.md` exists.
+- Guide page links back to the diagram and the index.
+- **Always ship both** `.mmd` and `.guide.md` for a new chart (unless the user asks for diagram-only).
+
+## Where to put files
+
+Under `Documentation/02_FlowCharts/charts/`, mirrored by concern:
+
+| Area | Path |
+|------|------|
+| Cross-cutting (auth, WS, errors, presence, …) | `charts/base/` |
+| Dart backend | `charts/dart_backend/{http\|state\|module_registry}/` |
+| Flutter | `charts/flutter/{state\|…}/` |
+
+Use **kebab-case** stems: `security-auth-flow.mmd`, `state-ws-routing-flow.mmd`.
+
+Nav labels and titles come from the stem (`state-ws-routing-flow` → “State Ws Routing Flow”). Prefer a clear `-flow` suffix when it fits existing charts.
+
+## Workflow (when user asks)
+
+1. **Scope the logic** — read the real code/docs; one chart = one coherent flow (not a dump of the whole codebase).
+2. **Write `{name}.mmd`** — Mermaid `flowchart` (usually `TD` / `LR`). Prefer subgraphs for layers/steps. Keep node labels short; put detail in the guide. Do **not** embed `%%{init:…}%%` (shared theme is injected at build if present).
+3. **Write `{name}.guide.md`** — see guide shape below. First line is `# Title` (builder strips it; template owns the H1).
+4. **Regenerate** from project root:
+   ```bash
+   python3 automation/backend/build_nav_and_charts.py
+   ```
+5. **Optional:** if a matching `Documentation/03_Base/*.md` exists and the user wants discoverability, add a one-line **Chart + plain English guide** link to the generated `.html` / `.guide.html` (same pattern as `ERROR_SYSTEM.md`, `WS_SYSTEM.md`).
+
+Do not hand-edit generated `.html` or invent parallel chart trees outside `02_FlowCharts/charts/`.
+
+## Guide shape (plain English)
+
+Match existing guides (`error-handling-flow.guide.md`, `state-ws-routing-flow.guide.md`):
+
+1. **Lead** — what the chart shows in one short paragraph (no jargon wall).
+2. **Concepts** — tables or short sections for tiers, actors, or decision points.
+3. **Step-through** — numbered path matching the diagram left→right / top→bottom.
+4. **Copy-paste examples** — real snippets (Dart/Python/curl) a reader can try.
+5. **Try it locally** — how to exercise the flow in this repo when practical.
+6. **Related** — links to sibling charts (`.html`) and canonical docs under `03_Base/`.
+
+Guide markdown subset supported by the builder: `#`/`##`/`###`, paragraphs, lists, fenced code, tables, `**bold**`, `` `code` ``, `[text](href)`.
+
+## Chart quality
+
+- Trace **actual** modules/files/APIs named in the repo; avoid fictional boxes.
+- Prefer flow of control / data over class-hierarchy dumps.
+- Split oversized topics into sibling charts (e.g. WS system vs Flutter reconnect) and cross-link in guides.
+
+## Before finishing
+
+- [ ] User explicitly requested the chart
+- [ ] `.mmd` + `.guide.md` co-located under the right `charts/…` folder
+- [ ] `python3 automation/backend/build_nav_and_charts.py` run; new chart appears in `index.html` nav
+- [ ] No manual edits to generated HTML as the source of truth

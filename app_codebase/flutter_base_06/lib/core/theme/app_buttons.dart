@@ -153,7 +153,7 @@ class AppButtonStyles {
         filledBg: AppColors.primary,
         filledFg: AppColors.onPrimary,
         tonalBg: AppColors.primaryPastel,
-        tonalFg: AppColors.onPrimary,
+        tonalFg: AppColors.onPrimaryContainer,
         outlinedFg: AppColors.primary,
         outlinedBorder: AppColors.primary,
         textFg: AppColors.primary,

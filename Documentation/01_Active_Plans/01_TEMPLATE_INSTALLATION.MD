@@ -4,9 +4,9 @@
 
 **Status:** Living checklist — tick items as the product matures.  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-07-20
+**Last Updated:** 2026-07-24
 
-Related: [00_MASTER_PLAN.md](00_MASTER_PLAN.md) · [wfstart.md](../00_System_Wide/wfstart.md) · [wfsecrets.md](../00_System_Wide/wfsecrets.md) · [DRAIN_SYSTEM.md](../03_Base/DRAIN_SYSTEM.md) · [PRODUCTION_SYSTEM.md](../03_Base/PRODUCTION_SYSTEM.md)
+Related: [00_MASTER_PLAN.md](00_MASTER_PLAN.md) · [wfstart.md](../00_System_Wide/wfstart.md) · [wfsecrets.md](../00_System_Wide/wfsecrets.md) · [DRAIN_SYSTEM.md](../03_Base/DRAIN_SYSTEM.md) · [PRODUCTION_SYSTEM.md](../03_Base/PRODUCTION_SYSTEM.md) · [DEEP_LINKS.md](../03_Base/Flutter/DEEP_LINKS.md) · [email-verification.md](email-verification.md)
 
 ---
 
@@ -137,10 +137,50 @@ Template still uses a single `POSTGRES_USER` for API + migrations + Adminer.
 
 ## Step 8 — First deploy smoke
 
-- [ ] `curl https://<api>/health` → `db: ok` (Alembic head includes `ops_runtime`).
+- [ ] `curl https://<api>/health` → `db: ok` (Alembic head includes `ops_runtime` / email-verify migration as shipped).
 - [ ] With service key: `GET /service/ops/drain-status` → JSON envelope.
 - [ ] Local or staging: `ops_drain.py enter` → `poll` → `exit` (app only; skip edge).
 - [ ] With edge live: `/public/*` is 503 while `/health` and `/service/ops/drain-status` still reach the app.
+
+---
+
+## Step 9 — Email verify deep links (production App / Universal Links)
+
+App + go_router handling ships in the template ([DEEP_LINKS.md](../03_Base/Flutter/DEEP_LINKS.md)). **HTTPS App Links do not work** until the product domain, store signing, and edge static files are finished. Custom-scheme local debug (`arcori://…`) is enough for device testing; production mail must use HTTPS.
+
+Mail / App Link path (after rename): `{PUBLIC_APP_URL}/<kebab>-verify-email?token=…`  
+API stays: `POST /public/auth/verify-email`.
+
+### Env and Flutter project
+
+- [ ] Set `ARCORI_PUBLIC_APP_URL` (rebranded prefix) in `.env.prod` to the **HTTPS App Link host** (same host users open from email — not Flutter web `localhost`).
+- [ ] Enable `ARCORI_EMAIL_VERIFICATION_ENABLED` and real `MAIL_SMTP_*` / `MAIL_FROM*` in prod.
+- [ ] Replace AndroidManifest App Link `android:host` (`your-domain.example` → real host); keep `pathPrefix` on the verify path only.
+- [ ] Replace iOS `Runner.entitlements` `applinks:your-domain.example` with `applinks:<real-host>`.
+- [ ] Confirm Associated Domains capability is on for the App ID in Apple Developer / Xcode signing.
+- [ ] After `wfstart` / rename: scheme, path, package/bundle IDs match the product (see [DEEP_LINKS.md](../03_Base/Flutter/DEEP_LINKS.md) branding notes).
+
+### Host `/.well-known` (Caddy / nginx on App Link domain)
+
+Copy stubs from [`Documentation/03_Base/Flutter/well-known/`](../03_Base/Flutter/well-known/) onto the **same host** as `PUBLIC_APP_URL`:
+
+| File | Serve as |
+|------|----------|
+| `apple-app-site-association` | `https://<host>/.well-known/apple-app-site-association` |
+| `assetlinks.json` | `https://<host>/.well-known/assetlinks.json` |
+
+- [ ] Replace `TEAMID` + iOS bundle id in AASA; paths only `/<kebab>-verify-email` (and `/*` if used).
+- [ ] Replace Android `package_name` + **Play App Signing** SHA-256 in `assetlinks.json` (not only local debug keystore).
+- [ ] HTTPS, **no redirects** on `/.well-known/*`; correct `Content-Type` (Apple expects JSON).
+- [ ] Do **not** claim future browser-only paths (`/rl/…`, marketing landings) in AASA / intent-filters — leave those for a later referral step.
+
+### Store / verify
+
+- [ ] Apple: Associated Domains + ship a build that includes entitlements.
+- [ ] Google: upload a Play build so Digital Asset Links can verify against Play signing cert.
+- [ ] Smoke: open a real verification email on a device with the app installed → app opens Account → `email_verified` true (or invalid-token SnackBar).
+
+Detail and local adb/simctl commands: [DEEP_LINKS.md](../03_Base/Flutter/DEEP_LINKS.md). Soft-verify product behavior: [email-verification.md](email-verification.md).
 
 ---
 

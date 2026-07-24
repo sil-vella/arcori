@@ -72,7 +72,7 @@ void main() {
 
     test('parses custom scheme host', () {
       final uri = Uri.parse(
-        'arcori://wf-template-verify-email?token=xyz',
+        'arcori://arcori-verify-email?token=xyz',
       );
       expect(EmailVerifyDeepLinkHandler.tokenFromUri(uri), 'xyz');
     });

@@ -1,0 +1,207 @@
+{
+  "version": 1,
+  "generatedFrom": "catalog JSON files in data/",
+  "themes": [
+    {
+      "theme": "Animals",
+      "themeCode": "ANM",
+      "subthemes": [
+        "Big Cats",
+        "Birds of Prey",
+        "Canines",
+        "Insects",
+        "Marine Life",
+        "Reptiles"
+      ]
+    },
+    {
+      "theme": "Characters",
+      "themeCode": "CHR",
+      "subthemes": [
+        "Mascots"
+      ]
+    },
+    {
+      "theme": "Fantasy",
+      "themeCode": "FAN",
+      "subthemes": [
+        "Dragons",
+        "Dwarves",
+        "Elves",
+        "Fairies",
+        "Goblins",
+        "Labyrinth",
+        "Mystic Beasts",
+        "Orcs",
+        "Wizards"
+      ]
+    },
+    {
+      "theme": "Gaming",
+      "themeCode": "GAM",
+      "subthemes": [
+        "Card Game",
+        "Esports",
+        "RPG",
+        "Racing",
+        "Retro Arcade",
+        "Sandbox",
+        "Strategy",
+        "Survival"
+      ]
+    },
+    {
+      "theme": "History",
+      "themeCode": "HIS",
+      "subthemes": [
+        "Age of Discovery",
+        "Ancient Egypt",
+        "Medieval",
+        "Roman Empire",
+        "Samurai",
+        "Vikings",
+        "Wild West"
+      ]
+    },
+    {
+      "theme": "Horror",
+      "themeCode": "HOR",
+      "subthemes": [
+        "Ghosts",
+        "Haunted Objects",
+        "Nightmares",
+        "Vampires",
+        "Werewolves",
+        "Zombies"
+      ]
+    },
+    {
+      "theme": "Kin",
+      "themeCode": null,
+      "subthemes": [
+        "Entelairs"
+      ]
+    },
+    {
+      "theme": "Lifestyle",
+      "themeCode": "LIF",
+      "subthemes": [
+        "Dance",
+        "Fashion",
+        "Food",
+        "Music",
+        "Photography",
+        "Travel"
+      ]
+    },
+    {
+      "theme": "Myth",
+      "themeCode": "MYT",
+      "subthemes": [
+        "Urban Legends"
+      ]
+    },
+    {
+      "theme": "Nature",
+      "themeCode": "NAT",
+      "subthemes": [
+        "Flowers",
+        "Forests",
+        "Landscapes",
+        "Mountains",
+        "Rivers",
+        "Sky",
+        "Volcanoes",
+        "Weather"
+      ]
+    },
+    {
+      "theme": "Ocean",
+      "themeCode": "OCN",
+      "subthemes": [
+        "Coral Reefs",
+        "Deep Sea",
+        "Marine",
+        "Pirates",
+        "Sea Monsters",
+        "Ships",
+        "Treasure"
+      ]
+    },
+    {
+      "theme": "Slammers",
+      "themeCode": "SLM",
+      "subthemes": [
+        "Balanced",
+        "Brute Force",
+        "Heavy Impact",
+        "Light Control",
+        "Precision",
+        "Recovery",
+        "Unstable",
+        "Visual Flair",
+        "Weighted Control",
+        "Wide Spread"
+      ]
+    },
+    {
+      "theme": "Space",
+      "themeCode": "SPC",
+      "subthemes": [
+        "Aliens",
+        "Asteroids",
+        "Astronauts",
+        "Black Holes",
+        "Comets",
+        "Galaxies",
+        "Planets",
+        "Spacecraft",
+        "Stars"
+      ]
+    },
+    {
+      "theme": "Sports",
+      "themeCode": "SPT",
+      "subthemes": [
+        "Adventure Sports",
+        "Basketball",
+        "Extreme Sports",
+        "Football",
+        "Martial Arts",
+        "Motorsports",
+        "Precision Sports",
+        "Tennis"
+      ]
+    },
+    {
+      "theme": "Technology",
+      "themeCode": "TEC",
+      "subthemes": [
+        "AI",
+        "Cyberpunk",
+        "Drones",
+        "Gadgets",
+        "Mechs",
+        "Nanotech",
+        "Robots"
+      ]
+    },
+    {
+      "theme": "Travellers",
+      "themeCode": "TRV",
+      "subthemes": []
+    },
+    {
+      "theme": "Vehicles",
+      "themeCode": "VEH",
+      "subthemes": [
+        "Aircraft",
+        "Boats",
+        "Construction",
+        "Motorcycles",
+        "Supercars",
+        "Trains"
+      ]
+    }
+  ]
+}

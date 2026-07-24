@@ -1,0 +1,518 @@
+{
+  "catalog": "Slammer Genesis Series",
+  "theme": "Slammers",
+  "themeCode": "SLM",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "SLM-STR-GEN001-0001",
+      "themeCode": "SLM",
+      "designCode": "STR",
+      "designFamily": "STARTER_SLAMMER",
+      "design": "Starter Slammer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Balanced",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "origin": "Starter",
+      "series": "Slammer Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 5
+      },
+      "economy": {
+        "permanent": true,
+        "maxCharges": null,
+        "chargeCostPerUse": 0,
+        "rechargeCostGoldCaps": 0,
+        "shopPriceGoldCaps": 0
+      },
+      "artworkPrompt": "Give me an image with flat artwork for a starter slammer in minimalist style with a standard finish and no effect. This image will be used as the source artwork to cut a circular slammer from \u2014 do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the starter slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-STR-GEN001-0001.webp",
+      "loreDescription": "A collectible Starter Slammer Slammer generation I from the Slammers Genesis Series."
+    },
+    {
+      "internalId": "SLM-TTN-GEN001-0002",
+      "themeCode": "SLM",
+      "designCode": "TTN",
+      "designFamily": "TITAN_SLAMMER",
+      "design": "Titan Slammer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Heavy Impact",
+      "style": "Realistic",
+      "finish": "Metallic",
+      "effect": "Pulse",
+      "printedRarity": "Rare",
+      "origin": "Shop",
+      "series": "Slammer Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 9,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 7
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "rechargeCostGoldCaps": 20,
+        "shopPriceGoldCaps": 150
+      },
+      "artworkPrompt": "Give me an image with flat artwork for a titan slammer in realistic style with a metallic finish and pulse effect. This image will be used as the source artwork to cut a circular slammer from \u2014 do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the titan slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-TTN-GEN001-0002.webp",
+      "loreDescription": "A collectible Titan Slammer Slammer generation I from the Slammers Genesis Series."
+    },
+    {
+      "internalId": "SLM-NDL-GEN001-0003",
+      "themeCode": "SLM",
+      "designCode": "NDL",
+      "designFamily": "NEEDLE_SLAMMER",
+      "design": "Needle Slammer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Precision",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "effect": "Glow",
+      "printedRarity": "Rare",
+      "origin": "Shop",
+      "series": "Slammer Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 4,
+        "precision": 9,
+        "control": 8,
+        "recovery": 7,
+        "spread": 2
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "rechargeCostGoldCaps": 20,
+        "shopPriceGoldCaps": 150
+      },
+      "artworkPrompt": "Give me an image with flat artwork for a needle slammer in minimalist style with a chrome finish and glow effect. This image will be used as the source artwork to cut a circular slammer from \u2014 do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the needle slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-NDL-GEN001-0003.webp",
+      "loreDescription": "A collectible Needle Slammer Slammer generation I from the Slammers Genesis Series."
+    },
+    {
+      "internalId": "SLM-CYC-GEN001-0004",
+      "themeCode": "SLM",
+      "designCode": "CYC",
+      "designFamily": "CYCLONE_SLAMMER",
+      "design": "Cyclone Slammer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Wide Spread",
+      "style": "Neon",
+      "finish": "Holographic",
+      "effect": "Motion",
+      "printedRarity": "Epic",
+      "origin": "Shop",
+      "series": "Slammer Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 9
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 20,
+        "chargeCostPerUse": 1,
+        "rechargeCostGoldCaps": 25,
+        "shopPriceGoldCaps": 250
+      },
+      "artworkPrompt": "Give me an image with flat artwork for a cyclone slammer in neon style with a holographic finish and motion effect. This image will be used as the source artwork to cut a circular slammer from \u2014 do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the cyclone slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-CYC-GEN001-0004.webp",
+      "loreDescription": "A collectible Cyclone Slammer Slammer generation I from the Slammers Genesis Series."
+    },
+    {
+      "internalId": "SLM-FTH-GEN001-0005",
+      "themeCode": "SLM",
+      "designCode": "FTH",
+      "designFamily": "FEATHER_SLAMMER",
+      "design": "Feather Slammer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Light Control",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "effect": "Sparkle",
+      "printedRarity": "Uncommon",
+      "origin": "Shop",
+      "series": "Slammer Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 3,
+        "precision": 8,
+        "control": 9,
+        "recovery": 9,
+        "spread": 3
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 30,
+        "chargeCostPerUse": 1,
+        "rechargeCostGoldCaps": 15,
+        "shopPriceGoldCaps": 100
+      },
+      "artworkPrompt": "Give me an image with flat artwork for a feather slammer in watercolor style with a gloss finish and sparkle effect. This image will be used as the source artwork to cut a circular slammer from \u2014 do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the feather slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-FTH-GEN001-0005.webp",
+      "loreDescription": "A collectible Feather Slammer Slammer generation I from the Slammers Genesis Series."
+    },
+    {
+      "internalId": "SLM-HAM-GEN001-0006",
+      "themeCode": "SLM",
+      "designCode": "HAM",
+      "designFamily": "HAMMER_SLAMMER",
+      "design": "Hammer Slammer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Brute Force",
+      "style": "Comic",
+      "finish": "Metallic",
+      "effect": "Fire",
+      "printedRarity": "Epic",
+      "origin": "Shop",
+      "series": "Slammer Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 10,
+        "precision": 2,
+        "control": 3,
+        "recovery": 2,
+        "spread": 8
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 20,
+        "chargeCostPerUse": 1,
+        "rechargeCostGoldCaps": 25,
+        "shopPriceGoldCaps": 250
+      },
+      "artworkPrompt": "Give me an image with flat artwork for a hammer slammer in comic style with a metallic finish and fire effect. This image will be used as the source artwork to cut a circular slammer from \u2014 do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the hammer slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-HAM-GEN001-0006.webp",
+      "loreDescription": "A collectible Hammer Slammer Slammer generation I from the Slammers Genesis Series."
+    },
+    {
+      "internalId": "SLM-ECO-GEN001-0007",
+      "themeCode": "SLM",
+      "designCode": "ECO",
+      "designFamily": "ECHO_SLAMMER",
+      "design": "Echo Slammer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Recovery",
+      "style": "Neon",
+      "finish": "Chrome",
+      "effect": "Pulse",
+      "printedRarity": "Rare",
+      "origin": "Shop",
+      "series": "Slammer Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 6,
+        "control": 7,
+        "recovery": 9,
+        "spread": 4
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "rechargeCostGoldCaps": 20,
+        "shopPriceGoldCaps": 150
+      },
+      "artworkPrompt": "Give me an image with flat artwork for a echo slammer in neon style with a chrome finish and pulse effect. This image will be used as the source artwork to cut a circular slammer from \u2014 do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the echo slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-ECO-GEN001-0007.webp",
+      "loreDescription": "A collectible Echo Slammer Slammer generation I from the Slammers Genesis Series."
+    },
+    {
+      "internalId": "SLM-GRV-GEN001-0008",
+      "themeCode": "SLM",
+      "designCode": "GRV",
+      "designFamily": "GRAVITY_SLAMMER",
+      "design": "Gravity Slammer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Weighted Control",
+      "style": "Low Poly",
+      "finish": "Matte",
+      "effect": "Glow",
+      "printedRarity": "Legendary",
+      "origin": "Shop",
+      "series": "Slammer Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 8,
+        "precision": 6,
+        "control": 6,
+        "recovery": 4,
+        "spread": 6
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 15,
+        "chargeCostPerUse": 1,
+        "rechargeCostGoldCaps": 35,
+        "shopPriceGoldCaps": 400
+      },
+      "artworkPrompt": "Give me an image with flat artwork for a gravity slammer in low poly style with a matte finish and glow effect. This image will be used as the source artwork to cut a circular slammer from \u2014 do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the gravity slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-GRV-GEN001-0008.webp",
+      "loreDescription": "A collectible Gravity Slammer Slammer generation I from the Slammers Genesis Series."
+    },
+    {
+      "internalId": "SLM-PRM-GEN001-0009",
+      "themeCode": "SLM",
+      "designCode": "PRM",
+      "designFamily": "PRISM_SLAMMER",
+      "design": "Prism Slammer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Visual Flair",
+      "style": "Minimalist",
+      "finish": "Prismatic",
+      "effect": "Rainbow Shift",
+      "printedRarity": "Legendary",
+      "origin": "Shop",
+      "series": "Slammer Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 7,
+        "control": 7,
+        "recovery": 6,
+        "spread": 5
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 20,
+        "chargeCostPerUse": 1,
+        "rechargeCostGoldCaps": 30,
+        "shopPriceGoldCaps": 350
+      },
+      "artworkPrompt": "Give me an image with flat artwork for a prism slammer in minimalist style with a prismatic finish and rainbow shift effect. This image will be used as the source artwork to cut a circular slammer from \u2014 do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the prism slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-PRM-GEN001-0009.webp",
+      "loreDescription": "A collectible Prism Slammer Slammer generation I from the Slammers Genesis Series."
+    },
+    {
+      "internalId": "SLM-GLT-GEN001-0010",
+      "themeCode": "SLM",
+      "designCode": "GLT",
+      "designFamily": "GLITCH_SLAMMER",
+      "design": "Glitch Slammer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Unstable",
+      "style": "Pixel Art",
+      "finish": "Holographic",
+      "effect": "Pulse",
+      "printedRarity": "Mythic",
+      "origin": "Event",
+      "series": "Slammer Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 7,
+        "precision": 4,
+        "control": 3,
+        "recovery": 5,
+        "spread": 10
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 12,
+        "chargeCostPerUse": 1,
+        "rechargeCostGoldCaps": 40,
+        "shopPriceGoldCaps": null
+      },
+      "artworkPrompt": "Give me an image with flat artwork for a glitch slammer in pixel art style with a holographic finish and pulse effect. This image will be used as the source artwork to cut a circular slammer from \u2014 do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the glitch slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-GLT-GEN001-0010.webp",
+      "loreDescription": "A collectible Glitch Slammer Slammer generation I from the Slammers Genesis Series."
+    }
+  ]
+}

@@ -15,7 +15,7 @@ GoRouter buildAppGoRouter(Ref ref) {
     initialLocation: AppPaths.home,
     redirect: (context, state) {
       final uri = state.uri;
-      // Custom scheme: arcori://wf-template-verify-email?token=…
+      // Custom scheme: arcori://arcori-verify-email?token=…
       if (uri.scheme == 'arcori') {
         final token = EmailVerifyDeepLinkHandler.tokenFromUri(uri);
         if (token != null) {

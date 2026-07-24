@@ -218,7 +218,7 @@ When `ARCORI_EMAIL_VERIFICATION_ENABLED` is truthy:
 - Full `register` and `convert-guest` create a Redis verify token and send SMTP mail (`MAIL_SMTP_*` / `MAIL_FROM*`).
 - Guests never receive verification mail; `email_verified` is `true` only when `users.email_verified_at` is set.
 - `POST /public/auth/verify-email` `{ token }` sets `email_verified_at`.
-- Mail / App Link path (not a web UI): `{ARCORI_PUBLIC_APP_URL}/wf-template-verify-email?token=…` — see [DEEP_LINKS.md](Flutter/DEEP_LINKS.md).
+- Mail / App Link path (not a web UI): `{ARCORI_PUBLIC_APP_URL}/arcori-verify-email?token=…` — see [DEEP_LINKS.md](Flutter/DEEP_LINKS.md).
 - `POST /authuser/user/account/resend-verification` for full + unverified (guests → forbidden).
 - Login is **unchanged** (soft gate — tokens still issued).
 

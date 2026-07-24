@@ -32,7 +32,7 @@ def maybe_send_email_verification(user_id: str, email: str) -> None:
     except EmailVerifyStoreError:
         return
 
-    verify_url = f"{public_app_url()}/wf-template-verify-email?token={token}"
+    verify_url = f"{public_app_url()}/arcori-verify-email?token={token}"
     body = (
         "Verify your email address for Arcori.\n\n"
         f"Open this link (valid for a limited time):\n{verify_url}\n\n"

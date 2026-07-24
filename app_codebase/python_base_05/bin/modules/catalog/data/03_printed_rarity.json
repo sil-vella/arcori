@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "description": "Printed Rarity influences how often an Arcori enters circulation and how often it is naturally selected, without affecting gameplay strength. Values can be tuned later.",
+  "printedRarities": [
+    {
+      "printedRarity": "Common",
+      "packChance": "Very High",
+      "selectionWeight": 3.0
+    },
+    {
+      "printedRarity": "Uncommon",
+      "packChance": "High",
+      "selectionWeight": 2.0
+    },
+    {
+      "printedRarity": "Rare",
+      "packChance": "Medium",
+      "selectionWeight": 1.2
+    },
+    {
+      "printedRarity": "Epic",
+      "packChance": "Low",
+      "selectionWeight": 0.8
+    },
+    {
+      "printedRarity": "Legendary",
+      "packChance": "Very Low",
+      "selectionWeight": 0.5
+    },
+    {
+      "printedRarity": "Unique",
+      "packChance": "Special rules",
+      "selectionWeight": null,
+      "selectionWeightRule": "Custom"
+    }
+  ]
+}

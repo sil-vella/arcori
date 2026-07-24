@@ -1,0 +1,16 @@
+---
+description: Always check existing logic before implementing; stay aligned with modules, contracts, and auth.
+alwaysApply: true
+---
+
+# Align with existing architecture
+
+Before writing new code, **read the existing implementation** for the same concern (core helpers, sibling modules, registry wiring). Extend what is there — do not invent a parallel path.
+
+## Non-negotiable
+
+1. **Modules + registry** — Features live in modules and wire through `module_registry` (routes, WS, state, drawer, errors). No one-off bootstrap outside that pattern.
+2. **Contracts** — Cross-module and core↔module boundaries use contracts/sinks/readers. Do not reach into another module’s internals.
+3. **Auth** — Use the existing auth tiers and guards (`public` / `authuser` / `service`), shared verify helpers, and session/token flows. Never add alternate auth or bypass guards.
+
+References: [EXAMPLE_MODULE.md](Documentation/03_Base/EXAMPLE_MODULE.md), [SECURITY_SYSTEM.md](Documentation/03_Base/SECURITY_SYSTEM.md), [STATE_SYSTEM.md](Documentation/03_Base/Flutter/STATE_SYSTEM.md), [NAVIGATION_SYSTEM.md](Documentation/03_Base/Flutter/NAVIGATION_SYSTEM.md).

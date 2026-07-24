@@ -1,0 +1,488 @@
+{
+  "catalog": "Vehicles Genesis Series",
+  "theme": "Vehicles",
+  "themeCode": "VEH",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "VEH-SUP-GEN001-0001",
+      "themeCode": "VEH",
+      "designCode": "SUP",
+      "designFamily": "HYPERCAR",
+      "design": "Hypercar",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Supercars",
+      "style": "Realistic",
+      "finish": "Chrome",
+      "effect": "Motion",
+      "printedRarity": "Legendary",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a hypercar in realistic style with a chrome finish and motion effect. Use a background that is visually related to the hypercar. No borders, no frames. The hypercar should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-SUP-GEN001-0001.webp",
+      "loreDescription": "A collectible Hypercar Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-MCL-GEN001-0002",
+      "themeCode": "VEH",
+      "designCode": "MCL",
+      "designFamily": "CLASSIC_COUPE",
+      "design": "Classic Coupe",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Supercars",
+      "style": "Comic",
+      "finish": "Gloss",
+      "effect": "None",
+      "printedRarity": "Common",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a classic coupe in comic style with a gloss finish and no effect. Use a background that is visually related to the classic coupe. No borders, no frames. The classic coupe should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-MCL-GEN001-0002.webp",
+      "loreDescription": "A collectible Classic Coupe Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-BIK-GEN001-0003",
+      "themeCode": "VEH",
+      "designCode": "BIK",
+      "designFamily": "STREET_BIKE",
+      "design": "Street Bike",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Motorcycles",
+      "style": "Anime",
+      "finish": "Metallic",
+      "effect": "Motion",
+      "printedRarity": "Rare",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a street bike in anime style with a metallic finish and motion effect. Use a background that is visually related to the street bike. No borders, no frames. The street bike should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-BIK-GEN001-0003.webp",
+      "loreDescription": "A collectible Street Bike Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-CRS-GEN001-0004",
+      "themeCode": "VEH",
+      "designCode": "CRS",
+      "designFamily": "CRUISER_BIKE",
+      "design": "Cruiser Bike",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Motorcycles",
+      "style": "Realistic",
+      "finish": "Matte",
+      "effect": "None",
+      "printedRarity": "Uncommon",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a cruiser bike in realistic style with a matte finish and no effect. Use a background that is visually related to the cruiser bike. No borders, no frames. The cruiser bike should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-CRS-GEN001-0004.webp",
+      "loreDescription": "A collectible Cruiser Bike Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-JET-GEN001-0005",
+      "themeCode": "VEH",
+      "designCode": "JET",
+      "designFamily": "JET_FIGHTER",
+      "design": "Jet Fighter",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Aircraft",
+      "style": "Realistic",
+      "finish": "Foil",
+      "effect": "Fire",
+      "printedRarity": "Epic",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a jet fighter in realistic style with a foil finish and fire effect. Use a background that is visually related to the jet fighter. No borders, no frames. The jet fighter should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-JET-GEN001-0005.webp",
+      "loreDescription": "A collectible Jet Fighter Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-HEL-GEN001-0006",
+      "themeCode": "VEH",
+      "designCode": "HEL",
+      "designFamily": "RESCUE_HELICOPTER",
+      "design": "Rescue Helicopter",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Aircraft",
+      "style": "Comic",
+      "finish": "Standard",
+      "effect": "Motion",
+      "printedRarity": "Common",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a rescue helicopter in comic style with a standard finish and motion effect. Use a background that is visually related to the rescue helicopter. No borders, no frames. The rescue helicopter should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-HEL-GEN001-0006.webp",
+      "loreDescription": "A collectible Rescue Helicopter Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-BLT-GEN001-0007",
+      "themeCode": "VEH",
+      "designCode": "BLT",
+      "designFamily": "BULLET_TRAIN",
+      "design": "Bullet Train",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Trains",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "effect": "Glow",
+      "printedRarity": "Rare",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a bullet train in minimalist style with a chrome finish and glow effect. Use a background that is visually related to the bullet train. No borders, no frames. The bullet train should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-BLT-GEN001-0007.webp",
+      "loreDescription": "A collectible Bullet Train Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-STM-GEN001-0008",
+      "themeCode": "VEH",
+      "designCode": "STM",
+      "designFamily": "STEAM_ENGINE",
+      "design": "Steam Engine",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Trains",
+      "style": "Watercolor",
+      "finish": "Metallic",
+      "effect": "Smoke",
+      "printedRarity": "Uncommon",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a steam engine in watercolor style with a metallic finish and smoke effect. Use a background that is visually related to the steam engine. No borders, no frames. The steam engine should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-STM-GEN001-0008.webp",
+      "loreDescription": "A collectible Steam Engine Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-YCH-GEN001-0009",
+      "themeCode": "VEH",
+      "designCode": "YCH",
+      "designFamily": "LUXURY_YACHT",
+      "design": "Luxury Yacht",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Boats",
+      "style": "Realistic",
+      "finish": "Gloss",
+      "effect": "Sparkle",
+      "printedRarity": "Epic",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a luxury yacht in realistic style with a gloss finish and sparkle effect. Use a background that is visually related to the luxury yacht. No borders, no frames. The luxury yacht should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-YCH-GEN001-0009.webp",
+      "loreDescription": "A collectible Luxury Yacht Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-SPB-GEN001-0010",
+      "themeCode": "VEH",
+      "designCode": "SPB",
+      "designFamily": "SPEED_BOAT",
+      "design": "Speed Boat",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Boats",
+      "style": "Comic",
+      "finish": "Standard",
+      "effect": "Motion",
+      "printedRarity": "Common",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a speed boat in comic style with a standard finish and motion effect. Use a background that is visually related to the speed boat. No borders, no frames. The speed boat should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-SPB-GEN001-0010.webp",
+      "loreDescription": "A collectible Speed Boat Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-BLD-GEN001-0011",
+      "themeCode": "VEH",
+      "designCode": "BLD",
+      "designFamily": "BULLDOZER",
+      "design": "Bulldozer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Construction",
+      "style": "Cartoon",
+      "finish": "Matte",
+      "effect": "None",
+      "printedRarity": "Common",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a bulldozer in cartoon style with a matte finish and no effect. Use a background that is visually related to the bulldozer. No borders, no frames. The bulldozer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-BLD-GEN001-0011.webp",
+      "loreDescription": "A collectible Bulldozer Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "VEH-CRN-GEN001-0012",
+      "themeCode": "VEH",
+      "designCode": "CRN",
+      "designFamily": "TOWER_CRANE",
+      "design": "Tower Crane",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Vehicles",
+      "subtheme": "Construction",
+      "style": "Low Poly",
+      "finish": "Metallic",
+      "effect": "Pulse",
+      "printedRarity": "Rare",
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a tower crane in low poly style with a metallic finish and pulse effect. Use a background that is visually related to the tower crane. No borders, no frames. The tower crane should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-CRN-GEN001-0012.webp",
+      "loreDescription": "A collectible Tower Crane Arcori generation I from the Vehicles Genesis Series.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    }
+  ]
+}

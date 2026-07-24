@@ -9,7 +9,7 @@ Related docs: [NAVIGATION_SYSTEM.md](NAVIGATION_SYSTEM.md) (shell chrome), [MODA
 | Layer | Location | Role |
 |-------|----------|------|
 | Barrel export | `lib/core/theme/theme.dart` | One import for all theme tokens |
-| Colors | `lib/core/theme/app_colors.dart` | Pastel palette — brand, semantic, neutrals |
+| Colors | `lib/core/theme/app_colors.dart` | Arcori brand palette (logo) — brand, semantic, neutrals |
 | Typography | `lib/core/theme/app_typography.dart` | Font sizes, weights, semantic text styles |
 | Spacing | `lib/core/theme/app_spacing.dart` | Layout gaps and screen padding |
 | Buttons | `lib/core/theme/app_buttons.dart` | Brand + semantic button styles |
@@ -42,7 +42,7 @@ app_init.dart
 2. **No hardcoded `Colors.*` in modules.** Use `AppColors`, `context.appColors`, or `Theme.of(context).colorScheme`.
 3. **Semantic names over raw values.** Prefer `context.appTypography.h2` and `context.appButtons.success.filled` over inline `TextStyle` / `ButtonStyle`.
 4. **Material slots still work.** `textTheme.headlineMedium`, `colorScheme.primary`, etc. are mapped from the same tokens — use whichever reads clearer in context.
-5. **Pastel palette.** Brand and status colors are muted pastels with matching `*Pastel` container variants and `on*` foreground tokens for contrast.
+5. **Brand from logo.** Primary purple, gold, bronze, and green are sampled from `assets/images/branding/logo.jpg`. Each brand/status color has a matching `*Pastel` container and `on*` foreground for contrast.
 6. **Platform font by default.** `AppFonts.primary` is `null` (Roboto / SF Pro). Set it when custom fonts are added to `pubspec.yaml`.
 
 ## Quick start
@@ -96,14 +96,16 @@ class MyScreen extends StatelessWidget {
 
 Static `const Color` tokens in `app_colors.dart`.
 
-### Brand
+### Brand (from `assets/images/branding/logo.jpg`)
 
-| Token | Use |
-|-------|-----|
-| `primary` / `primaryPastel` | Main brand actions and containers |
-| `secondary` / `secondaryPastel` | Supporting actions |
-| `tertiary` / `tertiaryPastel` | Decorative accents |
-| `accent` / `accentPastel` | Highlights, links, focus |
+| Token | Hex | Use |
+|-------|-----|-----|
+| `primary` / `primaryPastel` | `#6D2885` / `#D6C2DC` | Purple field — main actions and containers |
+| `secondary` / `secondaryPastel` | `#FAB537` / `#FDEAC7` | Gold wordmark — supporting actions |
+| `tertiary` / `tertiaryPastel` | `#D39F57` / `#F3E4CF` | Emblem bronze — decorative accents |
+| `accent` / `accentPastel` | `#6FB52A` / `#D6EAC3` | Logo green — highlights, links, focus |
+
+Filled primary uses light `onPrimary`; text on `primaryPastel` uses `onPrimaryContainer`.
 
 ### Semantic status
 

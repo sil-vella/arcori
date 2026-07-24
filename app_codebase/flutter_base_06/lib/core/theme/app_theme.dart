@@ -90,7 +90,7 @@ abstract final class AppTheme {
     primary: AppColors.primary,
     onPrimary: AppColors.onPrimary,
     primaryContainer: AppColors.primaryPastel,
-    onPrimaryContainer: AppColors.onPrimary,
+    onPrimaryContainer: AppColors.onPrimaryContainer,
     secondary: AppColors.secondary,
     onSecondary: AppColors.onSecondary,
     secondaryContainer: AppColors.secondaryPastel,
@@ -120,19 +120,19 @@ abstract final class AppTheme {
     brightness: Brightness.dark,
     primary: AppColors.primary,
     onPrimary: AppColors.onPrimary,
-    primaryContainer: Color(0xFF3D5C4A),
+    primaryContainer: AppColors.primaryContainerDark,
     onPrimaryContainer: AppColors.primaryPastel,
     secondary: AppColors.secondary,
     onSecondary: AppColors.onSecondary,
-    secondaryContainer: Color(0xFF4A4060),
+    secondaryContainer: AppColors.secondaryContainerDark,
     onSecondaryContainer: AppColors.secondaryPastel,
     tertiary: AppColors.tertiary,
     onTertiary: AppColors.onTertiary,
-    tertiaryContainer: Color(0xFF5C4038),
+    tertiaryContainer: AppColors.tertiaryContainerDark,
     onTertiaryContainer: AppColors.tertiaryPastel,
     error: AppColors.red,
     onError: AppColors.onRed,
-    errorContainer: Color(0xFF5C3030),
+    errorContainer: AppColors.errorContainerDark,
     onErrorContainer: AppColors.redPastel,
     surface: AppColors.surfaceDark,
     onSurface: AppColors.onSurfaceDark,
@@ -148,7 +148,7 @@ abstract final class AppTheme {
   );
 }
 
-/// Pastel palette exposed on [ThemeData.extensions] for convenient access.
+/// Brand palette exposed on [ThemeData.extensions] for convenient access.
 ///
 /// Prefer [AppColors] for static references; use this when you already have a
 /// [BuildContext] and want theme-adjacent tokens in one place.
@@ -205,7 +205,7 @@ extension AppThemeContext on BuildContext {
       Theme.of(this).extension<AppModalThemeExtension>() ??
       AppModalThemeExtension.light;
 
-  /// Pastel palette tokens registered on the active theme.
+  /// Brand palette tokens registered on the active theme.
   AppThemeExtension get appColors =>
       Theme.of(this).extension<AppThemeExtension>() ??
       const AppThemeExtension();
