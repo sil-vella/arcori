@@ -174,7 +174,7 @@ Bring these from a hardened product fork when you need them:
 
 - Versioned image tags + deploy automation with post-deploy health assert
 - App `/metrics` endpoint with CIDR restriction
-- Catalog hot-reload and product-specific `/service/*` routes
+- Product-specific `/service/*` catalog routes for Dart (player catalog read is authuser; see [catalog-hot-reload.md](../01_Active_Plans/catalog-hot-reload.md))
 
 ## Drain / maintenance (app layer)
 

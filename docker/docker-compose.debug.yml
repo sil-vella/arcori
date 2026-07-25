@@ -79,6 +79,8 @@ services:
       - ../app_codebase/python_base_05/alembic:/app/alembic
       - ../app_codebase/python_base_05/alembic.ini:/app/alembic.ini:ro
       - arcori_uploads:/data/uploads
+      # Read-only Arcori catalog artwork (filenames = internalId.webp)
+      - ../assets/images/arcori:/data/catalog-media:ro
     command: ["./entrypoint.dev.sh"]
     depends_on:
       Arcori_postgres:

@@ -14,6 +14,7 @@
 <ul>
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
 <li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/catalog-hot-reload-flow.html">Catalog Hot Reload Flow</a></li>
 <li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
 <li><a href="../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
 <li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
@@ -100,7 +101,7 @@ curl -s -X POST http://127.0.0.1:8000/public/auth/refresh \
   -d &#x27;{&quot;access_token&quot;:&quot;&lt;access_token&gt;&quot;}&#x27; | jq .</code></pre>
 <p>Use the <code>SERVICE_KEY</code> value from your <code>.env.local</code> (sample default shown above). Wrong service key → <strong>403</strong>. Bad or expired JWT → <strong>401</strong>.</p>
 <h2>What is not built yet</h2>
-<p>Google Sign-In → JWT exchange is planned. Email verification and rate limiting on auth routes are deferred.</p>
+<p>Google Sign-In → JWT exchange is planned. Email verification is deferred. HTTP rate limiting (global + <code>/public/auth/*</code> + email identity) is implemented — see <a href="../../../03_Base/SECURITY_SYSTEM.md">SECURITY_SYSTEM.md</a> and <a href="../../../01_Active_Plans/rate-limiting.md">rate-limiting.md</a>.</p>
   </div>
 </main>
 </body>

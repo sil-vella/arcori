@@ -1,0 +1,49 @@
+{
+  "catalog": "History Pioneers Series",
+  "theme": "History",
+  "series": "Pioneers",
+  "themeCode": "HIS",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "HIS-CAR-GEN002-0004",
+      "themeCode": "HIS",
+      "designCode": "CAR",
+      "designFamily": "CARTOGRAPHER",
+      "design": "Cartographer",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "History",
+      "subtheme": "Age of Discovery",
+      "style": "Watercolor",
+      "finish": "Matte",
+      "effect": "None",
+      "printedRarity": "Common",
+      "series": "Pioneers Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a cartographer in watercolor style with a matte finish and no effect. Use a background that is visually related to the cartographer. No borders, no frames. The cartographer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-CAR-GEN002-0004.webp",
+      "loreDescription": "A collectible Cartographer Arcori generation I from the History Pioneers Series.",
+      "legacy": {
+        "preservationRequirement": 100,
+        "closureMilestone": 200
+      }
+    }
+  ]
+}

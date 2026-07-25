@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catalog Hot Reload Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/catalog-hot-reload-flow.html" class="active">Catalog Hot Reload Flow</a></li>
+<li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="catalog-hot-reload-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../index.html">All charts</a>
+  </p>
+  <h1>Catalog Hot Reload Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart shows how the FastAPI <strong>catalog</strong> module serves Velora design JSON from disk with a <strong>mtime memory cache</strong>, so adding or editing theme files does not require a server restart.</p>
+<h2>Concepts</h2>
+<table><thead><tr><th>Piece</th><th>Role</th></tr></thead><tbody><tr><td><strong>authuser</strong></td><td>All catalog reads need a Bearer access JWT (same as notifications / profile)</td></tr><tr><td><strong>Exact-match router</strong></td><td>Paths are fixed strings; theme/design ids are <strong>query params</strong> (<code>code</code>, <code>id</code>)</td></tr><tr><td><strong>Loader cache</strong></td><td>Per worker: <code>(mtime_ns, size) → parsed JSON</code>; mismatch → re-read file</td></tr><tr><td><strong>Index scan</strong></td><td><code>GET …/catalog/index</code> lists <code>data/series/<strong>/*.json</code> using folder mtimes so </strong>new** theme files appear</td></tr><tr><td><strong>SSOT</strong></td><td>Files under <code>bin/modules/catalog/data/</code> — not Postgres for v1</td></tr></tbody></table>
+<h2>Endpoints</h2>
+<table><thead><tr><th>Full URL</th><th>Purpose</th></tr></thead><tbody><tr><td><code>GET /authuser/catalog/meta</code></td><td>Themes, regions, kin, rarities</td></tr><tr><td><code>GET /authuser/catalog/index</code></td><td>Velora list-everything (optional <code>series</code> / <code>theme</code> / <code>subtheme</code> / <code>limit</code> / <code>offset</code>)</td></tr><tr><td><code>GET /authuser/catalog/theme?code=ANM</code></td><td>One theme document</td></tr><tr><td><code>GET /authuser/catalog/design?id=ANM-TIG-GEN001-0001</code></td><td>One design</td></tr></tbody></table>
+<p>Responses use <code>{ok: true, data: …}</code> and omit <code>artworkPrompt</code>. Errors use <code>catalog/not_found</code>, <code>catalog/invalid_query</code>, <code>catalog/load_failed</code>.</p>
+<h2>Step-through</h2>
+<ol><li>Startup registers <code>catalog</code> errors and authuser routes via <code>module_registry</code>.</li><li>Client calls an authuser catalog URL with Bearer token.</li><li><code>authuser_guard</code> verifies JWT; <code>catalog_app</code> calls <code>catalog_service</code>.</li><li>Service asks the loader for meta, a theme file, a design, or a full series scan.</li><li>Loader stats the file (or series folders). Same fingerprint → cached object; else read JSON and refresh cache.</li><li>Service strips <code>artworkPrompt</code> and returns <code>json_ok</code>.</li><li>After you add/edit a JSON file on the mounted <code>bin</code> volume, the <strong>next</strong> request that touches that path (or index) picks up the change — per worker.</li></ol>
+<h2>Copy-paste examples</h2>
+<pre><code class="language-bash"># After login — paste access_token
+TOKEN=…
+
+curl -s http://127.0.0.1:8000/authuser/catalog/meta \
+  -H &quot;Authorization: Bearer $TOKEN&quot; | jq .
+
+curl -s &#x27;http://127.0.0.1:8000/authuser/catalog/index?theme=Animals&amp;limit=5&#x27; \
+  -H &quot;Authorization: Bearer $TOKEN&quot; | jq .
+
+curl -s &#x27;http://127.0.0.1:8000/authuser/catalog/theme?code=ANM&#x27; \
+  -H &quot;Authorization: Bearer $TOKEN&quot; | jq &#x27;.data.themeCode, (.data.designs|length)&#x27;
+
+curl -s &#x27;http://127.0.0.1:8000/authuser/catalog/design?id=ANM-TIG-GEN001-0001&#x27; \
+  -H &quot;Authorization: Bearer $TOKEN&quot; | jq .</code></pre>
+<pre><code class="language-python"># Unit tests use a temp data root
+from modules.catalog import catalog_loader as loader
+loader.set_data_root_override(tmp_path / &quot;data&quot;)</code></pre>
+<h2>Try it locally</h2>
+<ol><li>Start FastAPI debug compose (<code>bin</code> is bind-mounted).</li><li>Obtain a token (<code>/public/auth/login</code> or guest bootstrap).</li><li>Hit <code>/authuser/catalog/index</code>.</li><li>Add <code>bin/modules/catalog/data/series/genesis/fashion.json</code> and call index again — new theme should appear without restarting the API container.</li></ol>
+<h2>Related</h2>
+<ul><li>Active plan: <a href="../../../01_Active_Plans/catalog-hot-reload.md">catalog-hot-reload.md</a></li><li>Tech Spec: <a href="../../../Game_Specific/Arcori_Technical_Specification_v0.4.md">Arcori_Technical_Specification_v0.4.md</a></li><li>Auth tier chart: <a href="security-auth-flow.html">security-auth-flow</a></li><li>Errors: <a href="error-handling-flow.html">error-handling-flow</a> · <a href="../../../03_Base/ERROR_SYSTEM.md">ERROR_SYSTEM.md</a></li></ul>
+  </div>
+</main>
+</body>
+</html>

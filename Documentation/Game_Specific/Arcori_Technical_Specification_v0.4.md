@@ -11,7 +11,7 @@ Fields: internalId, themeCode, designCode, designFamily, design, regionCode, aff
 
 | Layer | Role |
 |-------|------|
-| **Arcori Catalog** | Immutable design definitions (+ media); data behind Velora |
+| **Arcori Catalog** | Immutable design definitions (+ media); JSON under `modules/catalog/data/`; served authuser via mtime-cached loader (see [catalog-hot-reload.md](../01_Active_Plans/catalog-hot-reload.md)) |
 | **Region Catalog** | Politics and geography |
 | **Standings** | Live per-design community state for the **active** generation (mastery ranks, generation fill, leader window) |
 | **Museum** | World historical snapshots of **closed** generations (factual archive) |
@@ -42,6 +42,19 @@ Not owned                            Minted legacy piece
 | **Museum** | Closed-generation history (world), distinct from Trove |
 
 Transport for Standings / My Mastery: HTTP on screen enter; optional authuser WS invalidation (`standings_changed` / mint events) while Detail is open — not per-flip counter streaming.
+
+### Catalog HTTP (FastAPI)
+
+Read-only **authuser** routes (Bearer). Exact-match router → query params for ids:
+
+- `GET /authuser/catalog/meta`
+- `GET /authuser/catalog/index` (Velora scan of `series/**/*.json`)
+- `GET /authuser/catalog/theme?code=ANM`
+- `GET /authuser/catalog/design?id=…`
+
+Hot-reload: memory cache invalidated when file mtime/size changes; new theme files appear on next index after series folder mtime updates. Responses omit `artworkPrompt`.
+
+**Chart + plain English guide:** [catalog-hot-reload-flow](../02_FlowCharts/charts/base/catalog-hot-reload-flow.html) · [guide](../02_FlowCharts/charts/base/catalog-hot-reload-flow.guide.html)
 
 ## Relationships
 

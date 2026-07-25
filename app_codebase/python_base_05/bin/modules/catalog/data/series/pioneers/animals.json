@@ -1,0 +1,49 @@
+{
+  "catalog": "Animals Pioneers Series",
+  "theme": "Animals",
+  "series": "Pioneers",
+  "themeCode": "ANM",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "ANM-LYX-GEN002-0001",
+      "themeCode": "ANM",
+      "designCode": "LYX",
+      "designFamily": "LYNX",
+      "design": "Lynx",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Animals",
+      "subtheme": "Big Cats",
+      "style": "Comic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "series": "Pioneers Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a lynx in comic style with a standard finish and no effect. Use a background that is visually related to the lynx. No borders, no frames. The lynx should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-LYX-GEN002-0001.webp",
+      "loreDescription": "A collectible Lynx Arcori generation I from the Animals Pioneers Series.",
+      "legacy": {
+        "preservationRequirement": 100,
+        "closureMilestone": 200
+      }
+    }
+  ]
+}

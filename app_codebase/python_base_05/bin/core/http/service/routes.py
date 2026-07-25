@@ -110,6 +110,16 @@ def _mount_media(app: FastAPI) -> None:
     os.makedirs(root, exist_ok=True)
     app.mount("/media", StaticFiles(directory=root), name="media")
 
+    catalog_root = os.environ.get("CATALOG_MEDIA_ROOT", "/data/catalog-media").strip()
+    if not catalog_root:
+        catalog_root = "/data/catalog-media"
+    os.makedirs(catalog_root, exist_ok=True)
+    app.mount(
+        "/catalog-media",
+        StaticFiles(directory=catalog_root),
+        name="catalog_media",
+    )
+
 
 def _normalize_path(path: str) -> str:
     if path == "":

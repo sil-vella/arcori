@@ -45,6 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
             FilledButton.tonal(
+              onPressed: () => Nav.push(context, AppPaths.velora),
+              child: const Text('Velora'),
+            ),
+            const SizedBox(height: 16),
+            FilledButton.tonal(
               onPressed: () => Nav.push(context, AppPaths.sample),
               child: const Text('Open sample module'),
             ),

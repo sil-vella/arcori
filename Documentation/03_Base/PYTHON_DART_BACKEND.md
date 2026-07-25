@@ -235,7 +235,7 @@ Not in this template yet:
 
 - Match-scoped WS credential for game rooms
 - Redis pub/sub for multi-instance WS fan-out
-- Game catalog `/service/*` routes beyond example_module record
+- Game catalog `/service/*` routes for Dart (player browse is authuser — see catalog-hot-reload active plan)
 
 ## Charts
 

@@ -18,6 +18,8 @@ import 'notifications/notifications_routes.dart';
 import 'notifications/register_notifications_state.dart';
 import 'sample/sample_drawer.dart';
 import 'sample/sample_routes.dart';
+import 'velora/velora_drawer.dart';
+import 'velora/velora_routes.dart';
 import 'ws_demo/ws_demo_bottom_nav.dart';
 import 'ws_demo/ws_demo_drawer.dart';
 import 'ws_demo/ws_demo_routes.dart';
@@ -50,4 +52,6 @@ void registerApplicationModules(
   registerExampleModuleBottomNavScope(bottomNav);
   registerNotificationsRoutes(routes, notificationScreens);
   registerNotificationsDrawer(drawer);
+  registerVeloraRoutes(routes, notificationScreens);
+  registerVeloraDrawer(drawer);
 }

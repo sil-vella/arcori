@@ -1,0 +1,49 @@
+{
+  "catalog": "Ocean Pioneers Series",
+  "theme": "Ocean",
+  "series": "Pioneers",
+  "themeCode": "OCN",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "OCN-TPL-GEN002-0007",
+      "themeCode": "OCN",
+      "designCode": "TPL",
+      "designFamily": "TIDE_POOL",
+      "design": "Tide Pool",
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Ocean",
+      "subtheme": "Coral Reefs",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "effect": "None",
+      "printedRarity": "Common",
+      "series": "Pioneers Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a tide pool in watercolor style with a gloss finish and no effect. Use a background that is visually related to the tide pool. No borders, no frames. The tide pool should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-TPL-GEN002-0007.webp",
+      "loreDescription": "A collectible Tide Pool Arcori generation I from the Ocean Pioneers Series.",
+      "legacy": {
+        "preservationRequirement": 100,
+        "closureMilestone": 200
+      }
+    }
+  ]
+}

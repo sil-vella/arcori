@@ -128,5 +128,31 @@ backups/
 # --- Generated docs (optional PDFs next to flowcharts) ---
 Documentation/02_FlowCharts/charts/**/*.pdf
 
+# --- Images / binary art (catalog, kin, etc.) ---
+*.webp
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.ico
+*.heic
+*.avif
+*.tiff
+*.tif
+
+# --- Video ---
+*.mp4
+*.mov
+*.m4v
+*.avi
+*.mkv
+*.webm
+*.wmv
+*.flv
+*.mpeg
+*.mpg
+*.3gp
+
 # --- Flutter Chrome profile (launch_chrome.sh) ---
 .flutter_chrome_profile_*/

@@ -6,6 +6,8 @@ from core.http.service.routes import application_routes
 from core.ws.service.channel_registry import application_ws_sink
 from modules.auth.auth_app import register_auth_routes
 from modules.auth.auth_errors import register_auth_errors
+from modules.catalog.catalog_app import register_catalog_routes
+from modules.catalog.catalog_errors import register_catalog_errors
 from modules.example_module.example_app import register_example_module_routes
 from modules.notifications.notification_app import register_notification_routes
 from modules.notifications.notification_errors import register_notification_errors
@@ -38,6 +40,7 @@ def register_application_routes() -> None:
     register_service_routes(application_routes, http_responses)
     register_example_module_routes(application_routes, http_responses)
     register_notification_routes(application_routes, http_responses)
+    register_catalog_routes(application_routes, http_responses)
     register_presence_routes(application_routes, http_responses)
     register_ops_routes(application_routes, http_responses)
     register_auth_routes(application_routes, http_responses)
@@ -48,6 +51,7 @@ def register_application_errors() -> None:
     register_auth_errors(module_error_registrar)
     register_demo_errors(module_error_registrar)
     register_notification_errors(module_error_registrar)
+    register_catalog_errors(module_error_registrar)
     register_presence_errors(module_error_registrar)
     register_ops_errors(module_error_registrar)
 

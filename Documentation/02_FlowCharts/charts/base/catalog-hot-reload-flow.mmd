@@ -1,0 +1,53 @@
+flowchart TD
+  T["Catalog hot-reload read path<br/>python_base_05 modules/catalog"]
+
+  subgraph wire["Startup — module_registry"]
+    R1["register_catalog_errors"]
+    R2["register_catalog_routes<br/>authuser_get only"]
+    R1 --> R2
+  end
+
+  subgraph http["HTTP request"]
+    C1["Client Bearer JWT"]
+    C2["GET /authuser/catalog/..."]
+    C3["authuser_guard"]
+    C4["catalog_app handler"]
+    C1 --> C2 --> C3 --> C4
+  end
+
+  subgraph svc["catalog_service"]
+    S1["meta / index / theme / design"]
+    S2["strip artworkPrompt"]
+    S3["res.json_ok envelope"]
+    S1 --> S2 --> S3
+  end
+
+  subgraph load["catalog_loader — mtime cache"]
+    L1{"Need file or index?"}
+    L2["stat mtime_ns + size"]
+    L3{"Fingerprint match?"}
+    L4["Return cached parse"]
+    L5["Read JSON from disk<br/>modules/catalog/data"]
+    L6["Store in worker memory"]
+    L7["Scan series/**/*.json<br/>dir fingerprint"]
+    L1 -->|"single file"| L2
+    L1 -->|"Velora index"| L7
+    L7 --> L2
+    L2 --> L3
+    L3 -->|yes| L4
+    L3 -->|no| L5 --> L6 --> L4
+  end
+
+  subgraph disk["Disk SSOT"]
+    D1["00_themes… 01_regions<br/>02_kin 03_rarity"]
+    D2["series/genesis/*.json<br/>series/pioneers/*.json"]
+  end
+
+  C4 --> S1
+  S1 --> L1
+  L5 --> D1
+  L5 --> D2
+  L7 --> D2
+  S3 --> Out["Client Velora / Detail"]
+
+  Edit["Edit or add JSON<br/>no server restart"] -.->|"next request"| L2
