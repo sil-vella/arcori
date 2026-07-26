@@ -31,7 +31,7 @@ class RunLog:
         self._closed = False
         started = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         header = (
-            f"# wf_template dashboard run log\n"
+            f"# arcori dashboard run log\n"
             f"# script: {script_id}\n"
             f"# mode: {mode}\n"
             f"# started: {started}\n"

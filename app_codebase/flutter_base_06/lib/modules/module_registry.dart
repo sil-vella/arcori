@@ -12,6 +12,8 @@ import 'home/home_drawer.dart';
 import 'home/home_routes.dart';
 import 'auth/auth_drawer.dart';
 import 'auth/auth_routes.dart';
+import 'avari/avari_drawer.dart';
+import 'avari/avari_routes.dart';
 import 'notifications/notifications_drawer.dart';
 import 'notifications/notifications_routes.dart';
 import 'notifications/register_notifications_state.dart';
@@ -39,6 +41,8 @@ void registerApplicationModules(
   registerHomeDrawer(drawer);
   registerAuthRoutes(routes, notificationScreens);
   registerAuthDrawer(drawer);
+  registerAvariRoutes(routes, notificationScreens);
+  registerAvariDrawer(drawer);
   registerSampleRoutes(routes, notificationScreens);
   registerWsDemoRoutes(routes, notificationScreens);
   registerWsDemoBottomNavScope(bottomNav);

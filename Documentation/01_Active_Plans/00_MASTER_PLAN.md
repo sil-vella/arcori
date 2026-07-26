@@ -2,7 +2,7 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-07-24
+**Last Updated:** 2026-07-26
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
@@ -22,6 +22,7 @@ Index of active implementation plans. Detail lives in the linked files; Game_Spe
 | [core-match-loop.md](core-match-loop.md) | Matchmaking → match → celebration → Match Summary → exits |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Standings module + Detail tab + wfrun tiger seed; My Mastery/Trove still open |
 | [catalog-hot-reload.md](catalog-hot-reload.md) | Catalog JSON mtime cache, authuser APIs, `/catalog-media`, Flutter Velora browse |
+| [avari-profile.md](avari-profile.md) | Avari Profile `/avari` + drawer avatar header; Account stays auth/avatar upload |
 
 ## Design references
 

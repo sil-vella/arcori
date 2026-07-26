@@ -4,12 +4,11 @@ import '../../core/navigation/app_paths.dart';
 import '../../core/navigation/contracts/register_drawer_contract.dart';
 
 void registerAuthDrawer(AppDrawerSink drawer) {
-  drawer.addDestinations(const [
-    AppDrawerDestination(
+  drawer.addBottomItems(const [
+    AppDrawerBottomItem(
       path: AppPaths.account,
-      label: 'Account',
-      icon: Icons.person_outlined,
-      selectedIcon: Icons.person,
+      icon: Icons.settings_outlined,
+      tooltip: 'Account',
     ),
   ]);
 }

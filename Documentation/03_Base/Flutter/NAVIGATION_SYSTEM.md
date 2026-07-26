@@ -4,13 +4,13 @@ Technical guide for routing, shell chrome, drawer navigation, imperative `Nav`, 
 
 ## Overview
 
-Navigation is built on **go_router** with a single **ShellRoute** that wraps all feature routes in one shared `AppShell`. Feature modules never import `AppShell` or the concrete registries — they register routes and drawer rows through **sink interfaces** at startup.
+Navigation is built on **go_router** with a single **ShellRoute** that wraps all feature routes in one shared `AppShell`. Feature modules never import `AppShell` or the concrete registries — they register routes and drawer placements (header, destinations, bottom icons) through **sink interfaces** at startup.
 
 | Layer | Location | Role |
 |-------|----------|------|
 | Bootstrap | `lib/app_init.dart` | Reset registries, register modules, build router, run app |
 | Route sink | `lib/core/navigation/app_route_registry.dart` | Collects `GoRoute` trees from modules |
-| Drawer sink | `lib/core/navigation/app_drawer_registry.dart` | Collects `AppDrawerDestination` rows |
+| Drawer sink | `lib/core/navigation/app_drawer_registry.dart` | Collects header, destination rows, and bottom icon items |
 | Bottom nav scope sink | `lib/core/bottom_nav/bottom_nav_registry.dart` | Collects module route prefixes for bottom bar |
 | Shell | `lib/core/navigation/app_shell.dart` | One `Scaffold`: drawer, app bar, bottom bar, body |
 | Imperative API | `lib/core/navigation/app_navigation.dart` | `Nav` — push, pop, go, drawer push |
@@ -37,7 +37,7 @@ GoRouter
 2. **GoRouter is the single source of truth** for location and back-stack depth. There is no parallel manual nav stack.
 3. **Imperative navigation goes through `Nav`.** Screens and shell must not call `context.push`, `context.pop`, or `GoRouter.of(context)` directly (avoids extension clashes and bypassing shell semantics).
 4. **Registration files may use go_router.** `*_routes.dart` and `*_drawer.dart` import `go_router` and `AppPaths`; `*_screen.dart` imports `Nav` only.
-5. **Registries are resettable** before each bootstrap so widget tests and hot restarts do not accumulate duplicate routes or drawer rows.
+5. **Registries are resettable** before each bootstrap so widget tests and hot restarts do not accumulate duplicate routes or drawer placements.
 
 ## Bootstrap sequence
 
@@ -122,7 +122,23 @@ Add a constant to `AppPaths`, register in `module_registry.dart`, and add a matc
 
 ### Sink contract
 
-`AppDrawerSink` exposes `AppDrawerDestination` rows:
+`AppDrawerSink` exposes three placements:
+
+| Placement | Sink method | Capacity | Registry getter |
+|-----------|-------------|----------|-----------------|
+| Header | `setHeader(AppDrawerHeader)` | Exactly one (assert if called twice) | `appDrawerHeader` |
+| Destinations | `addDestinations(...)` | Ordered list, unlimited | `appDrawerDestinations` |
+| Bottom | `addBottomItems(...)` | Ordered list, unlimited | `appDrawerBottomItems` |
+
+**Header** — module owns the widget via `WidgetBuilder`. At most one registration across the whole app.
+
+```dart
+drawer.setHeader(AppDrawerHeader(
+  builder: (context) => /* module-owned header widget */,
+));
+```
+
+**Destinations** — primary nav rows:
 
 | Field | Purpose |
 |-------|---------|
@@ -145,7 +161,21 @@ void registerHomeDrawer(AppDrawerSink drawer) {
 }
 ```
 
-`AppShell` reads `appDrawerDestinations` at build time and renders a Material 3 `NavigationDrawer`.
+**Bottom** — horizontal icon row at the drawer foot. Each item is an icon that navigates to a screen path. Layout (when wired in `AppShell`): fill left → right; when a row is full, wrap one level upward. No item limit.
+
+| Field | Purpose |
+|-------|---------|
+| `path` | Same string as the feature's `GoRoute.path` |
+| `icon` | Material icon for the control |
+| `tooltip` | Optional accessibility / long-press hint |
+
+```dart
+drawer.addBottomItems(const [
+  AppDrawerBottomItem(path: AppPaths.settings, icon: Icons.settings_outlined),
+]);
+```
+
+Registry getters (`appDrawerHeader`, `appDrawerDestinations`, `appDrawerBottomItems`) are the shell’s read API. `AppShell` currently renders destination rows in a Material 3 `NavigationDrawer`; header and bottom icon-row UI wiring is not hooked up yet.
 
 ### Drawer selection highlight
 
@@ -188,8 +218,8 @@ FilledButton.tonal(
 
 - `PopScope` — intercepts system back when `Nav.canPop` is true
 - `ShellAppBar` + `ShellNavControls` — back button, registrable toolbar slots, hamburger menu
-- `NavigationDrawer` — module-registered destinations
-- `ShellBottomBar` — optional per-screen module action row (hidden when no items)
+- `NavigationDrawer` — module-registered destinations (header + bottom icon-row placements registered via `AppDrawerSink`; shell UI for those slots pending)
+- `ShellBottomBar` — optional per-screen module action row (hidden when no items); unrelated to drawer bottom icons
 - `body` — active route widget from go_router
 
 See [BOTTOM_NAV_REGISTRATION.md](BOTTOM_NAV_REGISTRATION.md) for bottom bar registration. See [APPBAR_WIDGET_REGISTRATION.md](APPBAR_WIDGET_REGISTRATION.md) for toolbar slots.
@@ -255,9 +285,9 @@ This produces a **cross-section back stack** (e.g. Home → Sample → WS Demo, 
 
 1. Create `lib/modules/<name>/`:
    - `<name>_routes.dart` — `register<Name>Routes(AppRouteSink, NotificationScreenSink)` (register navigable slug beside [GoRoute])
-   - `<name>_drawer.dart` — `register<Name>Drawer(AppDrawerSink)`
+   - `<name>_drawer.dart` — `register<Name>Drawer(AppDrawerSink)` — usually `addDestinations`; optionally `addBottomItems`; at most one module in the app may `setHeader`
    - `<name>_screen.dart` — body widget; use `ModuleScreenRegistrar` or `AppBarRegistrar` (see AppBar / bottom nav docs)
-   - `<name>_bottom_nav.dart` — optional `register<Name>BottomNavScope` + item factory
+   - `<name>_bottom_nav.dart` — optional `register<Name>BottomNavScope` + item factory (shell bottom bar, not drawer bottom icons)
 2. Add path to `AppPaths`.
 3. Wire calls in `module_registry.dart` (routes, drawer, optional bottom nav scope).
 4. Add widget tests if navigation or chrome behavior is non-trivial.
@@ -300,7 +330,7 @@ Coverage includes: root chrome (menu, no back), push/pop, drawer stack unwind, a
 | `lib/core/navigation/app_drawer_registry.dart` | Drawer sink |
 | `lib/core/navigation/app_paths.dart` | Path constants |
 | `lib/core/navigation/contracts/register_route_contract.dart` | `AppRouteSink` |
-| `lib/core/navigation/contracts/register_drawer_contract.dart` | `AppDrawerSink`, `AppDrawerDestination` |
+| `lib/core/navigation/contracts/register_drawer_contract.dart` | `AppDrawerSink`, `AppDrawerHeader`, `AppDrawerDestination`, `AppDrawerBottomItem` |
 | `lib/core/navigation/contracts/app_navigation_contract.dart` | `AppNavigation` interface (documentation / future DI) |
 | `lib/core/bottom_nav/bottom_nav_registry.dart` | Bottom nav scope sink |
 | `lib/core/bottom_nav/shell_bottom_bar.dart` | Shell bottom action bar |

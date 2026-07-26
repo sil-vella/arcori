@@ -14,6 +14,7 @@ abstract final class AppPaths {
   static const velora = '/velora';
   static const veloraTheme = '/velora/theme';
   static const arcoriDetail = '/velora/arcori';
+  static const avari = '/avari';
 
   static const _protectedPaths = {wsDemo};
 

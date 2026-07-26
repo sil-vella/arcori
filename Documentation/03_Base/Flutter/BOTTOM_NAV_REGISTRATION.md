@@ -161,8 +161,8 @@ During route transitions (pop/push), location may change before the registrar di
 `AppShell` owns:
 
 - `ShellAppBar` + `ShellNavControls` (back, menu)
-- `NavigationDrawer`
-- `ShellBottomBar` (when items exist)
+- `NavigationDrawer` — destination rows today; header + bottom icon-row placements are registered on `AppDrawerSink` (see [NAVIGATION_SYSTEM.md](NAVIGATION_SYSTEM.md))
+- `ShellBottomBar` (when items exist) — this doc; not the drawer’s bottom icon row
 - `body` — active route
 
 Screens must not add a second `Scaffold` for shell chrome (login is a known exception with its own local app bar).

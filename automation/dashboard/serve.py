@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# dash Open wf_template automation dashboard in browser
+# dash Open arcori automation dashboard in browser
 """wfrun dashboard — browser GUI alternative to the wfrun CLI script menu."""
 
 from __future__ import annotations
