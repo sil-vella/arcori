@@ -180,3 +180,85 @@ class CatalogThemeEntry {
 
   String get label => theme.isNotEmpty ? theme : themeCode;
 }
+
+class StandingsRankEntry {
+  const StandingsRankEntry({
+    required this.rank,
+    required this.displayLabel,
+    required this.masteryPoints,
+  });
+
+  factory StandingsRankEntry.fromJson(Map<String, dynamic> json) {
+    return StandingsRankEntry(
+      rank: json['rank'] is int
+          ? json['rank'] as int
+          : int.tryParse('${json['rank']}') ?? 0,
+      displayLabel: json['displayLabel']?.toString() ?? '',
+      masteryPoints: json['masteryPoints'] is int
+          ? json['masteryPoints'] as int
+          : int.tryParse('${json['masteryPoints']}') ?? 0,
+    );
+  }
+
+  final int rank;
+  final String displayLabel;
+  final int masteryPoints;
+}
+
+class DesignStandings {
+  const DesignStandings({
+    required this.internalId,
+    this.generationNumber,
+    this.generationRoman,
+    this.fillCurrent = 0,
+    this.fillCap = 0,
+    this.leaderWindowEndsAt,
+    this.ranks = const [],
+  });
+
+  factory DesignStandings.fromJson(Map<String, dynamic> json) {
+    final gen = json['generation'];
+    final fill = json['fill'];
+    final rawRanks = json['ranks'];
+    return DesignStandings(
+      internalId: json['internalId']?.toString() ?? '',
+      generationNumber: gen is Map
+          ? (gen['number'] is int
+              ? gen['number'] as int
+              : int.tryParse('${gen['number']}'))
+          : null,
+      generationRoman: gen is Map ? gen['roman']?.toString() : null,
+      fillCurrent: fill is Map
+          ? (fill['current'] is int
+              ? fill['current'] as int
+              : int.tryParse('${fill['current']}') ?? 0)
+          : 0,
+      fillCap: fill is Map
+          ? (fill['cap'] is int
+              ? fill['cap'] as int
+              : int.tryParse('${fill['cap']}') ?? 0)
+          : 0,
+      leaderWindowEndsAt: json['leaderWindowEndsAt']?.toString(),
+      ranks: rawRanks is List
+          ? rawRanks
+              .whereType<Map>()
+              .map(
+                (item) =>
+                    StandingsRankEntry.fromJson(Map<String, dynamic>.from(item)),
+              )
+              .toList()
+          : const [],
+    );
+  }
+
+  final String internalId;
+  final int? generationNumber;
+  final String? generationRoman;
+  final int fillCurrent;
+  final int fillCap;
+  final String? leaderWindowEndsAt;
+  final List<StandingsRankEntry> ranks;
+
+  bool get isEmpty =>
+      ranks.isEmpty && fillCurrent == 0 && fillCap == 0;
+}

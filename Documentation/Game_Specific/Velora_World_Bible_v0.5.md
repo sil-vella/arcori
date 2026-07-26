@@ -1,7 +1,7 @@
 # Velora World Bible
 
 Working Draft v0.5  
-**Last aligned:** 2026-07-24 (player destinations: Velora / Trove)
+**Last aligned:** 2026-07-26 (Avari — those who walk beside the Arcori)
 
 ## The Origin of Velora
 
@@ -24,11 +24,26 @@ Every Arcori bears a fragment of that forgotten age, though none can truly expla
 The Museum preserves what is known.  
 The Chronicle remembers what cannot be proven.
 
-In play: **Velora** is the world players enter to discover what still circulates (Arcori most of all). Mastery is progress upon those living echoes — not ownership. When a generation closes and a mint is earned, that Arcori leaves circulation into a player’s **Trove**; the Museum keeps the world’s factual record of what closed.
+In play: **Velora** is the world **Avari** enter to discover what still circulates (Arcori most of all). Mastery is progress upon those living echoes — not ownership. When a generation closes and a mint is earned, that Arcori leaves circulation into an Avari’s **Trove**; the Museum keeps the world’s factual record of what closed.
 
 Somewhere beyond every region yet discovered lies the unanswered question every generation inherits:
 
 Who first dreamed of Velora?
+
+## The Avari
+
+Avari are those who walk beside the Arcori. Though they do not command their destinies, they shape their journeys through skill, perseverance, and the preservation of Legacy. Every Chronicle remembers the Arcori, but it also remembers the Avari who carried them through the ages.
+
+Among the Avari, the Chronicles mark those who rise further:
+
+| Name | Kind | How the Chronicle speaks of them |
+|------|------|----------------------------------|
+| **Avari** | Identity | All who walk beside the Arcori |
+| **Master** | Competitive title | Proven through skill and standing |
+| **Legacy Owner** | Preservation achievement | Those who keep a closed Arcori from vanishing into silence |
+| **Generation Creator** | Historical title | Named when a generation’s origin is attributed to an Avari’s hand |
+
+Identity first; titles after. An Avari remains Avari even when the Chronicle also names them Master, Legacy Owner, or Generation Creator.
 
 ## The Great Separation (Future Revelation Draft)
 

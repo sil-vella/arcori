@@ -1,19 +1,36 @@
 # Arcori Game Design Document
 
 Working Draft v0.4  
-**Last aligned:** 2026-07-24 (Velora / Trove / mastery vs mint)
+**Last aligned:** 2026-07-26 (Avari player identity and title hierarchy)
 
 ## Gameplay
 
 2–4 players. One Arcori each. Two rounds. One flip = one point. Two flips increase Mastery. Practice mode is AI only with no progression.
 
-Players select circulating designs they have **play/mastery access** to (starter unlocks, Market, etc.). That access is **not ownership**.
+Players (**Avari**) select circulating designs they have **play/mastery access** to (starter unlocks, Market, etc.). That access is **not ownership**.
+
+## Avari (player)
+
+In Velora, players are **Avari** — those who walk beside the Arcori. They do not command Arcori destinies; they shape journeys through skill, perseverance, and Legacy preservation.
+
+### Title hierarchy
+
+A player can become, in order:
+
+| Title | Kind | Meaning |
+|-------|------|---------|
+| **Avari** | Identity | Every player — the baseline name for who you are in Velora |
+| **Master** | Competitive title | Earned through mastery / competitive standing on designs |
+| **Legacy Owner** | Preservation achievement | Earned when a generation closes and the mint enters the player’s Trove |
+| **Generation Creator** | Historical title | Attributed when a preserved/minted generation names its creator |
+
+These stack as achievements and standing — **Avari** remains identity; the rest are earned titles above it.
 
 ## Legacy and minting
 
 World State: Active/Closed. Legacy State: Legacy Preserved/Legacy Lost. Immediate preservation opportunity then 30-day leader window. Auto closure at mastery cap.
 
-When a generation **closes** and a player earns the mint (closing limit / leader–preservation rules), that Arcori leaves circulation and enters the player’s **Trove** as a **minted** piece. Until then the player only holds **Mastery** on the design — not ownership.
+When a generation **closes** and a player earns the mint (closing limit / leader–preservation rules), that Arcori leaves circulation and enters the player’s **Trove** as a **minted** piece. That mint confers **Legacy Owner** for that piece. Until then the player only holds **Mastery** on the design — not ownership.
 
 ## Economy
 
@@ -27,9 +44,9 @@ Starter balanced slammer. Rechargeable variants with Impact, Precision, Control,
 
 | Track | Meaning |
 |-------|---------|
-| Profile XP → Rank | Player progression |
-| Mastery → Design | Progress on a **circulating** design (not owned) |
-| Generations → World | Design/world state; closure can mint into Trove |
+| Profile XP → Rank | Avari progression |
+| Mastery → Design | Progress on a **circulating** design (not owned); path toward **Master** |
+| Generations → World | Design/world state; closure can mint into Trove (**Legacy Owner** / **Generation Creator**) |
 
 Events keep design identity; mastery continues on the design’s active generation rules.
 
@@ -51,7 +68,7 @@ Three featured missions, Daily Cache, extra mission rewards and no-miss streak b
 | **Standings** | Live community race (top mastery, generation fill, leader window) |
 | **My Mastery** | Your mastery on this design — not ownership while circulating |
 | **Museum** | World-facing factual history of closed generations (not the personal Trove) |
-| **Profile** | Rank/XP and mastery summary; links to Trove for mints |
+| **Profile** | Avari identity, Rank/XP, earned titles (Master / Legacy Owner / Generation Creator); links to Trove for mints |
 
 **Startup (returning):** Splash → Notifications → News → Daily Missions → Home.  
 **Bottom sink:** Trove • PLAY • Market.  

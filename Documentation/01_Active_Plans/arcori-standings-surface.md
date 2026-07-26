@@ -1,6 +1,6 @@
 # Arcori Standings Surface
 
-**Status:** Spec + Velora browse slice; Standings/My Mastery still open  
+**Status:** Standings GET + Detail tab + wfrun tiger seed; My Mastery still open  
 **Created:** 2026-07-24  
 **Last Updated:** 2026-07-25
 
@@ -21,28 +21,48 @@ Define Velora / Trove / Arcori Detail (Standings + My Mastery) and transport (HT
 
 | Surface | Role |
 |---------|------|
-| Velora | World browse → Arcori Detail (default Standings later) |
+| Velora | World browse → Arcori Detail |
 | Trove | Minted list only |
-| Arcori Detail | SSOT; submenu Standings, My Mastery (deferred) |
+| Arcori Detail | SSOT; **Details** + **Standings** tabs (My Mastery deferred) |
 | Sink | Trove • PLAY • Market (PLAY = circulating access) |
 
-## Done (Flutter browse slice)
+## Standings module (Postgres)
 
-- Velora: circulating catalog index grouped **theme → series**; tiles with circle thumbs via `/catalog-media` + `imageUrl`
-- Arcori Detail: circle-cropped art + design fields (no Standings / My Mastery tabs yet)
-- Entry: Home CTA + drawer; paths `/velora`, `/velora/arcori?id=`
+New module `bin/modules/standings/` — **not** catalog JSON.
+
+| Piece | Role |
+|-------|------|
+| `design_standings` | Per `(internal_id, generation_number)` fill + leader window |
+| `design_standings_ranks` | Synthetic rank labels + mastery points (no `user_id` yet) |
+| `standings_service.replace_design_standings` / `clear_design_standings` | Internal apply (seed + future match) |
+| `GET /authuser/standings/design?id=` | Authuser read; empty zeros/ranks if unset |
+
+Response shape:
+
+```text
+{ internalId, generation: { number, roman }, fill: { current, cap },
+  leaderWindowEndsAt, ranks: [{ rank, displayLabel, masteryPoints }] }
+```
+
+## Done
+
+- Velora theme buttons → theme browse → Detail (circle art)
+- Detail tabs: Details | Standings (HTTP on Standings tab enter)
+- Catalog authuser APIs + `/catalog-media`
+- wfrun: `automation/backend/seed_or_clear_standings.py` — prompt **seed** or **clear** for Tiger Genesis `ANM-TIG-GEN001-0001`
 
 ## Transport
 
-HTTP on enter; optional WS `standings_changed` / mint invalidate while Detail open. No per-flip streams.
+HTTP on enter; optional WS `standings_changed` / mint invalidate while Detail open (deferred). No per-flip streams.
 
 ## Implementation Steps
 
 - [x] Document already aligned in Game_Specific (this plan)
 - [x] Catalog authuser APIs + `/catalog-media` + Flutter Velora browse / Detail shell
-- [ ] REST standings + my-mastery endpoints
-- [ ] Flutter Standings / My Mastery on Detail; Trove
-- [ ] Optional WS invalidate hooks
+- [x] Standings module + GET + Detail Standings tab + wfrun tiger seed/clear
+- [ ] REST my-mastery endpoints + Flutter My Mastery tab
+- [ ] Match-driven apply; optional WS invalidate hooks
+- [ ] Trove
 
 ## Notes
 

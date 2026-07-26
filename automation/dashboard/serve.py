@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# dash Open arcori automation dashboard in browser
+# dash Open wf_template automation dashboard in browser
 """wfrun dashboard — browser GUI alternative to the wfrun CLI script menu."""
 
 from __future__ import annotations
@@ -11,6 +11,7 @@ import subprocess
 import sys
 import webbrowser
 from collections.abc import Awaitable, Callable
+from dataclasses import dataclass
 from pathlib import Path
 
 try:
@@ -47,22 +48,44 @@ def require_wfrun() -> Path:
     return Path(root)
 
 
+@dataclass
+class ScriptSession:
+    script_id: str
+    runner: PtyRunner
+    run_log: RunLog
+    log_path: Path
+
+
+def _rel_log_path(log_path: Path, root: Path) -> str:
+    try:
+        return log_path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return str(log_path)
+
+
 class SessionManager:
+    """One PTY session per script id — multiple scripts can run concurrently."""
+
     def __init__(self) -> None:
-        self._runner: PtyRunner | None = None
-        self._log: RunLog | None = None
+        self._sessions: dict[str, ScriptSession] = {}
         self._lock = asyncio.Lock()
 
-    async def stop_current(self) -> None:
+    async def stop_session(self, session: ScriptSession) -> None:
         async with self._lock:
-            runner = self._runner
-            run_log = self._log
-            self._runner = None
-            self._log = None
-            if runner is not None:
-                await runner.terminate()
-            if run_log is not None:
-                run_log.close(exit_code=None)
+            current = self._sessions.get(session.script_id)
+            if current is not session:
+                return
+            self._sessions.pop(session.script_id, None)
+        await session.runner.terminate()
+        session.run_log.close(exit_code=None)
+
+    async def stop(self, script_id: str) -> None:
+        async with self._lock:
+            session = self._sessions.pop(script_id, None)
+        if session is None:
+            return
+        await session.runner.terminate()
+        session.run_log.close(exit_code=None)
 
     async def start(
         self,
@@ -72,8 +95,8 @@ class SessionManager:
         rows: int,
         send_json: Callable[[dict[str, object]], Awaitable[None]],
         send_bytes: Callable[[bytes], Awaitable[None]],
-    ) -> Path:
-        await self.stop_current()
+    ) -> tuple[ScriptSession, Path]:
+        await self.stop(entry_id)
 
         catalog = discover_scripts(root)
         entry = resolve_script(root, entry_id, catalog)
@@ -83,8 +106,15 @@ class SessionManager:
         mode = os.environ.get("WFRUN_MODE", "local")
 
         log_path = log_path_for_script(entry.id)
+        log_rel = _rel_log_path(log_path, root)
         run_log = RunLog(log_path, entry.id, cmd, mode)
         runner = PtyRunner(cmd, child_env, cwd, cols=cols, rows=rows)
+        session = ScriptSession(
+            script_id=entry.id,
+            runner=runner,
+            run_log=run_log,
+            log_path=log_path,
+        )
 
         async def on_output(data: bytes) -> None:
             run_log.write(data)
@@ -92,27 +122,26 @@ class SessionManager:
 
         async def on_exit(code: int) -> None:
             run_log.close(exit_code=code)
-            await send_json({"type": "exit", "code": code, "log_file": str(log_path)})
+            await send_json(
+                {"type": "exit", "code": code, "log_file": log_rel}
+            )
             async with self._lock:
-                if self._runner is runner:
-                    self._runner = None
-                if self._log is run_log:
-                    self._log = None
+                if self._sessions.get(entry.id) is session:
+                    self._sessions.pop(entry.id, None)
 
         async with self._lock:
-            self._runner = runner
-            self._log = run_log
+            self._sessions[entry.id] = session
 
         runner.start(on_output, on_exit)
-        print(f"📝 Logging: {log_path}")
+        print(f"📝 Logging: {log_rel}")
         await send_json(
             {
                 "type": "started",
                 "script": entry.id,
-                "log_file": str(log_path),
+                "log_file": log_rel,
             }
         )
-        return log_path
+        return session, log_path
 
 
 def _dashboard_url(host: str, port: int) -> str:
@@ -123,7 +152,7 @@ async def handle_index(_request: web.Request) -> web.Response:
     return web.FileResponse(STATIC_DIR / "index.html")
 
 
-async def handle_session(request: web.Request) -> web.Response:
+async def handle_session(_request: web.Request) -> web.Response:
     env_file = os.environ.get("WFRUN_ENV_FILE", "")
     return web.json_response(
         {
@@ -190,17 +219,17 @@ async def handle_ws_run(request: web.Request) -> web.WebSocketResponse:
         if not ws.closed:
             await ws.send_bytes(data)
 
+    session: ScriptSession | None = None
     try:
-        await manager.start(script_id, root, cols, rows, send_json, send_bytes)
+        session, _log_path = await manager.start(
+            script_id, root, cols, rows, send_json, send_bytes
+        )
     except ValueError as exc:
         await send_json({"type": "error", "message": str(exc)})
         await ws.close()
         return ws
 
-    runner = manager._runner
-    if runner is None:
-        await ws.close()
-        return ws
+    runner = session.runner
 
     try:
         async for msg in ws:
@@ -223,7 +252,7 @@ async def handle_ws_run(request: web.Request) -> web.WebSocketResponse:
             elif msg.type in {WSMsgType.CLOSE, WSMsgType.ERROR}:
                 break
     finally:
-        await manager.stop_current()
+        await manager.stop_session(session)
 
     return ws
 

@@ -1,7 +1,7 @@
 # Arcori Technical Specification
 
 Working Draft v0.4  
-**Last aligned:** 2026-07-24 (Velora / Trove / Standings / mastery vs mint)
+**Last aligned:** 2026-07-26 (Avari identity; title hierarchy)
 
 ## Arcori Model
 
@@ -16,21 +16,32 @@ Fields: internalId, themeCode, designCode, designFamily, design, regionCode, aff
 | **Standings** | Live per-design community state for the **active** generation (mastery ranks, generation fill, leader window) |
 | **Museum** | World historical snapshots of **closed** generations (factual archive) |
 | **Chronicle** | Mythology |
-| **Trove (player)** | Durable record of **minted** closed Arcori belonging to a player — out of circulation |
+| **Trove (Avari / player)** | Durable record of **minted** closed Arcori belonging to a player — out of circulation |
 | **Mastery (player×design)** | Circulating progress; **not ownership** |
+
+## Avari (player) titles
+
+Product voice: players are **Avari**. Auth / API / account models may still say `player` / `user`.
+
+| Title | Kind | System hook (concept) |
+|-------|------|------------------------|
+| **Avari** | Identity | Every authenticated player account in product copy |
+| **Master** | Competitive title | Mastery / Standings standing (per design or aggregate — TBD) |
+| **Legacy Owner** | Preservation achievement | Minted closed Arcori in Trove |
+| **Generation Creator** | Historical title | `generation.creator` attributed to a player (not System) |
 
 ## Player ↔ design semantics
 
 ```text
 Circulating (Velora)                 Closed / out of circulation
 ────────────────────────────────     ────────────────────────────
-Play + Mastery                       Mint → player's Trove
+Play + Mastery                       Mint → Avari's Trove (Legacy Owner)
 Live Standings                       Standings inactive; Museum snapshot
 Not owned                            Minted legacy piece
 ```
 
 - Starter unlocks / pack grants = **play/mastery access**, not Trove mints.
-- `generation.creator`: System for launch content; Player when a preserved/minted generation attributes a creator.
+- `generation.creator`: System for launch content; Player (**Generation Creator**) when a preserved/minted generation attributes a creator.
 
 ## UI surfaces (client)
 
@@ -62,4 +73,4 @@ Designs have affinity/hostility. Regions have allies/enemies. Regions are orthog
 
 ## Generation Creator
 
-Stored within generation.creator. System for launch content; Player for subsequent preserved / minted generations.
+Stored within `generation.creator`. System for launch content; Player (**Generation Creator** historical title) for subsequent preserved / minted generations.

@@ -23,6 +23,8 @@ import models.user_notification  # noqa: E402, F401
 import models.global_notification  # noqa: E402, F401
 import models.global_notification_read  # noqa: E402, F401
 import models.ops_runtime  # noqa: E402, F401
+import models.design_standing  # noqa: E402, F401
+import models.example_module_record  # noqa: E402, F401
 
 config = context.config
 

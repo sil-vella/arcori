@@ -84,6 +84,16 @@ class VeloraApiClient {
     return _get(uri, accessToken: accessToken, parse: _parseDesign);
   }
 
+  Future<VeloraApiOutcome<DesignStandings>> fetchStandings({
+    required String accessToken,
+    required String internalId,
+  }) {
+    final uri = Uri.parse('$_baseUrl/authuser/standings/design').replace(
+      queryParameters: {'id': internalId},
+    );
+    return _get(uri, accessToken: accessToken, parse: _parseStandings);
+  }
+
   Future<VeloraApiOutcome<T>> _get<T>(
     Uri uri, {
     required String accessToken,
@@ -200,6 +210,37 @@ class VeloraApiClient {
     }
     return VeloraApiOutcome.success(
       DesignDetail.fromJson(Map<String, dynamic>.from(data)),
+    );
+  }
+
+  VeloraApiOutcome<DesignStandings> _parseStandings(http.Response response) {
+    final envelope = _decodeEnvelope(response.body);
+    if (envelope == null) {
+      return VeloraApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    if (envelope['ok'] != true) {
+      return VeloraApiOutcome.failure(
+        error: ApiError.fromEnvelope(envelope),
+      );
+    }
+    final data = envelope['data'];
+    if (data is! Map) {
+      return VeloraApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    return VeloraApiOutcome.success(
+      DesignStandings.fromJson(Map<String, dynamic>.from(data)),
     );
   }
 

@@ -1,7 +1,7 @@
 # Arcori Content Bible
 
 Working Draft v0.4  
-**Last aligned:** 2026-07-24 (Velora / Museum / Trove lore split)
+**Last aligned:** 2026-07-26 (Avari player naming and titles)
 
 ## Content Structure
 
@@ -15,6 +15,19 @@ Animals, Fantasy, Space, Technology, Gaming, Sports, Lifestyle, History, Horror,
 
 Each Arcori defines artworkPrompt, style, finish and effect.
 
+## Player naming (Avari)
+
+Players are **Avari**. Copy and lore should prefer **Avari** over generic “player” where voice matters (Chronicle, Museum captions, onboarding flavor). Systems docs may still say “player” when describing accounts or API roles.
+
+| Title | Kind | Content use |
+|-------|------|-------------|
+| **Avari** | Identity | Default address for the player in world-facing text |
+| **Master** | Competitive title | Standings / mastery celebration copy |
+| **Legacy Owner** | Preservation achievement | Mint / Trove / preservation moments |
+| **Generation Creator** | Historical title | Closed-generation attribution in Museum / Chronicle |
+
+Lore draft (Chronicle voice): *Avari are those who walk beside the Arcori. Though they do not command their destinies, they shape their journeys through skill, perseverance, and the preservation of Legacy. Every Chronicle remembers the Arcori, but it also remembers the Avari who carried them through the ages.*
+
 ## Lore and record-keeping
 
 | Layer | Role |
@@ -22,9 +35,9 @@ Each Arcori defines artworkPrompt, style, finish and effect.
 | **loreDescription** | Concise per-design background on the catalog entry |
 | **Chronicle** | Evolving mythology (what cannot be proven) |
 | **Museum** | Factual world history of closed generations |
-| **Trove** | A player’s **minted** closed Arcori (personal legacy), not the Museum |
+| **Trove** | An Avari’s **minted** closed Arcori (personal legacy), not the Museum |
 
-**Velora** is the world players enter to discover content (notably Arcori). Circulating designs are progressed via **Mastery**; only after closure and mint do pieces leave circulation into a Trove.
+**Velora** is the world Avari enter to discover content (notably Arcori). Circulating designs are progressed via **Mastery**; only after closure and mint do pieces leave circulation into a Trove.
 
 ## Future Content
 

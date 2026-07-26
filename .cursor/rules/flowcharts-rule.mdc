@@ -5,7 +5,7 @@ alwaysApply: false
 
 # FlowCharts (`.mmd` + `.guide.md`)
 
-Full system: [Documentation/02_FlowCharts](Documentation/02_FlowCharts/), builder [build_nav_and_charts.py](automation/backend/build_nav_and_charts.py), open via `wfcharts` ([wfcharts.md](Documentation/00_System_Wide/wfcharts.md)).
+Full system: [Documentation/02_FlowCharts](Documentation/02_FlowCharts/), builder [build_nav_and_charts.py](automation/dashboard/build_nav_and_charts.py), open via `wfcharts` ([wfcharts.md](Documentation/00_System_Wide/wfcharts.md)).
 
 ## Hard gate — do not auto-create
 
@@ -49,7 +49,7 @@ Nav labels and titles come from the stem (`state-ws-routing-flow` → “State W
 3. **Write `{name}.guide.md`** — see guide shape below. First line is `# Title` (builder strips it; template owns the H1).
 4. **Regenerate** from project root:
    ```bash
-   python3 automation/backend/build_nav_and_charts.py
+   python3 automation/dashboard/build_nav_and_charts.py
    ```
 5. **Optional:** if a matching `Documentation/03_Base/*.md` exists and the user wants discoverability, add a one-line **Chart + plain English guide** link to the generated `.html` / `.guide.html` (same pattern as `ERROR_SYSTEM.md`, `WS_SYSTEM.md`).
 
@@ -78,5 +78,5 @@ Guide markdown subset supported by the builder: `#`/`##`/`###`, paragraphs, list
 
 - [ ] User explicitly requested the chart
 - [ ] `.mmd` + `.guide.md` co-located under the right `charts/…` folder
-- [ ] `python3 automation/backend/build_nav_and_charts.py` run; new chart appears in `index.html` nav
+- [ ] `python3 automation/dashboard/build_nav_and_charts.py` run; new chart appears in `index.html` nav
 - [ ] No manual edits to generated HTML as the source of truth

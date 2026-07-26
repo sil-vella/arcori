@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>arcori dashboard</title>
+  <title>wf_template dashboard</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.min.css">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <h1>arcori dashboard</h1>
+      <h1>wf_template dashboard</h1>
       <p class="subtitle">GUI alternative — CLI <code>wfrun</code> still works as before</p>
     </div>
     <div class="session-meta" id="session-meta">Loading session…</div>
@@ -31,10 +31,21 @@
     </aside>
 
     <section class="terminal-pane">
-      <div class="terminal-header">
-        <span id="active-script">No script running</span>
+      <div class="terminal-tabs" id="terminal-tabs" aria-label="Open terminals"></div>
+      <div class="terminal-toolbar" id="terminal-toolbar" hidden>
+        <button type="button" id="run-btn" class="run-btn">Run script</button>
+        <div class="session-id-group">
+          <span class="session-id-label">log</span>
+          <button type="button" id="session-id-btn" class="session-id-btn" title="Relative log file path"></button>
+          <button type="button" id="copy-session-id-btn" class="copy-btn" title="Copy relative log path">Copy</button>
+        </div>
+        <span id="active-script" class="active-script-path"></span>
       </div>
-      <div id="terminal" class="terminal-host"></div>
+      <div id="terminal-stack" class="terminal-stack">
+        <p class="terminal-placeholder" id="terminal-placeholder">
+          Select a script to open its terminal
+        </p>
+      </div>
     </section>
   </main>
 

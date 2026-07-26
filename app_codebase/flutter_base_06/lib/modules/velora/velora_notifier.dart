@@ -303,3 +303,98 @@ final arcoriDetailProvider =
     NotifierProvider<ArcoriDetailNotifier, ArcoriDetailState>(
   ArcoriDetailNotifier.new,
 );
+
+class ArcoriStandingsState {
+  const ArcoriStandingsState({
+    this.standings,
+    this.isLoading = false,
+    this.errorMessage,
+    this.loaded = false,
+  });
+
+  final DesignStandings? standings;
+  final bool isLoading;
+  final String? errorMessage;
+  final bool loaded;
+
+  ArcoriStandingsState copyWith({
+    DesignStandings? standings,
+    bool? isLoading,
+    String? errorMessage,
+    bool? loaded,
+    bool clearStandings = false,
+    bool clearError = false,
+  }) {
+    return ArcoriStandingsState(
+      standings: clearStandings ? null : (standings ?? this.standings),
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      loaded: loaded ?? this.loaded,
+    );
+  }
+}
+
+class ArcoriStandingsNotifier
+    extends FamilyNotifier<ArcoriStandingsState, String> {
+  @override
+  ArcoriStandingsState build(String internalId) => const ArcoriStandingsState();
+
+  VeloraApiClient get _api => ref.read(veloraApiClientProvider);
+
+  String? get _accessToken => ref.read(authProvider).accessToken;
+
+  Future<void> load({bool force = false}) async {
+    if (!force && state.loaded && state.errorMessage == null) {
+      return;
+    }
+    final token = _accessToken;
+    if (token == null || token.isEmpty) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Sign in to view standings',
+        loaded: false,
+      );
+      return;
+    }
+    state = state.copyWith(
+      isLoading: true,
+      clearError: true,
+      clearStandings: true,
+    );
+    final outcome = await _api.fetchStandings(
+      accessToken: token,
+      internalId: arg,
+    );
+    if (!outcome.isSuccess) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: _messageForOutcome(outcome),
+        loaded: false,
+      );
+      return;
+    }
+    state = state.copyWith(
+      standings: outcome.data,
+      isLoading: false,
+      loaded: true,
+      clearError: true,
+    );
+  }
+
+  String? _messageForOutcome(VeloraApiOutcome<dynamic> outcome) {
+    if (outcome.isNetworkError) {
+      return 'Network error — check your connection';
+    }
+    final error = outcome.error;
+    if (error == null) {
+      return null;
+    }
+    actionForApiError(error, isWebSocket: false);
+    return error.message;
+  }
+}
+
+final arcoriStandingsProvider = NotifierProvider.family<
+    ArcoriStandingsNotifier, ArcoriStandingsState, String>(
+  ArcoriStandingsNotifier.new,
+);

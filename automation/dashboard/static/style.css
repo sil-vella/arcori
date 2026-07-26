@@ -214,6 +214,21 @@ code {
   border-left-color: var(--accent);
 }
 
+.script-link.has-terminal .name::after {
+  content: "";
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-left: 0.4rem;
+  border-radius: 50%;
+  background: var(--muted);
+  vertical-align: middle;
+}
+
+.script-link.running .name::after {
+  background: #4ade80;
+}
+
 .script-link .name {
   display: block;
   font-size: 0.88rem;
@@ -243,6 +258,78 @@ code {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
+}
+
+.terminal-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.4rem 0.65rem 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+  min-height: 2.2rem;
+}
+
+.terminal-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 14rem;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 0.4rem 0.55rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.terminal-tab:hover {
+  color: var(--text);
+  background: rgba(91, 156, 255, 0.08);
+}
+
+.terminal-tab.active {
+  color: var(--text);
+  background: var(--bg);
+  border-color: var(--border);
+}
+
+.terminal-tab.running .terminal-tab-label::before {
+  content: "";
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-right: 0.35rem;
+  border-radius: 50%;
+  background: #4ade80;
+  vertical-align: middle;
+}
+
+.terminal-tab-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.terminal-tab-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 3px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.terminal-tab-close:hover {
+  color: var(--danger);
+  background: rgba(255, 107, 107, 0.12);
 }
 
 .terminal-header {
@@ -252,9 +339,104 @@ code {
   font-size: 0.85rem;
 }
 
-.terminal-host {
+.terminal-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 0.85rem;
+  padding: 0.55rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.run-btn {
+  border: 1px solid var(--accent);
+  background: rgba(91, 156, 255, 0.14);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.run-btn:hover:not(:disabled) {
+  background: rgba(91, 156, 255, 0.24);
+}
+
+.run-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.session-id-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.session-id-label {
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.session-id-btn,
+.copy-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 6px;
+  padding: 0.35rem 0.55rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.session-id-btn {
+  max-width: 18rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--accent);
+}
+
+.session-id-btn:hover,
+.copy-btn:hover {
+  border-color: var(--accent);
+  background: rgba(91, 156, 255, 0.08);
+}
+
+.active-script-path {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 40%;
+}
+
+.terminal-stack {
+  position: relative;
   flex: 1;
   min-height: 480px;
+  min-width: 0;
+}
+
+.terminal-placeholder {
+  margin: 0;
+  padding: 1.25rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.terminal-host {
+  position: absolute;
+  inset: 0;
   padding: 0.5rem;
 }
 
