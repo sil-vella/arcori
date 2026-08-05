@@ -1,6 +1,6 @@
 # Match Setting — Core Flow
 
-**Status:** Stage 1 done — Stage 2 detail in [match-hot-state.md](match-hot-state.md)  
+**Status:** Stage 1 done — Stage 2 practice hot state implemented ([match-hot-state.md](match-hot-state.md))  
 **Created:** 2026-07-26  
 **Last Updated:** 2026-08-05
 
@@ -15,7 +15,7 @@ Match pipeline from Play hub through shared match state and back to Play idle.
 | Stage | Focus |
 |-------|--------|
 | **1** | Play screen → type select → orchestrator stubs → idle (done) |
-| **2** | Complete **match hot state**: Flutter client ↔ Dart backend over WS (next) |
+| **2** | Match hot state Flutter ↔ Dart WS + catalog freeze (done — practice stub; see [match-hot-state.md](match-hot-state.md)) |
 | Later | Per-type setup, match UI, post-match / FastAPI durable rewards |
 
 ## Match types
@@ -53,38 +53,31 @@ Stage 1 complete: `/play` hub, match-type `AppModal`, stub pipeline returns to i
 
 ---
 
-## Stage 2 — Complete match state (Flutter ↔ Dart) — next
+## Stage 2 — Complete match state (Flutter ↔ Dart) — done (practice stub)
 
-**Detail SSOT:** [match-hot-state.md](match-hot-state.md) (snapshot shape, caller/arena, catalog freeze via `/service/catalog`, matching stubbed).
+**Detail SSOT:** [match-hot-state.md](match-hot-state.md).
 
-**Goal:** Replace the `_runMatchSsot` stub with a real **module-owned hot match store** on the Dart backend, synced to Flutter over authuser WS — same pattern as [example_module](../03_Base/EXAMPLE_MODULE.md) (fork; do not extend it).
-
-```text
-PlayScreen / MatchFlowNotifier
-  → WsConnectionManager (dart authuser)
-  → match/* channels
-  → Dart MatchStore (hot) + per-match catalog freeze
-  → WS full snapshot → Flutter match notifier / replay
-```
+**Delivered:** Dart `match` module + Flutter mirror + `POST /service/catalog/designs` freeze; `_runMatchSsot` runs create → end → leave when Dart WS + auth are configured.
 
 ### Scope (summary — see match-hot-state for full)
 
-| In | Out (later) |
+| In (done) | Out (later) |
 |----|-------------|
 | Dart `match` module + Flutter mirror + practice stub create | Real matchmaking / invite / event fill |
 | Full wire snapshots; `callerUserId`, `arenaId`, `matchType` object, seats with `arcoriIds[]` + `slammerId` | Full match gameplay UI / celebration / summary |
-| FastAPI `/service/catalog` batch for Dart freeze at init | SharedPrefs catalog hydrate; mid-match catalog reload |
-| Terminal `phase: ended` → Play idle | FastAPI durable rewards |
+| FastAPI `/service/catalog/designs` batch for Dart freeze at init | SharedPrefs catalog hydrate; mid-match catalog reload |
+| Terminal `phase: ended` → Play continues to postMatch/idle | FastAPI durable rewards |
 
 ### Implementation Steps
 
-Tracked in [match-hot-state.md](match-hot-state.md) (A service catalog → B Dart module → C Flutter → D charts).
+Tracked and checked off in [match-hot-state.md](match-hot-state.md).
 
 ### Notes (Stage 2)
 
 - Hot path only: Dart in-memory — not Python match persistence yet.
-- Auth: WS authuser JWT; catalog freeze uses service tier. Align with [WS_SYSTEM.md](../03_Base/WS_SYSTEM.md).
+- Auth: WS authuser JWT; catalog freeze uses service tier.
 - Player matching remains stubbed until a later plan.
+- Open polish: Flutter `error_policy` mapping for `match/…` WS failures; optional Dart WS integration test.
 
 ---
 

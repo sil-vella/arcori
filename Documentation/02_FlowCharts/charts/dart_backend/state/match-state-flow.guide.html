@@ -14,7 +14,10 @@
 <ul>
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
 <li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/catalog-hot-reload-flow.html">Catalog Hot Reload Flow</a></li>
 <li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
 <li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
 <li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
 <li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
@@ -28,6 +31,7 @@
 <li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
 </ul></li>
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
 <li><a href="../../../charts/dart_backend/state/match-state-flow.html" class="active">Match State Flow</a></li>
 </ul></li>
 </ul></li>
@@ -35,8 +39,12 @@
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
 <li><a href="../../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
 <li><a href="../../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
 <li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
 </ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Match Flow</button><ul>
+<li><a href="../../../charts/match_flow/match-setting-flow.html">Match Setting Flow</a></li>
 </ul></li>
 </ul>
     </nav>
@@ -52,17 +60,21 @@
   <h1>Match State Flow</h1>
   <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
   <div class="guide-body">
-<p>This chart shows the <strong>join → play → broadcast → persist</strong> path on the Dart game server.</p>
-<h2>Join</h2>
-<p>Client sends <code>match/join</code> with optional <code>match_id</code>. Dart adds the player, registers the connection in <code>RoomRegistry</code>, and broadcasts the current snapshot.</p>
-<h2>Play</h2>
-<p>Client sends <code>match/state</code> patches (or server ticks in a future module). Each patch bumps <code>version</code> and is broadcast to <strong>all</strong> subscribers — other clients receive pushes without polling.</p>
-<h2>Leave / end</h2>
-<p><code>match/leave</code> unsubscribes the connection. If the room is empty, Dart may mark the match <code>ended</code> and call FastAPI finalize.</p>
-<h2>Try it</h2>
-<p>Run Dart tests: <code>dart test test/match_ws_broadcast_test.dart</code> from <code>app_codebase/dart_bkend_base_02</code>.</p>
+<p>This chart shows <strong>create → freeze catalog → broadcast full snapshot → end/leave</strong> on the Dart game server.</p>
+<h2>Concepts</h2>
+<table><thead><tr><th>Piece</th><th>Role</th></tr></thead><tbody><tr><td><strong>match/create</strong></td><td>Practice stub: human caller + AI seat; freezes catalog via FastAPI service.</td></tr><tr><td><strong>MatchRuntime.catalogById</strong></td><td>Private freeze — not on the wire.</td></tr><tr><td><strong>Full snapshot</strong></td><td>Every broadcast replaces client mirror when <code>version</code> is newer.</td></tr><tr><td><strong>callerUserId / arenaId</strong></td><td>Who called the match; where it is played.</td></tr><tr><td><strong>RoomRegistry</strong></td><td><code>connectionId</code> ↔ room (<code>matchId</code>) + <code>userId</code>.</td></tr></tbody></table>
+<h2>Step-through</h2>
+<ol><li>Client authenticates on Dart <code>ws/authuser</code>.</li><li><code>match/create</code> → Dart batch-fetches designs → stores freeze → returns + broadcasts snapshot (<code>phase: playing</code>).</li><li><code>match/end</code> (caller) → <code>phase: ended</code> + <code>result</code>.</li><li><code>match/leave</code> unsubscribes; empty room may end the match.</li></ol>
+<h2>Copy-paste examples</h2>
+<pre><code class="language-bash"># Service catalog batch (internal)
+curl -s -X POST http://127.0.0.1:8000/service/catalog/designs \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -H &#x27;X-Service-Key: $SERVICE_KEY&#x27; \
+  -d &#x27;{&quot;ids&quot;:[&quot;SLM-STR-GEN001-0001&quot;,&quot;ANM-TIG-GEN001-0001&quot;]}&#x27;</code></pre>
+<pre><code class="language-bash">cd app_codebase/dart_bkend_base_02
+dart test test/match_store_test.dart test/match_service_test.dart</code></pre>
 <h2>Related</h2>
-<ul><li><a href="../../../../03_Base/DART_STATE_SYSTEM.md">DART_STATE_SYSTEM.md</a></li><li><a href="../../flutter/state/state-ws-routing-flow.html">Flutter state-ws-routing-flow</a></li></ul>
+<ul><li><a href="../../../01_Active_Plans/match-hot-state.md">match-hot-state.md</a></li><li><a href="../../../03_Base/DART_STATE_SYSTEM.md">DART_STATE_SYSTEM.md</a></li><li><a href="../../match_flow/match-setting-flow.html">match-setting-flow</a></li><li><a href="../../../01_Active_Plans/catalog-hot-reload.md">catalog-hot-reload.md</a></li></ul>
   </div>
 </main>
 </body>

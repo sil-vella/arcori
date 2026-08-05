@@ -1,0 +1,39 @@
+flowchart TD
+  title["Dart — match state flow"]
+
+  subgraph client["Flutter / WS client"]
+    CREATE["match/create"]
+    JOIN["match/join"]
+    ENDC["match/end"]
+    LEAVE["match/leave"]
+  end
+
+  subgraph handlers["modules/match"]
+    HC["handleMatchCreate"]
+    HJ["handleMatchJoin"]
+    HE["handleMatchEnd"]
+    HL["handleMatchLeave"]
+    SVC["MatchService"]
+    CAT["MatchCatalogClient"]
+  end
+
+  subgraph core["core/state"]
+    STORE["MatchStore + MatchRuntime"]
+    ROOM["RoomRegistry"]
+    CAST["BroadcastHub"]
+  end
+
+  subgraph fastapi["FastAPI"]
+    BATCH["POST /service/catalog/designs"]
+    DISK["catalog JSON disk"]
+  end
+
+  CREATE --> HC --> SVC
+  JOIN --> HJ --> SVC
+  ENDC --> HE --> SVC
+  LEAVE --> HL --> SVC
+  SVC -->|"freeze once"| CAT --> BATCH --> DISK
+  SVC --> STORE
+  SVC --> ROOM
+  SVC --> CAST
+  CAST -->|"match/state full snapshot"| client

@@ -1,4 +1,4 @@
-"""Catalog HTTP routes (authuser read-only)."""
+"""Catalog HTTP routes (authuser reads + service batch for Dart freeze)."""
 
 from __future__ import annotations
 
@@ -6,8 +6,15 @@ from core.errors.app_error import AppError
 from core.http.contracts.register_route_contract import ApplicationRouteSink
 from core.http.contracts.response_contract import HttpResponseContract
 from core.http.request_context import get_auth_user_id, get_current_request
+from modules.auth.auth_service import parse_json_body
 from modules.catalog.catalog_errors import INVALID_QUERY
-from modules.catalog.catalog_service import get_design, get_index, get_meta, get_theme
+from modules.catalog.catalog_service import (
+    get_design,
+    get_designs_batch,
+    get_index,
+    get_meta,
+    get_theme,
+)
 
 
 def register_catalog_routes(
@@ -19,6 +26,7 @@ def register_catalog_routes(
     routes.authuser_get("/catalog/index", lambda: _handle_index(res))
     routes.authuser_get("/catalog/theme", lambda: _handle_theme(res))
     routes.authuser_get("/catalog/design", lambda: _handle_design(res))
+    routes.service_post("/catalog/designs", lambda: _handle_designs_batch(res))
 
 
 def _require_user_id() -> str:
@@ -103,5 +111,16 @@ def _handle_design(res: HttpResponseContract):
                 or ""
             )
         return res.json_ok(get_design(internal_id))
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_designs_batch(res: HttpResponseContract):
+    try:
+        body = parse_json_body()
+        ids = body.get("ids")
+        if ids is not None and not isinstance(ids, list):
+            raise AppError(INVALID_QUERY, message="ids must be a list")
+        return res.json_ok(get_designs_batch(ids if isinstance(ids, list) else None))
     except AppError as err:
         return err.to_http_response()

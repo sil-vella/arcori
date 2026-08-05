@@ -32,6 +32,7 @@
 </ul></li>
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
 <li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+<li><a href="../../charts/dart_backend/state/match-state-flow.html">Match State Flow</a></li>
 </ul></li>
 </ul></li>
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
@@ -59,39 +60,22 @@
   <h1>Match Setting Flow</h1>
   <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
   <div class="guide-body">
-<p>This chart is the <strong>Match Flow</strong> home chart. Stage 1 is Flutter-only (Play hub → type select → stub pipeline → idle). Later stages add Dart hot match state and the rest of the stack under this same nav section.</p>
+<p>This chart is the <strong>Match Flow</strong> home chart. Play hub → type select → pipeline. <strong><code>_runMatchSsot</code></strong> talks to Dart match hot state when Dart WS + auth are configured; otherwise it no-ops (unit tests / offline).</p>
 <h2>Concepts</h2>
-<table><thead><tr><th>Piece</th><th>Role</th></tr></thead><tbody><tr><td><strong>PlayScreen</strong></td><td>Start and end hub. Stage 1 never navigates away.</td></tr><tr><td><strong>MatchFlowNotifier</strong></td><td>Owns <code>phase</code> + <code>selectedType</code> via <code>matchFlowProvider</code>.</td></tr><tr><td><strong>MatchType</strong></td><td><code>practice</code>, <code>quickStart</code>, <code>specialEvent</code>, <code>invite</code>.</td></tr><tr><td><strong>AppModal</strong></td><td>Type picker overlay — not a go_router route.</td></tr><tr><td><strong>Stub hooks</strong></td><td><code>_runTypeSetup</code>, <code>_runMatchSsot</code>, <code>_runPostMatch</code> — no-ops today; Stage 2 fills match state via Flutter ↔ Dart WS.</td></tr></tbody></table>
+<table><thead><tr><th>Piece</th><th>Role</th></tr></thead><tbody><tr><td><strong>PlayScreen</strong></td><td>Start and end hub; stays on <code>/play</code>.</td></tr><tr><td><strong>MatchFlowNotifier</strong></td><td>Owns <code>phase</code> + <code>selectedType</code> via <code>matchFlowProvider</code>.</td></tr><tr><td><strong>MatchType</strong></td><td><code>practice</code>, <code>quickStart</code>, <code>specialEvent</code>, <code>invite</code>.</td></tr><tr><td><strong>AppModal</strong></td><td>Type picker overlay — not a go_router route.</td></tr><tr><td><strong><code>_runMatchSsot</code></strong></td><td>Connects Dart WS → <code>match/create</code> → <code>match/end</code> → <code>match/leave</code> (practice stub).</td></tr><tr><td><strong>matchSnapshotProvider</strong></td><td>Flutter mirror of full Dart snapshots (<code>match/*</code> prefix).</td></tr></tbody></table>
 <h3>Phases</h3>
-<table><thead><tr><th>Phase</th><th>What happens</th></tr></thead><tbody><tr><td><code>idle</code></td><td>Play button enabled; ready for a new run.</td></tr><tr><td><code>selectingType</code></td><td>Centered modal open; cancel returns to idle.</td></tr><tr><td><code>typeSetup</code></td><td>Per-type setup hook (stub).</td></tr><tr><td><code>inMatch</code></td><td>Shared gameplay SSOT hook (stub → live Dart state in Stage 2).</td></tr><tr><td><code>postMatch</code></td><td>Type-dependent post-match hook (stub).</td></tr></tbody></table>
+<table><thead><tr><th>Phase</th><th>What happens</th></tr></thead><tbody><tr><td><code>idle</code></td><td>Play button enabled; ready for a new run.</td></tr><tr><td><code>selectingType</code></td><td>Centered modal open; cancel returns to idle.</td></tr><tr><td><code>typeSetup</code></td><td>Per-type setup hook (still stub — matching later).</td></tr><tr><td><code>inMatch</code></td><td>Live Dart match SSOT when configured.</td></tr><tr><td><code>postMatch</code></td><td>Type-dependent post-match hook (stub).</td></tr></tbody></table>
 <h2>Step-through</h2>
-<ol><li>Open <strong>Play</strong> from the drawer (<code>AppPaths.play</code> → <code>/play</code>).</li><li>Press <strong>Play</strong> → <code>startPlay()</code> → <code>selectingType</code>.</li><li>Modal lists the four types. Close / barrier → <code>cancelSelection()</code> → <code>idle</code>.</li><li>Choose a type → <code>selectType(type)</code> → <code>typeSetup</code> → <code>inMatch</code> → <code>postMatch</code> → clear state → <code>idle</code>.</li><li>Play button is disabled while not idle; phase label shows on the screen.</li></ol>
-<p>Re-entrancy: <code>startPlay</code> is ignored unless idle. A <code>_runId</code> guard drops stale async work if selection is cancelled mid-flight (hooks are sync today).</p>
+<ol><li>Open <strong>Play</strong> from the drawer (<code>/play</code>).</li><li>Press <strong>Play</strong> → type modal → pick a type.</li><li><code>typeSetup</code> stub runs.</li><li><code>inMatch</code>: if <code>ARCORI_DART_WS_URL</code> + access token exist, Flutter creates a practice match on Dart (catalog freeze), ends it, leaves; snapshot mirrored via <code>matchSnapshotProvider</code>.</li><li><code>postMatch</code> stub → idle.</li></ol>
 <h2>Copy-paste examples</h2>
-<p>Start selection from the screen:</p>
-<pre><code class="language-dart">final notifier = ref.read(matchFlowProvider.notifier);
-notifier.startPlay();
-final type = await showMatchTypeSelectModal(context);
-if (type == null) {
-  notifier.cancelSelection();
-  return;
-}
-await notifier.selectType(type);</code></pre>
-<p>Phase enum (models):</p>
-<pre><code class="language-dart">enum MatchFlowPhase {
-  idle,
-  selectingType,
-  typeSetup,
-  inMatch,
-  postMatch,
-}</code></pre>
+<pre><code class="language-dart">await manager.send(&#x27;dart&#x27;, type: &#x27;event&#x27;, channel: &#x27;match/create&#x27;, payload: {});
+await manager.send(&#x27;dart&#x27;, type: &#x27;event&#x27;, channel: &#x27;match/end&#x27;, payload: {&#x27;matchId&#x27;: id});</code></pre>
 <h2>Try it locally</h2>
-<ol><li>Launch Flutter (<code>wfrun</code> / Chrome launch scripts).</li><li>Drawer → <strong>Play</strong>.</li><li>Press <strong>Play</strong>, pick a type — stubs finish immediately; you stay on Play idle.</li><li>Or run tests:</li></ol>
 <pre><code class="language-bash">cd app_codebase/flutter_base_06
-flutter test test/modules/play/</code></pre>
-<p>Dev traces: <code>play_notifier.dart</code> uses <code>LOGGING_SWITCH</code> + <code>customlog</code> for phase transitions (needs <code>DUTCH_DEV_LOG=1</code>).</p>
+flutter test test/modules/play/ test/modules/match/</code></pre>
+<p>With backends up and dart-defines set, Drawer → Play → pick Practice runs create/end against Dart.</p>
 <h2>Related</h2>
-<ul><li>Active plan: <a href="../../../01_Active_Plans/match-setting-core-flow.md">match-setting-core-flow.md</a></li><li>Broader loop (summary / exits): <a href="../../../01_Active_Plans/core-match-loop.md">core-match-loop.md</a></li><li>Navigation: <a href="../../../03_Base/Flutter/NAVIGATION_SYSTEM.md">NAVIGATION_SYSTEM.md</a></li><li>Modals: <a href="../../../03_Base/Flutter/MODAL_SYSTEM.md">MODAL_SYSTEM.md</a></li><li>Example module (Stage 2 pattern): <a href="../../../03_Base/EXAMPLE_MODULE.md">EXAMPLE_MODULE.md</a></li><li>State registration pattern: <a href="../flutter/state/state-module-registration-flow.html">state-module-registration-flow</a></li></ul>
+<ul><li>Active plan: <a href="../../../01_Active_Plans/match-hot-state.md">match-hot-state.md</a></li><li><a href="../../../01_Active_Plans/match-setting-core-flow.md">match-setting-core-flow.md</a></li><li><a href="../dart_backend/state/match-state-flow.html">match-state-flow</a></li><li><a href="../../../03_Base/EXAMPLE_MODULE.md">EXAMPLE_MODULE.md</a></li></ul>
   </div>
 </main>
 </body>

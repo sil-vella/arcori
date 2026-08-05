@@ -1,5 +1,5 @@
 flowchart TD
-  title["Match setting — stage 1 hub"]
+  title["Match setting — Play hub + live match SSOT"]
 
   subgraph entry["Entry"]
     Drawer["Drawer Play"]
@@ -26,7 +26,22 @@ flowchart TD
 
   subgraph pipeline["MatchFlowNotifier pipeline"]
     Setup["phase typeSetup<br/>_runTypeSetup stub"]
-    Match["phase inMatch<br/>_runMatchSsot stub"]
+    Match["phase inMatch<br/>_runMatchSsot"]
     Post["phase postMatch<br/>_runPostMatch stub"]
     Types -->|"selectType"| Setup --> Match --> Post --> Idle
   end
+
+  subgraph dart["Dart match hot state"]
+    Create["match/create<br/>catalog freeze"]
+    Snap["MatchStore full snapshot"]
+    EndCh["match/end"]
+    Leave["match/leave"]
+    Broadcast["match/state broadcast"]
+    Create --> Snap --> Broadcast
+    EndCh --> Snap
+    Leave --> Snap
+  end
+
+  Match -->|"WS authuser when configured"| Create
+  Match -->|"wait phase ended"| EndCh
+  Match --> Leave

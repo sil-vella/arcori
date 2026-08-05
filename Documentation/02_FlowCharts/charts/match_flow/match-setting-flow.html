@@ -32,6 +32,7 @@
 </ul></li>
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
 <li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+<li><a href="../../charts/dart_backend/state/match-state-flow.html">Match State Flow</a></li>
 </ul></li>
 </ul></li>
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
@@ -54,7 +55,7 @@
   <h1>Match Setting Flow</h1>
   <p class="chart-guide-link"><a href="match-setting-flow.guide.html">Plain English guide &amp; examples →</a></p>
   <div class="mermaid">flowchart TD
-  title[&quot;Match setting — stage 1 hub&quot;]
+  title[&quot;Match setting — Play hub + live match SSOT&quot;]
 
   subgraph entry[&quot;Entry&quot;]
     Drawer[&quot;Drawer Play&quot;]
@@ -81,10 +82,25 @@
 
   subgraph pipeline[&quot;MatchFlowNotifier pipeline&quot;]
     Setup[&quot;phase typeSetup&lt;br/&gt;_runTypeSetup stub&quot;]
-    Match[&quot;phase inMatch&lt;br/&gt;_runMatchSsot stub&quot;]
+    Match[&quot;phase inMatch&lt;br/&gt;_runMatchSsot&quot;]
     Post[&quot;phase postMatch&lt;br/&gt;_runPostMatch stub&quot;]
     Types --&gt;|&quot;selectType&quot;| Setup --&gt; Match --&gt; Post --&gt; Idle
-  end</div>
+  end
+
+  subgraph dart[&quot;Dart match hot state&quot;]
+    Create[&quot;match/create&lt;br/&gt;catalog freeze&quot;]
+    Snap[&quot;MatchStore full snapshot&quot;]
+    EndCh[&quot;match/end&quot;]
+    Leave[&quot;match/leave&quot;]
+    Broadcast[&quot;match/state broadcast&quot;]
+    Create --&gt; Snap --&gt; Broadcast
+    EndCh --&gt; Snap
+    Leave --&gt; Snap
+  end
+
+  Match --&gt;|&quot;WS authuser when configured&quot;| Create
+  Match --&gt;|&quot;wait phase ended&quot;| EndCh
+  Match --&gt; Leave</div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script>

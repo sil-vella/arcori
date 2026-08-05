@@ -7,6 +7,9 @@ import 'auth/auth_app.dart';
 import 'example_module/example_app.dart';
 import 'example_module/example_errors.dart';
 import 'example_module/example_store.dart';
+import 'match/match_app.dart';
+import 'match/match_errors.dart';
+import 'match/match_store.dart';
 import 'ops/ops_app.dart';
 import 'ops/ops_errors.dart';
 import 'ops/ops_state.dart';
@@ -25,16 +28,19 @@ void registerApplicationRoutes() {
 void registerApplicationErrors() {
   registerDemoErrors(moduleErrorRegistrar);
   registerExampleModuleErrors(moduleErrorRegistrar);
+  registerMatchErrors(moduleErrorRegistrar);
   registerOpsErrors(moduleErrorRegistrar);
 }
 
 void registerApplicationState() {
   resetStateRegistry();
   resetExampleModuleState();
+  resetMatchState();
   resetOpsState();
 }
 
 void registerApplicationWsChannels() {
   registerDemoWsChannels(applicationWsSink);
   registerExampleModuleWsChannels(applicationWsSink);
+  registerMatchWsChannels(applicationWsSink);
 }

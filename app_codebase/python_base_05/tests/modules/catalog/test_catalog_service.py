@@ -10,7 +10,13 @@ import pytest
 
 from core.errors.app_error import AppError
 from modules.catalog import catalog_loader as loader
-from modules.catalog.catalog_service import get_design, get_index, get_meta, get_theme
+from modules.catalog.catalog_service import (
+    get_design,
+    get_designs_batch,
+    get_index,
+    get_meta,
+    get_theme,
+)
 
 
 @pytest.fixture
@@ -106,6 +112,31 @@ def test_not_found(catalog_root: Path):
     with pytest.raises(AppError) as exc2:
         get_design("MISSING")
     assert exc2.value.code == "catalog/not_found"
+
+
+def test_designs_batch_happy_path(catalog_root: Path):
+    payload = get_designs_batch(["ANM-TIG-GEN001-0001", "ANM-TIG-GEN001-0001"])
+    assert set(payload["designs"].keys()) == {"ANM-TIG-GEN001-0001"}
+    design = payload["designs"]["ANM-TIG-GEN001-0001"]
+    assert design["design"] == "Tiger"
+    assert "artworkPrompt" not in design
+    assert design["catalogVersion"] == 1
+
+
+def test_designs_batch_fail_closed_missing_id(catalog_root: Path):
+    with pytest.raises(AppError) as exc:
+        get_designs_batch(["ANM-TIG-GEN001-0001", "MISSING"])
+    assert exc.value.code == "catalog/not_found"
+
+
+def test_designs_batch_invalid_ids(catalog_root: Path):
+    with pytest.raises(AppError) as exc:
+        get_designs_batch([])
+    assert exc.value.code == "catalog/invalid_query"
+
+    with pytest.raises(AppError) as exc2:
+        get_designs_batch(None)  # type: ignore[arg-type]
+    assert exc2.value.code == "catalog/invalid_query"
 
 
 def test_index_picks_up_new_theme_file(catalog_root: Path):

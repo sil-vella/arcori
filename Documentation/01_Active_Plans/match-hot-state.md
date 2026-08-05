@@ -1,6 +1,6 @@
 # Match Hot State (Flutter ↔ Dart)
 
-**Status:** Spec locked — ready to implement  
+**Status:** Stage 2 practice stub complete — polish + later gameplay remain  
 **Created:** 2026-08-05  
 **Last Updated:** 2026-08-05
 
@@ -12,191 +12,142 @@ Related: [match-setting-core-flow.md](match-setting-core-flow.md) · [core-match
 
 Replace Play’s `_runMatchSsot` stub with a real **module-owned hot match store** on Dart, synced to Flutter over authuser WS. Dart is gameplay SSOT for the live match; FastAPI catalog remains definition SSOT; durable rewards stay out of scope.
 
-**Player matching / matchmaking stays a stub** — practice (or single-seat create) is enough to exercise join → snapshot → leave/end.
+**Player matching / matchmaking stays a stub** — practice create (human caller + AI seat) exercises create → snapshot → end → leave.
 
 ## Architecture rules (non-negotiable)
 
-Align with [architecture-align-rule](../../.cursor/rules/architecture-align-rule.mdc) and [error-sys-rule](../../.cursor/rules/error-sys-rule.mdc):
+Align with architecture-align and error-sys rules:
 
-1. **Modules + registry** — new `match` module on Dart + Flutter (fork `example_module`; do not extend it). Wire via `module_registry` only.
-2. **Contracts** — use core `RoomRegistry` / `BroadcastHub` / `WsConnectionContext`; no parallel session or id systems.
-3. **Auth** — Dart WS `authuser` JWT; FastAPI catalog freeze via **`/service/catalog/*`** + `X-Service-Key`. No alternate auth.
-4. **Errors** — `AppError` / `{ok, error: {code, message}}`; module codes `match/…` and extend `catalog/…` for service fetch failures. Flutter: `ApiError` + `error_policy` (no hardcoded strings).
+1. **Modules + registry** — `match` module on Dart + Flutter (forked from `example_module`). Wire via `module_registry` only.
+2. **Contracts** — core `RoomRegistry` / `BroadcastHub` / `WsConnectionContext`; no parallel session or id systems.
+3. **Auth** — Dart WS `authuser` JWT; FastAPI catalog freeze via **`POST /service/catalog/designs`** + `X-Service-Key`.
+4. **Errors** — `AppError` / `{ok, error}`; codes `match/…` and `catalog/…`. Flutter: `ApiError` via WS envelope (policy mapping still open — see below).
 
 ## Role split
 
 | Layer | Owns |
 |-------|------|
-| **FastAPI catalog** | Design/slammer JSON on disk; authuser reads for Flutter; **new service-tier batch fetch** for Dart |
-| **Dart MatchStore** | Live match snapshot + **per-match frozen catalog** (sim stats) in process memory |
-| **Flutter** | MatchFlow pipeline + mirror of wire snapshot; art/name via existing Velora/catalog HTTP (not embedded in every WS tick) |
-| **IDs** | `userId` (JWT `sub`) ↔ `connectionId` (WS session) already on `WsConnectionContext` + `RoomRegistry.userIdFor` — **no new player/match-player ids** |
+| **FastAPI catalog** | Design/slammer JSON on disk; authuser reads for Flutter; **service batch** for Dart |
+| **Dart MatchStore** | Live match snapshot + **per-match frozen catalog** in process memory |
+| **Flutter** | MatchFlow pipeline + mirror of wire snapshot |
+| **IDs** | `userId` ↔ `connectionId` only |
 
-```text
-Flutter (Play / match notifier)
-  → WS authuser match/* 
-  → Dart MatchService / MatchStore
-       → (on match init) FastAPI POST/GET /service/catalog/…  (batch designs)
-       → freeze into MatchRuntime.catalogById
-  → broadcast full MatchSnapshot (version++)
-  → Flutter replace local mirror
-```
+## Wire channels (authuser)
 
-## Wire snapshot (full object each broadcast)
+| Channel | Role |
+|---------|------|
+| `match/create` | Practice stub create + catalog freeze + room subscribe |
+| `match/join` | Rejoin seat by `matchId` |
+| `match/leave` | Unsubscribe; empty room ends match |
+| `match/end` | Caller ends match → `phase: ended` |
+| `match/state` | Broadcast channel for full snapshot pushes |
 
-Prefer **full snapshots** on the wire (same idea as `example_module`: small intents in, full truth out). Clients replace local state when `version` is newer.
+WS handlers may be async (`FutureOr`) so create can await freeze.
 
-```json
-{
-  "matchId": "m_…",
-  "version": 1,
-  "phase": "playing",
-  "round": 1,
-  "roundsTotal": 2,
-  "arenaId": "arena_velora_plaza",
-  "callerUserId": "usr_…",
-  "matchType": {
-    "code": "practice"
-  },
-  "seats": [
-    {
-      "userId": "usr_…",
-      "seatIndex": 0,
-      "kind": "human",
-      "score": 0,
-      "connected": true,
-      "arcoriIds": ["ANM-TIG-GEN001-0001"],
-      "slammerId": "SLM-STR-GEN001-0001"
-    }
-  ],
-  "table": { "pieces": [] },
-  "active": null,
-  "lastEvent": null,
-  "result": null
-}
-```
+## Catalog freeze
 
-### Field notes
+**Rule:** Catalog SSOT = FastAPI disk. Active match truth for physics = Dart per-match freeze **once at init**. Do not reload mid-match.
 
-| Field | Notes |
-|-------|--------|
-| `matchType` | **Object** with `code` (`practice` \| `quickStart` \| `specialEvent` \| `invite`) + type-specific keys (e.g. `eventId`, `eventName`, `inviteId`) |
-| `callerUserId` | Who called the match (arena / lobby authority). Included in snapshot. |
-| `arenaId` | Chosen pre-match; kept in snapshot for bg/FX. |
-| `seats[]` | Lean only — no username/rank. `arcoriIds[]`, `slammerId`, `kind` human\|ai. |
-| `result` | `null` until `phase: "ended"`. |
+`POST /service/catalog/designs` body `{ "ids": ["…"] }` — fail-closed if any id missing. Returns `{ designs: { id: design } }` with `artworkPrompt` stripped + `catalogVersion`.
 
-**Not on the wire (Dart private):** `MatchRuntime.catalogById` freeze used for physics / slam resolution.
-
-### `matchType` examples
-
-```json
-{ "code": "practice" }
-{ "code": "quickStart", "entryCostCaps": 1 }
-{ "code": "specialEvent", "eventId": "evt_…", "eventName": "Summer Slam", "rulesetId": "rules_event_v1" }
-{ "code": "invite", "inviteId": "inv_…", "maxSeats": 4 }
-```
-
-## Catalog freeze (match init)
-
-**Rule:** Catalog SSOT = FastAPI disk. Active match truth for physics = **Dart per-match freeze loaded once at init**. Do **not** reload catalog mid-match.
-
-1. On match create / loadout lock, Dart calls FastAPI **`/service/catalog/…`** (batch by `internalId`s from seats).
-2. Store sim-critical fields in `MatchRuntime.catalogById` (slammer `gameplayAttributes` / economy as needed; Arcori piece rules when defined).
-3. Slam / rule resolution reads **only** the freeze — never client-supplied stats.
-
-Authuser catalog remains for Flutter UI (images via `imageUrl` / `/catalog-media`).
+Dart calls this through module-owned [`MatchCatalogClient`](../../app_codebase/dart_bkend_base_02/bin/modules/match/match_catalog_client.dart) (not a method on core `FastApiServiceClient` — keeps core free of match imports).
 
 ## Player matching — stub
 
-| In this plan | Stub / later |
-|--------------|--------------|
-| Create/join a match room with caller + fixed/stub seats (e.g. practice: human + optional AI seat) | Real matchmaking queue, invite flow, event lobby fill |
-| `typeSetup` may no-op or set hardcoded practice loadout | Per-type economy checks, arena picker UI, invite UX |
+Practice stub only. Real matchmaking / invite / event fill = later.
 
-Matching stub must still produce a valid `MatchSnapshot` + freeze path so Stage 2 is testable end-to-end.
+## Gaps (remaining)
 
-## Predictive client presentation
-
-- Flutter may start slam / FX animations on intent (**presentation only**).
-- Scores, flips, win/loss come only from Dart broadcasts; reconcile animation to `lastEvent` / snapshot.
-- Do not optimistically mutate authoritative seat scores.
-
-## Scope
-
-| In | Out (later / other plans) |
-|----|---------------------------|
-| Dart `match` module: store, WS join/state/leave (or create), room broadcast, errors | Real matchmaking / invite / event fill |
-| Flutter match notifier + replay + `AppStateSink.onWsReady`; wire `_runMatchSsot` | Full match gameplay UI / celebration / Match Summary |
-| Full snapshot sync + terminal `phase: ended` → Play idle | FastAPI durable rewards / mastery / gold |
-| FastAPI **`/service/catalog`** batch fetch for freeze | Flutter SharedPrefs catalog hydrate (optional, separate — see catalog plan) |
-| Tests: store, WS, freeze, Flutter mirror | Mid-match catalog hot-reload into active matches (**forbidden**) |
-
-## Gaps (explicit)
-
-1. **`/service/catalog/*` does not exist yet** — only authuser catalog today. Add service-tier design (prefer **batch by ids**) for Dart match init. Reuse `catalog_loader` / service strip rules; guard with `service` tier + `SERVICE_KEY`.
-2. **Flutter SharedPrefs catalog hydrate** — optional and **separate** from this plan ([catalog-hot-reload.md](catalog-hot-reload.md) out-of-scope list). Match UI can fetch needed designs over authuser HTTP / existing Velora client when rendering.
-3. **No mid-match catalog reload** — balance patches must not change an in-flight freeze. New matches pick up new catalog on next init.
-4. **Arena content catalog** — `arenaId` string in snapshot now; arena definitions / media can land later like other content.
-5. **Piece physics fields on Arcori** (e.g. weight) — add to catalog when designed; then include in freeze. Slammer `gameplayAttributes` already exist in `slammers.json`.
+1. ~~`/service/catalog/*`~~ — **done** (`POST /service/catalog/designs`)
+2. **Flutter SharedPrefs catalog hydrate** — optional, separate
+3. **No mid-match catalog reload** — still forbidden
+4. **Arena content catalog** — `arenaId` string only
+5. **Piece physics on Arcori** — add to catalog when designed
+6. Real matchmaking; full slam UI; durable rewards
+7. **Flutter `error_policy` for `match/…`** — create/end failures currently log/timeout in `_runMatchSsot`; not yet branched via `actionForApiError`
+8. **Dart live WS integration test** — store/service unit tests exist; no `match_*_ws_test` like `example_module_ws_test`
 
 ## Implementation steps
 
-### A — FastAPI service catalog (prerequisite for freeze)
+### A — FastAPI service catalog ✅
 
-- [ ] Add `/service/catalog/designs` (or equivalent) batch fetch by `internalId[]`
-- [ ] Reuse loader; omit `artworkPrompt`; return fields Dart needs for freeze (+ `catalogVersion` / theme doc version if available)
-- [ ] Register in `module_registry`; `catalog/…` errors for not_found / invalid_query / load_failed
-- [ ] Tests: service key required; batch happy path; missing id behavior
+- [x] `POST /service/catalog/designs` batch by `internalId[]`
+- [x] Reuse loader; omit `artworkPrompt`; include `catalogVersion`
+- [x] Fail-closed missing ids (`catalog/not_found`)
+- [x] Unit tests in `tests/modules/catalog/test_catalog_service.py`
+- [ ] Optional: HTTP-level TestClient asserting service key required (guard already covers all `service_*` routes)
 
-### B — Dart match module
+### B — Dart match module ✅
 
-- [ ] Fork `example_module` → `modules/match/` (store, service, WS handlers, errors, app registration)
-- [ ] Models: `MatchSnapshot`, `MatchSeat`, `MatchType` object, `MatchRuntime` (private freeze map)
-- [ ] `MatchStore`: create (stub seats), apply join/leave, bump `version`, end match
-- [ ] On create/init: call FastAPI service catalog → fill `catalogById`; fail match create with `match/catalog_freeze_failed` (or map catalog codes) if freeze fails
-- [ ] WS channels (authuser): e.g. `match/join`, `match/leave`, `match/state` (and/or create) — broadcast **full** snapshot via `BroadcastHub` + `RoomRegistry`
-- [ ] Authorize seats by `ctx.userId`; route by `ctx.connectionId` (existing map only)
-- [ ] Register state reset + WS + errors in Dart `module_registry`
-- [ ] Tests: store versioning, room broadcast, freeze mocked service client, leave/end
+- [x] `modules/match/` store, service, catalog client, WS, errors, app
+- [x] Practice stub seats + `MatchRuntime.catalogById`
+- [x] Channels: create / join / leave / end; broadcast `match/state`
+- [x] Register in Dart `module_registry`
+- [x] Tests: `match_store_test.dart`, `match_service_test.dart` (mocked HTTP freeze)
+- [ ] Optional: process WS integration test (`match/create` over real Dart server)
 
-### C — Flutter match mirror + Play wiring
+### C — Flutter match mirror + Play wiring ✅ (core path)
 
-- [ ] Match state models + notifier + optional replay (`example_module` pattern)
-- [ ] `registerMatchState(AppStateSink)` — `onWsReady` / reconnect subscribe as needed
-- [ ] Wire `MatchFlowNotifier._runMatchSsot`: connect Dart WS → join/create stub match → watch until `phase == ended` → tear down → continue pipeline to idle
-- [ ] Map `match/…` (and catalog-related) failures via `ApiError` / `error_policy`
-- [ ] Tests: notifier apply snapshot by version; router dispatch; Play smoke with mocked WS if feasible
+- [x] `modules/match/` snapshot notifier + replay + `registerMatchState`
+- [x] Wire `_runMatchSsot` (create → end → leave when Dart WS + auth available; skip otherwise)
+- [x] Tests: `test/modules/match/match_notifier_test.dart`; play notifier still passes offline
+- [ ] Map `match/…` WS failures through `ApiError` / `error_policy` (user-facing + retry)
 
-### D — Docs / charts
+### D — Docs / charts ✅
 
-- [ ] Update [match-setting-core-flow.md](match-setting-core-flow.md) Stage 2 to point here as detail SSOT
-- [ ] Update match-setting + match-state flowcharts/guides when channels land
-- [ ] Note service catalog in [catalog-hot-reload.md](catalog-hot-reload.md) when implemented
+- [x] This plan + catalog-hot-reload note
+- [x] match-setting + match-state flowchart sources updated + regenerated
 
 ## Current progress
 
-Spec locked in planning (snapshot shape, caller, arena, matchType object, seats with `arcoriIds[]` + `slammerId`, full snapshots, catalog freeze via service tier, matching stubbed). **No implementation yet.**
+Verified in codebase (2026-08-05):
+
+| Area | Evidence |
+|------|----------|
+| Service catalog | `catalog_app.py` `service_post("/catalog/designs")` + `get_designs_batch` |
+| Dart match | `bin/modules/match/*` registered in `module_registry.dart` |
+| Flutter mirror | `lib/modules/match/*` + `registerMatchState` in Flutter `module_registry` |
+| Play wiring | `play_notifier.dart` `_runMatchSsot` create/end/leave |
+| Charts | `match-setting-flow` + `match-state-flow` sources rebuilt |
+
+Stage 2 **practice path** is implemented. Matching, slam gameplay, and durable rewards remain out of scope.
 
 ## Next steps
 
-1. Implement **A — `/service/catalog` batch** (unblocks freeze).
-2. Implement **B — Dart match module** with practice stub create + freeze.
-3. Implement **C — Flutter mirror** + `_runMatchSsot` wiring.
-4. Refresh charts/guides.
+1. Optional polish: `error_policy` for match WS errors; Dart WS integration test
+2. Real matchmaking / type setup
+3. Slam intents + table simulation using freeze
+4. Match UI surface
+5. FastAPI finalize / Match Summary
 
 ## Files modified
 
-*(Populate as implementation proceeds.)*
-
 - `Documentation/01_Active_Plans/match-hot-state.md`
-- `Documentation/01_Active_Plans/00_MASTER_PLAN.md`
+- `Documentation/01_Active_Plans/catalog-hot-reload.md`
 - `Documentation/01_Active_Plans/match-setting-core-flow.md`
+- `Documentation/01_Active_Plans/00_MASTER_PLAN.md`
+- `Documentation/02_FlowCharts/charts/match_flow/match-setting-flow.*`
+- `Documentation/02_FlowCharts/charts/dart_backend/state/match-state-flow.*`
+- `app_codebase/python_base_05/bin/modules/catalog/catalog_app.py`
+- `app_codebase/python_base_05/bin/modules/catalog/catalog_service.py`
+- `app_codebase/python_base_05/tests/modules/catalog/test_catalog_service.py`
+- `app_codebase/dart_bkend_base_02/bin/modules/match/**`
+- `app_codebase/dart_bkend_base_02/bin/modules/module_registry.dart`
+- `app_codebase/dart_bkend_base_02/bin/core/ws/contracts/ws_message_contract.dart`
+- `app_codebase/dart_bkend_base_02/bin/core/ws/ws_dispatcher.dart`
+- `app_codebase/dart_bkend_base_02/bin/core/http/fastapi_service_client.dart`
+- `app_codebase/dart_bkend_base_02/test/match_store_test.dart`
+- `app_codebase/dart_bkend_base_02/test/match_service_test.dart`
+- `app_codebase/flutter_base_06/lib/modules/match/**`
+- `app_codebase/flutter_base_06/lib/modules/play/play_notifier.dart`
+- `app_codebase/flutter_base_06/lib/modules/play/play_models.dart`
+- `app_codebase/flutter_base_06/lib/modules/module_registry.dart`
+- `app_codebase/flutter_base_06/test/modules/match/match_notifier_test.dart`
 
 ## Notes / decisions
 
-- **Caller** (not steward/host) — `callerUserId` for who called the match.
-- **Full wire snapshots**; optional deltas only if measured need later — always keep full resync on join.
-- **AI seats:** e.g. `userId: "ai:seat_N"`, `kind: "ai"` — not real accounts.
-- Practice: caller = human; progression/economy still later (GDD: practice free, no progression).
-- Post-match FastAPI finalize remains future ([core-match-loop.md](core-match-loop.md)); terminal snapshot is enough for Play to leave `inMatch`.
+- **Caller** — `callerUserId`
+- **Full wire snapshots**; private freeze not on wire
+- AI seat `ai:seat_1`; stub ids `ANM-TIG-GEN001-0001`, `ANM-WTI-GEN001-0002`, `SLM-STR-GEN001-0001`
+- Play skips live SSOT when `ARCORI_DART_WS_URL` or auth token missing (unit tests)
+- Catalog freeze client is **module-owned** (`MatchCatalogClient`) rather than extending core `FastApiServiceClient` (avoids core → match import)

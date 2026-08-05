@@ -129,7 +129,7 @@ Future<void> runWsConnection(WebSocketChannel channel, {required String tier}) a
       }
 
       try {
-        final result = handler(ctx, msg);
+        final result = await handler(ctx, msg);
         if (result != null) {
           channel.sink.add(encodeWsOk(result));
         }

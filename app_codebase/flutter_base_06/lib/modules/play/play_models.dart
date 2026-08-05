@@ -31,7 +31,7 @@ extension MatchFlowPhaseLabel on MatchFlowPhase {
         MatchFlowPhase.idle => 'Ready',
         MatchFlowPhase.selectingType => 'Select match type',
         MatchFlowPhase.typeSetup => 'Setting up…',
-        MatchFlowPhase.inMatch => 'Match (stub)',
+        MatchFlowPhase.inMatch => 'In match',
         MatchFlowPhase.postMatch => 'Post-match (stub)',
       };
 }

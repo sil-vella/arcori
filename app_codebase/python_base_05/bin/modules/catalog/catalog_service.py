@@ -210,9 +210,35 @@ def get_design(internal_id: str) -> dict[str, Any]:
     series_key = str(doc.get("series") or "").strip() or "Unknown"
     theme_name = str(design.get("theme") or doc.get("theme") or "")
     out["seriesKey"] = series_key
+    out["catalogVersion"] = doc.get("version")
     out["imageUrl"] = image_url_for(
         series_key=series_key,
         theme=theme_name,
         internal_id=design_id,
     )
     return out
+
+
+def get_designs_batch(ids: list[str] | None) -> dict[str, Any]:
+    """Fail-closed batch fetch for Dart match freeze (service tier)."""
+    if not isinstance(ids, list) or not ids:
+        raise AppError(INVALID_QUERY, message="ids must be a non-empty list")
+
+    cleaned: list[str] = []
+    seen: set[str] = set()
+    for raw in ids:
+        design_id = str(raw or "").strip()
+        if not design_id:
+            raise AppError(INVALID_QUERY, message="ids must not contain empty values")
+        if design_id in seen:
+            continue
+        seen.add(design_id)
+        cleaned.append(design_id)
+
+    if not cleaned:
+        raise AppError(INVALID_QUERY, message="ids must be a non-empty list")
+
+    designs: dict[str, Any] = {}
+    for design_id in cleaned:
+        designs[design_id] = get_design(design_id)
+    return {"designs": designs}

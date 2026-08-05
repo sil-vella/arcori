@@ -14,7 +14,10 @@
 <ul>
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
 <li><a href="../../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../../charts/base/catalog-hot-reload-flow.html">Catalog Hot Reload Flow</a></li>
 <li><a href="../../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
 <li><a href="../../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
 <li><a href="../../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
 <li><a href="../../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
@@ -28,6 +31,7 @@
 <li><a href="../../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
 </ul></li>
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
 <li><a href="../../../charts/dart_backend/state/match-state-flow.html" class="active">Match State Flow</a></li>
 </ul></li>
 </ul></li>
@@ -35,8 +39,12 @@
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
 <li><a href="../../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
 <li><a href="../../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
 <li><a href="../../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
 </ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Match Flow</button><ul>
+<li><a href="../../../charts/match_flow/match-setting-flow.html">Match Setting Flow</a></li>
 </ul></li>
 </ul>
     </nav>
@@ -47,40 +55,44 @@
   <h1>Match State Flow</h1>
   <p class="chart-guide-link"><a href="match-state-flow.guide.html">Plain English guide &amp; examples →</a></p>
   <div class="mermaid">flowchart TD
-  T[&quot;Dart — match state flow&quot;]
+  title[&quot;Dart — match state flow&quot;]
 
-  subgraph client [&quot;Flutter / WS client&quot;]
-    JOIN[&quot;match/join event&quot;]
-    PATCH[&quot;match/state event&quot;]
-    LEAVE[&quot;match/leave event&quot;]
+  subgraph client[&quot;Flutter / WS client&quot;]
+    CREATE[&quot;match/create&quot;]
+    JOIN[&quot;match/join&quot;]
+    ENDC[&quot;match/end&quot;]
+    LEAVE[&quot;match/leave&quot;]
   end
 
-  subgraph handlers [&quot;modules/match&quot;]
+  subgraph handlers[&quot;modules/match&quot;]
+    HC[&quot;handleMatchCreate&quot;]
     HJ[&quot;handleMatchJoin&quot;]
-    HS[&quot;handleMatchState&quot;]
+    HE[&quot;handleMatchEnd&quot;]
     HL[&quot;handleMatchLeave&quot;]
     SVC[&quot;MatchService&quot;]
+    CAT[&quot;MatchCatalogClient&quot;]
   end
 
-  subgraph core [&quot;core/state&quot;]
-    STORE[&quot;MatchStore&quot;]
+  subgraph core[&quot;core/state&quot;]
+    STORE[&quot;MatchStore + MatchRuntime&quot;]
     ROOM[&quot;RoomRegistry&quot;]
     CAST[&quot;BroadcastHub&quot;]
   end
 
-  subgraph persist [&quot;Post-game&quot;]
-    API[&quot;FastAPI POST /service/match/finalize&quot;]
-    DB[(Postgres)]
+  subgraph fastapi[&quot;FastAPI&quot;]
+    BATCH[&quot;POST /service/catalog/designs&quot;]
+    DISK[&quot;catalog JSON disk&quot;]
   end
 
+  CREATE --&gt; HC --&gt; SVC
   JOIN --&gt; HJ --&gt; SVC
-  PATCH --&gt; HS --&gt; SVC
+  ENDC --&gt; HE --&gt; SVC
   LEAVE --&gt; HL --&gt; SVC
+  SVC --&gt;|&quot;freeze once&quot;| CAT --&gt; BATCH --&gt; DISK
   SVC --&gt; STORE
   SVC --&gt; ROOM
   SVC --&gt; CAST
-  CAST --&gt;|&quot;match/state push&quot;| client
-  SVC --&gt;|&quot;phase ended&quot;| API --&gt; DB</div>
+  CAST --&gt;|&quot;match/state full snapshot&quot;| client</div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script>

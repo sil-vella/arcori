@@ -40,6 +40,12 @@ Router is exact-match (no path params) — ids via query:
 
 Client payloads omit `artworkPrompt`. Envelope: `{ok, data}` / `{ok, error}` with `catalog/*` codes.
 
+## Endpoints (service)
+
+| Method | Path | Body | Purpose |
+|--------|------|------|---------|
+| POST | `/service/catalog/designs` | `{ "ids": ["…"] }` | Batch designs for Dart match freeze (fail-closed) |
+
 ## Flutter (Velora slice)
 
 - Module `lib/modules/velora/` — index (theme → series) + Arcori Detail circle art
@@ -60,4 +66,4 @@ Client payloads omit `artworkPrompt`. Envelope: `{ok, data}` / `{ok, error}` wit
 
 ## Related follow-on
 
-- **`/service/catalog/*` batch fetch** — required by [match-hot-state.md](match-hot-state.md) so Dart can freeze slammer/Arcori stats at match init (not authuser; service key only). Implement under that plan; update this doc when landed.
+- **`POST /service/catalog/designs`** — implemented for [match-hot-state.md](match-hot-state.md) (Dart freezes slammer/Arcori stats at match init; service key only).

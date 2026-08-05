@@ -19,6 +19,10 @@ class FastApiServiceClient {
   final http.Client _client;
   final String _baseUrl;
 
+  String get baseUrl => _baseUrl;
+
+  http.Client get client => _client;
+
   static String _defaultBaseUrl() {
     final fromEnv = Platform.environment['FASTAPI_SERVICE_URL'];
     if (fromEnv != null && fromEnv.isNotEmpty) {

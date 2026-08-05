@@ -1,6 +1,8 @@
 /// WebSocket message shapes — shared wire format matching HTTP JSON envelope.
 library;
 
+import 'dart:async';
+
 class WsConnectionContext {
   WsConnectionContext({
     required this.tier,
@@ -46,8 +48,8 @@ class WsClientMessage {
   }
 }
 
-/// Handler returns response data map, error map with `_wsSendError`, or null.
-typedef WsChannelHandler = Map<String, dynamic>? Function(
+/// Handler returns response data map, or null. May be async (e.g. match create freeze).
+typedef WsChannelHandler = FutureOr<Map<String, dynamic>?> Function(
   WsConnectionContext ctx,
   WsClientMessage msg,
 );
