@@ -35,6 +35,7 @@ Under `Documentation/02_FlowCharts/charts/`, mirrored by concern:
 | Area | Path |
 |------|------|
 | Cross-cutting (auth, WS, errors, presence, …) | `charts/base/` |
+| Match pipeline (cross-stack: Flutter + Dart + later Python) | `charts/match_flow/` |
 | Dart backend | `charts/dart_backend/{http\|state\|module_registry}/` |
 | Flutter | `charts/flutter/{state\|…}/` |
 

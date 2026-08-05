@@ -4,7 +4,9 @@
 **Created:** 2026-07-20  
 **Last Updated:** 2026-07-24
 
-Related: [returning-player-startup-flow.md](returning-player-startup-flow.md) · [core-match-loop.md](core-match-loop.md) · [first-time-player-flow.md](first-time-player-flow.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · Flutter bottom-nav docs in `03_Base/Flutter/`
+Related: [returning-player-startup-flow.md](returning-player-startup-flow.md) · [core-match-loop.md](core-match-loop.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [first-time-player-flow.md](first-time-player-flow.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · Flutter bottom-nav docs in `03_Base/Flutter/`
+
+Stage 1 Play route + type select (drawer entry; Home sink later): [match-setting-core-flow.md](match-setting-core-flow.md).
 
 ## Objective
 

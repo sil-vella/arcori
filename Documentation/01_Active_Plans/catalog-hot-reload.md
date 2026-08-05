@@ -55,6 +55,9 @@ Client payloads omit `artworkPrompt`. Envelope: `{ok, data}` / `{ok, error}` wit
 ## Out of scope (still)
 
 - Standings / mastery / Trove
-- Flutter SharedPrefs catalog hydrate
-- `/service/catalog/*`
+- Flutter SharedPrefs catalog hydrate (optional; separate from match)
 - Postgres catalog sync
+
+## Related follow-on
+
+- **`/service/catalog/*` batch fetch** — required by [match-hot-state.md](match-hot-state.md) so Dart can freeze slammer/Arcori stats at match init (not authuser; service key only). Implement under that plan; update this doc when landed.

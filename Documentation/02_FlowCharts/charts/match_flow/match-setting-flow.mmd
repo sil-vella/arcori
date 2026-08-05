@@ -1,0 +1,32 @@
+flowchart TD
+  title["Match setting — stage 1 hub"]
+
+  subgraph entry["Entry"]
+    Drawer["Drawer Play"]
+    Path["AppPaths.play /play"]
+    Screen["PlayScreen"]
+    Drawer --> Path --> Screen
+  end
+
+  subgraph hub["Play hub — stays on route"]
+    Idle["phase idle"]
+    PlayBtn["Press Play"]
+    Screen --> Idle
+    Idle -->|"startPlay"| Selecting
+  end
+
+  subgraph select["Type selection"]
+    Selecting["phase selectingType"]
+    Modal["showMatchTypeSelectModal<br/>AppModal centered"]
+    Types["practice / quickStart<br/>specialEvent / invite"]
+    Cancel["cancelSelection"]
+    Selecting --> Modal --> Types
+    Modal -->|"dismiss null"| Cancel --> Idle
+  end
+
+  subgraph pipeline["MatchFlowNotifier pipeline"]
+    Setup["phase typeSetup<br/>_runTypeSetup stub"]
+    Match["phase inMatch<br/>_runMatchSsot stub"]
+    Post["phase postMatch<br/>_runPostMatch stub"]
+    Types -->|"selectType"| Setup --> Match --> Post --> Idle
+  end

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Match Setting Flow — Guide — FlowCharts</title>
+  <link rel="stylesheet" href="../../css/flowcharts.css">
+</head>
+<body>
+<header class="flowcharts-header">
+  <div class="header-inner">
+    <a class="logo" href="../../index.html">FlowCharts</a>
+    <nav class="flowcharts-nav" aria-label="Chart index">
+<ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Base</button><ul>
+<li><a href="../../charts/base/backend-state-split.html">Backend State Split</a></li>
+<li><a href="../../charts/base/catalog-hot-reload-flow.html">Catalog Hot Reload Flow</a></li>
+<li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
+<li><a href="../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
+<li><a href="../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
+<li><a href="../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
+<li><a href="../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Dart Backend</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Http</button><ul>
+<li><a href="../../charts/dart_backend/http/feature-module-http-flow.html">Feature Module Http Flow</a></li>
+<li><a href="../../charts/dart_backend/http/http-core-flow.html">Http Core Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Module Registry</button><ul>
+<li><a href="../../charts/dart_backend/module_registry/module-registry-flow.html">Module Registry Flow</a></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/dart_backend/state/example-module-state-flow.html">Example Module State Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Flutter</button><ul>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">State</button><ul>
+<li><a href="../../charts/flutter/state/state-module-registration-flow.html">State Module Registration Flow</a></li>
+<li><a href="../../charts/flutter/state/state-system-flow.html">State System Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-reconnect-flow.html">State Ws Reconnect Flow</a></li>
+<li><a href="../../charts/flutter/state/state-ws-routing-flow.html">State Ws Routing Flow</a></li>
+</ul></li>
+</ul></li>
+<li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Match Flow</button><ul>
+<li><a href="../../charts/match_flow/match-setting-flow.html" class="active">Match Setting Flow</a></li>
+</ul></li>
+</ul>
+    </nav>
+  </div>
+</header>
+
+<main class="flowcharts-main flowcharts-guide">
+  <p class="chart-guide-nav">
+    <a href="match-setting-flow.html">← View diagram</a>
+    <span class="chart-guide-sep">·</span>
+    <a href="../../index.html">All charts</a>
+  </p>
+  <h1>Match Setting Flow</h1>
+  <p class="guide-lead">Plain English explanation and copy-paste examples for this flowchart.</p>
+  <div class="guide-body">
+<p>This chart is the <strong>Match Flow</strong> home chart. Stage 1 is Flutter-only (Play hub → type select → stub pipeline → idle). Later stages add Dart hot match state and the rest of the stack under this same nav section.</p>
+<h2>Concepts</h2>
+<table><thead><tr><th>Piece</th><th>Role</th></tr></thead><tbody><tr><td><strong>PlayScreen</strong></td><td>Start and end hub. Stage 1 never navigates away.</td></tr><tr><td><strong>MatchFlowNotifier</strong></td><td>Owns <code>phase</code> + <code>selectedType</code> via <code>matchFlowProvider</code>.</td></tr><tr><td><strong>MatchType</strong></td><td><code>practice</code>, <code>quickStart</code>, <code>specialEvent</code>, <code>invite</code>.</td></tr><tr><td><strong>AppModal</strong></td><td>Type picker overlay — not a go_router route.</td></tr><tr><td><strong>Stub hooks</strong></td><td><code>_runTypeSetup</code>, <code>_runMatchSsot</code>, <code>_runPostMatch</code> — no-ops today; Stage 2 fills match state via Flutter ↔ Dart WS.</td></tr></tbody></table>
+<h3>Phases</h3>
+<table><thead><tr><th>Phase</th><th>What happens</th></tr></thead><tbody><tr><td><code>idle</code></td><td>Play button enabled; ready for a new run.</td></tr><tr><td><code>selectingType</code></td><td>Centered modal open; cancel returns to idle.</td></tr><tr><td><code>typeSetup</code></td><td>Per-type setup hook (stub).</td></tr><tr><td><code>inMatch</code></td><td>Shared gameplay SSOT hook (stub → live Dart state in Stage 2).</td></tr><tr><td><code>postMatch</code></td><td>Type-dependent post-match hook (stub).</td></tr></tbody></table>
+<h2>Step-through</h2>
+<ol><li>Open <strong>Play</strong> from the drawer (<code>AppPaths.play</code> → <code>/play</code>).</li><li>Press <strong>Play</strong> → <code>startPlay()</code> → <code>selectingType</code>.</li><li>Modal lists the four types. Close / barrier → <code>cancelSelection()</code> → <code>idle</code>.</li><li>Choose a type → <code>selectType(type)</code> → <code>typeSetup</code> → <code>inMatch</code> → <code>postMatch</code> → clear state → <code>idle</code>.</li><li>Play button is disabled while not idle; phase label shows on the screen.</li></ol>
+<p>Re-entrancy: <code>startPlay</code> is ignored unless idle. A <code>_runId</code> guard drops stale async work if selection is cancelled mid-flight (hooks are sync today).</p>
+<h2>Copy-paste examples</h2>
+<p>Start selection from the screen:</p>
+<pre><code class="language-dart">final notifier = ref.read(matchFlowProvider.notifier);
+notifier.startPlay();
+final type = await showMatchTypeSelectModal(context);
+if (type == null) {
+  notifier.cancelSelection();
+  return;
+}
+await notifier.selectType(type);</code></pre>
+<p>Phase enum (models):</p>
+<pre><code class="language-dart">enum MatchFlowPhase {
+  idle,
+  selectingType,
+  typeSetup,
+  inMatch,
+  postMatch,
+}</code></pre>
+<h2>Try it locally</h2>
+<ol><li>Launch Flutter (<code>wfrun</code> / Chrome launch scripts).</li><li>Drawer → <strong>Play</strong>.</li><li>Press <strong>Play</strong>, pick a type — stubs finish immediately; you stay on Play idle.</li><li>Or run tests:</li></ol>
+<pre><code class="language-bash">cd app_codebase/flutter_base_06
+flutter test test/modules/play/</code></pre>
+<p>Dev traces: <code>play_notifier.dart</code> uses <code>LOGGING_SWITCH</code> + <code>customlog</code> for phase transitions (needs <code>DUTCH_DEV_LOG=1</code>).</p>
+<h2>Related</h2>
+<ul><li>Active plan: <a href="../../../01_Active_Plans/match-setting-core-flow.md">match-setting-core-flow.md</a></li><li>Broader loop (summary / exits): <a href="../../../01_Active_Plans/core-match-loop.md">core-match-loop.md</a></li><li>Navigation: <a href="../../../03_Base/Flutter/NAVIGATION_SYSTEM.md">NAVIGATION_SYSTEM.md</a></li><li>Modals: <a href="../../../03_Base/Flutter/MODAL_SYSTEM.md">MODAL_SYSTEM.md</a></li><li>Example module (Stage 2 pattern): <a href="../../../03_Base/EXAMPLE_MODULE.md">EXAMPLE_MODULE.md</a></li><li>State registration pattern: <a href="../flutter/state/state-module-registration-flow.html">state-module-registration-flow</a></li></ul>
+  </div>
+</main>
+</body>
+</html>

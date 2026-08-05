@@ -2,7 +2,7 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-07-26
+**Last Updated:** 2026-08-05
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
@@ -19,6 +19,8 @@ Index of active implementation plans. Detail lives in the linked files; Game_Spe
 | [first-time-player-flow.md](first-time-player-flow.md) | Splash → Kin/Genesis → starter access → guided practice → intros → Home |
 | [returning-player-startup-flow.md](returning-player-startup-flow.md) | Auto login → sync → overnight → notification queue → Home |
 | [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Home layout, Velora entry, sink Trove • PLAY • Market |
+| [match-setting-core-flow.md](match-setting-core-flow.md) | Stage 1 hub done; Stage 2 → [match-hot-state.md](match-hot-state.md) |
+| [match-hot-state.md](match-hot-state.md) | Match snapshot + Dart freeze via `/service/catalog`; matching stubbed |
 | [core-match-loop.md](core-match-loop.md) | Matchmaking → match → celebration → Match Summary → exits |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Standings module + Detail tab + wfrun tiger seed; My Mastery/Trove still open |
 | [catalog-hot-reload.md](catalog-hot-reload.md) | Catalog JSON mtime cache, authuser APIs, `/catalog-media`, Flutter Velora browse |

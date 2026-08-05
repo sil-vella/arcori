@@ -17,6 +17,8 @@ import 'avari/avari_routes.dart';
 import 'notifications/notifications_drawer.dart';
 import 'notifications/notifications_routes.dart';
 import 'notifications/register_notifications_state.dart';
+import 'play/play_drawer.dart';
+import 'play/play_routes.dart';
 import 'sample/sample_routes.dart';
 import 'velora/velora_drawer.dart';
 import 'velora/velora_routes.dart';
@@ -43,6 +45,8 @@ void registerApplicationModules(
   registerAuthDrawer(drawer);
   registerAvariRoutes(routes, notificationScreens);
   registerAvariDrawer(drawer);
+  registerPlayRoutes(routes, notificationScreens);
+  registerPlayDrawer(drawer);
   registerSampleRoutes(routes, notificationScreens);
   registerWsDemoRoutes(routes, notificationScreens);
   registerWsDemoBottomNavScope(bottomNav);

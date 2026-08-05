@@ -4,7 +4,9 @@
 **Created:** 2026-07-20  
 **Last Updated:** 2026-07-24
 
-Related: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
+Related: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [match-hot-state.md](match-hot-state.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
+
+Stage 1 hub + type select + stub pipeline: [match-setting-core-flow.md](match-setting-core-flow.md).
 
 ## Objective
 

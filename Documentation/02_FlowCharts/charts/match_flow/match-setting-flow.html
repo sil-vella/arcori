@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Presence System Flow — FlowCharts</title>
+  <title>Match Setting Flow — FlowCharts</title>
   <link rel="stylesheet" href="../../css/flowcharts.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
 <li><a href="../../charts/base/catalog-hot-reload-flow.html">Catalog Hot Reload Flow</a></li>
 <li><a href="../../charts/base/error-handling-flow.html">Error Handling Flow</a></li>
 <li><a href="../../charts/base/notification-system-flow.html">Notification System Flow</a></li>
-<li><a href="../../charts/base/presence-system-flow.html" class="active">Presence System Flow</a></li>
+<li><a href="../../charts/base/presence-system-flow.html">Presence System Flow</a></li>
 <li><a href="../../charts/base/production-runtime-flow.html">Production Runtime Flow</a></li>
 <li><a href="../../charts/base/security-auth-flow.html">Security Auth Flow</a></li>
 <li><a href="../../charts/base/ws-system-flow.html">Ws System Flow</a></li>
@@ -43,7 +43,7 @@
 </ul></li>
 </ul></li>
 <li><button type="button" class="nav-folder" aria-haspopup="true" aria-expanded="false">Match Flow</button><ul>
-<li><a href="../../charts/match_flow/match-setting-flow.html">Match Setting Flow</a></li>
+<li><a href="../../charts/match_flow/match-setting-flow.html" class="active">Match Setting Flow</a></li>
 </ul></li>
 </ul>
     </nav>
@@ -51,51 +51,40 @@
 </header>
 
 <main class="flowcharts-main">
-  <h1>Presence System Flow</h1>
-  <p class="chart-guide-link"><a href="presence-system-flow.guide.html">Plain English guide &amp; examples →</a></p>
-  <div class="mermaid">flowchart TB
-  T[&quot;User presence — FastAPI authuser WS&quot;]
+  <h1>Match Setting Flow</h1>
+  <p class="chart-guide-link"><a href="match-setting-flow.guide.html">Plain English guide &amp; examples →</a></p>
+  <div class="mermaid">flowchart TD
+  title[&quot;Match setting — stage 1 hub&quot;]
 
-  subgraph flutter [Flutter]
-    AppWs[&quot;AppWsCoordinator api WS&quot;]
+  subgraph entry[&quot;Entry&quot;]
+    Drawer[&quot;Drawer Play&quot;]
+    Path[&quot;AppPaths.play /play&quot;]
+    Screen[&quot;PlayScreen&quot;]
+    Drawer --&gt; Path --&gt; Screen
   end
 
-  subgraph ws [ws_dispatcher]
-    Auth[auth success]
-    Frame[inbound frame]
-    Close[disconnect]
+  subgraph hub[&quot;Play hub — stays on route&quot;]
+    Idle[&quot;phase idle&quot;]
+    PlayBtn[&quot;Press Play&quot;]
+    Screen --&gt; Idle
+    Idle --&gt;|&quot;startPlay&quot;| Selecting
   end
 
-  subgraph local [Per-worker transport]
-    ConnReg[&quot;ConnectionRegistry send&quot;]
-    UserConn[&quot;UserConnectionRegistry&quot;]
+  subgraph select[&quot;Type selection&quot;]
+    Selecting[&quot;phase selectingType&quot;]
+    Modal[&quot;showMatchTypeSelectModal&lt;br/&gt;AppModal centered&quot;]
+    Types[&quot;practice / quickStart&lt;br/&gt;specialEvent / invite&quot;]
+    Cancel[&quot;cancelSelection&quot;]
+    Selecting --&gt; Modal --&gt; Types
+    Modal --&gt;|&quot;dismiss null&quot;| Cancel --&gt; Idle
   end
 
-  subgraph redis [Redis presence]
-    UserSet[&quot;SET user:{user_id}&quot;]
-    SessionHash[&quot;HASH session:{session_id} + TTL&quot;]
-  end
-
-  subgraph core [Core API]
-    Presence[&quot;UserPresenceService&quot;]
-    HTTP[&quot;GET /authuser/presence&quot;]
-  end
-
-  subgraph modules [Feature modules]
-    Game[&quot;game invite flow&quot;]
-  end
-
-  AppWs --&gt; Auth
-  Auth --&gt; UserConn
-  Auth --&gt; Presence
-  Presence --&gt; SessionHash
-  Presence --&gt; UserSet
-  Frame --&gt; Presence
-  Close --&gt; UserConn
-  Close --&gt; Presence
-  UserConn --&gt; ConnReg
-  Game --&gt; Presence
-  HTTP --&gt; Presence</div>
+  subgraph pipeline[&quot;MatchFlowNotifier pipeline&quot;]
+    Setup[&quot;phase typeSetup&lt;br/&gt;_runTypeSetup stub&quot;]
+    Match[&quot;phase inMatch&lt;br/&gt;_runMatchSsot stub&quot;]
+    Post[&quot;phase postMatch&lt;br/&gt;_runPostMatch stub&quot;]
+    Types --&gt;|&quot;selectType&quot;| Setup --&gt; Match --&gt; Post --&gt; Idle
+  end</div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script>
