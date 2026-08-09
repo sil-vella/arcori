@@ -15,6 +15,8 @@ from modules.notifications.notification_app import register_notification_routes
 from modules.notifications.notification_errors import register_notification_errors
 from modules.ops.ops_app import register_ops_routes
 from modules.ops.ops_errors import register_ops_errors
+from modules.players.players_app import register_players_routes
+from modules.players.players_errors import register_players_errors
 from modules.presence.presence_app import register_presence_routes
 from modules.presence.presence_errors import register_presence_errors
 from modules.standings.standings_app import register_standings_routes
@@ -45,6 +47,7 @@ def register_application_routes() -> None:
     register_example_module_routes(application_routes, http_responses)
     register_notification_routes(application_routes, http_responses)
     register_catalog_routes(application_routes, http_responses)
+    register_players_routes(application_routes, http_responses)
     register_standings_routes(application_routes, http_responses)
     register_avari_routes(application_routes, http_responses)
     register_presence_routes(application_routes, http_responses)
@@ -58,6 +61,7 @@ def register_application_errors() -> None:
     register_demo_errors(module_error_registrar)
     register_notification_errors(module_error_registrar)
     register_catalog_errors(module_error_registrar)
+    register_players_errors(module_error_registrar)
     register_standings_errors(module_error_registrar)
     register_avari_errors(module_error_registrar)
     register_presence_errors(module_error_registrar)

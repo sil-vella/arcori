@@ -7,9 +7,11 @@ import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/theme/theme.dart';
 import '../../match/widgets/practice_match_surface.dart';
+import '../../matchmaking/widgets/matchmaking_lobby_modal.dart';
 import '../play_models.dart';
 import '../play_notifier.dart';
 import '../widgets/match_type_select_modal.dart';
+import '../widgets/play_failure_modal.dart';
 import '../widgets/practice_loadout_modal.dart';
 
 /// Play hub — start and end of the match pipeline.
@@ -42,14 +44,38 @@ class PlayScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final flow = ref.watch(matchFlowProvider);
-    final canPlay = flow.isIdle;
+    final canPlay = flow.isIdle && flow.errorMessage == null;
 
     ref.listen(matchFlowProvider, (prev, next) {
-      final enteredPracticeInMatch = next.phase == MatchFlowPhase.inMatch &&
-          next.selectedType == MatchType.practice &&
+      final enteredOnlineLobby = next.phase == MatchFlowPhase.typeSetup &&
+          (next.selectedType == MatchType.quickStart ||
+              next.selectedType == MatchType.specialEvent) &&
+          prev?.phase == MatchFlowPhase.selectingType;
+      if (enteredOnlineLobby && context.mounted) {
+        unawaited(showMatchmakingLobbyModal(context, ref));
+      }
+
+      final enteredInMatch = next.phase == MatchFlowPhase.inMatch &&
           prev?.phase != MatchFlowPhase.inMatch;
-      if (enteredPracticeInMatch && context.mounted) {
-        unawaited(showPracticeMatchSurface(context, ref));
+      if (enteredInMatch && context.mounted) {
+        // Let the lobby modal pop first (same-frame promote → inMatch race).
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!context.mounted) return;
+          unawaited(showPracticeMatchSurface(context, ref));
+        });
+      }
+
+      final error = next.errorMessage;
+      if (error != null &&
+          error.isNotEmpty &&
+          error != prev?.errorMessage &&
+          context.mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          if (!context.mounted) return;
+          await showPlayFailureModal(context, error);
+          if (!context.mounted) return;
+          ref.read(matchFlowProvider.notifier).clearError();
+        });
       }
     });
 

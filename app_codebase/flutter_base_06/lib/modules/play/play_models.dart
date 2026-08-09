@@ -41,11 +41,15 @@ class MatchFlowState {
     this.phase = MatchFlowPhase.idle,
     this.selectedType,
     this.practiceLoadout,
+    this.errorMessage,
   });
 
   final MatchFlowPhase phase;
   final MatchType? selectedType;
   final PracticeLoadout? practiceLoadout;
+
+  /// Set when a play attempt aborts; UI shows an OK modal then [clearError].
+  final String? errorMessage;
 
   bool get isIdle => phase == MatchFlowPhase.idle;
 
@@ -53,8 +57,10 @@ class MatchFlowState {
     MatchFlowPhase? phase,
     MatchType? selectedType,
     PracticeLoadout? practiceLoadout,
+    String? errorMessage,
     bool clearSelectedType = false,
     bool clearPracticeLoadout = false,
+    bool clearError = false,
   }) {
     return MatchFlowState(
       phase: phase ?? this.phase,
@@ -64,6 +70,7 @@ class MatchFlowState {
       practiceLoadout: clearPracticeLoadout
           ? null
           : (practiceLoadout ?? this.practiceLoadout),
+      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
   }
 }

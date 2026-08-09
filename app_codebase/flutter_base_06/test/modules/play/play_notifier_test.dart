@@ -42,8 +42,19 @@ void main() {
       expect(container.read(matchSnapshotProvider).matchId, isNull);
     });
 
-    test('non-practice room stub returns to idle without match snapshot',
-        () async {
+    test('invite room stub returns to idle without match snapshot', () async {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final notifier = container.read(matchFlowProvider.notifier);
+
+      notifier.startPlay();
+      await notifier.selectType(MatchType.invite);
+
+      expect(container.read(matchFlowProvider).isIdle, isTrue);
+      expect(container.read(matchSnapshotProvider).matchId, isNull);
+    });
+
+    test('quickStart without auth aborts idle with errorMessage', () async {
       final container = ProviderContainer();
       addTearDown(container.dispose);
       final notifier = container.read(matchFlowProvider.notifier);
@@ -51,8 +62,13 @@ void main() {
       notifier.startPlay();
       await notifier.selectType(MatchType.quickStart);
 
-      expect(container.read(matchFlowProvider).isIdle, isTrue);
-      expect(container.read(matchSnapshotProvider).matchId, isNull);
+      final flow = container.read(matchFlowProvider);
+      expect(flow.isIdle, isTrue);
+      expect(flow.errorMessage, isNotNull);
+      expect(flow.errorMessage, contains('Sign in'));
+
+      notifier.clearError();
+      expect(container.read(matchFlowProvider).errorMessage, isNull);
     });
 
     test('startPlay is ignored while pipeline is not idle', () async {

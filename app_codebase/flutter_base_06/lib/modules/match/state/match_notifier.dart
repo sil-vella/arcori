@@ -2,10 +2,13 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../utils/dev_logger.dart';
 import '../../play/play_models.dart';
 import '../practice_ai_pool.dart';
 import 'match_replay.dart';
 import 'match_snapshot_state.dart';
+
+const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 const stubArenaId = 'arena_velora_plaza';
 const stubSlammerId = 'SLM-STR-GEN001-0001';
@@ -52,6 +55,12 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
 
     final matchId =
         'local_practice_${DateTime.now().microsecondsSinceEpoch}';
+    if (LOGGING_SWITCH) {
+      customlog(
+        'match: startLocalPractice human=$humanUserId '
+        'ai=${ais.join(",")} arcori=${loadout.arcoriId}',
+      );
+    }
     state = MatchSnapshotState(
       matchId: matchId,
       version: 1,
@@ -101,6 +110,13 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     final matchId = state.matchId;
     if (matchId == null || !state.phaseIsPlaying) return;
 
+    if (LOGGING_SWITCH) {
+      customlog(
+        'match: stubMatch start matchId=$matchId '
+        'rounds=${state.roundsTotal} seats=${state.seats.length}',
+      );
+    }
+
     final roundsTotal = state.roundsTotal;
     final seatCount = state.seats.length;
     if (seatCount == 0) return;
@@ -126,6 +142,12 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
           active: {'seatIndex': seatIndex, 'action': 'slam'},
         );
         _applyStubSlam(actorUserId: actor.userId);
+        if (LOGGING_SWITCH) {
+          customlog(
+            'match: stubSlam round=$round seat=$seatIndex '
+            'actor=${actor.userId}',
+          );
+        }
         if (!_stillRunning(matchId)) return;
 
         if (stepDelay > Duration.zero) {
@@ -143,6 +165,9 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
 
     if (_stillRunning(matchId)) {
       localEnd();
+      if (LOGGING_SWITCH) {
+        customlog('match: stubMatch ended matchId=$matchId');
+      }
     }
   }
 

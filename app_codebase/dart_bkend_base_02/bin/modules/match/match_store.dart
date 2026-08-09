@@ -116,6 +116,42 @@ class MatchStore {
     });
   }
 
+  /// Online match from lobby: humans + AI seats; [matchType] carries game type.
+  MatchSnapshot createFromLobby({
+    required String callerUserId,
+    required Map<String, dynamic> matchType,
+    required List<MatchSeat> seats,
+    required Map<String, Map<String, dynamic>> catalogById,
+    String arenaId = stubArenaId,
+  }) {
+    if (seats.isEmpty) {
+      throw ArgumentError('seats required');
+    }
+    final matchId = _newMatchId();
+    final snapshot = MatchSnapshot(
+      matchId: matchId,
+      version: 1,
+      phase: 'playing',
+      round: 1,
+      roundsTotal: 2,
+      arenaId: arenaId,
+      callerUserId: callerUserId,
+      matchType: Map<String, dynamic>.from(matchType),
+      seats: seats,
+      active: const {
+        'seatIndex': 0,
+        'action': 'slam',
+      },
+    );
+    _snapshots[matchId] = snapshot;
+    _runtimes[matchId] = MatchRuntime(
+      matchId: matchId,
+      frozenAt: DateTime.now().toUtc(),
+      catalogById: catalogById,
+    );
+    return snapshot;
+  }
+
   MatchSnapshot endMatch(String matchId) {
     return bump(matchId, (current) {
       final scores = <String, int>{

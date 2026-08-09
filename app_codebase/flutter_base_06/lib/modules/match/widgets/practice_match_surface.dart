@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/modal/modal.dart';
+import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/ws/ws_connection_manager.dart';
 import '../state/match_notifier.dart';
 
-/// Full-screen practice match — Flutter-only; auto stub loop (readout only).
+const _dartWsId = 'dart';
+
+/// Match surface — practice auto-run readout; online shows End for caller.
 Future<void> showPracticeMatchSurface(BuildContext context, WidgetRef ref) {
   return AppModal.showFullScreenShell<void>(
     context,
-    title: 'Practice match',
+    title: 'Match',
     showCloseButton: false,
     barrierDismissible: false,
     child: const _PracticeMatchBody(),
@@ -19,20 +23,47 @@ Future<void> showPracticeMatchSurface(BuildContext context, WidgetRef ref) {
 class _PracticeMatchBody extends ConsumerWidget {
   const _PracticeMatchBody();
 
+  bool _isLocal(String? matchId) =>
+      matchId != null && matchId.startsWith('local_practice_');
+
+  Future<void> _endOnline(WidgetRef ref) async {
+    final snap = ref.read(matchSnapshotProvider);
+    final matchId = snap.matchId;
+    if (matchId == null || matchId.isEmpty || snap.isEnded) return;
+    final userId = ref.read(authProvider).userId?.trim();
+    if (userId == null || userId.isEmpty || snap.callerUserId != userId) {
+      return;
+    }
+    final manager = ref.read(wsConnectionManagerProvider.notifier);
+    await manager.send(
+      _dartWsId,
+      type: 'event',
+      channel: 'match/end',
+      payload: {'matchId': matchId},
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final snap = ref.watch(matchSnapshotProvider);
+    final local = _isLocal(snap.matchId);
 
     ref.listen(matchSnapshotProvider, (prev, next) {
-      if (next.isEnded && context.mounted) {
+      // Edge-trigger only: multiple ended WS frames must not pop go_router.
+      if (!next.isEnded || prev?.isEnded == true || !context.mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
         AppModal.dismiss(context);
-      }
+      });
     });
 
     final lastEvent = snap.lastEvent;
     final seats = snap.seats;
 
+    // Shrink-wrap: full-screen shell puts this Column in a scroll view
+    // (unbounded height) — Spacer/Expanded are invalid there.
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
@@ -49,7 +80,7 @@ class _PracticeMatchBody extends ConsumerWidget {
           Text(
             'Type: ${snap.matchType['code'] ?? '—'}'
             '${snap.matchType['subtype'] != null ? ' / ${snap.matchType['subtype']}' : ''}'
-            ' (offline auto)',
+            '${local ? ' (offline auto)' : ' (online)'}',
             style: context.appTypography.bodySmall,
           ),
         ],
@@ -77,12 +108,23 @@ class _PracticeMatchBody extends ConsumerWidget {
                   '${lastEvent['actorUserId'] != null ? ' · ${lastEvent['actorUserId']}' : ''}',
           style: context.appTypography.bodySmall,
         ),
-        const Spacer(),
+        AppSpacing.gapLg,
         Text(
-          snap.isEnded ? 'Match ended' : 'Auto-running stub slams…',
+          snap.isEnded
+              ? 'Match ended'
+              : local
+                  ? 'Auto-running stub slams…'
+                  : 'Online match (stub end available)',
           style: context.appTypography.bodySmall,
           textAlign: TextAlign.center,
         ),
+        if (!local && !snap.isEnded) ...[
+          AppSpacing.gapSm,
+          OutlinedButton(
+            onPressed: () => _endOnline(ref),
+            child: const Text('End match'),
+          ),
+        ],
       ],
     );
   }

@@ -23,6 +23,7 @@ Index of active implementation plans. Detail lives in the linked files; Game_Spe
 | [match-hot-state.md](match-hot-state.md) | Dart match module for online later; not used for Flutter practice |
 | [practice-offline-routing.md](practice-offline-routing.md) | Practice = Flutter-only; embedded 10 AI pool, pick 2; non-practice = room stub |
 | [practice-stub-gameplay.md](practice-stub-gameplay.md) | Auto stub loop: 2 rounds × 3 seats, then postMatch stub |
+| [ws-matchmaking-modes.md](ws-matchmaking-modes.md) | Quick/Event join-or-create lobby → match room SSOT; invite stub |
 | [practice-match-v1.md](practice-match-v1.md) | Practice loadout + local stub slam; Dart packs dormant for practice |
 | [core-match-loop.md](core-match-loop.md) | Matchmaking → match → celebration → Match Summary → exits |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Standings module + Detail tab + wfrun tiger seed; My Mastery/Trove still open |

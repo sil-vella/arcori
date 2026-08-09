@@ -1,10 +1,10 @@
 # Match Hot State (Flutter ↔ Dart)
 
-**Status:** Stage 2 Dart match module complete — **not used for Flutter practice** (see offline routing)  
+**Status:** Stage 2 Dart match module + online matchmaking for quickStart/specialEvent  
 **Created:** 2026-08-05  
-**Last Updated:** 2026-08-08
+**Last Updated:** 2026-08-09
 
-Related: [match-setting-core-flow.md](match-setting-core-flow.md) · [practice-offline-routing.md](practice-offline-routing.md) · [practice-match-v1.md](practice-match-v1.md) · [core-match-loop.md](core-match-loop.md) · [catalog-hot-reload.md](catalog-hot-reload.md) · [EXAMPLE_MODULE.md](../03_Base/EXAMPLE_MODULE.md) · [DART_STATE_SYSTEM.md](../03_Base/DART_STATE_SYSTEM.md) · [Flutter STATE_SYSTEM.md](../03_Base/Flutter/STATE_SYSTEM.md) · [ERROR_SYSTEM.md](../03_Base/ERROR_SYSTEM.md) · [WS_SYSTEM.md](../03_Base/WS_SYSTEM.md) · [PYTHON_DART_BACKEND.md](../03_Base/PYTHON_DART_BACKEND.md)
+Related: [match-setting-core-flow.md](match-setting-core-flow.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [practice-offline-routing.md](practice-offline-routing.md) · [practice-match-v1.md](practice-match-v1.md) · [core-match-loop.md](core-match-loop.md) · [catalog-hot-reload.md](catalog-hot-reload.md) · [EXAMPLE_MODULE.md](../03_Base/EXAMPLE_MODULE.md) · [DART_STATE_SYSTEM.md](../03_Base/DART_STATE_SYSTEM.md) · [Flutter STATE_SYSTEM.md](../03_Base/Flutter/STATE_SYSTEM.md) · [ERROR_SYSTEM.md](../03_Base/ERROR_SYSTEM.md) · [WS_SYSTEM.md](../03_Base/WS_SYSTEM.md) · [PYTHON_DART_BACKEND.md](../03_Base/PYTHON_DART_BACKEND.md)
 
 **Charts:** [match-setting-flow](../02_FlowCharts/charts/match_flow/match-setting-flow.html) · [match-state-flow](../02_FlowCharts/charts/dart_backend/state/match-state-flow.html) · [backend-state-split](../02_FlowCharts/charts/base/backend-state-split.html)
 
@@ -12,7 +12,8 @@ Related: [match-setting-core-flow.md](match-setting-core-flow.md) · [practice-o
 
 Build a **module-owned hot match store** on Dart for **future online** matches, synced to Flutter over authuser WS. Dart remains gameplay SSOT for live online matches; FastAPI catalog remains definition SSOT; durable rewards stay out of scope.
 
-**Practice is Flutter-only** — see [practice-offline-routing.md](practice-offline-routing.md). The Dart `match/create` path is **not** called from Flutter practice. Player matching / matchmaking stays a stub for non-practice modes.
+**Practice is Flutter-only** — see [practice-offline-routing.md](practice-offline-routing.md).  
+**quickStart / specialEvent** use Dart [matchmaking](ws-matchmaking-modes.md) then promote into this match room SSOT. **Invite** remains a Play stub.
 
 ## Architecture rules (non-negotiable)
 

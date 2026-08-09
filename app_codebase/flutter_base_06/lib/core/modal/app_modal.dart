@@ -159,7 +159,12 @@ abstract final class AppModal {
   }
 
   /// Dismisses the topmost modal route opened via [AppModal].
+  ///
+  /// No-ops when the root navigator cannot pop — avoids emptying go_router
+  /// (black screen) if dismiss is invoked after the modal is already gone.
   static void dismiss<T>(BuildContext context, [T? result]) {
-    Navigator.of(context, rootNavigator: true).pop<T>(result);
+    final nav = Navigator.of(context, rootNavigator: true);
+    if (!nav.canPop()) return;
+    nav.pop<T>(result);
   }
 }

@@ -15,6 +15,7 @@ import 'auth/auth_routes.dart';
 import 'avari/avari_drawer.dart';
 import 'avari/avari_routes.dart';
 import 'match/register_match_state.dart';
+import 'matchmaking/register_matchmaking_state.dart';
 import 'notifications/notifications_drawer.dart';
 import 'notifications/notifications_routes.dart';
 import 'notifications/register_notifications_state.dart';
@@ -39,6 +40,7 @@ void registerApplicationModules(
   registerWsDemoState(state);
   registerExampleModuleState(state);
   registerMatchState(state);
+  registerMatchmakingState(state);
   registerNotificationsState(state);
 
   registerHomeRoutes(routes, notificationScreens);
