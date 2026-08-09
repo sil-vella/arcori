@@ -1,8 +1,8 @@
 # Avari Profile
 
-**Status:** Implemented (read API + Profile screen + drawer avatar header)  
+**Status:** Implemented (read API + Profile screen + drawer avatar header); persistence via [player-profile-schema.md](player-profile-schema.md)  
 **Created:** 2026-07-26  
-**Last Updated:** 2026-07-26
+**Last Updated:** 2026-08-09
 
 Related: [GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · [first-time-player-flow.md](first-time-player-flow.md) · [arcori-standings-surface.md](arcori-standings-surface.md)
 

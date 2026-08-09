@@ -34,6 +34,18 @@ const matchForbidden = ErrorSpec(
   403,
 );
 
+const matchInvalidAction = ErrorSpec(
+  'match/invalid_action',
+  'Unknown or unsupported match action',
+  400,
+);
+
+const matchNotYourTurn = ErrorSpec(
+  'match/not_your_turn',
+  'Not your turn to act',
+  403,
+);
+
 void registerMatchErrors(ModuleErrorRegistrar registrar) {
   registrar.registerModule('match', [
     matchUnauthorized,
@@ -41,5 +53,7 @@ void registerMatchErrors(ModuleErrorRegistrar registrar) {
     matchNotFound,
     matchCatalogFreezeFailed,
     matchForbidden,
+    matchInvalidAction,
+    matchNotYourTurn,
   ]);
 }

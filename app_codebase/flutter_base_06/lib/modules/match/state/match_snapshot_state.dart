@@ -45,6 +45,7 @@ class MatchSnapshotState {
     this.callerUserId,
     this.matchType = const {},
     this.seats = const [],
+    this.active,
     this.result,
     this.lastEvent,
   });
@@ -58,6 +59,7 @@ class MatchSnapshotState {
   final String? callerUserId;
   final Map<String, dynamic> matchType;
   final List<MatchSeatView> seats;
+  final Map<String, dynamic>? active;
   final Map<String, dynamic>? result;
   final Map<String, dynamic>? lastEvent;
 
@@ -73,9 +75,11 @@ class MatchSnapshotState {
     String? callerUserId,
     Map<String, dynamic>? matchType,
     List<MatchSeatView>? seats,
+    Map<String, dynamic>? active,
     Map<String, dynamic>? result,
     Map<String, dynamic>? lastEvent,
     bool clear = false,
+    bool clearActive = false,
   }) {
     if (clear) {
       return const MatchSnapshotState();
@@ -90,6 +94,7 @@ class MatchSnapshotState {
       callerUserId: callerUserId ?? this.callerUserId,
       matchType: matchType ?? this.matchType,
       seats: seats ?? this.seats,
+      active: clearActive ? null : (active ?? this.active),
       result: result ?? this.result,
       lastEvent: lastEvent ?? this.lastEvent,
     );
@@ -117,6 +122,9 @@ class MatchSnapshotState {
           ? Map<String, dynamic>.from(rawType)
           : const <String, dynamic>{},
       seats: seats,
+      active: payload['active'] is Map
+          ? Map<String, dynamic>.from(payload['active'] as Map)
+          : null,
       result: payload['result'] is Map
           ? Map<String, dynamic>.from(payload['result'] as Map)
           : null,

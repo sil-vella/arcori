@@ -1,38 +1,35 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/state/auth/auth_providers.dart';
 import '../../utils/dev_logger.dart';
 import '../match/state/match_notifier.dart';
 import '../match/state/match_snapshot_state.dart';
 import 'play_models.dart';
-import '../../core/state/auth/auth_providers.dart';
-import '../../core/ws/ws_config.dart';
-import '../../core/ws/ws_connection_manager.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
-
-const _dartWsId = 'dart';
 
 final matchFlowProvider =
     NotifierProvider<MatchFlowNotifier, MatchFlowState>(MatchFlowNotifier.new);
 
 /// Owns the Play → type select → setup → match → post-match pipeline.
 ///
-/// Stage 2: `_runMatchSsot` talks to Dart match hot state when WS/auth available.
+/// Practice is Flutter-only (local snapshot). Other types hit a room-create stub.
 class MatchFlowNotifier extends Notifier<MatchFlowState> {
   int _runId = 0;
 
   @override
   MatchFlowState build() => const MatchFlowState();
 
-  /// Enter type selection. No-op if not idle.
   void startPlay() {
     if (!state.isIdle) return;
     _setPhase(MatchFlowPhase.selectingType);
   }
 
-  /// Cancel type modal → idle.
   void cancelSelection() {
-    if (state.phase != MatchFlowPhase.selectingType) return;
+    if (state.phase != MatchFlowPhase.selectingType &&
+        state.phase != MatchFlowPhase.typeSetup) {
+      return;
+    }
     _runId++;
     state = const MatchFlowState();
     if (LOGGING_SWITCH) {
@@ -40,13 +37,17 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     }
   }
 
-  /// Chosen type → run pipeline → idle.
-  Future<void> selectType(MatchType type) async {
+  /// [practiceLoadout] used for practice local seats; ignored for other types.
+  Future<void> selectType(
+    MatchType type, {
+    PracticeLoadout? practiceLoadout,
+  }) async {
     if (state.phase != MatchFlowPhase.selectingType) return;
     final runId = ++_runId;
     state = MatchFlowState(
       phase: MatchFlowPhase.typeSetup,
       selectedType: type,
+      practiceLoadout: practiceLoadout,
     );
     if (LOGGING_SWITCH) {
       customlog('play: selectType=${type.name} → typeSetup');
@@ -55,9 +56,14 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     await _runTypeSetup(type);
     if (!_isCurrentRun(runId, type)) return;
 
-    _setPhase(MatchFlowPhase.inMatch);
-    await _runMatchSsot();
-    if (!_isCurrentRun(runId, type)) return;
+    if (type == MatchType.practice) {
+      _setPhase(MatchFlowPhase.inMatch);
+      await _runPracticeLocal(practiceLoadout);
+      if (!_isCurrentRun(runId, type)) return;
+    } else {
+      await _runRoomCreateStub(type);
+      if (!_isCurrentRun(runId, type)) return;
+    }
 
     _setPhase(MatchFlowPhase.postMatch);
     await _runPostMatch();
@@ -80,85 +86,52 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     }
   }
 
-  /// Hook: per-type setup (matchmaking, invite, event rules). Stub for now.
   Future<void> _runTypeSetup(MatchType type) async {
     if (LOGGING_SWITCH) {
-      customlog('play: typeSetup stub type=${type.name}');
+      customlog(
+        'play: typeSetup type=${type.name} '
+        'loadout=${state.practiceLoadout?.arcoriId ?? '-'}',
+      );
     }
   }
 
-  /// Live Dart match SSOT when configured; otherwise no-op (tests / offline).
-  Future<void> _runMatchSsot() async {
-    final url = WsConfig.dartAuthuserUrl;
-    final token = ref.read(authProvider).accessToken;
-    if (url.isEmpty || token == null || token.isEmpty) {
-      if (LOGGING_SWITCH) {
-        customlog('play: matchSsot skip (no dart ws url or auth token)');
-      }
-      return;
-    }
+  /// Flutter-only practice: local human + 2 AI. Waits until local End.
+  Future<void> _runPracticeLocal(PracticeLoadout? loadout) async {
+    final effective = loadout ??
+        const PracticeLoadout(
+          arcoriId: 'ANM-TIG-GEN001-0001',
+          slammerId: stubSlammerId,
+        );
+    final userId = ref.read(authProvider).userId?.trim();
+    final humanId =
+        (userId != null && userId.isNotEmpty) ? userId : 'local';
 
-    final manager = ref.read(wsConnectionManagerProvider.notifier);
-    ref.read(matchSnapshotProvider.notifier).clear();
-    // Keep notifier alive for replay listener.
-    ref.read(matchSnapshotProvider);
-
-    final already =
-        ref.read(wsConnectionManagerProvider).connections[_dartWsId] ?? false;
-    if (!already) {
-      await manager.connect(_dartWsId, url: url, accessToken: token);
-    }
+    final match = ref.read(matchSnapshotProvider.notifier);
+    match.clear();
+    match.startLocalPractice(humanUserId: humanId, loadout: effective);
 
     if (LOGGING_SWITCH) {
-      customlog('play: matchSsot create');
+      customlog(
+        'play: practiceLocal started human=$humanId '
+        'arcori=${effective.arcoriId}',
+      );
     }
-    await manager.send(
-      _dartWsId,
-      type: 'event',
-      channel: 'match/create',
-      payload: const {},
-    );
-
-    final matchId = await _waitForMatchField(
-      (s) => s.matchId != null && s.matchId!.isNotEmpty ? s.matchId : null,
-      label: 'matchId',
-    );
-    if (matchId == null) {
-      if (LOGGING_SWITCH) {
-        customlog('play: matchSsot timed out waiting for create');
-      }
-      return;
-    }
-
-    if (LOGGING_SWITCH) {
-      customlog('play: matchSsot end matchId=$matchId');
-    }
-    await manager.send(
-      _dartWsId,
-      type: 'event',
-      channel: 'match/end',
-      payload: {'matchId': matchId},
-    );
 
     final ended = await _waitForMatchField(
       (s) => s.isEnded ? true : null,
       label: 'ended',
+      timeout: const Duration(minutes: 30),
     );
     if (ended != true && LOGGING_SWITCH) {
-      customlog('play: matchSsot timed out waiting for ended');
+      customlog('play: practiceLocal timed out waiting for ended');
     }
+    match.clear();
+  }
 
-    try {
-      await manager.send(
-        _dartWsId,
-        type: 'event',
-        channel: 'match/leave',
-        payload: {'matchId': matchId},
-      );
-    } catch (e) {
-      if (LOGGING_SWITCH) {
-        customlog('play: matchSsot leave error: $e');
-      }
+  /// Online room create — stub only (no Dart WS yet).
+  Future<void> _runRoomCreateStub(MatchType type) async {
+    if (LOGGING_SWITCH) {
+      customlog('play: roomCreateStub type=${type.name} (no WS)');
     }
   }
 
@@ -174,12 +147,11 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       await Future<void>.delayed(const Duration(milliseconds: 50));
     }
     if (LOGGING_SWITCH) {
-      customlog('play: matchSsot wait timeout label=$label');
+      customlog('play: wait timeout label=$label');
     }
     return null;
   }
 
-  /// Hook: type-dependent post-match. Stub for now.
   Future<void> _runPostMatch() async {
     if (LOGGING_SWITCH) {
       customlog('play: postMatch stub');

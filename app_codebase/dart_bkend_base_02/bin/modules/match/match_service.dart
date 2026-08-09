@@ -1,9 +1,10 @@
-/// Match orchestration — create with catalog freeze, join/leave/end + broadcast.
+/// Match orchestration — create with catalog freeze, join/leave/end + actions.
 library;
 
 import '../../core/errors/app_error.dart';
 import '../../core/http/fastapi_service_client.dart';
 import '../../core/state/state_registry.dart';
+import 'action_dispatcher.dart';
 import 'match_catalog_client.dart';
 import 'match_errors.dart';
 import 'match_models.dart';
@@ -14,19 +15,35 @@ class MatchService {
     MatchStore? store,
     FastApiServiceClient? fastApi,
     MatchCatalogClient? catalog,
+    ActionDispatcher? dispatcher,
   })  : _store = store ?? matchStore,
-        _catalog = catalog ?? MatchCatalogClient(fastApi: fastApi);
+        _catalog = catalog ?? MatchCatalogClient(fastApi: fastApi),
+        _dispatcher = dispatcher ??
+            ActionDispatcher(store: store ?? matchStore);
 
   final MatchStore _store;
   final MatchCatalogClient _catalog;
+  final ActionDispatcher _dispatcher;
 
   Future<MatchSnapshot> createPractice({
     required String callerUserId,
     required String connectionId,
+    List<String>? callerArcoriIds,
+    String? callerSlammerId,
+    String arenaId = stubArenaId,
   }) async {
+    final humanArcori = (callerArcoriIds != null && callerArcoriIds.isNotEmpty)
+        ? callerArcoriIds
+        : <String>[stubArcoriId];
+    final humanSlammer =
+        (callerSlammerId != null && callerSlammerId.trim().isNotEmpty)
+            ? callerSlammerId.trim()
+            : stubSlammerId;
+
     final ids = <String>{
-      stubArcoriId,
+      ...humanArcori,
       stubAiArcoriId,
+      humanSlammer,
       stubSlammerId,
     }.toList();
 
@@ -54,6 +71,9 @@ class MatchService {
     final snapshot = _store.createPracticeStub(
       callerUserId: callerUserId,
       catalogById: catalogById,
+      arenaId: arenaId,
+      callerArcoriIds: humanArcori,
+      callerSlammerId: humanSlammer,
     );
     roomRegistry.subscribe(
       snapshot.matchId,
@@ -131,6 +151,20 @@ class MatchService {
       return current;
     }
     final snapshot = _store.endMatch(matchId);
+    _broadcast(snapshot);
+    return snapshot;
+  }
+
+  MatchSnapshot action({
+    required String matchId,
+    required String userId,
+    required Map<String, dynamic> payload,
+  }) {
+    final snapshot = _dispatcher.dispatch(
+      matchId: matchId,
+      actorUserId: userId,
+      payload: payload,
+    );
     _broadcast(snapshot);
     return snapshot;
   }

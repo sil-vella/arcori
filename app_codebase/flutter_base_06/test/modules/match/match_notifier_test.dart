@@ -3,9 +3,39 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:arcori/core/state/app_state_registry.dart';
 import 'package:arcori/modules/match/register_match_state.dart';
 import 'package:arcori/modules/match/state/match_notifier.dart';
+import 'package:arcori/modules/play/play_models.dart';
 
 void main() {
   group('MatchSnapshotNotifier', () {
+    test('local practice: seats, slam rotate, end', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final notifier = container.read(matchSnapshotProvider.notifier);
+
+      notifier.startLocalPractice(
+        humanUserId: 'usr_local',
+        loadout: const PracticeLoadout(
+          arcoriId: 'ANM-TIG-GEN001-0001',
+          slammerId: stubSlammerId,
+        ),
+      );
+
+      var snap = container.read(matchSnapshotProvider);
+      expect(snap.seats, hasLength(3));
+      expect(snap.matchType['code'], 'practice');
+      expect(snap.active?['seatIndex'], 0);
+
+      notifier.localSlam(actorUserId: 'usr_local');
+      snap = container.read(matchSnapshotProvider);
+      expect(snap.lastEvent?['type'], 'slam');
+      expect(snap.active?['seatIndex'], 1);
+
+      notifier.localEnd();
+      snap = container.read(matchSnapshotProvider);
+      expect(snap.isEnded, isTrue);
+      expect(snap.active, isNull);
+    });
+
     test('applies snapshot and ignores older version', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);

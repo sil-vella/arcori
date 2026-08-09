@@ -4,7 +4,7 @@
 **Created:** 2026-07-26  
 **Last Updated:** 2026-08-05
 
-Related: [match-hot-state.md](match-hot-state.md) · [core-match-loop.md](core-match-loop.md) · [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [EXAMPLE_MODULE.md](../03_Base/EXAMPLE_MODULE.md) · [DART_STATE_SYSTEM.md](../03_Base/DART_STATE_SYSTEM.md) · [Flutter STATE_SYSTEM.md](../03_Base/Flutter/STATE_SYSTEM.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
+Related: [match-hot-state.md](match-hot-state.md) · [practice-match-v1.md](practice-match-v1.md) · [core-match-loop.md](core-match-loop.md) · [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [EXAMPLE_MODULE.md](../03_Base/EXAMPLE_MODULE.md) · [DART_STATE_SYSTEM.md](../03_Base/DART_STATE_SYSTEM.md) · [Flutter STATE_SYSTEM.md](../03_Base/Flutter/STATE_SYSTEM.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
 
 **Chart + plain English guide:** [match-setting-flow — diagram](../02_FlowCharts/charts/match_flow/match-setting-flow.html) · [guide](../02_FlowCharts/charts/match_flow/match-setting-flow.guide.html)
 

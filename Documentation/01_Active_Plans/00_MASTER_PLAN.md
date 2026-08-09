@@ -2,7 +2,7 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-08-05
+**Last Updated:** 2026-08-09
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
@@ -20,11 +20,14 @@ Index of active implementation plans. Detail lives in the linked files; Game_Spe
 | [returning-player-startup-flow.md](returning-player-startup-flow.md) | Auto login → sync → overnight → notification queue → Home |
 | [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Home layout, Velora entry, sink Trove • PLAY • Market |
 | [match-setting-core-flow.md](match-setting-core-flow.md) | Stage 1+2 practice path done; later: match UI / matching |
-| [match-hot-state.md](match-hot-state.md) | Stage 2 practice stub done; freeze via `/service/catalog/designs`; matching still stubbed |
+| [match-hot-state.md](match-hot-state.md) | Dart match module for online later; not used for Flutter practice |
+| [practice-offline-routing.md](practice-offline-routing.md) | Practice = Flutter-only local (human+2 AI); non-practice = room stub |
+| [practice-match-v1.md](practice-match-v1.md) | Practice loadout + local stub slam; Dart packs dormant for practice |
 | [core-match-loop.md](core-match-loop.md) | Matchmaking → match → celebration → Match Summary → exits |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Standings module + Detail tab + wfrun tiger seed; My Mastery/Trove still open |
 | [catalog-hot-reload.md](catalog-hot-reload.md) | Catalog JSON mtime cache, authuser APIs, `/catalog-media`, Flutter Velora browse |
 | [avari-profile.md](avari-profile.md) | Avari Profile `/avari` + drawer avatar header; Account stays auth/avatar upload |
+| [player-profile-schema.md](player-profile-schema.md) | Auth + Avari Postgres tables, complete document, admin testuser Alembic seed |
 
 ## Design references
 

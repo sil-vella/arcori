@@ -54,9 +54,12 @@ void main() {
       final snapshot = await service.createPractice(
         callerUserId: 'usr_a',
         connectionId: 'conn-1',
+        callerArcoriIds: [stubArcoriId],
+        callerSlammerId: stubSlammerId,
       );
 
       expect(snapshot.phase, 'playing');
+      expect(snapshot.seats[0].arcoriIds, [stubArcoriId]);
       expect(store.getRuntime(snapshot.matchId)!.catalogById.length, 3);
       expect(roomRegistry.connectionIds(snapshot.matchId), contains('conn-1'));
 

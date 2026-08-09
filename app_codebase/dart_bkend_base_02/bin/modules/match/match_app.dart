@@ -9,4 +9,5 @@ void registerMatchWsChannels(ApplicationChannelSink channels) {
   channels.authuserChannel('match/join', handleMatchJoin);
   channels.authuserChannel('match/leave', handleMatchLeave);
   channels.authuserChannel('match/end', handleMatchEnd);
+  channels.authuserChannel('match/action', handleMatchAction);
 }

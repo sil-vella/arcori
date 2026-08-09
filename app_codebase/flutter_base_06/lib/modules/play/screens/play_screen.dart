@@ -1,14 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/theme/theme.dart';
+import '../../match/widgets/practice_match_surface.dart';
 import '../play_models.dart';
 import '../play_notifier.dart';
 import '../widgets/match_type_select_modal.dart';
+import '../widgets/practice_loadout_modal.dart';
 
-/// Play hub — start and end of the match pipeline (stage 1 stays on this route).
+/// Play hub — start and end of the match pipeline.
 class PlayScreen extends ConsumerWidget {
   const PlayScreen({super.key});
 
@@ -21,13 +25,33 @@ class PlayScreen extends ConsumerWidget {
       notifier.cancelSelection();
       return;
     }
-    await notifier.selectType(type);
+
+    PracticeLoadout? loadout;
+    if (type == MatchType.practice) {
+      loadout = await showPracticeLoadoutModal(context);
+      if (!context.mounted) return;
+      if (loadout == null) {
+        notifier.cancelSelection();
+        return;
+      }
+    }
+
+    await notifier.selectType(type, practiceLoadout: loadout);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final flow = ref.watch(matchFlowProvider);
     final canPlay = flow.isIdle;
+
+    ref.listen(matchFlowProvider, (prev, next) {
+      final enteredPracticeInMatch = next.phase == MatchFlowPhase.inMatch &&
+          next.selectedType == MatchType.practice &&
+          prev?.phase != MatchFlowPhase.inMatch;
+      if (enteredPracticeInMatch && context.mounted) {
+        unawaited(showPracticeMatchSurface(context, ref));
+      }
+    });
 
     return ModuleScreenRegistrar(
       appBarItems: const [

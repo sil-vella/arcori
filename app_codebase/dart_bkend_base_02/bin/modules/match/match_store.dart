@@ -4,6 +4,7 @@ library;
 import 'dart:math';
 
 import 'match_models.dart';
+import 'type_subtype_pack_registry.dart';
 
 class MatchStore {
   final Map<String, MatchSnapshot> _snapshots = {};
@@ -27,27 +28,39 @@ class MatchStore {
     return 'm_${stamp.toRadixString(16)}_$n';
   }
 
-  /// Practice stub: human caller + one AI seat; freeze supplied by service.
+  /// Practice: human caller + AI seat; [matchType] has `code: practice` and no subtype.
   MatchSnapshot createPracticeStub({
     required String callerUserId,
     required Map<String, Map<String, dynamic>> catalogById,
     String arenaId = stubArenaId,
+    List<String>? callerArcoriIds,
+    String? callerSlammerId,
+    String aiArcoriId = stubAiArcoriId,
+    String aiSlammerId = stubSlammerId,
   }) {
+    final humanArcori = (callerArcoriIds != null && callerArcoriIds.isNotEmpty)
+        ? List<String>.from(callerArcoriIds)
+        : <String>[stubArcoriId];
+    final humanSlammer =
+        (callerSlammerId != null && callerSlammerId.trim().isNotEmpty)
+            ? callerSlammerId.trim()
+            : stubSlammerId;
+
     final matchId = _newMatchId();
     final seats = [
       MatchSeat(
         userId: callerUserId,
         seatIndex: 0,
         kind: 'human',
-        arcoriIds: const [stubArcoriId],
-        slammerId: stubSlammerId,
+        arcoriIds: humanArcori,
+        slammerId: humanSlammer,
       ),
-      const MatchSeat(
+      MatchSeat(
         userId: 'ai:seat_1',
         seatIndex: 1,
         kind: 'ai',
-        arcoriIds: [stubAiArcoriId],
-        slammerId: stubSlammerId,
+        arcoriIds: [aiArcoriId],
+        slammerId: aiSlammerId,
       ),
     ];
     final snapshot = MatchSnapshot(
@@ -58,8 +71,13 @@ class MatchStore {
       roundsTotal: 2,
       arenaId: arenaId,
       callerUserId: callerUserId,
+      // Practice: no subtype key.
       matchType: const {'code': 'practice'},
       seats: seats,
+      active: const {
+        'seatIndex': 0,
+        'action': 'slam',
+      },
     );
     _snapshots[matchId] = snapshot;
     _runtimes[matchId] = MatchRuntime(
@@ -134,4 +152,5 @@ final matchStore = MatchStore();
 
 void resetMatchState() {
   matchStore.reset();
+  typeSubtypePackRegistry.clear();
 }

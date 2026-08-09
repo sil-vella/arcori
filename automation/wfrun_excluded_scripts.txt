@@ -22,3 +22,6 @@ production/mongodb_tls/mongo_tls_common.sh
 production_host/mongodb_tls/mongo_tls_common.sh
 production/mongodb_tls/load_mongo_tls_args.sh
 production_host/mongodb_tls/load_mongo_tls_args.sh
+
+# static seed data (not standalone runners)
+backend/data/ai_players_500.json
