@@ -21,7 +21,8 @@ Index of active implementation plans. Detail lives in the linked files; Game_Spe
 | [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Home layout, Velora entry, sink Trove • PLAY • Market |
 | [match-setting-core-flow.md](match-setting-core-flow.md) | Stage 1+2 practice path done; later: match UI / matching |
 | [match-hot-state.md](match-hot-state.md) | Dart match module for online later; not used for Flutter practice |
-| [practice-offline-routing.md](practice-offline-routing.md) | Practice = Flutter-only local (human+2 AI); non-practice = room stub |
+| [practice-offline-routing.md](practice-offline-routing.md) | Practice = Flutter-only; embedded 10 AI pool, pick 2; non-practice = room stub |
+| [practice-stub-gameplay.md](practice-stub-gameplay.md) | Auto stub loop: 2 rounds × 3 seats, then postMatch stub |
 | [practice-match-v1.md](practice-match-v1.md) | Practice loadout + local stub slam; Dart packs dormant for practice |
 | [core-match-loop.md](core-match-loop.md) | Matchmaking → match → celebration → Match Summary → exits |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Standings module + Detail tab + wfrun tiger seed; My Mastery/Trove still open |

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/state/auth/auth_providers.dart';
 import '../../utils/dev_logger.dart';
 import '../match/state/match_notifier.dart';
-import '../match/state/match_snapshot_state.dart';
 import 'play_models.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
@@ -95,7 +94,10 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     }
   }
 
-  /// Flutter-only practice: local human + 2 AI. Waits until local End.
+  /// Step delay for auto stub practice loop (tests may set [Duration.zero]).
+  Duration practiceStubStepDelay = practiceStubStepDelayDefault;
+
+  /// Flutter-only practice: local human + 2 AI. Auto stub loop then end.
   Future<void> _runPracticeLocal(PracticeLoadout? loadout) async {
     final effective = loadout ??
         const PracticeLoadout(
@@ -117,13 +119,14 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       );
     }
 
-    final ended = await _waitForMatchField(
-      (s) => s.isEnded ? true : null,
-      label: 'ended',
-      timeout: const Duration(minutes: 30),
-    );
-    if (ended != true && LOGGING_SWITCH) {
-      customlog('play: practiceLocal timed out waiting for ended');
+    await match.runLocalPracticeStubMatch(stepDelay: practiceStubStepDelay);
+
+    if (LOGGING_SWITCH) {
+      final snap = ref.read(matchSnapshotProvider);
+      customlog(
+        'play: practiceLocal finished ended=${snap.isEnded} '
+        'round=${snap.round}',
+      );
     }
     match.clear();
   }
@@ -133,23 +136,6 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     if (LOGGING_SWITCH) {
       customlog('play: roomCreateStub type=${type.name} (no WS)');
     }
-  }
-
-  Future<T?> _waitForMatchField<T>(
-    T? Function(MatchSnapshotState state) pick, {
-    required String label,
-    Duration timeout = const Duration(seconds: 8),
-  }) async {
-    final deadline = DateTime.now().add(timeout);
-    while (DateTime.now().isBefore(deadline)) {
-      final value = pick(ref.read(matchSnapshotProvider));
-      if (value != null) return value;
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-    }
-    if (LOGGING_SWITCH) {
-      customlog('play: wait timeout label=$label');
-    }
-    return null;
   }
 
   Future<void> _runPostMatch() async {

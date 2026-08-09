@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/modal/modal.dart';
-import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../state/match_notifier.dart';
 
-/// Full-screen practice match — Flutter-only local snapshot; Slam / End.
+/// Full-screen practice match — Flutter-only; auto stub loop (readout only).
 Future<void> showPracticeMatchSurface(BuildContext context, WidgetRef ref) {
   return AppModal.showFullScreenShell<void>(
     context,
@@ -19,17 +18,6 @@ Future<void> showPracticeMatchSurface(BuildContext context, WidgetRef ref) {
 
 class _PracticeMatchBody extends ConsumerWidget {
   const _PracticeMatchBody();
-
-  void _slam(WidgetRef ref) {
-    final userId = ref.read(authProvider).userId?.trim();
-    final actor =
-        (userId != null && userId.isNotEmpty) ? userId : 'local';
-    ref.read(matchSnapshotProvider.notifier).localSlam(actorUserId: actor);
-  }
-
-  void _end(BuildContext context, WidgetRef ref) {
-    ref.read(matchSnapshotProvider.notifier).localEnd();
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,7 +49,7 @@ class _PracticeMatchBody extends ConsumerWidget {
           Text(
             'Type: ${snap.matchType['code'] ?? '—'}'
             '${snap.matchType['subtype'] != null ? ' / ${snap.matchType['subtype']}' : ''}'
-            ' (offline)',
+            ' (offline auto)',
             style: context.appTypography.bodySmall,
           ),
         ],
@@ -74,8 +62,8 @@ class _PracticeMatchBody extends ConsumerWidget {
             child: Text(
               '#${seat.seatIndex} ${seat.kind} ${seat.userId} '
               'score=${seat.score} '
-              'arcori=${seat.arcoriIds.join(",")} '
-              'slammer=${seat.slammerId}'
+              'arcori=${seat.arcoriIds.isEmpty ? '—' : seat.arcoriIds.join(",")} '
+              'slammer=${seat.slammerId.isEmpty ? '—' : seat.slammerId}'
               '${snap.active?['seatIndex'] == seat.seatIndex ? ' ← active' : ''}',
               style: context.appTypography.bodySmall,
             ),
@@ -85,18 +73,15 @@ class _PracticeMatchBody extends ConsumerWidget {
           lastEvent == null
               ? 'Last event: —'
               : 'Last event: ${lastEvent['type']} '
-                  '(${lastEvent['result'] ?? ''})',
+                  '(${lastEvent['result'] ?? ''})'
+                  '${lastEvent['actorUserId'] != null ? ' · ${lastEvent['actorUserId']}' : ''}',
           style: context.appTypography.bodySmall,
         ),
         const Spacer(),
-        FilledButton(
-          onPressed: snap.isEnded ? null : () => _slam(ref),
-          child: const Text('Slam'),
-        ),
-        AppSpacing.gapSm,
-        OutlinedButton(
-          onPressed: snap.isEnded ? null : () => _end(context, ref),
-          child: const Text('End match'),
+        Text(
+          snap.isEnded ? 'Match ended' : 'Auto-running stub slams…',
+          style: context.appTypography.bodySmall,
+          textAlign: TextAlign.center,
         ),
       ],
     );

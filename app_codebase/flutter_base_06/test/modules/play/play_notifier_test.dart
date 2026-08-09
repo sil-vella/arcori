@@ -22,34 +22,21 @@ void main() {
       expect(container.read(matchFlowProvider).selectedType, isNull);
     });
 
-    test('practice local: 3 seats, no hang; End → idle', () async {
+    test('practice auto stub loop returns to idle without manual End',
+        () async {
       final container = ProviderContainer();
       addTearDown(container.dispose);
       final flow = container.read(matchFlowProvider.notifier);
-      final match = container.read(matchSnapshotProvider.notifier);
+      flow.practiceStubStepDelay = Duration.zero;
 
       flow.startPlay();
-      final done = flow.selectType(
+      await flow.selectType(
         MatchType.practice,
         practiceLoadout: const PracticeLoadout(
           arcoriId: 'ANM-TIG-GEN001-0001',
           slammerId: stubSlammerId,
         ),
       );
-
-      // Allow pipeline to enter inMatch + start local session.
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-      final snap = container.read(matchSnapshotProvider);
-      expect(snap.matchId, isNotNull);
-      expect(snap.matchId!.startsWith('local_practice_'), isTrue);
-      expect(snap.seats, hasLength(3));
-      expect(snap.seats[0].kind, 'human');
-      expect(snap.seats[1].userId, 'ai:seat_1');
-      expect(snap.seats[2].userId, 'ai:seat_2');
-      expect(container.read(matchFlowProvider).phase, MatchFlowPhase.inMatch);
-
-      match.localEnd();
-      await done;
 
       expect(container.read(matchFlowProvider).isIdle, isTrue);
       expect(container.read(matchSnapshotProvider).matchId, isNull);

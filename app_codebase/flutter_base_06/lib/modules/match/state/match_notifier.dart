@@ -1,13 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../play/play_models.dart';
+import '../practice_ai_pool.dart';
 import 'match_replay.dart';
 import 'match_snapshot_state.dart';
 
 const stubArenaId = 'arena_velora_plaza';
-const stubAiArcoriId = 'ANM-WTI-GEN001-0002';
-const stubAiArcoriId2 = 'ANM-TIG-GEN001-0001';
 const stubSlammerId = 'SLM-STR-GEN001-0001';
+
+const Duration practiceStubStepDelayDefault = Duration(milliseconds: 200);
 
 class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
   @override
@@ -35,11 +38,18 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     state = _applyFrame(state, data);
   }
 
-  /// Flutter-only practice: human + 2 AI. No Dart WS.
+  /// Flutter-only practice: human + 2 AI from embedded pool. No Dart WS / API.
   void startLocalPractice({
     required String humanUserId,
     required PracticeLoadout loadout,
+    List<String>? aiUserIds,
+    Random? random,
   }) {
+    final ais = aiUserIds ?? pickPracticeAiUserIds(random: random);
+    if (ais.length != 2) {
+      throw ArgumentError.value(ais, 'aiUserIds', 'must contain exactly 2 ids');
+    }
+
     final matchId =
         'local_practice_${DateTime.now().microsecondsSinceEpoch}';
     state = MatchSnapshotState(
@@ -61,31 +71,91 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
           arcoriIds: [loadout.arcoriId],
           slammerId: loadout.slammerId,
         ),
-        const MatchSeatView(
-          userId: 'ai:seat_1',
+        MatchSeatView(
+          userId: ais[0],
           seatIndex: 1,
           kind: 'ai',
           score: 0,
           connected: true,
-          arcoriIds: [stubAiArcoriId],
-          slammerId: stubSlammerId,
+          arcoriIds: const [],
+          slammerId: '',
         ),
-        const MatchSeatView(
-          userId: 'ai:seat_2',
+        MatchSeatView(
+          userId: ais[1],
           seatIndex: 2,
           kind: 'ai',
           score: 0,
           connected: true,
-          arcoriIds: [stubAiArcoriId2],
-          slammerId: stubSlammerId,
+          arcoriIds: const [],
+          slammerId: '',
         ),
       ],
       active: const {'seatIndex': 0, 'action': 'slam'},
     );
   }
 
+  /// Auto-run stub practice: 2 rounds × each seat 1 slam, then end.
+  Future<void> runLocalPracticeStubMatch({
+    Duration stepDelay = practiceStubStepDelayDefault,
+  }) async {
+    final matchId = state.matchId;
+    if (matchId == null || !state.phaseIsPlaying) return;
+
+    final roundsTotal = state.roundsTotal;
+    final seatCount = state.seats.length;
+    if (seatCount == 0) return;
+
+    for (var round = 1; round <= roundsTotal; round++) {
+      if (!_stillRunning(matchId)) return;
+
+      if (state.round != round) {
+        state = state.copyWith(
+          round: round,
+          active: const {'seatIndex': 0, 'action': 'slam'},
+        );
+      }
+
+      for (var seatIndex = 0; seatIndex < seatCount; seatIndex++) {
+        if (!_stillRunning(matchId)) return;
+
+        final seats = state.seats;
+        if (seatIndex >= seats.length) return;
+        final actor = seats[seatIndex];
+
+        state = state.copyWith(
+          active: {'seatIndex': seatIndex, 'action': 'slam'},
+        );
+        _applyStubSlam(actorUserId: actor.userId);
+        if (!_stillRunning(matchId)) return;
+
+        if (stepDelay > Duration.zero) {
+          await Future<void>.delayed(stepDelay);
+        }
+      }
+
+      if (round < roundsTotal && _stillRunning(matchId)) {
+        state = state.copyWith(
+          round: round + 1,
+          active: const {'seatIndex': 0, 'action': 'slam'},
+        );
+      }
+    }
+
+    if (_stillRunning(matchId)) {
+      localEnd();
+    }
+  }
+
+  bool _stillRunning(String matchId) {
+    return state.matchId == matchId && state.phaseIsPlaying;
+  }
+
   /// Stub slam: lastEvent + rotate active. No score/physics.
   void localSlam({required String actorUserId}) {
+    _applyStubSlam(actorUserId: actorUserId);
+  }
+
+  void _applyStubSlam({required String actorUserId}) {
     final current = state;
     if (!current.phaseIsPlaying || current.matchId == null) return;
 

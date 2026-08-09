@@ -120,6 +120,8 @@ Run Alembic upgrade in the target env; use the test user for Flutter login smoke
 
 **AI seed (local/dev):** `automation/backend/feed_ai_players.py` via wfrun — loads `automation/backend/data/ai_players_500.json`. Prompts to clear existing AI players and to replace/skip email conflicts.
 
+**Practice AI pool (Flutter offline):** a fixed sample of 10 seed `userId`s is embedded in client code (`practice_ai_pool.dart`). Practice does **not** query the DB or FastAPI for AI; each match randomly picks 2 from that list. See [practice-offline-routing.md](practice-offline-routing.md).
+
 ## Files Modified
 
 - `Documentation/01_Active_Plans/player-profile-schema.md`
