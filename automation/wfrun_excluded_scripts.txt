@@ -16,6 +16,8 @@ frontend/dart_defines_from_env.sh
 frontend/global_log_filter.sh
 
 # package / shared modules
+marketing/publish_common.py
+marketing/cron_social_auto_post.py
 production/mongodb_tls/__init__.py
 production_host/mongodb_tls/__init__.py
 production/mongodb_tls/mongo_tls_common.sh
