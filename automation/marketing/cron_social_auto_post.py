@@ -27,7 +27,7 @@ import argparse
 import json
 import os
 import re
-import shutil
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -48,7 +48,8 @@ from youtube_publish_video import publish_youtube_video
 SSH_HOST_DEFAULT = "mixta_mt"
 REMOTE_MARKETING_DEFAULT = "/home/u877877481/rop01/marketing"
 
-VIDEO_RE = re.compile(r"^video_(\d+)$")
+# video_008 or video_008(would_u_play_joker) — sort key = digits after video_
+VIDEO_RE = re.compile(r"^video_(\d+)(.*)$")
 RENDER_RE = re.compile(r"^render_(\d+)\.mp4$", re.I)
 LOG_NAME_RE = re.compile(r"^(\d{8}T\d{6})_([A-Za-z0-9_-]+)\.log$")
 PRODUCT_RE = re.compile(r"^[A-Za-z0-9_-]+$")
@@ -265,7 +266,10 @@ def _next_product(products: list[str], last: str | None) -> str | None:
 
 def _list_remote_videos(product: str) -> list[str]:
     path = f"{_remote_root()}/{product}/videos"
-    proc = _ssh(f"mkdir -p {path}; ls -1 {path}", check=False)
+    proc = _ssh(
+        f"mkdir -p {shlex.quote(path)}; ls -1 {shlex.quote(path)}",
+        check=False,
+    )
     if proc.returncode != 0:
         _die(f"list videos failed for {product}: {(proc.stderr or '').strip()}")
     found: list[tuple[int, str]] = []
@@ -274,7 +278,7 @@ def _list_remote_videos(product: str) -> list[str]:
         idx = _video_index(name)
         if idx is not None:
             found.append((idx, name))
-    found.sort(key=lambda t: t[0])
+    found.sort(key=lambda t: (t[0], t[1]))
     return [n for _, n in found]
 
 
@@ -328,32 +332,42 @@ def _delete_remote_video(product: str, video_name: str, *, dry_run: bool) -> Non
     if dry_run:
         print(f"[dry-run] would delete {remote}")
         return
-    proc = _ssh(f"rm -rf {remote}", check=False)
+    proc = _ssh(f"rm -rf -- {shlex.quote(remote)}", check=False)
     if proc.returncode != 0:
         _die(f"delete failed {remote}: {(proc.stderr or '').strip()}")
 
 
 def _pull_video_dir(product: str, video_name: str, dest_parent: Path) -> Path:
-    """rsync/scp remote video_* into dest_parent/video_*; return local path."""
-    remote = f"{_remote_root()}/{product}/videos/{video_name}/"
+    """Pull remote video_* (suffix allowed) into dest_parent/video_*; return local path."""
+    remote_parent = f"{_remote_root()}/{product}/videos"
     local = dest_parent / video_name
     local.mkdir(parents=True, exist_ok=True)
     host = _ssh_host()
-    rsync = shutil.which("rsync")
-    if rsync:
-        cmd = [
-            rsync,
-            "-a",
-            "--exclude=.DS_Store",
-            f"{host}:{remote}",
-            f"{local}/",
-        ]
-    else:
-        # scp -r copies into dest; use parent then rename if needed
-        cmd = ["scp", "-r", f"{host}:{remote.rstrip('/')}", str(dest_parent)]
-    proc = subprocess.run(cmd, text=True, capture_output=True)
-    if proc.returncode != 0:
-        _die(f"pull failed {video_name}: {(proc.stderr or proc.stdout or '').strip()}")
+    # tar|ssh so names with () are safe
+    ssh_proc = subprocess.Popen(
+        [
+            "ssh",
+            "-o",
+            "BatchMode=yes",
+            "-o",
+            "ConnectTimeout=30",
+            host,
+            f"tar -C {shlex.quote(remote_parent)} -cf - {shlex.quote(video_name)}",
+        ],
+        stdout=subprocess.PIPE,
+    )
+    assert ssh_proc.stdout is not None
+    tar_proc = subprocess.run(
+        ["tar", "-C", str(dest_parent), "-xf", "-"],
+        stdin=ssh_proc.stdout,
+        capture_output=True,
+        text=True,
+    )
+    ssh_proc.stdout.close()
+    ssh_rc = ssh_proc.wait()
+    if ssh_rc != 0 or tar_proc.returncode != 0:
+        err = (tar_proc.stderr or tar_proc.stdout or "").strip()
+        _die(f"pull failed {video_name}: {err or ssh_rc or tar_proc.returncode}")
     if not local.is_dir():
         _die(f"pull missing local dir: {local}")
     return local

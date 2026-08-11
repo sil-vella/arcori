@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# dash Open arcori automation dashboard in browser
+# dash Open wf_template automation dashboard in browser
 """wfrun dashboard — browser GUI alternative to the wfrun CLI script menu."""
 
 from __future__ import annotations
@@ -10,6 +10,8 @@ import os
 import re
 import subprocess
 import sys
+import time
+import uuid
 import webbrowser
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
@@ -32,8 +34,14 @@ from script_discovery import build_command, discover_scripts, resolve_script
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 STATIC_DIR = SCRIPT_DIR / "static"
+MARKETING_DATA_DIR = SCRIPT_DIR / "data"
+MARKETING_MEDIA_DIR = MARKETING_DATA_DIR / "media"
+MARKETING_POSTS_FILE = MARKETING_DATA_DIR / "marketing_posts.json"
+MARKETING_SCRIPTS_DIR = SCRIPT_DIR.parent / "marketing"
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8765
+# Large enough for Shorts / TikTok clips uploaded through the Marketing tab
+MARKETING_CLIENT_MAX_SIZE = 512 * 1024 * 1024
 # Same-origin path prefix so the Task Manager iframe shares the dashboard origin
 # (cross-site cookies break PHP session + CSRF login inside the iframe).
 TM_PROXY_PREFIX = "/tm"
@@ -42,6 +50,492 @@ _TM_ABS_ATTR_RE = re.compile(
 )
 _TM_CSS_URL_RE = re.compile(rb"""(?i)(url\(\s*['"]?)/(?!tm/)""")
 _TM_PROXY_TIMEOUT = ClientTimeout(total=120)
+
+if str(MARKETING_SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(MARKETING_SCRIPTS_DIR))
+
+
+def _marketing_posts_path() -> Path:
+    MARKETING_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    return MARKETING_POSTS_FILE
+
+
+def _read_marketing_posts() -> list[dict[str, object]]:
+    path = _marketing_posts_path()
+    if not path.is_file():
+        return []
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if not isinstance(raw, dict):
+        return []
+    posts = raw.get("posts")
+    if not isinstance(posts, list):
+        return []
+    return [p for p in posts if isinstance(p, dict)]
+
+
+def _write_marketing_posts(posts: list[dict[str, object]]) -> None:
+    path = _marketing_posts_path()
+    payload = {"posts": posts}
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+async def handle_marketing_posts_get(_request: web.Request) -> web.Response:
+    posts = await asyncio.to_thread(_read_marketing_posts)
+    # List endpoint returns light summaries; full payload stays on each post
+    summaries = []
+    for post in posts:
+        summaries.append(
+            {
+                "id": post.get("id"),
+                "title": post.get("title") or "(untitled)",
+                "platforms": post.get("platforms") or [],
+                "created_at": post.get("created_at"),
+                "updated_at": post.get("updated_at"),
+                "publish_ok": (
+                    (post.get("publish") or {}).get("ok")
+                    if isinstance(post.get("publish"), dict)
+                    else None
+                ),
+            }
+        )
+    return web.json_response({"ok": True, "posts": summaries})
+
+
+async def handle_marketing_post_get(request: web.Request) -> web.Response:
+    post_id = request.match_info.get("post_id", "").strip()
+    posts = await asyncio.to_thread(_read_marketing_posts)
+    for post in posts:
+        if str(post.get("id")) == post_id:
+            return web.json_response({"ok": True, "post": post})
+    return web.json_response({"ok": False, "error": "not_found"}, status=404)
+
+
+def _safe_media_filename(name: str) -> str:
+    base = Path(name or "upload.bin").name
+    cleaned = "".join(ch if ch.isalnum() or ch in "._-" else "_" for ch in base)
+    return cleaned[:120] or "upload.bin"
+
+
+async def _parse_marketing_post_request(
+    request: web.Request,
+) -> tuple[dict[str, object] | None, _MarketingUpload | None, web.Response | None]:
+    """Return (body, media_upload, error_response)."""
+    content_type = (request.content_type or "").lower()
+    if "multipart/form-data" in content_type:
+        reader = await request.multipart()
+        body: dict[str, object] | None = None
+        media_upload: _MarketingUpload | None = None
+        while True:
+            part = await reader.next()
+            if part is None:
+                break
+            if part.name == "payload":
+                raw = await part.text()
+                try:
+                    parsed = json.loads(raw)
+                except json.JSONDecodeError:
+                    return None, None, web.json_response(
+                        {
+                            "ok": False,
+                            "error": {
+                                "code": "invalid_json",
+                                "message": "payload must be JSON",
+                            },
+                        },
+                        status=400,
+                    )
+                if not isinstance(parsed, dict):
+                    return None, None, web.json_response(
+                        {
+                            "ok": False,
+                            "error": {
+                                "code": "invalid_json",
+                                "message": "payload must be an object",
+                            },
+                        },
+                        status=400,
+                    )
+                body = parsed
+            elif part.name == "media" and getattr(part, "filename", None):
+                media_bytes = await part.read(decode=False)
+                media_upload = _MarketingUpload(
+                    filename=str(part.filename or "upload.bin"),
+                    content_type=str(part.headers.get("Content-Type") or ""),
+                    data=media_bytes,
+                )
+        if body is None:
+            return None, None, web.json_response(
+                {
+                    "ok": False,
+                    "error": {
+                        "code": "invalid_json",
+                        "message": "multipart requires payload field",
+                    },
+                },
+                status=400,
+            )
+        return body, media_upload, None
+
+    try:
+        body_obj = await request.json()
+    except json.JSONDecodeError:
+        return None, None, web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "invalid_json", "message": "invalid JSON body"},
+            },
+            status=400,
+        )
+    if not isinstance(body_obj, dict):
+        return None, None, web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "invalid_json", "message": "body must be an object"},
+            },
+            status=400,
+        )
+    return body_obj, None, None
+
+
+@dataclass
+class _MarketingUpload:
+    filename: str
+    content_type: str
+    data: bytes
+
+
+def _save_marketing_media(post_id: str, upload: _MarketingUpload) -> dict[str, object]:
+    dest_dir = MARKETING_MEDIA_DIR / post_id
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    filename = _safe_media_filename(upload.filename)
+    dest = dest_dir / filename
+    dest.write_bytes(upload.data)
+    return {
+        "name": filename,
+        "type": upload.content_type,
+        "size": len(upload.data),
+        "path": str(dest),
+    }
+
+
+def _publish_selected_platforms(
+    post: dict[str, object],
+) -> dict[str, object]:
+    """Publish only platforms listed on the post. Never posts to unchecked ones."""
+    from facebook_publish_post import publish_facebook_post
+    from tiktok_publish_video import publish_tiktok_video
+    from youtube_publish_video import publish_youtube_video
+
+    platforms = [
+        str(p).strip().lower()
+        for p in (post.get("platforms") or [])
+        if str(p).strip()
+    ]
+    title = str(post.get("title") or "")
+    description = str(post.get("description") or "")
+    hashtags = post.get("hashtags") if isinstance(post.get("hashtags"), list) else []
+    hashtag_strs = [str(h) for h in hashtags]
+    media = post.get("media") if isinstance(post.get("media"), dict) else {}
+    media_path = str(media.get("path") or "").strip() or None
+
+    results: dict[str, object] = {}
+
+    if "facebook" in platforms:
+        fb = post.get("facebook") if isinstance(post.get("facebook"), dict) else {}
+        link = ""
+        if str(fb.get("post_type") or "") == "link":
+            link = str(fb.get("link") or "").strip()
+        schedule_at = None
+        if str(fb.get("publish_mode") or "") == "schedule":
+            schedule_at = str(fb.get("schedule_at") or "").strip() or None
+        page = str(fb.get("page") or "").strip() or None
+        results["facebook"] = publish_facebook_post(
+            title=title,
+            description=description,
+            hashtags=hashtag_strs,
+            link=link,
+            schedule_at=schedule_at,
+            page_id=page,
+            media_path=media_path,
+        )
+
+    if "youtube" in platforms:
+        yt = post.get("youtube") if isinstance(post.get("youtube"), dict) else {}
+        if not media_path:
+            results["youtube"] = {
+                "ok": False,
+                "error": {
+                    "code": "youtube_media_required",
+                    "message": "YouTube publish requires a video file",
+                },
+            }
+        else:
+            results["youtube"] = publish_youtube_video(
+                title=title,
+                description=description,
+                video_path=media_path,
+                privacy=str(yt.get("privacy") or "private"),
+                category_id=str(yt.get("category_id") or "").strip() or None,
+                tags=[str(t) for t in (yt.get("tags") or hashtag_strs)],
+                publish_at=str(yt.get("publish_at") or "").strip() or None,
+                playlist_id=str(yt.get("playlist_id") or "").strip() or None,
+            )
+
+    if "tiktok" in platforms:
+        tt = post.get("tiktok") if isinstance(post.get("tiktok"), dict) else {}
+        if not media_path:
+            results["tiktok"] = {
+                "ok": False,
+                "error": {
+                    "code": "tiktok_media_required",
+                    "message": "TikTok publish requires a video file",
+                },
+            }
+        else:
+            results["tiktok"] = publish_tiktok_video(
+                title=title,
+                description=description,
+                hashtags=hashtag_strs,
+                video_path=media_path,
+                privacy_level=str(tt.get("privacy_level") or "SELF_ONLY"),
+                disable_comment=bool(tt.get("disable_comment")),
+                disable_duet=bool(tt.get("disable_duet")),
+                disable_stitch=bool(tt.get("disable_stitch")),
+            )
+
+    return results
+
+
+async def handle_marketing_posts_create(request: web.Request) -> web.Response:
+    body, media_upload, err = await _parse_marketing_post_request(request)
+    if err is not None:
+        return err
+    assert body is not None
+
+    title = str(body.get("title") or "").strip()
+    if not title:
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "title_required", "message": "Title is required"},
+            },
+            status=400,
+        )
+
+    platforms_raw = body.get("platforms") if isinstance(body.get("platforms"), list) else []
+    platforms = [str(p).strip().lower() for p in platforms_raw if str(p).strip()]
+    if not platforms:
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {
+                    "code": "platforms_required",
+                    "message": "Select at least one platform",
+                },
+            },
+            status=400,
+        )
+
+    needs_media = any(p in {"youtube", "tiktok"} for p in platforms)
+    if needs_media and media_upload is None:
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {
+                    "code": "media_required",
+                    "message": "YouTube/TikTok require an image/video file",
+                },
+            },
+            status=400,
+        )
+
+    now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    post_id = str(uuid.uuid4())
+    media_meta: dict[str, object] | None = None
+    if media_upload is not None and isinstance(media_upload, _MarketingUpload):
+        media_meta = await asyncio.to_thread(_save_marketing_media, post_id, media_upload)
+    elif isinstance(body.get("media"), dict):
+        media_meta = body.get("media")  # type: ignore[assignment]
+
+    post: dict[str, object] = {
+        "id": post_id,
+        "created_at": now,
+        "updated_at": now,
+        "title": title,
+        "description": str(body.get("description") or ""),
+        "platforms": platforms,
+        "hashtags": body.get("hashtags") if isinstance(body.get("hashtags"), list) else [],
+        "media": media_meta,
+        "facebook": body.get("facebook") if isinstance(body.get("facebook"), dict) else None,
+        "youtube": body.get("youtube") if isinstance(body.get("youtube"), dict) else None,
+        "tiktok": body.get("tiktok") if isinstance(body.get("tiktok"), dict) else None,
+        "payload": body,
+        "publish": None,
+    }
+
+    def _append() -> dict[str, object]:
+        posts = _read_marketing_posts()
+        posts.insert(0, post)
+        _write_marketing_posts(posts)
+        return post
+
+    saved = await asyncio.to_thread(_append)
+
+    publish_results = await asyncio.to_thread(_publish_selected_platforms, saved)
+    all_ok = bool(publish_results) and all(
+        isinstance(v, dict) and v.get("ok") for v in publish_results.values()
+    )
+    publish_block = {
+        "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "ok": all_ok,
+        "results": publish_results,
+    }
+
+    def _update_publish() -> dict[str, object]:
+        posts = _read_marketing_posts()
+        for item in posts:
+            if str(item.get("id")) == post_id:
+                item["publish"] = publish_block
+                item["updated_at"] = publish_block["at"]
+                _write_marketing_posts(posts)
+                return item
+        saved["publish"] = publish_block
+        return saved
+
+    updated = await asyncio.to_thread(_update_publish)
+    status = 201 if all_ok else 207
+    return web.json_response(
+        {
+            "ok": all_ok,
+            "post": updated,
+            "publish": publish_block,
+            "error": None
+            if all_ok
+            else {
+                "code": "publish_partial_or_failed",
+                "message": "One or more selected platforms failed to publish",
+            },
+        },
+        status=status,
+    )
+
+
+def _youtube_refresh_access_token() -> str:
+    """Return a short-lived access token from env refresh credentials."""
+    import urllib.error
+    import urllib.parse
+    import urllib.request
+
+    client_id = _env_from_wfrun_file("YOUTUBE_CLIENT_ID")
+    client_secret = _env_from_wfrun_file("YOUTUBE_CLIENT_SECRET")
+    refresh_token = _env_from_wfrun_file("YOUTUBE_REFRESH_TOKEN")
+    if not client_id or not client_secret or not refresh_token:
+        raise RuntimeError(
+            "missing_youtube_credentials — set YOUTUBE_CLIENT_ID, "
+            "YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN"
+        )
+    data = urllib.parse.urlencode(
+        {
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "refresh_token": refresh_token,
+            "grant_type": "refresh_token",
+        }
+    ).encode("utf-8")
+    req = urllib.request.Request(
+        "https://oauth2.googleapis.com/token",
+        data=data,
+        method="POST",
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"youtube_token_refresh_failed: {body}") from exc
+    access = (payload.get("access_token") or "").strip()
+    if not access:
+        raise RuntimeError("youtube_token_refresh_failed: no access_token")
+    return access
+
+
+def _youtube_list_playlists(access_token: str) -> list[dict[str, str]]:
+    import urllib.error
+    import urllib.parse
+    import urllib.request
+
+    items_out: list[dict[str, str]] = []
+    page_token = ""
+    while True:
+        params: dict[str, str] = {
+            "part": "snippet,contentDetails",
+            "mine": "true",
+            "maxResults": "50",
+        }
+        if page_token:
+            params["pageToken"] = page_token
+        url = (
+            "https://www.googleapis.com/youtube/v3/playlists?"
+            + urllib.parse.urlencode(params)
+        )
+        req = urllib.request.Request(
+            url,
+            headers={"Authorization": f"Bearer {access_token}"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                payload = json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"youtube_playlists_failed: {body}") from exc
+        for item in payload.get("items") or []:
+            if not isinstance(item, dict):
+                continue
+            pid = str(item.get("id") or "").strip()
+            snippet = item.get("snippet") if isinstance(item.get("snippet"), dict) else {}
+            title = str(snippet.get("title") or pid).strip() or pid
+            if pid:
+                items_out.append({"id": pid, "title": title})
+        page_token = str(payload.get("nextPageToken") or "").strip()
+        if not page_token:
+            break
+    return items_out
+
+
+async def handle_marketing_youtube_playlists(_request: web.Request) -> web.Response:
+    def _run() -> list[dict[str, str]]:
+        token = _youtube_refresh_access_token()
+        return _youtube_list_playlists(token)
+
+    try:
+        playlists = await asyncio.to_thread(_run)
+    except RuntimeError as exc:
+        msg = str(exc)
+        code = "youtube_playlists_error"
+        if msg.startswith("missing_youtube_credentials"):
+            code = "missing_youtube_credentials"
+        elif "invalid_grant" in msg or "token_refresh_failed" in msg:
+            code = "youtube_reauth_required"
+        return web.json_response(
+            {"ok": False, "error": {"code": code, "message": msg}},
+            status=400,
+        )
+    except Exception as exc:  # noqa: BLE001 — boundary JSON for dashboard
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {
+                    "code": "youtube_playlists_error",
+                    "message": str(exc),
+                },
+            },
+            status=500,
+        )
+    return web.json_response({"ok": True, "data": {"playlists": playlists}})
 
 
 def require_wfrun() -> Path:
@@ -351,6 +845,7 @@ async def handle_session(request: web.Request) -> web.Response:
     base = _task_manager_base_url()
     slug = _env_from_wfrun_file("TASK_MANAGER_SLUG")
     task_manager_url = _task_manager_url(request)
+    repo_brand = _env_from_wfrun_file("REPO_BRAND")
     return web.json_response(
         {
             "mode": os.environ.get("WFRUN_MODE", ""),
@@ -358,6 +853,7 @@ async def handle_session(request: web.Request) -> web.Response:
             "root": os.environ.get("WFRUN_ROOT", ""),
             "env_file": env_file,
             "env_file_name": Path(env_file).name if env_file else "",
+            "repo_brand": repo_brand,
             "task_manager_base_url": base,
             "task_manager_slug": slug,
             "task_manager_url": task_manager_url,
@@ -458,7 +954,7 @@ async def handle_ws_run(request: web.Request) -> web.WebSocketResponse:
 
 
 def create_app(root: Path) -> web.Application:
-    app = web.Application()
+    app = web.Application(client_max_size=MARKETING_CLIENT_MAX_SIZE)
     app["root"] = root
     app["session_manager"] = SessionManager()
 
@@ -477,6 +973,13 @@ def create_app(root: Path) -> web.Application:
     app.router.add_get("/api/session", handle_session)
     app.router.add_post("/api/open-env-file", handle_open_env_file)
     app.router.add_get("/api/scripts", handle_scripts)
+    app.router.add_get("/api/marketing/posts", handle_marketing_posts_get)
+    app.router.add_post("/api/marketing/posts", handle_marketing_posts_create)
+    app.router.add_get("/api/marketing/posts/{post_id}", handle_marketing_post_get)
+    app.router.add_get(
+        "/api/marketing/youtube/playlists",
+        handle_marketing_youtube_playlists,
+    )
     app.router.add_route("*", TM_PROXY_PREFIX, handle_tm_proxy)
     app.router.add_route("*", TM_PROXY_PREFIX + "/{path:.*}", handle_tm_proxy)
     app.router.add_get("/ws/run", handle_ws_run)

@@ -157,6 +157,18 @@
   }
 
   function renderSession(session) {
+    const brand = String(session.repo_brand || "").trim() || "dashboard";
+    const brandTitle = `${brand} dashboard`;
+    const brandEl = document.getElementById("dashboard-brand-title");
+    if (brandEl) {
+      brandEl.textContent = brandTitle;
+    }
+    document.title = brandTitle;
+
+    if (!session.env_file) {
+      sessionMetaEl.textContent = `${session.mode} · ${session.profile}`;
+      return;
+    }
     const envName = session.env_file_name || session.env_file.split("/").pop();
     sessionMetaEl.replaceChildren();
 
