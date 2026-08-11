@@ -47,6 +47,7 @@ startLocalPractice
 - Random first player
 - Distinct AI decisions
 - Match Summary / FastAPI finalize
+- Online invite — [ws-invite-match.md](ws-invite-match.md) (not practice)
 
 ## Files modified
 

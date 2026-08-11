@@ -4,7 +4,7 @@
 Build nav from charts/ directory structure and generate HTML for each .mmd file.
 Also builds plain-English guide pages from co-located .guide.md files.
 
-Run from project root: python3 automation/backend/build_nav_and_charts.py
+Run from project root: python3 automation/dashboard/build_nav_and_charts.py
 No server: all pages are static; each chart's Mermaid source is embedded in its HTML.
 """
 
@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 
 
-# This script lives in automation/backend/; flowcharts assets are under Documentation/02_FlowCharts/
+# This script lives in automation/dashboard/; flowcharts assets are under Documentation/02_FlowCharts/
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent.parent
 _FLOWCHARTS_CANDIDATES = (

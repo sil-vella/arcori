@@ -1,5 +1,5 @@
 ---
-description: Create or update active implementation plans in the Documentation/01_Active_plans directory. Use when starting new implementations or when implementation changes occur.
+description: Create/update active plans, sync Task Manager label (tasks/notes/checklists), and record architecture or game/app logic decisions in the case study. Use when starting implementations, changing approach, or completing significant feature work.
 alwaysApply: false
 ---
 
@@ -7,7 +7,15 @@ alwaysApply: false
 
 ## Overview
 
-This rule guides the agent to maintain active implementation plans in `/Users/sil/Documents/Work/reignofplay/Dutch/app_dev/Documentation/01_Active_plans`. Plans document current implementation work and must be kept up-to-date as changes occur.
+Maintain active implementation plans in `Documentation/01_Active_Plans/`. When a change locks an **architecture** or **game/app logic** decision (with a clear reason), also update the game case study so the narrative stays accurate.
+
+**Also keep this repo’s Task Manager label in sync** (tasks, checklist steps, notes) whenever you create or update an active plan—see [Task Manager sync](#task-manager-sync).
+
+- Plans: day-to-day progress, checklists, file lists  
+- Task Manager: same progress on the shared board (dashboard Task Manager tab)  
+- Case study: durable “what we decided and why” for product/game logic — not every small edit
+
+Full API / schema / env reference: [`Documentation/00_System_Wide/task-manager.md`](../../Documentation/00_System_Wide/task-manager.md).
 
 ## When to Create a New Plan
 
@@ -28,10 +36,12 @@ Update the existing plan when:
 
 ## Plan File Location
 
-All active plans must be stored in:
 ```
-/Users/sil/Documents/Work/reignofplay/Dutch/app_dev/Documentation/01_Active_plans/
+Documentation/01_Active_Plans/
 ```
+
+Index: [`00_MASTER_PLAN.md`](../../Documentation/01_Active_Plans/00_MASTER_PLAN.md).  
+Game case study: [`02_CASE_STUDY.md`](../../Documentation/01_Active_Plans/02_CASE_STUDY.md) (or `03_CASE_STUDY.md` if that filename is what the repo uses).
 
 ## Plan File Naming
 
@@ -55,17 +65,154 @@ Each plan should include:
 
 ## Workflow
 
-1. **At Start**: Check if a relevant plan exists in `01_Active_plans/`
+1. **At Start**: Check if a relevant plan exists in `01_Active_Plans/`
    - If no plan exists → Create a new plan file
    - If plan exists → Review and update it
+   - Add/update a row in [`00_MASTER_PLAN.md`](../../Documentation/01_Active_Plans/00_MASTER_PLAN.md) when a new plan is created or status/focus changes
+   - **Sync Task Manager**: ensure label exists; create a task for the plan; add checklist items for open steps ([details](#task-manager-sync))
 
 2. **During Implementation**: After each significant modification:
    - Update the "Current Progress" section
    - Add any new files to "Files Modified"
    - Update "Next Steps" if priorities change
    - Add notes about decisions or issues encountered
+   - If a lasting architecture / game-logic decision was made → [update the case study](#case-study-updates)
+   - **Sync Task Manager**: check off completed checklist items; add/update notes; add new checklist lines for new steps
 
-3. **On Completion**: Mark plan as completed and archive if needed
+3. **On Completion**: Mark plan as completed; update master plan status; fold any final decisions into the case study if not already recorded; **check off remaining Task Manager items** for that plan’s task. Do **not** delete Task Manager tasks/items unless the user explicitly approves (see [Deletes](#deletes--always-ask-first))
+
+## Task Manager sync
+
+Agents **must** create/update the Task Manager board for this repo when creating or updating an active plan (same moments as the markdown plan workflow above). Use judgment: keep the board useful, not noisy.
+
+### Config (from env — never hardcode origin/secrets)
+
+Read from project `.env.local` / `.env.prod` (or already-loaded `wfrun` env):
+
+- `TASK_MANAGER_BASE_URL` — HTTP origin only, e.g. `http://tm.reignofplay.com` (no trailing slash; no TLS on this host)
+- `TASK_MANAGER_SLUG`
+- `TM_USERNAME` — Task Manager login user
+- `TM_PASSWORD` — Task Manager login password
+- `TM_JWT_SECRET` — must match the Task Manager server `JWT_SECRET` (document/align only; **do not** send this on API calls; never log it)
+
+Legacy fallback (if `TASK_MANAGER_BASE_URL` is unset): `TASK_MANAGER_HOST` + optional `TASK_MANAGER_PORT`.
+
+Dashboard label URL (human):  
+`$TASK_MANAGER_BASE_URL/content/label.php?slug=$TASK_MANAGER_SLUG&embed=1`
+
+API base: `$TASK_MANAGER_BASE_URL`  
+Doc: [`task-manager.md`](../../Documentation/00_System_Wide/task-manager.md)
+
+### Auth (required for all board API calls)
+
+Board JSON endpoints require `Authorization: Bearer <token>` (or `BOARD_API_KEY` on the server — agents use JWT login).
+
+1. Load `TM_USERNAME` / `TM_PASSWORD` from `.env.local` (never hardcode; never print passwords/tokens in plans or chat)
+2. `POST /api/login.php` with `{"username":"$TM_USERNAME","password":"$TM_PASSWORD"}`
+3. Read `token` from `{ "ok": true, "token": "...", "expires_in": 86400 }`
+4. Send `Authorization: Bearer $TOKEN` on every subsequent Task Manager API request
+5. On `401 unauthorized`, login again once and retry; if login fails or creds missing, warn in plan **Notes** and continue the markdown plan only
+
+`TM_JWT_SECRET` is not used by the agent HTTP client — the server signs/verifies JWTs with its own `JWT_SECRET`. Keep the env value in sync with the Task Manager deployment for ops clarity.
+
+### Mapping
+
+| Active plan | Task Manager |
+|-------------|--------------|
+| Plan file / major workstream | One **task** (title ≈ plan title or short workstream name) |
+| Area / layer (optional) | **category** on the task (`category_id` / `category_name` from `label-get`) |
+| Implementation steps / TODOs | **checklist** items (`kind=checklist`) |
+| Decisions, blockers, context | **note** items (`kind=note`) |
+| Step completed | `POST /api/item-check.php` with `is_done: true` |
+
+### Categories
+
+- `GET /api/label-get.php` returns `categories` (and `label.categories`) plus per-task `category_id` / `category: { id, name } | null`
+- On `task-create`, pass one of: `category_id`, `category` (id, name, or `{id}`), `categories` (first entry), or `category_name` — first valid wins; invalid/foreign ids → `null`
+- On `task-update`, omit `category_id` to keep; set `null`/`""` to clear
+- Prefer an existing category from `label-get` that fits the work (e.g. Backend / Frontend); leave unassigned if none fit
+- Creating new categories is a UI concern unless an API exists; do not invent category deletes for cleanup
+
+### Agent procedure
+
+1. Authenticate ([Auth](#auth-required-for-all-board-api-calls)): login with `TM_USERNAME` / `TM_PASSWORD`, keep Bearer token for this sync
+2. `GET /api/label-get.php?slug=$TASK_MANAGER_SLUG` (with Bearer)
+   - If `label_not_found` → `POST /api/label-create.php` with `{"text":"$TASK_MANAGER_SLUG"}` then GET again
+3. Note available **categories** from the response. Find an existing **task** whose title matches this plan/workstream; if none, `POST /api/task-create.php` with `label_id` + `title` and optional `category_id` / `category_name`
+4. Reuse item ids from the GET payload:
+   - New open steps → `item-add-checklist` (or `item-add` with `kind=checklist`)
+   - Context/decisions → `item-add-note`
+   - Completed steps → `item-check` / `item-update` (`is_done: true`)
+   - Dropped / obsolete steps → prefer leave unchecked or mark done with a note; **never delete** without asking ([Deletes](#deletes--always-ask-first))
+5. Do **not** recreate the same checklist text if an open/done item already exists—update or check it
+6. If `TASK_MANAGER_BASE_URL` / slug / `TM_USERNAME` / `TM_PASSWORD` missing, login fails, or API unreachable: warn once in the plan **Notes**; do not block the markdown plan update
+7. Remember slugify: `my_cool_app` → `my-cool-app`. Use the `slug` returned by `label-create` / `label-get` if `TASK_MANAGER_SLUG` with underscores 404s
+
+### Deletes — always ask first
+
+**Before any Task Manager delete**, stop and ask the user for explicit permission. Do not delete “just to clean up.”
+
+Applies to all of:
+
+- `POST /api/task-delete.php`
+- `POST /api/item-delete.php`
+- Deleting **categories** (UI or API) — also clears task `category_id`, does not remove tasks
+- Any other delete of labels, tasks, checklist lines, notes, or categories
+
+Until the user says yes (for that specific id/title, or a clear bulk approval for listed items): prefer `item-check` / `item-update`, add a note, reassign/clear category via update, or leave the item as-is.
+
+### curl sketch
+
+```bash
+# Load from .env.local (example); never echo TM_PASSWORD / token into logs
+BASE="${TASK_MANAGER_BASE_URL}"
+TOKEN=$(curl -sS -X POST "${BASE}/api/login.php" \
+  -H "Content-Type: application/json" \
+  -d "{\"username\":\"${TM_USERNAME}\",\"password\":\"${TM_PASSWORD}\"}" \
+  | python3 -c "import sys,json; print(json.load(sys.stdin).get('token',''))")
+AUTH="Authorization: Bearer ${TOKEN}"
+
+curl -sS "${BASE}/api/label-get.php?slug=${TASK_MANAGER_SLUG}" -H "$AUTH"
+curl -sS -X POST "${BASE}/api/task-create.php" -H "Content-Type: application/json" -H "$AUTH" \
+  -d "{\"label_id\":LABEL_ID,\"title\":\"Plan title\",\"category_id\":CATEGORY_ID}"
+# or: \"category_name\":\"Backend\"
+curl -sS -X POST "${BASE}/api/item-add-checklist.php" -H "Content-Type: application/json" -H "$AUTH" \
+  -d "{\"task_id\":TASK_ID,\"text\":\"Step description\"}"
+curl -sS -X POST "${BASE}/api/item-check.php" -H "Content-Type: application/json" -H "$AUTH" \
+  -d "{\"item_id\":ITEM_ID,\"is_done\":true}"
+```
+
+## Case study updates
+
+**File:** `Documentation/01_Active_Plans/02_CASE_STUDY.md` (or `03_CASE_STUDY.md` if present)
+
+Update the case study when implementation work **locks or changes** a decision about how the game or app is structured — not when polishing UI copy, renaming a local variable, or fixing a one-off bug with no design impact.
+
+### Do record (architecture + game/app logic)
+
+- Where truth lives (Flutter vs Dart vs FastAPI vs Postgres) and why
+- Match / matchmaking / practice routing (online vs offline, room SSOT, lobby rules)
+- Product semantics (Mastery vs ownership, Velora vs Trove, Caller, economy rules)
+- Data model splits (catalog disk vs player tables vs hot match freeze)
+- Transport choices that affect design (HTTP vs WS for a domain; full snapshot vs patch)
+- New modules or surfaces that change the player journey (Play hub phases, Detail tabs, post-match exits)
+- Reversals of earlier approach (e.g. practice moved off Dart WS)
+
+For each entry, keep the case study voice: **what**, **why (human)**, **why (technical)** — short. Prefer amending an existing phase/section or the “Major decisions” / “What is live vs next” tables over dumping a changelog.
+
+### Do not record
+
+- Trivial refactors, formatting, test-only tweaks, log line edits
+- Transient debugging, sticky-modal one-offs unless they establish a reusable failure pattern
+- Exhaustive file lists (those stay in the active plan)
+- Base-template infra already out of scope for the game case study (auth shell, drain, logging systems) unless a **game** decision depends on them
+
+### How to edit
+
+1. Update `Last Updated` / timeline row if the milestone is calendar-visible  
+2. Extend or correct the relevant phase section, architecture snapshot, or decision table  
+3. Refresh “What is live today vs next” when status of a major pipeline step changes  
+4. Keep the clickable menu in sync if you add a new top-level section  
 
 ## Example Plan Template
 
@@ -96,11 +243,20 @@ Each plan should include:
 
 ## Notes
 [Important decisions, issues, or considerations]
+
+## Case study
+[If a lasting decision was made: one line pointing at which case-study section was updated, or "n/a — no architecture/game-logic change"]
+
+## Task Manager
+[optional: label slug + task id/title synced, or "synced" / "skipped — API unreachable"]
 ```
 
 ## Important Reminders
 
 - **Always update the plan** after making code changes
-- **Keep the plan current** - outdated plans are not useful
+- **Keep the plan current** — outdated plans are not useful
+- **Sync Task Manager** when the plan changes (create/update/check items as fit)
+- **Never delete** Task Manager tasks/items/categories without asking the user first
 - **Be specific** about what was changed and why
 - **Document decisions** that affect the implementation approach
+- **Update the case study** for architecture and game/app logic decisions + reasons; skip trivial detail

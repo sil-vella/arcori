@@ -11,6 +11,10 @@
   const terminalTabsEl = document.getElementById("terminal-tabs");
   const terminalStackEl = document.getElementById("terminal-stack");
   const terminalPlaceholderEl = document.getElementById("terminal-placeholder");
+  const mainTabsEl = document.getElementById("main-tabs");
+  const taskManagerFrame = document.getElementById("task-manager-frame");
+  const taskManagerMissingEl = document.getElementById("task-manager-missing");
+  const taskManagerStatusEl = document.getElementById("task-manager-status");
 
   /** @type {Map<string, {
    *   scriptId: string,
@@ -29,6 +33,95 @@
   let activeScriptId = null;
   let activeGroup = null;
   let groupedScripts = [];
+  let activeView = "scripts";
+  let taskManagerUrl = "";
+
+  function isAbsoluteHttpUrl(value) {
+    return /^https?:\/\/[^/\s]+/i.test(value);
+  }
+
+  function setTaskManagerStatus(text) {
+    if (!taskManagerStatusEl) {
+      return;
+    }
+    if (!text) {
+      taskManagerStatusEl.hidden = true;
+      taskManagerStatusEl.textContent = "";
+      return;
+    }
+    taskManagerStatusEl.hidden = false;
+    taskManagerStatusEl.textContent = text;
+  }
+
+  function ensureEmbedLoaded(frame) {
+    if (!frame) {
+      return;
+    }
+    if (!taskManagerUrl || !isAbsoluteHttpUrl(taskManagerUrl)) {
+      frame.removeAttribute("src");
+      frame.hidden = true;
+      if (taskManagerMissingEl) {
+        taskManagerMissingEl.hidden = false;
+      }
+      setTaskManagerStatus("");
+      frame.dataset.loaded = "";
+      return;
+    }
+    if (frame.dataset.loaded === "1" && frame.getAttribute("src") === taskManagerUrl) {
+      frame.hidden = false;
+      if (taskManagerMissingEl) {
+        taskManagerMissingEl.hidden = true;
+      }
+      setTaskManagerStatus(taskManagerUrl);
+      return;
+    }
+    frame.hidden = false;
+    if (taskManagerMissingEl) {
+      taskManagerMissingEl.hidden = true;
+    }
+    // Never assign relative/empty src — browsers resolve "" to this dashboard origin.
+    frame.src = taskManagerUrl;
+    frame.dataset.loaded = "1";
+    setTaskManagerStatus(taskManagerUrl);
+  }
+
+  function setActiveView(view) {
+    activeView = view;
+
+    mainTabsEl.querySelectorAll(".main-tab").forEach((tab) => {
+      const isActive = tab.dataset.view === view;
+      tab.classList.toggle("active", isActive);
+      tab.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+
+    document.querySelectorAll(".view-panel").forEach((panel) => {
+      const isActive = panel.dataset.view === view;
+      panel.classList.toggle("active", isActive);
+      panel.hidden = !isActive;
+    });
+
+    if (view === "task-manager") {
+      ensureEmbedLoaded(taskManagerFrame);
+    }
+
+    if (view === "scripts" && activeScriptId) {
+      const session = sessions.get(activeScriptId);
+      if (session) {
+        requestAnimationFrame(() => {
+          session.fitAddon.fit();
+          if (session.ws && session.ws.readyState === WebSocket.OPEN) {
+            session.ws.send(
+              JSON.stringify({
+                type: "resize",
+                cols: session.term.cols,
+                rows: session.term.rows,
+              })
+            );
+          }
+        });
+      }
+    }
+  }
 
   function basename(scriptId) {
     return scriptId.split("/").pop();
@@ -524,11 +617,27 @@
   async function loadSession() {
     const res = await fetch("/api/session");
     const session = await res.json();
+    const nextUrl = session.task_manager_url || "";
+    taskManagerUrl = isAbsoluteHttpUrl(nextUrl) ? nextUrl : "";
     renderSession(session);
+    if (activeView === "task-manager") {
+      ensureEmbedLoaded(taskManagerFrame);
+    }
   }
 
   runBtn.addEventListener("click", () => {
     runActiveScript();
+  });
+
+  mainTabsEl.addEventListener("click", (event) => {
+    const tab = event.target.closest(".main-tab");
+    if (!tab || !mainTabsEl.contains(tab)) {
+      return;
+    }
+    const view = tab.dataset.view;
+    if (view && view !== activeView) {
+      setActiveView(view);
+    }
   });
 
   sessionIdBtn.addEventListener("click", () => {

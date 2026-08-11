@@ -6,30 +6,35 @@
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
+**Next implementation:** [ws-invite-match.md](ws-invite-match.md) (Friend Match / invite WS).
+
+**Narrative:** [03_CASE_STUDY.md](03_CASE_STUDY.md) — full game implementation case study (design → matchmaking; template infra out of scope).
+
 ## Template / ops
 
-| Plan | Focus |
-|------|--------|
-| [01_TEMPLATE_INSTALLATION.MD](01_TEMPLATE_INSTALLATION.MD) | New product install, secrets, drain, TLS, RBAC, first deploy |
+| Plan | Status | Focus |
+|------|--------|--------|
+| [01_TEMPLATE_INSTALLATION.MD](01_TEMPLATE_INSTALLATION.MD) | Living | New product install, secrets, drain, TLS, RBAC, first deploy |
 
 ## Player app flows
 
-| Plan | Focus |
-|------|--------|
-| [first-time-player-flow.md](first-time-player-flow.md) | Splash → Kin/Genesis → starter access → guided practice → intros → Home |
-| [returning-player-startup-flow.md](returning-player-startup-flow.md) | Auto login → sync → overnight → notification queue → Home |
-| [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Home layout, Velora entry, sink Trove • PLAY • Market |
-| [match-setting-core-flow.md](match-setting-core-flow.md) | Stage 1+2 practice path done; later: match UI / matching |
-| [match-hot-state.md](match-hot-state.md) | Dart match module for online later; not used for Flutter practice |
-| [practice-offline-routing.md](practice-offline-routing.md) | Practice = Flutter-only; embedded 10 AI pool, pick 2; non-practice = room stub |
-| [practice-stub-gameplay.md](practice-stub-gameplay.md) | Auto stub loop: 2 rounds × 3 seats, then postMatch stub |
-| [ws-matchmaking-modes.md](ws-matchmaking-modes.md) | Quick/Event join-or-create lobby → match room SSOT; invite stub |
-| [practice-match-v1.md](practice-match-v1.md) | Practice loadout + local stub slam; Dart packs dormant for practice |
-| [core-match-loop.md](core-match-loop.md) | Matchmaking → match → celebration → Match Summary → exits |
-| [arcori-standings-surface.md](arcori-standings-surface.md) | Standings module + Detail tab + wfrun tiger seed; My Mastery/Trove still open |
-| [catalog-hot-reload.md](catalog-hot-reload.md) | Catalog JSON mtime cache, authuser APIs, `/catalog-media`, Flutter Velora browse |
-| [avari-profile.md](avari-profile.md) | Avari Profile `/avari` + drawer avatar header; Account stays auth/avatar upload |
-| [player-profile-schema.md](player-profile-schema.md) | Auth + Avari Postgres tables, complete document, admin testuser Alembic seed |
+| Plan | Status | Focus |
+|------|--------|--------|
+| [first-time-player-flow.md](first-time-player-flow.md) | Spec | Splash → Kin/Genesis → starter access → guided practice → intros → Home |
+| [returning-player-startup-flow.md](returning-player-startup-flow.md) | Spec | Auto login → sync → overnight → notification queue → Home |
+| [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Spec | Home layout, Velora entry, sink Trove • PLAY • Market |
+| [match-setting-core-flow.md](match-setting-core-flow.md) | Partial | Play hub + types; practice offline; quick/event online; invite next |
+| [match-hot-state.md](match-hot-state.md) | Done (online room SSOT) | Dart match module + Flutter mirror; used by matchmaking promote |
+| [practice-offline-routing.md](practice-offline-routing.md) | Completed | Practice = Flutter-only; embedded 10 AI pool |
+| [practice-stub-gameplay.md](practice-stub-gameplay.md) | Completed | Auto stub loop: 2 rounds × 3 seats → postMatch |
+| [ws-matchmaking-modes.md](ws-matchmaking-modes.md) | Completed | Quick/Event lobby → AI fill → match room SSOT |
+| [ws-invite-match.md](ws-invite-match.md) | **Next** | Friend Match invite WS (replaces Play stub) |
+| [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
+| [core-match-loop.md](core-match-loop.md) | Spec | Matchmaking → match → celebration → Match Summary → exits |
+| [arcori-standings-surface.md](arcori-standings-surface.md) | Partial | Standings + Detail tab; My Mastery/Trove still open |
+| [catalog-hot-reload.md](catalog-hot-reload.md) | Done | Catalog JSON mtime cache, authuser APIs, Flutter Velora |
+| [avari-profile.md](avari-profile.md) | Done | Avari Profile `/avari` + drawer avatar header |
+| [player-profile-schema.md](player-profile-schema.md) | Done | Auth + Avari tables, admin testuser seed |
 
 ## Design references
 

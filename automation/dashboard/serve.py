@@ -7,6 +7,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 import subprocess
 import sys
 import webbrowser
@@ -15,7 +16,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 try:
-    from aiohttp import WSMsgType, web
+    from aiohttp import ClientSession, ClientTimeout, WSMsgType, web
 except ImportError:
     print(
         "❌ Missing dependency: aiohttp\n"
@@ -33,6 +34,14 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 STATIC_DIR = SCRIPT_DIR / "static"
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8765
+# Same-origin path prefix so the Task Manager iframe shares the dashboard origin
+# (cross-site cookies break PHP session + CSRF login inside the iframe).
+TM_PROXY_PREFIX = "/tm"
+_TM_ABS_ATTR_RE = re.compile(
+    rb'(?i)(\b(?:href|src|action|formaction|data-src|poster)\s*=\s*[\'"])/(?!tm/)'
+)
+_TM_CSS_URL_RE = re.compile(rb"""(?i)(url\(\s*['"]?)/(?!tm/)""")
+_TM_PROXY_TIMEOUT = ClientTimeout(total=120)
 
 
 def require_wfrun() -> Path:
@@ -152,8 +161,196 @@ async def handle_index(_request: web.Request) -> web.Response:
     return web.FileResponse(STATIC_DIR / "index.html")
 
 
-async def handle_session(_request: web.Request) -> web.Response:
+def _env_from_wfrun_file(key: str) -> str:
+    """Prefer process env; fall back to WFRUN_ENV_FILE key=value lines."""
+    value = os.environ.get(key, "").strip()
+    if value:
+        return value
+    env_file = os.environ.get("WFRUN_ENV_FILE", "").strip()
+    if not env_file:
+        return ""
+    path = Path(env_file)
+    if not path.is_file():
+        return ""
+    try:
+        for raw in path.read_text(encoding="utf-8").splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            name, _, val = line.partition("=")
+            if name.strip() != key:
+                continue
+            val = val.strip()
+            if len(val) >= 2 and val[0] == val[-1] and val[0] in "\"'":
+                val = val[1:-1]
+            return val.strip()
+    except OSError:
+        return ""
+    return ""
+
+
+def _task_manager_base_url() -> str:
+    """Origin for Task Manager (no trailing slash). Prefer TASK_MANAGER_BASE_URL."""
+    base = _env_from_wfrun_file("TASK_MANAGER_BASE_URL").rstrip("/")
+    if base:
+        return base
+    # Legacy host:port (pre-domain deploy)
+    host = _env_from_wfrun_file("TASK_MANAGER_HOST")
+    port = _env_from_wfrun_file("TASK_MANAGER_PORT")
+    if host and port:
+        return f"http://{host}:{port}"
+    if host:
+        return f"http://{host}"
+    return ""
+
+
+def _task_manager_embed_path() -> str:
+    slug = _env_from_wfrun_file("TASK_MANAGER_SLUG")
+    if not _task_manager_base_url() or not slug:
+        return ""
+    return f"{TM_PROXY_PREFIX}/content/label.php?slug={slug}&embed=1"
+
+
+def _task_manager_url(request: web.Request | None = None) -> str:
+    """Dashboard same-origin embed URL (via /tm proxy), not the remote origin."""
+    path = _task_manager_embed_path()
+    if not path:
+        return ""
+    if request is not None:
+        return f"{request.url.scheme}://{request.host}{path}"
+    host = os.environ.get("WFRUN_DASHBOARD_HOST", DEFAULT_HOST).strip() or DEFAULT_HOST
+    port = int(os.environ.get("WFRUN_DASHBOARD_PORT", str(DEFAULT_PORT)))
+    return f"http://{host}:{port}{path}"
+
+
+def _rewrite_tm_set_cookie(value: str) -> str:
+    parts: list[str] = []
+    saw_path = False
+    for raw in value.split(";"):
+        part = raw.strip()
+        if not part:
+            continue
+        lower = part.lower()
+        if lower.startswith("domain="):
+            continue
+        if lower.startswith("path="):
+            parts.append(f"Path={TM_PROXY_PREFIX}")
+            saw_path = True
+            continue
+        if lower == "secure":
+            continue
+        parts.append(part)
+    if not saw_path:
+        parts.append(f"Path={TM_PROXY_PREFIX}")
+    return "; ".join(parts)
+
+
+def _rewrite_tm_location(location: str, remote_base: str) -> str:
+    if location.startswith(remote_base):
+        location = location[len(remote_base) :] or "/"
+    if location.startswith("//"):
+        return location
+    if location.startswith("/") and not location.startswith(f"{TM_PROXY_PREFIX}/"):
+        if location == TM_PROXY_PREFIX:
+            return location
+        return f"{TM_PROXY_PREFIX}{location}"
+    return location
+
+
+def _rewrite_tm_body(body: bytes, remote_base: str) -> bytes:
+    remote = remote_base.encode("ascii", errors="ignore")
+    if remote:
+        body = body.replace(remote + b"/", (TM_PROXY_PREFIX + "/").encode("ascii"))
+        body = body.replace(remote, TM_PROXY_PREFIX.encode("ascii"))
+    body = _TM_ABS_ATTR_RE.sub(rb"\1" + (TM_PROXY_PREFIX + "/").encode("ascii"), body)
+    body = _TM_CSS_URL_RE.sub(rb"\1" + (TM_PROXY_PREFIX + "/").encode("ascii"), body)
+    # Avoid accidental /tm/tm/ if upstream already used the prefix string
+    doubled = (TM_PROXY_PREFIX + TM_PROXY_PREFIX + "/").encode("ascii")
+    body = body.replace(doubled, (TM_PROXY_PREFIX + "/").encode("ascii"))
+    return body
+
+
+async def handle_tm_proxy(request: web.Request) -> web.StreamResponse:
+    remote_base = _task_manager_base_url()
+    if not remote_base:
+        return web.Response(text="Task Manager not configured", status=503)
+
+    path = request.match_info.get("path", "").lstrip("/")
+    target = f"{remote_base}/{path}" if path else f"{remote_base}/"
+    if request.query_string:
+        target = f"{target}?{request.query_string}"
+
+    fwd_headers: dict[str, str] = {}
+    for key, value in request.headers.items():
+        lower = key.lower()
+        if lower in {
+            "host",
+            "content-length",
+            "connection",
+            "transfer-encoding",
+            "keep-alive",
+            "proxy-authenticate",
+            "proxy-authorization",
+            "te",
+            "trailers",
+            "upgrade",
+        }:
+            continue
+        fwd_headers[key] = value
+
+    body_in = await request.read()
+    session: ClientSession = request.app["tm_http"]
+    try:
+        async with session.request(
+            request.method,
+            target,
+            headers=fwd_headers,
+            data=body_in if body_in else None,
+            allow_redirects=False,
+        ) as upstream:
+            raw = await upstream.read()
+            content_type = upstream.headers.get("Content-Type", "")
+            if any(
+                token in content_type
+                for token in ("text/html", "text/css", "javascript", "json")
+            ):
+                raw = _rewrite_tm_body(raw, remote_base)
+
+            out = web.Response(body=raw, status=upstream.status)
+            for key, value in upstream.headers.items():
+                lower = key.lower()
+                if lower in {
+                    "transfer-encoding",
+                    "content-encoding",
+                    "content-length",
+                    "connection",
+                    "x-frame-options",
+                }:
+                    continue
+                if lower == "set-cookie":
+                    out.headers.add("Set-Cookie", _rewrite_tm_set_cookie(value))
+                    continue
+                if lower == "location":
+                    out.headers[key] = _rewrite_tm_location(value, remote_base)
+                    continue
+                if lower == "content-security-policy":
+                    continue
+                out.headers[key] = value
+            out.headers["Content-Security-Policy"] = "frame-ancestors *"
+            return out
+    except Exception as exc:  # noqa: BLE001 — surface upstream failures to the iframe
+        return web.Response(
+            text=f"Task Manager proxy error: {exc}",
+            status=502,
+            content_type="text/plain",
+        )
+
+
+async def handle_session(request: web.Request) -> web.Response:
     env_file = os.environ.get("WFRUN_ENV_FILE", "")
+    base = _task_manager_base_url()
+    slug = _env_from_wfrun_file("TASK_MANAGER_SLUG")
+    task_manager_url = _task_manager_url(request)
     return web.json_response(
         {
             "mode": os.environ.get("WFRUN_MODE", ""),
@@ -161,6 +358,9 @@ async def handle_session(_request: web.Request) -> web.Response:
             "root": os.environ.get("WFRUN_ROOT", ""),
             "env_file": env_file,
             "env_file_name": Path(env_file).name if env_file else "",
+            "task_manager_base_url": base,
+            "task_manager_slug": slug,
+            "task_manager_url": task_manager_url,
         }
     )
 
@@ -262,10 +462,23 @@ def create_app(root: Path) -> web.Application:
     app["root"] = root
     app["session_manager"] = SessionManager()
 
+    async def _open_tm_http(application: web.Application) -> None:
+        application["tm_http"] = ClientSession(timeout=_TM_PROXY_TIMEOUT)
+
+    async def _close_tm_http(application: web.Application) -> None:
+        session = application.get("tm_http")
+        if session is not None and not session.closed:
+            await session.close()
+
+    app.on_startup.append(_open_tm_http)
+    app.on_cleanup.append(_close_tm_http)
+
     app.router.add_get("/", handle_index)
     app.router.add_get("/api/session", handle_session)
     app.router.add_post("/api/open-env-file", handle_open_env_file)
     app.router.add_get("/api/scripts", handle_scripts)
+    app.router.add_route("*", TM_PROXY_PREFIX, handle_tm_proxy)
+    app.router.add_route("*", TM_PROXY_PREFIX + "/{path:.*}", handle_tm_proxy)
     app.router.add_get("/ws/run", handle_ws_run)
     app.router.add_static("/static/", STATIC_DIR, show_index=False)
     return app
@@ -284,6 +497,14 @@ def main() -> None:
 
     print(f"🖥️  wfrun dashboard ({mode})")
     print(f"   {url}")
+    tm_url = _task_manager_url()
+    if tm_url:
+        print(f"   Task Manager: {tm_url}")
+    else:
+        print(
+            "   Task Manager: unset "
+            "(need TASK_MANAGER_BASE_URL + TASK_MANAGER_SLUG in .env.local or .env.prod)"
+        )
     print(f"   Logs: {LOGS_DIR}")
     print("   CLI wfrun remains available — this GUI is an alternative.")
     print("   Press Ctrl+C here to stop the server.")

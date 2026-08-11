@@ -1,12 +1,10 @@
 # Core Match Loop
 
-**Status:** Spec captured — not implemented  
+**Status:** Spec — partial runtime exists (practice offline; quick/event online stub end)  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-07-24
+**Last Updated:** 2026-08-09
 
-Related: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [match-hot-state.md](match-hot-state.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
-
-Stage 1 hub + type select + stub pipeline: [match-setting-core-flow.md](match-setting-core-flow.md).
+Related: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [match-hot-state.md](match-hot-state.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [ws-invite-match.md](ws-invite-match.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
 
 ## Objective
 
@@ -22,6 +20,16 @@ Play Hub
   → result celebration
   → Match Summary
 ```
+
+## Runtime progress (not full loop)
+
+| Step | Status |
+|------|--------|
+| Mode select | Done (`/play`) |
+| Practice setup + stub match | Done |
+| quickStart / specialEvent matchmaking + stub match end | Done |
+| Invite matchmaking | **Next** — [ws-invite-match.md](ws-invite-match.md) |
+| Celebration / Match Summary / durable rewards / Play Again | Not started |
 
 ## Match Summary contents
 
@@ -46,20 +54,17 @@ After Match Summary the player chooses:
 
 ## Implementation Steps
 
-- [ ] Mode select → matchmaking / setup pipeline
-- [ ] Match runtime (Dart hot path + FastAPI durable rewards)
+- [x] Mode select → practice / quick / event pipelines (stub end)
+- [ ] Invite pipeline — [ws-invite-match.md](ws-invite-match.md)
+- [ ] Match runtime beyond stub (weighted slam + FastAPI durable rewards)
 - [ ] Result celebration modal / screen
 - [ ] Match Summary payload + UI (all fields above)
 - [ ] Play Again → rematchmaking without Play Hub revisit
 - [ ] Home / Velora / Trove exits
 
-## Current Progress
-
-2026-07-24 aligned with mastery vs mint / Velora / Trove.
-
 ## Next Steps
 
-Align summary fields with economy, mastery, daily systems, and generation/legacy services as those modules land.
+Ship invite WS, then celebration / summary when economy modules are ready.
 
 ## Notes
 

@@ -1,29 +1,28 @@
 # WS Matchmaking (Quick Join + Special Event)
 
-**Status:** Implemented (Invite deferred as Play stub)  
+**Status:** Completed  
 **Created:** 2026-08-09  
 **Last Updated:** 2026-08-09
 
-Related: [practice-offline-routing.md](practice-offline-routing.md) · [match-hot-state.md](match-hot-state.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md)
+Related: [ws-invite-match.md](ws-invite-match.md) · [practice-offline-routing.md](practice-offline-routing.md) · [match-hot-state.md](match-hot-state.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md)
 
 ## Objective
 
-Online **quickStart** and **specialEvent** share join-or-create lobby logic (5s / 3 seats / DB AI fill), then promote into the existing **match room SSOT** (`matchId` + RoomRegistry). **Invite** stays a Play stub (no WS).
-
-Auth / config failures and lobby timeouts abort the Play run (idle + `errorMessage`) and show a centered **OK** modal — no sticky “Finding players…” shell.
+Online **quickStart** and **specialEvent** share join-or-create lobby logic (5s / 3 seats / DB AI fill), then promote into the existing **match room SSOT** (`matchId` + RoomRegistry).
 
 ## Flow
 
 ```text
 Play → quickStart | specialEvent
+  → gate: auth + Dart WS URL (else OK modal abort)
   → matchmaking/find (queueKey from game type)
   → join open lobby OR create + 5s timer
   → full(3) OR timeout → AI sample → MatchLifecycle.startFromLobby
   → roomId = matchId, match/state
   → Flutter match surface (stub auto-end for caller) → postMatch stub → idle
 
-Play → invite → roomCreateStub (log) → idle
 Play → practice → offline (unchanged)
+Play → invite → next plan [ws-invite-match.md](ws-invite-match.md) (still Play stub today)
 ```
 
 ## Room SSOT
@@ -31,12 +30,31 @@ Play → practice → offline (unchanged)
 - Lobby: optional `lobby_<id>` membership for fan-out on `matchmaking/lobby`
 - Live match: **only** `match` module + core RoomRegistry (`roomId === matchId`)
 
+## Implementation
+
+- [x] Dart `matchmaking` module: find / join-or-create / 5s timer / promote
+- [x] `MatchLifecycleContract` + `MatchService.startFromLobby` + catalog freeze + room subscribe
+- [x] FastAPI `POST /service/players/ai/sample`
+- [x] Flutter: wire quickStart / specialEvent → find; lobby modal; match surface
+- [x] Auth / config / lobby-timeout abort → idle + centered OK modal (no sticky Finding players)
+- [x] Lobby dismiss race (promote before mount / leave typeSetup) + match-surface single dismiss
+- [x] Invite left as Play stub — tracked in [ws-invite-match.md](ws-invite-match.md)
+- [x] Unit tests (Dart matchmaking + Flutter play gate) + active plans
+
+## Gaps (deferred — not this plan)
+
+- Weighted slam / real online gameplay loop
+- Standing empty rooms / invite (see next plan)
+- Flutter `error_policy` mapping for all `matchmaking/…` WS codes
+
 ## Files
 
 - Dart: `bin/modules/matchmaking/**`, `match/match_lifecycle_contract.dart`, `match_service.startFromLobby`
-- FastAPI: `POST /service/players/ai/sample`
-- Flutter: `lib/modules/matchmaking/**`, play_notifier online path
+- FastAPI: `modules/players/**` (`POST /service/players/ai/sample`)
+- Flutter: `lib/modules/matchmaking/**`, `play_notifier` online path, `play_failure_modal`, lobby + match surface dismiss hardening
+- Docs: this file · [ws-invite-match.md](ws-invite-match.md) · master index
 
-## Invite
+## Notes
 
-Deferred — no invite WS channels in this phase.
+- Verified manually: authenticated Quick Start → AI fill → promote → stub end → idle
+- AI ids come from DB sample (not practice’s embedded 10-user pool)

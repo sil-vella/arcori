@@ -16,41 +16,72 @@
     <div class="session-meta" id="session-meta">Loading session…</div>
   </header>
 
-  <main class="layout">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h2>Scripts</h2>
-        <button type="button" id="stop-btn" class="stop-btn" disabled>Stop</button>
-      </div>
-      <div class="sidebar-body">
-        <nav id="accordion-nav" class="accordion-nav" aria-label="Script groups"></nav>
-        <div id="accordion-content" class="accordion-content">
-          <p class="accordion-placeholder">Select a section</p>
-        </div>
-      </div>
-    </aside>
+  <nav class="main-tabs" id="main-tabs" aria-label="Dashboard views" role="tablist">
+    <button type="button" class="main-tab active" role="tab" aria-selected="true" aria-controls="view-scripts" id="tab-scripts" data-view="scripts">Scripts</button>
+    <button type="button" class="main-tab" role="tab" aria-selected="false" aria-controls="view-task-manager" id="tab-task-manager" data-view="task-manager">Task Manager</button>
+    <button type="button" class="main-tab" role="tab" aria-selected="false" aria-controls="view-marketing" id="tab-marketing" data-view="marketing">Marketing</button>
+  </nav>
 
-    <section class="terminal-pane">
-      <div class="terminal-tabs" id="terminal-tabs" aria-label="Open terminals"></div>
-      <div class="terminal-toolbar" id="terminal-toolbar" hidden>
-        <button type="button" id="run-btn" class="run-btn">Run script</button>
-        <div class="session-id-group">
-          <span class="session-id-label">log</span>
-          <button type="button" id="session-id-btn" class="session-id-btn" title="Relative log file path"></button>
-          <button type="button" id="copy-session-id-btn" class="copy-btn" title="Copy relative log path">Copy</button>
-        </div>
-        <span id="active-script" class="active-script-path"></span>
+  <div class="view-stack">
+    <div class="view-panel active" id="view-scripts" role="tabpanel" aria-labelledby="tab-scripts" data-view="scripts">
+      <main class="layout">
+        <aside class="sidebar">
+          <div class="sidebar-header">
+            <h2>Scripts</h2>
+            <button type="button" id="stop-btn" class="stop-btn" disabled>Stop</button>
+          </div>
+          <div class="sidebar-body">
+            <nav id="accordion-nav" class="accordion-nav" aria-label="Script groups"></nav>
+            <div id="accordion-content" class="accordion-content">
+              <p class="accordion-placeholder">Select a section</p>
+            </div>
+          </div>
+        </aside>
+
+        <section class="terminal-pane">
+          <div class="terminal-tabs" id="terminal-tabs" aria-label="Open terminals"></div>
+          <div class="terminal-toolbar" id="terminal-toolbar" hidden>
+            <button type="button" id="run-btn" class="run-btn">Run script</button>
+            <div class="session-id-group">
+              <span class="session-id-label">log</span>
+              <button type="button" id="session-id-btn" class="session-id-btn" title="Relative log file path"></button>
+              <button type="button" id="copy-session-id-btn" class="copy-btn" title="Copy relative log path">Copy</button>
+            </div>
+            <span id="active-script" class="active-script-path"></span>
+          </div>
+          <div id="terminal-stack" class="terminal-stack">
+            <p class="terminal-placeholder" id="terminal-placeholder">
+              Select a script to open its terminal
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="view-panel" id="view-task-manager" role="tabpanel" aria-labelledby="tab-task-manager" data-view="task-manager" hidden>
+      <iframe
+        id="task-manager-frame"
+        class="embed-frame"
+        title="Task Manager"
+        referrerpolicy="no-referrer-when-downgrade"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-downloads"
+      ></iframe>
+      <p class="placeholder-panel" id="task-manager-missing" hidden>
+        Set <code>TASK_MANAGER_BASE_URL</code> and <code>TASK_MANAGER_SLUG</code> in <code>.env.local</code> / <code>.env.prod</code>.
+      </p>
+      <p class="embed-status" id="task-manager-status" hidden></p>
+    </div>
+
+    <div class="view-panel" id="view-marketing" role="tabpanel" aria-labelledby="tab-marketing" data-view="marketing" hidden>
+      <div class="placeholder-panel">
+        <h2>Marketing</h2>
+        <p>Coming soon — marketing tools from this view.</p>
       </div>
-      <div id="terminal-stack" class="terminal-stack">
-        <p class="terminal-placeholder" id="terminal-placeholder">
-          Select a script to open its terminal
-        </p>
-      </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js"></script>
-  <script src="/static/app.js"></script>
+  <script src="/static/app.js?v=tm-embed-2"></script>
 </body>
 </html>

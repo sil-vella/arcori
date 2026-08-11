@@ -1,10 +1,10 @@
 # Match Hot State (Flutter ↔ Dart)
 
-**Status:** Stage 2 Dart match module + online matchmaking for quickStart/specialEvent  
+**Status:** Completed for room SSOT — quickStart/specialEvent promote here; invite next  
 **Created:** 2026-08-05  
 **Last Updated:** 2026-08-09
 
-Related: [match-setting-core-flow.md](match-setting-core-flow.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [practice-offline-routing.md](practice-offline-routing.md) · [practice-match-v1.md](practice-match-v1.md) · [core-match-loop.md](core-match-loop.md) · [catalog-hot-reload.md](catalog-hot-reload.md) · [EXAMPLE_MODULE.md](../03_Base/EXAMPLE_MODULE.md) · [DART_STATE_SYSTEM.md](../03_Base/DART_STATE_SYSTEM.md) · [Flutter STATE_SYSTEM.md](../03_Base/Flutter/STATE_SYSTEM.md) · [ERROR_SYSTEM.md](../03_Base/ERROR_SYSTEM.md) · [WS_SYSTEM.md](../03_Base/WS_SYSTEM.md) · [PYTHON_DART_BACKEND.md](../03_Base/PYTHON_DART_BACKEND.md)
+Related: [match-setting-core-flow.md](match-setting-core-flow.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [ws-invite-match.md](ws-invite-match.md) · [practice-offline-routing.md](practice-offline-routing.md) · [practice-match-v1.md](practice-match-v1.md) · [core-match-loop.md](core-match-loop.md) · [catalog-hot-reload.md](catalog-hot-reload.md) · [EXAMPLE_MODULE.md](../03_Base/EXAMPLE_MODULE.md) · [DART_STATE_SYSTEM.md](../03_Base/DART_STATE_SYSTEM.md) · [Flutter STATE_SYSTEM.md](../03_Base/Flutter/STATE_SYSTEM.md) · [ERROR_SYSTEM.md](../03_Base/ERROR_SYSTEM.md) · [WS_SYSTEM.md](../03_Base/WS_SYSTEM.md) · [PYTHON_DART_BACKEND.md](../03_Base/PYTHON_DART_BACKEND.md)
 
 **Charts:** [match-setting-flow](../02_FlowCharts/charts/match_flow/match-setting-flow.html) · [match-state-flow](../02_FlowCharts/charts/dart_backend/state/match-state-flow.html) · [backend-state-split](../02_FlowCharts/charts/base/backend-state-split.html)
 
@@ -13,7 +13,8 @@ Related: [match-setting-core-flow.md](match-setting-core-flow.md) · [ws-matchma
 Build a **module-owned hot match store** on Dart for **future online** matches, synced to Flutter over authuser WS. Dart remains gameplay SSOT for live online matches; FastAPI catalog remains definition SSOT; durable rewards stay out of scope.
 
 **Practice is Flutter-only** — see [practice-offline-routing.md](practice-offline-routing.md).  
-**quickStart / specialEvent** use Dart [matchmaking](ws-matchmaking-modes.md) then promote into this match room SSOT. **Invite** remains a Play stub.
+**quickStart / specialEvent** use Dart [matchmaking](ws-matchmaking-modes.md) then promote into this match room SSOT (**done**).  
+**Invite** — next: [ws-invite-match.md](ws-invite-match.md) (Play stub until then).
 
 ## Architecture rules (non-negotiable)
 
@@ -54,20 +55,26 @@ WS handlers may be async (`FutureOr`) so create can await freeze.
 
 Dart calls this through module-owned [`MatchCatalogClient`](../../app_codebase/dart_bkend_base_02/bin/modules/match/match_catalog_client.dart) (not a method on core `FastApiServiceClient` — keeps core free of match imports).
 
-## Player matching — stub
+## Player matching
 
-Practice stub only. Real matchmaking / invite / event fill = later.
+| Mode | Status |
+|------|--------|
+| Practice | Flutter-only local seats — [practice-offline-routing.md](practice-offline-routing.md) |
+| quickStart / specialEvent | Dart matchmaking → `startFromLobby` — [ws-matchmaking-modes.md](ws-matchmaking-modes.md) **done** |
+| Invite | Play stub → [ws-invite-match.md](ws-invite-match.md) **next** |
 
 ## Gaps (remaining)
 
 1. ~~`/service/catalog/*`~~ — **done** (`POST /service/catalog/designs`)
-2. **Flutter SharedPrefs catalog hydrate** — optional, separate
-3. **No mid-match catalog reload** — still forbidden
-4. **Arena content catalog** — `arenaId` string only
-5. **Piece physics on Arcori** — add to catalog when designed
-6. Real matchmaking; full slam UI; durable rewards
-7. **Flutter `error_policy` for `match/…`** — needed when online Play rewires to Dart WS; practice no longer uses that path
-8. **Dart live WS integration test** — store/service unit tests exist; no `match_*_ws_test` like `example_module_ws_test`
+2. ~~quickStart / specialEvent matchmaking~~ — **done** ([ws-matchmaking-modes.md](ws-matchmaking-modes.md))
+3. **Invite Friend Match** — [ws-invite-match.md](ws-invite-match.md)
+4. **Flutter SharedPrefs catalog hydrate** — optional, separate
+5. **No mid-match catalog reload** — still forbidden
+6. **Arena content catalog** — `arenaId` string only
+7. **Piece physics on Arcori** — add to catalog when designed
+8. Full slam UI; durable rewards / Match Summary
+9. **Flutter `error_policy` for `match/…` + `matchmaking/…`** — partial (OK modal for play gate/timeout)
+10. **Dart live WS integration test** — store/service unit tests exist; no `match_*_ws_test` like `example_module_ws_test`
 
 ## Implementation steps
 
@@ -94,7 +101,8 @@ Practice stub only. Real matchmaking / invite / event fill = later.
 - [x] Local practice apply path (`startLocalPractice` / `localSlam` / `localEnd`) — [practice-offline-routing.md](practice-offline-routing.md)
 - [x] Dart WS create/end/leave **removed from practice Play path** (module kept for online later)
 - [x] Tests: local practice + WS apply in `match_notifier_test.dart`
-- [ ] Map `match/…` WS failures through `ApiError` / `error_policy` when online path is wired
+- [x] Online Play path for quickStart/specialEvent (matchmaking → match surface)
+- [ ] Map remaining `match/…` / `matchmaking/…` WS failures through `ApiError` / `error_policy`
 
 ### D — Docs / charts ✅
 
@@ -113,15 +121,16 @@ Verified in codebase (2026-08-05):
 | Play wiring | Practice = Flutter local; Dart match unused for practice |
 | Charts | `match-setting-flow` + `match-state-flow` sources rebuilt |
 
-Stage 2 **Dart match module** is implemented for online later. Live practice is offline — [practice-offline-routing.md](practice-offline-routing.md). Matching, slam gameplay, and durable rewards remain out of scope.
+Stage 2 **Dart match module** is the online room SSOT. Practice is offline. quickStart/specialEvent matchmaking promotes into this store. Slam gameplay and durable rewards remain out of scope.
 
 ## Next steps
 
 1. ~~Practice Flutter-only routing~~ — [practice-offline-routing.md](practice-offline-routing.md)
-2. Weighted slam / AI turns / random first player (local practice)
-3. Optional: `error_policy` + Dart WS integration test for online path
-4. Real matchmaking / room create on Dart for non-practice
-5. Match UI polish + FastAPI finalize / Match Summary
+2. ~~quickStart / specialEvent matchmaking~~ — [ws-matchmaking-modes.md](ws-matchmaking-modes.md)
+3. **Invite Friend Match** — [ws-invite-match.md](ws-invite-match.md)
+4. Weighted slam / AI turns / random first player (local practice)
+5. Optional: fuller `error_policy` + Dart WS integration test
+6. Match UI polish + FastAPI finalize / Match Summary
 
 ## Files modified
 
