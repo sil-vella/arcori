@@ -14,6 +14,8 @@ Rotation:
 
 Media: latest 00renders/render_00*.mp4. Caption from post_data.json
 (defaults: all three platforms; title falls back to video folder name).
+Per-platform description under facebook/youtube/tiktok is appended to the
+shared description when non-empty.
 
 Usage (on rop01):
   # load product env first, or:
@@ -423,6 +425,17 @@ def _normalize_post(post: dict[str, Any], video_name: str) -> dict[str, Any]:
     }
 
 
+def _platform_description(base: str, platform: dict[str, Any]) -> str:
+    """Shared description + optional platform.description (newline-separated)."""
+    extra = str(platform.get("description") or "").strip()
+    base_s = (base or "").rstrip()
+    if not extra:
+        return base or ""
+    if not base_s:
+        return extra
+    return f"{base_s}\n{extra}"
+
+
 def _result_ok(result: dict[str, Any]) -> bool:
     return bool(result.get("ok"))
 
@@ -457,7 +470,7 @@ def _publish_all(
             schedule_at = str(fb.get("schedule_at") or "").strip() or None
         results["facebook"] = publish_facebook_post(
             title=title,
-            description=description,
+            description=_platform_description(description, fb),
             hashtags=hashtags,
             link=link,
             schedule_at=schedule_at,
@@ -469,7 +482,7 @@ def _publish_all(
         yt = post["youtube"]
         results["youtube"] = publish_youtube_video(
             title=title,
-            description=description,
+            description=_platform_description(description, yt),
             video_path=media_path,
             privacy=str(yt.get("privacy") or "private"),
             category_id=str(yt.get("category_id") or "").strip() or None,
@@ -482,7 +495,7 @@ def _publish_all(
         tt = post["tiktok"]
         results["tiktok"] = publish_tiktok_video(
             title=title,
-            description=description,
+            description=_platform_description(description, tt),
             hashtags=hashtags,
             video_path=media_path,
             privacy_level=str(tt.get("privacy_level") or "SELF_ONLY"),
