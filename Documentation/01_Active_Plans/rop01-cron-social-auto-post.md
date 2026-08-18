@@ -122,4 +122,4 @@ n/a — ops/marketing pipeline.
 
 ## Task Manager
 
-Label slug `arcori` — sync when board API auth works; until then track in this plan.
+Own Ops card **rop01 cron — social auto-post** (task `33`), not App Dev.

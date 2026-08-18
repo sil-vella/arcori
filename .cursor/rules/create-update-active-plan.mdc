@@ -69,7 +69,7 @@ Each plan should include:
    - If no plan exists → Create a new plan file
    - If plan exists → Review and update it
    - Add/update a row in [`00_MASTER_PLAN.md`](../../Documentation/01_Active_Plans/00_MASTER_PLAN.md) when a new plan is created or status/focus changes
-   - **Sync Task Manager**: ensure label exists; create a task for the plan; add checklist items for open steps ([details](#task-manager-sync))
+   - **Sync Task Manager**: ensure label exists; for **player-app** work add/check **checklist** lines on the existing **App Dev** task (do not create a new card per plan). For marketing/ops/dashboard/infra, reuse or create that workstream’s own task. See [details](#task-manager-sync).
 
 2. **During Implementation**: After each significant modification:
    - Update the "Current Progress" section
@@ -79,7 +79,7 @@ Each plan should include:
    - If a lasting architecture / game-logic decision was made → [update the case study](#case-study-updates)
    - **Sync Task Manager**: check off completed checklist items; add/update notes; add new checklist lines for new steps
 
-3. **On Completion**: Mark plan as completed; update master plan status; fold any final decisions into the case study if not already recorded; **check off remaining Task Manager items** for that plan’s task. Do **not** delete Task Manager tasks/items unless the user explicitly approves (see [Deletes](#deletes--always-ask-first))
+3. **On Completion**: Mark plan as completed; update master plan status; fold any final decisions into the case study if not already recorded; **check off remaining App Dev (or workstream) checklist items**. Do **not** delete Task Manager tasks/items unless the user explicitly approves (see [Deletes](#deletes--always-ask-first)). **Never touch the Ideas card** unless the user asks.
 
 ## Task Manager sync
 
@@ -89,7 +89,7 @@ Agents **must** create/update the Task Manager board for this repo when creating
 
 Read from project `.env.local` / `.env.prod` (or already-loaded `wfrun` env):
 
-- `TASK_MANAGER_BASE_URL` — HTTP origin only, e.g. `http://tm.reignofplay.com` (no trailing slash; no TLS on this host)
+- `TASK_MANAGER_BASE_URL` — origin only, no trailing slash. Production is `https://tm.reignofplay.com` (TLS on 443). HTTP still answers on 80; prefer the value already in `.env.local` / `.env.prod`.
 - `TASK_MANAGER_SLUG`
 - `TM_USERNAME` — Task Manager login user
 - `TM_PASSWORD` — Task Manager login password
@@ -105,7 +105,7 @@ Doc: [`task-manager.md`](../../Documentation/00_System_Wide/task-manager.md)
 
 ### Auth (required for all board API calls)
 
-Board JSON endpoints require `Authorization: Bearer <token>` (or `BOARD_API_KEY` on the server — agents use JWT login).
+Board JSON endpoints require `Authorization: Bearer <token>` (or `BOARD_API_KEY` via `X-Api-Key` / Bearer — agents use JWT login). Production stack is **nginx → Apache/mod_php** (not PHP-FPM). `fastcgi_param` on the nginx vhost does nothing. Apache must pass `Authorization` (`CGIPassAuth` / `SetEnvIf`); PHP also reads `apache_request_headers()` in `api_require_auth()`. If `label-get` is 401 while login is 200, the header is not reaching PHP — that is an Apache/TM-image issue, not a missing FastCGI param.
 
 1. Load `TM_USERNAME` / `TM_PASSWORD` from `.env.local` (never hardcode; never print passwords/tokens in plans or chat)
 2. `POST /api/login.php` with `{"username":"$TM_USERNAME","password":"$TM_PASSWORD"}`
@@ -117,20 +117,26 @@ Board JSON endpoints require `Authorization: Bearer <token>` (or `BOARD_API_KEY`
 
 ### Mapping
 
-| Active plan | Task Manager |
-|-------------|--------------|
-| Plan file / major workstream | One **task** (title ≈ plan title or short workstream name) |
+**Arcori board is project-wide**, not an app-only backlog. Player-app work shares **one** task named **App Dev**. Do not create a new board task for each app active plan.
+
+| Work | Task Manager |
+|------|--------------|
+| Player app (Flutter / Dart match / FastAPI game modules) | Single task **App Dev** — micro-builds as **checklist** items. Reuse forever. |
+| Marketing, dashboard, cron/ops, template install | Separate **task** per workstream (not App Dev) |
+| Ideas / unstructured notes | **Ideas** card — do not edit or delete unless the user asks |
 | Area / layer (optional) | **category** on the task (`category_id` / `category_name` from `label-get`) |
 | Implementation steps / TODOs | **checklist** items (`kind=checklist`) |
 | Decisions, blockers, context | **note** items (`kind=note`) |
 | Step completed | `POST /api/item-check.php` with `is_done: true` |
+
+This label’s categories include `Match`, `World`, `Player`, `Design`, `Ops`, `General`. App Dev uses **General**; marketing/cron/revenue/install use **Ops**. Do not invent Backend/Frontend if those names are absent.
 
 ### Categories
 
 - `GET /api/label-get.php` returns `categories` (and `label.categories`) plus per-task `category_id` / `category: { id, name } | null`
 - On `task-create`, pass one of: `category_id`, `category` (id, name, or `{id}`), `categories` (first entry), or `category_name` — first valid wins; invalid/foreign ids → `null`
 - On `task-update`, omit `category_id` to keep; set `null`/`""` to clear
-- Prefer an existing category from `label-get` that fits the work (e.g. Backend / Frontend); leave unassigned if none fit
+- Prefer an existing category from `label-get` that fits the work (on this label: Ops, General, Match, …); leave unassigned if none fit
 - Creating new categories is a UI concern unless an API exists; do not invent category deletes for cleanup
 
 ### Agent procedure
@@ -138,7 +144,7 @@ Board JSON endpoints require `Authorization: Bearer <token>` (or `BOARD_API_KEY`
 1. Authenticate ([Auth](#auth-required-for-all-board-api-calls)): login with `TM_USERNAME` / `TM_PASSWORD`, keep Bearer token for this sync
 2. `GET /api/label-get.php?slug=$TASK_MANAGER_SLUG` (with Bearer)
    - If `label_not_found` → `POST /api/label-create.php` with `{"text":"$TASK_MANAGER_SLUG"}` then GET again
-3. Note available **categories** from the response. Find an existing **task** whose title matches this plan/workstream; if none, `POST /api/task-create.php` with `label_id` + `title` and optional `category_id` / `category_name`
+3. Note available **categories**. For **player-app** plans: find the task titled **App Dev** (create it only if missing) and add/check **checklist** lines there — never a new task per app plan. For marketing/ops/dashboard/infra: find an existing task whose title matches that workstream; if none, `POST /api/task-create.php` with `label_id` + `title` and optional `category_id` / `category_name`. **Do not modify Ideas.**
 4. Reuse item ids from the GET payload:
    - New open steps → `item-add-checklist` (or `item-add` with `kind=checklist`)
    - Context/decisions → `item-add-note`
@@ -174,10 +180,10 @@ AUTH="Authorization: Bearer ${TOKEN}"
 
 curl -sS "${BASE}/api/label-get.php?slug=${TASK_MANAGER_SLUG}" -H "$AUTH"
 curl -sS -X POST "${BASE}/api/task-create.php" -H "Content-Type: application/json" -H "$AUTH" \
-  -d "{\"label_id\":LABEL_ID,\"title\":\"Plan title\",\"category_id\":CATEGORY_ID}"
-# or: \"category_name\":\"Backend\"
+  -d "{\"label_id\":LABEL_ID,\"title\":\"App Dev\",\"category_name\":\"General\"}"
+# Prefer adding checklists to App Dev, not creating a card per plan:
 curl -sS -X POST "${BASE}/api/item-add-checklist.php" -H "Content-Type: application/json" -H "$AUTH" \
-  -d "{\"task_id\":TASK_ID,\"text\":\"Step description\"}"
+  -d "{\"task_id\":APP_DEV_TASK_ID,\"text\":\"Invite / Friend Match WS\"}"
 curl -sS -X POST "${BASE}/api/item-check.php" -H "Content-Type: application/json" -H "$AUTH" \
   -d "{\"item_id\":ITEM_ID,\"is_done\":true}"
 ```
@@ -248,15 +254,16 @@ For each entry, keep the case study voice: **what**, **why (human)**, **why (tec
 [If a lasting decision was made: one line pointing at which case-study section was updated, or "n/a — no architecture/game-logic change"]
 
 ## Task Manager
-[optional: label slug + task id/title synced, or "synced" / "skipped — API unreachable"]
+[App Dev checklist line, or Ops card title + id — or "skipped — API unreachable"]
 ```
 
 ## Important Reminders
 
 - **Always update the plan** after making code changes
 - **Keep the plan current** — outdated plans are not useful
-- **Sync Task Manager** when the plan changes (create/update/check items as fit)
+- **Sync Task Manager** when the plan changes (App Dev checklists for app work; own card for ops/marketing)
 - **Never delete** Task Manager tasks/items/categories without asking the user first
+- **Never edit Ideas** unless the user asks
 - **Be specific** about what was changed and why
 - **Document decisions** that affect the implementation approach
 - **Update the case study** for architecture and game/app logic decisions + reasons; skip trivial detail

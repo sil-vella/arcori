@@ -10,7 +10,7 @@ Canonical product/code lives under `/Users/sil/Documents/Work/00Utilities/task_m
 
 | Env key | Role |
 |---------|------|
-| `TASK_MANAGER_BASE_URL` | HTTP origin only (no trailing slash), e.g. `http://tm.reignofplay.com`. **No TLS** on this host — do not use `https://`. |
+| `TASK_MANAGER_BASE_URL` | Origin only (no trailing slash). Production: `https://tm.reignofplay.com` (TLS on 443). HTTP on 80 still answers. |
 | `TASK_MANAGER_SLUG` | **URL slug** for this product’s label (must match DB `board_label.slug`) |
 | `TM_USERNAME` | Task Manager API / UI login username |
 | `TM_PASSWORD` | Task Manager API / UI login password |
@@ -34,7 +34,7 @@ Open the board in the browser via **wfrun → dashboard → Task Manager**.
 
 **Embed / framing:** The dashboard iframe loads Task Manager through a **same-origin proxy** at `/tm/...` (not the remote origin directly). Cross-site iframes cannot keep the PHP session cookie, which broke login with “Invalid form token” (CSRF). The proxy rewrites cookies/`Location`/root-absolute URLs so session + CSRF work on `http://127.0.0.1:8765/tm/...`.
 
-Remote origin remains `TASK_MANAGER_BASE_URL` (`http://tm.reignofplay.com`, **no TLS**). Nginx may still send `X-Frame-Options: SAMEORIGIN` on the origin; the proxy strips that for the iframe.
+Remote origin is `$TASK_MANAGER_BASE_URL` (prefer `https://tm.reignofplay.com`). Nginx may still send `X-Frame-Options: SAMEORIGIN` on the origin; the proxy strips that for the iframe.
 
 ---
 
@@ -42,18 +42,20 @@ Remote origin remains `TASK_MANAGER_BASE_URL` (`http://tm.reignofplay.com`, **no
 
 ```
 board_label (slug = TASK_MANAGER_SLUG)
-  ├── board_category (optional grouping per label: Backend, Frontend, …)
-  └── board_task (title = work package / plan section)
+  ├── board_category (optional grouping per label: Ops, General, Match, …)
+  └── board_task (title = workstream card — **not** one card per app plan)
         ├── category_id → board_category | null   (at most one category per task)
         └── board_task_item
               ├── kind=checklist  (done checkbox)
               └── kind=note       (free text; no checkbox)
 ```
 
-Mirror active-plan markdown roughly as:
+Mirror active-plan markdown as:
 
-- **Plan / major workstream** → one **task**
-- **Area / layer** (optional) → **category** on that task (reuse existing category names from `label-get`)
+- **Player-app work** → **one** task titled **App Dev**; each micro-build is a **checklist** line (see [00_MASTER_PLAN.md](../01_Active_Plans/00_MASTER_PLAN.md) Task Manager section). Do not create a card per app plan.
+- **Project-wide workstreams** (marketing, dashboard, cron, template install) → one **task** per workstream
+- **Ideas** → leave untouched unless the user asks
+- **Area / layer** (optional) → **category** on that task (reuse names from `label-get`: Match, World, Player, Design, Ops, General)
 - **Implementation steps** → **checklist** items on that task
 - **Decisions / blockers / context** → **note** items on that task
 
@@ -88,9 +90,13 @@ From the task_manager `web_dev` tree, debug Compose runs **MariaDB only** on hos
 - Volume: `task_manager_debug_db_data`
 - Env: repo `.env.local` (`MYSQL_*` / app DB settings)
 
-PHP for local debug typically runs on the host (not in that debug compose file). Production is served at `TASK_MANAGER_BASE_URL` (e.g. `http://tm.reignofplay.com`).
+PHP for local debug typically runs on the host (not in that debug compose file). Production is served at `$TASK_MANAGER_BASE_URL` (prefer `https://tm.reignofplay.com`).
 
-Agents usually talk to the **HTTP JSON API** on `$TASK_MANAGER_BASE_URL`, not the DB directly.
+**Production request path (tm.reignofplay.com):** nginx (80/443) → `127.0.0.1:8082` → **Apache/mod_php**. There is **no PHP-FPM** on that host. `fastcgi_param HTTP_AUTHORIZATION` on the nginx vhost does nothing.
+
+Apache historically stripped `Authorization` before PHP (`label-get` 401 while login 200). The TM image fix is `CGIPassAuth On` + `SetEnvIf Authorization` (`web_dev/docker/apache-pass-auth.conf`) and `api_require_auth()` also reading `apache_request_headers()`. JWT Bearer and `X-Api-Key` (`BOARD_API_KEY`) both work once that image is deployed.
+
+Agents usually talk to the **JSON API** on `$TASK_MANAGER_BASE_URL`, not the DB directly.
 
 ---
 
@@ -110,7 +116,7 @@ Body: { "username": "...", "password": "..." }
 # 200: { "ok": true, "token": "<jwt>", "expires_in": 86400, "username": "..." }
 ```
 
-Agents load `TM_USERNAME` / `TM_PASSWORD` from `.env.local`, call login, then pass `Authorization: Bearer $token` on label/task/item calls. On `401`, re-login once. Do not log passwords or tokens.
+Agents load `TM_USERNAME` / `TM_PASSWORD` from `.env.local`, call login, then pass `Authorization: Bearer $token` on label/task/item calls. On `401`, re-login once. If login works and board calls stay 401, Apache is not passing `Authorization` to PHP (see production path above) — do not “fix” that with nginx `fastcgi_param`. Do not log passwords or tokens.
 
 Optional server `BOARD_API_KEY` (Bearer or `X-Api-Key`) is an alternate auth path for automation services — product agents should use username/password → JWT.
 
@@ -225,20 +231,15 @@ curl -sS -X POST "${BASE}/api/label-create.php" \
   -H "Content-Type: application/json" -H "$AUTH" \
   -d "{\"text\":\"${SLUG}\"}"
 
-# Create a task with category (id from label-get.categories)
+# Create a workstream task (ops/marketing only — app work goes on App Dev)
 curl -sS -X POST "${BASE}/api/task-create.php" \
   -H "Content-Type: application/json" -H "$AUTH" \
-  -d '{"label_id":1,"title":"Dashboard main tabs","category_id":2}'
+  -d '{"label_id":1,"title":"Dashboard Revenue tab","category_name":"Ops"}'
 
-# Or by category name on that label
-curl -sS -X POST "${BASE}/api/task-create.php" \
-  -H "Content-Type: application/json" -H "$AUTH" \
-  -d '{"label_id":1,"title":"Dashboard main tabs","category_name":"Backend"}'
-
-# Checklist step
+# App Dev already exists: add a micro-build checklist, do not create another app card
 curl -sS -X POST "${BASE}/api/item-add-checklist.php" \
   -H "Content-Type: application/json" -H "$AUTH" \
-  -d '{"task_id":10,"text":"Wire Task Manager iframe"}'
+  -d '{"task_id":32,"text":"Invite / Friend Match WS"}'
 
 # Note / decision
 curl -sS -X POST "${BASE}/api/item-add-note.php" \
@@ -256,7 +257,7 @@ curl -sS -X POST "${BASE}/api/task-update.php" \
   -d '{"task_id":10,"title":"Dashboard main tabs","category_id":2}'
 ```
 
-Prefer **GET label-get** first; reuse existing task/item/category ids. Avoid duplicate titles for the same open workstream—update/check instead of creating parallel cards.
+Prefer **GET label-get** first; reuse existing task/item/category ids. For this product, reuse **App Dev** for app micro-builds — do not create parallel app cards. Never edit **Ideas** unless asked.
 
 **Deletes:** never call `task-delete` / `item-delete`, delete categories, or otherwise remove board data without explicit user permission for the specific item(s). See the active-plan rule’s “Deletes — always ask first.”
 

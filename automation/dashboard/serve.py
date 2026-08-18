@@ -38,10 +38,22 @@ from docs_discovery import (
 from script_discovery import build_command, discover_scripts, resolve_script
 
 SCRIPT_DIR = Path(__file__).resolve().parent
+REVENUE_DIR = SCRIPT_DIR.parent / "revenue"
 STATIC_DIR = SCRIPT_DIR / "static"
 MARKETING_DATA_DIR = SCRIPT_DIR / "data"
 MARKETING_MEDIA_DIR = MARKETING_DATA_DIR / "media"
 MARKETING_POSTS_FILE = MARKETING_DATA_DIR / "marketing_posts.json"
+REVENUE_LEDGER_FILE = MARKETING_DATA_DIR / "revenue_ledger.json"
+EXPENSE_TYPES = (
+    "ads",
+    "tools",
+    "hosting",
+    "contractors",
+    "apple",
+    "google",
+    "legal",
+    "other",
+)
 MARKETING_SCRIPTS_DIR = SCRIPT_DIR.parent / "marketing"
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8765
@@ -85,6 +97,735 @@ def _write_marketing_posts(posts: list[dict[str, object]]) -> None:
     path = _marketing_posts_path()
     payload = {"posts": posts}
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+REVENUE_SUBTABS = frozenset({"revenue", "expense", "downloads"})
+
+
+def _revenue_ledger_path() -> Path:
+    MARKETING_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    return REVENUE_LEDGER_FILE
+
+
+def _empty_revenue_ledger() -> dict[str, object]:
+    return {
+        "entries": {},
+        "download_entries": {},
+        "expenses": [],
+        "filters": {
+            "kind": "estimated",
+            "from": "",
+            "to": "",
+            "sources": ["admob", "play", "appstore"],
+        },
+        "download_filters": {
+            "from": "",
+            "to": "",
+            "sources": ["play", "appstore"],
+        },
+        "last_load": None,
+        "last_downloads_load": None,
+        "active_subtab": "revenue",
+    }
+
+
+def _read_revenue_ledger() -> dict[str, object]:
+    path = _revenue_ledger_path()
+    empty = _empty_revenue_ledger()
+    if not path.is_file():
+        return empty
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return empty
+    if not isinstance(raw, dict):
+        return empty
+    entries = raw.get("entries")
+    download_entries = raw.get("download_entries")
+    expenses = raw.get("expenses")
+    filters = raw.get("filters")
+    download_filters = raw.get("download_filters")
+    last_load = raw.get("last_load")
+    last_downloads_load = raw.get("last_downloads_load")
+    active_subtab = raw.get("active_subtab")
+    if not isinstance(entries, dict):
+        entries = {}
+    if not isinstance(download_entries, dict):
+        download_entries = {}
+    if not isinstance(expenses, list):
+        expenses = []
+    if not isinstance(filters, dict):
+        filters = empty["filters"]
+    if not isinstance(download_filters, dict):
+        download_filters = empty["download_filters"]
+    if last_load is not None and not isinstance(last_load, dict):
+        last_load = None
+    if last_downloads_load is not None and not isinstance(last_downloads_load, dict):
+        last_downloads_load = None
+    if active_subtab not in REVENUE_SUBTABS:
+        active_subtab = "revenue"
+
+    # One-time backfill: promote cached last Downloads table into tracked entries
+    if not download_entries and isinstance(last_downloads_load, dict):
+        rows = last_downloads_load.get("rows")
+        if isinstance(rows, list) and rows:
+            for row in rows:
+                if not isinstance(row, dict):
+                    continue
+                day = str(row.get("date") or "").strip()
+                source = str(row.get("source") or "").strip().lower()
+                kind = str(row.get("kind") or "downloads").strip().lower() or "downloads"
+                app_id = str(row.get("app_id") or "").strip()
+                if not day or not source:
+                    continue
+                try:
+                    units = float(row.get("units") or 0)
+                except (TypeError, ValueError):
+                    units = 0.0
+                key = f"{day}|{source}|{kind}|{app_id}"
+                download_entries[key] = {
+                    "date": day,
+                    "source": source,
+                    "kind": kind,
+                    "units": units,
+                    "app_id": app_id,
+                    "label": row.get("label"),
+                    "updated_at": str(last_downloads_load.get("loaded_at") or ""),
+                }
+
+    return {
+        "entries": {
+            str(k): v for k, v in entries.items() if isinstance(v, dict)
+        },
+        "download_entries": {
+            str(k): v for k, v in download_entries.items() if isinstance(v, dict)
+        },
+        "expenses": [e for e in expenses if isinstance(e, dict)],
+        "filters": filters,
+        "download_filters": download_filters,
+        "last_load": last_load,
+        "last_downloads_load": last_downloads_load,
+        "active_subtab": active_subtab,
+    }
+
+
+def _write_revenue_ledger(ledger: dict[str, object]) -> None:
+    path = _revenue_ledger_path()
+    empty = _empty_revenue_ledger()
+    payload = {
+        "entries": ledger.get("entries") if isinstance(ledger.get("entries"), dict) else {},
+        "download_entries": ledger.get("download_entries")
+        if isinstance(ledger.get("download_entries"), dict)
+        else {},
+        "expenses": ledger.get("expenses") if isinstance(ledger.get("expenses"), list) else [],
+        "filters": ledger.get("filters") if isinstance(ledger.get("filters"), dict) else empty["filters"],
+        "download_filters": ledger.get("download_filters")
+        if isinstance(ledger.get("download_filters"), dict)
+        else empty["download_filters"],
+        "last_load": ledger.get("last_load") if isinstance(ledger.get("last_load"), dict) else None,
+        "last_downloads_load": ledger.get("last_downloads_load")
+        if isinstance(ledger.get("last_downloads_load"), dict)
+        else None,
+        "active_subtab": ledger.get("active_subtab")
+        if ledger.get("active_subtab") in REVENUE_SUBTABS
+        else "revenue",
+    }
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def _sum_amounts_by_currency(
+    entries: dict[str, object],
+    *,
+    kind: str = "estimated",
+    month_prefix: str | None = None,
+) -> dict[str, float]:
+    totals: dict[str, float] = {}
+    for entry_raw in entries.values():
+        if not isinstance(entry_raw, dict):
+            continue
+        entry = entry_raw
+        if str(entry.get("kind") or "estimated") != kind:
+            continue
+        day = str(entry.get("date") or "")
+        if month_prefix and not day.startswith(month_prefix):
+            continue
+        try:
+            amount = float(entry.get("amount") or 0)
+        except (TypeError, ValueError):
+            amount = 0.0
+        cur = str(entry.get("currency") or "USD").upper() or "USD"
+        totals[cur] = totals.get(cur, 0.0) + amount
+    return {k: round(v, 6) for k, v in sorted(totals.items()) if abs(v) > 1e-12}
+
+
+def _sum_expenses_by_currency(
+    expenses: list[object],
+    *,
+    month_prefix: str | None = None,
+) -> dict[str, float]:
+    totals: dict[str, float] = {}
+    for raw in expenses:
+        if not isinstance(raw, dict):
+            continue
+        day = str(raw.get("date") or "").strip()
+        if month_prefix and not day.startswith(month_prefix):
+            continue
+        try:
+            amount = float(raw.get("amount") or 0)
+        except (TypeError, ValueError):
+            amount = 0.0
+        cur = str(raw.get("currency") or "USD").upper() or "USD"
+        totals[cur] = totals.get(cur, 0.0) + amount
+    return {k: round(v, 6) for k, v in sorted(totals.items()) if abs(v) > 1e-12}
+
+
+def _profit_by_currency(
+    revenue: dict[str, float],
+    expenses: dict[str, float],
+) -> dict[str, float]:
+    """Profit = revenue − expenses per currency (no FX conversion)."""
+    currencies = sorted(set(revenue) | set(expenses))
+    out: dict[str, float] = {}
+    for cur in currencies:
+        out[cur] = round(float(revenue.get(cur) or 0) - float(expenses.get(cur) or 0), 6)
+    return out
+
+
+def _tracked_date_range(entries: dict[str, object], *, kind: str = "estimated") -> tuple[str, str]:
+    days: list[str] = []
+    for entry_raw in entries.values():
+        if not isinstance(entry_raw, dict):
+            continue
+        if str(entry_raw.get("kind") or "estimated") != kind:
+            continue
+        day = str(entry_raw.get("date") or "").strip()
+        if day:
+            days.append(day)
+    if not days:
+        return "", ""
+    return min(days), max(days)
+
+
+def _sum_units_by_source(
+    entries: dict[str, object],
+    *,
+    month_prefix: str | None = None,
+) -> dict[str, float]:
+    totals: dict[str, float] = {}
+    for entry_raw in entries.values():
+        if not isinstance(entry_raw, dict):
+            continue
+        day = str(entry_raw.get("date") or "")
+        if month_prefix and not day.startswith(month_prefix):
+            continue
+        try:
+            units = float(entry_raw.get("units") or 0)
+        except (TypeError, ValueError):
+            units = 0.0
+        src = str(entry_raw.get("source") or "unknown").strip().lower() or "unknown"
+        totals[src] = totals.get(src, 0.0) + units
+    return {k: round(v, 3) for k, v in sorted(totals.items()) if abs(v) > 1e-12}
+
+
+def _downloads_snapshot_from_ledger(ledger: dict[str, object]) -> dict[str, object]:
+    raw = ledger.get("download_entries")
+    entries: dict[str, object] = raw if isinstance(raw, dict) else {}
+    month_prefix = time.strftime("%Y-%m")
+    tracked_from, tracked_to = _tracked_date_range(entries, kind="downloads")
+    all_time = _sum_units_by_source(entries)
+    month = _sum_units_by_source(entries, month_prefix=month_prefix)
+    total_all = round(sum(all_time.values()), 3)
+    total_month = round(sum(month.values()), 3)
+    return {
+        "all_time": all_time,
+        "all_time_total": total_all,
+        "current_month": month,
+        "current_month_total": total_month,
+        "current_month_label": month_prefix,
+        "tracked_from": tracked_from,
+        "tracked_to": tracked_to,
+        "note": (
+            "All-time downloads = sum of days stored after Downloads Refresh "
+            "(not a store lifetime API). Widen From and Refresh to grow it."
+        ),
+        "updated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+    }
+
+
+def _revenue_snapshot_from_ledger(ledger: dict[str, object]) -> dict[str, object]:
+    entries_raw = ledger.get("entries")
+    entries: dict[str, object] = entries_raw if isinstance(entries_raw, dict) else {}
+    month_prefix = time.strftime("%Y-%m")
+    expenses = ledger.get("expenses") if isinstance(ledger.get("expenses"), list) else []
+    tracked_from, tracked_to = _tracked_date_range(entries, kind="estimated")
+    all_time_rev = _sum_amounts_by_currency(entries, kind="estimated")
+    month_rev = _sum_amounts_by_currency(
+        entries, kind="estimated", month_prefix=month_prefix
+    )
+    all_time_exp = _sum_expenses_by_currency(expenses)
+    month_exp = _sum_expenses_by_currency(expenses, month_prefix=month_prefix)
+    return {
+        "all_time": all_time_rev,
+        "current_month": month_rev,
+        "expenses_all_time": all_time_exp,
+        "expenses_current_month": month_exp,
+        "profit_all_time": _profit_by_currency(all_time_rev, all_time_exp),
+        "profit_current_month": _profit_by_currency(month_rev, month_exp),
+        "current_month_label": month_prefix,
+        "tracked_from": tracked_from,
+        "tracked_to": tracked_to,
+        "note": (
+            "All-time is the sum of days stored in the local ledger after Refresh "
+            "(not a separate lifetime store API). Widen From and Refresh to grow it. "
+            "Profit = tracked revenue − expenses (same currency only; no FX). "
+            "Expenses persist in revenue_ledger.json."
+        ),
+        "expense_count": len(expenses),
+        "updated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+    }
+
+
+def _tab_state_from_ledger(ledger: dict[str, object]) -> dict[str, object]:
+    expenses = ledger.get("expenses") if isinstance(ledger.get("expenses"), list) else []
+    expenses_sorted = sorted(
+        expenses,
+        key=lambda e: str((e or {}).get("created_at") or (e or {}).get("date") or ""),
+        reverse=True,
+    )
+    return {
+        "snapshot": _revenue_snapshot_from_ledger(ledger),
+        "filters": ledger.get("filters")
+        if isinstance(ledger.get("filters"), dict)
+        else _empty_revenue_ledger()["filters"],
+        "download_filters": ledger.get("download_filters")
+        if isinstance(ledger.get("download_filters"), dict)
+        else _empty_revenue_ledger()["download_filters"],
+        "last_load": ledger.get("last_load")
+        if isinstance(ledger.get("last_load"), dict)
+        else None,
+        "last_downloads_load": ledger.get("last_downloads_load")
+        if isinstance(ledger.get("last_downloads_load"), dict)
+        else None,
+        "downloads_snapshot": _downloads_snapshot_from_ledger(ledger),
+        "expenses": expenses_sorted,
+        "active_subtab": ledger.get("active_subtab")
+        if ledger.get("active_subtab") in REVENUE_SUBTABS
+        else "revenue",
+    }
+
+
+def _persist_revenue_series(
+    rows: list[dict[str, object]],
+    *,
+    series_payload: dict[str, object],
+    filters: dict[str, object],
+) -> dict[str, object]:
+    """Merge day entries, save full last table load + filters, return tab snapshot.
+
+    Keys include app_id so multi-app sources (e.g. AdMob iOS + Android) do not
+    overwrite each other. For each (date, source, kind) present in ``rows``,
+    existing ledger rows for that tuple are replaced so old 4-part keys are dropped.
+    """
+    ledger = _read_revenue_ledger()
+    entries = ledger.get("entries")
+    if not isinstance(entries, dict):
+        entries = {}
+    now = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+
+    replace_keys: set[tuple[str, str, str]] = set()
+    normalized: list[dict[str, object]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        day = str(row.get("date") or "").strip()
+        source = str(row.get("source") or "").strip().lower()
+        currency = str(row.get("currency") or "USD").strip().upper() or "USD"
+        kind = str(row.get("kind") or "estimated").strip().lower() or "estimated"
+        app_id = str(row.get("app_id") or "").strip()
+        if not day or not source:
+            continue
+        try:
+            amount = float(row.get("amount") or 0)
+        except (TypeError, ValueError):
+            amount = 0.0
+        replace_keys.add((day, source, kind))
+        normalized.append(
+            {
+                "date": day,
+                "source": source,
+                "currency": currency,
+                "kind": kind,
+                "app_id": app_id,
+                "amount": amount,
+                "units": row.get("units"),
+                "label": row.get("label"),
+            }
+        )
+
+    if replace_keys:
+        entries = {
+            key: entry
+            for key, entry in entries.items()
+            if not (
+                isinstance(entry, dict)
+                and (
+                    str(entry.get("date") or "").strip(),
+                    str(entry.get("source") or "").strip().lower(),
+                    str(entry.get("kind") or "estimated").strip().lower() or "estimated",
+                )
+                in replace_keys
+            )
+        }
+
+    for row in normalized:
+        day = str(row["date"])
+        source = str(row["source"])
+        currency = str(row["currency"])
+        kind = str(row["kind"])
+        app_id = str(row["app_id"])
+        key = f"{day}|{source}|{currency}|{kind}|{app_id}"
+        entries[key] = {
+            "date": day,
+            "source": source,
+            "currency": currency,
+            "kind": kind,
+            "amount": row["amount"],
+            "units": row.get("units"),
+            "app_id": app_id,
+            "label": row.get("label"),
+            "updated_at": now,
+        }
+    ledger["entries"] = entries
+    ledger["filters"] = {
+        "kind": str(filters.get("kind") or "estimated"),
+        "from": str(filters.get("from") or ""),
+        "to": str(filters.get("to") or ""),
+        "sources": list(filters.get("sources") or []),
+    }
+    # Persist the visible tab payload (table + summary + errors)
+    ledger["last_load"] = {
+        "ok": bool(series_payload.get("ok")),
+        "kind": series_payload.get("kind"),
+        "from": series_payload.get("from"),
+        "to": series_payload.get("to"),
+        "sources": series_payload.get("sources"),
+        "rows": series_payload.get("rows") if isinstance(series_payload.get("rows"), list) else [],
+        "summary": series_payload.get("summary")
+        if isinstance(series_payload.get("summary"), dict)
+        else {},
+        "errors": series_payload.get("errors")
+        if isinstance(series_payload.get("errors"), dict)
+        else {},
+        "warnings": series_payload.get("warnings")
+        if isinstance(series_payload.get("warnings"), list)
+        else [],
+        "loaded_at": now,
+    }
+    _write_revenue_ledger(ledger)
+    return _revenue_snapshot_from_ledger(ledger)
+
+
+def _persist_downloads_series(
+    *,
+    series_payload: dict[str, object],
+    filters: dict[str, object],
+) -> dict[str, object]:
+    """Merge download day entries + cache last table load (separate from money entries)."""
+    ledger = _read_revenue_ledger()
+    entries = ledger.get("download_entries")
+    if not isinstance(entries, dict):
+        entries = {}
+    now = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+    rows = (
+        series_payload.get("rows")
+        if isinstance(series_payload.get("rows"), list)
+        else []
+    )
+
+    replace_keys: set[tuple[str, str, str]] = set()
+    normalized: list[dict[str, object]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        day = str(row.get("date") or "").strip()
+        source = str(row.get("source") or "").strip().lower()
+        kind = str(row.get("kind") or "downloads").strip().lower() or "downloads"
+        app_id = str(row.get("app_id") or "").strip()
+        if not day or not source:
+            continue
+        try:
+            units = float(row.get("units") or 0)
+        except (TypeError, ValueError):
+            units = 0.0
+        replace_keys.add((day, source, kind))
+        normalized.append(
+            {
+                "date": day,
+                "source": source,
+                "kind": kind,
+                "app_id": app_id,
+                "units": units,
+                "label": row.get("label"),
+            }
+        )
+
+    if replace_keys:
+        entries = {
+            key: entry
+            for key, entry in entries.items()
+            if not (
+                isinstance(entry, dict)
+                and (
+                    str(entry.get("date") or "").strip(),
+                    str(entry.get("source") or "").strip().lower(),
+                    str(entry.get("kind") or "downloads").strip().lower() or "downloads",
+                )
+                in replace_keys
+            )
+        }
+
+    for row in normalized:
+        day = str(row["date"])
+        source = str(row["source"])
+        kind = str(row["kind"])
+        app_id = str(row["app_id"])
+        key = f"{day}|{source}|{kind}|{app_id}"
+        entries[key] = {
+            "date": day,
+            "source": source,
+            "kind": kind,
+            "units": row["units"],
+            "app_id": app_id,
+            "label": row.get("label"),
+            "updated_at": now,
+        }
+    ledger["download_entries"] = entries
+    ledger["download_filters"] = {
+        "from": str(filters.get("from") or ""),
+        "to": str(filters.get("to") or ""),
+        "sources": list(filters.get("sources") or []),
+    }
+    ledger["last_downloads_load"] = {
+        "ok": bool(series_payload.get("ok")),
+        "kind": "downloads",
+        "from": series_payload.get("from"),
+        "to": series_payload.get("to"),
+        "sources": series_payload.get("sources"),
+        "rows": rows,
+        "summary": series_payload.get("summary")
+        if isinstance(series_payload.get("summary"), dict)
+        else {},
+        "errors": series_payload.get("errors")
+        if isinstance(series_payload.get("errors"), dict)
+        else {},
+        "warnings": series_payload.get("warnings")
+        if isinstance(series_payload.get("warnings"), list)
+        else [],
+        "loaded_at": now,
+    }
+    _write_revenue_ledger(ledger)
+    return _tab_state_from_ledger(ledger)
+
+
+def _merge_revenue_rows_into_ledger(rows: list[dict[str, object]]) -> dict[str, object]:
+    """Backward-compatible wrapper — prefers _persist_revenue_series."""
+    return _persist_revenue_series(
+        rows,
+        series_payload={"ok": True, "rows": rows, "summary": {}, "errors": {}, "warnings": []},
+        filters={"kind": "estimated", "from": "", "to": "", "sources": []},
+    )
+
+
+async def handle_revenue_snapshot(_request: web.Request) -> web.Response:
+    """Full persisted Revenue tab (KPIs, filters, last table, expenses)."""
+    ledger = await asyncio.to_thread(_read_revenue_ledger)
+    state = _tab_state_from_ledger(ledger)
+    return web.json_response({"ok": True, **state})
+
+
+async def handle_revenue_tab_ui(request: web.Request) -> web.Response:
+    """Persist subtab / filter UI without a live source fetch."""
+    try:
+        body = await request.json()
+    except Exception:  # noqa: BLE001
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "invalid_json", "message": "Expected JSON body"},
+            },
+            status=400,
+        )
+    if not isinstance(body, dict):
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "invalid_body", "message": "Expected object"},
+            },
+            status=400,
+        )
+
+    def _save() -> dict[str, object]:
+        ledger = _read_revenue_ledger()
+        sub = str(body.get("active_subtab") or "").strip()
+        if sub in REVENUE_SUBTABS:
+            ledger["active_subtab"] = sub
+        filters = body.get("filters")
+        if isinstance(filters, dict):
+            prev = ledger.get("filters") if isinstance(ledger.get("filters"), dict) else {}
+            sources = filters.get("sources")
+            ledger["filters"] = {
+                "kind": str(filters.get("kind") or prev.get("kind") or "estimated"),
+                "from": str(filters.get("from") or prev.get("from") or ""),
+                "to": str(filters.get("to") or prev.get("to") or ""),
+                "sources": list(sources)
+                if isinstance(sources, list)
+                else list(prev.get("sources") or ["admob", "play", "appstore"]),
+            }
+        download_filters = body.get("download_filters")
+        if isinstance(download_filters, dict):
+            prev_d = (
+                ledger.get("download_filters")
+                if isinstance(ledger.get("download_filters"), dict)
+                else {}
+            )
+            sources_d = download_filters.get("sources")
+            ledger["download_filters"] = {
+                "from": str(download_filters.get("from") or prev_d.get("from") or ""),
+                "to": str(download_filters.get("to") or prev_d.get("to") or ""),
+                "sources": list(sources_d)
+                if isinstance(sources_d, list)
+                else list(prev_d.get("sources") or ["play", "appstore"]),
+            }
+        _write_revenue_ledger(ledger)
+        return _tab_state_from_ledger(ledger)
+
+    state = await asyncio.to_thread(_save)
+    return web.json_response({"ok": True, **state})
+
+
+async def handle_expenses_get(_request: web.Request) -> web.Response:
+    ledger = await asyncio.to_thread(_read_revenue_ledger)
+    expenses = ledger.get("expenses") if isinstance(ledger.get("expenses"), list) else []
+    # Newest first
+    expenses_sorted = sorted(
+        expenses,
+        key=lambda e: str((e or {}).get("created_at") or (e or {}).get("date") or ""),
+        reverse=True,
+    )
+    return web.json_response({"ok": True, "expenses": expenses_sorted})
+
+
+async def handle_expenses_create(request: web.Request) -> web.Response:
+    try:
+        body = await request.json()
+    except Exception:  # noqa: BLE001
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "invalid_json", "message": "Expected JSON body"},
+            },
+            status=400,
+        )
+    if not isinstance(body, dict):
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "invalid_body", "message": "Expected object"},
+            },
+            status=400,
+        )
+
+    exp_type = str(body.get("type") or "").strip().lower()
+    if exp_type not in EXPENSE_TYPES:
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {
+                    "code": "invalid_type",
+                    "message": f"type must be one of: {', '.join(EXPENSE_TYPES)}",
+                },
+            },
+            status=400,
+        )
+    try:
+        amount = float(body.get("amount"))
+    except (TypeError, ValueError):
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "invalid_amount", "message": "amount must be a number"},
+            },
+            status=400,
+        )
+    if amount < 0:
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "invalid_amount", "message": "amount must be >= 0"},
+            },
+            status=400,
+        )
+    currency = str(body.get("currency") or "USD").strip().upper() or "USD"
+    description = str(body.get("description") or "").strip()
+    now = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+    expense_date = time.strftime("%Y-%m-%d")  # local date, set on save
+    expense = {
+        "id": str(uuid.uuid4()),
+        "type": exp_type,
+        "amount": amount,
+        "currency": currency,
+        "description": description,
+        "date": expense_date,
+        "created_at": now,
+    }
+
+    def _add() -> tuple[dict[str, object], dict[str, object]]:
+        ledger = _read_revenue_ledger()
+        expenses = ledger.get("expenses")
+        if not isinstance(expenses, list):
+            expenses = []
+        expenses.append(expense)
+        ledger["expenses"] = expenses
+        _write_revenue_ledger(ledger)
+        return expense, _revenue_snapshot_from_ledger(ledger)
+
+    saved, snap = await asyncio.to_thread(_add)
+    return web.json_response({"ok": True, "expense": saved, "snapshot": snap})
+
+
+async def handle_expenses_delete(request: web.Request) -> web.Response:
+    expense_id = request.match_info.get("expense_id", "").strip()
+    if not expense_id:
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "missing_id", "message": "Missing expense id"},
+            },
+            status=400,
+        )
+
+    def _delete() -> dict[str, object] | None:
+        ledger = _read_revenue_ledger()
+        expenses = ledger.get("expenses")
+        if not isinstance(expenses, list):
+            return None
+        next_list = [e for e in expenses if str((e or {}).get("id")) != expense_id]
+        if len(next_list) == len(expenses):
+            return None
+        ledger["expenses"] = next_list
+        _write_revenue_ledger(ledger)
+        return _revenue_snapshot_from_ledger(ledger)
+
+    snap = await asyncio.to_thread(_delete)
+    if snap is None:
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "not_found", "message": "Expense not found"},
+            },
+            status=404,
+        )
+    return web.json_response({"ok": True, "snapshot": snap})
 
 
 async def handle_marketing_posts_get(_request: web.Request) -> web.Response:
@@ -1218,6 +1959,142 @@ async def handle_ws_run(request: web.Request) -> web.WebSocketResponse:
     return ws
 
 
+
+async def handle_revenue_series(request: web.Request) -> web.Response:
+    """Estimated or settled revenue rows from AdMob / Play / App Store."""
+    if str(REVENUE_DIR) not in sys.path:
+        sys.path.insert(0, str(REVENUE_DIR))
+    try:
+        from fetch_revenue import collect_from_query
+    except ImportError as exc:
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {
+                    "code": "revenue_import",
+                    "message": f"Revenue helpers unavailable: {exc}",
+                },
+            },
+            status=500,
+        )
+
+    sources = (request.query.get("sources") or "").strip()
+    kind = (request.query.get("kind") or "estimated").strip()
+    from_s = (request.query.get("from") or "").strip()
+    to_s = (request.query.get("to") or "").strip()
+
+    def _run() -> dict:
+        return collect_from_query(
+            sources_csv=sources,
+            kind=kind,
+            from_s=from_s,
+            to_s=to_s,
+        )
+
+    try:
+        payload = await asyncio.to_thread(_run)
+    except Exception as exc:  # noqa: BLE001 — surface to UI
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "revenue_failed", "message": str(exc)},
+            },
+            status=500,
+        )
+    if payload.get("ok") and isinstance(payload.get("rows"), list):
+        try:
+            sources_list = [
+                p.strip() for p in sources.split(",") if p.strip()
+            ] or list(payload.get("sources") or [])
+
+            def _persist() -> dict[str, object]:
+                return _persist_revenue_series(
+                    list(payload["rows"]),
+                    series_payload=payload,
+                    filters={
+                        "kind": kind,
+                        "from": from_s or str(payload.get("from") or ""),
+                        "to": to_s or str(payload.get("to") or ""),
+                        "sources": sources_list,
+                    },
+                )
+
+            snap = await asyncio.to_thread(_persist)
+            payload["snapshot"] = snap
+        except Exception as exc:  # noqa: BLE001 — live rows still useful
+            payload["snapshot_error"] = str(exc)
+    return web.json_response(payload)
+
+
+async def handle_downloads_series(request: web.Request) -> web.Response:
+    """Play / App Store download (install) units for Revenue → Downloads."""
+    if str(REVENUE_DIR) not in sys.path:
+        sys.path.insert(0, str(REVENUE_DIR))
+    try:
+        from fetch_downloads import collect_downloads_from_query
+    except ImportError as exc:
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {
+                    "code": "downloads_import",
+                    "message": f"Downloads helpers unavailable: {exc}",
+                },
+            },
+            status=500,
+        )
+
+    sources = (request.query.get("sources") or "").strip()
+    from_s = (request.query.get("from") or "").strip()
+    to_s = (request.query.get("to") or "").strip()
+
+    def _run() -> dict:
+        return collect_downloads_from_query(
+            sources_csv=sources,
+            from_s=from_s,
+            to_s=to_s,
+        )
+
+    try:
+        payload = await asyncio.to_thread(_run)
+    except Exception as exc:  # noqa: BLE001 — surface to UI
+        return web.json_response(
+            {
+                "ok": False,
+                "error": {"code": "downloads_failed", "message": str(exc)},
+            },
+            status=500,
+        )
+    if payload.get("ok") and isinstance(payload.get("rows"), list):
+        try:
+            sources_list = [
+                p.strip() for p in sources.split(",") if p.strip()
+            ] or list(payload.get("sources") or [])
+
+            def _persist() -> dict[str, object]:
+                return _persist_downloads_series(
+                    series_payload=payload,
+                    filters={
+                        "from": from_s or str(payload.get("from") or ""),
+                        "to": to_s or str(payload.get("to") or ""),
+                        "sources": sources_list,
+                    },
+                )
+
+            state = await asyncio.to_thread(_persist)
+            payload["last_downloads_load"] = state.get("last_downloads_load")
+            payload["download_filters"] = state.get("download_filters")
+            payload["downloads_snapshot"] = state.get("downloads_snapshot")
+        except Exception as exc:  # noqa: BLE001 — live rows still useful
+            payload["persist_error"] = str(exc)
+    return web.json_response(payload)
+
+
+async def handle_revenue_summary(request: web.Request) -> web.Response:
+    """Same collector as series; client uses summary field (kept as dedicated route)."""
+    return await handle_revenue_series(request)
+
+
 def create_app(root: Path) -> web.Application:
     app = web.Application(client_max_size=MARKETING_CLIENT_MAX_SIZE)
     app["root"] = root
@@ -1269,6 +2146,14 @@ def create_app(root: Path) -> web.Application:
     app.router.add_route("*", TM_PROXY_PREFIX + "/{path:.*}", handle_tm_proxy)
     app.router.add_get("/ws/run", handle_ws_run)
     app.router.add_static("/static/", STATIC_DIR, show_index=False)
+    app.router.add_get("/api/revenue/summary", handle_revenue_summary)
+    app.router.add_get("/api/revenue/series", handle_revenue_series)
+    app.router.add_get("/api/downloads/series", handle_downloads_series)
+    app.router.add_get("/api/revenue/snapshot", handle_revenue_snapshot)
+    app.router.add_post("/api/revenue/tab", handle_revenue_tab_ui)
+    app.router.add_get("/api/expenses", handle_expenses_get)
+    app.router.add_post("/api/expenses", handle_expenses_create)
+    app.router.add_delete("/api/expenses/{expense_id}", handle_expenses_delete)
     return app
 
 

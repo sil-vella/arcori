@@ -2,7 +2,7 @@
 
 **Status:** Next — not started (Play stub today)  
 **Created:** 2026-08-09  
-**Last Updated:** 2026-08-09
+**Last Updated:** 2026-08-18
 
 Related: [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [match-hot-state.md](match-hot-state.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md)
 
@@ -52,3 +52,7 @@ Start with product decisions, then Dart invite module aligned with existing matc
 
 - GDD alias: Friend Match
 - Prior art: `matchmaking` queueKey / lobby timer patterns — invite should not collide with `quickStart||` queues
+
+## Task Manager
+
+Track as an open checklist on **App Dev** (task `32`).
