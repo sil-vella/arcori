@@ -21,10 +21,22 @@ from modules.presence.presence_app import register_presence_routes
 from modules.presence.presence_errors import register_presence_errors
 from modules.standings.standings_app import register_standings_routes
 from modules.standings.standings_errors import register_standings_errors
+from modules.contacts.contacts_app import register_contacts_routes
+from modules.contacts.contacts_errors import register_contacts_errors
 from modules.service.service_app import register_service_routes
 from modules.user.user_app import register_user_routes
 from modules.ws.demo_errors import register_demo_errors
 from modules.ws.demo_ws_app import register_demo_ws_channels
+from modules.friend_match_invite.friend_match_invite_app import (
+    register_friend_match_invite_routes,
+)
+from modules.friend_match_invite.friend_match_invite_errors import (
+    register_friend_match_invite_errors,
+)
+from modules.friend_match_invite.friend_match_invite_notifications import (
+    register_friend_match_invite_notification_handlers,
+    register_friend_match_invite_notification_subtypes,
+)
 
 
 def register_notification_reply_handlers() -> None:
@@ -38,7 +50,9 @@ def register_notification_reply_handlers() -> None:
 
     reset_notification_subtypes()
     register_builtin_notification_subtypes()
+    register_friend_match_invite_notification_subtypes()
     register_example_notification_handlers()
+    register_friend_match_invite_notification_handlers()
 
 
 def register_application_routes() -> None:
@@ -46,6 +60,8 @@ def register_application_routes() -> None:
     register_service_routes(application_routes, http_responses)
     register_example_module_routes(application_routes, http_responses)
     register_notification_routes(application_routes, http_responses)
+    register_friend_match_invite_routes(application_routes, http_responses)
+    register_contacts_routes(application_routes, http_responses)
     register_catalog_routes(application_routes, http_responses)
     register_players_routes(application_routes, http_responses)
     register_standings_routes(application_routes, http_responses)
@@ -61,6 +77,8 @@ def register_application_errors() -> None:
     register_demo_errors(module_error_registrar)
     register_notification_errors(module_error_registrar)
     register_catalog_errors(module_error_registrar)
+    register_friend_match_invite_errors(module_error_registrar)
+    register_contacts_errors(module_error_registrar)
     register_players_errors(module_error_registrar)
     register_standings_errors(module_error_registrar)
     register_avari_errors(module_error_registrar)

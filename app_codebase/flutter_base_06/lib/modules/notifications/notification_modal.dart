@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/modal/modal.dart';
+import '../../core/navigation/app_navigation.dart';
+import '../../core/navigation/app_paths.dart';
 import '../../core/notifications/response/response_config.dart';
 import '../../core/notifications/response/response_executor.dart';
 import '../../core/notifications/subtype/subtype_registry.dart';
@@ -12,6 +14,7 @@ import '../../core/theme/theme.dart';
 import 'notifications_api.dart';
 import 'notifications_notifier.dart';
 import 'notifications_state.dart';
+import '../play/play_notifier.dart';
 
 /// Shows one or more notifications in a single modal session.
 ///
@@ -283,21 +286,54 @@ Widget _replyActionButton({
     if (accessToken.isEmpty) {
       return;
     }
+    final optionKey = option.key.trim().toLowerCase();
     final result = await executeReply(
       ref: ref,
       api: api,
       accessToken: accessToken,
       message: message,
-      optionKey: option.key,
+      optionKey: optionKey,
       config: config,
       markRead: markRead,
     );
+
+    final isInviteAccept = message.source.trim() == 'friend_match_invite' &&
+        optionKey == 'accept';
+
     if (!result.success && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Could not submit your response')),
       );
       return;
     }
+
+    if (isInviteAccept) {
+      final inviteId = result.data?['inviteId']?.toString() ?? '';
+      if (inviteId.isEmpty) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Invite id missing')),
+          );
+          await onComplete();
+        }
+        return;
+      }
+
+      if (context.mounted) {
+        await onComplete();
+      }
+      if (!context.mounted) return;
+
+      Nav.push(context, AppPaths.play);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        final notifier = ref.read(matchFlowProvider.notifier);
+        notifier.startPlay();
+        unawaited(notifier.startInviteJoin(inviteId: inviteId));
+      });
+      return;
+    }
+
     if (context.mounted) {
       await onComplete();
     }

@@ -122,6 +122,29 @@ class MatchmakingStore {
     return next;
   }
 
+  /// Cancels an invite lobby instead of promoting with AI.
+  ///
+  /// Used for the "2 humans, no AI fill" contract.
+  LobbySnapshot cancelLobby(String lobbyId) {
+    final current = _lobbies[lobbyId];
+    if (current == null) {
+      throw StateError('lobby not found: $lobbyId');
+    }
+
+    _closeOpenIndex(current);
+    for (final m in current.members) {
+      _userLobby.remove(m.userId);
+    }
+
+    final next = current.copyWith(
+      phase: 'cancelled',
+      members: const [],
+      clearMatchId: true,
+    );
+    _lobbies[lobbyId] = next;
+    return next;
+  }
+
   void _closeOpenIndex(LobbySnapshot lobby) {
     final ids = _openByKey[lobby.queueKey];
     ids?.remove(lobby.lobbyId);

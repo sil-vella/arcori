@@ -23,7 +23,7 @@ final matchFlowProvider =
 /// Owns the Play → type select → setup → match → post-match pipeline.
 ///
 /// Practice is Flutter-only. quickStart/specialEvent use Dart matchmaking.
-/// Invite stays a room stub.
+/// Invite uses Dart matchmaking via a dedicated invite lobby.
 class MatchFlowNotifier extends Notifier<MatchFlowState> {
   int _runId = 0;
 
@@ -57,15 +57,24 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
   Future<void> selectType(
     MatchType type, {
     PracticeLoadout? practiceLoadout,
+    String? inviteId,
   }) async {
     if (state.phase != MatchFlowPhase.selectingType) return;
 
-    if (type == MatchType.quickStart || type == MatchType.specialEvent) {
+    if (type == MatchType.quickStart ||
+        type == MatchType.specialEvent ||
+        type == MatchType.invite) {
       final gateError = _onlinePlayGateError();
       if (gateError != null) {
         _abortWithMessage(gateError);
         return;
       }
+    }
+
+    if (type == MatchType.invite &&
+        (inviteId == null || inviteId.trim().isEmpty)) {
+      _abortWithMessage('Invite id missing. Please try again.');
+      return;
     }
 
     final runId = ++_runId;
@@ -89,6 +98,12 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
         type == MatchType.specialEvent) {
       await _runOnlineMatchmaking(type);
       if (!_isCurrentRun(runId, type)) return;
+    } else if (type == MatchType.invite) {
+      await _runInviteMatchmaking(
+        inviteId: inviteId!,
+        createIfMissing: true,
+      );
+      if (!_isCurrentRun(runId, type)) return;
     } else {
       await _runRoomCreateStub(type);
       if (!_isCurrentRun(runId, type)) return;
@@ -102,6 +117,50 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     if (LOGGING_SWITCH) {
       customlog('play: pipeline done → idle');
     }
+  }
+
+  /// Notification guest entrypoint: join an existing invite lobby.
+  ///
+  /// Expected: caller already invoked [startPlay], so UI is in
+  /// [MatchFlowPhase.selectingType]. If not, we still allow from idle.
+  Future<void> startInviteJoin({required String inviteId}) async {
+    final gateError = _onlinePlayGateError();
+    if (gateError != null) {
+      _abortWithMessage(gateError);
+      return;
+    }
+
+    if (!state.isIdle && state.phase != MatchFlowPhase.selectingType) {
+      return;
+    }
+
+    if (state.isIdle) {
+      startPlay();
+      if (state.phase != MatchFlowPhase.selectingType) return;
+    }
+
+    if (inviteId.trim().isEmpty) {
+      _abortWithMessage('Invite id missing. Please try again.');
+      return;
+    }
+
+    final runId = ++_runId;
+    state = MatchFlowState(
+      phase: MatchFlowPhase.typeSetup,
+      selectedType: MatchType.invite,
+    );
+
+    await _runInviteMatchmaking(
+      inviteId: inviteId.trim(),
+      createIfMissing: false,
+    );
+    if (!_isCurrentRun(runId, MatchType.invite)) return;
+
+    _setPhase(MatchFlowPhase.postMatch);
+    await _runPostMatch();
+    if (!_isCurrentRun(runId, MatchType.invite)) return;
+
+    state = const MatchFlowState();
   }
 
   /// Abort play pipeline; UI shows an OK modal from [errorMessage].
@@ -319,10 +378,151 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     return {'code': 'quickStart'};
   }
 
+  Map<String, dynamic> _inviteMatchTypePayload(String inviteId) {
+    return {'code': 'invite', 'subtype': inviteId};
+  }
+
+  /// Invite Friend Match: Dart matchmaking find → promote → match room.
+  ///
+  /// Contract:
+  /// - 2 humans total
+  /// - no AI fill
+  Future<void> _runInviteMatchmaking({
+    required String inviteId,
+    required bool createIfMissing,
+  }) async {
+    final gateError = _onlinePlayGateError();
+    if (gateError != null) {
+      _abortWithMessage(gateError);
+      return;
+    }
+
+    final url = WsConfig.dartAuthuserUrl;
+    final token = ref.read(authProvider).accessToken!;
+
+    final manager = ref.read(wsConnectionManagerProvider.notifier);
+    ref.read(matchSnapshotProvider.notifier).clear();
+    ref.read(lobbySnapshotProvider.notifier).clear();
+    // Ensure match + lobby listeners are mounted.
+    ref.read(matchSnapshotProvider);
+    ref.read(lobbySnapshotProvider);
+
+    final already =
+        ref.read(wsConnectionManagerProvider).connections[_dartWsId] ?? false;
+    if (!already) {
+      await manager.connect(_dartWsId, url: url, accessToken: token);
+    }
+
+    final matchType = _inviteMatchTypePayload(inviteId);
+    if (LOGGING_SWITCH) {
+      customlog(
+        'play: invite matchmaking find matchType=$matchType '
+        'createIfMissing=$createIfMissing',
+      );
+    }
+
+    await manager.send(
+      _dartWsId,
+      type: 'event',
+      channel: 'matchmaking/find',
+      payload: {
+        'matchType': matchType,
+        'createIfMissing': createIfMissing,
+      },
+    );
+
+    final promoted = await _waitForLobbyPromoted(
+      timeout: const Duration(seconds: 25),
+    );
+    if (promoted == null) {
+      if (LOGGING_SWITCH) {
+        customlog('play: invite matchmaking timed out waiting for promote');
+      }
+      if (createIfMissing) {
+        // Best-effort cancel: the lobby may already be gone.
+        try {
+          await manager.send(
+            _dartWsId,
+            type: 'event',
+            channel: 'matchmaking/cancel',
+            payload: const {},
+          );
+        } catch (_) {}
+      }
+      _abortWithMessage(
+        createIfMissing
+            ? 'Invite timed out. Please try again.'
+            : 'Invite not found or expired.',
+      );
+      return;
+    }
+
+    _setPhase(MatchFlowPhase.inMatch);
+
+    final matchId = await _waitForMatchField(
+      (s) => s.matchId != null && s.matchId!.isNotEmpty ? s.matchId : null,
+      label: 'matchId',
+      timeout: const Duration(seconds: 15),
+    );
+    if (matchId == null) {
+      if (LOGGING_SWITCH) {
+        customlog('play: invite matchmaking missing match snapshot');
+      }
+      _abortWithMessage('Match failed to start. Please try again.');
+      return;
+    }
+
+    if (autoEndOnlineMatch) {
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      final snap = ref.read(matchSnapshotProvider);
+      final userId = ref.read(authProvider).userId?.trim();
+      if (!snap.isEnded &&
+          userId != null &&
+          userId.isNotEmpty &&
+          snap.callerUserId == userId) {
+        try {
+          await manager.send(
+            _dartWsId,
+            type: 'event',
+            channel: 'match/end',
+            payload: {'matchId': matchId},
+          );
+        } catch (e) {
+          if (LOGGING_SWITCH) {
+            customlog('play: invite auto-end error: $e');
+          }
+        }
+      }
+    }
+
+    await _waitForMatchField(
+      (s) => s.isEnded ? true : null,
+      label: 'ended',
+      timeout: const Duration(minutes: 30),
+    );
+
+    try {
+      await manager.send(
+        _dartWsId,
+        type: 'event',
+        channel: 'match/leave',
+        payload: {'matchId': matchId},
+      );
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('play: invite leave error: $e');
+      }
+    }
+
+    ref.read(matchSnapshotProvider.notifier).clear();
+    ref.read(lobbySnapshotProvider.notifier).clear();
+  }
+
   Future<bool?> _waitForLobbyPromoted({required Duration timeout}) async {
     final deadline = DateTime.now().add(timeout);
     while (DateTime.now().isBefore(deadline)) {
       final lobby = ref.read(lobbySnapshotProvider);
+      if (lobby.phase == 'cancelled') return null;
       if (lobby.isPromoted) return true;
       final match = ref.read(matchSnapshotProvider);
       if (match.matchId != null && match.matchId!.isNotEmpty) return true;
@@ -348,10 +548,10 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     return null;
   }
 
-  /// Invite — stub only (no WS).
+  /// Stub for future match types beyond practice/quickStart/specialEvent/invite.
   Future<void> _runRoomCreateStub(MatchType type) async {
     if (LOGGING_SWITCH) {
-      customlog('play: roomCreateStub type=${type.name} (invite stub, no WS)');
+      customlog('play: roomCreateStub type=${type.name} (no WS stub)');
     }
   }
 

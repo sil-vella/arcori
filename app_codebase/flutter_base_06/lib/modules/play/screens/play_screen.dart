@@ -11,6 +11,7 @@ import '../../matchmaking/widgets/matchmaking_lobby_modal.dart';
 import '../play_models.dart';
 import '../play_notifier.dart';
 import '../widgets/match_type_select_modal.dart';
+import '../widgets/invite_setup_modal.dart';
 import '../widgets/play_failure_modal.dart';
 import '../widgets/practice_loadout_modal.dart';
 
@@ -38,6 +39,17 @@ class PlayScreen extends ConsumerWidget {
       }
     }
 
+    if (type == MatchType.invite) {
+      final inviteId = await showInviteSetupModal(context: context, ref: ref);
+      if (!context.mounted) return;
+      if (inviteId == null || inviteId.trim().isEmpty) {
+        notifier.cancelSelection();
+        return;
+      }
+      await notifier.selectType(type, inviteId: inviteId);
+      return;
+    }
+
     await notifier.selectType(type, practiceLoadout: loadout);
   }
 
@@ -49,8 +61,9 @@ class PlayScreen extends ConsumerWidget {
     ref.listen(matchFlowProvider, (prev, next) {
       final enteredOnlineLobby = next.phase == MatchFlowPhase.typeSetup &&
           (next.selectedType == MatchType.quickStart ||
-              next.selectedType == MatchType.specialEvent) &&
-          prev?.phase == MatchFlowPhase.selectingType;
+              next.selectedType == MatchType.specialEvent ||
+              next.selectedType == MatchType.invite) &&
+          prev?.phase != MatchFlowPhase.typeSetup;
       if (enteredOnlineLobby && context.mounted) {
         unawaited(showMatchmakingLobbyModal(context, ref));
       }

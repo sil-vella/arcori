@@ -2,8 +2,10 @@
 library;
 
 import 'dart:async';
+import 'dart:convert';
 
 import '../../core/errors/app_error.dart';
+import '../../core/auth/auth_config.dart';
 import '../../core/http/fastapi_service_client.dart';
 import '../../core/state/state_registry.dart';
 import '../../utils/dev_logger.dart';
@@ -30,10 +32,12 @@ class MatchmakingService {
     this.targetSeats = defaultTargetSeats,
   })  : _store = store ?? matchmakingStore,
         _match = matchLifecycle ?? matchService,
-        _ai = aiClient ?? MatchmakingAiClient(fastApi: fastApi);
+        _fastApi = fastApi ?? FastApiServiceClient(),
+        _ai = aiClient ?? MatchmakingAiClient(fastApi: fastApi ?? FastApiServiceClient());
 
   final MatchmakingStore _store;
   final MatchLifecycleContract _match;
+  final FastApiServiceClient _fastApi;
   final MatchmakingAiClient _ai;
   final Duration fillWindow;
   final bool scheduleTimers;
@@ -51,6 +55,42 @@ class MatchmakingService {
     _store.reset();
   }
 
+  Future<Map<String, dynamic>?> _resolveInviteForAi(String inviteId) async {
+    final trimmed = inviteId.trim();
+    if (trimmed.isEmpty) return null;
+    final uri = Uri.parse(
+      '${_fastApi.baseUrl}/service/friend_match_invites/resolve',
+    );
+
+    try {
+      final response = await _fastApi.client
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Service-Key': serviceKey(),
+            },
+            body: jsonEncode({'inviteId': trimmed}),
+          )
+          .timeout(const Duration(seconds: 5));
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        return null;
+      }
+
+      final decoded = jsonDecode(response.body);
+      if (decoded is! Map) return null;
+      if (decoded['ok'] != true) return null;
+
+      final data = decoded['data'];
+      if (data is! Map) return null;
+      return Map<String, dynamic>.from(data);
+    } catch (_) {
+      // Best-effort: if resolve fails, treat as non-AI and fall back.
+      return null;
+    }
+  }
+
   Future<LobbySnapshot> find({
     required String userId,
     required String connectionId,
@@ -66,16 +106,29 @@ class MatchmakingService {
     } catch (_) {
       throw AppError(
         matchmakingInvalidRequest,
-        message: 'matchType.code required (quickStart|specialEvent)',
+        message: 'matchType.code required (quickStart|specialEvent|invite)',
       );
     }
     final code = matchType['code']?.toString() ?? '';
-    if (code != 'quickStart' && code != 'specialEvent') {
+    if (code != 'quickStart' && code != 'specialEvent' && code != 'invite') {
       throw AppError(
         matchmakingInvalidRequest,
-        message: 'Only quickStart and specialEvent supported',
+        message: 'Only quickStart, specialEvent, and invite supported',
       );
     }
+
+    final inviteId = matchType['subtype']?.toString().trim() ?? '';
+    if (code == 'invite' && inviteId.isEmpty) {
+      throw AppError(
+        matchmakingInvalidRequest,
+        message: 'invite requires matchType.subtype=inviteId',
+      );
+    }
+
+    final rawCreateIfMissing = payload['createIfMissing'];
+    final createIfMissing = rawCreateIfMissing is bool ? rawCreateIfMissing : true;
+
+    final effectiveTargetSeats = (code == 'invite') ? 2 : targetSeats;
 
     final existing = _store.lobbyForUser(userId);
     if (existing != null && existing.phase == 'waiting') {
@@ -100,22 +153,40 @@ class MatchmakingService {
     final queueKey = queueKeyFor(matchType);
     var lobby = _store.findOpenLobby(queueKey);
     if (lobby == null) {
-      final endsAt = DateTime.now().toUtc().add(fillWindow);
+      if (code == 'invite' && !createIfMissing) {
+        throw AppError(matchmakingInviteNotFound);
+      }
+      final effectiveFillWindow =
+          code == 'invite' ? const Duration(seconds: 20) : fillWindow;
+      final endsAt = DateTime.now().toUtc().add(effectiveFillWindow);
       lobby = _store.createLobby(
         matchType: matchType,
         creator: member,
         endsAt: endsAt,
-        targetSeats: targetSeats,
+        targetSeats: effectiveTargetSeats,
       );
       roomRegistry.subscribe(lobby.lobbyId, connectionId, userId: userId);
       _broadcastLobby(lobby);
-      _armTimer(lobby.lobbyId);
+      _armTimer(lobby.lobbyId, effectiveFillWindow);
       if (LOGGING_SWITCH) {
         customlog(
           'matchmaking: create lobby=${lobby.lobbyId} '
           'queueKey=$queueKey user=$userId endsAt=${lobby.endsAt.toIso8601String()}',
         );
       }
+      // Invite contract special-case: if the invited user is an offline AI,
+      // we can auto-promote immediately (so the waiting modal doesn't stick).
+      if (code == 'invite' && lobby.members.length == lobby.targetSeats - 1) {
+        try {
+          return await promoteLobby(lobby.lobbyId);
+        } on AppError catch (e) {
+          if (e.code == matchmakingInviteNeedsMoreHumans.code) {
+            return lobby;
+          }
+          rethrow;
+        }
+      }
+
       return lobby;
     }
 
@@ -131,6 +202,21 @@ class MatchmakingService {
 
     if (lobby.members.length >= lobby.targetSeats) {
       return await promoteLobby(lobby.lobbyId);
+    }
+
+    // Invite contract special-case: if we have host + one missing seat,
+    // and that missing invitee is an offline AI, auto-promote immediately.
+    final isInvite = lobby.matchType['code']?.toString() == 'invite';
+    if (isInvite && lobby.members.length == lobby.targetSeats - 1) {
+      try {
+        return await promoteLobby(lobby.lobbyId);
+      } on AppError catch (e) {
+        if (e.code == matchmakingInviteNeedsMoreHumans.code) {
+          // Invited seat isn't an AI (or resolve failed); stay waiting.
+          return lobby;
+        }
+        rethrow;
+      }
     }
     return lobby;
   }
@@ -184,22 +270,46 @@ class MatchmakingService {
       final needAi = lobby.targetSeats - lobby.members.length;
       final exclude = lobby.members.map((m) => m.userId).toList();
       List<String> aiIds = const [];
+
+      final isInvite = lobby.matchType['code']?.toString() == 'invite';
       if (needAi > 0) {
-        try {
-          aiIds = await _ai.sampleAiUserIds(
-            count: needAi,
-            excludeUserIds: exclude,
-          );
-          if (LOGGING_SWITCH) {
-            customlog('matchmaking: AI sample count=${aiIds.length} ids=$aiIds');
+        if (isInvite) {
+          // For invite lobbies we normally require a 2nd human (no AI fill).
+          // If the invited user is an offline AI, we auto-fill that seat.
+          if (needAi != 1) {
+            throw AppError(matchmakingInviteNeedsMoreHumans);
           }
-        } on AppError {
-          rethrow;
-        } catch (e) {
-          throw AppError(
-            matchmakingAiUnavailable,
-            message: 'AI sample failed: $e',
-          );
+          final inviteId =
+              lobby.matchType['subtype']?.toString().trim() ?? '';
+          final resolved = await _resolveInviteForAi(inviteId);
+          final invitedUserId =
+              resolved?['invitedUserId']?.toString().trim() ?? '';
+          final isAi = resolved?['isAi'] == true;
+
+          if (isAi && invitedUserId.isNotEmpty) {
+            aiIds = [invitedUserId];
+          } else {
+            throw AppError(matchmakingInviteNeedsMoreHumans);
+          }
+        } else {
+          try {
+            aiIds = await _ai.sampleAiUserIds(
+              count: needAi,
+              excludeUserIds: exclude,
+            );
+            if (LOGGING_SWITCH) {
+              customlog(
+                'matchmaking: AI sample count=${aiIds.length} ids=$aiIds',
+              );
+            }
+          } on AppError {
+            rethrow;
+          } catch (e) {
+            throw AppError(
+              matchmakingAiUnavailable,
+              message: 'AI sample failed: $e',
+            );
+          }
         }
       }
 
@@ -249,15 +359,47 @@ class MatchmakingService {
     }
   }
 
-  void _armTimer(String lobbyId) {
+  void _armTimer(String lobbyId, Duration delay) {
     if (!scheduleTimers) return;
     _cancelTimer(lobbyId);
-    _timers[lobbyId] = Timer(fillWindow, () {
+    _timers[lobbyId] = Timer(delay, () {
       if (LOGGING_SWITCH) {
         customlog('matchmaking: timer fire lobby=$lobbyId');
       }
-      unawaited(promoteLobby(lobbyId));
+      unawaited(_timeoutPromoteOrCancel(lobbyId));
     });
+  }
+
+  Future<void> _timeoutPromoteOrCancel(String lobbyId) async {
+    final current = _store.getLobby(lobbyId);
+    if (current == null || current.phase != 'waiting') return;
+
+    final isInvite = current.matchType['code']?.toString() == 'invite';
+    if (isInvite && current.members.length < current.targetSeats) {
+      // Invite contract: 2 humans, no AI fill.
+      // However, if the missing invitee is an offline AI, promotion should
+      // succeed (and we don't cancel).
+      try {
+        await promoteLobby(lobbyId);
+        return;
+      } on AppError catch (e) {
+        if (e.code != matchmakingInviteNeedsMoreHumans.code) {
+          // Unknown invite failure: keep consistent with previous behavior.
+          rethrow;
+        }
+      }
+
+      // Not an AI (or resolve failed): cancel instead of waiting forever.
+      final members = List<LobbyMember>.from(current.members);
+      final cancelled = _store.cancelLobby(lobbyId);
+      _broadcastLobby(cancelled);
+      for (final m in members) {
+        roomRegistry.unsubscribe(lobbyId, m.connectionId);
+      }
+      return;
+    }
+
+    await promoteLobby(lobbyId);
   }
 
   void _cancelTimer(String lobbyId) {

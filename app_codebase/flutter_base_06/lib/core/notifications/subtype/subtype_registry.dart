@@ -106,6 +106,12 @@ void registerBuiltinNotificationSubtypes() {
       category: 'record',
       subtype: 'example_record_saved',
       modalPriority: 200,
-        ),
+    ),
+    const NotificationSubtypeSpec(
+      source: 'friend_match_invite',
+      category: 'friend_match',
+      subtype: 'invite_v1',
+      modalPriority: 70,
+    ),
   ]);
 }

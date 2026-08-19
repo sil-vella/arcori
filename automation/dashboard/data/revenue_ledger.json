@@ -1,0 +1,26 @@
+{
+  "entries": {},
+  "download_entries": {},
+  "expenses": [],
+  "filters": {
+    "kind": "estimated",
+    "from": "2026-07-20",
+    "to": "2026-08-18",
+    "sources": [
+      "admob",
+      "play",
+      "appstore"
+    ]
+  },
+  "download_filters": {
+    "from": "2026-07-20",
+    "to": "2026-08-18",
+    "sources": [
+      "play",
+      "appstore"
+    ]
+  },
+  "last_load": null,
+  "last_downloads_load": null,
+  "active_subtab": "downloads"
+}

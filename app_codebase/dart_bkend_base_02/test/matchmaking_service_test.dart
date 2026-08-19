@@ -61,6 +61,32 @@ void main() {
               200,
             );
           }
+          if (request.url.path == '/service/friend_match_invites/resolve') {
+            final body = jsonDecode(request.body) as Map;
+            final inviteId = body['inviteId']?.toString() ?? '';
+            if (inviteId == 'inv-1') {
+              return http.Response(
+                jsonEncode({
+                  'ok': true,
+                  'data': {
+                    'invitedUserId': 'ai-user-1',
+                    'isAi': true,
+                  },
+                }),
+                200,
+              );
+            }
+            return http.Response(
+              jsonEncode({
+                'ok': true,
+                'data': {
+                  'invitedUserId': 'human-user-x',
+                  'isAi': false,
+                },
+              }),
+              200,
+            );
+          }
           return http.Response('not found', 404);
         }),
       );
@@ -72,6 +98,7 @@ void main() {
         store: lobbyStore,
         matchLifecycle: matchSvc,
         aiClient: MatchmakingAiClient(fastApi: fastApi),
+        fastApi: fastApi,
         scheduleTimers: false,
       );
     });
@@ -143,6 +170,29 @@ void main() {
       expect(snap!.seats, hasLength(3));
       expect(snap.seats.where((s) => s.kind == 'ai'), hasLength(2));
       expect(snap.matchType['code'], 'quickStart');
+    });
+
+    test('invite lobby promotes when missing seat is offline AI', () async {
+      final invite = await mm.find(
+        userId: 'host-1',
+        connectionId: 'c-host',
+        payload: {
+          'matchType': {'code': 'invite', 'subtype': 'inv-1'},
+          'createIfMissing': true,
+        },
+      );
+
+      expect(invite.phase, 'promoted');
+      expect(invite.matchId, isNotNull);
+
+      final snap = matchStoreLocal.getSnapshot(invite.matchId!);
+      expect(snap, isNotNull);
+      expect(snap!.seats, hasLength(2));
+      expect(snap.seats.where((s) => s.kind == 'ai'), hasLength(1));
+      expect(
+        snap.seats.where((s) => s.kind == 'ai').first.userId,
+        'ai-user-1',
+      );
     });
   });
 }

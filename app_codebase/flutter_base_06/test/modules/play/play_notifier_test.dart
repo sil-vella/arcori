@@ -42,7 +42,7 @@ void main() {
       expect(container.read(matchSnapshotProvider).matchId, isNull);
     });
 
-    test('invite room stub returns to idle without match snapshot', () async {
+    test('invite without auth aborts idle with errorMessage', () async {
       final container = ProviderContainer();
       addTearDown(container.dispose);
       final notifier = container.read(matchFlowProvider.notifier);
@@ -51,6 +51,8 @@ void main() {
       await notifier.selectType(MatchType.invite);
 
       expect(container.read(matchFlowProvider).isIdle, isTrue);
+      expect(container.read(matchFlowProvider).errorMessage, isNotNull);
+      expect(container.read(matchFlowProvider).errorMessage, contains('Sign in'));
       expect(container.read(matchSnapshotProvider).matchId, isNull);
     });
 

@@ -66,8 +66,10 @@ class LobbySnapshotState {
       queueKey: payload['queueKey']?.toString(),
       phase: payload['phase']?.toString(),
       members: members,
-      targetSeats:
-          payload['targetSeats'] is int ? payload['targetSeats'] as int : 3,
+      // WS/JSON decoding can yield `num` instead of `int`; we always want an int.
+      targetSeats: payload['targetSeats'] is num
+          ? (payload['targetSeats'] as num).toInt()
+          : 3,
       endsAt: endsAt,
       matchId: payload['matchId']?.toString(),
       matchType: rawType is Map

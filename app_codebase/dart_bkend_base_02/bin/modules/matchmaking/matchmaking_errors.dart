@@ -34,6 +34,18 @@ const matchmakingPromoteFailed = ErrorSpec(
   502,
 );
 
+const matchmakingInviteNotFound = ErrorSpec(
+  'matchmaking/invite_not_found',
+  'Invite lobby not found (invite may be expired or not created yet)',
+  404,
+);
+
+const matchmakingInviteNeedsMoreHumans = ErrorSpec(
+  'matchmaking/invite_needs_more_humans',
+  'Invite requires the invited human(s); AI fill is disabled',
+  409,
+);
+
 void registerMatchmakingErrors(ModuleErrorRegistrar registrar) {
   registrar.registerModule('matchmaking', [
     matchmakingUnauthorized,
@@ -41,5 +53,7 @@ void registerMatchmakingErrors(ModuleErrorRegistrar registrar) {
     matchmakingNotInLobby,
     matchmakingAiUnavailable,
     matchmakingPromoteFailed,
+    matchmakingInviteNotFound,
+    matchmakingInviteNeedsMoreHumans,
   ]);
 }

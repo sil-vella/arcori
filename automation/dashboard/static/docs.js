@@ -116,8 +116,49 @@
       });
     }
 
+    function caseStudyVersionFromSection(sectionId) {
+      const h = String(sectionId || "").replace(/^#/, "");
+      if (
+        h === "version-technical" ||
+        h === "technical" ||
+        h.startsWith("tech-")
+      ) {
+        return "technical";
+      }
+      return "overview";
+    }
+
+    function applyCaseStudyVersion(iframe, sectionId) {
+      const version = caseStudyVersionFromSection(sectionId);
+      const win = iframe.contentWindow;
+      const docEl = iframe.contentDocument;
+      if (win && typeof win.setCaseStudyVersion === "function") {
+        win.setCaseStudyVersion(version);
+        return;
+      }
+      const btnId = version === "technical" ? "btn-technical" : "btn-overview";
+      const btn = docEl && docEl.getElementById(btnId);
+      if (btn) {
+        btn.click();
+        return;
+      }
+      try {
+        if (win) {
+          win.location.hash =
+            version === "technical" ? "version-technical" : "version-overview";
+        }
+      } catch (_) {
+        /* same-origin file API */
+      }
+    }
+
     function scrollToSection(sectionId) {
       if (!sectionId || !markdownEl) {
+        return;
+      }
+      const iframe = markdownEl.querySelector("iframe.case-study-frame");
+      if (iframe) {
+        applyCaseStudyVersion(iframe, sectionId);
         return;
       }
       const target = markdownEl.querySelector(`#${CSS.escape(sectionId)}`);
@@ -156,6 +197,33 @@
       }
       if (pathEl) {
         pathEl.textContent = `Documentation/${doc.path}`;
+      }
+
+      const isHtml =
+        doc.format === "html" ||
+        (typeof doc.path === "string" &&
+          /\.html?$/i.test(doc.path));
+
+      if (isHtml) {
+        const fileUrl =
+          doc.file_url ||
+          `/api/docs/file?path=${encodeURIComponent(doc.path)}`;
+        const existing = markdownEl.querySelector("iframe.case-study-frame");
+        if (existing && existing.dataset.docPath === doc.path) {
+          applyCaseStudyVersion(existing, sectionId);
+          return;
+        }
+        markdownEl.innerHTML = "";
+        const iframe = document.createElement("iframe");
+        iframe.className = "case-study-frame";
+        iframe.title = doc.title || "Case study";
+        iframe.dataset.docPath = doc.path;
+        iframe.addEventListener("load", () => {
+          applyCaseStudyVersion(iframe, sectionId);
+        });
+        iframe.src = fileUrl;
+        markdownEl.appendChild(iframe);
+        return;
       }
 
       markdownEl.innerHTML = renderMarkdown(doc.markdown);
