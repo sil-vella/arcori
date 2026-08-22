@@ -5,8 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/errors/error_policy.dart';
 import '../../core/state/auth/auth_providers.dart';
 import '../../core/ws/app_resume_hooks.dart';
+import '../../utils/dev_logger.dart';
 import 'notifications_api.dart';
 import 'notifications_state.dart';
+
+const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 final notificationsApiClientProvider = Provider<NotificationsApiClient>(
   (ref) => NotificationsApiClient(),
@@ -48,6 +51,12 @@ class NotificationsNotifier extends Notifier<NotificationsState> {
     state = state.copyWith(isLoading: true, clearError: true);
     final outcome = await _api.fetchMessages(accessToken: token);
     if (!outcome.isSuccess) {
+      if (LOGGING_SWITCH) {
+        customlog(
+          'notifications: refreshInbox failed network=${outcome.isNetworkError} '
+          'code=${outcome.error?.rawCode ?? '-'}',
+        );
+      }
       state = state.copyWith(
         isLoading: false,
         errorMessage: _messageForOutcome(outcome),
@@ -55,6 +64,15 @@ class NotificationsNotifier extends Notifier<NotificationsState> {
       return;
     }
     final result = outcome.data!;
+    if (LOGGING_SWITCH) {
+      final instantUnread = result.messages
+          .where((m) => m.isInstant && m.isUnread)
+          .length;
+      customlog(
+        'notifications: refreshInbox ok total=${result.messages.length} '
+        'unread=${result.unreadCount} instantUnread=$instantUnread',
+      );
+    }
     state = state.copyWith(
       messages: result.messages,
       unreadCount: _combinedUnreadCount(
@@ -196,9 +214,17 @@ class NotificationsNotifier extends Notifier<NotificationsState> {
 
   List<NotificationMessage> pendingInstantModals() {
     final shown = state.shownModalIds;
-    return state.instantModalCandidates
+    final pending = state.instantModalCandidates
         .where((message) => !shown.contains(_modalKey(message)))
         .toList();
+    if (LOGGING_SWITCH) {
+      customlog(
+        'notifications: pendingInstantModals count=${pending.length} '
+        'candidates=${state.instantModalCandidates.length} '
+        'shown=${shown.length}',
+      );
+    }
+    return pending;
   }
 
   bool _shouldFetch() {

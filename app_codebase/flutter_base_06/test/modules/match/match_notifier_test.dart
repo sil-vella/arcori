@@ -31,13 +31,17 @@ void main() {
       expect(practiceAiPoolUserIds, contains(snap.seats[1].userId));
       expect(practiceAiPoolUserIds, contains(snap.seats[2].userId));
       expect(snap.seats[1].arcoriIds, isEmpty);
-      expect(snap.seats[1].slammerId, isEmpty);
+      expect(snap.seats[1].slammerId, stubSlammerId);
       expect(snap.seats[2].arcoriIds, isEmpty);
-      expect(snap.seats[2].slammerId, isEmpty);
+      expect(snap.seats[2].slammerId, stubSlammerId);
 
       notifier.localSlam(actorUserId: 'usr_local');
       snap = container.read(matchSnapshotProvider);
       expect(snap.lastEvent?['type'], 'slam');
+      expect(snap.lastEvent?['seatIndex'], 0);
+      expect(snap.lastEvent?['round'], 1);
+      expect(snap.lastEvent?['slammerId'], stubSlammerId);
+      expect(snap.lastEvent?['arcoriId'], 'ANM-TIG-GEN001-0001');
       expect(snap.active?['seatIndex'], 1);
 
       notifier.localEnd();

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import uuid
 from typing import Any
 
 from core.state.session_scope import session_scope
@@ -9,6 +10,24 @@ from core.errors.app_error import AppError
 from modules.auth.auth_service import get_user_profile
 from modules.avari import avari_repository as repo
 from modules.avari.avari_errors import INVALID_QUERY, NOT_FOUND
+
+
+def list_design_access_ids(user_id: str) -> list[str]:
+    """Circulating play/mastery access design ids for a user (match selection)."""
+    uid = (user_id or "").strip()
+    if not uid:
+        return []
+    with session_scope() as session:
+        rows = repo.list_design_access(session, uid)
+        out: list[str] = []
+        seen: set[str] = set()
+        for row in rows:
+            design_id = str(getattr(row, "design_id", "") or "").strip()
+            if not design_id or design_id in seen:
+                continue
+            seen.add(design_id)
+            out.append(design_id)
+        return out
 
 
 def get_avari_profile(user_id: str) -> dict[str, Any]:
@@ -24,7 +43,11 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
     account_type = str(profile.get("account_type") or "Regular")
 
     with session_scope() as session:
-        avari = repo.find_avari_profile(session, uid)
+        avari = repo.ensure_avari_profile(
+            session,
+            user_id=uuid.UUID(uid),
+            display_name=display_name,
+        )
         kin = repo.find_player_kin(session, uid)
         mastery_rows = repo.list_mastery_top(session, uid, limit=5)
         designs_tracked = repo.count_mastery_designs(session, uid)

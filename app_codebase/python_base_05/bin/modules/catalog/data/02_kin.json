@@ -9,15 +9,20 @@
       "designCode": "Pla_202607092145",
       "designFamily": "PLAYER_CHOSEN_NAME",
       "design": "Player chosen name",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -32,7 +37,8 @@
       "style": "Chibi",
       "finish": "Standard",
       "effect": "None",
-      "printedRarity": "Unique",
+      "printedRarity": "Common",
+      "selectionWeight": null,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",

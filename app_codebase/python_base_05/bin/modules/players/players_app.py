@@ -7,7 +7,7 @@ from core.http.contracts.register_route_contract import ApplicationRouteSink
 from core.http.contracts.response_contract import HttpResponseContract
 from modules.auth.auth_service import parse_json_body
 from modules.players.players_errors import INVALID_REQUEST
-from modules.players.players_service import sample_ai_players
+from modules.players.players_service import is_ai_user, sample_ai_players
 
 
 def register_players_routes(
@@ -15,6 +15,18 @@ def register_players_routes(
     res: HttpResponseContract,
 ) -> None:
     routes.service_post("/players/ai/sample", lambda: _handle_ai_sample(res))
+    routes.service_post("/players/is_ai", lambda: _handle_is_ai(res))
+
+
+def _handle_is_ai(res: HttpResponseContract):
+    try:
+        body = parse_json_body()
+        user_id = str(body.get("userId", "")).strip()
+        if not user_id:
+            raise AppError(INVALID_REQUEST, message="userId is required")
+        return res.json_ok({"isAi": is_ai_user(user_id)})
+    except AppError as err:
+        return err.to_http_response()
 
 
 def _handle_ai_sample(res: HttpResponseContract):

@@ -34,6 +34,31 @@ def find_avari_profile(session: Session, user_id: str) -> AvariProfile | None:
     ).first()
 
 
+def ensure_avari_profile(
+    session: Session,
+    *,
+    user_id: uuid.UUID,
+    display_name: str,
+) -> AvariProfile:
+    """Create a starter Avari profile row when the auth account has none yet."""
+    existing = session.scalars(
+        select(AvariProfile).where(AvariProfile.user_id == user_id)
+    ).first()
+    if existing is not None:
+        return existing
+
+    name = (display_name or "Avari").strip()[:64] or "Avari"
+    profile = AvariProfile(
+        user_id=user_id,
+        display_name=name,
+        primary_title="Avari",
+        titles=["Avari"],
+    )
+    session.add(profile)
+    session.flush()
+    return profile
+
+
 def find_player_kin(session: Session, user_id: str) -> PlayerKin | None:
     uid = _as_uuid(user_id)
     if uid is None:

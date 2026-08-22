@@ -384,7 +384,7 @@ code {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  max-width: 14rem;
+  max-width: 18rem;
   border: 1px solid transparent;
   border-bottom: 0;
   border-radius: 6px 6px 0 0;
@@ -478,6 +478,21 @@ code {
 .run-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.mirror-log-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.mirror-log-check input {
+  margin: 0;
+  cursor: pointer;
 }
 
 .session-id-group {

@@ -11,8 +11,9 @@
       "designCode": "PXR",
       "designFamily": "PIXEL_ROGUE",
       "design": "Pixel Rogue",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -35,6 +36,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Pioneers Series",
       "worldState": "Active",
       "seasonState": "Active",

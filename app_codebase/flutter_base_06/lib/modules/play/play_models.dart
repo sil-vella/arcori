@@ -75,6 +75,17 @@ class MatchFlowState {
   }
 }
 
+/// Result of host-side invite setup (invite id + invited user for matchmaking).
+class InviteSetupResult {
+  const InviteSetupResult({
+    required this.inviteId,
+    required this.invitedUserId,
+  });
+
+  final String inviteId;
+  final String invitedUserId;
+}
+
 /// Practice loadout — one Arcori + one slammer (arena fixed locally).
 class PracticeLoadout {
   const PracticeLoadout({

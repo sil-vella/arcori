@@ -1,7 +1,7 @@
 # Arcori Content Bible
 
 Working Draft v0.4  
-**Last aligned:** 2026-07-26 (Avari player naming and titles)
+**Last aligned:** 2026-08-20 (five launch regions)
 
 ## Content Structure
 
@@ -41,4 +41,6 @@ Lore draft (Chronicle voice): *Avari are those who walk beside the Arcori. Thoug
 
 ## Future Content
 
-New Arcori, Regions, Chronicle chapters, Companions, Events and Villains.
+New Arcori, further Regions, Chronicle chapters, Companions, Events and Villains.
+
+Launch regions (catalog): Ashdrift Hill, Everlight Grove, Little Frost, Moonwake Bay, Amberwild — see [Velora World Bible](Velora_World_Bible_v0.5.md).

@@ -32,6 +32,10 @@ def catalog_root(tmp_path: Path):
         json.dumps({"rarities": []}),
         encoding="utf-8",
     )
+    (root / "04_selection_weights.json").write_text(
+        json.dumps({"version": 1}),
+        encoding="utf-8",
+    )
     animals = {
         "catalog": "Animals Genesis Series",
         "theme": "Animals",

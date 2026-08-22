@@ -1,8 +1,8 @@
 # Match Setting — Core Flow
 
-**Status:** Partial — practice offline + quick/event online done; invite next  
+**Status:** Partial — practice offline + quick/event/invite online done; gameplay still stub  
 **Created:** 2026-07-26  
-**Last Updated:** 2026-08-09
+**Last Updated:** 2026-08-20
 
 Related: [match-hot-state.md](match-hot-state.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [ws-invite-match.md](ws-invite-match.md) · [practice-offline-routing.md](practice-offline-routing.md) · [practice-match-v1.md](practice-match-v1.md) · [core-match-loop.md](core-match-loop.md) · [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [EXAMPLE_MODULE.md](../03_Base/EXAMPLE_MODULE.md) · [DART_STATE_SYSTEM.md](../03_Base/DART_STATE_SYSTEM.md) · [Flutter STATE_SYSTEM.md](../03_Base/Flutter/STATE_SYSTEM.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
 
@@ -18,7 +18,7 @@ Match pipeline from Play hub through shared match state and back to Play idle.
 | **2** | Match hot state Flutter ↔ Dart + catalog freeze | Done ([match-hot-state.md](match-hot-state.md)) |
 | **2b** | Practice Flutter-only + stub gameplay | Done |
 | **2c** | quickStart / specialEvent matchmaking | Done ([ws-matchmaking-modes.md](ws-matchmaking-modes.md)) |
-| **2d** | Invite Friend Match | **Next** ([ws-invite-match.md](ws-invite-match.md)) |
+| **2d** | Invite Friend Match | Done ([ws-invite-match.md](ws-invite-match.md)) |
 | Later | Match UI / celebration / summary / durable rewards | Open |
 
 ## Match types
@@ -28,7 +28,7 @@ Match pipeline from Play hub through shared match state and back to Play idle.
 | `practice` | Practice | Flutter-only local |
 | `quickStart` | Quick Start | Dart matchmaking → match room |
 | `specialEvent` | Special Event | Dart matchmaking → match room |
-| `invite` | Invite | Play stub → **next** invite WS |
+| `invite` | Invite | Dart private lobby (2 humans, no AI fill) → match room |
 
 ## Phases
 
@@ -59,17 +59,18 @@ Cancel from type modal returns to idle. Online auth failures abort with OK modal
 
 ---
 
-## Stage 2d — Invite (next)
+## Stage 2d — Invite (done)
 
 **Detail:** [ws-invite-match.md](ws-invite-match.md).
 
-- [ ] Replace `_runRoomCreateStub` for invite with real host/guest (or code) flow
-- [ ] Promote into same match room SSOT
+- [x] Replace invite stub with host contacts + guest notification Accept
+- [x] Promote into same match room SSOT (2 seats, no AI fill)
 
 ---
 
 ## Later
 
+- Weighted slam / real turns / random first player
 - Per-type setup UIs and economy checks
 - Match screen / celebration / Match Summary / Play Again
 - FastAPI durable rewards

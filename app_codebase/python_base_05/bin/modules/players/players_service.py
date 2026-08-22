@@ -20,6 +20,38 @@ AI_SEED_MARKER = "ai_seed:v1"
 AI_EMAIL_DOMAIN = "@ai.arcori.local"
 
 
+def is_ai_user(user_id: str) -> bool:
+    """True when [user_id] matches seeded AI players (notes marker or AI email domain)."""
+    try:
+        uid = uuid.UUID(str(user_id).strip())
+    except ValueError:
+        if LOGGING_SWITCH:
+            customlog(f"players: is_ai_user invalid uuid user_id={user_id!r}")
+        return False
+
+    try:
+        with session_scope() as session:
+            stmt = (
+                select(User.id)
+                .outerjoin(AvariProfile, AvariProfile.user_id == User.id)
+                .where(
+                    User.id == uid,
+                    or_(
+                        AvariProfile.notes == AI_SEED_MARKER,
+                        func.lower(User.email).like(f"%{AI_EMAIL_DOMAIN}"),
+                    ),
+                )
+            )
+            found = session.execute(stmt).first() is not None
+            if LOGGING_SWITCH:
+                customlog(f"players: is_ai_user user_id={uid} found={found}")
+            return found
+    except Exception as exc:
+        if LOGGING_SWITCH:
+            customlog(f"players: is_ai_user error user_id={uid} err={exc}")
+        return False
+
+
 def sample_ai_players(
     *,
     count: int,

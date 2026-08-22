@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import uuid
 from dataclasses import dataclass
 from typing import Any
 
@@ -22,6 +23,7 @@ from core.state.session_scope import session_scope
 from core.utils.dev_logger import customlog
 from modules.auth import login_event_repository, user_repository
 from modules.auth.password_utils import hash_password, verify_password
+from modules.avari import avari_repository as avari_repo
 
 logger = logging.getLogger(__name__)
 
@@ -122,6 +124,11 @@ def register(
             password_hash=hash_password(password),
             is_guest=is_guest,
         )
+        avari_repo.ensure_avari_profile(
+            session,
+            user_id=user.id,
+            display_name=username,
+        )
         user_id = str(user.id)
         is_guest_flag = user.is_guest
 
@@ -165,6 +172,7 @@ def login(*, email: str, password: str) -> dict[str, Any]:
             )
         password_hash = user.password_hash
         user_id = str(user.id)
+        username = user.username
         is_guest_flag = user.is_guest
         email_verified = user.email_verified_at is not None
 
@@ -175,6 +183,13 @@ def login(*, email: str, password: str) -> dict[str, Any]:
             code="invalid_credentials",
             message="Invalid email or password",
             status=401,
+        )
+
+    with session_scope() as session:
+        avari_repo.ensure_avari_profile(
+            session,
+            user_id=uuid.UUID(user_id),
+            display_name=username,
         )
 
     payload = _issue_token_pair(user_id)

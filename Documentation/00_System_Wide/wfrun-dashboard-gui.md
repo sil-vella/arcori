@@ -2,7 +2,7 @@
 
 **Status**: Completed  
 **Created**: 2026-07-11  
-**Last Updated**: 2026-07-11
+**Last Updated**: 2026-08-20
 
 ## Objective
 
@@ -51,4 +51,5 @@ wfrun   # → local/prod → automation/dashboard/serve.py
 
 - CLI `wfrun` wrapper was not modified — GUI appears as one more script in the menu.
 - Server binds localhost by default (`127.0.0.1:8765`).
-- One active PTY session at a time; starting a new script stops the previous run.
+- Scripts can run concurrently, including **multiple tabs of the same script**. **Run script** on a live tab opens a new tab instead of stopping the current PTY; **Stop** applies to the active tab only.
+- For `docker_up.sh` / `docker_up_build.sh`, toolbar checkbox **Mirror [dev] → global.log** sets `WFRUN_MIRROR_GLOBAL_LOG` for that run (preference stored in `localStorage`).

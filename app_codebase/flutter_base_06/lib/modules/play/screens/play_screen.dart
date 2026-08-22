@@ -40,13 +40,19 @@ class PlayScreen extends ConsumerWidget {
     }
 
     if (type == MatchType.invite) {
-      final inviteId = await showInviteSetupModal(context: context, ref: ref);
+      final setup = await showInviteSetupModal(context: context, ref: ref);
       if (!context.mounted) return;
-      if (inviteId == null || inviteId.trim().isEmpty) {
+      if (setup == null ||
+          setup.inviteId.trim().isEmpty ||
+          setup.invitedUserId.trim().isEmpty) {
         notifier.cancelSelection();
         return;
       }
-      await notifier.selectType(type, inviteId: inviteId);
+      await notifier.selectType(
+        type,
+        inviteId: setup.inviteId,
+        invitedUserId: setup.invitedUserId,
+      );
       return;
     }
 

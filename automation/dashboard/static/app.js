@@ -8,6 +8,8 @@
   const terminalToolbarEl = document.getElementById("terminal-toolbar");
   const sessionIdBtn = document.getElementById("session-id-btn");
   const copySessionIdBtn = document.getElementById("copy-session-id-btn");
+  const mirrorGlobalLogLabel = document.getElementById("mirror-global-log-label");
+  const mirrorGlobalLogCheck = document.getElementById("mirror-global-log-check");
   const terminalTabsEl = document.getElementById("terminal-tabs");
   const terminalStackEl = document.getElementById("terminal-stack");
   const terminalPlaceholderEl = document.getElementById("terminal-placeholder");
@@ -16,7 +18,10 @@
   const taskManagerMissingEl = document.getElementById("task-manager-missing");
   const taskManagerStatusEl = document.getElementById("task-manager-status");
 
+  const MIRROR_LOG_STORAGE_KEY = "wfrun.mirrorGlobalLog";
+
   /** @type {Map<string, {
+   *   sessionKey: string,
    *   scriptId: string,
    *   logFile: string | null,
    *   runnable: boolean,
@@ -30,7 +35,7 @@
    * }>} */
   const sessions = new Map();
 
-  let activeScriptId = null;
+  let activeSessionKey = null;
   let activeGroup = null;
   let groupedScripts = [];
   let activeView = "scripts";
@@ -107,12 +112,13 @@
     if (window.DocsDash && typeof window.DocsDash.onView === "function") {
       window.DocsDash.onView(view);
     }
+
     if (window.RevenueDash && typeof window.RevenueDash.onView === "function") {
       window.RevenueDash.onView(view);
     }
 
-    if (view === "scripts" && activeScriptId) {
-      const session = sessions.get(activeScriptId);
+    if (view === "scripts" && activeSessionKey) {
+      const session = sessions.get(activeSessionKey);
       if (session) {
         requestAnimationFrame(() => {
           session.fitAddon.fit();
@@ -134,6 +140,34 @@
     return scriptId.split("/").pop();
   }
 
+  function newSessionKey() {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+    return `s-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  }
+
+  function getActiveSession() {
+    return activeSessionKey ? sessions.get(activeSessionKey) : null;
+  }
+
+  function getActiveScriptId() {
+    return getActiveSession()?.scriptId ?? null;
+  }
+
+  function sessionsForScript(scriptId) {
+    return [...sessions.values()].filter((session) => session.scriptId === scriptId);
+  }
+
+  function tabLabel(session) {
+    const name = basename(session.scriptId);
+    const same = sessionsForScript(session.scriptId);
+    if (same.length < 2) {
+      return name;
+    }
+    return `${name} · ${same.indexOf(session) + 1}`;
+  }
+
   function escapeHtml(value) {
     return String(value)
       .replaceAll("&", "&amp;")
@@ -142,13 +176,43 @@
       .replaceAll('"', "&quot;");
   }
 
+  function supportsMirrorGlobalLog(scriptId) {
+    return (
+      scriptId === "automation/backend/docker_up.sh" ||
+      scriptId === "automation/backend/docker_up_build.sh"
+    );
+  }
+
+  function readMirrorGlobalLogPref() {
+    try {
+      return localStorage.getItem(MIRROR_LOG_STORAGE_KEY) === "1";
+    } catch (_err) {
+      return false;
+    }
+  }
+
+  function writeMirrorGlobalLogPref(on) {
+    try {
+      localStorage.setItem(MIRROR_LOG_STORAGE_KEY, on ? "1" : "0");
+    } catch (_err) {
+      /* ignore quota / private mode */
+    }
+  }
+
   function updateToolbar() {
-    const session = activeScriptId ? sessions.get(activeScriptId) : null;
+    const session = getActiveSession();
     const hasSession = Boolean(session);
     terminalToolbarEl.hidden = !hasSession;
     stopBtn.disabled = !(session && session.running);
     runBtn.disabled = !(session && session.runnable);
     copySessionIdBtn.disabled = !(session && session.logFile);
+    if (mirrorGlobalLogLabel && mirrorGlobalLogCheck) {
+      const showMirror = Boolean(session && supportsMirrorGlobalLog(session.scriptId));
+      mirrorGlobalLogLabel.hidden = !showMirror;
+      if (showMirror) {
+        mirrorGlobalLogCheck.checked = readMirrorGlobalLogPref();
+      }
+    }
     if (session) {
       const logLabel = session.logFile || "(no log yet — run script)";
       sessionIdBtn.textContent = logLabel;
@@ -195,7 +259,7 @@
       event.preventDefault();
       const res = await fetch("/api/open-env-file", { method: "POST" });
       if (!res.ok) {
-        const active = activeScriptId ? sessions.get(activeScriptId) : null;
+        const active = getActiveSession();
         if (active) {
           active.term.writeln("\r\n\x1b[31mCould not open env file\x1b[0m");
         }
@@ -220,64 +284,63 @@
 
   function markSidebarActive(scriptId) {
     document.querySelectorAll(".script-link").forEach((el) => {
-      el.classList.toggle("active", el.dataset.scriptId === scriptId);
-      el.classList.toggle("has-terminal", sessions.has(el.dataset.scriptId));
-      el.classList.toggle(
-        "running",
-        sessions.get(el.dataset.scriptId)?.running === true
-      );
+      const id = el.dataset.scriptId;
+      const related = sessionsForScript(id);
+      el.classList.toggle("active", id === scriptId);
+      el.classList.toggle("has-terminal", related.length > 0);
+      el.classList.toggle("running", related.some((session) => session.running));
     });
   }
 
   function renderTerminalTabs() {
     terminalTabsEl.replaceChildren();
-    for (const [scriptId, session] of sessions) {
+    for (const session of sessions.values()) {
       const tab = document.createElement("button");
       tab.type = "button";
       tab.className = "terminal-tab";
-      if (scriptId === activeScriptId) {
+      if (session.sessionKey === activeSessionKey) {
         tab.classList.add("active");
       }
       if (session.running) {
         tab.classList.add("running");
       }
-      tab.dataset.scriptId = scriptId;
+      tab.dataset.sessionKey = session.sessionKey;
       tab.title = session.logFile
-        ? `${scriptId}\n${session.logFile}`
-        : scriptId;
+        ? `${session.scriptId}\n${session.logFile}`
+        : session.scriptId;
       tab.innerHTML = `
-        <span class="terminal-tab-label">${escapeHtml(basename(scriptId))}</span>
+        <span class="terminal-tab-label">${escapeHtml(tabLabel(session))}</span>
         <span class="terminal-tab-close" title="Close terminal" aria-label="Close">×</span>
       `;
       tab.addEventListener("click", (event) => {
         const close = event.target.closest(".terminal-tab-close");
         if (close) {
           event.stopPropagation();
-          closeTerminalSession(scriptId);
+          closeTerminalSession(session.sessionKey);
           return;
         }
-        focusTerminal(scriptId);
+        focusTerminal(session.sessionKey);
       });
       session.tabEl = tab;
       terminalTabsEl.appendChild(tab);
     }
   }
 
-  function focusTerminal(scriptId) {
-    if (!sessions.has(scriptId)) {
+  function focusTerminal(sessionKey) {
+    if (!sessions.has(sessionKey)) {
       return;
     }
-    activeScriptId = scriptId;
+    activeSessionKey = sessionKey;
     terminalPlaceholderEl.hidden = true;
 
-    for (const [id, session] of sessions) {
-      session.hostEl.hidden = id !== scriptId;
+    for (const session of sessions.values()) {
+      session.hostEl.hidden = session.sessionKey !== sessionKey;
       if (session.tabEl) {
-        session.tabEl.classList.toggle("active", id === scriptId);
+        session.tabEl.classList.toggle("active", session.sessionKey === sessionKey);
       }
     }
 
-    const session = sessions.get(scriptId);
+    const session = sessions.get(sessionKey);
     requestAnimationFrame(() => {
       session.fitAddon.fit();
       session.term.focus();
@@ -292,15 +355,26 @@
       }
     });
 
-    markSidebarActive(scriptId);
+    markSidebarActive(session.scriptId);
     updateToolbar();
   }
 
-  function openTerminalPanel(scriptId, { runnable = true } = {}) {
-    let session = sessions.get(scriptId);
+  function openTerminalPanel(scriptId, { runnable = true, forceNew = false } = {}) {
+    let session = null;
+    if (!forceNew) {
+      const active = getActiveSession();
+      if (active && active.scriptId === scriptId) {
+        session = active;
+      } else {
+        const matches = sessionsForScript(scriptId);
+        session = matches.length ? matches[matches.length - 1] : null;
+      }
+    }
     if (!session) {
+      const sessionKey = newSessionKey();
       const hostEl = document.createElement("div");
       hostEl.className = "terminal-host";
+      hostEl.dataset.sessionKey = sessionKey;
       hostEl.dataset.scriptId = scriptId;
       hostEl.hidden = true;
       terminalStackEl.appendChild(hostEl);
@@ -321,6 +395,7 @@
       term.open(hostEl);
 
       session = {
+        sessionKey,
         scriptId,
         logFile: null,
         runnable,
@@ -332,16 +407,16 @@
         running: false,
         onDataDisposable: null,
       };
-      sessions.set(scriptId, session);
+      sessions.set(sessionKey, session);
       renderTerminalTabs();
       term.writeln(`\x1b[90mTerminal ready — press Run script to start\x1b[0m`);
     }
-    focusTerminal(scriptId);
+    focusTerminal(session.sessionKey);
     return session;
   }
 
-  function stopSession(scriptId, { writeStopped = false } = {}) {
-    const session = sessions.get(scriptId);
+  function stopSession(sessionKey, { writeStopped = false } = {}) {
+    const session = sessions.get(sessionKey);
     if (!session) {
       return;
     }
@@ -360,34 +435,34 @@
     if (session.tabEl) {
       session.tabEl.classList.remove("running");
     }
-    markSidebarActive(activeScriptId);
+    markSidebarActive(getActiveScriptId());
     updateToolbar();
     renderTerminalTabs();
   }
 
-  function closeTerminalSession(scriptId) {
-    const session = sessions.get(scriptId);
+  function closeTerminalSession(sessionKey) {
+    const session = sessions.get(sessionKey);
     if (!session) {
       return;
     }
-    stopSession(scriptId);
+    stopSession(sessionKey);
     session.term.dispose();
     session.hostEl.remove();
-    sessions.delete(scriptId);
+    sessions.delete(sessionKey);
     renderTerminalTabs();
 
-    if (activeScriptId === scriptId) {
+    if (activeSessionKey === sessionKey) {
       const remaining = [...sessions.keys()];
       if (remaining.length > 0) {
         focusTerminal(remaining[remaining.length - 1]);
       } else {
-        activeScriptId = null;
+        activeSessionKey = null;
         terminalPlaceholderEl.hidden = false;
         markSidebarActive(null);
         updateToolbar();
       }
     } else {
-      markSidebarActive(activeScriptId);
+      markSidebarActive(getActiveScriptId());
       updateToolbar();
     }
   }
@@ -398,30 +473,38 @@
       cols: String(cols),
       rows: String(rows),
     });
+    if (supportsMirrorGlobalLog(scriptId)) {
+      const wantMirror = Boolean(mirrorGlobalLogCheck && mirrorGlobalLogCheck.checked);
+      params.set("mirror_global_log", wantMirror ? "1" : "0");
+    }
     const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
     return `${proto}//${window.location.host}/ws/run?${params.toString()}`;
   }
 
   function runActiveScript() {
-    if (!activeScriptId) {
-      return;
-    }
-    const session = sessions.get(activeScriptId);
-    if (!session || !session.runnable) {
+    const current = getActiveSession();
+    if (!current || !current.runnable) {
       return;
     }
 
-    stopSession(activeScriptId);
+    const session = current.running
+      ? openTerminalPanel(current.scriptId, {
+          runnable: current.runnable,
+          forceNew: true,
+        })
+      : current;
+
+    stopSession(session.sessionKey);
     session.term.reset();
     session.logFile = null;
     session.running = true;
     updateToolbar();
     renderTerminalTabs();
-    markSidebarActive(activeScriptId);
+    markSidebarActive(session.scriptId);
 
     session.fitAddon.fit();
     const ws = new WebSocket(
-      wsUrl(activeScriptId, session.term.cols || 80, session.term.rows || 24)
+      wsUrl(session.scriptId, session.term.cols || 80, session.term.rows || 24)
     );
     ws.binaryType = "arraybuffer";
     session.ws = ws;
@@ -439,7 +522,7 @@
             session.running = false;
             updateToolbar();
             renderTerminalTabs();
-            markSidebarActive(activeScriptId);
+            markSidebarActive(session.scriptId);
           } else if (payload.type === "started") {
             session.term.writeln(`\r\n\x1b[36m▶ ${payload.script}\x1b[0m`);
             if (payload.log_file) {
@@ -459,7 +542,7 @@
             session.running = false;
             updateToolbar();
             renderTerminalTabs();
-            markSidebarActive(activeScriptId);
+            markSidebarActive(session.scriptId);
           }
         } catch (_err) {
           session.term.write(event.data);
@@ -476,7 +559,7 @@
         session.running = false;
         updateToolbar();
         renderTerminalTabs();
-        markSidebarActive(activeScriptId);
+        markSidebarActive(session.scriptId);
       }
     });
 
@@ -485,7 +568,7 @@
       session.running = false;
       updateToolbar();
       renderTerminalTabs();
-      markSidebarActive(activeScriptId);
+      markSidebarActive(session.scriptId);
     });
 
     session.onDataDisposable = session.term.onData((data) => {
@@ -496,7 +579,7 @@
   }
 
   async function copyLogPath() {
-    const session = activeScriptId ? sessions.get(activeScriptId) : null;
+    const session = getActiveSession();
     if (!session) {
       return;
     }
@@ -526,13 +609,13 @@
     if (!script.runnable) {
       btn.classList.add("unsupported");
     }
-    if (script.id === activeScriptId) {
+    if (script.id === getActiveScriptId()) {
       btn.classList.add("active");
     }
-    if (sessions.has(script.id)) {
+    if (sessionsForScript(script.id).length > 0) {
       btn.classList.add("has-terminal");
     }
-    if (sessions.get(script.id)?.running) {
+    if (sessionsForScript(script.id).some((session) => session.running)) {
       btn.classList.add("running");
     }
 
@@ -648,6 +731,13 @@
     runActiveScript();
   });
 
+  if (mirrorGlobalLogCheck) {
+    mirrorGlobalLogCheck.checked = readMirrorGlobalLogPref();
+    mirrorGlobalLogCheck.addEventListener("change", () => {
+      writeMirrorGlobalLogPref(mirrorGlobalLogCheck.checked);
+    });
+  }
+
   mainTabsEl.addEventListener("click", (event) => {
     const tab = event.target.closest(".main-tab");
     if (!tab || !mainTabsEl.contains(tab)) {
@@ -668,10 +758,10 @@
   });
 
   stopBtn.addEventListener("click", () => {
-    if (!activeScriptId) {
+    if (!activeSessionKey) {
       return;
     }
-    stopSession(activeScriptId, { writeStopped: true });
+    stopSession(activeSessionKey, { writeStopped: true });
   });
 
   window.addEventListener("resize", () => {

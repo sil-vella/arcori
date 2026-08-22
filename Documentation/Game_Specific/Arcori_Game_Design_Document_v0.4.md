@@ -1,7 +1,7 @@
 # Arcori Game Design Document
 
 Working Draft v0.4  
-**Last aligned:** 2026-07-26 (Avari player identity and title hierarchy)
+**Last aligned:** 2026-08-20 (five launch regions)
 
 ## Gameplay
 
@@ -62,7 +62,7 @@ Three featured missions, Daily Cache, extra mission rewards and no-miss streak b
 
 | Name | Role |
 |------|------|
-| **Velora** | World browse — anything found in the world (most notably circulating Arcori) |
+| **Velora** | World browse — five launch lands (Ashdrift Hill, Everlight Grove, Little Frost, Moonwake Bay, Amberwild) plus the Realm Beyond, and anything found there (most notably circulating Arcori) |
 | **Trove** | Personal vault of **minted closed** Arcori only (out of circulation) |
 | **Arcori Detail** | SSOT page for a design; submenu **Standings** + **My Mastery** |
 | **Standings** | Live community race (top mastery, generation fill, leader window) |

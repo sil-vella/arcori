@@ -1,6 +1,6 @@
 # Arcori — Game Implementation Case Study
 
-**Status:** Complete (narrative through 2026-08-09)  
+**Status:** Complete (narrative through 2026-08-20)  
 **Created:** 2026-08-09  
 **Scope:** How **Arcori** was designed and built on top of the FastAPI + Postgres + Dart + Flutter product stack. This document ignores base-template systems (auth shells, drain, logging, error envelopes, presence, etc.) except where a game decision reused them.
 
@@ -25,6 +25,7 @@ Design SSOT remains under [`Documentation/Game_Specific/`](../Game_Specific/). L
 13. [Phase H — Practice stub gameplay](#13-phase-h--practice-stub-gameplay)
 14. [Phase I — Player profile schema and AI seed](#14-phase-i--player-profile-schema-and-ai-seed)
 15. [Phase J — Online matchmaking (Quick Start + Special Event)](#15-phase-j--online-matchmaking-quick-start--special-event)
+15b. [Friend Match / invite](#15b-friend-match--invite)
 16. [Architecture snapshot (game)](#16-architecture-snapshot-game)
 17. [What is live today vs next](#17-what-is-live-today-vs-next)
 18. [Major decisions and why](#18-major-decisions-and-why)
@@ -89,6 +90,7 @@ These names are product decisions, not cosmetic labels. They drove schemas, scre
 | **Gold Fragments / Caps** | Economy | 4 Fragments = 1 Cap; random MP costs 1 Cap |
 | **Caller** | Match initiator (`callerUserId`) | Arena / lobby authority (not “host/steward”) |
 | **Arena** | Match place (`arenaId`) | Backgrounds / FX for the whole match |
+| **Launch regions** | ASH / EVG / LFR / MWB / AMB (+ **RBY** Realm Beyond, no standing) | Politics + lore in Region Catalog; standing −2…+2, not a collect lock |
 
 **Mastery vs ownership (the hinge decision):**  
 Early drafts talked about “Collection” as owned cards. Product clarified: circulating designs grant **play/mastery access** only. **Trove** is reserved for mints that left circulation. That single clarification split tables (`player_design_access` vs `player_trove`), UI (Velora vs Trove), and Match Summary wording (“mastery changes,” not “you own Tiger”).
@@ -140,13 +142,15 @@ Approximate product arc (2026), reconstructed from docs, commits, and chat histo
 | Jul 26 | Avari title hierarchy in docs; Avari Profile screen/API; Play Hub Stage 1 + Match Flow chart |
 | Aug 5 | Match hot-state design (caller, arena, seats, freeze); Dart match module + Flutter mirror |
 | Aug 5–8 | Practice scaffold → **offline-only** practice correction; embedded AI pool |
-| Aug 9 | Practice stub auto loop; player profile schema + 500 AI seed; Quick/Event matchmaking → match room; Invite left as next |
+| Aug 9 | Practice stub auto loop; player profile schema + 500 AI seed; Quick/Event matchmaking → match room |
+| Aug 20 | Friend Match invite: contacts + instant notification Accept → 2-seat lobby → same match room SSOT |
 
 Git “pre … impl” sequence on this repo:
 
 ```text
 catalog → standings → avari profile → play module → hot state
   → practice v1 → practice AI selection → quick/special WS rooms
+  → friend match invite
 ```
 
 ---
@@ -281,7 +285,7 @@ idle → selectingType → typeSetup → inMatch → postMatch → idle
 | `practice` | Practice | Flutter-only |
 | `quickStart` | Quick Start | Dart matchmaking |
 | `specialEvent` | Special Event | Dart matchmaking (+ subtype later) |
-| `invite` | Friend Match | Invite WS (next) |
+| `invite` | Friend Match | Invite WS (private lobby) |
 
 **Why Stage 1 first:**  
 User direction: plan core flow only; leave per-type logic, real gameplay, and post-match for later. Start and end on Play so navigation debt stays low.
@@ -421,7 +425,24 @@ Auth / config failure must abort with a centered OK modal and clear sticky “Fi
 **Technical:**  
 Dart `modules/matchmaking/` + `MatchLifecycleContract`; FastAPI `POST /service/players/ai/sample`; Flutter lobby notifier + play gate.
 
-Plans: [ws-matchmaking-modes.md](ws-matchmaking-modes.md); next [ws-invite-match.md](ws-invite-match.md).
+Plans: [ws-matchmaking-modes.md](ws-matchmaking-modes.md); Friend Match [ws-invite-match.md](ws-invite-match.md).
+
+---
+
+## 15b. Friend Match / invite
+
+**Product lock:** Host picks a contact, creates a private 2-seat lobby (no public queue, **no AI fill**). Guest gets a stored **instant** notification (`source=friend_match_invite`, `subtype=invite_v1`) with `data.response.type=reply` (Accept / Decline). Accept posts `/authuser/notifications/response`, then the Play reply listener joins the same lobby and both promote into the existing match room SSOT.
+
+**Why notification, not a custom popup:**  
+The guest may be anywhere in the app. The notification system already owns unread instant modals, WS `inbox_changed`, and reply dispatch. A parallel invite modal would skip inbox persistence and the Host pipeline.
+
+**Why 2 seats / no AI:**  
+Friend Match is a human vs human table. Quick/Event still fill with DB AI; invite must not.
+
+**Technical:**  
+Python `friend_match_invite` + contacts; Dart invite `queueKey` / no-AI timer; Flutter `registerPlayNotifications` reply listener. Instant modal uses `appRootNavigatorKey` because `NotificationHost` sits above `MaterialApp.router`.
+
+Plan: [ws-invite-match.md](ws-invite-match.md).
 
 ---
 
@@ -432,7 +453,8 @@ Plans: [ws-matchmaking-modes.md](ws-matchmaking-modes.md); next [ws-invite-match
 │  Play (MatchFlow)                       │
 │    practice ──► local MatchSnapshot     │
 │    quick/event ► matchmaking lobby UI   │
-│    invite ────► stub (next)             │
+│    invite ────► contacts + notification │
+│                 → 2-seat lobby → room   │
 │  Velora / Arcori Detail / Standings tab │
 │  Avari Profile                          │
 └───────────────┬─────────────────────────┘
@@ -455,9 +477,9 @@ Plans: [ws-matchmaking-modes.md](ws-matchmaking-modes.md); next [ws-invite-match
 
 | Stack | Modules |
 |-------|---------|
-| Python | `catalog`, `standings`, `avari`, players AI sample |
+| Python | `catalog`, `standings`, `avari`, players AI sample, `friend_match_invite`, `contacts` |
 | Dart | `match`, `matchmaking` |
-| Flutter | `play`, `match`, `matchmaking`, `velora`, `avari` |
+| Flutter | `play`, `match`, `matchmaking`, `velora`, `avari`, notifications reply listener |
 
 ---
 
@@ -470,15 +492,15 @@ Plans: [ws-matchmaking-modes.md](ws-matchmaking-modes.md); next [ws-invite-match
 - Play hub type select  
 - Offline practice: loadout → 3 seats → auto stub 2×3 slams → idle  
 - Online Quick Start / Special Event: lobby → AI fill → match room → stub end → idle  
+- Friend Match: contacts invite → instant notification Accept → 2-seat lobby → match room → stub end  
 - 500 AI players + admin test Avari in local DB  
 
 ### Next (ordered by master plan)
 
-1. **Friend Match / invite WS** — private lobby into same match room SSOT  
-2. Weighted slam / real turn logic / random first player (practice + online)  
-3. Celebration + Match Summary + FastAPI durable rewards  
-4. Home sink Trove • PLAY • Market; first-time / returning flows  
-5. My Mastery tab; Trove UI; economy writers from matches  
+1. **Weighted slam / real turn logic / random first player** (practice + online)  
+2. Celebration + Match Summary + FastAPI durable rewards  
+3. Home sink Trove • PLAY • Market; first-time / returning flows  
+4. My Mastery tab; Trove UI; economy writers from matches  
 
 ---
 
@@ -494,9 +516,14 @@ Plans: [ws-matchmaking-modes.md](ws-matchmaking-modes.md); next [ws-invite-match
 | HTTP for Standings, not flip-stream WS | Race updates are sparse | Optional invalidate later |
 | Dart hot match for online; Flutter-only practice | Offline practice must be free and local | Two apply paths, one snapshot shape |
 | Catalog freeze at match init | Fair mid-match balance | Service batch; strip prompts |
+| Five launch regions; standing −2…+2 | Politics without good/evil factions; travel and collecting stay open | Region Catalog `01_regions.json`; region-to-region standings, not design IDs |
+| Match Arcori pick after seats | Players do not choose loadout online; hostility pairs more often | `04_selection_weights.json` + `POST /service/catalog/select_arcori`; pool = that seat’s circulating `player_design_access` only (weighted, else random in-pool; never global catalog) |
+| Online stub turn stages before end | Prove seat order / round / slam event without physics | Dart `MatchStubLoop` after `startFromLobby`: 2×N stub slams (`lastEvent` includes `slammerId`); Flutter waits for `ended` |
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
 | Caller (not host/steward) | Table-feel product voice | `callerUserId` on snapshot |
 | Join-or-create + 5s + AI fill | Solo players still play | Shared matchmaking for quick/event |
+| Friend Match via notification reply | Guest can accept from any screen; invite persists if app was backgrounded | `create_for_user` instant + `data.response` reply; no parallel invite modal |
+| Invite = 2 humans, no AI | Friend Match is a human table | Separate invite queueKey; cancel if second human never arrives |
 | Embed 10 practice AI ids | True offline | No practice → DB dependency |
 | Action packs by type/subtype | Events can add rules later | Core pack + registry; practice no subtype |
 
@@ -532,6 +559,7 @@ Plans: [ws-matchmaking-modes.md](ws-matchmaking-modes.md); next [ws-invite-match
 - [practice-stub-gameplay.md](practice-stub-gameplay.md)  
 - [ws-matchmaking-modes.md](ws-matchmaking-modes.md)  
 - [ws-invite-match.md](ws-invite-match.md)  
+- [stub-match-arcori-selection.md](stub-match-arcori-selection.md)  
 - [catalog-hot-reload.md](catalog-hot-reload.md)  
 - [arcori-standings-surface.md](arcori-standings-surface.md)  
 - [avari-profile.md](avari-profile.md)  
@@ -549,4 +577,4 @@ Plans: [ws-matchmaking-modes.md](ws-matchmaking-modes.md); next [ws-invite-match
 
 ---
 
-*End of case study narrative (game implementation through invite-next boundary, 2026-08-09).*
+*End of case study narrative (game implementation through Friend Match live, 2026-08-20).*

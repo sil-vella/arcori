@@ -27,6 +27,27 @@ void main() {
       lobbyStore = MatchmakingStore();
       final fastApi = FastApiServiceClient(
         client: MockClient((request) async {
+          if (request.url.path == '/service/catalog/select_arcori') {
+            final body = jsonDecode(request.body) as Map;
+            final seats = body['seats'] as List? ?? [];
+            final selections = <Map<String, dynamic>>[];
+            for (var i = 0; i < seats.length; i++) {
+              final seat = seats[i] as Map;
+              final userId = seat['userId']?.toString() ?? '';
+              selections.add({
+                'userId': userId,
+                'arcoriId': i == 0 ? stubArcoriId : stubAiArcoriId,
+                'source': 'weighted',
+              });
+            }
+            return http.Response(
+              jsonEncode({
+                'ok': true,
+                'data': {'selections': selections},
+              }),
+              200,
+            );
+          }
           if (request.url.path == '/service/catalog/designs') {
             return http.Response(
               jsonEncode({
@@ -87,12 +108,24 @@ void main() {
               200,
             );
           }
+          if (request.url.path == '/service/players/is_ai') {
+            final body = jsonDecode(request.body) as Map;
+            final userId = body['userId']?.toString() ?? '';
+            return http.Response(
+              jsonEncode({
+                'ok': true,
+                'data': {'isAi': userId == 'ai-user-1'},
+              }),
+              200,
+            );
+          }
           return http.Response('not found', 404);
         }),
       );
       matchSvc = MatchService(
         store: matchStoreLocal,
         catalog: MatchCatalogClient(fastApi: fastApi),
+        autoStubTurns: false,
       );
       mm = MatchmakingService(
         store: lobbyStore,
@@ -177,7 +210,11 @@ void main() {
         userId: 'host-1',
         connectionId: 'c-host',
         payload: {
-          'matchType': {'code': 'invite', 'subtype': 'inv-1'},
+          'matchType': {
+            'code': 'invite',
+            'subtype': 'inv-1',
+            'invitedUserId': 'ai-user-1',
+          },
           'createIfMissing': true,
         },
       );

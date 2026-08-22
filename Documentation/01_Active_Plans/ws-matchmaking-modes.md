@@ -22,7 +22,7 @@ Play → quickStart | specialEvent
   → Flutter match surface (stub auto-end for caller) → postMatch stub → idle
 
 Play → practice → offline (unchanged)
-Play → invite → next plan [ws-invite-match.md](ws-invite-match.md) (still Play stub today)
+Play → invite → [ws-invite-match.md](ws-invite-match.md) (private 2-seat lobby, notification Accept)
 ```
 
 ## Room SSOT
@@ -38,13 +38,13 @@ Play → invite → next plan [ws-invite-match.md](ws-invite-match.md) (still Pl
 - [x] Flutter: wire quickStart / specialEvent → find; lobby modal; match surface
 - [x] Auth / config / lobby-timeout abort → idle + centered OK modal (no sticky Finding players)
 - [x] Lobby dismiss race (promote before mount / leave typeSetup) + match-surface single dismiss
-- [x] Invite left as Play stub — tracked in [ws-invite-match.md](ws-invite-match.md)
+- [x] Invite left as a separate plan — [ws-invite-match.md](ws-invite-match.md) (**done**)
 - [x] Unit tests (Dart matchmaking + Flutter play gate) + active plans
 
 ## Gaps (deferred — not this plan)
 
 - Weighted slam / real online gameplay loop
-- Standing empty rooms / invite (see next plan)
+- Standing empty rooms
 - Flutter `error_policy` mapping for all `matchmaking/…` WS codes
 
 ## Files

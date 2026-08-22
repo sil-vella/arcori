@@ -45,6 +45,7 @@ class PasswordUtilsTests(unittest.TestCase):
 
 
 class RegisterTests(unittest.TestCase):
+    @patch("modules.auth.auth_service.avari_repo.ensure_avari_profile")
     @patch("modules.auth.auth_service.enforce_guest_register_rate_limit")
     @patch("modules.auth.auth_service.enforce_auth_identity_rate_limit")
     @patch("modules.auth.auth_service.get_refresh_session_store")
@@ -57,6 +58,7 @@ class RegisterTests(unittest.TestCase):
         get_store: MagicMock,
         _rl: MagicMock,
         _guest_rl: MagicMock,
+        ensure_profile: MagicMock,
     ) -> None:
         session = MagicMock()
         scope.return_value.__enter__.return_value = session
@@ -83,6 +85,7 @@ class RegisterTests(unittest.TestCase):
         self.assertEqual(payload["refresh_token"], "refresh-token")
         self.assertTrue(payload["is_guest"])
         store.set_current_jti.assert_called_once_with(str(user.id), "jti-1")
+        ensure_profile.assert_called_once()
 
     @patch("modules.auth.auth_service.enforce_auth_identity_rate_limit")
     @patch("modules.auth.auth_service.session_scope")
@@ -108,12 +111,14 @@ class RegisterTests(unittest.TestCase):
 
 
 class LoginTests(unittest.TestCase):
+    @patch("modules.auth.auth_service.avari_repo.ensure_avari_profile")
     @patch("modules.auth.auth_service.enforce_auth_identity_rate_limit")
     @patch("modules.auth.auth_service.get_refresh_session_store")
     @patch("modules.auth.auth_service.session_scope")
     @patch("modules.auth.auth_service.user_repository")
     def test_login_success(
-        self, repo: MagicMock, scope: MagicMock, get_store: MagicMock, _rl: MagicMock
+        self, repo: MagicMock, scope: MagicMock, get_store: MagicMock, _rl: MagicMock,
+        ensure_profile: MagicMock,
     ) -> None:
         session = MagicMock()
         scope.return_value.__enter__.return_value = session
@@ -132,6 +137,7 @@ class LoginTests(unittest.TestCase):
 
         self.assertEqual(payload["user_id"], str(user.id))
         self.assertTrue(payload["is_guest"])
+        ensure_profile.assert_called_once()
 
     @patch("modules.auth.auth_service.enforce_auth_identity_rate_limit")
     @patch("modules.auth.auth_service.session_scope")

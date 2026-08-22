@@ -1521,6 +1521,7 @@ def require_wfrun() -> Path:
 
 @dataclass
 class ScriptSession:
+    session_key: str
     script_id: str
     runner: PtyRunner
     run_log: RunLog
@@ -1535,7 +1536,7 @@ def _rel_log_path(log_path: Path, root: Path) -> str:
 
 
 class SessionManager:
-    """One PTY session per script id — multiple scripts can run concurrently."""
+    """Concurrent PTY sessions. The same script may run in more than one tab."""
 
     def __init__(self) -> None:
         self._sessions: dict[str, ScriptSession] = {}
@@ -1543,18 +1544,10 @@ class SessionManager:
 
     async def stop_session(self, session: ScriptSession) -> None:
         async with self._lock:
-            current = self._sessions.get(session.script_id)
+            current = self._sessions.get(session.session_key)
             if current is not session:
                 return
-            self._sessions.pop(session.script_id, None)
-        await session.runner.terminate()
-        session.run_log.close(exit_code=None)
-
-    async def stop(self, script_id: str) -> None:
-        async with self._lock:
-            session = self._sessions.pop(script_id, None)
-        if session is None:
-            return
+            self._sessions.pop(session.session_key, None)
         await session.runner.terminate()
         session.run_log.close(exit_code=None)
 
@@ -1566,21 +1559,25 @@ class SessionManager:
         rows: int,
         send_json: Callable[[dict[str, object]], Awaitable[None]],
         send_bytes: Callable[[bytes], Awaitable[None]],
+        env_overrides: dict[str, str] | None = None,
     ) -> tuple[ScriptSession, Path]:
-        await self.stop(entry_id)
-
         catalog = discover_scripts(root)
         entry = resolve_script(root, entry_id, catalog)
         cmd = build_command(entry.path)
         child_env = env_for_script(entry)
+        if env_overrides:
+            child_env.update(env_overrides)
         cwd = cwd_for_script()
         mode = os.environ.get("WFRUN_MODE", "local")
+        session_key = uuid.uuid4().hex
 
         log_path = log_path_for_script(entry.id)
         log_rel = _rel_log_path(log_path, root)
         run_log = RunLog(log_path, entry.id, cmd, mode)
+
         runner = PtyRunner(cmd, child_env, cwd, cols=cols, rows=rows)
         session = ScriptSession(
+            session_key=session_key,
             script_id=entry.id,
             runner=runner,
             run_log=run_log,
@@ -1597,11 +1594,11 @@ class SessionManager:
                 {"type": "exit", "code": code, "log_file": log_rel}
             )
             async with self._lock:
-                if self._sessions.get(entry.id) is session:
-                    self._sessions.pop(entry.id, None)
+                if self._sessions.get(session_key) is session:
+                    self._sessions.pop(session_key, None)
 
         async with self._lock:
-            self._sessions[entry.id] = session
+            self._sessions[session_key] = session
 
         runner.start(on_output, on_exit)
         print(f"📝 Logging: {log_rel}")
@@ -1907,11 +1904,18 @@ async def handle_ws_run(request: web.Request) -> web.WebSocketResponse:
     script_id = request.query.get("script", "").strip()
     cols = int(request.query.get("cols", "80"))
     rows = int(request.query.get("rows", "24"))
+    mirror_raw = request.query.get("mirror_global_log", "").strip().lower()
 
     if not script_id:
         await ws.send_json({"type": "error", "message": "Missing script query parameter"})
         await ws.close()
         return ws
+
+    env_overrides: dict[str, str] = {}
+    if mirror_raw in {"1", "true", "yes", "on"}:
+        env_overrides["WFRUN_MIRROR_GLOBAL_LOG"] = "1"
+    elif mirror_raw in {"0", "false", "no", "off"}:
+        env_overrides["WFRUN_MIRROR_GLOBAL_LOG"] = "0"
 
     async def send_json(payload: dict[str, object]) -> None:
         if not ws.closed:
@@ -1924,7 +1928,13 @@ async def handle_ws_run(request: web.Request) -> web.WebSocketResponse:
     session: ScriptSession | None = None
     try:
         session, _log_path = await manager.start(
-            script_id, root, cols, rows, send_json, send_bytes
+            script_id,
+            root,
+            cols,
+            rows,
+            send_json,
+            send_bytes,
+            env_overrides=env_overrides or None,
         )
     except ValueError as exc:
         await send_json({"type": "error", "message": str(exc)})

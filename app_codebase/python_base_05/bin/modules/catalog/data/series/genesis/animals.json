@@ -11,14 +11,17 @@
       "designCode": "TIG",
       "designFamily": "TIGER",
       "design": "Tiger",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -35,6 +38,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -51,14 +55,17 @@
       "designCode": "WTI",
       "designFamily": "WHITE_TIGER",
       "design": "White Tiger",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -74,7 +81,8 @@
       "style": "Realistic",
       "finish": "Gloss",
       "effect": "Glow",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -91,14 +99,17 @@
       "designCode": "LIO",
       "designFamily": "LION",
       "design": "Lion",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -115,6 +126,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -131,14 +143,17 @@
       "designCode": "BPA",
       "designFamily": "BLACK_PANTHER",
       "design": "Black Panther",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -154,7 +169,8 @@
       "style": "Comic",
       "finish": "Metallic",
       "effect": "Motion",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -171,14 +187,17 @@
       "designCode": "CHE",
       "designFamily": "CHEETAH",
       "design": "Cheetah",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -194,7 +213,8 @@
       "style": "Anime",
       "finish": "Gloss",
       "effect": "Motion",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -211,14 +231,17 @@
       "designCode": "LEO",
       "designFamily": "LEOPARD",
       "design": "Leopard",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -234,7 +257,8 @@
       "style": "Watercolor",
       "finish": "Matte",
       "effect": "None",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -251,8 +275,9 @@
       "designCode": "SNL",
       "designFamily": "SNOW_LEOPARD",
       "design": "Snow Leopard",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -274,7 +299,8 @@
       "style": "Realistic",
       "finish": "Foil",
       "effect": "Sparkle",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -291,14 +317,17 @@
       "designCode": "JAG",
       "designFamily": "JAGUAR",
       "design": "Jaguar",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -314,7 +343,8 @@
       "style": "Comic",
       "finish": "Chrome",
       "effect": "Pulse",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -331,8 +361,9 @@
       "designCode": "AWO",
       "designFamily": "ARCTIC_WOLF",
       "design": "Arctic Wolf",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -355,6 +386,7 @@
       "finish": "Matte",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -371,14 +403,17 @@
       "designCode": "GWO",
       "designFamily": "GREY_WOLF",
       "design": "Grey Wolf",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -395,6 +430,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -411,14 +447,17 @@
       "designCode": "RFX",
       "designFamily": "RED_FOX",
       "design": "Red Fox",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -434,7 +473,8 @@
       "style": "Cartoon",
       "finish": "Gloss",
       "effect": "Motion",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -451,15 +491,20 @@
       "designCode": "GEA",
       "designFamily": "GOLDEN_EAGLE",
       "design": "Golden Eagle",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -474,7 +519,8 @@
       "style": "Realistic",
       "finish": "Metallic",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -491,15 +537,20 @@
       "designCode": "PFA",
       "designFamily": "PEREGRINE_FALCON",
       "design": "Peregrine Falcon",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -515,6 +566,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -531,14 +583,17 @@
       "designCode": "GWS",
       "designFamily": "GREAT_WHITE_SHARK",
       "design": "Great White Shark",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -554,7 +609,8 @@
       "style": "Realistic",
       "finish": "Chrome",
       "effect": "Motion",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -571,14 +627,17 @@
       "designCode": "ORC",
       "designFamily": "ORCA",
       "design": "Orca",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -594,7 +653,8 @@
       "style": "Minimalist",
       "finish": "Gloss",
       "effect": "None",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -611,14 +671,17 @@
       "designCode": "KCO",
       "designFamily": "KING_COBRA",
       "design": "King Cobra",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -634,7 +697,8 @@
       "style": "Comic",
       "finish": "Foil",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -651,14 +715,17 @@
       "designCode": "KDR",
       "designFamily": "KOMODO_DRAGON",
       "design": "Komodo Dragon",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -674,7 +741,8 @@
       "style": "Realistic",
       "finish": "Matte",
       "effect": "None",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -691,14 +759,17 @@
       "designCode": "SCR",
       "designFamily": "SALTWATER_CROCODILE",
       "design": "Saltwater Crocodile",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -715,6 +786,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -731,15 +803,20 @@
       "designCode": "EDR",
       "designFamily": "EMPEROR_DRAGONFLY",
       "design": "Emperor Dragonfly",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -754,7 +831,8 @@
       "style": "Anime",
       "finish": "Transparent",
       "effect": "Sparkle",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -771,15 +849,20 @@
       "designCode": "MBF",
       "designFamily": "MONARCH_BUTTERFLY",
       "design": "Monarch Butterfly",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -794,7 +877,8 @@
       "style": "Watercolor",
       "finish": "Prismatic",
       "effect": "Rainbow Shift",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",

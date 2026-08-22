@@ -58,6 +58,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     MatchType type, {
     PracticeLoadout? practiceLoadout,
     String? inviteId,
+    String? invitedUserId,
   }) async {
     if (state.phase != MatchFlowPhase.selectingType) return;
 
@@ -101,6 +102,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     } else if (type == MatchType.invite) {
       await _runInviteMatchmaking(
         inviteId: inviteId!,
+        invitedUserId: invitedUserId ?? '',
         createIfMissing: true,
       );
       if (!_isCurrentRun(runId, type)) return;
@@ -152,6 +154,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
 
     await _runInviteMatchmaking(
       inviteId: inviteId.trim(),
+      invitedUserId: '',
       createIfMissing: false,
     );
     if (!_isCurrentRun(runId, MatchType.invite)) return;
@@ -210,9 +213,6 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
 
   /// Step delay for auto stub practice loop (tests may set [Duration.zero]).
   Duration practiceStubStepDelay = practiceStubStepDelayDefault;
-
-  /// When true (default), online caller auto-sends match/end after promote (stub).
-  bool autoEndOnlineMatch = true;
 
   /// Flutter-only practice: local human + 2 AI. Auto stub loop then end.
   Future<void> _runPracticeLocal(PracticeLoadout? loadout) async {
@@ -321,29 +321,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       return;
     }
 
-    if (autoEndOnlineMatch) {
-      await Future<void>.delayed(const Duration(milliseconds: 400));
-      final snap = ref.read(matchSnapshotProvider);
-      final userId = ref.read(authProvider).userId?.trim();
-      if (!snap.isEnded &&
-          userId != null &&
-          userId.isNotEmpty &&
-          snap.callerUserId == userId) {
-        try {
-          await manager.send(
-            _dartWsId,
-            type: 'event',
-            channel: 'match/end',
-            payload: {'matchId': matchId},
-          );
-        } catch (e) {
-          if (LOGGING_SWITCH) {
-            customlog('play: onlineMatchmaking auto-end error: $e');
-          }
-        }
-      }
-    }
-
+    // Online stub turns run on Dart (2 rounds × slam); wait for phase=ended.
     await _waitForMatchField(
       (s) => s.isEnded ? true : null,
       label: 'ended',
@@ -378,8 +356,19 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     return {'code': 'quickStart'};
   }
 
-  Map<String, dynamic> _inviteMatchTypePayload(String inviteId) {
-    return {'code': 'invite', 'subtype': inviteId};
+  Map<String, dynamic> _inviteMatchTypePayload(
+    String inviteId, {
+    String invitedUserId = '',
+  }) {
+    final payload = <String, dynamic>{
+      'code': 'invite',
+      'subtype': inviteId,
+    };
+    final invited = invitedUserId.trim();
+    if (invited.isNotEmpty) {
+      payload['invitedUserId'] = invited;
+    }
+    return payload;
   }
 
   /// Invite Friend Match: Dart matchmaking find → promote → match room.
@@ -389,6 +378,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
   /// - no AI fill
   Future<void> _runInviteMatchmaking({
     required String inviteId,
+    required String invitedUserId,
     required bool createIfMissing,
   }) async {
     final gateError = _onlinePlayGateError();
@@ -413,7 +403,10 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       await manager.connect(_dartWsId, url: url, accessToken: token);
     }
 
-    final matchType = _inviteMatchTypePayload(inviteId);
+    final matchType = _inviteMatchTypePayload(
+      inviteId,
+      invitedUserId: invitedUserId,
+    );
     if (LOGGING_SWITCH) {
       customlog(
         'play: invite matchmaking find matchType=$matchType '
@@ -472,29 +465,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       return;
     }
 
-    if (autoEndOnlineMatch) {
-      await Future<void>.delayed(const Duration(milliseconds: 400));
-      final snap = ref.read(matchSnapshotProvider);
-      final userId = ref.read(authProvider).userId?.trim();
-      if (!snap.isEnded &&
-          userId != null &&
-          userId.isNotEmpty &&
-          snap.callerUserId == userId) {
-        try {
-          await manager.send(
-            _dartWsId,
-            type: 'event',
-            channel: 'match/end',
-            payload: {'matchId': matchId},
-          );
-        } catch (e) {
-          if (LOGGING_SWITCH) {
-            customlog('play: invite auto-end error: $e');
-          }
-        }
-      }
-    }
-
+    // Online stub turns run on Dart (2 rounds × slam); wait for phase=ended.
     await _waitForMatchField(
       (s) => s.isEnded ? true : null,
       label: 'ended',
@@ -520,13 +491,43 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
 
   Future<bool?> _waitForLobbyPromoted({required Duration timeout}) async {
     final deadline = DateTime.now().add(timeout);
+    var ticks = 0;
     while (DateTime.now().isBefore(deadline)) {
       final lobby = ref.read(lobbySnapshotProvider);
-      if (lobby.phase == 'cancelled') return null;
-      if (lobby.isPromoted) return true;
+      if (lobby.phase == 'cancelled') {
+        if (LOGGING_SWITCH) {
+          customlog('play: lobby cancelled while waiting for promote');
+        }
+        return null;
+      }
+      if (lobby.isPromoted) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'play: lobby promoted lobbyId=${lobby.lobbyId} '
+            'matchId=${lobby.matchId}',
+          );
+        }
+        return true;
+      }
       final match = ref.read(matchSnapshotProvider);
-      if (match.matchId != null && match.matchId!.isNotEmpty) return true;
+      if (match.matchId != null && match.matchId!.isNotEmpty) {
+        if (LOGGING_SWITCH) {
+          customlog('play: match snapshot ready matchId=${match.matchId}');
+        }
+        return true;
+      }
+      ticks++;
+      if (LOGGING_SWITCH && ticks % 20 == 0) {
+        customlog(
+          'play: waiting promote lobbyId=${lobby.lobbyId} '
+          'phase=${lobby.phase} members=${lobby.members.length}/'
+          '${lobby.targetSeats} matchId=${match.matchId}',
+        );
+      }
       await Future<void>.delayed(const Duration(milliseconds: 50));
+    }
+    if (LOGGING_SWITCH) {
+      customlog('play: lobby promote wait timed out');
     }
     return null;
   }

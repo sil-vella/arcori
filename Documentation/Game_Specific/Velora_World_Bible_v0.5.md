@@ -1,7 +1,7 @@
 # Velora World Bible
 
 Working Draft v0.5  
-**Last aligned:** 2026-07-26 (Avari — those who walk beside the Arcori)
+**Last aligned:** 2026-08-20 (five launch regions + regional standing)
 
 ## The Origin of Velora
 
@@ -44,6 +44,66 @@ Among the Avari, the Chronicles mark those who rise further:
 | **Generation Creator** | Historical title | Named when a generation’s origin is attributed to an Avari’s hand |
 
 Identity first; titles after. An Avari remains Avari even when the Chronicle also names them Master, Legacy Owner, or Generation Creator.
+
+## The Five Launch Regions
+
+Early Velora is known through five regions. Together they give a balanced foundation: horror and mystery, heroic adventure, irreverent comedy, oceanic discovery, and ancient wilderness.
+
+Regional ties are political and cultural, not moral camps. An Avari’s region may colour reputation and story — it does not bar friendship, travel, or collecting Arcori.
+
+Catalog SSOT: `01_regions.json` (`regionCode`, lore, identity, standing, alliances).
+
+| Code | Region | Identity |
+|------|--------|----------|
+| **ASH** | Ashdrift Hill | Silence, obscured memories, psychological mystery, forgotten ruins |
+| **EVG** | Everlight Grove | Teamwork, transformation, colourful energy, ancient guardians |
+| **LFR** | Little Frost | Snowy small-town life, absurdity, dark comedy, recurring chaos |
+| **MWB** | Moonwake Bay | Ocean mystery, moonlit exploration, lost places, changing tides |
+| **AMB** | Amberwild | Wilderness, ancient life, preserved moments, exploration, awakening |
+| **RBY** | Realm Beyond | Beyond the veil — not a Velora land; no affinities or hostilities |
+
+**Ashdrift Hill.** Ash falls endlessly, though no fire or volcano has been found. Roads vanish under pale drifts; abandoned structures emerge without warning; distant figures appear in the grey and are gone. Some say the ash is memories Velora could not keep. Others say something beneath the hill still burns. The Chronicle confirms neither.
+
+**Everlight Grove.** Enormous trees grow around ancient pillars of coloured light. When the Grove is threatened, those colours converge into one radiant force. Old carvings show guardians beside colossal animal-shaped figures — creature, machine, or symbol, forgotten. The light still chooses new defenders.
+
+**Little Frost.** A remote settlement in seeming permanent winter: colourful houses, modest streets, cheerful people — until something strange happens, as it always does. Monsters, visitors, disasters, and ridiculous disputes are ordinary inconveniences. Buildings may fall one day and stand the next morning. No one agrees whether the town heals itself or refuses to remember.
+
+**Moonwake Bay.** A luminous coast where the sea glows under the moon. Receding tide reveals pathways, Arcori markings, and unmapped fragments of structure. Sailors say the moon draws forgotten places close to Velora. Some ruins last minutes; others last generations. Those who follow the lights beneath the waves do not always return to the same shore.
+
+**Amberwild.** Golden wilderness of grassland, forest, and towering amber. Inside the amber: shapes like extinct creatures, unfamiliar objects, moments frozen in time. The land feels ancient, yet storms uncover new finds. Some believe Amberwild keeps memories from fading. Others warn the amber is not preserving its inhabitants — it is waiting to release them.
+
+### Standing between regions
+
+| Standing | Value |
+|----------|-------|
+| Affinity | +2 |
+| Favourable | +1 |
+| Neutral | 0 |
+| Tension | −1 |
+| Hostility | −2 |
+
+| Pair | Standing | Why |
+|------|----------|-----|
+| Ashdrift Hill ↔ Moonwake Bay | Affinity | Pathfinders share brief, vanishing discoveries |
+| Everlight Grove ↔ Amberwild | Affinity | Guardians and wilderness exchange protection and knowledge |
+| Everlight Grove ↔ Little Frost | Favourable | Everlight helps after disasters; Little Frost mocks the ceremony |
+| Little Frost ↔ Moonwake Bay | Favourable | Frozen trade routes; both live beside the unexplained |
+| Ashdrift Hill ↔ Amberwild | Neutral | Different ways of keeping the past; curious, distant |
+| Ashdrift Hill ↔ Little Frost | Neutral | Shared harsh climate; mutual distrust of disappearances |
+| Everlight Grove ↔ Moonwake Bay | Tension | Secure dangerous finds vs keep forgotten places open |
+| Moonwake Bay ↔ Amberwild | Tension | Relics where the changing shore meets Amberwild |
+| Little Frost ↔ Amberwild | Tension | Careless vs overly serious preservation |
+| Ashdrift Hill ↔ Everlight Grove | Hostility | Contain / extinguish / leave the mystery beneath the ash |
+
+**The Veiled Accord** — Ashdrift Hill and Moonwake Bay study lost memories.  
+**The Living Pact** — Everlight Grove and Amberwild defend living and ancient forces.  
+**Little Frost** stands independent: friendly with Everlight and Moonwake, joins neither alliance.
+
+**Central conflict:** whether what lies beneath Ashdrift’s falling ash should be contained, extinguished, or left untouched.
+
+### The Realm Beyond (catalogued, outside the map)
+
+**RBY** is not a sixth Velora polity. It is the elsewhere beyond the veil — the Realm Beyond of the Great Separation. It joins no alliance and holds **no affinities or hostilities**. Catalog residents at launch: Katie, Ten, Lemon, Ten & Lemon, LeeG.
 
 ## The Great Separation (Future Revelation Draft)
 

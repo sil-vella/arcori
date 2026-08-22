@@ -11,14 +11,17 @@
       "designCode": "PHA",
       "designFamily": "PHARAOH",
       "design": "Pharaoh",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -34,7 +37,8 @@
       "style": "Realistic",
       "finish": "Foil",
       "effect": "Glow",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -51,15 +55,20 @@
       "designCode": "ANB",
       "designFamily": "ANUBIS_GUARDIAN",
       "design": "Anubis Guardian",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -74,7 +83,8 @@
       "style": "Comic",
       "finish": "Metallic",
       "effect": "Fire",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -91,15 +101,20 @@
       "designCode": "SCR",
       "designFamily": "ROYAL_SCRIBE",
       "design": "Royal Scribe",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -115,6 +130,7 @@
       "finish": "Matte",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -131,8 +147,9 @@
       "designCode": "BSR",
       "designFamily": "BERSERKER",
       "design": "Berserker",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -154,7 +171,8 @@
       "style": "Comic",
       "finish": "Metallic",
       "effect": "Motion",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -171,14 +189,17 @@
       "designCode": "LSH",
       "designFamily": "LONGSHIP_CAPTAIN",
       "design": "Longship Captain",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -194,7 +215,8 @@
       "style": "Realistic",
       "finish": "Chrome",
       "effect": "Pulse",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -211,15 +233,20 @@
       "designCode": "RSM",
       "designFamily": "RUNE_SHIELD",
       "design": "Rune Shield",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -234,7 +261,8 @@
       "style": "Anime",
       "finish": "Foil",
       "effect": "Glow",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -251,15 +279,20 @@
       "designCode": "KNG",
       "designFamily": "ROYAL_KNIGHT",
       "design": "Royal Knight",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -275,6 +308,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -291,15 +325,20 @@
       "designCode": "PAL",
       "designFamily": "PALADIN",
       "design": "Paladin",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -314,7 +353,8 @@
       "style": "Comic",
       "finish": "Metallic",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -331,8 +371,9 @@
       "designCode": "JST",
       "designFamily": "JOUST_CHAMPION",
       "design": "Joust Champion",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -354,7 +395,8 @@
       "style": "Anime",
       "finish": "Chrome",
       "effect": "Motion",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -371,14 +413,17 @@
       "designCode": "LEG",
       "designFamily": "LEGIONNAIRE",
       "design": "Legionnaire",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -394,7 +439,8 @@
       "style": "Realistic",
       "finish": "Foil",
       "effect": "None",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -411,14 +457,17 @@
       "designCode": "CES",
       "designFamily": "CAESAR",
       "design": "Caesar",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -434,7 +483,8 @@
       "style": "Watercolor",
       "finish": "Prismatic",
       "effect": "Glow",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -451,14 +501,17 @@
       "designCode": "GLD",
       "designFamily": "GLADIATOR",
       "design": "Gladiator",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -474,7 +527,8 @@
       "style": "Comic",
       "finish": "Metallic",
       "effect": "Fire",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -491,15 +545,20 @@
       "designCode": "SAM",
       "designFamily": "SAMURAI",
       "design": "Samurai",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -514,7 +573,8 @@
       "style": "Realistic",
       "finish": "Matte",
       "effect": "None",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -531,15 +591,20 @@
       "designCode": "SHG",
       "designFamily": "SHOGUN",
       "design": "Shogun",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -554,7 +619,8 @@
       "style": "Anime",
       "finish": "Foil",
       "effect": "Glow",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -571,15 +637,20 @@
       "designCode": "NIN",
       "designFamily": "NINJA_SCOUT",
       "design": "Ninja Scout",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -594,7 +665,8 @@
       "style": "Comic",
       "finish": "Gloss",
       "effect": "Motion",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -611,8 +683,9 @@
       "designCode": "SHF",
       "designFamily": "LONE_SHERIFF",
       "design": "Lone Sheriff",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -635,6 +708,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -651,14 +725,17 @@
       "designCode": "GSL",
       "designFamily": "GUNSLINGER",
       "design": "Gunslinger",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -674,7 +751,8 @@
       "style": "Realistic",
       "finish": "Chrome",
       "effect": "Fire",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -691,14 +769,17 @@
       "designCode": "OUT",
       "designFamily": "OUTLAW",
       "design": "Outlaw",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -714,7 +795,8 @@
       "style": "Graffiti",
       "finish": "Matte",
       "effect": "Smoke",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -731,14 +813,17 @@
       "designCode": "EXP",
       "designFamily": "EXPLORER",
       "design": "Explorer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -754,7 +839,8 @@
       "style": "Watercolor",
       "finish": "Gloss",
       "effect": "Sparkle",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -771,14 +857,17 @@
       "designCode": "NAV",
       "designFamily": "MASTER_NAVIGATOR",
       "design": "Master Navigator",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -794,7 +883,8 @@
       "style": "Minimalist",
       "finish": "Metallic",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",

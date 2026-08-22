@@ -1,16 +1,347 @@
 {
   "catalog": "Launch Regions",
-  "version": 1,
+  "version": 3,
+  "description": "Velora's five starting lands plus the Realm Beyond. Velora relationships are political and cultural, not permanent moral alignments. An Avari's region influences reputation and story opportunities — it does not prevent friendships, travel, or collecting Arcori. The Realm Beyond sits outside that map and has no affinities or hostilities.",
+  "standingScale": {
+    "affinity": 2,
+    "favourable": 1,
+    "neutral": 0,
+    "tension": -1,
+    "hostility": -2
+  },
+  "centralConflict": {
+    "regions": ["ASH", "EVG"],
+    "summary": "Ashdrift Hill and Everlight Grove disagree over whether the mystery beneath the falling ash should be contained, extinguished or left untouched."
+  },
+  "alliances": [
+    {
+      "allianceCode": "VEILED_ACCORD",
+      "name": "The Veiled Accord",
+      "members": ["ASH", "MWB"],
+      "purpose": "Cooperate in studying lost memories and places that appear only briefly."
+    },
+    {
+      "allianceCode": "LIVING_PACT",
+      "name": "The Living Pact",
+      "members": ["EVG", "AMB"],
+      "purpose": "Defend living wilderness and ancient forces."
+    }
+  ],
   "regions": [
     {
-      "regionCode": "HTW",
-      "relationships": {
-        "affinity": [
-          "NAT-FOR-GEN001-0001"
-        ],
-        "hostility": [
-          "FAN-OBR-GEN001-0014"
+      "regionCode": "ASH",
+      "name": "Ashdrift Hill",
+      "type": "region",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "allianceCode": "VEILED_ACCORD",
+      "loreDescription": "Ash falls endlessly across Ashdrift Hill, although no fire or volcano has ever been found. Roads disappear beneath pale drifts, abandoned structures emerge without warning, and distant figures sometimes appear through the grey before vanishing again.\n\nThe people of Ashdrift believe the falling ash is the remains of memories that Velora could not preserve. Others claim something beneath the hill is still burning—but no Chronicle confirms what it might be.",
+      "identity": {
+        "summary": "silence, obscured memories, psychological mystery and forgotten ruins",
+        "traits": [
+          "silence",
+          "obscured memories",
+          "psychological mystery",
+          "forgotten ruins"
         ]
+      },
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "relationships": {
+        "affinity": ["MWB"],
+        "favourable": [],
+        "neutral": ["AMB", "LFR"],
+        "tension": [],
+        "hostility": ["EVG"],
+        "allies": ["MWB"],
+        "enemies": ["EVG"],
+        "standings": {
+          "MWB": {
+            "value": 2,
+            "label": "Affinity",
+            "reason": "Both study places and memories that appear only briefly. Their pathfinders regularly exchange discoveries."
+          },
+          "AMB": {
+            "value": 0,
+            "label": "Neutral",
+            "reason": "Both preserve the past differently: Ashdrift lets memories fall and fade; Amberwild traps them in amber. They remain curious but distant."
+          },
+          "LFR": {
+            "value": 0,
+            "label": "Neutral",
+            "reason": "Their harsh climates create mutual understanding, but neither region entirely trusts the other's strange disappearances and recoveries."
+          },
+          "EVG": {
+            "value": -2,
+            "label": "Hostility",
+            "reason": "Everlight believes something beneath Ashdrift threatens Velora. Ashdrift considers Everlight's attempted interventions an invasion."
+          }
+        }
+      }
+    },
+    {
+      "regionCode": "EVG",
+      "name": "Everlight Grove",
+      "type": "region",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "allianceCode": "LIVING_PACT",
+      "loreDescription": "Everlight Grove is a bright, energetic land where enormous trees grow around ancient pillars of coloured light. Each pillar shines differently, but when danger threatens the Grove, their separate colours converge into a single radiant force.\n\nOld carvings depict groups of guardians standing beside colossal animal-shaped figures. Whether these were creatures, machines or symbolic protectors has been forgotten. The light continues to choose new defenders whenever the Grove needs them.",
+      "identity": {
+        "summary": "teamwork, transformation, colourful energy and ancient guardians",
+        "traits": [
+          "teamwork",
+          "transformation",
+          "colourful energy",
+          "ancient guardians"
+        ]
+      },
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "relationships": {
+        "affinity": ["AMB"],
+        "favourable": ["LFR"],
+        "neutral": [],
+        "tension": ["MWB"],
+        "hostility": ["ASH"],
+        "allies": ["AMB"],
+        "enemies": ["ASH"],
+        "standings": {
+          "AMB": {
+            "value": 2,
+            "label": "Affinity",
+            "reason": "The Grove's guardians protect Amberwild's living wilderness, while Amberwild provides ancient knowledge and materials."
+          },
+          "LFR": {
+            "value": 1,
+            "label": "Favourable",
+            "reason": "Everlight repeatedly assists Little Frost after its inexplicable disasters. Little Frost appreciates the help but mocks Everlight's ceremony."
+          },
+          "MWB": {
+            "value": -1,
+            "label": "Tension",
+            "reason": "Everlight wants dangerous discoveries secured; Moonwake believes forgotten places must remain open to exploration."
+          },
+          "ASH": {
+            "value": -2,
+            "label": "Hostility",
+            "reason": "Everlight believes something beneath Ashdrift threatens Velora. Ashdrift considers Everlight's attempted interventions an invasion."
+          }
+        }
+      }
+    },
+    {
+      "regionCode": "LFR",
+      "name": "Little Frost",
+      "type": "region",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "allianceCode": null,
+      "loreDescription": "Little Frost is a remote settlement surrounded by snowy mountains and seemingly trapped in permanent winter. Its colourful houses, modest streets and cheerful residents make it appear peaceful—until something strange inevitably happens.\n\nMonsters, visitors, unexplained disasters and ridiculous disputes are treated as normal inconveniences. Buildings may be destroyed one day and stand untouched the next morning. No one agrees whether the town heals itself or simply refuses to remember what happened.",
+      "identity": {
+        "summary": "snowy small-town life, absurdity, dark comedy and recurring chaos",
+        "traits": [
+          "snowy small-town life",
+          "absurdity",
+          "dark comedy",
+          "recurring chaos"
+        ]
+      },
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "relationships": {
+        "affinity": [],
+        "favourable": ["EVG", "MWB"],
+        "neutral": ["ASH"],
+        "tension": ["AMB"],
+        "hostility": [],
+        "allies": [],
+        "enemies": [],
+        "standings": {
+          "EVG": {
+            "value": 1,
+            "label": "Favourable",
+            "reason": "Everlight repeatedly assists Little Frost after its inexplicable disasters. Little Frost appreciates the help but mocks Everlight's ceremony."
+          },
+          "MWB": {
+            "value": 1,
+            "label": "Favourable",
+            "reason": "Traders cross the frozen routes between them. Both cultures are comfortable living beside unexplained phenomena."
+          },
+          "ASH": {
+            "value": 0,
+            "label": "Neutral",
+            "reason": "Their harsh climates create mutual understanding, but neither region entirely trusts the other's strange disappearances and recoveries."
+          },
+          "AMB": {
+            "value": -1,
+            "label": "Tension",
+            "reason": "Amberwild considers Little Frost careless and destructive. Little Frost sees Amberwild's preservation customs as overly serious and restrictive."
+          }
+        }
+      }
+    },
+    {
+      "regionCode": "MWB",
+      "name": "Moonwake Bay",
+      "type": "region",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "allianceCode": "VEILED_ACCORD",
+      "loreDescription": "Moonwake Bay lies along a luminous coast where the sea glows beneath the moon. When the tide retreats, it reveals pathways, Arcori markings and fragments of structures that do not appear on any map.\n\nSailors believe the moon pulls more than water from the bay—it draws forgotten places close to Velora. Some ruins remain exposed for minutes; others endure for generations. Those who follow the lights beneath the waves do not always return to the same shore.",
+      "identity": {
+        "summary": "ocean mystery, moonlit exploration, lost places and changing tides",
+        "traits": [
+          "ocean mystery",
+          "moonlit exploration",
+          "lost places",
+          "changing tides"
+        ]
+      },
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "relationships": {
+        "affinity": ["ASH"],
+        "favourable": ["LFR"],
+        "neutral": [],
+        "tension": ["EVG", "AMB"],
+        "hostility": [],
+        "allies": ["ASH"],
+        "enemies": [],
+        "standings": {
+          "ASH": {
+            "value": 2,
+            "label": "Affinity",
+            "reason": "Both study places and memories that appear only briefly. Their pathfinders regularly exchange discoveries."
+          },
+          "LFR": {
+            "value": 1,
+            "label": "Favourable",
+            "reason": "Traders cross the frozen routes between them. Both cultures are comfortable living beside unexplained phenomena."
+          },
+          "EVG": {
+            "value": -1,
+            "label": "Tension",
+            "reason": "Everlight wants dangerous discoveries secured; Moonwake believes forgotten places must remain open to exploration."
+          },
+          "AMB": {
+            "value": -1,
+            "label": "Tension",
+            "reason": "They dispute relics uncovered where the changing shoreline meets Amberwild territory."
+          }
+        }
+      }
+    },
+    {
+      "regionCode": "AMB",
+      "name": "Amberwild",
+      "type": "region",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "allianceCode": "LIVING_PACT",
+      "loreDescription": "Amberwild is a vast golden wilderness of sunlit grasslands, dense forests and towering amber formations. Within the amber rest shapes resembling extinct creatures, unfamiliar objects and moments seemingly frozen in time.\n\nThe land feels ancient, yet new discoveries appear after every great storm. Some believe Amberwild preserves memories before they can fade. Others warn that the amber is not preserving its inhabitants—it is waiting to release them.",
+      "identity": {
+        "summary": "wilderness, ancient life, preserved moments, exploration and awakening",
+        "traits": [
+          "wilderness",
+          "ancient life",
+          "preserved moments",
+          "exploration",
+          "awakening"
+        ]
+      },
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "relationships": {
+        "affinity": ["EVG"],
+        "favourable": [],
+        "neutral": ["ASH"],
+        "tension": ["MWB", "LFR"],
+        "hostility": [],
+        "allies": ["EVG"],
+        "enemies": [],
+        "standings": {
+          "EVG": {
+            "value": 2,
+            "label": "Affinity",
+            "reason": "The Grove's guardians protect Amberwild's living wilderness, while Amberwild provides ancient knowledge and materials."
+          },
+          "ASH": {
+            "value": 0,
+            "label": "Neutral",
+            "reason": "Both preserve the past differently: Ashdrift lets memories fall and fade; Amberwild traps them in amber. They remain curious but distant."
+          },
+          "MWB": {
+            "value": -1,
+            "label": "Tension",
+            "reason": "They dispute relics uncovered where the changing shoreline meets Amberwild territory."
+          },
+          "LFR": {
+            "value": -1,
+            "label": "Tension",
+            "reason": "Amberwild considers Little Frost careless and destructive. Little Frost sees Amberwild's preservation customs as overly serious and restrictive."
+          }
+        }
+      }
+    },
+    {
+      "regionCode": "RBY",
+      "name": "Realm Beyond",
+      "type": "region",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "allianceCode": null,
+      "loreDescription": "The Realm Beyond is not a land of Velora. Chronicles say the veil between them was once so thin that every laugh, hope and act of wonder echoed freely — remembered only as The Bright Time. Then the echoes faded. The Realm Beyond grew heavier, and the First Hands found themselves unable to return.\n\nWhat still crosses the veil does so without treaty or feud. The Realm Beyond holds no affinities and no hostilities. It is the unanswered elsewhere every generation inherits.",
+      "identity": {
+        "summary": "beyond the veil, First Hands, echoes that outlive their origin, no political standing",
+        "traits": [
+          "beyond the veil",
+          "First Hands",
+          "echoes that outlive their origin",
+          "no political standing"
+        ]
+      },
+      "location": {
+        "regionCode": "RBY",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "relationships": {
+        "affinity": [],
+        "favourable": [],
+        "neutral": [],
+        "tension": [],
+        "hostility": [],
+        "allies": [],
+        "enemies": [],
+        "standings": {}
       }
     }
   ]

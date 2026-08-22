@@ -2,7 +2,7 @@
 description: Dev logging uses customlog only, each call gated by if LOGGING_SWITCH. One switch per file—no alternate gate names.
 globs:
   - app_codebase/**/*
-alwaysApply: false
+alwaysApply: true
 ---
 
 # Dev logging (`customlog`, `LOGGING_SWITCH`, `global.log`)

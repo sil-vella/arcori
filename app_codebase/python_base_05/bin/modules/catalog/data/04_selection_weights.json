@@ -1,0 +1,91 @@
+{
+  "catalog": "Match Arcori Selection Weights",
+  "version": 1,
+  "description": "Sole match-time table for choosing an Arcori after players are already in the room. Each seated player's accessible Arcori list is scored here. Players are not matched by this file. Combine: candidateWeight = printedRarityWeight * regionMultiplier. Region multiplier is the highest boost vs Arcori already seated. Hostility is the strongest match chance. Design-level catalog selectionWeight is not used here.",
+  "when": "after_players_enter_room",
+  "pipeline": [
+    "printedRarity",
+    "regionStanding"
+  ],
+  "combine": "multiply",
+  "printedRarity": {
+    "order": 1,
+    "description": "Base weight from the candidate's printedRarity. Higher is more likely. Unique is custom and stays out of the numeric pool until a weight is set.",
+    "weights": {
+      "Common": 3.0,
+      "Uncommon": 2.0,
+      "Rare": 1.2,
+      "Epic": 0.8,
+      "Legendary": 0.5,
+      "Unique": null
+    },
+    "missingPrintedRarity": 3.0,
+    "nullWeightMeans": "exclude_from_weighted_pool"
+  },
+  "regionStanding": {
+    "order": 2,
+    "description": "Multiply the rarity weight by how the candidate's region stands toward regions already in the match. If several Arcori are already seated, use the largest multiplier (hostility wins). First seat in the room uses noSeatedRegionsMultiplier. Realm Beyond (RBY) has no political standing.",
+    "noSeatedRegionsMultiplier": 1.0,
+    "unknownPairMultiplier": 1.0,
+    "sameRegionMultiplier": 1.0,
+    "aggregate": "max_multiplier",
+    "multipliersByStandingLabel": {
+      "Hostility": 2.5,
+      "Tension": 1.6,
+      "Neutral": 1.0,
+      "Favourable": 0.85,
+      "Affinity": 0.7
+    },
+    "multipliersByStandingValue": {
+      "-2": 2.5,
+      "-1": 1.6,
+      "0": 1.0,
+      "1": 0.85,
+      "2": 0.7
+    },
+    "pairs": {
+      "ASH": {
+        "EVG": { "label": "Hostility", "value": -2, "multiplier": 2.5 },
+        "LFR": { "label": "Neutral", "value": 0, "multiplier": 1.0 },
+        "MWB": { "label": "Affinity", "value": 2, "multiplier": 0.7 },
+        "AMB": { "label": "Neutral", "value": 0, "multiplier": 1.0 },
+        "RBY": { "label": "Neutral", "value": 0, "multiplier": 1.0 }
+      },
+      "EVG": {
+        "ASH": { "label": "Hostility", "value": -2, "multiplier": 2.5 },
+        "LFR": { "label": "Favourable", "value": 1, "multiplier": 0.85 },
+        "MWB": { "label": "Tension", "value": -1, "multiplier": 1.6 },
+        "AMB": { "label": "Affinity", "value": 2, "multiplier": 0.7 },
+        "RBY": { "label": "Neutral", "value": 0, "multiplier": 1.0 }
+      },
+      "LFR": {
+        "ASH": { "label": "Neutral", "value": 0, "multiplier": 1.0 },
+        "EVG": { "label": "Favourable", "value": 1, "multiplier": 0.85 },
+        "MWB": { "label": "Favourable", "value": 1, "multiplier": 0.85 },
+        "AMB": { "label": "Tension", "value": -1, "multiplier": 1.6 },
+        "RBY": { "label": "Neutral", "value": 0, "multiplier": 1.0 }
+      },
+      "MWB": {
+        "ASH": { "label": "Affinity", "value": 2, "multiplier": 0.7 },
+        "EVG": { "label": "Tension", "value": -1, "multiplier": 1.6 },
+        "LFR": { "label": "Favourable", "value": 1, "multiplier": 0.85 },
+        "AMB": { "label": "Tension", "value": -1, "multiplier": 1.6 },
+        "RBY": { "label": "Neutral", "value": 0, "multiplier": 1.0 }
+      },
+      "AMB": {
+        "ASH": { "label": "Neutral", "value": 0, "multiplier": 1.0 },
+        "EVG": { "label": "Affinity", "value": 2, "multiplier": 0.7 },
+        "LFR": { "label": "Tension", "value": -1, "multiplier": 1.6 },
+        "MWB": { "label": "Tension", "value": -1, "multiplier": 1.6 },
+        "RBY": { "label": "Neutral", "value": 0, "multiplier": 1.0 }
+      },
+      "RBY": {
+        "ASH": { "label": "Neutral", "value": 0, "multiplier": 1.0 },
+        "EVG": { "label": "Neutral", "value": 0, "multiplier": 1.0 },
+        "LFR": { "label": "Neutral", "value": 0, "multiplier": 1.0 },
+        "MWB": { "label": "Neutral", "value": 0, "multiplier": 1.0 },
+        "AMB": { "label": "Neutral", "value": 0, "multiplier": 1.0 }
+      }
+    }
+  }
+}

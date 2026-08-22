@@ -21,7 +21,15 @@ def log_path_for_script(entry_id: str, now: datetime | None = None) -> Path:
     moment = now or datetime.now()
     timestamp = moment.strftime("%Y%m%d-%H%M%S")
     script_name = _safe_script_name(entry_id)
-    return LOGS_DIR / f"{timestamp}-{script_name}.log"
+    path = LOGS_DIR / f"{timestamp}-{script_name}.log"
+    if not path.exists():
+        return path
+    n = 2
+    while True:
+        candidate = LOGS_DIR / f"{timestamp}-{script_name}-{n}.log"
+        if not candidate.exists():
+            return candidate
+        n += 1
 
 
 class RunLog:
@@ -31,7 +39,7 @@ class RunLog:
         self._closed = False
         started = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         header = (
-            f"# arcori dashboard run log\n"
+            f"# wf_template dashboard run log\n"
             f"# script: {script_id}\n"
             f"# mode: {mode}\n"
             f"# started: {started}\n"

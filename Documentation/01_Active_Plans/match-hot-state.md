@@ -1,8 +1,8 @@
 # Match Hot State (Flutter ↔ Dart)
 
-**Status:** Completed for room SSOT — quickStart/specialEvent promote here; invite next  
+**Status:** Completed for room SSOT — quickStart/specialEvent/invite promote here  
 **Created:** 2026-08-05  
-**Last Updated:** 2026-08-09
+**Last Updated:** 2026-08-20
 
 Related: [match-setting-core-flow.md](match-setting-core-flow.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [ws-invite-match.md](ws-invite-match.md) · [practice-offline-routing.md](practice-offline-routing.md) · [practice-match-v1.md](practice-match-v1.md) · [core-match-loop.md](core-match-loop.md) · [catalog-hot-reload.md](catalog-hot-reload.md) · [EXAMPLE_MODULE.md](../03_Base/EXAMPLE_MODULE.md) · [DART_STATE_SYSTEM.md](../03_Base/DART_STATE_SYSTEM.md) · [Flutter STATE_SYSTEM.md](../03_Base/Flutter/STATE_SYSTEM.md) · [ERROR_SYSTEM.md](../03_Base/ERROR_SYSTEM.md) · [WS_SYSTEM.md](../03_Base/WS_SYSTEM.md) · [PYTHON_DART_BACKEND.md](../03_Base/PYTHON_DART_BACKEND.md)
 
@@ -14,7 +14,7 @@ Build a **module-owned hot match store** on Dart for **future online** matches, 
 
 **Practice is Flutter-only** — see [practice-offline-routing.md](practice-offline-routing.md).  
 **quickStart / specialEvent** use Dart [matchmaking](ws-matchmaking-modes.md) then promote into this match room SSOT (**done**).  
-**Invite** — next: [ws-invite-match.md](ws-invite-match.md) (Play stub until then).
+**Invite** uses the same room SSOT after a private 2-seat lobby — [ws-invite-match.md](ws-invite-match.md) (**done**).
 
 ## Architecture rules (non-negotiable)
 
@@ -61,13 +61,13 @@ Dart calls this through module-owned [`MatchCatalogClient`](../../app_codebase/d
 |------|--------|
 | Practice | Flutter-only local seats — [practice-offline-routing.md](practice-offline-routing.md) |
 | quickStart / specialEvent | Dart matchmaking → `startFromLobby` — [ws-matchmaking-modes.md](ws-matchmaking-modes.md) **done** |
-| Invite | Play stub → [ws-invite-match.md](ws-invite-match.md) **next** |
+| Invite | Private 2-seat lobby → [ws-invite-match.md](ws-invite-match.md) **done** |
 
 ## Gaps (remaining)
 
 1. ~~`/service/catalog/*`~~ — **done** (`POST /service/catalog/designs`)
 2. ~~quickStart / specialEvent matchmaking~~ — **done** ([ws-matchmaking-modes.md](ws-matchmaking-modes.md))
-3. **Invite Friend Match** — [ws-invite-match.md](ws-invite-match.md)
+3. ~~Invite Friend Match~~ — **done** ([ws-invite-match.md](ws-invite-match.md))
 4. **Flutter SharedPrefs catalog hydrate** — optional, separate
 5. **No mid-match catalog reload** — still forbidden
 6. **Arena content catalog** — `arenaId` string only
@@ -127,8 +127,8 @@ Stage 2 **Dart match module** is the online room SSOT. Practice is offline. quic
 
 1. ~~Practice Flutter-only routing~~ — [practice-offline-routing.md](practice-offline-routing.md)
 2. ~~quickStart / specialEvent matchmaking~~ — [ws-matchmaking-modes.md](ws-matchmaking-modes.md)
-3. **Invite Friend Match** — [ws-invite-match.md](ws-invite-match.md)
-4. Weighted slam / AI turns / random first player (local practice)
+3. ~~Invite Friend Match~~ — [ws-invite-match.md](ws-invite-match.md)
+4. Weighted slam / AI turns / random first player (practice + online)
 5. Optional: fuller `error_policy` + Dart WS integration test
 6. Match UI polish + FastAPI finalize / Match Summary
 

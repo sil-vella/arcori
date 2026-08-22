@@ -87,7 +87,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
           score: 0,
           connected: true,
           arcoriIds: const [],
-          slammerId: '',
+          slammerId: stubSlammerId,
         ),
         MatchSeatView(
           userId: ais[1],
@@ -96,7 +96,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
           score: 0,
           connected: true,
           arcoriIds: const [],
-          slammerId: '',
+          slammerId: stubSlammerId,
         ),
       ],
       active: const {'seatIndex': 0, 'action': 'slam'},
@@ -198,12 +198,18 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
 
     final nextSeat = (actor.seatIndex + 1) % current.seats.length;
     final nextVersion = current.version + 1;
+    final arcoriId =
+        actor.arcoriIds.isNotEmpty ? actor.arcoriIds.first : null;
     state = current.copyWith(
       version: nextVersion,
       active: {'seatIndex': nextSeat, 'action': 'slam'},
       lastEvent: {
         'type': 'slam',
         'actorUserId': actorUserId,
+        'seatIndex': actor.seatIndex,
+        'round': current.round,
+        'slammerId': actor.slammerId,
+        'arcoriId': arcoriId,
         'result': 'stub',
         'version': nextVersion,
       },

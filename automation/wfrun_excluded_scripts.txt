@@ -19,6 +19,7 @@ dashboard/data/marketing_posts.json
 # sourced helpers (not standalone runners)
 frontend/dart_defines_from_env.sh
 frontend/global_log_filter.sh
+backend/docker_up_common.sh
 
 # marketing — hide helpers / publish runners; keep upload_queue + token renewals visible
 marketing/publish_common.py

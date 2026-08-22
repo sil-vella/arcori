@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>dashboard</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.min.css">
-  <link rel="stylesheet" href="/static/style.css?v=docs-3">
+  <link rel="stylesheet" href="/static/style.css?v=mirror-1">
 </head>
 <body>
   <header class="topbar">
@@ -45,6 +45,10 @@
           <div class="terminal-tabs" id="terminal-tabs" aria-label="Open terminals"></div>
           <div class="terminal-toolbar" id="terminal-toolbar" hidden>
             <button type="button" id="run-btn" class="run-btn">Run script</button>
+            <label class="mirror-log-check" id="mirror-global-log-label" hidden>
+              <input type="checkbox" id="mirror-global-log-check">
+              Mirror [dev] → global.log
+            </label>
             <div class="session-id-group">
               <span class="session-id-label">log</span>
               <button type="button" id="session-id-btn" class="session-id-btn" title="Relative log file path"></button>
@@ -649,7 +653,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="/static/revenue.js?v=revenue-6"></script>
-  <script src="/static/app.js?v=brand-1"></script>
+  <script src="/static/app.js?v=mirror-1"></script>
   <script src="/static/marketing.js?v=marketing-8"></script>
   <script src="/static/docs.js?v=docs-3"></script>
 </body>

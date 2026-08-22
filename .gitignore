@@ -71,6 +71,7 @@ redis_data/
 
 # --- Logs & local runtime ---
 global.log
+.dashboard_logs/
 *.log
 *.out
 *.err

@@ -67,6 +67,7 @@ def design_summary(
         "theme": design.get("theme"),
         "subtheme": design.get("subtheme"),
         "printedRarity": design.get("printedRarity"),
+        "selectionWeight": design.get("selectionWeight"),
         "series": design.get("series"),
         "seriesKey": series_key,
         "worldState": design.get("worldState"),

@@ -26,6 +26,10 @@ def catalog_root(tmp_path: Path):
         json.dumps({"rarities": []}),
         encoding="utf-8",
     )
+    (root / "04_selection_weights.json").write_text(
+        json.dumps({"version": 1}),
+        encoding="utf-8",
+    )
     animals = {
         "catalog": "Animals Test",
         "theme": "Animals",
@@ -57,6 +61,8 @@ def catalog_root(tmp_path: Path):
 def test_load_meta(catalog_root: Path):
     data = loader.load_meta("themes_subthemes")
     assert data["version"] == 1
+    weights = loader.load_meta("selection_weights")
+    assert weights["version"] == 1
 
 
 def test_file_edit_visible_without_clear(catalog_root: Path):

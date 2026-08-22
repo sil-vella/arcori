@@ -11,8 +11,9 @@
       "designCode": "RGT",
       "designFamily": "ROCK_GUITARIST",
       "design": "Rock Guitarist",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -34,7 +35,8 @@
       "style": "Comic",
       "finish": "Gloss",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -51,15 +53,20 @@
       "designCode": "DDJ",
       "designFamily": "DJ_PULSE",
       "design": "DJ Pulse",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -74,7 +81,8 @@
       "style": "Neon",
       "finish": "Chrome",
       "effect": "Pulse",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -91,15 +99,20 @@
       "designCode": "VSO",
       "designFamily": "VIOLIN_SOLOIST",
       "design": "Violin Soloist",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -114,7 +127,8 @@
       "style": "Watercolor",
       "finish": "Foil",
       "effect": "Sparkle",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -131,8 +145,9 @@
       "designCode": "BRK",
       "designFamily": "STREET_BREAKER",
       "design": "Street Breaker",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -154,7 +169,8 @@
       "style": "Graffiti",
       "finish": "Gloss",
       "effect": "Motion",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -171,15 +187,20 @@
       "designCode": "BAL",
       "designFamily": "BALLET_STAR",
       "design": "Ballet Star",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -194,7 +215,8 @@
       "style": "Realistic",
       "finish": "Matte",
       "effect": "Glow",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -211,15 +233,20 @@
       "designCode": "POP",
       "designFamily": "POP_PERFORMER",
       "design": "Pop Performer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -234,7 +261,8 @@
       "style": "Anime",
       "finish": "Prismatic",
       "effect": "Sparkle",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -251,8 +279,9 @@
       "designCode": "MBG",
       "designFamily": "MEGA_BURGER",
       "design": "Mega Burger",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -275,6 +304,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -291,14 +321,17 @@
       "designCode": "SSH",
       "designFamily": "SUSHI_MASTER",
       "design": "Sushi Master",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -314,7 +347,8 @@
       "style": "Minimalist",
       "finish": "Gloss",
       "effect": "None",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -331,8 +365,9 @@
       "designCode": "PZA",
       "designFamily": "PIZZA_CHEF",
       "design": "Pizza Chef",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -354,7 +389,8 @@
       "style": "Comic",
       "finish": "Metallic",
       "effect": "Fire",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -371,14 +407,17 @@
       "designCode": "GEX",
       "designFamily": "GLOBE_EXPLORER",
       "design": "Globe Explorer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -394,7 +433,8 @@
       "style": "Watercolor",
       "finish": "Chrome",
       "effect": "Motion",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -411,14 +451,17 @@
       "designCode": "TRB",
       "designFamily": "TRAIL_BACKPACKER",
       "design": "Trail Backpacker",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -435,6 +478,7 @@
       "finish": "Matte",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -451,14 +495,17 @@
       "designCode": "AFL",
       "designFamily": "AROUND_THE_WORLD",
       "design": "Around the World",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -474,7 +521,8 @@
       "style": "Minimalist",
       "finish": "Foil",
       "effect": "Glow",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -491,8 +539,9 @@
       "designCode": "USR",
       "designFamily": "URBAN_STREETWEAR",
       "design": "Urban Streetwear",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -514,7 +563,8 @@
       "style": "Graffiti",
       "finish": "Gloss",
       "effect": "Pulse",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -531,15 +581,20 @@
       "designCode": "RUN",
       "designFamily": "RUNWAY_ICON",
       "design": "Runway Icon",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -554,7 +609,8 @@
       "style": "Realistic",
       "finish": "Prismatic",
       "effect": "Sparkle",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -571,15 +627,20 @@
       "designCode": "VIN",
       "designFamily": "VINTAGE_TAILOR",
       "design": "Vintage Tailor",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -594,7 +655,8 @@
       "style": "Watercolor",
       "finish": "Matte",
       "effect": "None",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -611,15 +673,20 @@
       "designCode": "NPH",
       "designFamily": "NIGHT_PHOTOGRAPHER",
       "design": "Night Photographer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -634,7 +701,8 @@
       "style": "Realistic",
       "finish": "Chrome",
       "effect": "Glow",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -651,14 +719,17 @@
       "designCode": "WLF",
       "designFamily": "WILDLIFE_PHOTOGRAPHER",
       "design": "Wildlife Photographer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -675,6 +746,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -691,15 +763,20 @@
       "designCode": "DRN",
       "designFamily": "DRONE_PHOTOGRAPHER",
       "design": "Drone Photographer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -714,7 +791,8 @@
       "style": "Minimalist",
       "finish": "Metallic",
       "effect": "Motion",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -731,8 +809,9 @@
       "designCode": "BAR",
       "designFamily": "MASTER_BARISTA",
       "design": "Master Barista",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -754,7 +833,8 @@
       "style": "Cartoon",
       "finish": "Gloss",
       "effect": "Sparkle",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -771,15 +851,20 @@
       "designCode": "VINY",
       "designFamily": "VINYL_COLLECTOR",
       "design": "Vinyl Collector",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -794,7 +879,8 @@
       "style": "Retro",
       "finish": "Foil",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",

@@ -92,21 +92,33 @@ wfrun   # → automation/frontend/print_wfrun_env.sh or launch_chrome.sh
 **Docker Compose only** — use wfrun so `.env.local` / `.env.prod` are loaded automatically:
 
 ```bash
-wfrun   # → automation/backend/docker_up_build.sh
+wfrun   # → automation/backend/docker_up.sh        # start only (no rebuild)
+wfrun   # → automation/backend/docker_up_build.sh  # rebuild + start
 ```
 
-That runs `docker compose --env-file <env> -f <compose> up --build -d` with:
+Both use the same env/compose mapping; only `--build` differs:
+
+| Script | Compose command |
+|--------|-----------------|
+| `docker_up.sh` | `up -d`, or **`restart`** if the engine and target containers are already running |
+| `docker_up_build.sh` | `up --build -d` |
 
 | `WFRUN_MODE` | Compose file | Env file |
 |--------------|--------------|----------|
 | `local` | `docker/docker-compose.debug.yml` | `.env.local` |
 | `prod` | `docker/docker-compose.yml` | `.env.prod` |
 
-Rebuild a single service (pass args after selecting the script, or run directly with wfrun env exported):
+**Docker:** start Docker Desktop yourself first. `docker_up.sh` / `docker_up_build.sh` exit with a message if the daemon is down; otherwise `up -d` or **`restart`** when the stack is already running.
+
+**Optional `global.log` mirror:** set `WFRUN_MIRROR_GLOBAL_LOG=1` in the environment (or check **Mirror [dev] → global.log** on the dashboard when running these scripts). After compose succeeds, the up script spawns `docker_logs_to_global_log.sh` in a detached session (skips if already running). Detached mirror stdout goes to `.dashboard_logs/docker_logs_mirror.log`.
+
+Rebuild or start a single service (pass args after selecting the script, or run directly with wfrun env exported):
 
 ```bash
 # e.g. API only after requirements.txt changed
 bash automation/backend/docker_up_build.sh Arcori_api
+# start existing images only
+bash automation/backend/docker_up.sh Arcori_api
 ```
 
 Sync global notification campaigns from git JSON into Postgres (loads `DATABASE_URL` from `.env.local` / `.env.prod`):
@@ -120,7 +132,8 @@ Manual equivalent (local):
 
 ```bash
 cd docker
-docker compose --env-file ../.env.local -f docker-compose.debug.yml up --build -d
+docker compose --env-file ../.env.local -f docker-compose.debug.yml up -d          # no rebuild
+docker compose --env-file ../.env.local -f docker-compose.debug.yml up --build -d  # rebuild
 ```
 
 Services: Postgres `:5433`, FastAPI `:8000`, Dart `:8080`, Adminer `:8081`. All load `../.env.local` via `env_file`. See [`wfsecrets.md`](wfsecrets.md).

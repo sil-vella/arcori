@@ -21,11 +21,14 @@ from modules.friend_match_invite.friend_match_invite_store import (
     accept_invite,
     decline_invite,
 )
+from core.utils.dev_logger import customlog
 
 
 FRIEND_MATCH_INVITE_SOURCE = "friend_match_invite"
 FRIEND_MATCH_INVITE_CATEGORY = "friend_match"
 FRIEND_MATCH_INVITE_SUBTYPE = "invite_v1"
+
+LOGGING_SWITCH = True
 
 
 def register_friend_match_invite_notification_subtypes() -> None:
@@ -52,6 +55,11 @@ def _parse_invite_id(message: dict[str, Any]) -> str:
 
 def _reply_handler(*, user_id: str, message: dict[str, Any], option_key: str, **_: Any) -> dict[str, Any]:
     invite_id = _parse_invite_id(message)
+    if LOGGING_SWITCH:
+        customlog(
+            f"friend_match_invite: reply user={user_id} option={option_key} "
+            f"invite_id={invite_id or '-'}"
+        )
     if not invite_id:
         raise AppError(friend_match_inviteNotFound)
 
@@ -70,6 +78,11 @@ def _reply_handler(*, user_id: str, message: dict[str, Any], option_key: str, **
     except RuntimeError:
         raise AppError(friend_match_inviteNotPending)
 
+    if LOGGING_SWITCH:
+        customlog(
+            f"friend_match_invite: reply ok user={user_id} option={option_key} "
+            f"invite_id={invite_id}"
+        )
     return {"success": True, "data": {"inviteId": invite_id}}
 
 

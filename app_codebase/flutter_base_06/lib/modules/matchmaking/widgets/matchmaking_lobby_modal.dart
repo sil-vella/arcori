@@ -3,13 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/modal/modal.dart';
 import '../../../core/theme/theme.dart';
+import '../../../utils/dev_logger.dart';
+import '../../match/state/match_notifier.dart';
+import '../../match/state/match_snapshot_state.dart';
 import '../../play/play_models.dart';
 import '../../play/play_notifier.dart';
 import '../state/lobby_notifier.dart';
 import '../state/lobby_snapshot_state.dart';
 
+const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
+
 /// Thin waiting modal while matchmaking lobby fills / timers out.
 Future<void> showMatchmakingLobbyModal(BuildContext context, WidgetRef ref) {
+  if (LOGGING_SWITCH) {
+    customlog('MatchmakingLobbyModal: show');
+  }
   return AppModal.showCenteredShell<void>(
     context,
     title: 'Finding players…',
@@ -29,46 +37,100 @@ class _LobbyBody extends ConsumerStatefulWidget {
 class _LobbyBodyState extends ConsumerState<_LobbyBody> {
   bool _dismissed = false;
 
-  bool _shouldClose(LobbySnapshotState lobby, MatchFlowState flow) {
+  bool _shouldClose(
+    LobbySnapshotState lobby,
+    MatchFlowState flow,
+    MatchSnapshotState match,
+  ) {
+    if (match.matchId != null && match.matchId!.isNotEmpty) return true;
     if (lobby.isPromoted) return true;
+    if (lobby.phase == 'cancelled') return true;
     if (flow.errorMessage != null && flow.errorMessage!.isNotEmpty) {
       return true;
     }
-    // Waiting UI is only valid during online typeSetup. Promote can land
-    // before this widget mounts — phase / idle catch that race.
+    if (flow.phase == MatchFlowPhase.inMatch ||
+        flow.phase == MatchFlowPhase.postMatch) {
+      return true;
+    }
+    // Invite: both humans joined — promote/match WS can lag behind server start.
+    if (flow.selectedType == MatchType.invite &&
+        lobby.targetSeats > 0 &&
+        lobby.members.length >= lobby.targetSeats) {
+      return true;
+    }
+    // Waiting UI is only valid during online typeSetup.
     if (flow.phase != MatchFlowPhase.typeSetup) return true;
     return false;
   }
 
-  void _closeOnce() {
+  void _closeOnce({required String reason}) {
     if (_dismissed || !mounted) return;
     _dismissed = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      AppModal.dismiss(context);
-    });
+    if (LOGGING_SWITCH) {
+      customlog('MatchmakingLobbyModal: dismiss reason=$reason');
+    }
+    AppModal.dismiss(context);
+  }
+
+  void _maybeClose(
+    LobbySnapshotState lobby,
+    MatchFlowState flow,
+    MatchSnapshotState match,
+    String via,
+  ) {
+    if (!_shouldClose(lobby, flow, match)) return;
+    final reason = via +
+        ' lobbyId=${lobby.lobbyId} phase=${lobby.phase} '
+        'promoted=${lobby.isPromoted} members=${lobby.members.length}/'
+        '${lobby.targetSeats} flowPhase=${flow.phase.name} '
+        'matchId=${match.matchId ?? '-'} '
+        'error=${flow.errorMessage ?? '-'}';
+    _closeOnce(reason: reason);
   }
 
   @override
   Widget build(BuildContext context) {
     final lobby = ref.watch(lobbySnapshotProvider);
     final flow = ref.watch(matchFlowProvider);
+    final match = ref.watch(matchSnapshotProvider);
 
     ref.listen(lobbySnapshotProvider, (prev, next) {
-      if (_shouldClose(next, ref.read(matchFlowProvider))) _closeOnce();
+      _maybeClose(
+        next,
+        ref.read(matchFlowProvider),
+        ref.read(matchSnapshotProvider),
+        'lobby',
+      );
     });
     ref.listen(matchFlowProvider, (prev, next) {
-      if (_shouldClose(ref.read(lobbySnapshotProvider), next)) _closeOnce();
+      _maybeClose(
+        ref.read(lobbySnapshotProvider),
+        next,
+        ref.read(matchSnapshotProvider),
+        'flow',
+      );
+    });
+    ref.listen(matchSnapshotProvider, (prev, next) {
+      _maybeClose(
+        ref.read(lobbySnapshotProvider),
+        ref.read(matchFlowProvider),
+        next,
+        'match',
+      );
     });
 
-    if (_shouldClose(lobby, flow)) {
-      _closeOnce();
-    }
+    _maybeClose(lobby, flow, match, 'build');
 
     final ends = lobby.endsAt;
     final remaining = ends == null
         ? null
         : ends.difference(DateTime.now().toUtc()).inSeconds;
+
+    final lobbyFull = lobby.targetSeats > 0 &&
+        lobby.members.length >= lobby.targetSeats;
+    final starting = lobby.isPromoted ||
+        lobbyFull ||
+        (match.matchId != null && match.matchId!.isNotEmpty);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -92,7 +154,7 @@ class _LobbyBodyState extends ConsumerState<_LobbyBody> {
           ),
         AppSpacing.gapMd,
         Text(
-          lobby.isPromoted ? 'Match starting…' : 'Waiting for players or timer…',
+          starting ? 'Match starting…' : 'Waiting for players or timer…',
           style: context.appTypography.bodySmall,
           textAlign: TextAlign.center,
         ),

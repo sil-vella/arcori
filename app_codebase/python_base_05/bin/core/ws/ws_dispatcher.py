@@ -81,11 +81,22 @@ async def run_ws_connection(websocket: WebSocket, *, tier: str) -> None:
     needs_auth = tier in (_TIER_AUTHUSER, _TIER_SERVICE)
 
     def register_connection() -> None:
+        loop = asyncio.get_running_loop()
+
         async def send_frame(frame: str) -> None:
             await websocket.send_text(frame)
 
         def schedule_send(frame: str) -> None:
-            asyncio.create_task(send_frame(frame))
+            # HTTP handlers run in a threadpool; Redis pub/sub is another thread.
+            # Always schedule onto this connection's event loop.
+            try:
+                running = asyncio.get_running_loop()
+            except RuntimeError:
+                running = None
+            if running is loop:
+                loop.create_task(send_frame(frame))
+            else:
+                asyncio.run_coroutine_threadsafe(send_frame(frame), loop)
 
         connection_registry.register(connection_id, schedule_send)
 

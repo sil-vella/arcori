@@ -2,11 +2,11 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-08-18
+**Last Updated:** 2026-08-21
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
-**Next app build:** [ws-invite-match.md](ws-invite-match.md) (Friend Match / invite WS). After that: weighted slam → celebration / Match Summary → Home sink / first-time flows.
+**Next app build:** weighted slam / real turns / random first player (practice + online). After that: celebration / Match Summary → Home sink / first-time flows.
 
 **Narrative:** [03_CASE_STUDY.md](03_CASE_STUDY.md) — full game implementation case study (design → matchmaking; template infra out of scope).
 
@@ -33,18 +33,20 @@ Done:
 - [x] Practice offline routing + stub gameplay
 - [x] Quick Start / Special Event matchmaking (AI fill → match room → stub end)
 - [x] Play failure OK modal + lobby/match dismiss hardening
+- [x] Invite / Friend Match WS — [ws-invite-match.md](ws-invite-match.md)
+- [x] Stub match Arcori selection (Python weights + Dart startFromLobby) — [stub-match-arcori-selection.md](stub-match-arcori-selection.md)
+- [x] Stub match turn stages (2 rounds × slam, Dart auto loop) — [stub-match-turn-stages.md](stub-match-turn-stages.md)
 
 Open (ordered):
 
-- [ ] **Invite / Friend Match WS** — [ws-invite-match.md](ws-invite-match.md) *(next)*
-- [ ] Weighted slam / real turns / random first player
+- [ ] **Weighted slam / real turns / random first player** *(next)*
 - [ ] Celebration + Match Summary + FastAPI durable rewards
 - [ ] Home sink Trove • PLAY • Market; first-time / returning startup
 - [ ] My Mastery tab + Trove UI + economy writers
 
 Standings surface is live with an open tail (My Mastery / Trove) covered by the last open line.
 
-**Board (2026-08-18):** Bearer JWT works on `https://tm.reignofplay.com`. **App Dev** is task `32`. Marketing / revenue / cron are separate Ops cards. Old per-plan Match/World/Player cards (`20`–`29`) deleted. **Ideas** (`18`) untouched.
+**Board (2026-08-21):** Stub match turn stages **Completed** on App Dev (`32`) — checklist `146` (+ dup `147`) + note `148`. Next open line: weighted slam. **Ideas** (`18`) untouched.
 
 ## Template / ops / project-wide (own TM cards — not App Dev)
 
@@ -52,6 +54,7 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 |------|--------|--------|
 | [rop01-cron-social-auto-post.md](rop01-cron-social-auto-post.md) | In Progress | Hostinger queue + cron poster FB/YT/TT |
 | [dashboard-revenue-tab.md](dashboard-revenue-tab.md) | Mostly done | wfrun Revenue tab (Play / ASC / AdMob) |
+| [dashboard-parallel-script-runs.md](dashboard-parallel-script-runs.md) | Completed | Same script in multiple PTY tabs (do not kill sibling) |
 | [marketing-post-metrics.md](marketing-post-metrics.md) | In Progress | Marketing metrics; TikTok list still open |
 | [01_TEMPLATE_INSTALLATION.MD](01_TEMPLATE_INSTALLATION.MD) | Living | New product install, secrets, drain, TLS, RBAC, first deploy |
 
@@ -62,12 +65,14 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 | [first-time-player-flow.md](first-time-player-flow.md) | Spec | Splash → Kin/Genesis → starter access → guided practice → intros → Home |
 | [returning-player-startup-flow.md](returning-player-startup-flow.md) | Spec | Auto login → sync → overnight → notification queue → Home |
 | [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Spec | Home layout, Velora entry, sink Trove • PLAY • Market |
-| [match-setting-core-flow.md](match-setting-core-flow.md) | Partial | Play hub + types; practice offline; quick/event online; invite next |
+| [match-setting-core-flow.md](match-setting-core-flow.md) | Partial | Play hub + types; practice offline; quick/event/invite online |
 | [match-hot-state.md](match-hot-state.md) | Done (online room SSOT) | Dart match module + Flutter mirror; used by matchmaking promote |
 | [practice-offline-routing.md](practice-offline-routing.md) | Completed | Practice = Flutter-only; embedded 10 AI pool |
 | [practice-stub-gameplay.md](practice-stub-gameplay.md) | Completed | Auto stub loop: 2 rounds × 3 seats → postMatch |
 | [ws-matchmaking-modes.md](ws-matchmaking-modes.md) | Completed | Quick/Event lobby → AI fill → match room SSOT |
-| [ws-invite-match.md](ws-invite-match.md) | **Next** | Friend Match invite WS (replaces Play stub) |
+| [ws-invite-match.md](ws-invite-match.md) | Completed | Friend Match invite WS + notification reply modal |
+| [stub-match-arcori-selection.md](stub-match-arcori-selection.md) | Completed | After seats: FastAPI pick via `04_selection_weights.json` |
+| [stub-match-turn-stages.md](stub-match-turn-stages.md) | Completed | Online Dart: 2×N stub slams then end; practice lastEvent aligned |
 | [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
 | [core-match-loop.md](core-match-loop.md) | Spec | Matchmaking → match → celebration → Match Summary → exits |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Partial | Standings + Detail tab; My Mastery/Trove still open |

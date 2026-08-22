@@ -1,8 +1,8 @@
 # Core Match Loop
 
-**Status:** Spec — partial runtime exists (practice offline; quick/event online stub end)  
+**Status:** Spec — matching paths exist (practice / quick / event / invite); match end still stub  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-08-09
+**Last Updated:** 2026-08-21
 
 Related: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [match-hot-state.md](match-hot-state.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [ws-invite-match.md](ws-invite-match.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
 
@@ -28,7 +28,8 @@ Play Hub
 | Mode select | Done (`/play`) |
 | Practice setup + stub match | Done |
 | quickStart / specialEvent matchmaking + stub match end | Done |
-| Invite matchmaking | **Next** — [ws-invite-match.md](ws-invite-match.md) |
+| Invite matchmaking | Done — [ws-invite-match.md](ws-invite-match.md) |
+| Stub match Arcori selection (weights) | Done — [stub-match-arcori-selection.md](stub-match-arcori-selection.md) |
 | Celebration / Match Summary / durable rewards / Play Again | Not started |
 
 ## Match Summary contents
@@ -55,7 +56,7 @@ After Match Summary the player chooses:
 ## Implementation Steps
 
 - [x] Mode select → practice / quick / event pipelines (stub end)
-- [ ] Invite pipeline — [ws-invite-match.md](ws-invite-match.md)
+- [x] Invite pipeline — [ws-invite-match.md](ws-invite-match.md)
 - [ ] Match runtime beyond stub (weighted slam + FastAPI durable rewards)
 - [ ] Result celebration modal / screen
 - [ ] Match Summary payload + UI (all fields above)
@@ -64,7 +65,7 @@ After Match Summary the player chooses:
 
 ## Next Steps
 
-Ship invite WS, then celebration / summary when economy modules are ready.
+Next app build: weighted slam / real turns / random first player, then celebration / summary when economy modules are ready.
 
 ## Notes
 

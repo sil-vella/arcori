@@ -44,7 +44,45 @@ void main() {
       expect(next.version, 2);
       expect(next.lastEvent?['type'], 'slam');
       expect(next.lastEvent?['result'], 'stub');
+      expect(next.lastEvent?['seatIndex'], 0);
+      expect(next.lastEvent?['round'], 1);
+      expect(next.lastEvent?['slammerId'], stubSlammerId);
+      expect(next.lastEvent?['arcoriId'], stubArcoriId);
       expect(next.active?['seatIndex'], 1);
+    });
+
+    test('slam wrapping advances round until roundsTotal', () {
+      final created = _practice();
+      // Practice stub: 2 seats (human + AI).
+      expect(created.seats, hasLength(2));
+      expect(created.roundsTotal, 2);
+
+      dispatcher.dispatch(
+        matchId: created.matchId,
+        actorUserId: 'usr_a',
+        payload: {'action': 'slam'},
+      );
+      final afterAi = dispatcher.dispatch(
+        matchId: created.matchId,
+        actorUserId: created.seats[1].userId,
+        payload: {'action': 'slam'},
+      );
+      expect(afterAi.round, 2);
+      expect(afterAi.active?['seatIndex'], 0);
+
+      dispatcher.dispatch(
+        matchId: created.matchId,
+        actorUserId: 'usr_a',
+        payload: {'action': 'slam'},
+      );
+      final last = dispatcher.dispatch(
+        matchId: created.matchId,
+        actorUserId: created.seats[1].userId,
+        payload: {'action': 'slam'},
+      );
+      expect(last.round, 2);
+      expect(last.lastEvent?['round'], 2);
+      expect(last.active?['seatIndex'], 1);
     });
 
     test('unknown action fails', () {

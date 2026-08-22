@@ -11,14 +11,17 @@
       "designCode": "DSR",
       "designFamily": "DUST_ROVER",
       "design": "Dust Rover",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -35,6 +38,7 @@
       "finish": "Chrome",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Pioneers Series",
       "worldState": "Active",
       "seasonState": "Active",

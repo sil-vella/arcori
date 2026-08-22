@@ -11,15 +11,20 @@
       "designCode": "DHR",
       "designFamily": "DUNGEON_HERO",
       "design": "Dungeon Hero",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -34,7 +39,8 @@
       "style": "Comic",
       "finish": "Metallic",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -51,15 +57,20 @@
       "designCode": "ELK",
       "designFamily": "ELF_KNIGHT",
       "design": "Elf Knight",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -74,7 +85,8 @@
       "style": "Anime",
       "finish": "Foil",
       "effect": "Sparkle",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -91,15 +103,20 @@
       "designCode": "BST",
       "designFamily": "BOSS_TITAN",
       "design": "Boss Titan",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -114,7 +131,8 @@
       "style": "Realistic",
       "finish": "Chrome",
       "effect": "Fire",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -131,8 +149,9 @@
       "designCode": "PWR",
       "designFamily": "PIXEL_WARRIOR",
       "design": "Pixel Warrior",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -155,6 +174,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -171,8 +191,9 @@
       "designCode": "8BT",
       "designFamily": "8_BIT_BLASTER",
       "design": "8-Bit Blaster",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -194,7 +215,8 @@
       "style": "Pixel Art",
       "finish": "Gloss",
       "effect": "Pulse",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -211,8 +233,9 @@
       "designCode": "ARC",
       "designFamily": "ARCADE_CHAMPION",
       "design": "Arcade Champion",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -234,7 +257,8 @@
       "style": "Neon",
       "finish": "Chrome",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -251,8 +275,9 @@
       "designCode": "TDR",
       "designFamily": "TURBO_DRIVER",
       "design": "Turbo Driver",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -275,6 +300,7 @@
       "finish": "Gloss",
       "effect": "Motion",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -291,8 +317,9 @@
       "designCode": "NDR",
       "designFamily": "NITRO_RACER",
       "design": "Nitro Racer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -314,7 +341,8 @@
       "style": "Anime",
       "finish": "Metallic",
       "effect": "Fire",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -331,8 +359,9 @@
       "designCode": "DRF",
       "designFamily": "DRIFT_KING",
       "design": "Drift King",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -354,7 +383,8 @@
       "style": "Realistic",
       "finish": "Foil",
       "effect": "Motion",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -371,15 +401,20 @@
       "designCode": "LSV",
       "designFamily": "LAST_SURVIVOR",
       "design": "Last Survivor",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -395,6 +430,7 @@
       "finish": "Matte",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -411,14 +447,17 @@
       "designCode": "WLD",
       "designFamily": "WILD_TRACKER",
       "design": "Wild Tracker",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -434,7 +473,8 @@
       "style": "Comic",
       "finish": "Standard",
       "effect": "Smoke",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -451,14 +491,17 @@
       "designCode": "APX",
       "designFamily": "APEX_HUNTER",
       "design": "Apex Hunter",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -474,7 +517,8 @@
       "style": "Anime",
       "finish": "Chrome",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -491,15 +535,20 @@
       "designCode": "CHC",
       "designFamily": "CHESS_COMMANDER",
       "design": "Chess Commander",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -515,6 +564,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -531,15 +581,20 @@
       "designCode": "WAR",
       "designFamily": "WAR_TACTICIAN",
       "design": "War Tactician",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -554,7 +609,8 @@
       "style": "Comic",
       "finish": "Metallic",
       "effect": "Pulse",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -571,15 +627,20 @@
       "designCode": "EMP",
       "designFamily": "EMPIRE_BUILDER",
       "design": "Empire Builder",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -594,7 +655,8 @@
       "style": "Low Poly",
       "finish": "Gloss",
       "effect": "Sparkle",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -611,8 +673,9 @@
       "designCode": "BLD",
       "designFamily": "BLOCK_BUILDER",
       "design": "Block Builder",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -635,6 +698,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -651,8 +715,9 @@
       "designCode": "RED",
       "designFamily": "REDSTONE_ENGINEER",
       "design": "Redstone Engineer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -674,7 +739,8 @@
       "style": "Pixel Art",
       "finish": "Chrome",
       "effect": "Pulse",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -691,15 +757,20 @@
       "designCode": "WRL",
       "designFamily": "WORLD_CREATOR",
       "design": "World Creator",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -714,7 +785,8 @@
       "style": "Minimalist",
       "finish": "Prismatic",
       "effect": "Floating Particles",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -731,15 +803,20 @@
       "designCode": "ECH",
       "designFamily": "ESPORTS_CHAMPION",
       "design": "Esports Champion",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -754,7 +831,8 @@
       "style": "Neon",
       "finish": "Holographic",
       "effect": "Glow",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -771,8 +849,9 @@
       "designCode": "PRO",
       "designFamily": "PRO_GAMER",
       "design": "Pro Gamer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -794,7 +873,8 @@
       "style": "Comic",
       "finish": "Gloss",
       "effect": "Motion",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -811,6 +891,7 @@
       "designCode": "LGG",
       "designFamily": "LEEG",
       "design": "LeeG",
+      "inspiration": null,
       "location": {
         "regionCode": "RBY",
         "locationCode": null,
@@ -834,7 +915,8 @@
       "style": "Chibi",
       "finish": "Standard",
       "effect": "None",
-      "printedRarity": "Unique",
+      "printedRarity": "Common",
+      "selectionWeight": null,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",

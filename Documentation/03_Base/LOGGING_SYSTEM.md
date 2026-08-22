@@ -112,6 +112,8 @@ Set **`LOGGING_SWITCH` to `true` / `True`** while actively tracing in a file; fl
 | `automation/backend/docker_logs_to_global_log.sh` | `docker compose logs -f Arcori_api Arcori_dart` | Full stream | Lines containing **`[dev]`** |
 | `automation/frontend/launch_chrome.sh` | `flutter run -d chrome` (via `wfrun`) | Full stdout/stderr | Lines matching **`I/flutter` or `I flutter`** and containing **`[dev]`**; consecutive duplicates skipped |
 
+**Auto-spawn from stack up:** `docker_up.sh` / `docker_up_build.sh` spawn the Docker mirror when **`WFRUN_MIRROR_GLOBAL_LOG`** is truthy (`1` / `true` / `yes` / `on`). On the dashboard, the **Mirror [dev] → global.log** checkbox (those two scripts only) sets that env for the run. Spawn is skipped if a mirror is already running; detached process output lands in `.dashboard_logs/docker_logs_mirror.log`.
+
 Implementation uses bash read loops in [`global_log_filter.sh`](../../automation/frontend/global_log_filter.sh):
 
 - Every line is printed to the terminal.
@@ -170,7 +172,7 @@ Python **`custom_log`** (and similar) is the broader application logging path an
 |---------|------------------|
 | Nothing in `global.log` from Flutter | `DUTCH_DEV_LOG` in `.env.dart.defines.local`, `LOGGING_SWITCH` true in target file, launch via **`launch_chrome.sh`** or **`run_chrome_to_global_log.sh`**. |
 | Nothing from Python/Dart | `DUTCH_DEV_LOG=1` in `.env.local`; Docker containers restarted; `LOGGING_SWITCH` true; lines must include **`[dev]`** on stderr. |
-| `global.log` empty but terminal shows `[dev]` | Flutter: confirm `launch_chrome.sh` filter is active. Backends: use **`docker_logs_to_global_log.sh`**. |
+| `global.log` empty but terminal shows `[dev]` | Flutter: confirm `launch_chrome.sh` filter is active. Backends: use **`docker_logs_to_global_log.sh`**, or run **`docker_up.sh` / `docker_up_build.sh`** with **`WFRUN_MIRROR_GLOBAL_LOG=1`** / dashboard checkbox. |
 | Flutter Web: no `devLog` | Without `--dart-define`, Web falls back to **`kDebugMode`** only — use launch scripts or add the define. |
 | Duplicate lines in `global.log` | Multiple terminals writing the same stack; or old content — truncate `global.log` before a session. Flutter script already dedupes **consecutive** identical lines. |
 

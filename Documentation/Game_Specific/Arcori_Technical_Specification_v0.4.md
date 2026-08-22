@@ -1,18 +1,24 @@
 # Arcori Technical Specification
 
 Working Draft v0.4  
-**Last aligned:** 2026-07-26 (Avari identity; title hierarchy)
+**Last aligned:** 2026-08-21 (stub match turn stages: 2 rounds × seat slam)
 
 ## Arcori Model
 
-Fields: internalId, themeCode, designCode, designFamily, design, regionCode, affinity[], hostility[], generation{roman,number,creator}, type, theme, subtheme, style, finish, effect, printedRarity, series, worldState, seasonState, artworkPrompt, loreDescription.
+Fields: internalId, themeCode, designCode, designFamily, design, inspiration, regionCode, affinity[], hostility[], generation{roman,number,creator}, type, theme, subtheme, style, finish, effect, printedRarity, selectionWeight, series, worldState, seasonState, artworkPrompt, loreDescription.
+
+**Natural selection (catalog / circulation):** `03_printed_rarity.json` maps printedRarity → default `selectionWeight` (Common 3.0 … Legendary 0.5; Unique is custom / null). If a design sets `selectionWeight` to a number, that value **overrides** the printed-rarity default for circulation-style uses. Omit or `null` → use the table. Launch catalog: all designs `printedRarity: Common`, with per-design `selectionWeight` copied from their previous rarity so selection spread is unchanged.
+
+**Match Arcori pairing SSOT:** after players are seated, `04_selection_weights.json` is the sole table for picking one design per seat (`printedRarity` weight × region standing multiplier; hostility boosts match chance). Design-level `selectionWeight` is **not** used for match pairing. Service: `POST /service/catalog/select_arcori`. Candidates = that player's `player_design_access` ids that are still circulating. Weight/parse failures → random among **those** candidates only — never the global circulating catalog. Empty player access → empty pick (client/Dart stub may fill Tiger).
+
+**Online stub turns:** after `startFromLobby`, Dart runs an auto stub loop (`roundsTotal` default 2 × one `slam` per seat) using each seat’s `slammerId`, broadcasts `match/state` with enriched `lastEvent` (`seatIndex`, `round`, `slammerId`, `arcoriId`, `result: stub`), then `endMatch`. Flutter online play waits for `phase=ended` (no client auto-end). Practice Flutter loop uses the same `lastEvent` shape.
 
 ## Architecture
 
 | Layer | Role |
 |-------|------|
 | **Arcori Catalog** | Immutable design definitions (+ media); JSON under `modules/catalog/data/`; served authuser via mtime-cached loader (see [catalog-hot-reload.md](../01_Active_Plans/catalog-hot-reload.md)) |
-| **Region Catalog** | Politics and geography |
+| **Region Catalog** | Politics and geography — five launch regions in `01_regions.json` |
 | **Standings** | Live per-design community state for the **active** generation (mastery ranks, generation fill, leader window) |
 | **Museum** | World historical snapshots of **closed** generations (factual archive) |
 | **Chronicle** | Mythology |
@@ -67,9 +73,29 @@ Hot-reload: memory cache invalidated when file mtime/size changes; new theme fil
 
 **Chart + plain English guide:** [catalog-hot-reload-flow](../02_FlowCharts/charts/base/catalog-hot-reload-flow.html) · [guide](../02_FlowCharts/charts/base/catalog-hot-reload-flow.guide.html)
 
+## Region model
+
+Launch codes: **ASH** Ashdrift Hill, **EVG** Everlight Grove, **LFR** Little Frost, **MWB** Moonwake Bay, **AMB** Amberwild. Outside the political map: **RBY** Realm Beyond (no affinity/hostility).
+
+Fields: regionCode, name, type (`region`), worldState, seasonState, allianceCode, loreDescription, identity{summary,traits[]}, location{regionCode,locationCode,latitude,longitude,radiusMeters}, relationships.
+
+`location` slots match design `location` (coords unset at launch). `allianceCode` is `VEILED_ACCORD`, `LIVING_PACT`, or null (Little Frost is independent).
+
 ## Relationships
 
-Designs have affinity/hostility. Regions have allies/enemies. Regions are orthogonal to Themes.
+Designs have affinity/hostility (piece-to-piece). Regions have political standing (region-to-region). Regions are orthogonal to Themes.
+
+Regional standing is cultural/political, not a moral alignment and not a travel or collect lock:
+
+| Label | Value | Lists on `relationships` |
+|-------|-------|--------------------------|
+| Affinity | +2 | `affinity` / `allies` |
+| Favourable | +1 | `favourable` |
+| Neutral | 0 | `neutral` |
+| Tension | −1 | `tension` |
+| Hostility | −2 | `hostility` / `enemies` |
+
+Each region also has `relationships.standings[otherRegionCode]` with `value`, `label`, and `reason`. File-level `alliances` and `centralConflict` sit beside the `regions` array.
 
 ## Generation Creator
 

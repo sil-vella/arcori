@@ -11,15 +11,20 @@
       "designCode": "CWR",
       "designFamily": "CANDLE_WRAITH",
       "design": "Candle Wraith",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -35,6 +40,7 @@
       "finish": "Gloss",
       "effect": "Glow",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Pioneers Series",
       "worldState": "Active",
       "seasonState": "Active",

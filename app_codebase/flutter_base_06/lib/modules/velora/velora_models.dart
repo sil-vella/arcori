@@ -1,6 +1,12 @@
 /// Catalog design models for Velora browse + Arcori Detail.
 library;
 
+double? _readSelectionWeight(Object? raw) {
+  if (raw == null) return null;
+  if (raw is num) return raw.toDouble();
+  return double.tryParse(raw.toString());
+}
+
 class DesignGeneration {
   const DesignGeneration({this.roman, this.number});
 
@@ -32,6 +38,7 @@ class DesignSummary {
     this.subtheme,
     this.themeCode,
     this.printedRarity,
+    this.selectionWeight,
     this.series,
     this.seriesKey,
     this.worldState,
@@ -50,6 +57,7 @@ class DesignSummary {
       subtheme: json['subtheme']?.toString(),
       themeCode: json['themeCode']?.toString(),
       printedRarity: json['printedRarity']?.toString(),
+      selectionWeight: _readSelectionWeight(json['selectionWeight']),
       series: json['series']?.toString(),
       seriesKey: json['seriesKey']?.toString(),
       worldState: json['worldState']?.toString(),
@@ -68,6 +76,7 @@ class DesignSummary {
   final String? subtheme;
   final String? themeCode;
   final String? printedRarity;
+  final double? selectionWeight;
   final String? series;
   final String? seriesKey;
   final String? worldState;
@@ -88,6 +97,7 @@ class DesignDetail {
     this.subtheme,
     this.themeCode,
     this.printedRarity,
+    this.selectionWeight,
     this.series,
     this.seriesKey,
     this.worldState,
@@ -107,6 +117,7 @@ class DesignDetail {
       subtheme: json['subtheme']?.toString(),
       themeCode: json['themeCode']?.toString(),
       printedRarity: json['printedRarity']?.toString(),
+      selectionWeight: _readSelectionWeight(json['selectionWeight']),
       series: json['series']?.toString(),
       seriesKey: json['seriesKey']?.toString(),
       worldState: json['worldState']?.toString(),
@@ -126,6 +137,7 @@ class DesignDetail {
   final String? subtheme;
   final String? themeCode;
   final String? printedRarity;
+  final double? selectionWeight;
   final String? series;
   final String? seriesKey;
   final String? worldState;

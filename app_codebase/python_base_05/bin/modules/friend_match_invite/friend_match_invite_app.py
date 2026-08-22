@@ -6,7 +6,7 @@ from core.errors.app_error import AppError
 from core.http.request_context import get_auth_user_id
 from core.http.contracts.register_route_contract import ApplicationRouteSink
 from core.http.contracts.response_contract import HttpResponseContract
-from core.state.session_scope import session_scope
+from core.utils.dev_logger import customlog
 from modules.auth.auth_service import parse_json_body
 from modules.friend_match_invite.friend_match_invite_errors import (
     friend_match_inviteInvalidRequest,
@@ -23,13 +23,10 @@ from modules.friend_match_invite.friend_match_invite_store import (
     get_invite,
 )
 from modules.notifications.notification_service import create_for_user
+from modules.players.players_service import is_ai_user
 from models.user_notification import NOTIFICATION_TYPE_INSTANT
-from models.avari_profile import AvariProfile
-from models.user import User
 
-from modules.players.players_service import AI_EMAIL_DOMAIN, AI_SEED_MARKER
-
-from sqlalchemy import func, or_, select
+LOGGING_SWITCH = True
 
 
 def register_friend_match_invite_routes(
@@ -65,8 +62,15 @@ def _handle_create(res: HttpResponseContract):
             invited_user_id=invited_user_id,
         )
 
-        if not _is_ai_user(invited_user_id):
-            create_for_user(
+        invited_is_ai = is_ai_user(invited_user_id)
+        if LOGGING_SWITCH:
+            customlog(
+                f"friend_match_invite: create invite_id={invite_id} "
+                f"host={host_user_id} invited={invited_user_id} is_ai={invited_is_ai}"
+            )
+
+        if not invited_is_ai:
+            message_id = create_for_user(
                 invited_user_id,
                 source=FRIEND_MATCH_INVITE_SOURCE,
                 notification_type=NOTIFICATION_TYPE_INSTANT,
@@ -86,38 +90,21 @@ def _handle_create(res: HttpResponseContract):
                     },
                 },
             )
+            if LOGGING_SWITCH:
+                customlog(
+                    f"friend_match_invite: notification created invite_id={invite_id} "
+                    f"invited={invited_user_id} message_id={message_id}"
+                )
+        else:
+            if LOGGING_SWITCH:
+                customlog(
+                    f"friend_match_invite: notification skipped (AI) "
+                    f"invite_id={invite_id} invited={invited_user_id}"
+                )
 
         return res.json_ok({"inviteId": invite_id})
     except AppError as err:
         return err.to_http_response()
-
-
-def _is_ai_user(user_id: str) -> bool:
-    """
-    AI detection rules must mirror `modules/players/players_service.sample_ai_players`.
-    """
-    try:
-        invited_uid = str(user_id).strip()
-        if not invited_uid:
-            return False
-
-        with session_scope() as session:
-            # Keep the logic as a single query: AvariProfile.notes marker OR AI email domain.
-            stmt = (
-                select(User.id)
-                .outerjoin(AvariProfile, AvariProfile.user_id == User.id)
-                .where(
-                    User.id == invited_uid,
-                    or_(
-                        AvariProfile.notes == AI_SEED_MARKER,
-                        func.lower(User.email).like(f"%{AI_EMAIL_DOMAIN}"),
-                    ),
-                )
-            )
-            return session.execute(stmt).first() is not None
-    except Exception:
-        # Service-tier endpoint: never break invite flow due to AI detection.
-        return False
 
 
 def _handle_resolve(res: HttpResponseContract):
@@ -132,12 +119,21 @@ def _handle_resolve(res: HttpResponseContract):
 
         rec = get_invite(invite_id)
         if rec is None:
+            if LOGGING_SWITCH:
+                customlog(f"friend_match_invite: resolve not_found invite_id={invite_id}")
             raise AppError(friend_match_inviteNotFound)
+
+        invited_is_ai = is_ai_user(rec.invited_user_id)
+        if LOGGING_SWITCH:
+            customlog(
+                f"friend_match_invite: resolve invite_id={invite_id} "
+                f"invited={rec.invited_user_id} is_ai={invited_is_ai}"
+            )
 
         return res.json_ok(
             {
                 "invitedUserId": rec.invited_user_id,
-                "isAi": _is_ai_user(rec.invited_user_id),
+                "isAi": invited_is_ai,
             },
         )
     except AppError as err:
@@ -147,4 +143,3 @@ def _handle_resolve(res: HttpResponseContract):
             friend_match_inviteInvalidRequest,
             message="Invalid request payload",
         ).to_http_response()
-

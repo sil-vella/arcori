@@ -75,20 +75,115 @@ class MatchmakingService {
           .timeout(const Duration(seconds: 5));
 
       if (response.statusCode < 200 || response.statusCode >= 300) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'matchmaking: invite resolve failed status=${response.statusCode} '
+            'inviteId=$trimmed body=${response.body}',
+          );
+        }
         return null;
       }
 
       final decoded = jsonDecode(response.body);
       if (decoded is! Map) return null;
-      if (decoded['ok'] != true) return null;
+      if (decoded['ok'] != true) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'matchmaking: invite resolve envelope not ok inviteId=$trimmed '
+            'body=${response.body}',
+          );
+        }
+        return null;
+      }
 
       final data = decoded['data'];
       if (data is! Map) return null;
-      return Map<String, dynamic>.from(data);
-    } catch (_) {
-      // Best-effort: if resolve fails, treat as non-AI and fall back.
+      final map = Map<String, dynamic>.from(data);
+      if (LOGGING_SWITCH) {
+        customlog(
+          'matchmaking: invite resolve ok inviteId=$trimmed '
+          'invitedUserId=${map['invitedUserId']} isAi=${map['isAi']}',
+        );
+      }
+      return map;
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('matchmaking: invite resolve error inviteId=$trimmed err=$e');
+      }
       return null;
     }
+  }
+
+  Future<bool> _checkUserIsAi(String userId) async {
+    final trimmed = userId.trim();
+    if (trimmed.isEmpty) return false;
+    final uri = Uri.parse('${_fastApi.baseUrl}/service/players/is_ai');
+
+    try {
+      final response = await _fastApi.client
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Service-Key': serviceKey(),
+            },
+            body: jsonEncode({'userId': trimmed}),
+          )
+          .timeout(const Duration(seconds: 5));
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'matchmaking: is_ai check failed status=${response.statusCode} '
+            'userId=$trimmed',
+          );
+        }
+        return false;
+      }
+
+      final decoded = jsonDecode(response.body);
+      if (decoded is! Map || decoded['ok'] != true) return false;
+      final data = decoded['data'];
+      if (data is! Map) return false;
+      final isAi = data['isAi'] == true;
+      if (LOGGING_SWITCH) {
+        customlog('matchmaking: is_ai check userId=$trimmed isAi=$isAi');
+      }
+      return isAi;
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('matchmaking: is_ai check error userId=$trimmed err=$e');
+      }
+      return false;
+    }
+  }
+
+  Future<({String invitedUserId, bool isAi})?> _resolveInvitedSeatForInvite(
+    Map<String, dynamic> matchType,
+  ) async {
+    final inviteId = matchType['subtype']?.toString().trim() ?? '';
+    var invitedUserId = matchType['invitedUserId']?.toString().trim() ?? '';
+
+    if (invitedUserId.isEmpty && inviteId.isNotEmpty) {
+      final resolved = await _resolveInviteForAi(inviteId);
+      invitedUserId = resolved?['invitedUserId']?.toString().trim() ?? '';
+      if (resolved?['isAi'] == true && invitedUserId.isNotEmpty) {
+        return (invitedUserId: invitedUserId, isAi: true);
+      }
+    }
+
+    if (invitedUserId.isEmpty) {
+      if (LOGGING_SWITCH) {
+        customlog(
+          'matchmaking: invite seat unresolved inviteId=$inviteId '
+          '(no invitedUserId on matchType and resolve failed)',
+        );
+      }
+      return null;
+    }
+
+    final isAi = await _checkUserIsAi(invitedUserId);
+    return (invitedUserId: invitedUserId, isAi: isAi);
   }
 
   Future<LobbySnapshot> find({
@@ -279,17 +374,22 @@ class MatchmakingService {
           if (needAi != 1) {
             throw AppError(matchmakingInviteNeedsMoreHumans);
           }
-          final inviteId =
-              lobby.matchType['subtype']?.toString().trim() ?? '';
-          final resolved = await _resolveInviteForAi(inviteId);
-          final invitedUserId =
-              resolved?['invitedUserId']?.toString().trim() ?? '';
-          final isAi = resolved?['isAi'] == true;
-
-          if (isAi && invitedUserId.isNotEmpty) {
-            aiIds = [invitedUserId];
-          } else {
+          final seat = await _resolveInvitedSeatForInvite(lobby.matchType);
+          if (seat == null || !seat.isAi || seat.invitedUserId.isEmpty) {
+            if (LOGGING_SWITCH) {
+              customlog(
+                'matchmaking: invite needs human lobby=$lobbyId '
+                'seat=${seat?.invitedUserId} isAi=${seat?.isAi}',
+              );
+            }
             throw AppError(matchmakingInviteNeedsMoreHumans);
+          }
+          aiIds = [seat.invitedUserId];
+          if (LOGGING_SWITCH) {
+            customlog(
+              'matchmaking: invite auto-fill AI seat=${seat.invitedUserId} '
+              'lobby=$lobbyId',
+            );
           }
         } else {
           try {

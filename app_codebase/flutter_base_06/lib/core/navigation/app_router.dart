@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,10 +9,16 @@ import 'app_shell.dart';
 import 'auth_redirect.dart';
 import 'contracts/register_route_contract.dart';
 
+/// Root navigator used by overlays that sit above [MaterialApp.router]
+/// (notification instant modals).
+final GlobalKey<NavigatorState> appRootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'appRoot');
+
 /// Builds a router from the current sink contents, with auth redirect (Option A).
 GoRouter buildAppGoRouter(Ref ref) {
   final routes = List<RouteBase>.of(_AppRouteRegistry._instance._routes);
   final router = GoRouter(
+    navigatorKey: appRootNavigatorKey,
     initialLocation: AppPaths.home,
     redirect: (context, state) {
       final uri = state.uri;

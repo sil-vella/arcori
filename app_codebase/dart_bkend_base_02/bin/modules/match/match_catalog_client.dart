@@ -9,7 +9,7 @@ import '../../core/http/fastapi_service_client.dart';
 import '../../utils/dev_logger.dart';
 import 'match_errors.dart';
 
-const bool LOGGING_SWITCH = false; // ignore: constant_identifier_names
+const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 class MatchCatalogClient {
   MatchCatalogClient({FastApiServiceClient? fastApi})
@@ -77,6 +77,78 @@ class MatchCatalogClient {
       throw AppError(
         matchCatalogFreezeFailed,
         message: 'Catalog freeze request failed: $e',
+      );
+    }
+  }
+
+  /// Match-time Arcori pick after seats exist. Returns userId → arcoriId.
+  Future<Map<String, String>> selectArcori({
+    required List<Map<String, dynamic>> seats,
+  }) async {
+    final uri = Uri.parse('${_fastApi.baseUrl}/service/catalog/select_arcori');
+    try {
+      final response = await _fastApi.client
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Service-Key': serviceKey(),
+            },
+            body: jsonEncode({'seats': seats}),
+          )
+          .timeout(const Duration(seconds: 10));
+      final body = jsonDecode(response.body);
+      if (body is! Map) {
+        throw AppError(
+          matchCatalogFreezeFailed,
+          message: 'Invalid select_arcori response',
+        );
+      }
+      final map = Map<String, dynamic>.from(body);
+      if (response.statusCode < 200 ||
+          response.statusCode >= 300 ||
+          map['ok'] != true) {
+        final err = map['error'];
+        final message = err is Map
+            ? (err['message']?.toString() ?? matchCatalogFreezeFailed.message)
+            : matchCatalogFreezeFailed.message;
+        throw AppError(matchCatalogFreezeFailed, message: message);
+      }
+      final data = map['data'];
+      if (data is! Map) {
+        throw AppError(
+          matchCatalogFreezeFailed,
+          message: 'select_arcori data missing',
+        );
+      }
+      final raw = data['selections'];
+      if (raw is! List) {
+        throw AppError(
+          matchCatalogFreezeFailed,
+          message: 'select_arcori selections missing',
+        );
+      }
+      final out = <String, String>{};
+      for (final item in raw) {
+        if (item is! Map) continue;
+        final userId = item['userId']?.toString().trim() ?? '';
+        final arcoriId = item['arcoriId']?.toString().trim() ?? '';
+        if (userId.isEmpty || arcoriId.isEmpty) continue;
+        out[userId] = arcoriId;
+      }
+      if (LOGGING_SWITCH) {
+        customlog('match catalog select_arcori ok count=${out.length}');
+      }
+      return out;
+    } on AppError {
+      rethrow;
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('match catalog select_arcori error: $e');
+      }
+      throw AppError(
+        matchCatalogFreezeFailed,
+        message: 'select_arcori request failed: $e',
       );
     }
   }

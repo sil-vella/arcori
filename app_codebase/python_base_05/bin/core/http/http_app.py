@@ -9,10 +9,11 @@ from that list. The server should call ``createHttpHandler`` as the one place to
 from fastapi import FastAPI
 
 from core.auth.auth_config import require_secrets_for_production
+from core.errors.module_error_registry import reset_module_error_registry
 from core.http.service.routes import build_application_handler, reset_route_registry
+from core.state.state_registry import inbox_broadcaster
 from core.utils.prod_runtime import configure_production
 from core.ws.ws_app import configure_websockets
-from core.errors.module_error_registry import reset_module_error_registry
 from modules.module_registry import (
     register_application_errors,
     register_application_routes,
@@ -30,4 +31,5 @@ def createHttpHandler() -> FastAPI:
     app = build_application_handler()
     configure_production(app)
     configure_websockets(app)
+    inbox_broadcaster.start_cross_worker_listener()
     return app

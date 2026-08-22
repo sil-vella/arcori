@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock, patch
+
 from core.state.connection_registry import ConnectionRegistry
 from core.state.user_connection_registry import UserConnectionRegistry
 from core.ws.inbox_broadcaster import InboxBroadcaster
@@ -16,7 +18,8 @@ def test_user_connection_registry_register_unregister() -> None:
     assert registry.connection_ids_for_user("user-1") == set()
 
 
-def test_inbox_broadcaster_notifies_all_user_connections() -> None:
+@patch("core.ws.inbox_broadcaster.presence_enabled", return_value=False)
+def test_inbox_broadcaster_notifies_all_user_connections(_presence: MagicMock) -> None:
     connections = ConnectionRegistry()
     user_connections = UserConnectionRegistry()
     broadcaster = InboxBroadcaster(
@@ -43,3 +46,39 @@ def test_inbox_broadcaster_notifies_all_user_connections() -> None:
     assert len(sent["b"]) == 1
     assert "inbox_changed" in sent["a"][0]
     assert "notifications/inbox" in sent["a"][0]
+
+
+@patch("core.ws.inbox_broadcaster.presence_enabled", return_value=True)
+def test_inbox_broadcaster_skips_same_worker_pubsub(_presence: MagicMock) -> None:
+    connections = ConnectionRegistry()
+    user_connections = UserConnectionRegistry()
+    broadcaster = InboxBroadcaster(
+        connections=connections,
+        user_connections=user_connections,
+    )
+    broadcaster._worker_id = "worker-a"
+
+    sent: dict[str, list[str]] = {}
+
+    def _send(frame: str) -> None:
+        sent.setdefault("a", []).append(frame)
+
+    connections.register("a", _send)
+    user_connections.register("user-1", "a")
+
+    broadcaster._handle_pubsub_message(
+        {
+            "type": "message",
+            "data": '{"user_id":"user-1","origin_worker":"worker-a"}',
+        }
+    )
+    assert "a" not in sent
+
+    broadcaster._handle_pubsub_message(
+        {
+            "type": "message",
+            "data": '{"user_id":"user-1","origin_worker":"worker-b"}',
+        }
+    )
+    assert len(sent["a"]) == 1
+    assert "inbox_changed" in sent["a"][0]

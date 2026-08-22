@@ -21,7 +21,7 @@ class CoreActionPack implements MatchActionPack {
     }
   }
 
-  /// Stub slam: set lastEvent and rotate active seat. No score/physics yet.
+  /// Stub slam: record lastEvent, rotate active; advance round on wrap.
   static MatchSnapshot _slam({
     required MatchStore store,
     required MatchSnapshot current,
@@ -46,18 +46,45 @@ class CoreActionPack implements MatchActionPack {
       throw AppError(matchNotYourTurn);
     }
 
-    final nextSeatIndex =
-        (actorSeat.seatIndex + 1) % current.seats.length;
+    final seatCount = current.seats.length;
+    final wrapping =
+        seatCount > 0 && actorSeat.seatIndex == seatCount - 1;
+    final nextSeatIndex = wrapping ? 0 : actorSeat.seatIndex + 1;
+
+    var nextRound = current.round;
+    var nextActive = <String, dynamic>{
+      'seatIndex': nextSeatIndex,
+      'action': 'slam',
+    };
+    if (wrapping) {
+      if (current.round < current.roundsTotal) {
+        nextRound = current.round + 1;
+        nextActive = {'seatIndex': 0, 'action': 'slam'};
+      } else {
+        // Last slam of last round — leave cursor on this seat; runner ends.
+        nextActive = {
+          'seatIndex': actorSeat.seatIndex,
+          'action': 'slam',
+        };
+      }
+    }
+
+    final seatIndex = actorSeat.seatIndex;
+    final slammerId = actorSeat.slammerId;
+    final arcoriId =
+        actorSeat.arcoriIds.isNotEmpty ? actorSeat.arcoriIds.first : null;
 
     return store.bump(current.matchId, (snap) {
       return snap.copyWith(
-        active: {
-          'seatIndex': nextSeatIndex,
-          'action': 'slam',
-        },
+        round: nextRound,
+        active: nextActive,
         lastEvent: {
           'type': 'slam',
           'actorUserId': actorUserId,
+          'seatIndex': seatIndex,
+          'round': current.round,
+          'slammerId': slammerId,
+          'arcoriId': arcoriId,
           'result': 'stub',
           'version': snap.version + 1,
         },

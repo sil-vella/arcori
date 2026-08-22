@@ -4,7 +4,7 @@
 #
 # Usage:
 #   wfrun → launch_android.sh
-#   launch_android.sh [adb_serial|1|oneplus]
+#   launch_android.sh [adb_serial|1|oneplus|2|note58|doogee]
 #
 # Screen-record mode (V key) is enabled by launch_android_with_screenrecord.sh.
 
@@ -62,6 +62,7 @@ warn_loopback_urls() {
 get_device_label() {
   case "$1" in
     84fbcf31) echo "OnePlus device" ;;
+    NOTE58000000021664) echo "DOOGEE Note 58" ;;
     *) echo "Android device" ;;
   esac
 }
@@ -69,6 +70,7 @@ get_device_label() {
 resolve_device_id() {
   case "$1" in
     1|oneplus|OnePlus|ONEPLUS) echo "84fbcf31" ;;
+    2|doogee|Doogee|DOOGEE|note58|Note58|NOTE58) echo "NOTE58000000021664" ;;
     *) echo "$1" ;;
   esac
 }
@@ -103,9 +105,10 @@ android_assert_device_connected() {
   return 0
 }
 
-prompt_oneplus_device() {
+prompt_android_device() {
   echo "📲 Select target device:" >&2
   echo "   1) OnePlus (84fbcf31)" >&2
+  echo "   2) DOOGEE Note 58 (NOTE58000000021664)" >&2
   local _tty=/dev/tty
   [[ -r "$_tty" ]] || _tty=/dev/stdin
   local choice=""
@@ -115,6 +118,7 @@ prompt_oneplus_device() {
   fi
   case "${choice:-1}" in
     1|oneplus|OnePlus|ONEPLUS|"") echo "84fbcf31" ;;
+    2|doogee|Doogee|DOOGEE|note58|Note58|NOTE58) echo "NOTE58000000021664" ;;
     *)
       echo "⚠️  Invalid choice, using 1 (OnePlus)" >&2
       echo "84fbcf31"
@@ -544,7 +548,7 @@ android_ensure_adb_path
 if [[ -n "${1:-}" ]]; then
   DEVICE_ID="$(resolve_device_id "$1")"
 else
-  DEVICE_ID="$(prompt_oneplus_device)"
+  DEVICE_ID="$(prompt_android_device)"
 fi
 DEVICE_LABEL="$(get_device_label "$DEVICE_ID")"
 android_assert_device_connected "$DEVICE_ID" || exit 1

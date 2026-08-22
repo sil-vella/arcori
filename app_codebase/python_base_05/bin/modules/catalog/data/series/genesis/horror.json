@@ -11,15 +11,20 @@
       "designCode": "GHO",
       "designFamily": "PHANTOM_SPIRIT",
       "design": "Phantom Spirit",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -34,7 +39,8 @@
       "style": "Watercolor",
       "finish": "Transparent",
       "effect": "Smoke",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -51,15 +57,20 @@
       "designCode": "WRA",
       "designFamily": "WRAITH",
       "design": "Wraith",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -74,7 +85,8 @@
       "style": "Realistic",
       "finish": "Chrome",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -91,14 +103,17 @@
       "designCode": "VAM",
       "designFamily": "BLOOD_COUNT",
       "design": "Blood Count",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -114,7 +129,8 @@
       "style": "Anime",
       "finish": "Foil",
       "effect": "Fire",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -131,14 +147,17 @@
       "designCode": "DRA",
       "designFamily": "DARK_NOBLE",
       "design": "Dark Noble",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -154,7 +173,8 @@
       "style": "Comic",
       "finish": "Gloss",
       "effect": "Pulse",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -171,8 +191,9 @@
       "designCode": "ZOM",
       "designFamily": "UNDEAD_WALKER",
       "design": "Undead Walker",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -195,6 +216,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -211,15 +233,20 @@
       "designCode": "INF",
       "designFamily": "INFECTED",
       "design": "Infected",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -234,7 +261,8 @@
       "style": "Realistic",
       "finish": "Matte",
       "effect": "Smoke",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -251,14 +279,17 @@
       "designCode": "WWF",
       "designFamily": "MOON_FANG",
       "design": "Moon Fang",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -274,7 +305,8 @@
       "style": "Anime",
       "finish": "Metallic",
       "effect": "Glow",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -291,14 +323,17 @@
       "designCode": "ALP",
       "designFamily": "ALPHA_WOLF",
       "design": "Alpha Wolf",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -314,7 +349,8 @@
       "style": "Realistic",
       "finish": "Chrome",
       "effect": "Motion",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -331,15 +367,20 @@
       "designCode": "DOL",
       "designFamily": "HAUNTED_DOLL",
       "design": "Haunted Doll",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -354,7 +395,8 @@
       "style": "Cartoon",
       "finish": "Gloss",
       "effect": "Sparkle",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -371,15 +413,20 @@
       "designCode": "MIR",
       "designFamily": "CURSED_MIRROR",
       "design": "Cursed Mirror",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -394,7 +441,8 @@
       "style": "Minimalist",
       "finish": "Prismatic",
       "effect": "Glow",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -411,15 +459,20 @@
       "designCode": "NMR",
       "designFamily": "NIGHT_TERROR",
       "design": "Night Terror",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -434,7 +487,8 @@
       "style": "Neon",
       "finish": "Chrome",
       "effect": "Pulse",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
@@ -451,15 +505,20 @@
       "designCode": "SLP",
       "designFamily": "SLEEP_WALKER",
       "design": "Sleep Walker",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -475,6 +534,7 @@
       "finish": "Matte",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",

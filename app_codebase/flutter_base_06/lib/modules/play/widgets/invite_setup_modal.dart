@@ -6,17 +6,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/modal/modal.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../utils/dev_logger.dart';
 import '../contacts_api.dart';
+import '../play_models.dart';
 import '../friend_match_invite_api.dart';
+
+const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 /// Host-side invite setup: search Contacts by username and request an inviteId.
 ///
-/// Returns the created `inviteId`, or null if cancelled/dismissed.
-Future<String?> showInviteSetupModal({
+/// Returns [InviteSetupResult], or null if cancelled/dismissed.
+Future<InviteSetupResult?> showInviteSetupModal({
   required BuildContext context,
   required WidgetRef ref,
 }) {
-  return AppModal.showCenteredShell<String?>(
+  return AppModal.showCenteredShell<InviteSetupResult?>(
     context,
     title: 'Create invite',
     barrierDismissible: true,
@@ -227,6 +231,12 @@ class _InviteSetupBodyState extends ConsumerState<_InviteSetupBody> {
 
     setState(() => _submittingInvite = true);
     try {
+      if (LOGGING_SWITCH) {
+        customlog(
+          'invite_setup: createInvite invitedUserId=${recipient.userId} '
+          'username=${recipient.username}',
+        );
+      }
       final api = FriendMatchInviteApiClient();
       final outcome = await api.createInvite(
         accessToken: token,
@@ -235,13 +245,31 @@ class _InviteSetupBodyState extends ConsumerState<_InviteSetupBody> {
 
       if (!mounted) return;
       if (!outcome.isSuccess) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'invite_setup: createInvite failed network=${outcome.isNetworkError} '
+            'code=${outcome.error?.rawCode ?? '-'}',
+          );
+        }
         messenger.showSnackBar(
           SnackBar(content: Text(outcome.error?.message ?? 'Request failed')),
         );
         return;
       }
 
-      AppModal.dismiss(context, outcome.data);
+      if (LOGGING_SWITCH) {
+        customlog(
+          'invite_setup: createInvite ok inviteId=${outcome.data} '
+          'invitedUserId=${recipient.userId}',
+        );
+      }
+      AppModal.dismiss(
+        context,
+        InviteSetupResult(
+          inviteId: outcome.data!,
+          invitedUserId: recipient.userId,
+        ),
+      );
     } finally {
       if (mounted) setState(() => _submittingInvite = false);
     }

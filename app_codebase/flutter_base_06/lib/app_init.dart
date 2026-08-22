@@ -16,6 +16,7 @@ import 'core/navigation/app_drawer_registry.dart';
 import 'core/navigation/app_route_registry.dart';
 import 'core/navigation/app_router.dart';
 import 'core/notifications/notification_screen_registry.dart';
+import 'core/notifications/response/reply_listener_registry.dart';
 import 'core/notifications/subtype/subtype_registry.dart';
 import 'core/state/app_state_registry.dart';
 import 'core/state/auth/auth_providers.dart';
@@ -48,6 +49,7 @@ Future<void> startApp() async {
   resetAppStateRegistry();
   resetNotificationScreenRegistry();
   resetNotificationSubtypeRegistry();
+  resetNotificationReplyListeners();
   registerBuiltinNotificationSubtypes();
   resetAppBarController();
   resetBottomNavController();

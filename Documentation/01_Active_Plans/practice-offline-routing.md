@@ -12,7 +12,7 @@ Correct the practice path so **practice never uses Dart WS**. After mode select:
 
 - **Practice** → Flutter-only local match: 1 human + 2 AI (from embedded pool), local snapshot, existing match surface on local state.
 - **quickStart / specialEvent** → online matchmaking — [ws-matchmaking-modes.md](ws-matchmaking-modes.md) (**done**).
-- **Invite** → Play stub until [ws-invite-match.md](ws-invite-match.md).
+- **Invite** → private 2-seat Friend Match — [ws-invite-match.md](ws-invite-match.md) (**done**).
 
 Gameplay (weighted slam, random first player) stays deferred — stub auto loop is in [practice-stub-gameplay.md](practice-stub-gameplay.md).
 
@@ -25,7 +25,7 @@ Play → choose type
             → auto stub loop (2 rounds × 3 slams) → end
             → postMatch stub → idle
   quickStart | specialEvent → matchmaking (see ws-matchmaking-modes)
-  Invite → roomCreateStub (log) → postMatch stub → idle  # until ws-invite-match
+  Invite → contacts + notification Accept → private lobby → match room  # [ws-invite-match]
 ```
 
 ## Scope locks
@@ -36,7 +36,7 @@ Play → choose type
 - AI seats: `userId` + in-match fields only (`seatIndex`, `kind`, `score`, `connected`); empty `arcoriIds` / `slammerId` until gameplay
 - No catalog freeze / FastAPI on practice path
 - Dart `match` module remains for later online modes; Flutter practice does not call it
-- Non-practice does not use the practice local path (online types use Dart matchmaking / invite stub)
+- Non-practice does not use the practice local path (online types use Dart matchmaking / invite lobby)
 - Play screen opens match surface for practice **and** online `inMatch`
 
 ## Implementation
@@ -52,7 +52,6 @@ Play → choose type
 ## Gaps (next)
 
 - Weighted slam / random first player / real AI decisions
-- **Invite WS** — [ws-invite-match.md](ws-invite-match.md)
 - Match Summary / FastAPI finalize
 
 ## Files modified

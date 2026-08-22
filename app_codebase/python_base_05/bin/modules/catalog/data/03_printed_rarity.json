@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Printed Rarity influences how often an Arcori enters circulation and how often it is naturally selected, without affecting gameplay strength. Values can be tuned later.",
+  "description": "Printed Rarity is the default how-often an Arcori enters circulation and is naturally selected, without affecting gameplay strength. A design-level selectionWeight, when not null, overrides this table. Values can be tuned later.",
   "printedRarities": [
     {
       "printedRarity": "Common",

@@ -16,6 +16,7 @@ from core.notifications.response_types import RESPONSE_TYPE_REPLY
 from core.notifications.subtype_registry import require_subtype_spec
 from core.state.session_scope import session_scope
 from core.state.state_registry import inbox_broadcaster
+from core.utils.dev_logger import customlog
 from modules.auth.auth_service import parse_json_body
 from modules.notifications import notification_repository as repo
 from modules.notifications.notification_errors import (
@@ -26,6 +27,8 @@ from modules.notifications.notification_errors import (
     NOT_FOUND,
     NOT_REPLY_TYPE,
 )
+
+LOGGING_SWITCH = True
 
 _MAX_LIST_LIMIT = 100
 _MAX_MARK_READ = 100
@@ -167,6 +170,13 @@ def create_for_user(
         )
         message_id = str(row.id)
 
+    if LOGGING_SWITCH:
+        customlog(
+            f"notifications: create_for_user user={uid} source={source_value} "
+            f"type={normalized_type} category={category_value} subtype={subtype_value} "
+            f"message_id={message_id} msg_id={msg_id or '-'}"
+        )
+
     inbox_broadcaster.notify_inbox_changed(str(uid))
     return message_id
 
@@ -211,9 +221,10 @@ def list_messages_for_user(
             unread_only=unread_only,
         )
         unread_count = repo.count_unread_user_notifications(session, uid)
+        messages = [_serialize_user_row(row) for row in rows]
 
     return {
-        "messages": [_serialize_user_row(row) for row in rows],
+        "messages": messages,
         "unread_count": unread_count,
     }
 
@@ -228,11 +239,11 @@ def list_globals_for_user(user_id: str) -> dict[str, Any]:
             uid,
             [row.id for row in globals_rows],
         )
+        messages = [
+            _serialize_global_row(row, user_read=row.id in read_ids)
+            for row in globals_rows
+        ]
 
-    messages = [
-        _serialize_global_row(row, user_read=row.id in read_ids)
-        for row in globals_rows
-    ]
     unread_count = sum(1 for message in messages if not message["user_read"])
     return {"messages": messages, "unread_count": unread_count}
 

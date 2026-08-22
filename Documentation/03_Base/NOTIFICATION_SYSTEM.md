@@ -173,7 +173,9 @@ WS frame sent to online sessions:
 
 Flutter handler (`register_notifications_state.dart`) refetches inbox + globals on this event.
 
-**Multi-worker note:** fan-out is in-memory per Gunicorn worker. **Online status** is cross-worker via Redis presence — see [PRESENCE_SYSTEM.md](PRESENCE_SYSTEM.md). WS `inbox_changed` delivery across workers still requires Redis pub/sub (deferred).
+**Multi-worker note:** fan-out is local per Gunicorn worker, then Redis pub/sub
+(`{ARCORI_PRESENCE_KEY_PREFIX}inbox_changed`) when `ARCORI_PRESENCE_ENABLED=true`
+so other workers push to their local sockets. Online status is also cross-worker via Redis presence — see [PRESENCE_SYSTEM.md](PRESENCE_SYSTEM.md).
 
 ---
 
@@ -374,7 +376,7 @@ register_reply_handler("example_module", _example_reply_handler)
 
 Wire from `register_notification_reply_handlers()` in `bin/modules/module_registry.py` — also resets and loads `register_builtin_notification_subtypes()`. Example: `bin/modules/example_module/example_notifications.py`.
 
-Optional Flutter follow-up: `registerNotificationReplyListener(source, callback)` in `reply_listener_registry.dart`.
+Optional Flutter follow-up: `registerNotificationReplyListener(source, callback)` in `reply_listener_registry.dart` (Friend Match Accept is registered from `registerPlayNotifications()`).
 
 ### Legacy `responses[]` (backward compatible)
 
@@ -496,6 +498,20 @@ create_for_user(
 
 Trigger: Dart `example/state` WS with `record: true` → `POST /service/example_module/record` → Python insert → notification create.
 
+### Real example — Friend Match invite (`friend_match_invite`)
+
+Host creates an invite via `POST /authuser/friend_match_invites/create`. FastAPI then calls `create_for_user` (not a custom modal) so the guest gets a stored **instant** notification with a **reply** response:
+
+| Field | Value |
+|-------|--------|
+| `source` | `friend_match_invite` |
+| `type` | `instant` (auto modal) |
+| `category` / `subtype` | `friend_match` / `invite_v1` |
+| `msg_id` | `friend_match_invite:{inviteId}` |
+| `data.response` | `{ "type": "reply", "options": [{ "key": "accept" }, { "key": "decline" }] }` |
+
+Python registers the subtype + reply handler in `friend_match_invite_notifications.py`. Flutter mirrors the subtype and a **reply listener** in `register_play_notifications.dart` (Accept → Play hub + `startInviteJoin`). The notification modal itself stays generic: it only POSTs `/authuser/notifications/response`.
+
 ---
 
 ## Module integration — service tier (Dart / cross-process)
@@ -585,6 +601,8 @@ lib/core/notifications/
 ```
 
 Mounted in `app_init.dart`: `resetNotificationSubtypeRegistry()` + `registerBuiltinNotificationSubtypes()` → `AppLifecycleObserver` → `NotificationHost` → `MaterialApp.router`.
+
+`NotificationHost` is **above** the GoRouter navigator (no `Navigator` / `Theme` on its own `context`). Instant modals must call `showNotificationModalSequence` with `appRootNavigatorKey.currentContext` (`GoRouter.navigatorKey` in `app_router.dart`). Do not use the host widget context for `AppModal.showCentered`.
 
 ### Fetch triggers
 
@@ -773,5 +791,5 @@ python3 bin/migrate.py
 |---------|-------|
 | Admin global create API | Use `wfrun` → `sync_global_notifications.py` + JSON seed (no HTTP admin API yet) |
 | `data.target_version` app-update gate | From legacy Dutch system |
-| Redis pub/sub multi-worker WS delivery | When Gunicorn workers > 1 — presence query already cross-worker via Redis |
+| Redis pub/sub multi-worker WS delivery | Done when `ARCORI_PRESENCE_ENABLED=true` — see InboxBroadcaster |
 | FCM/APNs OS push | Separate project |

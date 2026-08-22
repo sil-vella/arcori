@@ -11,14 +11,17 @@
       "designCode": "TPL",
       "designFamily": "TIDE_POOL",
       "design": "Tide Pool",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -35,6 +38,7 @@
       "finish": "Gloss",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "series": "Pioneers Series",
       "worldState": "Active",
       "seasonState": "Active",

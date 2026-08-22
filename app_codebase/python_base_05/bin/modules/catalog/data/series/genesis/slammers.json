@@ -11,15 +11,20 @@
       "designCode": "STR",
       "designFamily": "STARTER_SLAMMER",
       "design": "Starter Slammer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -35,6 +40,7 @@
       "finish": "Standard",
       "effect": "None",
       "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "origin": "Starter",
       "series": "Slammer Genesis Series",
       "worldState": "Active",
@@ -62,14 +68,17 @@
       "designCode": "TTN",
       "designFamily": "TITAN_SLAMMER",
       "design": "Titan Slammer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "AMB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "EVG"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -85,7 +94,8 @@
       "style": "Realistic",
       "finish": "Metallic",
       "effect": "Pulse",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "origin": "Shop",
       "series": "Slammer Genesis Series",
       "worldState": "Active",
@@ -113,14 +123,17 @@
       "designCode": "NDL",
       "designFamily": "NEEDLE_SLAMMER",
       "design": "Needle Slammer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -136,7 +149,8 @@
       "style": "Minimalist",
       "finish": "Chrome",
       "effect": "Glow",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "origin": "Shop",
       "series": "Slammer Genesis Series",
       "worldState": "Active",
@@ -164,14 +178,17 @@
       "designCode": "CYC",
       "designFamily": "CYCLONE_SLAMMER",
       "design": "Cyclone Slammer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "MWB",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
+      "affinity": [
+        "ASH"
+      ],
       "hostility": [],
       "generation": {
         "roman": "I",
@@ -187,7 +204,8 @@
       "style": "Neon",
       "finish": "Holographic",
       "effect": "Motion",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "origin": "Shop",
       "series": "Slammer Genesis Series",
       "worldState": "Active",
@@ -215,15 +233,20 @@
       "designCode": "FTH",
       "designFamily": "FEATHER_SLAMMER",
       "design": "Feather Slammer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -238,7 +261,8 @@
       "style": "Watercolor",
       "finish": "Gloss",
       "effect": "Sparkle",
-      "printedRarity": "Uncommon",
+      "printedRarity": "Common",
+      "selectionWeight": 2.0,
       "origin": "Shop",
       "series": "Slammer Genesis Series",
       "worldState": "Active",
@@ -266,8 +290,9 @@
       "designCode": "HAM",
       "designFamily": "HAMMER_SLAMMER",
       "design": "Hammer Slammer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -289,7 +314,8 @@
       "style": "Comic",
       "finish": "Metallic",
       "effect": "Fire",
-      "printedRarity": "Epic",
+      "printedRarity": "Common",
+      "selectionWeight": 0.8,
       "origin": "Shop",
       "series": "Slammer Genesis Series",
       "worldState": "Active",
@@ -317,15 +343,20 @@
       "designCode": "ECO",
       "designFamily": "ECHO_SLAMMER",
       "design": "Echo Slammer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -340,7 +371,8 @@
       "style": "Neon",
       "finish": "Chrome",
       "effect": "Pulse",
-      "printedRarity": "Rare",
+      "printedRarity": "Common",
+      "selectionWeight": 1.2,
       "origin": "Shop",
       "series": "Slammer Genesis Series",
       "worldState": "Active",
@@ -368,15 +400,20 @@
       "designCode": "GRV",
       "designFamily": "GRAVITY_SLAMMER",
       "design": "Gravity Slammer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "ASH",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -391,7 +428,8 @@
       "style": "Low Poly",
       "finish": "Matte",
       "effect": "Glow",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "origin": "Shop",
       "series": "Slammer Genesis Series",
       "worldState": "Active",
@@ -419,15 +457,20 @@
       "designCode": "PRM",
       "designFamily": "PRISM_SLAMMER",
       "design": "Prism Slammer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "EVG",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
         "radiusMeters": null
       },
-      "affinity": [],
-      "hostility": [],
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
       "generation": {
         "roman": "I",
         "number": 1,
@@ -442,7 +485,8 @@
       "style": "Minimalist",
       "finish": "Prismatic",
       "effect": "Rainbow Shift",
-      "printedRarity": "Legendary",
+      "printedRarity": "Common",
+      "selectionWeight": 0.5,
       "origin": "Shop",
       "series": "Slammer Genesis Series",
       "worldState": "Active",
@@ -470,8 +514,9 @@
       "designCode": "GLT",
       "designFamily": "GLITCH_SLAMMER",
       "design": "Glitch Slammer",
+      "inspiration": null,
       "location": {
-        "regionCode": null,
+        "regionCode": "LFR",
         "locationCode": null,
         "latitude": null,
         "longitude": null,
@@ -493,7 +538,8 @@
       "style": "Pixel Art",
       "finish": "Holographic",
       "effect": "Pulse",
-      "printedRarity": "Mythic",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
       "origin": "Event",
       "series": "Slammer Genesis Series",
       "worldState": "Active",

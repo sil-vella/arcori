@@ -21,6 +21,7 @@ import 'notifications/notifications_routes.dart';
 import 'notifications/register_notifications_state.dart';
 import 'play/play_drawer.dart';
 import 'play/play_routes.dart';
+import 'play/register_play_notifications.dart';
 import 'sample/sample_routes.dart';
 import 'velora/velora_drawer.dart';
 import 'velora/velora_routes.dart';
@@ -50,6 +51,7 @@ void registerApplicationModules(
   registerAvariRoutes(routes, notificationScreens);
   registerAvariDrawer(drawer);
   registerPlayRoutes(routes, notificationScreens);
+  registerPlayNotifications();
   registerPlayDrawer(drawer);
   registerSampleRoutes(routes, notificationScreens);
   registerWsDemoRoutes(routes, notificationScreens);

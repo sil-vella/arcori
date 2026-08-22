@@ -11,6 +11,7 @@ import 'match_errors.dart';
 import 'match_lifecycle_contract.dart';
 import 'match_models.dart';
 import 'match_store.dart';
+import 'match_stub_loop.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
@@ -20,14 +21,28 @@ class MatchService implements MatchLifecycleContract {
     FastApiServiceClient? fastApi,
     MatchCatalogClient? catalog,
     ActionDispatcher? dispatcher,
+    bool autoStubTurns = true,
+    Duration? stubStepDelay,
   })  : _store = store ?? matchStore,
         _catalog = catalog ?? MatchCatalogClient(fastApi: fastApi),
         _dispatcher =
-            dispatcher ?? ActionDispatcher(store: store ?? matchStore);
+            dispatcher ?? ActionDispatcher(store: store ?? matchStore),
+        autoStubTurns = autoStubTurns {
+    stubLoop = MatchStubLoop(
+      store: _store,
+      service: this,
+      stepDelay: stubStepDelay ?? stubMatchStepDelayDefault,
+    );
+  }
 
   final MatchStore _store;
   final MatchCatalogClient _catalog;
   final ActionDispatcher _dispatcher;
+
+  /// When true, [startFromLobby] schedules the online stub slam loop.
+  bool autoStubTurns;
+
+  late final MatchStubLoop stubLoop;
 
   Future<MatchSnapshot> createPractice({
     required String callerUserId,
@@ -113,8 +128,6 @@ class MatchService implements MatchLifecycleContract {
     final seats = <MatchSeat>[];
     for (var i = 0; i < humans.length; i++) {
       final h = humans[i];
-      final arcori =
-          h.arcoriIds.isNotEmpty ? h.arcoriIds : <String>[stubArcoriId];
       final slammer =
           h.slammerId.trim().isNotEmpty ? h.slammerId.trim() : stubSlammerId;
       seats.add(
@@ -122,7 +135,7 @@ class MatchService implements MatchLifecycleContract {
           userId: h.userId,
           seatIndex: i,
           kind: 'human',
-          arcoriIds: arcori,
+          arcoriIds: const [],
           slammerId: slammer,
         ),
       );
@@ -133,15 +146,57 @@ class MatchService implements MatchLifecycleContract {
           userId: aiUserIds[i],
           seatIndex: humans.length + i,
           kind: 'ai',
-          arcoriIds: const [stubAiArcoriId],
+          arcoriIds: const [],
           slammerId: stubSlammerId,
         ),
       );
     }
 
+    Map<String, String> selected = {};
+    try {
+      selected = await _catalog.selectArcori(
+        seats: [
+          for (final s in seats) {'userId': s.userId},
+        ],
+      );
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match: startFromLobby select_arcori ok '
+          'picks=${selected.entries.map((e) => '${e.key}:${e.value}').join(',')}',
+        );
+      }
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match: startFromLobby select_arcori failed → stub Tiger/WhiteTiger err=$e',
+        );
+      }
+      selected = {};
+    }
+
+    final assigned = <MatchSeat>[];
+    for (var i = 0; i < seats.length; i++) {
+      final s = seats[i];
+      final picked = selected[s.userId]?.trim() ?? '';
+      final arcoriId = picked.isNotEmpty
+          ? picked
+          : (s.kind == 'ai' ? stubAiArcoriId : stubArcoriId);
+      assigned.add(
+        MatchSeat(
+          userId: s.userId,
+          seatIndex: s.seatIndex,
+          kind: s.kind,
+          arcoriIds: [arcoriId],
+          slammerId: s.slammerId,
+          score: s.score,
+          connected: s.connected,
+        ),
+      );
+    }
+
     final ids = <String>{
-      for (final s in seats) ...s.arcoriIds,
-      for (final s in seats) s.slammerId,
+      for (final s in assigned) ...s.arcoriIds,
+      for (final s in assigned) s.slammerId,
     }.toList();
 
     late final Map<String, Map<String, dynamic>> catalogById;
@@ -168,7 +223,7 @@ class MatchService implements MatchLifecycleContract {
     final snapshot = _store.createFromLobby(
       callerUserId: callerUserId,
       matchType: matchType,
-      seats: seats,
+      seats: assigned,
       catalogById: catalogById,
       arenaId: arenaId,
     );
@@ -187,6 +242,9 @@ class MatchService implements MatchLifecycleContract {
         'type=${snapshot.matchType} humans=${humans.length} '
         'ai=${needAi} seats=${snapshot.seats.length}',
       );
+    }
+    if (autoStubTurns) {
+      stubLoop.schedule(snapshot.matchId);
     }
     return snapshot;
   }
@@ -253,6 +311,18 @@ class MatchService implements MatchLifecycleContract {
     }
     if (current.callerUserId != userId) {
       throw AppError(matchForbidden, message: 'Only caller can end match');
+    }
+    if (current.phase == 'ended') {
+      return current;
+    }
+    return endInternal(matchId);
+  }
+
+  /// End without caller check — used by the stub turn runner.
+  MatchSnapshot endInternal(String matchId) {
+    final current = _store.getSnapshot(matchId);
+    if (current == null) {
+      throw AppError(matchNotFound);
     }
     if (current.phase == 'ended') {
       return current;

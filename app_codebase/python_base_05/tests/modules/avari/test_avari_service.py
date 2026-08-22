@@ -70,6 +70,8 @@ class AvariServiceTests(unittest.TestCase):
         )
 
         with patch("modules.avari.avari_repository.find_avari_profile", return_value=avari), patch(
+            "modules.avari.avari_repository.ensure_avari_profile", return_value=avari
+        ), patch(
             "modules.avari.avari_repository.find_player_kin", return_value=kin
         ), patch(
             "modules.avari.avari_repository.list_mastery_top", return_value=[]
