@@ -26,12 +26,93 @@ void main() {
         catalogById: {
           stubArcoriId: {'internalId': stubArcoriId},
           stubAiArcoriId: {'internalId': stubAiArcoriId},
-          stubSlammerId: {'internalId': stubSlammerId},
+          stubSlammerId: {
+            'internalId': stubSlammerId,
+            'gameplayAttributes': {
+              'impact': 5,
+              'precision': 5,
+              'control': 5,
+              'recovery': 5,
+              'spread': 5,
+            },
+          },
         },
       );
     }
 
-    test('core slam stubs lastEvent and rotates active', () {
+    test('slam rejected during match start grace', () {
+      final created = _practice();
+      store.bump(created.matchId, (s) {
+        return s.copyWith(
+          active: {
+            'seatIndex': 0,
+            'action': 'slam',
+            'graceEndsAt': DateTime.now()
+                .toUtc()
+                .add(const Duration(seconds: 30))
+                .toIso8601String(),
+          },
+        );
+      });
+      expect(
+        () => dispatcher.dispatch(
+          matchId: created.matchId,
+          actorUserId: 'usr_a',
+          payload: const {'action': 'slam'},
+        ),
+        throwsA(
+          isA<AppError>().having((e) => e.code, 'code', matchNotYourTurn.code),
+        ),
+      );
+    });
+
+    test('slam echoes validated input on lastEvent', () {
+      final created = _practice();
+      expect(created.table['pieces'], isA<List>());
+      expect((created.table['pieces'] as List), hasLength(2));
+      final input = {
+        'speed': 0.72,
+        'trajectory': {'dx': 0.02, 'dy': 0.99, 'angleDeg': 88.8},
+        'source': 'gesture',
+      };
+      final next = dispatcher.dispatch(
+        matchId: created.matchId,
+        actorUserId: 'usr_a',
+        payload: {'action': 'slam', 'input': input},
+      );
+      expect(next.lastEvent?['input'], isNotNull);
+      expect(next.lastEvent?['input']['speed'], 0.72);
+      expect(next.lastEvent?['input']['source'], 'gesture');
+      expect(next.lastEvent?['result'], anyOf('flip', 'miss'));
+      expect(next.lastEvent?['outcome'], isNotNull);
+      expect(next.lastEvent?['outcome']['impulse'], isNotNull);
+    });
+
+    test('slam rejects invalid input speed', () {
+      final created = _practice();
+      expect(
+        () => dispatcher.dispatch(
+          matchId: created.matchId,
+          actorUserId: 'usr_a',
+          payload: {
+            'action': 'slam',
+            'input': {
+              'speed': 1.5,
+              'trajectory': {'dx': 0, 'dy': 1},
+            },
+          },
+        ),
+        throwsA(
+          isA<AppError>().having(
+            (e) => e.code,
+            'code',
+            matchInvalidRequest.code,
+          ),
+        ),
+      );
+    });
+
+    test('core slam rotates active and keeps table pieces', () {
       final created = _practice();
       expect(created.matchType.containsKey('subtype'), isFalse);
       expect(created.active?['seatIndex'], 0);
@@ -39,16 +120,24 @@ void main() {
       final next = dispatcher.dispatch(
         matchId: created.matchId,
         actorUserId: 'usr_a',
-        payload: {'action': 'slam'},
+        payload: {
+          'action': 'slam',
+          'input': {
+            'speed': 0.9,
+            'trajectory': {'dx': 0.0, 'dy': 1.0},
+            'source': 'gesture',
+          },
+        },
       );
       expect(next.version, 2);
       expect(next.lastEvent?['type'], 'slam');
-      expect(next.lastEvent?['result'], 'stub');
+      expect(next.lastEvent?['result'], anyOf('flip', 'miss'));
       expect(next.lastEvent?['seatIndex'], 0);
       expect(next.lastEvent?['round'], 1);
       expect(next.lastEvent?['slammerId'], stubSlammerId);
       expect(next.lastEvent?['arcoriId'], stubArcoriId);
       expect(next.active?['seatIndex'], 1);
+      expect((next.table['pieces'] as List), hasLength(2));
     });
 
     test('slam wrapping advances round until roundsTotal', () {
@@ -82,7 +171,8 @@ void main() {
       );
       expect(last.round, 2);
       expect(last.lastEvent?['round'], 2);
-      expect(last.active?['seatIndex'], 1);
+      // Past last seat — turn runner must not timeout the same seat again.
+      expect(last.active?['seatIndex'], 2);
     });
 
     test('unknown action fails', () {

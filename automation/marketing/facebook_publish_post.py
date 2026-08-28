@@ -27,6 +27,7 @@ from publish_common import (
     ok_result,
     require_wfrun,
 )
+from token_renewal import TokenRenewError, facebook_page_token
 
 GRAPH = "https://graph.facebook.com/v21.0"
 
@@ -44,7 +45,13 @@ def publish_facebook_post(
 ) -> dict[str, Any]:
     """Post to Page feed (or photos/videos if media_path is set)."""
     page_id = (page_id or env("FACEBOOK_PAGE_ID")).strip()
-    page_token = (page_token or env("FACEBOOK_PAGE_ACCESS_TOKEN")).strip()
+    if page_token:
+        page_token = page_token.strip()
+    else:
+        try:
+            page_token = facebook_page_token(auto_extend=True, persist=True)
+        except TokenRenewError as exc:
+            return exc.as_err_result()
     if not page_id or not page_token:
         return err_result(
             "missing_facebook_credentials",

@@ -17,6 +17,9 @@ from modules.friend_match_invite.friend_match_invite_notifications import (
     FRIEND_MATCH_INVITE_CATEGORY,
     FRIEND_MATCH_INVITE_SOURCE,
     FRIEND_MATCH_INVITE_SUBTYPE,
+    cancel_invite_and_notification,
+    invite_notification_msg_id,
+    purge_expired_invite_notifications,
 )
 from modules.friend_match_invite.friend_match_invite_store import (
     create_invite,
@@ -40,6 +43,10 @@ def register_friend_match_invite_routes(
     routes.service_post(
         "/friend_match_invites/resolve",
         lambda: _handle_resolve(res),
+    )
+    routes.service_post(
+        "/friend_match_invites/cancel",
+        lambda: _handle_cancel(res),
     )
 
 
@@ -78,7 +85,7 @@ def _handle_create(res: HttpResponseContract):
                 body="Accept to join the invite lobby.",
                 category=FRIEND_MATCH_INVITE_CATEGORY,
                 subtype=FRIEND_MATCH_INVITE_SUBTYPE,
-                msg_id=f"friend_match_invite:{invite_id}",
+                msg_id=invite_notification_msg_id(invite_id),
                 data={
                     "inviteId": invite_id,
                     "response": {
@@ -109,6 +116,7 @@ def _handle_create(res: HttpResponseContract):
 
 def _handle_resolve(res: HttpResponseContract):
     try:
+        purge_expired_invite_notifications()
         body = parse_json_body()
         invite_id = str(body.get("inviteId", "")).strip()
         if not invite_id:
@@ -136,6 +144,33 @@ def _handle_resolve(res: HttpResponseContract):
                 "isAi": invited_is_ai,
             },
         )
+    except AppError as err:
+        return err.to_http_response()
+    except (TypeError, ValueError):
+        return AppError(
+            friend_match_inviteInvalidRequest,
+            message="Invalid request payload",
+        ).to_http_response()
+
+
+def _handle_cancel(res: HttpResponseContract):
+    """Dart invite lobby timeout / cancel — drop invite + guest notification."""
+    try:
+        body = parse_json_body()
+        invite_id = str(body.get("inviteId", "")).strip()
+        if not invite_id:
+            raise AppError(
+                friend_match_inviteInvalidRequest,
+                message="inviteId is required",
+            )
+
+        rec = cancel_invite_and_notification(invite_id)
+        if LOGGING_SWITCH:
+            customlog(
+                f"friend_match_invite: cancel invite_id={invite_id} "
+                f"found={rec is not None}"
+            )
+        return res.json_ok({"inviteId": invite_id, "cancelled": True})
     except AppError as err:
         return err.to_http_response()
     except (TypeError, ValueError):

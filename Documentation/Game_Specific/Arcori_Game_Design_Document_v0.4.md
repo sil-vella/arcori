@@ -1,7 +1,7 @@
 # Arcori Game Design Document
 
 Working Draft v0.4  
-**Last aligned:** 2026-08-20 (five launch regions)
+**Last aligned:** 2026-08-27 (Pioneers: earlier mint)
 
 ## Gameplay
 
@@ -31,6 +31,15 @@ These stack as achievements and standing — **Avari** remains identity; the res
 World State: Active/Closed. Legacy State: Legacy Preserved/Legacy Lost. Immediate preservation opportunity then 30-day leader window. Auto closure at mastery cap.
 
 When a generation **closes** and a player earns the mint (closing limit / leader–preservation rules), that Arcori leaves circulation and enters the player’s **Trove** as a **minted** piece. That mint confers **Legacy Owner** for that piece. Until then the player only holds **Mastery** on the design — not ownership.
+
+Catalog series share that loop; they differ in how soon a generation can close:
+
+| Series | Role | preservationRequirement | closureMilestone |
+|--------|------|-------------------------|------------------|
+| **Genesis** | Main launch catalog | 500 | 1000 |
+| **Pioneers** | Small companion series (ten seed designs) | 100 | 200 |
+
+**Why Pioneers exists:** the lower preservation and closure numbers so those designs can be **minted earlier** than Genesis — first Trove pieces while Genesis generations are still filling. It is not a second art drop for its own sake.
 
 ## Economy
 

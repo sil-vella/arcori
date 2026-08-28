@@ -27,6 +27,7 @@ import 'core/ws/app_lifecycle_observer.dart';
 import 'core/ws/app_ws_coordinator.dart';
 import 'firebase_options.dart';
 import 'modules/auth/email_verify_deep_link.dart';
+import 'modules/match/state/slam_motion_capability_provider.dart';
 import 'modules/notifications/notification_host.dart';
 import 'modules/module_registry.dart';
 import 'utils/dev_logger.dart';
@@ -139,6 +140,8 @@ class _AppBootstrapState extends ConsumerState<AppBootstrap> {
       if (LOGGING_SWITCH) {
         customlog('AppBootstrap: auth bootstrap started');
       }
+      // Device shake capability — once per process; not per match.
+      ref.read(slamShakeAvailableProvider);
       EmailVerifyDeepLinkHandler.bind(
         apiFactory: () => ref.read(authApiClientProvider),
         onVerified: () => ref.read(userProfileProvider.notifier).refresh(),

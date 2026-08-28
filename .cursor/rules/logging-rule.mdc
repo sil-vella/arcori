@@ -97,3 +97,37 @@ Launch via **`automation/frontend/launch_chrome.sh`** (Flutter, mirrors to `glob
 - **New trace calls → `LOGGING_SWITCH = true`** in that file (unless the user explicitly asked for `false`).
 - If logs do not show: **`LOGGING_SWITCH`** must be **`true`** for that file, launch must pass **`DUTCH_DEV_LOG=1`** (or use the global-log scripts), and lines must contain **`[dev]`** for `global.log`.
 - Tail merged file: `tail -f global.log` from repo root.
+
+## Multi-device testing (2+ phones / accounts)
+
+**This is a logging visibility issue, not a network or match bug.**
+
+Two devices on the same Wi‑Fi hit the **same** FastAPI + Dart backends. When the guest slams and Dart logs `slam resolve … power=0.3`, the guest input **did** reach the server — even if you never see `slamInput: commit` for that device in `global.log`.
+
+### What `global.log` merges
+
+| Source | In `global.log`? |
+|--------|------------------|
+| Docker Python + Dart (`docker_logs_to_global_log.sh` / dashboard mirror) | Yes — **both users** |
+| Flutter from **one** `launch_android.sh` / `launch_chrome.sh` session | Yes — **that device only** |
+| Flutter on a **second** device (no mirror script on its stdout) | **No** — stays on that terminal / logcat |
+| Flutter lines without `[dev]` or without `I/flutter` prefix | No |
+
+Each Android launch attaches to **one** adb serial (`flutter run -d <serial>`) and pipes **that process** through `filter_flutter_to_global_log`. A second phone needs its **own** mirrored launch, or its `[dev]` lines never append to `global.log`.
+
+### Two-device workflow
+
+1. **Terminal A:** `wfrun automation/frontend/launch_android.sh <host_serial>` (or `1` / device alias)
+2. **Terminal B:** `wfrun automation/frontend/launch_android.sh <guest_serial>` (or `2`)
+3. **Backends:** one Docker stack + mirror (shared — shows both `user=` ids in invite/slam lines)
+4. In `global.log`, tell devices apart by **`I/flutter (PID):`** — PIDs differ per running app instance
+5. For guest-only UI traces (`slamInput`, `NotificationHost`), grep that PID or watch terminal B
+
+### Do not infer from missing Flutter lines
+
+- **Guest `slam resolve` with `power > 0`** in `Arcori_dart` → swipe reached server; resolver miss is gameplay RNG, not “other device broken”
+- **`human_timeout` + `power=0.0`** → no input received in the turn window (real input bug or grace/turn timing)
+- **Missing guest `slamInput` in `global.log`** → mirror not running for that device, or `DUTCH_DEV_LOG` / `LOGGING_SWITCH` off on that build — **not** proof the guest didn’t swipe
+- **Shake timeout on one phone only** → some OEMs flatline `userAccelerometer` (`peakMotion≈0.01`). App falls back to raw `accelerometer` (`shake_raw`). If `slamInput: disarmed without commit peakMotion=0.0x` persists, turn off battery restrictions for arcori or use swipe
+
+Full reference: [LOGGING_SYSTEM.md](Documentation/03_Base/LOGGING_SYSTEM.md) §6.4.

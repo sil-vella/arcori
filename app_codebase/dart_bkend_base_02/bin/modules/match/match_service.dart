@@ -1,6 +1,8 @@
 /// Match orchestration — create with catalog freeze, join/leave/end + actions.
 library;
 
+import 'dart:math';
+
 import '../../core/errors/app_error.dart';
 import '../../core/http/fastapi_service_client.dart';
 import '../../core/state/state_registry.dart';
@@ -11,7 +13,8 @@ import 'match_errors.dart';
 import 'match_lifecycle_contract.dart';
 import 'match_models.dart';
 import 'match_store.dart';
-import 'match_stub_loop.dart';
+import 'turn_pacing.dart';
+import 'match_turn_runner.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
@@ -22,16 +25,20 @@ class MatchService implements MatchLifecycleContract {
     MatchCatalogClient? catalog,
     ActionDispatcher? dispatcher,
     bool autoStubTurns = true,
-    Duration? stubStepDelay,
+    Duration? turnTimeout,
+    Duration? matchStartGrace,
+    Random? turnRandom,
   })  : _store = store ?? matchStore,
         _catalog = catalog ?? MatchCatalogClient(fastApi: fastApi),
         _dispatcher =
             dispatcher ?? ActionDispatcher(store: store ?? matchStore),
         autoStubTurns = autoStubTurns {
-    stubLoop = MatchStubLoop(
+    stubLoop = MatchTurnRunner(
       store: _store,
       service: this,
-      stepDelay: stubStepDelay ?? stubMatchStepDelayDefault,
+      matchStartGrace: matchStartGrace ?? matchStartGraceDefault,
+      turnTimeout: turnTimeout ?? turnTimeoutDefault,
+      random: turnRandom,
     );
   }
 
@@ -39,10 +46,10 @@ class MatchService implements MatchLifecycleContract {
   final MatchCatalogClient _catalog;
   final ActionDispatcher _dispatcher;
 
-  /// When true, [startFromLobby] schedules the online stub slam loop.
+  /// When true, [startFromLobby] schedules the online turn runner.
   bool autoStubTurns;
 
-  late final MatchStubLoop stubLoop;
+  late final MatchTurnRunner stubLoop;
 
   Future<MatchSnapshot> createPractice({
     required String callerUserId,
@@ -220,13 +227,30 @@ class MatchService implements MatchLifecycleContract {
     }
 
     final callerUserId = humans.first.userId;
-    final snapshot = _store.createFromLobby(
+    var snapshot = _store.createFromLobby(
       callerUserId: callerUserId,
       matchType: matchType,
       seats: assigned,
       catalogById: catalogById,
       arenaId: arenaId,
     );
+
+    final grace = stubLoop.matchStartGrace;
+    if (grace > Duration.zero) {
+      final graceEndsAt =
+          DateTime.now().toUtc().add(grace).toIso8601String();
+      snapshot = _store.bump(snapshot.matchId, (current) {
+        final active = Map<String, dynamic>.from(current.active ?? {});
+        active['graceEndsAt'] = graceEndsAt;
+        return current.copyWith(active: active);
+      });
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match: startFromLobby graceEndsAt=$graceEndsAt '
+          'matchId=${snapshot.matchId}',
+        );
+      }
+    }
 
     for (final h in humans) {
       roomRegistry.subscribe(
@@ -328,6 +352,25 @@ class MatchService implements MatchLifecycleContract {
       return current;
     }
     final snapshot = _store.endMatch(matchId);
+    _broadcast(snapshot);
+    return snapshot;
+  }
+
+  /// Remove `graceEndsAt` from active and broadcast (turn runner after grace).
+  MatchSnapshot clearTurnGrace(String matchId) {
+    final current = _store.getSnapshot(matchId);
+    if (current == null) {
+      throw AppError(matchNotFound);
+    }
+    final active = current.active;
+    if (active == null || !active.containsKey('graceEndsAt')) {
+      return current;
+    }
+    final nextActive = Map<String, dynamic>.from(active)..remove('graceEndsAt');
+    final snapshot = _store.bump(
+      matchId,
+      (s) => s.copyWith(active: nextActive),
+    );
     _broadcast(snapshot);
     return snapshot;
   }

@@ -1195,6 +1195,7 @@ def _publish_selected_platforms(
     """Publish only platforms listed on the post. Never posts to unchecked ones."""
     from facebook_publish_post import publish_facebook_post
     from tiktok_publish_video import publish_tiktok_video
+    from token_renewal import ensure_marketing_tokens
     from youtube_publish_video import publish_youtube_video
 
     platforms = [
@@ -1202,6 +1203,10 @@ def _publish_selected_platforms(
         for p in (post.get("platforms") or [])
         if str(p).strip()
     ]
+    # Quiet preflight: extend FB / refresh YT+TT and persist rotated secrets.
+    if platforms:
+        ensure_marketing_tokens(platforms=platforms)
+
     title = str(post.get("title") or "")
     description = str(post.get("description") or "")
     hashtags = post.get("hashtags") if isinstance(post.get("hashtags"), list) else []
@@ -1392,43 +1397,13 @@ async def handle_marketing_posts_create(request: web.Request) -> web.Response:
 
 
 def _youtube_refresh_access_token() -> str:
-    """Return a short-lived access token from env refresh credentials."""
-    import urllib.error
-    import urllib.parse
-    import urllib.request
+    """Return a short-lived access token; persist rotated refresh_token."""
+    from token_renewal import TokenRenewError, youtube_access_token
 
-    client_id = _env_from_wfrun_file("YOUTUBE_CLIENT_ID")
-    client_secret = _env_from_wfrun_file("YOUTUBE_CLIENT_SECRET")
-    refresh_token = _env_from_wfrun_file("YOUTUBE_REFRESH_TOKEN")
-    if not client_id or not client_secret or not refresh_token:
-        raise RuntimeError(
-            "missing_youtube_credentials — set YOUTUBE_CLIENT_ID, "
-            "YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN"
-        )
-    data = urllib.parse.urlencode(
-        {
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "refresh_token": refresh_token,
-            "grant_type": "refresh_token",
-        }
-    ).encode("utf-8")
-    req = urllib.request.Request(
-        "https://oauth2.googleapis.com/token",
-        data=data,
-        method="POST",
-        headers={"Content-Type": "application/x-www-form-urlencoded"},
-    )
     try:
-        with urllib.request.urlopen(req, timeout=60) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"youtube_token_refresh_failed: {body}") from exc
-    access = (payload.get("access_token") or "").strip()
-    if not access:
-        raise RuntimeError("youtube_token_refresh_failed: no access_token")
-    return access
+        return youtube_access_token(persist_rotated=True)
+    except TokenRenewError as exc:
+        raise RuntimeError(f"{exc.code}: {exc.message}") from exc
 
 
 def _youtube_list_playlists(access_token: str) -> list[dict[str, str]]:

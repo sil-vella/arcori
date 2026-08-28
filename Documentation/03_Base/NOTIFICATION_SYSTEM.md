@@ -512,6 +512,8 @@ Host creates an invite via `POST /authuser/friend_match_invites/create`. FastAPI
 
 Python registers the subtype + reply handler in `friend_match_invite_notifications.py`. Flutter mirrors the subtype and a **reply listener** in `register_play_notifications.dart` (Accept → Play hub + `startInviteJoin`). The notification modal itself stays generic: it only POSTs `/authuser/notifications/response`.
 
+**Cleanup:** Reply success returns `delete_notification: true` so `handle_response` **soft-deletes** the row (not only mark-read). Lobby timeout / host cancel calls `POST /service/friend_match_invites/cancel`. Inbox list prunes dead `friend_match_invite` instants so they cannot reappear on app start.
+
 ---
 
 ## Module integration — service tier (Dart / cross-process)

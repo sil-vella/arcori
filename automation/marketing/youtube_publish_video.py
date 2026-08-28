@@ -30,6 +30,7 @@ from publish_common import (
     ok_result,
     require_wfrun,
 )
+from token_renewal import TokenRenewError, youtube_access_token
 
 TOKEN_URI = "https://oauth2.googleapis.com/token"
 UPLOAD_URI = "https://www.googleapis.com/upload/youtube/v3/videos"
@@ -39,29 +40,7 @@ CHUNK = 8 * 1024 * 1024  # 8 MiB (multiple of 256 KiB)
 
 
 def _refresh_access_token() -> str:
-    client_id = env("YOUTUBE_CLIENT_ID")
-    client_secret = env("YOUTUBE_CLIENT_SECRET")
-    refresh_token = env("YOUTUBE_REFRESH_TOKEN")
-    if not client_id or not client_secret or not refresh_token:
-        raise RuntimeError(
-            "missing_youtube_credentials — set YOUTUBE_CLIENT_ID, "
-            "YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN"
-        )
-    status, payload, _ = http_json(
-        "POST",
-        TOKEN_URI,
-        form={
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "refresh_token": refresh_token,
-            "grant_type": "refresh_token",
-        },
-        timeout=60,
-    )
-    access = str(payload.get("access_token") or "").strip()
-    if status >= 400 or not access:
-        raise RuntimeError(f"youtube_token_refresh_failed: {payload!r}")
-    return access
+    return youtube_access_token(persist_rotated=True)
 
 
 def _content_type(path: Path) -> str:
@@ -212,10 +191,12 @@ def publish_youtube_video(
 
     try:
         access = _refresh_access_token()
+    except TokenRenewError as exc:
+        return exc.as_err_result()
     except RuntimeError as exc:
         msg = str(exc)
         code = "missing_youtube_credentials"
-        if "token_refresh" in msg or "invalid_grant" in msg:
+        if "token_refresh" in msg or "invalid_grant" in msg or "reauth" in msg:
             code = "youtube_reauth_required"
         return err_result(code, msg)
 

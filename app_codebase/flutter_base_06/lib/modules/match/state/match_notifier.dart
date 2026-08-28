@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/dev_logger.dart';
 import '../../play/play_models.dart';
+import '../input/match_grace.dart';
+import '../input/slam_resolver.dart';
+import '../input/turn_pacing.dart';
 import '../practice_ai_pool.dart';
 import 'match_replay.dart';
 import 'match_snapshot_state.dart';
@@ -13,9 +17,17 @@ const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 const stubArenaId = 'arena_velora_plaza';
 const stubSlammerId = 'SLM-STR-GEN001-0001';
 
-const Duration practiceStubStepDelayDefault = Duration(milliseconds: 200);
-
 class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
+  Completer<void>? _humanTurnWait;
+
+  /// Tunable for tests — default 5s grace + 5s human turn window.
+  Duration practiceMatchStartGrace = matchStartGraceDefault;
+  Duration practiceTurnTimeout = turnTimeoutDefault;
+  Duration practiceAiDelayMin = aiDelayMinDefault;
+  Duration practiceAiDelayMax = aiDelayMaxDefault;
+  double practiceAiMissProbability = aiMissProbabilityDefault;
+  Random? practiceTurnRandom;
+
   @override
   MatchSnapshotState build() {
     ref.listen<MatchPending?>(matchReplayProvider, (_, next) {
@@ -34,6 +46,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
   }
 
   void clear() {
+    _humanTurnWait = null;
     state = const MatchSnapshotState();
   }
 
@@ -61,6 +74,35 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         'ai=${ais.join(",")} arcori=${loadout.arcoriId}',
       );
     }
+    final seats = [
+      MatchSeatView(
+        userId: humanUserId,
+        seatIndex: 0,
+        kind: 'human',
+        score: 0,
+        connected: true,
+        arcoriIds: [loadout.arcoriId],
+        slammerId: loadout.slammerId,
+      ),
+      MatchSeatView(
+        userId: ais[0],
+        seatIndex: 1,
+        kind: 'ai',
+        score: 0,
+        connected: true,
+        arcoriIds: const [stubPracticeAiArcoriId],
+        slammerId: stubSlammerId,
+      ),
+      MatchSeatView(
+        userId: ais[1],
+        seatIndex: 2,
+        kind: 'ai',
+        score: 0,
+        connected: true,
+        arcoriIds: const [stubPracticeAiArcoriId],
+        slammerId: stubSlammerId,
+      ),
+    ];
     state = MatchSnapshotState(
       matchId: matchId,
       version: 1,
@@ -70,56 +112,40 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       arenaId: stubArenaId,
       callerUserId: humanUserId,
       matchType: const {'code': 'practice'},
-      seats: [
-        MatchSeatView(
-          userId: humanUserId,
-          seatIndex: 0,
-          kind: 'human',
-          score: 0,
-          connected: true,
-          arcoriIds: [loadout.arcoriId],
-          slammerId: loadout.slammerId,
-        ),
-        MatchSeatView(
-          userId: ais[0],
-          seatIndex: 1,
-          kind: 'ai',
-          score: 0,
-          connected: true,
-          arcoriIds: const [],
-          slammerId: stubSlammerId,
-        ),
-        MatchSeatView(
-          userId: ais[1],
-          seatIndex: 2,
-          kind: 'ai',
-          score: 0,
-          connected: true,
-          arcoriIds: const [],
-          slammerId: stubSlammerId,
-        ),
-      ],
-      active: const {'seatIndex': 0, 'action': 'slam'},
+      seats: seats,
+      table: tableFromSeatViews(
+        seats: [
+          for (final s in seats)
+            (
+              userId: s.userId,
+              seatIndex: s.seatIndex,
+              arcoriIds: s.arcoriIds,
+            ),
+        ],
+      ),
+      active: activeWithGrace(practiceMatchStartGrace),
     );
   }
 
-  /// Auto-run stub practice: 2 rounds × each seat 1 slam, then end.
-  Future<void> runLocalPracticeStubMatch({
-    Duration stepDelay = practiceStubStepDelayDefault,
-  }) async {
+  /// Turn-based practice: human gesture window + paced AI slams, then end.
+  Future<void> runLocalPracticeTurnMatch() async {
     final matchId = state.matchId;
     if (matchId == null || !state.phaseIsPlaying) return;
 
-    if (LOGGING_SWITCH) {
-      customlog(
-        'match: stubMatch start matchId=$matchId '
-        'rounds=${state.roundsTotal} seats=${state.seats.length}',
-      );
-    }
-
+    final rng = practiceTurnRandom ?? Random();
     final roundsTotal = state.roundsTotal;
     final seatCount = state.seats.length;
     if (seatCount == 0) return;
+
+    if (LOGGING_SWITCH) {
+      customlog(
+        'match: practiceTurn start matchId=$matchId '
+        'rounds=$roundsTotal seats=$seatCount '
+        'grace=${practiceMatchStartGrace.inSeconds}s',
+      );
+    }
+
+    await _waitPracticeGrace(matchId);
 
     for (var round = 1; round <= roundsTotal; round++) {
       if (!_stillRunning(matchId)) return;
@@ -134,40 +160,153 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       for (var seatIndex = 0; seatIndex < seatCount; seatIndex++) {
         if (!_stillRunning(matchId)) return;
 
-        final seats = state.seats;
-        if (seatIndex >= seats.length) return;
-        final actor = seats[seatIndex];
-
         state = state.copyWith(
           active: {'seatIndex': seatIndex, 'action': 'slam'},
         );
-        _applyStubSlam(actorUserId: actor.userId);
-        if (LOGGING_SWITCH) {
-          customlog(
-            'match: stubSlam round=$round seat=$seatIndex '
-            'actor=${actor.userId}',
+
+        final actor = state.seats[seatIndex];
+        if (actor.kind == 'human') {
+          await _waitHumanPracticeTurn(
+            matchId: matchId,
+            seatIndex: seatIndex,
+            actorUserId: actor.userId,
+          );
+        } else {
+          await _runAiPracticeTurn(
+            matchId: matchId,
+            seatIndex: seatIndex,
+            actorUserId: actor.userId,
+            rng: rng,
           );
         }
-        if (!_stillRunning(matchId)) return;
-
-        if (stepDelay > Duration.zero) {
-          await Future<void>.delayed(stepDelay);
-        }
-      }
-
-      if (round < roundsTotal && _stillRunning(matchId)) {
-        state = state.copyWith(
-          round: round + 1,
-          active: const {'seatIndex': 0, 'action': 'slam'},
-        );
       }
     }
 
     if (_stillRunning(matchId)) {
       localEnd();
       if (LOGGING_SWITCH) {
-        customlog('match: stubMatch ended matchId=$matchId');
+        customlog('match: practiceTurn ended matchId=$matchId');
       }
+    }
+  }
+
+  Future<void> runLocalPracticeStubMatch({Duration stepDelay = Duration.zero}) async {
+    if (stepDelay <= Duration.zero) {
+      practiceMatchStartGrace = Duration.zero;
+      practiceTurnTimeout = Duration.zero;
+      practiceAiDelayMin = Duration.zero;
+      practiceAiDelayMax = Duration.zero;
+      practiceAiMissProbability = 0;
+    }
+    await runLocalPracticeTurnMatch();
+  }
+
+  Future<void> _waitPracticeGrace(String matchId) async {
+    if (practiceMatchStartGrace <= Duration.zero) {
+      _clearPracticeGrace();
+      return;
+    }
+
+    final deadline = DateTime.now().add(practiceMatchStartGrace);
+    while (DateTime.now().isBefore(deadline)) {
+      if (!_stillRunning(matchId)) return;
+      final remaining = deadline.difference(DateTime.now());
+      await Future<void>.delayed(
+        remaining < turnPollInterval ? remaining : turnPollInterval,
+      );
+    }
+    if (!_stillRunning(matchId)) return;
+    _clearPracticeGrace();
+    if (LOGGING_SWITCH) {
+      customlog('match: practiceTurn grace ended matchId=$matchId');
+    }
+  }
+
+  void _clearPracticeGrace() {
+    if (!activeInGracePeriod(state.active)) return;
+    state = state.copyWith(active: activeWithoutGrace(state.active));
+  }
+
+  Future<void> _waitHumanPracticeTurn({
+    required String matchId,
+    required int seatIndex,
+    required String actorUserId,
+  }) async {
+    if (practiceTurnTimeout <= Duration.zero) {
+      if (_activeSeatIndex(state) == seatIndex) {
+        _applyStubSlam(
+          actorUserId: actorUserId,
+          input: timeoutSlamInputMap(),
+        );
+      }
+      return;
+    }
+
+    _humanTurnWait = Completer<void>();
+    try {
+      await _humanTurnWait!.future.timeout(practiceTurnTimeout);
+    } on TimeoutException {
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match: practiceTurn human timeout seat=$seatIndex user=$actorUserId',
+        );
+      }
+    } finally {
+      _humanTurnWait = null;
+    }
+
+    if (!_stillRunning(matchId)) return;
+    if (_activeSeatIndex(state) == seatIndex) {
+      _applyStubSlam(
+        actorUserId: actorUserId,
+        input: timeoutSlamInputMap(),
+      );
+    }
+  }
+
+  Future<void> _runAiPracticeTurn({
+    required String matchId,
+    required int seatIndex,
+    required String actorUserId,
+    required Random rng,
+  }) async {
+    final miss = rollAiMiss(rng, probability: practiceAiMissProbability);
+    if (miss) {
+      if (LOGGING_SWITCH) {
+        customlog('match: practiceTurn ai miss seat=$seatIndex');
+      }
+      await _waitHumanPracticeTurn(
+        matchId: matchId,
+        seatIndex: seatIndex,
+        actorUserId: actorUserId,
+      );
+      if (!_stillRunning(matchId)) return;
+      if (_activeSeatIndex(state) == seatIndex) {
+        _applyStubSlam(
+          actorUserId: actorUserId,
+          input: timeoutSlamInputMap(source: 'ai_timeout'),
+        );
+      }
+      return;
+    }
+
+    final delay = randomAiDelay(
+      rng,
+      min: practiceAiDelayMin,
+      max: practiceAiDelayMax,
+    );
+    if (delay > Duration.zero) {
+      await Future<void>.delayed(delay);
+    }
+    if (!_stillRunning(matchId)) return;
+    if (_activeSeatIndex(state) != seatIndex) return;
+
+    _applyStubSlam(
+      actorUserId: actorUserId,
+      input: syntheticAiSlamInput(rng),
+    );
+    if (LOGGING_SWITCH) {
+      customlog('match: practiceTurn ai slam seat=$seatIndex user=$actorUserId');
     }
   }
 
@@ -175,14 +314,31 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     return state.matchId == matchId && state.phaseIsPlaying;
   }
 
-  /// Stub slam: lastEvent + rotate active. No score/physics.
-  void localSlam({required String actorUserId}) {
-    _applyStubSlam(actorUserId: actorUserId);
+  int? _activeSeatIndex(MatchSnapshotState snap) {
+    final active = snap.active?['seatIndex'];
+    return active is int ? active : null;
   }
 
-  void _applyStubSlam({required String actorUserId}) {
+  /// Slam: resolve flips, rotate active, restack on round advance.
+  void localSlam({
+    required String actorUserId,
+    Map<String, dynamic>? input,
+  }) {
+    _applyStubSlam(actorUserId: actorUserId, input: input);
+    final wait = _humanTurnWait;
+    if (wait != null && !wait.isCompleted) {
+      wait.complete();
+    }
+  }
+
+  void _applyStubSlam({
+    required String actorUserId,
+    Map<String, dynamic>? input,
+  }) {
     final current = state;
     if (!current.phaseIsPlaying || current.matchId == null) return;
+
+    if (activeInGracePeriod(current.active)) return;
 
     MatchSeatView? actor;
     for (final s in current.seats) {
@@ -196,23 +352,93 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     final activeSeat = current.active?['seatIndex'];
     if (activeSeat is int && activeSeat != actor.seatIndex) return;
 
-    final nextSeat = (actor.seatIndex + 1) % current.seats.length;
+    final seatCount = current.seats.length;
+    final wrapping =
+        seatCount > 0 && actor.seatIndex == seatCount - 1;
+    final nextSeatIndex = wrapping ? 0 : actor.seatIndex + 1;
+
+    var nextRound = current.round;
+    var nextActive = <String, dynamic>{
+      'seatIndex': nextSeatIndex,
+      'action': 'slam',
+    };
+    var advancingRound = false;
+    if (wrapping) {
+      if (current.round < current.roundsTotal) {
+        nextRound = current.round + 1;
+        nextActive = {'seatIndex': 0, 'action': 'slam'};
+        advancingRound = true;
+      } else {
+        // Final slam — park active past last seat (mirrors Dart core pack).
+        nextActive = {
+          'seatIndex': seatCount,
+          'action': 'slam',
+        };
+      }
+    }
+
+    final slamInput = input ?? timeoutSlamInputMap();
+    final attrs = practiceSlammerAttrs[actor.slammerId] ??
+        defaultGameplayAttributes.map((k, v) => MapEntry(k, v));
+
+    final resolved = resolveSlam(
+      matchId: current.matchId!,
+      version: current.version,
+      actorSeatIndex: actor.seatIndex,
+      input: slamInput,
+      gameplayAttributes: Map<String, dynamic>.from(attrs),
+      table: current.table,
+    );
+
+    if (LOGGING_SWITCH) {
+      customlog(
+        'match: practice slam result=${resolved.result} '
+        'flips=${resolved.flippedPieceIds.length} '
+        'power=${resolved.impulse['power']}',
+      );
+    }
+
+    final scoreByUser = <String, int>{
+      for (final s in current.seats) s.userId: s.score,
+    };
+    for (final e in resolved.scoreDeltas.entries) {
+      scoreByUser[e.key] = (scoreByUser[e.key] ?? 0) + e.value;
+    }
+    final nextSeats = current.seats
+        .map((s) => s.copyWith(score: scoreByUser[s.userId] ?? s.score))
+        .toList();
+
+    var nextTable = <String, dynamic>{'pieces': resolved.pieces};
+    if (advancingRound) {
+      nextTable = restackFaceDown(nextTable);
+    }
+
     final nextVersion = current.version + 1;
     final arcoriId =
         actor.arcoriIds.isNotEmpty ? actor.arcoriIds.first : null;
+    final lastEvent = <String, dynamic>{
+      'type': 'slam',
+      'actorUserId': actorUserId,
+      'seatIndex': actor.seatIndex,
+      'round': current.round,
+      'slammerId': actor.slammerId,
+      'arcoriId': arcoriId,
+      'result': resolved.result,
+      'input': slamInput,
+      'outcome': {
+        'flippedPieceIds': resolved.flippedPieceIds,
+        'impulse': resolved.impulse,
+      },
+      'version': nextVersion,
+    };
+
     state = current.copyWith(
       version: nextVersion,
-      active: {'seatIndex': nextSeat, 'action': 'slam'},
-      lastEvent: {
-        'type': 'slam',
-        'actorUserId': actorUserId,
-        'seatIndex': actor.seatIndex,
-        'round': current.round,
-        'slammerId': actor.slammerId,
-        'arcoriId': arcoriId,
-        'result': 'stub',
-        'version': nextVersion,
-      },
+      round: nextRound,
+      active: nextActive,
+      seats: nextSeats,
+      table: nextTable,
+      lastEvent: lastEvent,
     );
   }
 

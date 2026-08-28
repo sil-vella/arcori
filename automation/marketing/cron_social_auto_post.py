@@ -21,6 +21,10 @@ Usage (on rop01):
   # load product env first, or:
   python3 automation/marketing/cron_social_auto_post.py --env-file /path/to/.env.prod
   python3 automation/marketing/cron_social_auto_post.py --dry-run
+
+Token preflight runs before publish (FB extend / YT+TT refresh via token_renewal).
+On failure, sends alert email and exits without touching the queue.
+Deploy tokens from Mac: automation/marketing/deploy_rop01_marketing.sh
 """
 
 from __future__ import annotations
@@ -45,6 +49,7 @@ if str(_SCRIPT_DIR) not in sys.path:
 from facebook_publish_post import publish_facebook_post
 from publish_common import env
 from tiktok_publish_video import publish_tiktok_video
+from token_renewal import ensure_marketing_tokens
 from youtube_publish_video import publish_youtube_video
 
 SSH_HOST_DEFAULT = "mixta_mt"
@@ -440,6 +445,38 @@ def _result_ok(result: dict[str, Any]) -> bool:
     return bool(result.get("ok"))
 
 
+def _preflight_tokens() -> bool:
+    """Renew FB/YT/TT tokens before publish; alert and abort when re-auth is required."""
+    if _DRY_RUN:
+        print("[dry-run] skip token preflight")
+        return True
+    print("token preflight (FB extend / YT+TT refresh)…")
+    result = ensure_marketing_tokens()
+    print(json.dumps(result, indent=2))
+    if result.get("ok"):
+        print("token preflight OK")
+        return True
+    lines = [
+        "Marketing token preflight failed — publish aborted.",
+        "Run deploy_rop01_marketing.sh after updating .env.local, or re-auth locally:",
+        "  facebook_validate_page_token.py --extend --write-env",
+        "  youtube_oauth_get_refresh_token.py",
+        "  tiktok_oauth_get_refresh_token.py",
+        "",
+    ]
+    platforms = result.get("platforms")
+    if isinstance(platforms, dict):
+        for name, status in platforms.items():
+            if not isinstance(status, dict) or status.get("ok"):
+                continue
+            err = status.get("error") if isinstance(status.get("error"), dict) else {}
+            code = err.get("code") or "unknown"
+            msg = err.get("message") or str(status)
+            lines.append(f"  {name}: {code}: {msg}")
+    _send_failure_alert("rop01 marketing token preflight FAILED", "\n".join(lines))
+    return False
+
+
 def _publish_all(
     post: dict[str, Any],
     media_path: Path,
@@ -653,6 +690,9 @@ def main() -> int:
             "WARN social tokens not visible in env — pass --env-file or export creds",
             file=sys.stderr,
         )
+
+    if not _preflight_tokens():
+        return 2
 
     try:
         products = _list_products()

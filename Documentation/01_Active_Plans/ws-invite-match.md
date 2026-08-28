@@ -2,7 +2,7 @@
 
 **Status:** Completed  
 **Created:** 2026-08-09  
-**Last Updated:** 2026-08-20
+**Last Updated:** 2026-08-28
 
 Related: [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [match-hot-state.md](match-hot-state.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md) · [NOTIFICATION_SYSTEM.md](../03_Base/NOTIFICATION_SYSTEM.md)
 
@@ -15,6 +15,8 @@ Replace the Play **invite** stub with a real Friend Match path that lands in the
 Host: Play → invite setup (contacts) → `POST /authuser/friend_match_invites/create` → private lobby (2 seats, no AI fill).
 
 Guest: `create_for_user` instant + `data.response.type=reply` → WS `inbox_changed` → `NotificationHost` modal → Accept posts `/authuser/notifications/response` → play reply listener joins lobby → both promote into match room SSOT → stub end.
+
+**Invite notification lifecycle (2026-08-28):** Accept/Decline soft-deletes the `user_notifications` row (`delete_notification`). Lobby timeout / host cancel calls `POST /service/friend_match_invites/cancel` (Dart) which pops the in-memory invite and soft-deletes the guest notification. Inbox list also prunes dead `friend_match_invite` instants so old popups cannot resurface on app start. Invite memory TTL is **45s** (aligned with the 20s Dart lobby window + grace).
 
 Verified 2026-08-20 on two Android devices (`global.log`: modal shown, accept, lobby 2/2, promote, `inMatch`).
 

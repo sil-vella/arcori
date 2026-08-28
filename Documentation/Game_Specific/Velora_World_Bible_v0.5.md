@@ -1,7 +1,7 @@
 # Velora World Bible
 
 Working Draft v0.5  
-**Last aligned:** 2026-08-20 (five launch regions + regional standing)
+**Last aligned:** 2026-08-27 (Pioneers: earlier mint)
 
 ## The Origin of Velora
 
@@ -25,6 +25,8 @@ The Museum preserves what is known.
 The Chronicle remembers what cannot be proven.
 
 In play: **Velora** is the world **Avari** enter to discover what still circulates (Arcori most of all). Mastery is progress upon those living echoes — not ownership. When a generation closes and a mint is earned, that Arcori leaves circulation into an Avari’s **Trove**; the Museum keeps the world’s factual record of what closed.
+
+Two catalog series circulate at launch. **Genesis** is the main body of living echoes. **Pioneers** is a small companion series whose preservation and closure thresholds are lower, so those generations can mint earlier — first Trove pieces while Genesis is still filling.
 
 Somewhere beyond every region yet discovered lies the unanswered question every generation inherits:
 

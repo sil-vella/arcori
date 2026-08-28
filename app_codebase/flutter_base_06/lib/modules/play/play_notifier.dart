@@ -211,8 +211,8 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     }
   }
 
-  /// Step delay for auto stub practice loop (tests may set [Duration.zero]).
-  Duration practiceStubStepDelay = practiceStubStepDelayDefault;
+  /// Step delay override for practice tests (zero → instant timeout slams).
+  Duration practiceStubStepDelay = Duration.zero;
 
   /// Flutter-only practice: local human + 2 AI. Auto stub loop then end.
   Future<void> _runPracticeLocal(PracticeLoadout? loadout) async {
@@ -226,6 +226,13 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
         (userId != null && userId.isNotEmpty) ? userId : 'local';
 
     final match = ref.read(matchSnapshotProvider.notifier);
+    if (practiceStubStepDelay <= Duration.zero) {
+      match.practiceMatchStartGrace = Duration.zero;
+      match.practiceTurnTimeout = Duration.zero;
+      match.practiceAiDelayMin = Duration.zero;
+      match.practiceAiDelayMax = Duration.zero;
+      match.practiceAiMissProbability = 0;
+    }
     match.clear();
     match.startLocalPractice(humanUserId: humanId, loadout: effective);
 
@@ -236,7 +243,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       );
     }
 
-    await match.runLocalPracticeStubMatch(stepDelay: practiceStubStepDelay);
+    await match.runLocalPracticeTurnMatch();
 
     if (LOGGING_SWITCH) {
       final snap = ref.read(matchSnapshotProvider);

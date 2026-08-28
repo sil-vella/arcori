@@ -2,8 +2,7 @@
 
 **Status**: In Progress  
 **Created**: 2026-08-11  
-**Last Updated**: 2026-08-11  
-**Product**: arcori (`REPO_BRAND=arcori`)
+**Last Updated**: 2026-08-11
 
 ## Hostinger storage — decided
 
@@ -39,10 +38,11 @@ rop01 uses **SSH/SFTP `mixta_mt`**: list/pull video dir to a temp dir → publis
 
 ```bash
 # on rop01
-python3 automation/marketing/cron_social_auto_post.py --env-file /path/to/.env.prod
-python3 automation/marketing/cron_social_auto_post.py --dry-run --env-file …
+python3 /opt/marketing/scripts/cron_social_auto_post.py --env-file /opt/marketing/env/.env
+python3 /opt/marketing/scripts/cron_social_auto_post.py --dry-run --env-file /opt/marketing/env/.env
 ```
 
+**Install path (rop01):** `/opt/marketing/{scripts,env,logs}/` — scripts + FB/YT/TT helpers; tokens in `env/.env` (mode 600); crontab stdout → `logs/`.
 ### `post_data.json` (Marketing dash contract)
 
 Same shape as dashboard compose `buildPayload()` (media is the latest `00renders/render_00*.mp4`, not a field here):
@@ -85,22 +85,23 @@ Empty `{}` still works (all platforms; title = folder name). Template filled on 
 - [x] Hostinger access from rop01 = SSH `mixta_mt` pull
 - [x] Cron runner `cron_social_auto_post.py` (excluded from wfrun)
 - [x] Full success = all selected platforms ok
-- [ ] Install cron on rop01 (schedule TBD)
+- [x] Install cron on rop01 — `/etc/cron.d/marketing-social` daily **13:00 Europe/Amsterdam** (`CRON_TZ`)
 - [ ] Smoke-test dry-run then live on one video
 - [ ] Fill real `post_data.json` on queued videos (currently `{}` in sample campaigns)
 - [ ] Document operator runbook
 
 ## Current Progress
 
-- Cron orchestrator built in template `automation/marketing/cron_social_auto_post.py`.
+- Cron orchestrator at `/opt/marketing/scripts/` on rop01; env at `/opt/marketing/env/.env`.
+- Crontab: `/etc/cron.d/marketing-social` → 13:00 Amsterdam → log `/opt/marketing/logs/cron_social.log`.
 - Reuses `facebook_publish_post` / `youtube_publish_video` / `tiktok_publish_video`.
+- **Token preflight** before publish: `ensure_marketing_tokens()` (FB extend / YT+TT refresh). On failure → alert email, exit 2, queue untouched.
+- **Deploy tokens** from Mac: `automation/marketing/deploy_rop01_marketing.sh` syncs `YOUTUBE_REFRESH_TOKEN`, `FACEBOOK_PAGE_ACCESS_TOKEN`, `FACEBOOK_USER_ACCESS_TOKEN` → rop env.
 
 ## Next Steps
 
-1. Deploy script + env to rop01; add crontab.
-2. Dry-run against Hostinger `arcori` queue.
-3. Live smoke (respect TT SELF_ONLY / YT private as needed).
-
+1. Live smoke when ready (YT private / TT SELF_ONLY still set on video_004).
+2. Document operator runbook.
 ## Files Modified
 
 - `automation/marketing/cron_social_auto_post.py`
@@ -122,4 +123,4 @@ n/a — ops/marketing pipeline.
 
 ## Task Manager
 
-Own Ops card **rop01 cron — social auto-post** (task `33`), not App Dev.
+Own Ops card **rop01 cron — social auto-post**, not App Dev.

@@ -17,39 +17,15 @@ from datetime import datetime, timezone
 from typing import Any
 
 from publish_common import env, err_result, http_json, ok_result
+from token_renewal import TokenRenewError, youtube_access_token
 
-TOKEN_URI = "https://oauth2.googleapis.com/token"
 CHANNELS_URI = "https://www.googleapis.com/youtube/v3/channels"
 PLAYLIST_ITEMS_URI = "https://www.googleapis.com/youtube/v3/playlistItems"
 VIDEOS_URI = "https://www.googleapis.com/youtube/v3/videos"
 
 
 def _refresh_access_token() -> str:
-    client_id = env("YOUTUBE_CLIENT_ID")
-    client_secret = env("YOUTUBE_CLIENT_SECRET")
-    refresh_token = env("YOUTUBE_REFRESH_TOKEN")
-    if not client_id or not client_secret or not refresh_token:
-        raise RuntimeError(
-            "missing_youtube_credentials — set YOUTUBE_CLIENT_ID, "
-            "YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN"
-        )
-    status, payload, _ = http_json(
-        "POST",
-        TOKEN_URI,
-        form={
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "refresh_token": refresh_token,
-            "grant_type": "refresh_token",
-        },
-        timeout=60,
-    )
-    if status >= 400 or not isinstance(payload, dict):
-        raise RuntimeError(f"youtube_token_refresh_failed: {payload!r}")
-    access = str(payload.get("access_token") or "").strip()
-    if not access:
-        raise RuntimeError("youtube_token_refresh_failed: no access_token")
-    return access
+    return youtube_access_token(persist_rotated=True)
 
 
 def _auth_headers(access_token: str) -> dict[str, str]:
@@ -158,6 +134,8 @@ def list_youtube_channel_videos(
     """List recent uploads (lightweight — no statistics)."""
     try:
         access = _refresh_access_token()
+    except TokenRenewError as exc:
+        return exc.as_err_result()
     except RuntimeError as exc:
         msg = str(exc)
         code = "missing_youtube_credentials"
@@ -258,10 +236,12 @@ def fetch_youtube_video_metrics(video_id: str) -> dict[str, Any]:
 
     try:
         access = _refresh_access_token()
+    except TokenRenewError as exc:
+        return exc.as_err_result()
     except RuntimeError as exc:
         msg = str(exc)
         code = "missing_youtube_credentials"
-        if "invalid_grant" in msg.lower():
+        if "invalid_grant" in msg.lower() or "reauth" in msg.lower():
             code = "youtube_reauth_required"
         return err_result(code, msg)
 

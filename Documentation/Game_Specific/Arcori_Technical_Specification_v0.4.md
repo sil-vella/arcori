@@ -1,17 +1,17 @@
 # Arcori Technical Specification
 
 Working Draft v0.4  
-**Last aligned:** 2026-08-21 (stub match turn stages: 2 rounds × seat slam)
+**Last aligned:** 2026-08-27 (Pioneers: earlier mint)
 
 ## Arcori Model
 
-Fields: internalId, themeCode, designCode, designFamily, design, inspiration, regionCode, affinity[], hostility[], generation{roman,number,creator}, type, theme, subtheme, style, finish, effect, printedRarity, selectionWeight, series, worldState, seasonState, artworkPrompt, loreDescription.
+Fields: internalId, themeCode, designCode, designFamily, design, inspiration, regionCode, affinity[], hostility[], generation{roman,number,creator}, type, theme, subtheme, style, finish, effect, printedRarity, selectionWeight, series, worldState, seasonState, artworkPrompt, loreDescription, legacy{preservationRequirement, closureMilestone}.
 
 **Natural selection (catalog / circulation):** `03_printed_rarity.json` maps printedRarity → default `selectionWeight` (Common 3.0 … Legendary 0.5; Unique is custom / null). If a design sets `selectionWeight` to a number, that value **overrides** the printed-rarity default for circulation-style uses. Omit or `null` → use the table. Launch catalog: all designs `printedRarity: Common`, with per-design `selectionWeight` copied from their previous rarity so selection spread is unchanged.
 
 **Match Arcori pairing SSOT:** after players are seated, `04_selection_weights.json` is the sole table for picking one design per seat (`printedRarity` weight × region standing multiplier; hostility boosts match chance). Design-level `selectionWeight` is **not** used for match pairing. Service: `POST /service/catalog/select_arcori`. Candidates = that player's `player_design_access` ids that are still circulating. Weight/parse failures → random among **those** candidates only — never the global circulating catalog. Empty player access → empty pick (client/Dart stub may fill Tiger).
 
-**Online stub turns:** after `startFromLobby`, Dart runs an auto stub loop (`roundsTotal` default 2 × one `slam` per seat) using each seat’s `slammerId`, broadcasts `match/state` with enriched `lastEvent` (`seatIndex`, `round`, `slammerId`, `arcoriId`, `result: stub`), then `endMatch`. Flutter online play waits for `phase=ended` (no client auto-end). Practice Flutter loop uses the same `lastEvent` shape.
+**Match slam / table:** at start, `table.pieces` holds one face-down disc per seat (`designId` from `arcoriIds`). `match/action` slam resolves via frozen slammer `gameplayAttributes` + raw `input` → `result: flip|miss`, `outcome.impulse`, updated `faceUp` / seat `score`. Round advance restacks face-down. Flutter may animate immediately (`SpringSimulation`); scores/faces only from authority.
 
 ## Architecture
 
@@ -48,6 +48,14 @@ Not owned                            Minted legacy piece
 
 - Starter unlocks / pack grants = **play/mastery access**, not Trove mints.
 - `generation.creator`: System for launch content; Player (**Generation Creator**) when a preserved/minted generation attributes a creator.
+- `legacy.preservationRequirement` / `legacy.closureMilestone` are per-design. Launch defaults by series:
+
+| Series | JSON folder | `internalId` token | preservationRequirement | closureMilestone | Why |
+|--------|-------------|--------------------|-------------------------|------------------|-----|
+| **Genesis** | `series/genesis/` | `GEN001` | 500 | 1000 | Main launch catalog |
+| **Pioneers** | `series/pioneers/` | `GEN002` | 100 | 200 | **Exists so these designs can mint earlier** than Genesis |
+
+`GEN002` marks the Pioneers series, not generation number (`generation.number` is still 1 / roman I at launch). Pioneers is the original ten seed designs; it is not a second full catalog.
 
 ## UI surfaces (client)
 

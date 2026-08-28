@@ -133,6 +133,34 @@ def soft_delete_user_notifications(
     return deleted
 
 
+def soft_delete_user_notifications_by_msg_ids(
+    session: Session,
+    msg_ids: list[str],
+    *,
+    user_id: uuid.UUID | None = None,
+) -> list[uuid.UUID]:
+    """Soft-delete active rows matching msg_id. Returns affected user ids."""
+    cleaned = [str(m).strip() for m in msg_ids if str(m).strip()]
+    if not cleaned:
+        return []
+    now = datetime.now(timezone.utc)
+    conditions = [
+        UserNotification.msg_id.in_(cleaned),
+        UserNotification.deleted_at.is_(None),
+    ]
+    if user_id is not None:
+        conditions.append(UserNotification.user_id == user_id)
+    rows = session.scalars(select(UserNotification).where(and_(*conditions))).all()
+    affected: list[uuid.UUID] = []
+    for row in rows:
+        row.deleted_at = now
+        if row.read_at is None:
+            row.read_at = now
+        affected.append(row.user_id)
+    session.flush()
+    return affected
+
+
 def list_active_global_notifications(
     session: Session,
     *,

@@ -95,6 +95,19 @@
       ]
     },
     {
+      "theme": "Music",
+      "themeCode": "MUS",
+      "subthemes": [
+        "Ballad",
+        "Eurodance",
+        "Hardcore",
+        "House",
+        "Pop",
+        "Rock",
+        "Trance"
+      ]
+    },
+    {
       "theme": "Myth",
       "themeCode": "MYT",
       "subthemes": [
@@ -113,6 +126,18 @@
         "Sky",
         "Volcanoes",
         "Weather"
+      ]
+    },
+    {
+      "theme": "Nostalgia",
+      "themeCode": "NOS",
+      "subthemes": [
+        "Collectibles",
+        "Everyday",
+        "Fashion",
+        "Gadgets",
+        "Media",
+        "Toys"
       ]
     },
     {
@@ -184,6 +209,18 @@
         "Mechs",
         "Nanotech",
         "Robots"
+      ]
+    },
+    {
+      "theme": "Television",
+      "themeCode": "TEL",
+      "subthemes": [
+        "Action",
+        "Animation",
+        "Dutch Comedy",
+        "Dutch Drama",
+        "Imported Series",
+        "Mystery"
       ]
     },
     {

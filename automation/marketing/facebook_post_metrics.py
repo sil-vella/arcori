@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from publish_common import env, err_result, http_json, ok_result
+from token_renewal import TokenRenewError, facebook_page_token
 
 GRAPH = "https://graph.facebook.com/v21.0"
 
@@ -377,8 +378,14 @@ def fetch_facebook_post_metrics(
     if not oid:
         return err_result("facebook_object_id_required", "Facebook object id is required")
 
-    token = (page_token or env("FACEBOOK_PAGE_ACCESS_TOKEN")).strip()
     page = (page_id or env("FACEBOOK_PAGE_ID")).strip()
+    try:
+        if page_token and str(page_token).strip():
+            token = str(page_token).strip()
+        else:
+            token = facebook_page_token(auto_extend=True, persist=True)
+    except TokenRenewError as exc:
+        return exc.as_err_result()
     if not token:
         return err_result(
             "missing_facebook_credentials",
@@ -477,8 +484,14 @@ def list_facebook_page_posts(
     page_id: str | None = None,
 ) -> dict[str, Any]:
     """List recent posts published by the Page (not visitor feed noise)."""
-    token = (page_token or env("FACEBOOK_PAGE_ACCESS_TOKEN")).strip()
     page = (page_id or env("FACEBOOK_PAGE_ID")).strip()
+    try:
+        if page_token and str(page_token).strip():
+            token = str(page_token).strip()
+        else:
+            token = facebook_page_token(auto_extend=True, persist=True)
+    except TokenRenewError as exc:
+        return exc.as_err_result()
     if not token or not page:
         return err_result(
             "missing_facebook_credentials",

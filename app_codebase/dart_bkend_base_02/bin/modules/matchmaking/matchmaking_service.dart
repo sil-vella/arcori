@@ -114,6 +114,44 @@ class MatchmakingService {
     }
   }
 
+  /// Lobby timeout / host cancel — soft-delete guest invite notification in FastAPI.
+  Future<void> _cancelFriendMatchInvite(String inviteId) async {
+    final trimmed = inviteId.trim();
+    if (trimmed.isEmpty) return;
+    final uri = Uri.parse(
+      '${_fastApi.baseUrl}/service/friend_match_invites/cancel',
+    );
+    try {
+      final response = await _fastApi.client
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Service-Key': serviceKey(),
+            },
+            body: jsonEncode({'inviteId': trimmed}),
+          )
+          .timeout(const Duration(seconds: 5));
+      if (LOGGING_SWITCH) {
+        customlog(
+          'matchmaking: invite cancel inviteId=$trimmed '
+          'status=${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('matchmaking: invite cancel error inviteId=$trimmed err=$e');
+      }
+    }
+  }
+
+  void _maybeCancelFriendMatchInvite(Map<String, dynamic> matchType) {
+    if (matchType['code']?.toString() != 'invite') return;
+    final inviteId = matchType['subtype']?.toString().trim() ?? '';
+    if (inviteId.isEmpty) return;
+    unawaited(_cancelFriendMatchInvite(inviteId));
+  }
+
   Future<bool> _checkUserIsAi(String userId) async {
     final trimmed = userId.trim();
     if (trimmed.isEmpty) return false;
@@ -334,6 +372,9 @@ class MatchmakingService {
     }
     if (next.phase == 'cancelled' || next.members.isEmpty) {
       _cancelTimer(lobby.lobbyId);
+      _maybeCancelFriendMatchInvite(
+        Map<String, dynamic>.from(lobby.matchType),
+      );
       return next;
     }
     _broadcastLobby(next);
@@ -496,6 +537,9 @@ class MatchmakingService {
       for (final m in members) {
         roomRegistry.unsubscribe(lobbyId, m.connectionId);
       }
+      _maybeCancelFriendMatchInvite(
+        Map<String, dynamic>.from(current.matchType),
+      );
       return;
     }
 

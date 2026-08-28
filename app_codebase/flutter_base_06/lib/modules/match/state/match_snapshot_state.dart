@@ -18,6 +18,18 @@ class MatchSeatView {
   final List<String> arcoriIds;
   final String slammerId;
 
+  MatchSeatView copyWith({int? score}) {
+    return MatchSeatView(
+      userId: userId,
+      seatIndex: seatIndex,
+      kind: kind,
+      score: score ?? this.score,
+      connected: connected,
+      arcoriIds: arcoriIds,
+      slammerId: slammerId,
+    );
+  }
+
   factory MatchSeatView.fromJson(Map<String, dynamic> json) {
     final rawIds = json['arcoriIds'];
     return MatchSeatView(
@@ -34,6 +46,44 @@ class MatchSeatView {
   }
 }
 
+class MatchPieceView {
+  const MatchPieceView({
+    required this.pieceId,
+    required this.designId,
+    required this.ownerUserId,
+    required this.seatIndex,
+    required this.faceUp,
+    required this.stackIndex,
+  });
+
+  final String pieceId;
+  final String designId;
+  final String ownerUserId;
+  final int seatIndex;
+  final bool faceUp;
+  final int stackIndex;
+
+  factory MatchPieceView.fromJson(Map<String, dynamic> json) {
+    return MatchPieceView(
+      pieceId: json['pieceId']?.toString() ?? '',
+      designId: json['designId']?.toString() ?? '',
+      ownerUserId: json['ownerUserId']?.toString() ?? '',
+      seatIndex: json['seatIndex'] is int ? json['seatIndex'] as int : 0,
+      faceUp: json['faceUp'] == true,
+      stackIndex: json['stackIndex'] is int ? json['stackIndex'] as int : 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'pieceId': pieceId,
+        'designId': designId,
+        'ownerUserId': ownerUserId,
+        'seatIndex': seatIndex,
+        'faceUp': faceUp,
+        'stackIndex': stackIndex,
+      };
+}
+
 class MatchSnapshotState {
   const MatchSnapshotState({
     this.matchId,
@@ -45,6 +95,7 @@ class MatchSnapshotState {
     this.callerUserId,
     this.matchType = const {},
     this.seats = const [],
+    this.table = const {'pieces': <dynamic>[]},
     this.active,
     this.result,
     this.lastEvent,
@@ -59,11 +110,21 @@ class MatchSnapshotState {
   final String? callerUserId;
   final Map<String, dynamic> matchType;
   final List<MatchSeatView> seats;
+  final Map<String, dynamic> table;
   final Map<String, dynamic>? active;
   final Map<String, dynamic>? result;
   final Map<String, dynamic>? lastEvent;
 
   bool get isEnded => phase == 'ended';
+
+  List<MatchPieceView> get pieces {
+    final raw = table['pieces'];
+    if (raw is! List) return const [];
+    return raw
+        .whereType<Map>()
+        .map((e) => MatchPieceView.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+  }
 
   MatchSnapshotState copyWith({
     String? matchId,
@@ -75,6 +136,7 @@ class MatchSnapshotState {
     String? callerUserId,
     Map<String, dynamic>? matchType,
     List<MatchSeatView>? seats,
+    Map<String, dynamic>? table,
     Map<String, dynamic>? active,
     Map<String, dynamic>? result,
     Map<String, dynamic>? lastEvent,
@@ -94,6 +156,7 @@ class MatchSnapshotState {
       callerUserId: callerUserId ?? this.callerUserId,
       matchType: matchType ?? this.matchType,
       seats: seats ?? this.seats,
+      table: table ?? this.table,
       active: clearActive ? null : (active ?? this.active),
       result: result ?? this.result,
       lastEvent: lastEvent ?? this.lastEvent,
@@ -109,6 +172,7 @@ class MatchSnapshotState {
             .toList()
         : <MatchSeatView>[];
     final rawType = payload['matchType'];
+    final rawTable = payload['table'];
     return MatchSnapshotState(
       matchId: payload['matchId']?.toString(),
       version: payload['version'] is int ? payload['version'] as int : 0,
@@ -122,6 +186,9 @@ class MatchSnapshotState {
           ? Map<String, dynamic>.from(rawType)
           : const <String, dynamic>{},
       seats: seats,
+      table: rawTable is Map
+          ? Map<String, dynamic>.from(rawTable)
+          : const {'pieces': <dynamic>[]},
       active: payload['active'] is Map
           ? Map<String, dynamic>.from(payload['active'] as Map)
           : null,

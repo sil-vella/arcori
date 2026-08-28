@@ -4,6 +4,7 @@ library;
 import 'dart:math';
 
 import 'match_models.dart';
+import 'table_pieces.dart';
 import 'type_subtype_pack_registry.dart';
 
 class MatchStore {
@@ -74,6 +75,7 @@ class MatchStore {
       // Practice: no subtype key.
       matchType: const {'code': 'practice'},
       seats: seats,
+      table: tableFromSeats(seats),
       active: const {
         'seatIndex': 0,
         'action': 'slam',
@@ -138,6 +140,7 @@ class MatchStore {
       callerUserId: callerUserId,
       matchType: Map<String, dynamic>.from(matchType),
       seats: seats,
+      table: tableFromSeats(seats),
       active: const {
         'seatIndex': 0,
         'action': 'slam',

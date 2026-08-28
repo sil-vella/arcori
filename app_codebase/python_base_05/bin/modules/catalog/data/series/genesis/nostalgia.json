@@ -1,0 +1,1565 @@
+{
+  "catalog": "Nostalgia Genesis Series",
+  "theme": "Nostalgia",
+  "series": "Genesis",
+  "themeCode": "NOS",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "NOS-KNK-GEN001-0001",
+      "themeCode": "NOS",
+      "designCode": "KNK",
+      "designFamily": "MARBLE_POUCH",
+      "design": "Knikkers and a Marble Pouch",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Toys",
+      "style": "Realistic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a knikkers and a marble pouch in realistic style with a standard finish and no effect. Use a background that is visually related to the knikkers and a marble pouch. No borders, no frames. The knikkers and a marble pouch should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-KNK-GEN001-0001.webp",
+      "loreDescription": "Children once carried these glass spheres through Ashdrift Hill, trading them beside roads that the falling ash later erased. Each marble still seems to hold the colour of a game whose rules no one remembers.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-DBL-GEN001-0002",
+      "themeCode": "NOS",
+      "designCode": "DBL",
+      "designFamily": "DIABOLO",
+      "design": "Diabolo",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Toys",
+      "style": "Comic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a diabolo in comic style with a standard finish and no effect. Use a background that is visually related to the diabolo. No borders, no frames. The diabolo should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-DBL-GEN001-0002.webp",
+      "loreDescription": "The diabolo was used in Everlight Grove during bright public celebrations. When spun fast enough, its string traces the same sweeping shapes found on the Grove's oldest guardian carvings.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-RLB-GEN001-0003",
+      "themeCode": "NOS",
+      "designCode": "RLB",
+      "designFamily": "ROLLERBLADES",
+      "design": "Rollerblades",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Everyday",
+      "style": "Anime",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a rollerblades in anime style with a standard finish and no effect. Use a background that is visually related to the rollerblades. No borders, no frames. The rollerblades should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-RLB-GEN001-0003.webp",
+      "loreDescription": "Little Frost riders fitted lines of wheels beneath their boots and raced over frozen streets after every thaw. Tracks sometimes continue beyond the edge of the road, though no rider admits making them.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-SLK-GEN001-0004",
+      "themeCode": "NOS",
+      "designCode": "SLK",
+      "designFamily": "PLASTIC_SLINKY",
+      "design": "Colorful Plastic Slinky",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Toys",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a colorful plastic slinky in watercolor style with a standard finish and no effect. Use a background that is visually related to the colorful plastic slinky. No borders, no frames. The colorful plastic slinky should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-SLK-GEN001-0004.webp",
+      "loreDescription": "This rainbow coil washed ashore after an unusually distant tide. It descends any set of steps placed before it, including stairways that only appear when Moonwake Bay retreats.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-TIC-GEN001-0005",
+      "themeCode": "NOS",
+      "designCode": "TIC",
+      "designFamily": "INFLATABLE_CHAIR",
+      "design": "Transparent Inflatable Chair",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Everyday",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a transparent inflatable chair in minimalist style with a standard finish and no effect. Use a background that is visually related to the transparent inflatable chair. No borders, no frames. The transparent inflatable chair should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-TIC-GEN001-0005.webp",
+      "loreDescription": "A transparent seat was found intact inside a cracked amber formation. It is weightless when empty, but becomes strangely heavy whenever someone recalls where they first saw one.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-WPT-GEN001-0006",
+      "themeCode": "NOS",
+      "designCode": "WPT",
+      "designFamily": "WATER_PISTOL",
+      "design": "Water Pistol",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Toys",
+      "style": "Neon",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a water pistol in neon style with a standard finish and no effect. Use a background that is visually related to the water pistol. No borders, no frames. The water pistol should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-WPT-GEN001-0006.webp",
+      "loreDescription": "This brightly coloured toy appears in Moonwake Bay's tide-lit reflections before it appears in the hand. Its reservoir is always full of rainwater, even in memories where no rain fell.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-TRL-GEN001-0007",
+      "themeCode": "NOS",
+      "designCode": "TRL",
+      "designFamily": "TROLL_DOLL",
+      "design": "Bright-Haired Troll Doll",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Toys",
+      "style": "Cartoon",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a bright-haired troll doll in cartoon style with a standard finish and no effect. Use a background that is visually related to the bright-haired troll doll. No borders, no frames. The bright-haired troll doll should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-TRL-GEN001-0007.webp",
+      "loreDescription": "The doll's impossible hair remains vivid beneath Ashdrift's grey fall. Travellers leave it at uncertain crossroads, believing its smile faces whichever road is least likely to disappear.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-HGC-GEN001-0008",
+      "themeCode": "NOS",
+      "designCode": "HGC",
+      "designFamily": "HANDHELD_CONSOLE",
+      "design": "Handheld Monochrome Game Console",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Gadgets",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a handheld monochrome game console in pixel art style with a standard finish and no effect. Use a background that is visually related to the handheld monochrome game console. No borders, no frames. The handheld monochrome game console should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-HGC-GEN001-0008.webp",
+      "loreDescription": "An old handheld game still runs without batteries in Everlight Grove. Its blocky screen depicts tiny defenders assembling whenever the region is threatened, although no two players see the same formation.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-CDP-GEN001-0009",
+      "themeCode": "NOS",
+      "designCode": "CDP",
+      "designFamily": "CD_PLAYER",
+      "design": "Portable CD Player with Headphones",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Gadgets",
+      "style": "Low Poly",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a portable cd player with headphones in low poly style with a standard finish and no effect. Use a background that is visually related to the portable cd player with headphones. No borders, no frames. The portable cd player with headphones should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-CDP-GEN001-0009.webp",
+      "loreDescription": "The player skips whenever Little Frost repeats a day, turning familiar songs into new arrangements. Residents use the interruptions to guess which parts of yesterday the town has forgotten.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-DSP-GEN001-0010",
+      "themeCode": "NOS",
+      "designCode": "DSP",
+      "designFamily": "DISPOSABLE_CAMERA",
+      "design": "Disposable Camera",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Gadgets",
+      "style": "Chibi",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a disposable camera in chibi style with a standard finish and no effect. Use a background that is visually related to the disposable camera. No borders, no frames. The disposable camera should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-DSP-GEN001-0010.webp",
+      "loreDescription": "Its final exposure never runs out. Photographs taken at low tide reveal people, piers and doorways that were absent when the shutter clicked, all waiting on a slightly different shore.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-FTC-GEN001-0011",
+      "themeCode": "NOS",
+      "designCode": "FTC",
+      "designFamily": "FANTASY_CARDS",
+      "design": "Original Fantasy Trading Cards",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Collectibles",
+      "style": "Graffiti",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a original fantasy trading cards in graffiti style with a standard finish and no effect. Use a background that is visually related to the original fantasy trading cards. No borders, no frames. The original fantasy trading cards should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-FTC-GEN001-0011.webp",
+      "loreDescription": "These cards portray wild creatures preserved nowhere else in Velora. After every great storm, a new creature appears in the artwork and one empty amber chamber is discovered nearby.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-ICP-GEN001-0012",
+      "themeCode": "NOS",
+      "designCode": "ICP",
+      "designFamily": "CONSTRUCTION_PIECES",
+      "design": "Interlocking Construction Pieces",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Toys",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a interlocking construction pieces in prismatic style with a standard finish and no effect. Use a background that is visually related to the interlocking construction pieces. No borders, no frames. The interlocking construction pieces should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-ICP-GEN001-0012.webp",
+      "loreDescription": "The rods and hubs rebuild themselves into fragments of places that almost seem familiar. Their structures cannot stand from every angle at once, yet their shadows remain perfectly joined.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-GBB-GEN001-0013",
+      "themeCode": "NOS",
+      "designCode": "GBB",
+      "designFamily": "GABBER_ACCESSORIES",
+      "design": "Gabber Accessories",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Fashion",
+      "style": "Retro",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a gabber accessories in retro style with a standard finish and no effect. Use a background that is visually related to the gabber accessories. No borders, no frames. The gabber accessories should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-GBB-GEN001-0013.webp",
+      "loreDescription": "A bomber jacket, whistle and cassette were recovered from an ash-filled hall with no doors. When the tape turns, a distant rhythm briefly pushes the falling ash upward.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-MTC-GEN001-0014",
+      "themeCode": "NOS",
+      "designCode": "MTC",
+      "designFamily": "MUSIC_TELEVISION",
+      "design": "Music Television Control Screen",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Media",
+      "style": "Neon",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a music television control screen in neon style with a standard finish and no effect. Use a background that is visually related to the music television control screen. No borders, no frames. The music television control screen should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-MTC-GEN001-0014.webp",
+      "loreDescription": "This control screen once selected performances broadcast across Everlight Grove. Some channels now show celebrations that have not happened yet, lit by colours absent from the Grove's known pillars.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-CTP-GEN001-0015",
+      "themeCode": "NOS",
+      "designCode": "CTP",
+      "designFamily": "TELEVISION_PROPS",
+      "design": "Children's Television Props",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Media",
+      "style": "Cartoon",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a children's television props in cartoon style with a standard finish and no effect. Use a background that is visually related to the children's television props. No borders, no frames. The children's television props should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-CTP-GEN001-0015.webp",
+      "loreDescription": "These cheerful studio props were found arranged inside an empty Little Frost school hall. Each morning the colour wheel points somewhere new, while the little door remains locked from both sides.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-FSA-GEN001-0016",
+      "themeCode": "NOS",
+      "designCode": "FSA",
+      "designFamily": "STICKER_ALBUM",
+      "design": "Football Sticker Album",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Collectibles",
+      "style": "Comic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a football sticker album in comic style with a standard finish and no effect. Use a background that is visually related to the football sticker album. No borders, no frames. The football sticker album should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-FSA-GEN001-0016.webp",
+      "loreDescription": "The album records teams from ports that no longer exist. Blank spaces fill when the tide exposes another drowned stadium, but the players pictured never face the camera.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-MWT-GEN001-0017",
+      "themeCode": "NOS",
+      "designCode": "MWT",
+      "designFamily": "MAGIC_WORM",
+      "design": "Magic Worm Toy",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Toys",
+      "style": "Chibi",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a magic worm toy in chibi style with a standard finish and no effect. Use a background that is visually related to the magic worm toy. No borders, no frames. The magic worm toy should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-MWT-GEN001-0017.webp",
+      "loreDescription": "This fuzzy toy winds through Amberwild without visible help, following cracks in the ancient resin. Wherever it stops, something trapped inside the amber begins to move.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-MDB-GEN001-0018",
+      "themeCode": "NOS",
+      "designCode": "MDB",
+      "designFamily": "DRAWING_BOARD",
+      "design": "Magnetic Drawing Board",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Toys",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a magnetic drawing board in minimalist style with a standard finish and no effect. Use a background that is visually related to the magnetic drawing board. No borders, no frames. The magnetic drawing board should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-MDB-GEN001-0018.webp",
+      "loreDescription": "Lines appear on the board when nobody is drawing. They resemble floor plans from half-remembered rooms, but erasing them sometimes removes a doorway from the surrounding world.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-GCS-GEN001-0019",
+      "themeCode": "NOS",
+      "designCode": "GCS",
+      "designFamily": "CEILING_STARS",
+      "design": "Glow-in-the-Dark Ceiling Stars",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Everyday",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a glow-in-the-dark ceiling stars in watercolor style with a standard finish and no effect. Use a background that is visually related to the glow-in-the-dark ceiling stars. No borders, no frames. The glow-in-the-dark ceiling stars should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-GCS-GEN001-0019.webp",
+      "loreDescription": "These small stars glow through Ashdrift's darkest nights. Their arrangement changes beneath the falling ash, forming constellations that point toward buildings the region has already forgotten.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-CDF-GEN001-0020",
+      "themeCode": "NOS",
+      "designCode": "CDF",
+      "designFamily": "COLLECTIBLE_DISCS",
+      "design": "Collectible Discs and Folder",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Collectibles",
+      "style": "Realistic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a collectible discs and folder in realistic style with a standard finish and no effect. Use a background that is visually related to the collectible discs and folder. No borders, no frames. The collectible discs and folder should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-CDF-GEN001-0020.webp",
+      "loreDescription": "Children of Everlight Grove traded these bright discs beneath the civic trees. When a full page is completed, the creatures printed on it turn toward the same unseen point beyond the city.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-DTC-GEN001-0021",
+      "themeCode": "NOS",
+      "designCode": "DTC",
+      "designFamily": "TELEPHONE_CARDS",
+      "design": "Dutch Telephone Cards",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Collectibles",
+      "style": "Comic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a dutch telephone cards in comic style with a standard finish and no effect. Use a background that is visually related to the dutch telephone cards. No borders, no frames. The dutch telephone cards should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-DTC-GEN001-0021.webp",
+      "loreDescription": "These prepaid cards once connected callers across Moonwake Bay. Some retain one final call, answered only by waves and a voice describing a shoreline that has not yet appeared.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-STK-GEN001-0022",
+      "themeCode": "NOS",
+      "designCode": "STK",
+      "designFamily": "STRIPPENKAART",
+      "design": "Strippenkaart",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Everyday",
+      "style": "Anime",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a strippenkaart in anime style with a standard finish and no effect. Use a background that is visually related to the strippenkaart. No borders, no frames. The strippenkaart should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-STK-GEN001-0022.webp",
+      "loreDescription": "Every stamped strip marks a journey through a place that almost existed. The final unused section keeps changing position, as though the ticket is waiting for one impossible connection.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-GLN-GEN001-0023",
+      "themeCode": "NOS",
+      "designCode": "GLN",
+      "designFamily": "GUILDER_NOTES",
+      "design": "Guilder-Era Coins and Banknotes",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Collectibles",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a guilder-era coins and banknotes in watercolor style with a standard finish and no effect. Use a background that is visually related to the guilder-era coins and banknotes. No borders, no frames. The guilder-era coins and banknotes should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-GLN-GEN001-0023.webp",
+      "loreDescription": "The faded money was recovered from a clear pocket inside Amberwild resin. Its portraits age between storms, while the flowers printed beside them repeatedly return to bloom.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-VHS-GEN001-0024",
+      "themeCode": "NOS",
+      "designCode": "VHS",
+      "designFamily": "VHS_CASSETTE",
+      "design": "VHS Rental Cassette",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Media",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a vhs rental cassette in minimalist style with a standard finish and no effect. Use a background that is visually related to the vhs rental cassette. No borders, no frames. The vhs rental cassette should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-VHS-GEN001-0024.webp",
+      "loreDescription": "The unmarked cassette plays recordings of abandoned Ashdrift buildings before the ash reached them. Each viewing adds one empty room that the viewer remembers visiting.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-SCS-GEN001-0025",
+      "themeCode": "NOS",
+      "designCode": "SCS",
+      "designFamily": "SCENTED_STATIONERY",
+      "design": "Scented Character Stationery",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Everyday",
+      "style": "Cartoon",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a scented character stationery in cartoon style with a standard finish and no effect. Use a background that is visually related to the scented character stationery. No borders, no frames. The scented character stationery should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-SCS-GEN001-0025.webp",
+      "loreDescription": "The paper carries the scent of warm fruit even in Little Frost's permanent winter. Notes left overnight are answered in cheerful drawings by a mascot nobody recalls creating.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-SBC-GEN001-0026",
+      "themeCode": "NOS",
+      "designCode": "SBC",
+      "designFamily": "SLAP_BRACELETS",
+      "design": "Slap Bracelet Collection",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Fashion",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a slap bracelet collection in pixel art style with a standard finish and no effect. Use a background that is visually related to the slap bracelet collection. No borders, no frames. The slap bracelet collection should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-SBC-GEN001-0026.webp",
+      "loreDescription": "These bracelets snap around any narrow surface when Everlight's warning lights awaken. Their patterns then rearrange into tiny maps leading toward the nearest gathering place.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-FBB-GEN001-0027",
+      "themeCode": "NOS",
+      "designCode": "FBB",
+      "designFamily": "FRIENDSHIP_BRACELETS",
+      "design": "Friendship Bracelets and Beads",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Fashion",
+      "style": "Low Poly",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a friendship bracelets and beads in low poly style with a standard finish and no effect. Use a background that is visually related to the friendship bracelets and beads. No borders, no frames. The friendship bracelets and beads should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-FBB-GEN001-0027.webp",
+      "loreDescription": "Pairs of these bracelets were exchanged before sailors departed Moonwake Bay. One band always stays dry; the other becomes damp whenever its distant partner approaches the water.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-BFP-GEN001-0028",
+      "themeCode": "NOS",
+      "designCode": "BFP",
+      "designFamily": "BEAN_PLUSH",
+      "design": "Bean-Filled Collectible Plush",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Collectibles",
+      "style": "Chibi",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a bean-filled collectible plush in chibi style with a standard finish and no effect. Use a background that is visually related to the bean-filled collectible plush. No borders, no frames. The bean-filled collectible plush should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-BFP-GEN001-0028.webp",
+      "loreDescription": "The soft forest creature was found resting beside an opened amber shell. Its fabric heart grows warm whenever something ancient moves beneath the grass.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-LVL-GEN001-0029",
+      "themeCode": "NOS",
+      "designCode": "LVL",
+      "designFamily": "LAVA_LAMP",
+      "design": "Lava Lamp",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Everyday",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a lava lamp in prismatic style with a standard finish and no effect. Use a background that is visually related to the lava lamp. No borders, no frames. The lava lamp should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-LVL-GEN001-0029.webp",
+      "loreDescription": "The floating shapes inside this lamp imitate rooms, roads and faces before dissolving. Reflections show different forms, suggesting the glass contains several versions of the same memory.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-MPH-GEN001-0030",
+      "themeCode": "NOS",
+      "designCode": "MPH",
+      "designFamily": "MOBILE_PHONE",
+      "design": "Late-1990s Mobile Phone",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Gadgets",
+      "style": "Neon",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a late-1990s mobile phone in neon style with a standard finish and no effect. Use a background that is visually related to the late-1990s mobile phone. No borders, no frames. The late-1990s mobile phone should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-MPH-GEN001-0030.webp",
+      "loreDescription": "The phone displays no network, yet receives brief calls during heavy ashfall. Every caller whispers directions to a structure that vanishes before it can be reached.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-TCC-GEN001-0031",
+      "themeCode": "NOS",
+      "designCode": "TCC",
+      "designFamily": "TOY_CATALOGUE",
+      "design": "Dutch Toy-Store Christmas Catalogue",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Media",
+      "style": "Graffiti",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a dutch toy-store christmas catalogue in graffiti style with a standard finish and no effect. Use a background that is visually related to the dutch toy-store christmas catalogue. No borders, no frames. The dutch toy-store christmas catalogue should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-TCC-GEN001-0031.webp",
+      "loreDescription": "Every winter, new toys appear on the catalogue's pages without replacing the old ones. Several resemble guardian forms that Everlight's oldest residents insist they have never seen.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-CMG-GEN001-0032",
+      "themeCode": "NOS",
+      "designCode": "CMG",
+      "designFamily": "MAGAZINE_GADGET",
+      "design": "Children's Magazine with Free Gadget",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Media",
+      "style": "Retro",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a children's magazine with free gadget in retro style with a standard finish and no effect. Use a background that is visually related to the children's magazine with free gadget. No borders, no frames. The children's magazine with free gadget should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-CMG-GEN001-0032.webp",
+      "loreDescription": "The magazine's plastic maze resets whenever Little Frost repairs itself. Its metal ball always stops at a route corresponding to a street damaged the previous day.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-SSA-GEN001-0033",
+      "themeCode": "NOS",
+      "designCode": "SSA",
+      "designFamily": "SCHOOL_AGENDA",
+      "design": "Sticker-Covered School Agenda",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Everyday",
+      "style": "Realistic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a sticker-covered school agenda in realistic style with a standard finish and no effect. Use a background that is visually related to the sticker-covered school agenda. No borders, no frames. The sticker-covered school agenda should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-SSA-GEN001-0033.webp",
+      "loreDescription": "Appointments appear in this worn agenda on dates erased by seawater. They describe meetings on piers that emerge only when Moonwake's tide retreats unusually far.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-PSB-GEN001-0034",
+      "themeCode": "NOS",
+      "designCode": "PSB",
+      "designFamily": "SKIP_BALL",
+      "design": "Plastic Skip Ball",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Toys",
+      "style": "Anime",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a plastic skip ball in anime style with a standard finish and no effect. Use a background that is visually related to the plastic skip ball. No borders, no frames. The plastic skip ball should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-PSB-GEN001-0034.webp",
+      "loreDescription": "The bouncing ball crosses Amberwild without leaving the ground for long. After storms, it returns carrying amber dust from clearings no explorer has mapped.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "NOS-TFG-GEN001-0035",
+      "themeCode": "NOS",
+      "designCode": "TFG",
+      "designFamily": "TABLETOP_FOOTBALL",
+      "design": "Tabletop Football Game",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Nostalgia",
+      "subtheme": "Toys",
+      "style": "Comic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a tabletop football game in comic style with a standard finish and no effect. Use a background that is visually related to the tabletop football game. No borders, no frames. The tabletop football game should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NOS-TFG-GEN001-0035.webp",
+      "loreDescription": "The tiny players continue their match after every control is released. Goals alter the board's painted lines, briefly forming street plans from Little Frost's unexplained overnight repairs.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    }
+  ]
+}

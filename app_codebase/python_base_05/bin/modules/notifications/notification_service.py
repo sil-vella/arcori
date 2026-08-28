@@ -223,6 +223,22 @@ def list_messages_for_user(
         unread_count = repo.count_unread_user_notifications(session, uid)
         messages = [_serialize_user_row(row) for row in rows]
 
+    # Drop dead friend-match invite instants before they reach Flutter modals.
+    try:
+        from modules.friend_match_invite.friend_match_invite_notifications import (
+            prune_stale_invite_notifications_for_user,
+        )
+
+        before = len(messages)
+        messages = prune_stale_invite_notifications_for_user(str(uid), messages)
+        if len(messages) != before:
+            with session_scope() as session:
+                unread_count = repo.count_unread_user_notifications(session, uid)
+    except Exception as err:
+        # Inbox must still load if invite module has a transient failure.
+        if LOGGING_SWITCH:
+            customlog(f"notifications: invite prune skipped err={err}")
+
     return {
         "messages": messages,
         "unread_count": unread_count,
@@ -277,7 +293,31 @@ def delete_for_user(user_id: str, message_ids: list[str]) -> dict[str, Any]:
     with session_scope() as session:
         deleted = repo.soft_delete_user_notifications(session, uid, ids)
 
+    if deleted:
+        inbox_broadcaster.notify_inbox_changed(str(uid))
     return {"deleted": deleted}
+
+
+def soft_delete_by_msg_ids(
+    msg_ids: list[str],
+    *,
+    user_id: str | None = None,
+) -> dict[str, Any]:
+    """Soft-delete user notifications by stable msg_id (e.g. invite cleanup)."""
+    uid = _parse_uuid(user_id, field="user_id") if user_id else None
+    with session_scope() as session:
+        affected = repo.soft_delete_user_notifications_by_msg_ids(
+            session,
+            msg_ids,
+            user_id=uid,
+        )
+    notified: set[str] = set()
+    for affected_uid in affected:
+        key = str(affected_uid)
+        if key not in notified:
+            notified.add(key)
+            inbox_broadcaster.notify_inbox_changed(key)
+    return {"deleted": len(affected)}
 
 
 def parse_message_ids_from_body(body: dict[str, Any]) -> list[str]:
@@ -349,8 +389,16 @@ def handle_response(
             option_key=key,
         )
 
-        if response.get("mark_read_on_success", True):
+        # Reply handlers may request hard removal (e.g. one-shot invites).
+        if result.get("delete_notification") and has_user:
+            repo.soft_delete_user_notifications(session, uid, [mid])
+            if row.read_at is None:
+                row.read_at = datetime.now(timezone.utc)
+        elif response.get("mark_read_on_success", True):
             mark_read()
+
+    if result.get("delete_notification") and has_user:
+        inbox_broadcaster.notify_inbox_changed(str(uid))
 
     payload: dict[str, Any] = {"success": True}
     data = result.get("data")

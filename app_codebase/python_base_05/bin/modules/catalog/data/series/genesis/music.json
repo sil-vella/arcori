@@ -1,0 +1,899 @@
+{
+  "catalog": "Music Genesis Series",
+  "theme": "Music",
+  "series": "Genesis",
+  "themeCode": "MUS",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "MUS-LPS-GEN001-0001",
+      "themeCode": "MUS",
+      "designCode": "LPS",
+      "designFamily": "LIMITLESS_PULSE",
+      "design": "Limitless Pulse",
+      "inspiration": "2 Unlimited",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Eurodance",
+      "style": "Realistic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a limitless pulse in realistic style with a standard finish and no effect. Use a background that is visually related to the limitless pulse. No borders, no frames. The limitless pulse should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-LPS-GEN001-0001.webp",
+      "loreDescription": "Two voices alternate over a relentless pulse that makes Everlight's separate civic lights flash as one.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-HBH-GEN001-0002",
+      "themeCode": "MUS",
+      "designCode": "HBH",
+      "designFamily": "HARBOR_HOLIDAY",
+      "design": "Harbor Holiday",
+      "inspiration": "Vengaboys",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Eurodance",
+      "style": "Comic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a harbor holiday in comic style with a standard finish and no effect. Use a background that is visually related to the harbor holiday. No borders, no frames. The harbor holiday should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-HBH-GEN001-0002.webp",
+      "loreDescription": "Four travelling performers turn every Moonwake departure into a celebration, even when the returning boat reaches another shore.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-ACS-GEN001-0003",
+      "themeCode": "MUS",
+      "designCode": "ACS",
+      "designFamily": "ASHCORE_SIGNAL",
+      "design": "Ashcore Signal",
+      "inspiration": "Paul Elstak",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Hardcore",
+      "style": "Anime",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a ashcore signal in anime style with a standard finish and no effect. Use a background that is visually related to the ashcore signal. No borders, no frames. The ashcore signal should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-ACS-GEN001-0003.webp",
+      "loreDescription": "The DJ's fastest rhythm briefly reverses Ashdrift's endless fall, revealing roads hidden beneath the grey.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-FRF-GEN001-0004",
+      "themeCode": "MUS",
+      "designCode": "FRF",
+      "designFamily": "FROST_FREQUENCY",
+      "design": "Frost Frequency",
+      "inspiration": "Charly Lownoise & Mental Theo",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Hardcore",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a frost frequency in watercolor style with a standard finish and no effect. Use a background that is visually related to the frost frequency. No borders, no frames. The frost frequency should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-FRF-GEN001-0004.webp",
+      "loreDescription": "Two rival mixers trade melodies so cheerful that Little Frost's snow begins falling upward between every chorus.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-WBC-GEN001-0005",
+      "themeCode": "MUS",
+      "designCode": "WBC",
+      "designFamily": "WILDBEAT_COLLECTIVE",
+      "design": "Wildbeat Collective",
+      "inspiration": "Party Animals",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Hardcore",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a wildbeat collective in minimalist style with a standard finish and no effect. Use a background that is visually related to the wildbeat collective. No borders, no frames. The wildbeat collective should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-WBC-GEN001-0005.webp",
+      "loreDescription": "Four performers borrow the signs of Amberwild creatures, awakening a different animal echo with every jump.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-TFR-GEN001-0006",
+      "themeCode": "MUS",
+      "designCode": "TFR",
+      "designFamily": "TWENTY_FOUR_REFLECTIONS",
+      "design": "Twenty-Four Reflections",
+      "inspiration": "Twenty 4 Seven",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Eurodance",
+      "style": "Neon",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a twenty-four reflections in neon style with a standard finish and no effect. Use a background that is visually related to the twenty-four reflections. No borders, no frames. The twenty-four reflections should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TFR-GEN001-0006.webp",
+      "loreDescription": "The trio performs continuously across mirrored rooms, although no reflection follows the same song.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-EHM-GEN001-0007",
+      "themeCode": "MUS",
+      "designCode": "EHM",
+      "designFamily": "EVERLIGHT_HOUSEMASTER",
+      "design": "Everlight Housemaster",
+      "inspiration": "DJ Jean",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "House",
+      "style": "Cartoon",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a everlight housemaster in cartoon style with a standard finish and no effect. Use a background that is visually related to the everlight housemaster. No borders, no frames. The everlight housemaster should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-EHM-GEN001-0007.webp",
+      "loreDescription": "Every record spun in the plaza draws forgotten residents toward Everlight's warmest gathering place.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-TDT-GEN001-0008",
+      "themeCode": "MUS",
+      "designCode": "TDT",
+      "designFamily": "TIDE_TRANCE",
+      "design": "Tide Trance",
+      "inspiration": "Tiësto",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Trance",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a tide trance in pixel art style with a standard finish and no effect. Use a background that is visually related to the tide trance. No borders, no frames. The tide trance should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TDT-GEN001-0008.webp",
+      "loreDescription": "Long rising tones illuminate pathways beneath the bay, each beat pulling another lost place closer.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-WBD-GEN001-0009",
+      "themeCode": "MUS",
+      "designCode": "WBD",
+      "designFamily": "WINTER_BALLADEER",
+      "design": "Winter Balladeer",
+      "inspiration": "Marco Borsato",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Ballad",
+      "style": "Low Poly",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a winter balladeer in low poly style with a standard finish and no effect. Use a background that is visually related to the winter balladeer. No borders, no frames. The winter balladeer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-WBD-GEN001-0009.webp",
+      "loreDescription": "His songs preserve feelings the town would otherwise erase during its unexplained overnight repairs.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-ASV-GEN001-0010",
+      "themeCode": "MUS",
+      "designCode": "ASV",
+      "designFamily": "AMBERSTORM_VOICE",
+      "design": "Amberstorm Voice",
+      "inspiration": "Anouk",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Rock",
+      "style": "Chibi",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a amberstorm voice in chibi style with a standard finish and no effect. Use a background that is visually related to the amberstorm voice. No borders, no frames. The amberstorm voice should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-ASV-GEN001-0010.webp",
+      "loreDescription": "A fierce guitar note travels through the amber formations until sealed creatures answer from within.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-GSG-GEN001-0011",
+      "themeCode": "MUS",
+      "designCode": "GSG",
+      "designFamily": "GROVE_SINGALONG",
+      "design": "Grove Singalong",
+      "inspiration": "Guus Meeuwis & Vagant",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Pop",
+      "style": "Graffiti",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a grove singalong in graffiti style with a standard finish and no effect. Use a background that is visually related to the grove singalong. No borders, no frames. The grove singalong should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-GSG-GEN001-0011.webp",
+      "loreDescription": "Their uncomplicated songs spread across the city until strangers remember sharing the same summer.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-TTD-GEN001-0012",
+      "themeCode": "MUS",
+      "designCode": "TTD",
+      "designFamily": "TOTAL_TIDE",
+      "design": "Total Tide",
+      "inspiration": "Total Touch",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Pop",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a total tide in prismatic style with a standard finish and no effect. Use a background that is visually related to the total tide. No borders, no frames. The total tide should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TTD-GEN001-0012.webp",
+      "loreDescription": "A luminous voice divides across the water and returns as a complete harmony from beneath the tide.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-TCS-GEN001-0013",
+      "themeCode": "MUS",
+      "designCode": "TCS",
+      "designFamily": "TWO_CHAIRS",
+      "design": "Two Chairs, One Song",
+      "inspiration": "Acda en de Munnik",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Ballad",
+      "style": "Retro",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a two chairs, one song in retro style with a standard finish and no effect. Use a background that is visually related to the two chairs, one song. No borders, no frames. The two chairs, one song should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TCS-GEN001-0013.webp",
+      "loreDescription": "The duo performs to an empty theatre whose seats laugh, sigh and applaud exactly as former audiences once did.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-ACV-GEN001-0014",
+      "themeCode": "MUS",
+      "designCode": "ACV",
+      "designFamily": "ASHEN_CAFE",
+      "design": "Ashen Cafe Voice",
+      "inspiration": "André Hazes",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Ballad",
+      "style": "Realistic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a ashen cafe voice in realistic style with a standard finish and no effect. Use a background that is visually related to the ashen cafe voice. No borders, no frames. The ashen cafe voice should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-ACV-GEN001-0014.webp",
+      "loreDescription": "His sorrowful voice keeps one small cafe visible whenever the surrounding streets disappear beneath ash.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-FDF-GEN001-0015",
+      "themeCode": "MUS",
+      "designCode": "FDF",
+      "designFamily": "FOLDED_FIRE",
+      "design": "Folded Fire",
+      "inspiration": "The Prodigy",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Rock",
+      "style": "Comic",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a folded fire in comic style with a standard finish and no effect. Use a background that is visually related to the folded fire. No borders, no frames. The folded fire should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-FDF-GEN001-0015.webp",
+      "loreDescription": "Their abrasive rhythm tears openings between incompatible platforms, stairways and fragments of remembered cities.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-FVL-GEN001-0016",
+      "themeCode": "MUS",
+      "designCode": "FVL",
+      "designFamily": "FIVE_LIGHTS",
+      "design": "Five Lights",
+      "inspiration": "Spice Girls",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Pop",
+      "style": "Anime",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a five lights in anime style with a standard finish and no effect. Use a background that is visually related to the five lights. No borders, no frames. The five lights should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-FVL-GEN001-0016.webp",
+      "loreDescription": "Five distinct voices refuse to become one, yet together awaken every colour hidden across Everlight Grove.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-RHA-GEN001-0017",
+      "themeCode": "MUS",
+      "designCode": "RHA",
+      "designFamily": "RETURNING_HARMONY",
+      "design": "Returning Harmony",
+      "inspiration": "Backstreet Boys",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Pop",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a returning harmony in watercolor style with a standard finish and no effect. Use a background that is visually related to the returning harmony. No borders, no frames. The returning harmony should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-RHA-GEN001-0017.webp",
+      "loreDescription": "Five harmonies follow the retreating tide, returning from ruins that belong to five different eras.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-GGR-GEN001-0018",
+      "themeCode": "MUS",
+      "designCode": "GGR",
+      "designFamily": "GREY_GYM",
+      "design": "Grey Gym Rehearsal",
+      "inspiration": "Nirvana",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Rock",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a grey gym rehearsal in minimalist style with a standard finish and no effect. Use a background that is visually related to the grey gym rehearsal. No borders, no frames. The grey gym rehearsal should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-GGR-GEN001-0018.webp",
+      "loreDescription": "Three musicians rehearse beneath the falling ash, allowing forgotten anger to echo through an abandoned school.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-NSS-GEN001-0019",
+      "themeCode": "MUS",
+      "designCode": "NSS",
+      "designFamily": "NEON_SNOWSTAR",
+      "design": "Neon Snowstar",
+      "inspiration": "Britney Spears",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Pop",
+      "style": "Neon",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a neon snowstar in neon style with a standard finish and no effect. Use a background that is visually related to the neon snowstar. No borders, no frames. The neon snowstar should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-NSS-GEN001-0019.webp",
+      "loreDescription": "Her bright performance turns Little Frost's repeated disasters into a carnival the town chooses to remember.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "MUS-GMO-GEN001-0020",
+      "themeCode": "MUS",
+      "designCode": "GMO",
+      "designFamily": "GOLDEN_MOTION",
+      "design": "Golden Motion",
+      "inspiration": "Michael Jackson",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Pop",
+      "style": "Cartoon",
+      "finish": "Standard",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Genesis Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with a golden motion in cartoon style with a standard finish and no effect. Use a background that is visually related to the golden motion. No borders, no frames. The golden motion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-GMO-GEN001-0020.webp",
+      "loreDescription": "Each movement leaves a trail of golden light that releases one preserved moment without breaking the amber around it.",
+      "legacy": {
+        "preservationRequirement": 500,
+        "closureMilestone": 1000
+      }
+    }
+  ]
+}

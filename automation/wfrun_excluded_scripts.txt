@@ -30,7 +30,10 @@ marketing/youtube_post_metrics.py
 marketing/youtube_publish_video.py
 marketing/tiktok_publish_video.py
 marketing/tiktok_post_video_smoke.py
+marketing/token_renewal.py
+marketing/deploy_rop01_marketing.sh
 # token renewals (do NOT exclude — needed from dash when tokens expire):
+#   ensure_platform_tokens.py
 #   facebook_validate_page_token.py
 #   youtube_oauth_get_refresh_token.py / youtube_refresh_access_token.py
 #   tiktok_oauth_get_refresh_token.py / tiktok_refresh_access_token.py

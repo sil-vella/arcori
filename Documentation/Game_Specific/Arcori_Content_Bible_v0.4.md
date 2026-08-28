@@ -1,15 +1,19 @@
 # Arcori Content Bible
 
 Working Draft v0.4  
-**Last aligned:** 2026-08-20 (five launch regions)
+**Last aligned:** 2026-08-27 (Pioneers: earlier mint)
 
 ## Content Structure
 
 Themes → Subthemes → Design Families → Generations.
 
-## Series 1
+## Series
 
-Animals, Fantasy, Space, Technology, Gaming, Sports, Lifestyle, History, Horror, Nature, Ocean, Vehicles and Slammers.
+**Genesis** — main launch catalog (Animals, Fantasy, Space, Technology, Gaming, Sports, Lifestyle, History, Horror, Nature, Ocean, Vehicles, Slammers, plus later themes such as Music, Nostalgia, Television). Legacy: `preservationRequirement` 500, `closureMilestone` 1000.
+
+**Pioneers** — ten seed designs, one per original theme. Same catalog shape as Genesis. Legacy: `preservationRequirement` 100, `closureMilestone` 200.
+
+Pioneers exists so those generations can **mint earlier** than Genesis. It is not a full second catalog.
 
 ## Art Direction
 

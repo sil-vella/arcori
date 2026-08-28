@@ -42,6 +42,50 @@ def env(name: str) -> str:
     return ""
 
 
+def upsert_env_key(path: Path, key: str, value: str) -> None:
+    """Create or replace KEY=value in an env file (preserves other lines)."""
+    text = path.read_text(encoding="utf-8") if path.is_file() else ""
+    lines = text.splitlines(keepends=True)
+    prefix = f"{key}="
+    replaced = False
+    out: list[str] = []
+    for line in lines:
+        stripped = line.lstrip()
+        if (
+            line.startswith(prefix)
+            or stripped.startswith(f"# {prefix}")
+            or stripped.startswith(f"#{prefix}")
+        ):
+            out.append(f"{key}={value}\n")
+            replaced = True
+        else:
+            out.append(line if line.endswith("\n") else line + "\n")
+    if not replaced:
+        if out and not out[-1].endswith("\n"):
+            out[-1] = out[-1] + "\n"
+        if out and out[-1].strip():
+            out.append("\n")
+        out.append(f"{key}={value}\n")
+    path.write_text("".join(out), encoding="utf-8")
+
+
+def persist_env_key(key: str, value: str) -> bool:
+    """Write key into WFRUN_ENV_FILE and update process env. Returns True if written."""
+    value = (value or "").strip()
+    if not value:
+        return False
+    os.environ[key] = value
+    env_file = os.environ.get("WFRUN_ENV_FILE", "").strip() or env("WFRUN_ENV_FILE")
+    if not env_file:
+        return False
+    path = Path(env_file)
+    try:
+        upsert_env_key(path, key, value)
+    except OSError:
+        return False
+    return True
+
+
 def require_wfrun() -> Path:
     root = os.environ.get("WFRUN_ROOT", "").strip()
     mode = os.environ.get("WFRUN_MODE", "").strip()

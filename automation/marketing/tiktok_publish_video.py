@@ -31,6 +31,7 @@ from publish_common import (
     ok_result,
     require_wfrun,
 )
+from token_renewal import TokenRenewError, tiktok_access_token
 
 TOKEN_URI = "https://open.tiktokapis.com/v2/oauth/token/"
 CREATOR_INFO_URI = "https://open.tiktokapis.com/v2/post/publish/creator_info/query/"
@@ -48,32 +49,7 @@ def _tiktok_ok(payload: dict) -> bool:
 
 
 def _refresh_access_token() -> str:
-    client_key = env("TIKTOK_CLIENT_KEY")
-    client_secret = env("TIKTOK_CLIENT_SECRET")
-    refresh_token = env("TIKTOK_REFRESH_TOKEN")
-    if not client_key or not client_secret or not refresh_token:
-        raise RuntimeError(
-            "missing_tiktok_credentials — set TIKTOK_CLIENT_KEY, "
-            "TIKTOK_CLIENT_SECRET, TIKTOK_REFRESH_TOKEN"
-        )
-    status, payload, _ = http_json(
-        "POST",
-        TOKEN_URI,
-        form={
-            "client_key": client_key,
-            "client_secret": client_secret,
-            "grant_type": "refresh_token",
-            "refresh_token": refresh_token,
-        },
-        headers={"Cache-Control": "no-cache"},
-        timeout=60,
-    )
-    if "data" in payload and isinstance(payload["data"], dict):
-        payload = {**payload, **payload["data"]}
-    access = str(payload.get("access_token") or "").strip()
-    if status >= 400 or not access:
-        raise RuntimeError(f"tiktok_token_refresh_failed: {payload!r}")
-    return access
+    return tiktok_access_token(persist_rotated=True)
 
 
 def _creator_info(access_token: str) -> dict:
@@ -131,10 +107,12 @@ def publish_tiktok_video(
     try:
         access = _refresh_access_token()
         info = _creator_info(access)
+    except TokenRenewError as exc:
+        return exc.as_err_result()
     except RuntimeError as exc:
         msg = str(exc)
         code = "missing_tiktok_credentials"
-        if "token_refresh" in msg:
+        if "token_refresh" in msg or "reauth" in msg or "invalid_grant" in msg:
             code = "tiktok_reauth_required"
         return err_result(code, msg)
 

@@ -2,11 +2,11 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-08-21
+**Last Updated:** 2026-08-27
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
-**Next app build:** weighted slam / real turns / random first player (practice + online). After that: celebration / Match Summary → Home sink / first-time flows.
+**Next app build:** random first player; celebration / Match Summary. Arcori slam impact (stack flip + spring motion) **done** — [arcori-slam-impact.md](arcori-slam-impact.md).
 
 **Narrative:** [03_CASE_STUDY.md](03_CASE_STUDY.md) — full game implementation case study (design → matchmaking; template infra out of scope).
 
@@ -36,17 +36,20 @@ Done:
 - [x] Invite / Friend Match WS — [ws-invite-match.md](ws-invite-match.md)
 - [x] Stub match Arcori selection (Python weights + Dart startFromLobby) — [stub-match-arcori-selection.md](stub-match-arcori-selection.md)
 - [x] Stub match turn stages (2 rounds × slam, Dart auto loop) — [stub-match-turn-stages.md](stub-match-turn-stages.md)
+- [x] Catalog expansion (75 nostalgia / music / TV Arcori in Genesis) — [pioneers-catalog-expansion.md](pioneers-catalog-expansion.md)
 
 Open (ordered):
 
-- [ ] **Weighted slam / real turns / random first player** *(next)*
+- [x] Player slam input (5s turns, swipe + motion → speed/trajectory) — [player-slam-input.md](player-slam-input.md)
+- [x] Arcori slam impact (stack flip + spring motion) — [arcori-slam-impact.md](arcori-slam-impact.md)
+- [ ] **Random first player** *(next)*
 - [ ] Celebration + Match Summary + FastAPI durable rewards
 - [ ] Home sink Trove • PLAY • Market; first-time / returning startup
 - [ ] My Mastery tab + Trove UI + economy writers
 
 Standings surface is live with an open tail (My Mastery / Trove) covered by the last open line.
 
-**Board (2026-08-21):** Stub match turn stages **Completed** on App Dev (`32`) — checklist `146` (+ dup `147`) + note `148`. Next open line: weighted slam. **Ideas** (`18`) untouched.
+**Board (2026-08-27):** Pioneers catalog expansion **Completed** on App Dev (`32`) — checklist `155`. **Ideas** (`18`) untouched.
 
 ## Template / ops / project-wide (own TM cards — not App Dev)
 
@@ -73,10 +76,13 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 | [ws-invite-match.md](ws-invite-match.md) | Completed | Friend Match invite WS + notification reply modal |
 | [stub-match-arcori-selection.md](stub-match-arcori-selection.md) | Completed | After seats: FastAPI pick via `04_selection_weights.json` |
 | [stub-match-turn-stages.md](stub-match-turn-stages.md) | Completed | Online Dart: 2×N stub slams then end; practice lastEvent aligned |
+| [player-slam-input.md](player-slam-input.md) | Completed | 5s turns + swipe/motion → speed/trajectory |
+| [arcori-slam-impact.md](arcori-slam-impact.md) | Completed | Stack flip + spring motion; attrs × input → faceUp/score |
 | [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
 | [core-match-loop.md](core-match-loop.md) | Spec | Matchmaking → match → celebration → Match Summary → exits |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Partial | Standings + Detail tab; My Mastery/Trove still open |
 | [catalog-hot-reload.md](catalog-hot-reload.md) | Done | Catalog JSON mtime cache, authuser APIs, Flutter Velora |
+| [pioneers-catalog-expansion.md](pioneers-catalog-expansion.md) | Completed | 75 new Genesis Arcori (Nostalgia / Music / Television); Pioneers stays original 10 |
 | [avari-profile.md](avari-profile.md) | Done | Avari Profile `/avari` + drawer avatar header |
 | [player-profile-schema.md](player-profile-schema.md) | Done | Auth + Avari tables, admin testuser seed |
 

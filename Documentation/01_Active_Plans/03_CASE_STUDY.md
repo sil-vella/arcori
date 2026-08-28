@@ -433,6 +433,8 @@ Plans: [ws-matchmaking-modes.md](ws-matchmaking-modes.md); Friend Match [ws-invi
 
 **Product lock:** Host picks a contact, creates a private 2-seat lobby (no public queue, **no AI fill**). Guest gets a stored **instant** notification (`source=friend_match_invite`, `subtype=invite_v1`) with `data.response.type=reply` (Accept / Decline). Accept posts `/authuser/notifications/response`, then the Play reply listener joins the same lobby and both promote into the existing match room SSOT.
 
+**Invite popup cleanup:** Accept/Decline **soft-deletes** the notification row (not merely mark-read). Lobby timeout / host cancel hits `POST /service/friend_match_invites/cancel`. Inbox fetch prunes dead invite instants so dismissed or expired invites cannot reappear on cold start.
+
 **Why notification, not a custom popup:**  
 The guest may be anywhere in the app. The notification system already owns unread instant modals, WS `inbox_changed`, and reply dispatch. A parallel invite modal would skip inbox persistence and the Host pipeline.
 
@@ -440,7 +442,7 @@ The guest may be anywhere in the app. The notification system already owns unrea
 Friend Match is a human vs human table. Quick/Event still fill with DB AI; invite must not.
 
 **Technical:**  
-Python `friend_match_invite` + contacts; Dart invite `queueKey` / no-AI timer; Flutter `registerPlayNotifications` reply listener. Instant modal uses `appRootNavigatorKey` because `NotificationHost` sits above `MaterialApp.router`.
+Python `friend_match_invite` + contacts; Dart invite `queueKey` / no-AI timer + cancel→FastAPI; Flutter `registerPlayNotifications` reply listener. Instant modal uses `appRootNavigatorKey` because `NotificationHost` sits above `MaterialApp.router`.
 
 Plan: [ws-invite-match.md](ws-invite-match.md).
 
@@ -517,12 +519,13 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Dart hot match for online; Flutter-only practice | Offline practice must be free and local | Two apply paths, one snapshot shape |
 | Catalog freeze at match init | Fair mid-match balance | Service batch; strip prompts |
 | Five launch regions; standing −2…+2 | Politics without good/evil factions; travel and collecting stay open | Region Catalog `01_regions.json`; region-to-region standings, not design IDs |
+| Pioneers series exists | First Trove mints should be reachable before Genesis generations fill | Legacy 100 / 200 vs Genesis 500 / 1000; ten seed designs only (`GEN002`) |
 | Match Arcori pick after seats | Players do not choose loadout online; hostility pairs more often | `04_selection_weights.json` + `POST /service/catalog/select_arcori`; pool = that seat’s circulating `player_design_access` only (weighted, else random in-pool; never global catalog) |
 | Online stub turn stages before end | Prove seat order / round / slam event without physics | Dart `MatchStubLoop` after `startFromLobby`: 2×N stub slams (`lastEvent` includes `slammerId`); Flutter waits for `ended` |
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
 | Caller (not host/steward) | Table-feel product voice | `callerUserId` on snapshot |
 | Join-or-create + 5s + AI fill | Solo players still play | Shared matchmaking for quick/event |
-| Friend Match via notification reply | Guest can accept from any screen; invite persists if app was backgrounded | `create_for_user` instant + `data.response` reply; no parallel invite modal |
+| Friend Match via notification reply | Guest can accept from any screen; invite is one-shot (soft-deleted after reply / lobby timeout) | `create_for_user` instant + `data.response` reply; cancel + inbox prune clear stale popups |
 | Invite = 2 humans, no AI | Friend Match is a human table | Separate invite queueKey; cancel if second human never arrives |
 | Embed 10 practice AI ids | True offline | No practice → DB dependency |
 | Action packs by type/subtype | Events can add rules later | Core pack + registry; practice no subtype |

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -284,7 +285,7 @@ void main() {
         store: store,
         catalog: MatchCatalogClient(fastApi: fastApi),
         autoStubTurns: false,
-        stubStepDelay: Duration.zero,
+        matchStartGrace: Duration.zero,
       );
 
       final snapshot = await service.startFromLobby(
@@ -334,8 +335,14 @@ void main() {
         store: store2,
         catalog: MatchCatalogClient(fastApi: fastApi),
         autoStubTurns: true,
-        stubStepDelay: Duration.zero,
+        matchStartGrace: Duration.zero,
+        turnTimeout: Duration.zero,
+        turnRandom: Random(1),
       );
+      service2.stubLoop
+        ..aiDelayMin = Duration.zero
+        ..aiDelayMax = Duration.zero
+        ..aiMissProbability = 0;
       final snap2 = await service2.startFromLobby(
         matchType: {'code': 'quickStart'},
         humans: [
