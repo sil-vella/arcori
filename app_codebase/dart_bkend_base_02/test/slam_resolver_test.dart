@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:test/test.dart';
 
+import '../bin/modules/match/slam_physics_world.dart';
 import '../bin/modules/match/slam_resolver.dart';
 import '../bin/modules/match/table_pieces.dart';
 
@@ -167,6 +170,81 @@ void main() {
       expect(pieces.every((p) => p['faceUp'] == false), isTrue);
       expect(pieces[0]['stackIndex'], 0);
       expect(pieces[1]['stackIndex'], 1);
+    });
+
+    test('same seed yields identical sim frames', () {
+      Map<String, dynamic> input() => {
+            'speed': 0.8,
+            'trajectory': {'dx': 0.2, 'dy': 1.0},
+          };
+      Map<String, dynamic> attrs() => {
+            'impact': 8,
+            'precision': 7,
+            'control': 6,
+            'recovery': 5,
+            'spread': 8,
+          };
+      final a = resolveSlam(
+        matchId: 'm_det',
+        version: 4,
+        actorSeatIndex: 0,
+        input: input(),
+        gameplayAttributes: attrs(),
+        table: stack(),
+      );
+      final b = resolveSlam(
+        matchId: 'm_det',
+        version: 4,
+        actorSeatIndex: 0,
+        input: input(),
+        gameplayAttributes: attrs(),
+        table: stack(),
+      );
+      expect(a.result, b.result);
+      expect(a.flippedPieceIds, b.flippedPieceIds);
+      expect(a.sim?['frames'].toString(), b.sim?['frames'].toString());
+    });
+
+    test('angled kick moves more than one disc (collision transfer)', () {
+      final r = resolveSlam(
+        matchId: 'm_collide',
+        version: 1,
+        actorSeatIndex: 0,
+        input: {
+          'speed': 0.9,
+          'trajectory': {'dx': 0.7, 'dy': 1.0},
+        },
+        gameplayAttributes: {
+          'impact': 9,
+          'precision': 5,
+          'control': 5,
+          'recovery': 5,
+          'spread': 9,
+        },
+        table: stack(),
+      );
+      expect(r.sim, isNotNull);
+      final frames = r.sim!['frames'] as List;
+      expect(frames.length, greaterThan(2));
+      final first = frames.first as Map;
+      final last = frames.last as Map;
+      final firstPoses = first['p'] as List;
+      final lastPoses = last['p'] as List;
+      var moved = 0;
+      for (var i = 0; i < firstPoses.length; i++) {
+        final a = firstPoses[i] as List;
+        final b = lastPoses[i] as List;
+        final dx = ((a[1] as num) - (b[1] as num)).abs();
+        final dy = ((a[2] as num) - (b[2] as num)).abs();
+        if (dx + dy > 0.05) moved++;
+      }
+      expect(moved, greaterThanOrEqualTo(2));
+    });
+
+    test('isFaceUpAngle recognizes up hemisphere', () {
+      expect(isFaceUpAngle(pi), isTrue);
+      expect(isFaceUpAngle(0), isFalse);
+      expect(isFaceUpAngle(pi / 2 + 0.1), isTrue);
     });
   });
 }

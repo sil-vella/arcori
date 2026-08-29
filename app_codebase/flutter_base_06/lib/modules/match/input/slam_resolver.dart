@@ -1,7 +1,12 @@
-/// Practice-local slam resolver (mirrors Dart slam_resolver.dart).
+/// Practice-local slam resolver (mirrors Dart slam_resolver.dart + physics).
 library;
 
 import 'dart:math';
+
+import '../../../utils/dev_logger.dart';
+import 'slam_physics_world.dart';
+
+const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 const Map<String, int> defaultGameplayAttributes = {
   'impact': 5,
@@ -31,6 +36,7 @@ class SlamResolveResult {
     required this.flippedPieceIds,
     required this.impulse,
     required this.result,
+    this.sim,
   });
 
   final List<Map<String, dynamic>> pieces;
@@ -38,6 +44,7 @@ class SlamResolveResult {
   final List<String> flippedPieceIds;
   final Map<String, dynamic> impulse;
   final String result;
+  final Map<String, dynamic>? sim;
 }
 
 Map<String, dynamic> tableFromSeatViews({
@@ -128,6 +135,12 @@ SlamResolveResult resolveSlam({
       flippedPieceIds: const [],
       impulse: _impulse(0, 0, 1, 0),
       result: 'miss',
+      sim: {
+        'dt': kSlamPhysicsDt,
+        'sampleEvery': kSlamPhysicsSampleEvery,
+        'pxPerMeter': kSlamPhysicsPxPerMeter,
+        'frames': <Map<String, dynamic>>[],
+      },
     );
   }
 
@@ -157,59 +170,54 @@ SlamResolveResult resolveSlam({
 
   final power = (speed * (impact / 10.0)).clamp(0.0, 1.0);
   final maxAffect = max(1, ((spread / 10.0) * pieces.length).ceil());
+  final impulse = _impulse(dx, dy, speed, power);
 
-  pieces.sort((a, b) {
-    final sa = a['stackIndex'] is int ? a['stackIndex'] as int : 0;
-    final sb = b['stackIndex'] is int ? b['stackIndex'] as int : 0;
-    return sa.compareTo(sb);
-  });
-
-  final flipped = <String>[];
-  final scoreDeltas = <String, int>{};
-  var remainingPower = power;
-
-  // Soft miss floor — timeout still misses; light swipes can flip.
   if (power < 0.02) {
+    if (LOGGING_SWITCH) {
+      customlog(
+        'slamResolve: softMiss power=${power.toStringAsFixed(3)} '
+        'matchId=$matchId',
+      );
+    }
     return SlamResolveResult(
       pieces: pieces,
-      scoreDeltas: scoreDeltas,
-      flippedPieceIds: flipped,
-      impulse: _impulse(dx, dy, speed, power),
+      scoreDeltas: const {},
+      flippedPieceIds: const [],
+      impulse: impulse,
       result: 'miss',
+      sim: {
+        'dt': kSlamPhysicsDt,
+        'sampleEvery': kSlamPhysicsSampleEvery,
+        'pxPerMeter': kSlamPhysicsPxPerMeter,
+        'frames': <Map<String, dynamic>>[],
+      },
     );
   }
 
-  var affected = 0;
-  var faceDownDepth = 0;
-  for (var i = pieces.length - 1; i >= 0 && affected < maxAffect; i--) {
-    if (pieces[i]['faceUp'] == true) {
-      continue;
-    }
-
-    final threshold = 0.03 + faceDownDepth * 0.025;
-    faceDownDepth++;
-    final roll = rng.nextDouble() * 0.25;
-    if (remainingPower + roll >= threshold) {
-      final id = pieces[i]['pieceId']?.toString() ?? 'p$i';
-      pieces[i] = {...pieces[i], 'faceUp': true};
-      flipped.add(id);
-      final owner = pieces[i]['ownerUserId']?.toString() ?? '';
-      if (owner.isNotEmpty) {
-        scoreDeltas[owner] = (scoreDeltas[owner] ?? 0) + 1;
-      }
-      remainingPower *= 0.75;
-      affected++;
-    } else {
-      break;
-    }
+  if (LOGGING_SWITCH) {
+    customlog(
+      'slamResolve: physics matchId=$matchId v=$version seat=$actorSeatIndex '
+      'power=${power.toStringAsFixed(3)} maxAffect=$maxAffect',
+    );
   }
 
-  return SlamResolveResult(
+  final physics = runSlamPhysics(
     pieces: pieces,
-    scoreDeltas: scoreDeltas,
-    flippedPieceIds: flipped,
-    impulse: _impulse(dx, dy, speed, power),
-    result: flipped.isEmpty ? 'miss' : 'flip',
+    dx: dx,
+    dy: dy,
+    speed: speed,
+    power: power,
+    maxAffect: maxAffect,
+    rng: rng,
+  );
+
+  return SlamResolveResult(
+    pieces: physics.pieces,
+    scoreDeltas: physics.scoreDeltas,
+    flippedPieceIds: physics.flippedPieceIds,
+    impulse: impulse,
+    result: physics.flippedPieceIds.isEmpty ? 'miss' : 'flip',
+    sim: physics.sim,
   );
 }
 

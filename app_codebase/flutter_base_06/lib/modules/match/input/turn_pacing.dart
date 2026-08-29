@@ -10,6 +10,10 @@ const Duration aiDelayMaxDefault = Duration(seconds: 4);
 const double aiMissProbabilityDefault = 0.05;
 const Duration turnPollInterval = Duration(milliseconds: 50);
 
+/// TEST: hold after each slam so sim replay / result modal can finish before
+/// the next seat. Set to [Duration.zero] when done testing.
+const Duration postSlamAnimHoldDefault = Duration(seconds: 5);
+
 Duration randomAiDelay(
   Random rng, {
   Duration min = aiDelayMinDefault,

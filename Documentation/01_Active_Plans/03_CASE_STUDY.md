@@ -125,7 +125,7 @@ Intents are small; broadcasts replace the whole `MatchSnapshot` with a `version`
 
 ### 4.6 Optimistic presentation, authoritative rules
 
-Flutter may start slam animations immediately. Scores, flips, round advance, and rewards come only from the match authority (Dart online / local rules later for practice).
+Flutter may start slam animations immediately (predictive impulse cleared when authority `outcome.sim` arrives; all clients replay the pose timeline). Acting player sees a non-blocking 3s result modal; turn clock continues. Scores, flips, round advance, and rewards come only from the match authority (Dart online / Flutter practice mirror of the same Forge2D resolver).
 
 ---
 
@@ -522,6 +522,7 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Pioneers series exists | First Trove mints should be reachable before Genesis generations fill | Legacy 100 / 200 vs Genesis 500 / 1000; ten seed designs only (`GEN002`) |
 | Match Arcori pick after seats | Players do not choose loadout online; hostility pairs more often | `04_selection_weights.json` + `POST /service/catalog/select_arcori`; pool = that seat’s circulating `player_design_access` only (weighted, else random in-pool; never global catalog) |
 | Online stub turn stages before end | Prove seat order / round / slam event without physics | Dart `MatchStubLoop` after `startFromLobby`: 2×N stub slams (`lastEvent` includes `slammerId`); Flutter waits for `ended` |
+| Forge2D slam physics (Dart SSOT) | Discs can hit each other mid-air and change path; flip feels physical | `forge2d` 0.14 side-view sim @ 1/60; wire `outcome.sim` pose timeline; all clients replay; actor gets 3s non-blocking result modal |
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
 | Caller (not host/steward) | Table-feel product voice | `callerUserId` on snapshot |
 | Join-or-create + 5s + AI fill | Solo players still play | Shared matchmaking for quick/event |

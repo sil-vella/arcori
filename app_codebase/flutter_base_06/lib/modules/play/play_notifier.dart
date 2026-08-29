@@ -232,6 +232,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       match.practiceAiDelayMin = Duration.zero;
       match.practiceAiDelayMax = Duration.zero;
       match.practiceAiMissProbability = 0;
+      match.practicePostSlamAnimHold = Duration.zero;
     }
     match.clear();
     match.startLocalPractice(humanUserId: humanId, loadout: effective);

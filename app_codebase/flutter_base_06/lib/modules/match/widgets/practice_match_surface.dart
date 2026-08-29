@@ -11,11 +11,12 @@ import '../input/match_grace.dart';
 import '../input/slam_input_capture.dart';
 import '../input/slam_input_models.dart';
 import '../input/slam_motion_capability.dart';
-import '../state/slam_motion_capability_provider.dart';
 import '../match_action_client.dart';
 import '../state/match_notifier.dart';
 import '../state/match_snapshot_state.dart';
+import '../state/slam_motion_capability_provider.dart';
 import 'arcori_stack_surface.dart';
+import 'slam_result_modal.dart';
 
 const _dartWsId = 'dart';
 
@@ -40,6 +41,7 @@ class _PracticeMatchBody extends ConsumerStatefulWidget {
 class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   Timer? _graceTicker;
   Map<String, dynamic>? _predictiveImpulse;
+  int? _lastSlamResultModalVersion;
 
   @override
   void dispose() {
@@ -75,6 +77,18 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     return _mySeatIndex(snap, userId) == active;
   }
 
+  int _scoreFor(MatchSnapshotState snap, String userId) {
+    for (final seat in snap.seats) {
+      if (seat.userId == userId) return seat.score;
+    }
+    return 0;
+  }
+
+  bool _simHasFrames(Map<String, dynamic>? sim) {
+    final frames = sim?['frames'];
+    return frames is List && frames.length >= 2;
+  }
+
   Future<void> _commitSlam(SlamInputPayload payload) async {
     final snap = ref.read(matchSnapshotProvider);
     final matchId = snap.matchId;
@@ -85,7 +99,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     if (!_isMyTurn(snap, userId)) return;
 
     final input = payload.toJson();
-    // Predictive animation from live gesture before authority returns.
+    // Predictive spring only until authority sim arrives.
     setState(() {
       _predictiveImpulse = {
         'vx': payload.trajectory.dx * payload.speed,
@@ -142,10 +156,42 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
         snap.phase == 'playing' && !snap.isEnded && myTurn && !inGrace;
 
     ref.listen(matchSnapshotProvider, (prev, next) {
-      if (!next.isEnded || prev?.isEnded == true || !context.mounted) return;
+      if (next.isEnded && prev?.isEnded != true && context.mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!context.mounted) return;
+          AppModal.dismiss(context);
+        });
+      }
+
+      final event = next.lastEvent;
+      if (event == null || event['type'] != 'slam') return;
+      final version = event['version'];
+      if (version is! int) return;
+      if (_lastSlamResultModalVersion == version) return;
+
+      final outcome = event['outcome'];
+      final hasSim = outcome is Map &&
+          outcome['sim'] is Map &&
+          _simHasFrames(Map<String, dynamic>.from(outcome['sim'] as Map));
+      if (hasSim && _predictiveImpulse != null && mounted) {
+        setState(() => _predictiveImpulse = null);
+      }
+
+      final actorId = event['actorUserId']?.toString();
+      final me = ref.read(authProvider).userId?.trim();
+      if (me == null || me.isEmpty || actorId != me) return;
+
+      _lastSlamResultModalVersion = version;
+      final delta =
+          prev == null ? 0 : _scoreFor(next, me) - _scoreFor(prev, me);
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!context.mounted) return;
-        AppModal.dismiss(context);
+        showSlamResultModal(
+          context,
+          lastEvent: Map<String, dynamic>.from(event),
+          actorScoreDelta: delta,
+        );
       });
     });
 
@@ -159,7 +205,13 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     final authorityImpulse = outcome is Map && outcome['impulse'] is Map
         ? Map<String, dynamic>.from(outcome['impulse'] as Map)
         : null;
-    final stackImpulse = authorityImpulse ?? _predictiveImpulse;
+    final authoritySim = outcome is Map && outcome['sim'] is Map
+        ? Map<String, dynamic>.from(outcome['sim'] as Map)
+        : null;
+    final simReady = _simHasFrames(authoritySim);
+    // Prefer authority sim; predictive/authority impulse only as fallback.
+    final stackImpulse =
+        simReady ? null : (authorityImpulse ?? _predictiveImpulse);
 
     final body = Column(
       mainAxisSize: MainAxisSize.min,
@@ -211,8 +263,10 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
         Text('Stack', style: context.appTypography.label),
         AppSpacing.gapXs,
         ArcoriStackSurface(
+          key: ValueKey('stack-${snap.matchId}-v${snap.version}'),
           pieces: snap.pieces,
           impulse: stackImpulse,
+          sim: authoritySim,
         ),
         AppSpacing.gapMd,
         Text(

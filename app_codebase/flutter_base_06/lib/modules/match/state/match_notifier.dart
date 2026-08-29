@@ -26,6 +26,9 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
   Duration practiceAiDelayMin = aiDelayMinDefault;
   Duration practiceAiDelayMax = aiDelayMaxDefault;
   double practiceAiMissProbability = aiMissProbabilityDefault;
+
+  /// TEST: pause after each slam before the next seat's turn.
+  Duration practicePostSlamAnimHold = postSlamAnimHoldDefault;
   Random? practiceTurnRandom;
 
   @override
@@ -179,6 +182,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
             rng: rng,
           );
         }
+        await _holdPracticeForAnim(matchId, seatIndex);
       }
     }
 
@@ -197,6 +201,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       practiceAiDelayMin = Duration.zero;
       practiceAiDelayMax = Duration.zero;
       practiceAiMissProbability = 0;
+      practicePostSlamAnimHold = Duration.zero;
     }
     await runLocalPracticeTurnMatch();
   }
@@ -310,6 +315,19 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     }
   }
 
+  /// TEST: give UI time to finish sim replay / result modal.
+  Future<void> _holdPracticeForAnim(String matchId, int seatIndex) async {
+    if (practicePostSlamAnimHold <= Duration.zero) return;
+    if (!_stillRunning(matchId)) return;
+    if (LOGGING_SWITCH) {
+      customlog(
+        'match: practiceTurn postSlamAnimHold afterSeat=$seatIndex '
+        'ms=${practicePostSlamAnimHold.inMilliseconds}',
+      );
+    }
+    await Future<void>.delayed(practicePostSlamAnimHold);
+  }
+
   bool _stillRunning(String matchId) {
     return state.matchId == matchId && state.phaseIsPlaying;
   }
@@ -362,12 +380,10 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       'seatIndex': nextSeatIndex,
       'action': 'slam',
     };
-    var advancingRound = false;
     if (wrapping) {
       if (current.round < current.roundsTotal) {
         nextRound = current.round + 1;
         nextActive = {'seatIndex': 0, 'action': 'slam'};
-        advancingRound = true;
       } else {
         // Final slam — park active past last seat (mirrors Dart core pack).
         nextActive = {
@@ -391,10 +407,13 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     );
 
     if (LOGGING_SWITCH) {
+      final frames = resolved.sim?['frames'];
+      final frameCount = frames is List ? frames.length : 0;
       customlog(
         'match: practice slam result=${resolved.result} '
         'flips=${resolved.flippedPieceIds.length} '
-        'power=${resolved.impulse['power']}',
+        'power=${resolved.impulse['power']} simFrames=$frameCount '
+        'flippedIds=${resolved.flippedPieceIds}',
       );
     }
 
@@ -408,10 +427,8 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         .map((s) => s.copyWith(score: scoreByUser[s.userId] ?? s.score))
         .toList();
 
-    var nextTable = <String, dynamic>{'pieces': resolved.pieces};
-    if (advancingRound) {
-      nextTable = restackFaceDown(nextTable);
-    }
+    // Always restack face-down after a slam so the next seat starts clean.
+    final nextTable = restackFaceDown({'pieces': resolved.pieces});
 
     final nextVersion = current.version + 1;
     final arcoriId =
@@ -428,6 +445,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       'outcome': {
         'flippedPieceIds': resolved.flippedPieceIds,
         'impulse': resolved.impulse,
+        if (resolved.sim != null) 'sim': resolved.sim,
       },
       'version': nextVersion,
     };

@@ -45,6 +45,7 @@ dependencies:
   web_socket_channel: ^3.0.2
   lottie: ^3.3.1
   sensors_plus: ^6.1.1
+  forge2d: ^0.14.2
 
   # Firebase GA4 — pinned for Xcode 15.2 / Firebase iOS SDK 10.x compatibility.
   firebase_core: 3.3.0

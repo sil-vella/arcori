@@ -23,6 +23,7 @@ class MatchTurnRunner {
     this.aiDelayMin = aiDelayMinDefault,
     this.aiDelayMax = aiDelayMaxDefault,
     this.aiMissProbability = aiMissProbabilityDefault,
+    this.postSlamAnimHold = postSlamAnimHoldDefault,
     Random? random,
   })  : _store = store,
         _service = service,
@@ -37,6 +38,9 @@ class MatchTurnRunner {
   Duration aiDelayMin;
   Duration aiDelayMax;
   double aiMissProbability;
+
+  /// TEST: pause after each slam before the next seat's turn.
+  Duration postSlamAnimHold;
 
   final Map<String, Future<void>> _inFlight = {};
 
@@ -101,6 +105,7 @@ class MatchTurnRunner {
             actorUserId: actor.userId,
           );
         }
+        await _holdForAnim(matchId, seatIndex);
       }
     }
 
@@ -247,6 +252,18 @@ class MatchTurnRunner {
   int? _activeSeatIndex(MatchSnapshot snap) {
     final active = snap.active?['seatIndex'];
     return active is int ? active : null;
+  }
+
+  /// TEST: give clients time to finish sim replay / result modal.
+  Future<void> _holdForAnim(String matchId, int seatIndex) async {
+    if (postSlamAnimHold <= Duration.zero) return;
+    if (LOGGING_SWITCH) {
+      customlog(
+        'match: turnRunner postSlamAnimHold matchId=$matchId '
+        'afterSeat=$seatIndex ms=${postSlamAnimHold.inMilliseconds}',
+      );
+    }
+    await Future<void>.delayed(postSlamAnimHold);
   }
 
   void _applySlam({

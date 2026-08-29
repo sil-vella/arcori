@@ -342,7 +342,8 @@ void main() {
       service2.stubLoop
         ..aiDelayMin = Duration.zero
         ..aiDelayMax = Duration.zero
-        ..aiMissProbability = 0;
+        ..aiMissProbability = 0
+        ..postSlamAnimHold = Duration.zero;
       final snap2 = await service2.startFromLobby(
         matchType: {'code': 'quickStart'},
         humans: [

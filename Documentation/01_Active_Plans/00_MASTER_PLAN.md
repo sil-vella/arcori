@@ -2,11 +2,11 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-08-27
+**Last Updated:** 2026-08-29
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
-**Next app build:** random first player; celebration / Match Summary. Arcori slam impact (stack flip + spring motion) **done** — [arcori-slam-impact.md](arcori-slam-impact.md).
+**Next app build:** random first player; celebration / Match Summary. Slam impact + **2D Forge2D physics** done — [arcori-slam-impact.md](arcori-slam-impact.md), [2d-slam-physics.md](2d-slam-physics.md).
 
 **Narrative:** [03_CASE_STUDY.md](03_CASE_STUDY.md) — full game implementation case study (design → matchmaking; template infra out of scope).
 
@@ -42,6 +42,7 @@ Open (ordered):
 
 - [x] Player slam input (5s turns, swipe + motion → speed/trajectory) — [player-slam-input.md](player-slam-input.md)
 - [x] Arcori slam impact (stack flip + spring motion) — [arcori-slam-impact.md](arcori-slam-impact.md)
+- [x] 2D slam physics (Forge2D collisions + `outcome.sim` replay) — [2d-slam-physics.md](2d-slam-physics.md)
 - [ ] **Random first player** *(next)*
 - [ ] Celebration + Match Summary + FastAPI durable rewards
 - [ ] Home sink Trove • PLAY • Market; first-time / returning startup
@@ -78,6 +79,7 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 | [stub-match-turn-stages.md](stub-match-turn-stages.md) | Completed | Online Dart: 2×N stub slams then end; practice lastEvent aligned |
 | [player-slam-input.md](player-slam-input.md) | Completed | 5s turns + swipe/motion → speed/trajectory |
 | [arcori-slam-impact.md](arcori-slam-impact.md) | Completed | Stack flip + spring motion; attrs × input → faceUp/score |
+| [2d-slam-physics.md](2d-slam-physics.md) | Completed | Forge2D side-view sim; collisions; `outcome.sim` timeline replay |
 | [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
 | [core-match-loop.md](core-match-loop.md) | Spec | Matchmaking → match → celebration → Match Summary → exits |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Partial | Standings + Detail tab; My Mastery/Trove still open |

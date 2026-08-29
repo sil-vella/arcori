@@ -65,12 +65,10 @@ class CoreActionPack implements MatchActionPack {
       'seatIndex': nextSeatIndex,
       'action': 'slam',
     };
-    var advancingRound = false;
     if (wrapping) {
       if (current.round < current.roundsTotal) {
         nextRound = current.round + 1;
         nextActive = {'seatIndex': 0, 'action': 'slam'};
-        advancingRound = true;
       } else {
         // Final slam of the match — move active past the last seat so the
         // turn runner does not wait/timeout again on the same seat.
@@ -107,10 +105,13 @@ class CoreActionPack implements MatchActionPack {
     );
 
     if (LOGGING_SWITCH) {
+      final frames = resolved.sim?['frames'];
+      final frameCount = frames is List ? frames.length : 0;
       customlog(
         'match: slam resolve matchId=${current.matchId} '
         'result=${resolved.result} flips=${resolved.flippedPieceIds.length} '
-        'power=${resolved.impulse['power']}',
+        'power=${resolved.impulse['power']} simFrames=$frameCount '
+        'flippedIds=${resolved.flippedPieceIds}',
       );
     }
 
@@ -126,10 +127,8 @@ class CoreActionPack implements MatchActionPack {
         )
         .toList();
 
-    var nextTable = <String, dynamic>{'pieces': resolved.pieces};
-    if (advancingRound) {
-      nextTable = restackFaceDown(nextTable);
-    }
+    // Always restack face-down after a slam so the next seat starts clean.
+    final nextTable = restackFaceDown({'pieces': resolved.pieces});
 
     return store.bump(current.matchId, (snap) {
       final lastEvent = <String, dynamic>{
@@ -144,6 +143,7 @@ class CoreActionPack implements MatchActionPack {
         'outcome': {
           'flippedPieceIds': resolved.flippedPieceIds,
           'impulse': resolved.impulse,
+          if (resolved.sim != null) 'sim': resolved.sim,
         },
         'version': snap.version + 1,
       };
