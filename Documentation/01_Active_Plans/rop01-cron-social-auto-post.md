@@ -32,7 +32,7 @@ rop01 uses **SSH/SFTP `mixta_mt`**: list/pull video dir to a temp dir → publis
 2. Newest `logs/<YYYYMMDDTHHMMSS>_<product>.log` → last product; pick **next** (wrap).
 3. First `video_***` by index; if none → `empty_queue` log, advance (same run).
 4. Pull folder; read `post_data.json`; latest `00renders/render_00*.mp4`.
-5. Publish selected platforms (default all three if `platforms` omitted).
+5. Publish selected platforms (default **facebook + youtube**; TikTok stripped until audit).
 6. **All selected platforms must succeed** → delete remote `video_***`, write success log, prune to **last 3** rotation logs.
 7. **Any publish failure** → no rotation log, no delete.
 
@@ -94,8 +94,8 @@ Empty `{}` still works (all platforms; title = folder name). Template filled on 
 
 - Cron orchestrator at `/opt/marketing/scripts/` on rop01; env at `/opt/marketing/env/.env`.
 - Crontab: `/etc/cron.d/marketing-social` → 13:00 Amsterdam → log `/opt/marketing/logs/cron_social.log`.
-- Reuses `facebook_publish_post` / `youtube_publish_video` / `tiktok_publish_video`.
-- **Token preflight** before publish: `ensure_marketing_tokens()` (FB extend / YT+TT refresh). On failure → alert email, exit 2, queue untouched.
+- Reuses `facebook_publish_post` / `youtube_publish_video` (TikTok publish disabled in cron until app audit).
+- **Token preflight** before publish: `ensure_marketing_tokens(facebook,youtube)`. On failure → alert email, exit 2, queue untouched.
 - **Deploy tokens** from Mac: `automation/marketing/deploy_rop01_marketing.sh` syncs `YOUTUBE_REFRESH_TOKEN`, `FACEBOOK_PAGE_ACCESS_TOKEN`, `FACEBOOK_USER_ACCESS_TOKEN` → rop env.
 
 ## Next Steps
@@ -113,7 +113,7 @@ Empty `{}` still works (all platforms; title = folder name). Template filled on 
 ## Notes
 
 - Never log tokens. Cron uses `--env-file` / exported prod env on rop01.
-- TikTok may remain Sandbox/`SELF_ONLY` until Production Live.
+- TikTok cron publish disabled (`DISABLED_PLATFORMS`) until Production Live / audit — was blocking rotation and re-posting FB/YT duplicates daily.
 - Partial platform success still counts as **failure** for delete/rotation (manual cleanup if needed).
 - Upload script + Hostinger verify already done for arcori (`video_004`…`008`).
 

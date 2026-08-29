@@ -13,7 +13,8 @@ Rotation:
   - Full success → delete remote video_***, write success log, prune to last 3 logs.
 
 Media: latest 00renders/render_00*.mp4. Caption from post_data.json
-(defaults: all three platforms; title falls back to video folder name).
+(defaults: facebook+youtube; TikTok stripped until app audit — unaudited
+sandbox blocks public posts and was blocking queue rotation).
 Per-platform description under facebook/youtube/tiktok is appended to the
 shared description when non-empty.
 
@@ -61,7 +62,10 @@ RENDER_RE = re.compile(r"^render_(\d+)\.mp4$", re.I)
 LOG_NAME_RE = re.compile(r"^(\d{8}T\d{6})_([A-Za-z0-9_-]+)\.log$")
 PRODUCT_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 
-DEFAULT_PLATFORMS = ("facebook", "youtube", "tiktok")
+# TikTok omitted until Production Live / audit (sandbox → permanent publish fail).
+DEFAULT_PLATFORMS = ("facebook", "youtube")
+# Drop these even when post_data.json still lists them.
+DISABLED_PLATFORMS = frozenset({"tiktok"})
 
 # Set by main() so failure helpers know dry-run / context
 _DRY_RUN = False
@@ -416,6 +420,9 @@ def _normalize_post(post: dict[str, Any], video_name: str) -> dict[str, Any]:
         platforms = [str(p).strip().lower() for p in platforms_raw if str(p).strip()]
     else:
         platforms = list(DEFAULT_PLATFORMS)
+    platforms = [p for p in platforms if p not in DISABLED_PLATFORMS]
+    if not platforms:
+        platforms = list(DEFAULT_PLATFORMS)
     title = str(post.get("title") or "").strip() or video_name
     description = str(post.get("description") or "")
     hashtags = post.get("hashtags") if isinstance(post.get("hashtags"), list) else []
@@ -450,8 +457,9 @@ def _preflight_tokens() -> bool:
     if _DRY_RUN:
         print("[dry-run] skip token preflight")
         return True
-    print("token preflight (FB extend / YT+TT refresh)…")
-    result = ensure_marketing_tokens()
+    # Only platforms the cron will actually publish (TT disabled for now).
+    print("token preflight (FB extend / YT refresh)…")
+    result = ensure_marketing_tokens(platforms=list(DEFAULT_PLATFORMS))
     print(json.dumps(result, indent=2))
     if result.get("ok"):
         print("token preflight OK")
@@ -461,7 +469,6 @@ def _preflight_tokens() -> bool:
         "Run deploy_rop01_marketing.sh after updating .env.local, or re-auth locally:",
         "  facebook_validate_page_token.py --extend --write-env",
         "  youtube_oauth_get_refresh_token.py",
-        "  tiktok_oauth_get_refresh_token.py",
         "",
     ]
     platforms = result.get("platforms")
