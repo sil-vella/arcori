@@ -313,6 +313,7 @@ void main() {
             userId: actor.userId,
             payload: const {'action': 'slam'},
           );
+          service.clearTurnAnimLock(snapshot.matchId);
           final ev = next.lastEvent!;
           expect(ev['type'], 'slam');
           slamEvents.add(Map<String, dynamic>.from(ev));
@@ -362,8 +363,8 @@ void main() {
       final ended2 = store2.getSnapshot(snap2.matchId)!;
       expect(ended2.phase, 'ended');
       expect(ended2.round, 2);
-      // v1 create + 4 slams + end
-      expect(ended2.version, 6);
+      // v1 create + 4 slams + 4 anim-lock clears + end
+      expect(ended2.version, 10);
     });
   });
 }

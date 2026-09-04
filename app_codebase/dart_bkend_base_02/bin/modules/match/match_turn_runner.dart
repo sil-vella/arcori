@@ -125,6 +125,7 @@ class MatchTurnRunner {
           );
         }
         await _holdForAnim(matchId, seatIndex);
+        _service.clearTurnAnimLock(matchId);
       }
     }
 
@@ -273,16 +274,21 @@ class MatchTurnRunner {
     return active is int ? active : null;
   }
 
-  /// TEST: give clients time to finish sim replay / result modal.
+  /// Hold after slam so clients finish sim replay + settle (from outcome.sim).
   Future<void> _holdForAnim(String matchId, int seatIndex) async {
     if (postSlamAnimHold <= Duration.zero) return;
+    final snap = _store.getSnapshot(matchId);
+    final fromSim = animHoldFromLastEvent(snap?.lastEvent);
+    final hold = fromSim ?? postSlamAnimHold;
+    if (hold <= Duration.zero) return;
     if (LOGGING_SWITCH) {
       customlog(
         'match: turnRunner postSlamAnimHold matchId=$matchId '
-        'afterSeat=$seatIndex ms=${postSlamAnimHold.inMilliseconds}',
+        'afterSeat=$seatIndex ms=${hold.inMilliseconds}'
+        '${fromSim != null ? ' source=simSteps' : ' source=default'}',
       );
     }
-    await Future<void>.delayed(postSlamAnimHold);
+    await Future<void>.delayed(hold);
   }
 
   void _applySlam({

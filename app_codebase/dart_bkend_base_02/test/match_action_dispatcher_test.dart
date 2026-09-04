@@ -6,6 +6,7 @@ import '../bin/modules/match/action_pack.dart';
 import '../bin/modules/match/match_errors.dart';
 import '../bin/modules/match/match_models.dart';
 import '../bin/modules/match/match_store.dart';
+import '../bin/modules/match/slam_input.dart';
 import '../bin/modules/match/type_subtype_pack_registry.dart';
 
 void main() {
@@ -19,6 +20,17 @@ void main() {
       packs = TypeSubtypePackRegistry();
       dispatcher = ActionDispatcher(store: store, packs: packs);
     });
+
+    void clearAnimLock(String matchId) {
+      final snap = store.getSnapshot(matchId);
+      if (snap == null) return;
+      final active = snap.active;
+      if (active == null || !active.containsKey('inputLockedUntil')) return;
+      store.bump(
+        matchId,
+        (s) => s.copyWith(active: activeWithoutAnimLock(active)),
+      );
+    }
 
     MatchSnapshot _practice() {
       return store.createPracticeStub(
@@ -152,6 +164,7 @@ void main() {
         actorUserId: 'usr_a',
         payload: {'action': 'slam'},
       );
+      clearAnimLock(created.matchId);
       final afterAi = dispatcher.dispatch(
         matchId: created.matchId,
         actorUserId: created.seats[1].userId,
@@ -160,11 +173,13 @@ void main() {
       expect(afterAi.round, 2);
       expect(afterAi.active?['seatIndex'], 0);
 
+      clearAnimLock(created.matchId);
       dispatcher.dispatch(
         matchId: created.matchId,
         actorUserId: 'usr_a',
         payload: {'action': 'slam'},
       );
+      clearAnimLock(created.matchId);
       final last = dispatcher.dispatch(
         matchId: created.matchId,
         actorUserId: created.seats[1].userId,

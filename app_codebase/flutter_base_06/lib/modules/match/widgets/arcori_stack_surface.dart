@@ -3,24 +3,23 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:vector_math/vector_math_64.dart' show Quaternion, Vector3;
 
 import '../../../utils/dev_logger.dart';
 import '../state/match_snapshot_state.dart';
+import '../input/turn_pacing.dart';
 import 'arcori_disc.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
-/// Cap wall-clock replay so long sims stay snappy in UX.
-const Duration kSimReplayMaxWall = Duration(milliseconds: 2500);
-
-/// Face-down Arcori stack — replays Forge2D pose timeline, or spring fallback.
+/// Face-down Arcori stack — replays 3D xyzq pose timeline, or spring fallback.
 class ArcoriStackSurface extends StatefulWidget {
   const ArcoriStackSurface({
     super.key,
     required this.pieces,
     this.impulse,
     this.sim,
-    this.height = 160,
+    this.height = 220,
     this.onAnimComplete,
   });
 
@@ -43,18 +42,33 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
   late final AnimationController _simClock;
 
   final Map<String, Offset> _offsets = {};
-  final Map<String, double> _rots = {};
+  final Map<String, _Quat> _quats = {};
   List<MatchPieceView> _pieces = const [];
   int _impulseNonce = 0;
   bool _replayingSim = false;
   List<_SimFrame> _simFrames = const [];
   double _pxPerMeter = 80;
   double _simDurationSec = 1.0;
-  final Map<String, Offset> _restWorld = {};
+  final Map<String, _Vec3> _restWorld = {};
+  Timer? _settleHoldTimer;
+  /// Fingerprint of the sim currently playing / last finished — skip restarts.
+  String? _simFingerprint;
 
   bool get _simReady {
     final frames = _parseSimFrames(widget.sim);
     return frames.length >= 2;
+  }
+
+  String? _fingerprintSim(Map<String, dynamic>? sim) {
+    if (sim == null) return null;
+    final frames = sim['frames'];
+    final steps = sim['steps'];
+    final n = frames is List ? frames.length : 0;
+    if (n < 2) return null;
+    // First/last frame ids + steps — stable across Map.from rebuilds.
+    final first = frames!.first;
+    final last = frames.last;
+    return 's=$steps;n=$n;a=${first.toString()};b=${last.toString()}';
   }
 
   @override
@@ -90,7 +104,8 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
       }
     }
 
-    final simChanged = !_simsEqual(widget.sim, oldWidget.sim);
+    final nextFp = _fingerprintSim(widget.sim);
+    final simChanged = nextFp != null && nextFp != _simFingerprint;
     if (simChanged && _simReady) {
       _impulseNonce++;
       _startSimIfPossible(force: true);
@@ -109,6 +124,10 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
   void _startSimIfPossible({required bool force}) {
     final frames = _parseSimFrames(widget.sim);
     if (frames.length < 2) return;
+    final fp = _fingerprintSim(widget.sim);
+    // Same sim already played or playing — never restart (parent remount /
+    // clearTurnAnimLock rebuilds used to loop the last slam).
+    if (fp != null && fp == _simFingerprint) return;
     if (!force && _replayingSim) return;
     _runSim(widget.sim!, frames);
   }
@@ -126,7 +145,7 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
   void _syncRest(List<MatchPieceView> pieces) {
     for (final p in pieces) {
       _offsets[p.pieceId] ??= Offset.zero;
-      _rots[p.pieceId] ??= p.faceUp ? pi : 0.0;
+      _quats[p.pieceId] ??= p.faceUp ? _Quat.faceUp() : _Quat.faceDown();
     }
   }
 
@@ -145,29 +164,37 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
   }
 
   void _runSim(Map<String, dynamic> sim, List<_SimFrame> frames) {
+    _settleHoldTimer?.cancel();
+    _settleHoldTimer = null;
     _replayingSim = true;
+    _simFingerprint = _fingerprintSim(sim);
     _simFrames = frames;
     _pxPerMeter = sim['pxPerMeter'] is num
         ? (sim['pxPerMeter'] as num).toDouble()
         : 80.0;
     _restWorld.clear();
     for (final pose in frames.first.poses) {
-      _restWorld[pose.id] = Offset(pose.x, pose.y);
-      _rots[pose.id] = pose.angle;
+      _restWorld[pose.id] = _Vec3(pose.x, pose.y, pose.z);
+      _quats[pose.id] = _Quat(pose.qx, pose.qy, pose.qz, pose.qw);
       _offsets[pose.id] = Offset.zero;
     }
 
     final dt = sim['dt'] is num ? (sim['dt'] as num).toDouble() : 1.0 / 60.0;
     _simDurationSec = frames.last.stepIndex * dt;
     if (_simDurationSec <= 0) _simDurationSec = dt;
-    final wallMs = (_simDurationSec * 1000)
-        .round()
-        .clamp(1, kSimReplayMaxWall.inMilliseconds);
+    // 1:1 with physics steps (backend animHoldMs covers replay + settle + pad).
+    final wallMs = (_simDurationSec * 1000).round().clamp(1, 15000);
+    final settleHold = Duration(
+      milliseconds: sim['settleHoldMs'] is num
+          ? (sim['settleHoldMs'] as num).round()
+          : slamSettleHoldDefault.inMilliseconds,
+    );
 
     if (LOGGING_SWITCH) {
       customlog(
         'arcoriStack: sim replay start frames=${frames.length} '
-        'simSec=${_simDurationSec.toStringAsFixed(2)} wallMs=$wallMs',
+        'simSec=${_simDurationSec.toStringAsFixed(2)} wallMs=$wallMs '
+        'settleHoldMs=${settleHold.inMilliseconds} space=xyzq',
       );
     }
 
@@ -183,13 +210,27 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
     )
         .whenComplete(() {
       if (!mounted) return;
+      // Freeze on last poses, then hold before stack snap.
+      _applySimAt(_simDurationSec, dt);
+      if (mounted) setState(() {});
       if (LOGGING_SWITCH) {
-        customlog('arcoriStack: sim replay complete → settle authority');
+        customlog(
+          'arcoriStack: sim replay complete → hold '
+          '${settleHold.inMilliseconds}ms before settle',
+        );
       }
-      _replayingSim = false;
-      _pieces = List<MatchPieceView>.from(widget.pieces);
-      _settleToAuthority();
-      widget.onAnimComplete?.call();
+      _settleHoldTimer?.cancel();
+      _settleHoldTimer = Timer(settleHold, () {
+        if (!mounted) return;
+        if (LOGGING_SWITCH) {
+          customlog('arcoriStack: settle authority after hold');
+        }
+        _replayingSim = false;
+        _pieces = List<MatchPieceView>.from(widget.pieces);
+        _settleToAuthority();
+        widget.onAnimComplete?.call();
+        setState(() {});
+      });
     });
   }
 
@@ -216,13 +257,19 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
       final pb = byIdB[id] ?? pa;
       final x = pa.x + (pb.x - pa.x) * u;
       final y = pa.y + (pb.y - pa.y) * u;
-      final ang = pa.angle + (pb.angle - pa.angle) * u;
-      final rest = _restWorld[id] ?? Offset(pa.x, pa.y);
-      _offsets[id] = Offset(
-        (x - rest.dx) * _pxPerMeter,
-        -(y - rest.dy) * _pxPerMeter,
+      final z = pa.z + (pb.z - pa.z) * u;
+      final q = _nlerp(
+        _Quat(pa.qx, pa.qy, pa.qz, pa.qw),
+        _Quat(pb.qx, pb.qy, pb.qz, pb.qw),
+        u,
       );
-      _rots[id] = ang;
+      final rest = _restWorld[id] ?? _Vec3(pa.x, pa.y, pa.z);
+      // Dead-above: table XZ → screen; full faces read as circles.
+      final dx = (x - rest.x) * _pxPerMeter;
+      final dyWorld = (y - rest.y) * _pxPerMeter;
+      final dz = (z - rest.z) * _pxPerMeter;
+      _offsets[id] = Offset(dx, -dz - dyWorld * 0.15);
+      _quats[id] = q;
     }
   }
 
@@ -287,12 +334,13 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
 
     for (final p in _pieces) {
       _offsets[p.pieceId] = Offset.zero;
-      _rots[p.pieceId] = p.faceUp ? pi : 0.0;
+      _quats[p.pieceId] = p.faceUp ? _Quat.faceUp() : _Quat.faceDown();
     }
   }
 
   @override
   void dispose() {
+    _settleHoldTimer?.cancel();
     _scatter.removeListener(_onTick);
     _flip.removeListener(_onTick);
     _simClock.removeListener(_onSimTick);
@@ -309,35 +357,79 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
     final t = _replayingSim ? 1.0 : _scatter.value.clamp(0.0, 1.5);
     final ft = _replayingSim ? 1.0 : _flip.value.clamp(0.0, 1.5);
     const discSize = 72.0;
+    /// Screen gap for stacked discs under dead-above (near-concentric).
+    const restStackGap = 2.0;
+    /// Dead-above camera — discs settle as full circles.
+    const viewPitch = 0.0;
 
     return SizedBox(
       height: widget.height,
       child: Stack(
         alignment: Alignment.center,
         children: [
+          // Dead-above table pad (round, under stack) — not a side-view strip.
+          Center(
+            child: Container(
+              width: discSize * 2.4,
+              height: discSize * 2.4,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.white.withValues(alpha: 0.10),
+                    Colors.black.withValues(alpha: 0.28),
+                  ],
+                ),
+                border: Border.all(color: Colors.white12),
+              ),
+            ),
+          ),
           for (var i = 0; i < sorted.length; i++)
             Builder(
               builder: (context) {
                 final p = sorted[i];
-                final base = Offset(0, -i * 3.0);
+                // Rest: perfect column; sim replay uses physics deltas only.
+                final base =
+                    _replayingSim ? Offset.zero : Offset(0, -i * restStackGap);
                 final scatter = (_offsets[p.pieceId] ?? Offset.zero) * t;
-                final double rot;
+                late final _Quat q;
                 if (_replayingSim) {
-                  rot = _rots[p.pieceId] ?? 0.0;
+                  q = _quats[p.pieceId] ?? _Quat.faceDown();
                 } else {
-                  final targetRot = p.faceUp ? pi : 0.0;
-                  final startRot = _rots[p.pieceId] ?? 0.0;
-                  rot = startRot +
-                      (targetRot - startRot) * ft.clamp(0.0, 1.0) +
-                      (1 - ft.clamp(0.0, 1.0)) *
-                          sin(ft * pi) *
-                          ((_impulseNonce > 0) ? 0.4 : 0);
+                  final target = p.faceUp ? _Quat.faceUp() : _Quat.faceDown();
+                  final start = _quats[p.pieceId] ?? _Quat.faceDown();
+                  q = _nlerp(start, target, ft.clamp(0.0, 1.0));
+                  final wobble = (1 - ft.clamp(0.0, 1.0)) *
+                      sin(ft * pi) *
+                      ((_impulseNonce > 0) ? 0.25 : 0);
+                  if (wobble != 0) {
+                    final wob =
+                        Quaternion.axisAngle(Vector3(1, 0.2, 0.4), wobble);
+                    final cur = Quaternion(q.x, q.y, q.z, q.w);
+                    final mixed = (wob * cur)..normalize();
+                    return ArcoriDisc(
+                      piece: p,
+                      size: discSize,
+                      offset: base + scatter,
+                      viewPitch: viewPitch,
+                      qx: mixed.x,
+                      qy: mixed.y,
+                      qz: mixed.z,
+                      qw: mixed.w,
+                      faceUpOverride: p.faceUp,
+                    );
+                  }
                 }
                 return ArcoriDisc(
                   piece: p,
                   size: discSize,
                   offset: base + scatter,
-                  rotationX: rot,
+                  viewPitch: viewPitch,
+                  qx: q.x,
+                  qy: q.y,
+                  qz: q.z,
+                  qw: q.w,
+                  faceUpOverride: _replayingSim ? null : p.faceUp,
                 );
               },
             ),
@@ -349,18 +441,49 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
   }
 }
 
+class _Quat {
+  const _Quat(this.x, this.y, this.z, this.w);
+
+  factory _Quat.faceUp() => const _Quat(0, 0, 0, 1);
+
+  factory _Quat.faceDown() {
+    final q = Quaternion.axisAngle(Vector3(1, 0, 0), pi);
+    return _Quat(q.x, q.y, q.z, q.w);
+  }
+
+  final double x;
+  final double y;
+  final double z;
+  final double w;
+}
+
+class _Vec3 {
+  const _Vec3(this.x, this.y, this.z);
+  final double x;
+  final double y;
+  final double z;
+}
+
 class _SimPose {
   const _SimPose({
     required this.id,
     required this.x,
     required this.y,
-    required this.angle,
+    required this.z,
+    required this.qx,
+    required this.qy,
+    required this.qz,
+    required this.qw,
   });
 
   final String id;
   final double x;
   final double y;
-  final double angle;
+  final double z;
+  final double qx;
+  final double qy;
+  final double qz;
+  final double qw;
 }
 
 class _SimFrame {
@@ -370,8 +493,32 @@ class _SimFrame {
   final List<_SimPose> poses;
 }
 
+_Quat _nlerp(_Quat a, _Quat b, double t) {
+  var bx = b.x;
+  var by = b.y;
+  var bz = b.z;
+  var bw = b.w;
+  // Same hemisphere.
+  if (a.x * bx + a.y * by + a.z * bz + a.w * bw < 0) {
+    bx = -bx;
+    by = -by;
+    bz = -bz;
+    bw = -bw;
+  }
+  final x = a.x + (bx - a.x) * t;
+  final y = a.y + (by - a.y) * t;
+  final z = a.z + (bz - a.z) * t;
+  final w = a.w + (bw - a.w) * t;
+  final n = sqrt(x * x + y * y + z * z + w * w);
+  if (n < 1e-9) return a;
+  return _Quat(x / n, y / n, z / n, w / n);
+}
+
 List<_SimFrame> _parseSimFrames(Map<String, dynamic>? sim) {
   if (sim == null) return const [];
+  // Ignore legacy 2D side-view frames (no space / not xyzq).
+  final space = sim['space']?.toString();
+  if (space != null && space != 'xyzq') return const [];
   final raw = sim['frames'];
   if (raw is! List) return const [];
   final out = <_SimFrame>[];
@@ -385,19 +532,27 @@ List<_SimFrame> _parseSimFrames(Map<String, dynamic>? sim) {
     if (posesRaw is! List) continue;
     final poses = <_SimPose>[];
     for (final row in posesRaw) {
-      if (row is! List || row.length < 4) continue;
+      if (row is! List || row.length < 8) continue;
       poses.add(
         _SimPose(
           id: row[0].toString(),
           x: row[1] is num ? (row[1] as num).toDouble() : 0,
           y: row[2] is num ? (row[2] as num).toDouble() : 0,
-          angle: row[3] is num ? (row[3] as num).toDouble() : 0,
+          z: row[3] is num ? (row[3] as num).toDouble() : 0,
+          qx: row[4] is num ? (row[4] as num).toDouble() : 0,
+          qy: row[5] is num ? (row[5] as num).toDouble() : 0,
+          qz: row[6] is num ? (row[6] as num).toDouble() : 0,
+          qw: row[7] is num ? (row[7] as num).toDouble() : 1,
         ),
       );
     }
     if (poses.isNotEmpty) {
       out.add(_SimFrame(stepIndex: i, poses: poses));
     }
+  }
+  // If frames exist but none were xyzq-shaped and space omitted, reject 2D.
+  if (out.isEmpty && raw.isNotEmpty && space == null) {
+    return const [];
   }
   return out;
 }
@@ -409,16 +564,4 @@ bool _impulsesEqual(Map<String, dynamic>? a, Map<String, dynamic>? b) {
       a['vy'] == b['vy'] &&
       a['spin'] == b['spin'] &&
       a['power'] == b['power'];
-}
-
-bool _simsEqual(Map<String, dynamic>? a, Map<String, dynamic>? b) {
-  if (identical(a, b)) return true;
-  if (a == null || b == null) return false;
-  final fa = a['frames'];
-  final fb = b['frames'];
-  if (fa is! List || fb is! List) return fa == fb;
-  if (fa.length != fb.length) return false;
-  if (fa.isEmpty) return true;
-  return fa.first.toString() == fb.first.toString() &&
-      fa.last.toString() == fb.last.toString();
 }

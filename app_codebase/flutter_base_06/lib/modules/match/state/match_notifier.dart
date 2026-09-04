@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../utils/dev_logger.dart';
 import '../../play/play_models.dart';
 import '../input/match_grace.dart';
+import '../input/slam_input_models.dart';
 import '../input/slam_resolver.dart';
 import '../input/turn_order.dart';
 import '../input/turn_pacing.dart';
@@ -331,17 +332,39 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     }
   }
 
-  /// TEST: give UI time to finish sim replay / result modal.
+  /// Hold after slam: prefer last outcome.sim.animHoldMs (steps×dt + settle).
   Future<void> _holdPracticeForAnim(String matchId, int seatIndex) async {
-    if (practicePostSlamAnimHold <= Duration.zero) return;
+    if (practicePostSlamAnimHold <= Duration.zero) {
+      _clearPracticeAnimLock();
+      return;
+    }
     if (!_stillRunning(matchId)) return;
+    final fromSim = animHoldFromLastEvent(state.lastEvent);
+    final hold = fromSim ?? practicePostSlamAnimHold;
     if (LOGGING_SWITCH) {
       customlog(
         'match: practiceTurn postSlamAnimHold afterSeat=$seatIndex '
-        'ms=${practicePostSlamAnimHold.inMilliseconds}',
+        'ms=${hold.inMilliseconds}'
+        '${fromSim != null ? ' source=simSteps' : ' source=default'}',
       );
     }
-    await Future<void>.delayed(practicePostSlamAnimHold);
+    await Future<void>.delayed(hold);
+    if (!_stillRunning(matchId)) return;
+    _clearPracticeAnimLock();
+  }
+
+  void _clearPracticeAnimLock() {
+    final active = state.active;
+    if (active == null || !active.containsKey('inputLockedUntil')) return;
+    state = state.copyWith(
+      version: state.version + 1,
+      active: activeWithoutAnimLock(active),
+    );
+    if (LOGGING_SWITCH) {
+      customlog(
+        'match: practiceTurn clearAnimLock seat=${state.active?['seatIndex']}',
+      );
+    }
   }
 
   bool _stillRunning(String matchId) {
@@ -373,6 +396,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     if (!current.phaseIsPlaying || current.matchId == null) return;
 
     if (activeInGracePeriod(current.active)) return;
+    if (activeInputLocked(current.active)) return;
 
     MatchSeatView? actor;
     for (final s in current.seats) {
@@ -395,7 +419,6 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       roundsTotal: current.roundsTotal,
     );
     final nextRound = advanced.round;
-    final nextActive = advanced.active;
 
     final slamInput = input ?? timeoutSlamInputMap();
     final attrs = practiceSlammerAttrs[actor.slammerId] ??
@@ -420,6 +443,14 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         'flippedIds=${resolved.flippedPieceIds}',
       );
     }
+
+    final holdMs = resolved.sim?['animHoldMs'] is num
+        ? (resolved.sim!['animHoldMs'] as num).round()
+        : practicePostSlamAnimHold.inMilliseconds;
+    final nextActive = activeWithAnimLock(
+      advanced.active,
+      Duration(milliseconds: holdMs),
+    );
 
     final scoreByUser = <String, int>{
       for (final s in current.seats) s.userId: s.score,

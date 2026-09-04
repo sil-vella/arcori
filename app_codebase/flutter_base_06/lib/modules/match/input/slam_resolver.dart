@@ -5,6 +5,7 @@ import 'dart:math';
 
 import '../../../utils/dev_logger.dart';
 import 'slam_physics_world.dart';
+import 'turn_pacing.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
@@ -135,12 +136,14 @@ SlamResolveResult resolveSlam({
       flippedPieceIds: const [],
       impulse: _impulse(0, 0, 1, 0),
       result: 'miss',
-      sim: {
+      sim: withSlamAnimTiming({
         'dt': kSlamPhysicsDt,
         'sampleEvery': kSlamPhysicsSampleEvery,
         'pxPerMeter': kSlamPhysicsPxPerMeter,
+        'space': kSlamPhysicsSpace,
+        'steps': 0,
         'frames': <Map<String, dynamic>>[],
-      },
+      }),
     );
   }
 
@@ -172,7 +175,7 @@ SlamResolveResult resolveSlam({
   final maxAffect = max(1, ((spread / 10.0) * pieces.length).ceil());
   final impulse = _impulse(dx, dy, speed, power);
 
-  if (power < 0.02) {
+  if (power < kSlamMinPower) {
     if (LOGGING_SWITCH) {
       customlog(
         'slamResolve: softMiss power=${power.toStringAsFixed(3)} '
@@ -185,12 +188,14 @@ SlamResolveResult resolveSlam({
       flippedPieceIds: const [],
       impulse: impulse,
       result: 'miss',
-      sim: {
+      sim: withSlamAnimTiming({
         'dt': kSlamPhysicsDt,
         'sampleEvery': kSlamPhysicsSampleEvery,
         'pxPerMeter': kSlamPhysicsPxPerMeter,
+        'space': kSlamPhysicsSpace,
+        'steps': 0,
         'frames': <Map<String, dynamic>>[],
-      },
+      }),
     );
   }
 
@@ -209,6 +214,11 @@ SlamResolveResult resolveSlam({
     power: power,
     maxAffect: maxAffect,
     rng: rng,
+    spreadAttr: spread,
+  );
+
+  final sim = withSlamAnimTiming(
+    Map<String, dynamic>.from(physics.sim),
   );
 
   return SlamResolveResult(
@@ -217,7 +227,7 @@ SlamResolveResult resolveSlam({
     flippedPieceIds: physics.flippedPieceIds,
     impulse: impulse,
     result: physics.flippedPieceIds.isEmpty ? 'miss' : 'flip',
-    sim: physics.sim,
+    sim: sim,
   );
 }
 

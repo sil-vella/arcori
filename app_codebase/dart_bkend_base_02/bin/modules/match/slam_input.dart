@@ -31,6 +31,37 @@ bool activeInGracePeriod(Map<String, dynamic>? active) {
   return raw != null && raw.isNotEmpty;
 }
 
+/// True while [active] carries `inputLockedUntil` (cleared after post-slam anim hold).
+///
+/// Presence is authoritative — next seat is already in `active.seatIndex`, but
+/// input/UI must stay locked until the server clears this after [animHoldMs].
+bool activeInputLocked(Map<String, dynamic>? active) {
+  if (active == null) return false;
+  final raw = active['inputLockedUntil']?.toString();
+  return raw != null && raw.isNotEmpty;
+}
+
+/// Stamp post-slam input lock onto an advanced [active] map.
+Map<String, dynamic> activeWithAnimLock(
+  Map<String, dynamic> active,
+  Duration hold,
+) {
+  final next = Map<String, dynamic>.from(active);
+  if (hold <= Duration.zero) {
+    next.remove('inputLockedUntil');
+    return next;
+  }
+  next['inputLockedUntil'] =
+      DateTime.now().toUtc().add(hold).toIso8601String();
+  return next;
+}
+
+Map<String, dynamic> activeWithoutAnimLock(Map<String, dynamic>? active) {
+  if (active == null) return const {'seatIndex': 0, 'action': 'slam'};
+  final next = Map<String, dynamic>.from(active)..remove('inputLockedUntil');
+  return next;
+}
+
 Map<String, dynamic>? parseSlamInput(Map<String, dynamic> payload) {
   final raw = payload['input'];
   if (raw == null) return null;

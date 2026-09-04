@@ -13,6 +13,7 @@ import 'match_errors.dart';
 import 'match_lifecycle_contract.dart';
 import 'match_models.dart';
 import 'match_store.dart';
+import 'slam_input.dart';
 import 'turn_pacing.dart';
 import 'match_turn_runner.dart';
 
@@ -375,6 +376,31 @@ class MatchService implements MatchLifecycleContract {
       matchId,
       (s) => s.copyWith(active: nextActive),
     );
+    _broadcast(snapshot);
+    return snapshot;
+  }
+
+  /// Remove `inputLockedUntil` after post-slam anim hold (unlock next seat input).
+  MatchSnapshot clearTurnAnimLock(String matchId) {
+    final current = _store.getSnapshot(matchId);
+    if (current == null) {
+      throw AppError(matchNotFound);
+    }
+    final active = current.active;
+    if (active == null || !active.containsKey('inputLockedUntil')) {
+      return current;
+    }
+    final nextActive = activeWithoutAnimLock(active);
+    final snapshot = _store.bump(
+      matchId,
+      (s) => s.copyWith(active: nextActive),
+    );
+    if (LOGGING_SWITCH) {
+      customlog(
+        'match: clearTurnAnimLock matchId=$matchId '
+        'seat=${nextActive['seatIndex']}',
+      );
+    }
     _broadcast(snapshot);
     return snapshot;
   }

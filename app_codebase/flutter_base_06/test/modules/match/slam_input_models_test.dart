@@ -11,7 +11,7 @@ void main() {
         motionPeakMagnitude: 0,
         motionAvailable: false,
       );
-      expect(payload.speed, greaterThan(0.25));
+      expect(payload.speed, greaterThan(0.2));
       expect(payload.trajectory.dy, greaterThan(0.9));
       expect(payload.source, 'gesture');
     });
@@ -24,7 +24,9 @@ void main() {
         motionPeakMagnitude: 0,
         motionAvailable: false,
       );
-      expect(payload.speed, greaterThan(0.4));
+      // 80 / swipeMaxDragDy(280) ≈ 0.29 with old caps; with soft caps ≈ 0.17.
+      expect(payload.speed, greaterThan(0.12));
+      expect(payload.speed, lessThan(0.35));
     });
 
     test('timeout payload is zero speed down', () {
@@ -42,7 +44,8 @@ void main() {
         motionPeakZ: 4,
       );
       expect(payload.source, 'shake');
-      expect(payload.speed, closeTo(0.8, 0.01));
+      // 12 / motionMaxMps2(28) ≈ 0.43
+      expect(payload.speed, closeTo(12 / 28, 0.02));
       expect(payload.trajectory.dy, greaterThan(0));
     });
   });

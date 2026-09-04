@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:test/test.dart';
+import 'package:vector_math/vector_math.dart';
 
 import '../bin/modules/match/slam_physics_world.dart';
 import '../bin/modules/match/slam_resolver.dart';
@@ -71,7 +72,73 @@ void main() {
       expect(r.impulse['power'], greaterThan(0.5));
     });
 
-    test('moderate speed on 3-stack often flips more than one', () {
+    test('weak slam counts but barely moves and usually does not wipe the stack', () {
+      final r = resolveSlam(
+        matchId: 'm_weak',
+        version: 1,
+        actorSeatIndex: 0,
+        input: {
+          'speed': 0.12,
+          'trajectory': {'dx': 0.0, 'dy': 1.0},
+        },
+        gameplayAttributes: {
+          'impact': 5,
+          'precision': 5,
+          'control': 5,
+          'recovery': 5,
+          'spread': 5,
+        },
+        table: stack(),
+      );
+      expect(r.impulse['power'], lessThan(0.15));
+      expect(r.sim, isNotNull);
+      final frames = r.sim!['frames'] as List;
+      expect(frames.length, greaterThan(1));
+      // Continuous physics: weak kick should not wipe a 2-stack.
+      expect(r.flippedPieceIds.length, lessThan(2));
+    });
+
+    test('mid power on 3-stack is not always all-or-nothing', () {
+      final three = {
+        'pieces': [
+          for (var i = 0; i < 3; i++)
+            piecePayload(
+              pieceId: 'p$i',
+              designId: 'D$i',
+              ownerUserId: 'u$i',
+              seatIndex: i,
+              faceUp: false,
+              stackIndex: i,
+            ),
+        ],
+      };
+      final flipCounts = <int>[];
+      for (var v = 1; v <= 12; v++) {
+        final r = resolveSlam(
+          matchId: 'm_partial',
+          version: v,
+          actorSeatIndex: 0,
+          input: {
+            'speed': 0.55,
+            'trajectory': {'dx': 0.15, 'dy': 1.0},
+          },
+          gameplayAttributes: {
+            'impact': 6,
+            'precision': 5,
+            'control': 5,
+            'recovery': 5,
+            'spread': 6,
+          },
+          table: three,
+        );
+        flipCounts.add(r.flippedPieceIds.length);
+      }
+      // Across seeds, expect variety (not always 0 and not always 3).
+      expect(flipCounts.any((n) => n < 3), isTrue);
+      expect(flipCounts.toSet().length, greaterThan(1));
+    });
+
+    test('strong slam on 3-stack can flip at least one', () {
       final three = {
         'pieces': [
           for (var i = 0; i < 3; i++)
@@ -90,11 +157,11 @@ void main() {
         version: 1,
         actorSeatIndex: 0,
         input: {
-          'speed': 0.6,
+          'speed': 0.9,
           'trajectory': {'dx': 0.0, 'dy': 1.0},
         },
         gameplayAttributes: {
-          'impact': 5,
+          'impact': 9,
           'precision': 5,
           'control': 5,
           'recovery': 5,
@@ -132,16 +199,21 @@ void main() {
         version: 3,
         actorSeatIndex: 1,
         input: {
-          'speed': 0.6,
+          'speed': 0.95,
           'trajectory': {'dx': 0.0, 'dy': 1.0},
         },
-        gameplayAttributes: defaultGameplayAttributes.map(
-          (k, v) => MapEntry(k, v),
-        ),
+        gameplayAttributes: {
+          'impact': 10,
+          'precision': 5,
+          'control': 5,
+          'recovery': 5,
+          'spread': 8,
+        },
         table: table,
       );
       expect(r.result, 'flip');
-      expect(r.flippedPieceIds, ['p0']);
+      expect(r.flippedPieceIds, contains('p0'));
+      expect(r.flippedPieceIds, isNot(contains('p1')));
     });
 
     test('restackFaceDown clears faces', () {
@@ -224,27 +296,33 @@ void main() {
         table: stack(),
       );
       expect(r.sim, isNotNull);
+      expect(r.sim!['space'], 'xyzq');
       final frames = r.sim!['frames'] as List;
       expect(frames.length, greaterThan(2));
       final first = frames.first as Map;
       final last = frames.last as Map;
       final firstPoses = first['p'] as List;
       final lastPoses = last['p'] as List;
+      expect((firstPoses.first as List).length, greaterThanOrEqualTo(8));
       var moved = 0;
       for (var i = 0; i < firstPoses.length; i++) {
         final a = firstPoses[i] as List;
         final b = lastPoses[i] as List;
         final dx = ((a[1] as num) - (b[1] as num)).abs();
         final dy = ((a[2] as num) - (b[2] as num)).abs();
-        if (dx + dy > 0.05) moved++;
+        final dz = ((a[3] as num) - (b[3] as num)).abs();
+        if (dx + dy + dz > 0.05) moved++;
       }
       expect(moved, greaterThanOrEqualTo(2));
     });
 
-    test('isFaceUpAngle recognizes up hemisphere', () {
-      expect(isFaceUpAngle(pi), isTrue);
-      expect(isFaceUpAngle(0), isFalse);
-      expect(isFaceUpAngle(pi / 2 + 0.1), isTrue);
+    test('isFaceUpOrientation recognizes face normal vs world up', () {
+      expect(isFaceUpOrientation(faceOrientation(faceUp: true)), isTrue);
+      expect(isFaceUpOrientation(faceOrientation(faceUp: false)), isFalse);
+      expect(
+        isFaceUpOrientation(Quaternion.axisAngle(Vector3(1, 0, 0), pi / 2)),
+        isFalse,
+      );
     });
   });
 }

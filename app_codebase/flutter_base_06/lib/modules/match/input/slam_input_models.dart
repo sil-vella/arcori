@@ -3,18 +3,19 @@ library;
 
 import 'dart:math';
 
-const double swipeMaxPxPerSec = 2000;
-const double swipeMaxDragDy = 100;
-const double motionMaxMps2 = 15;
+/// Higher caps → same gesture maps to lower speed (weak slam still commits).
+const double swipeMaxPxPerSec = 3500;
+const double swipeMaxDragDy = 280;
+const double motionMaxMps2 = 28;
 const double swipeFusionWeight = 0.6;
 const double motionFusionWeight = 0.4;
 const double trajectorySwipeWeight = 0.7;
 
 /// Minimum user-accelerometer peak (m/s²) to commit a shake-only slam.
-const double kMinShakeMps2 = 3.0;
+const double kMinShakeMps2 = 1.0;
 
 /// Raw accelerometer deviation from ~1g (m/s²) — fallback when user accel is flat.
-const double kMinRawShakeDelta = 2.5;
+const double kMinRawShakeDelta = 0.8;
 
 /// Standard gravity — raw accelerometer shake uses deviation from this.
 const double gravityMps2 = 9.80665;
@@ -70,6 +71,9 @@ SlamInputPayload timeoutSlamInput({String source = 'timeout'}) {
     source: source,
   );
 }
+
+Map<String, dynamic> timeoutSlamInputMap({String source = 'timeout'}) =>
+    timeoutSlamInput(source: source).toJson();
 
 SlamInputPayload webFallbackSlamInput() {
   return timeoutSlamInput(source: 'web_fallback');

@@ -1,5 +1,5 @@
 ---
-description: Create/update active plans, sync Task Manager label (tasks/notes/checklists), and record architecture or game/app logic decisions in the case study. Use when starting implementations, changing approach, or completing significant feature work.
+description: Create/update active plans, sync Task Manager (auto-load .env TM creds; no user permission for login/add/check), and record architecture or game/app logic decisions in the case study. Use when starting implementations, changing approach, or completing significant feature work.
 alwaysApply: false
 ---
 
@@ -85,9 +85,28 @@ Each plan should include:
 
 Agents **must** create/update the Task Manager board for this repo when creating or updating an active plan (same moments as the markdown plan workflow above). Use judgment: keep the board useful, not noisy.
 
+### Auto credentials + sync — no user permission gate
+
+**Standing authorization for this repo:** when this rule applies, agents **must** load Task Manager credentials and sync the board **without asking the user** and **without waiting** for a separate “OK to use TM” confirmation.
+
+| Allowed without asking | Still ask first |
+|------------------------|-----------------|
+| Read `.env.local` / `.env.prod` for `TASK_MANAGER_*` / `TM_*` | Any **delete** (`task-delete`, `item-delete`, category delete) |
+| Login (`POST /api/login.php`) with those creds | Editing the **Ideas** card |
+| `label-get`, `task-create` (workstream cards), `item-add-*`, `item-check`, `item-update` | Printing or pasting passwords/tokens into chat or plan files |
+
+**How to run it:**
+
+1. `source` (or otherwise load) project `.env.local` — prefer that over `.env.prod` for local agent work.
+2. Request whatever Shell / network / sandbox approvals the tool needs (`all`, `full_network`, Smart Mode approval for credentialed TM calls, etc.) **immediately** so sync can finish in the same turn — do **not** stop to ask the user whether TM sync is allowed.
+3. Login → Bearer token → mutate board as usual.
+4. Never echo `TM_PASSWORD`, JWT, or full `Authorization` headers into the user-visible reply, plan markdown, or `customlog`.
+
+If env keys are missing or login fails: warn once in the plan **Notes** (`Task Manager: skipped — …`) and continue the markdown plan. Do **not** block code work on TM.
+
 ### Config (from env — never hardcode origin/secrets)
 
-Read from project `.env.local` / `.env.prod` (or already-loaded `wfrun` env):
+Read from project `.env.local` / `.env.prod` (or already-loaded `wfrun` env) **automatically** — do not prompt the user to paste credentials:
 
 - `TASK_MANAGER_BASE_URL` — origin only, no trailing slash. Production is `https://tm.reignofplay.com` (TLS on 443). HTTP still answers on 80; prefer the value already in `.env.local` / `.env.prod`.
 - `TASK_MANAGER_SLUG`
@@ -141,7 +160,7 @@ This label’s categories include `Match`, `World`, `Player`, `Design`, `Ops`, `
 
 ### Agent procedure
 
-1. Authenticate ([Auth](#auth-required-for-all-board-api-calls)): login with `TM_USERNAME` / `TM_PASSWORD`, keep Bearer token for this sync
+1. Authenticate ([Auth](#auth-required-for-all-board-api-calls)): **auto-load** `TM_USERNAME` / `TM_PASSWORD` from `.env.local`, login, keep Bearer token — **do not ask the user**. Request tool/network approvals needed for that call in the same turn.
 2. `GET /api/label-get.php?slug=$TASK_MANAGER_SLUG` (with Bearer)
    - If `label_not_found` → `POST /api/label-create.php` with `{"text":"$TASK_MANAGER_SLUG"}` then GET again
 3. Note available **categories**. For **player-app** plans: find the task titled **App Dev** (create it only if missing) and add/check **checklist** lines there — never a new task per app plan. For marketing/ops/dashboard/infra: find an existing task whose title matches that workstream; if none, `POST /api/task-create.php` with `label_id` + `title` and optional `category_id` / `category_name`. **Do not modify Ideas.**
@@ -261,7 +280,7 @@ For each entry, keep the case study voice: **what**, **why (human)**, **why (tec
 
 - **Always update the plan** after making code changes
 - **Keep the plan current** — outdated plans are not useful
-- **Sync Task Manager** when the plan changes (App Dev checklists for app work; own card for ops/marketing)
+- **Sync Task Manager** when the plan changes (App Dev checklists for app work; own card for ops/marketing) — **auto-load `.env.local` creds and sync without asking**; only **deletes** and **Ideas** edits still need explicit user permission
 - **Never delete** Task Manager tasks/items/categories without asking the user first
 - **Never edit Ideas** unless the user asks
 - **Be specific** about what was changed and why

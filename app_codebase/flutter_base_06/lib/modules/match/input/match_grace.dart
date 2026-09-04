@@ -38,3 +38,33 @@ Map<String, dynamic> activeWithoutGrace(Map<String, dynamic>? active) {
   final next = Map<String, dynamic>.from(active)..remove('graceEndsAt');
   return next;
 }
+
+/// True while [active] carries `inputLockedUntil` (cleared after post-slam anim).
+///
+/// Next seat is already in `active.seatIndex`, but UI/input stay locked until
+/// the server (or practice runner) clears this after [animHoldMs].
+bool activeInputLocked(Map<String, dynamic>? active) {
+  if (active == null) return false;
+  final raw = active['inputLockedUntil']?.toString();
+  return raw != null && raw.isNotEmpty;
+}
+
+Map<String, dynamic> activeWithAnimLock(
+  Map<String, dynamic> active,
+  Duration hold,
+) {
+  final next = Map<String, dynamic>.from(active);
+  if (hold <= Duration.zero) {
+    next.remove('inputLockedUntil');
+    return next;
+  }
+  next['inputLockedUntil'] =
+      DateTime.now().toUtc().add(hold).toIso8601String();
+  return next;
+}
+
+Map<String, dynamic> activeWithoutAnimLock(Map<String, dynamic>? active) {
+  if (active == null) return const {'seatIndex': 0, 'action': 'slam'};
+  final next = Map<String, dynamic>.from(active)..remove('inputLockedUntil');
+  return next;
+}

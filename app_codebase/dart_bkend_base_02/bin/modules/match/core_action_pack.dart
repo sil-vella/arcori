@@ -11,6 +11,7 @@ import 'slam_input.dart';
 import 'slam_resolver.dart';
 import 'table_pieces.dart';
 import 'turn_order.dart';
+import 'turn_pacing.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
@@ -41,6 +42,9 @@ class CoreActionPack implements MatchActionPack {
     if (activeInGracePeriod(current.active)) {
       throw AppError(matchNotYourTurn, message: 'Match start grace');
     }
+    if (activeInputLocked(current.active)) {
+      throw AppError(matchNotYourTurn, message: 'Slam anim in progress');
+    }
     final activeSeat = current.active?['seatIndex'];
     MatchSeat? actorSeat;
     for (final s in current.seats) {
@@ -65,7 +69,6 @@ class CoreActionPack implements MatchActionPack {
       roundsTotal: current.roundsTotal,
     );
     final nextRound = advanced.round;
-    final nextActive = advanced.active;
 
     final seatIndex = actorSeat.seatIndex;
     final slammerId = actorSeat.slammerId;
@@ -95,13 +98,24 @@ class CoreActionPack implements MatchActionPack {
     if (LOGGING_SWITCH) {
       final frames = resolved.sim?['frames'];
       final frameCount = frames is List ? frames.length : 0;
+      final steps = resolved.sim?['steps'];
+      final holdMs = resolved.sim?['animHoldMs'];
       customlog(
         'match: slam resolve matchId=${current.matchId} '
         'result=${resolved.result} flips=${resolved.flippedPieceIds.length} '
         'power=${resolved.impulse['power']} simFrames=$frameCount '
+        'steps=$steps animHoldMs=$holdMs '
         'flippedIds=${resolved.flippedPieceIds}',
       );
     }
+
+    final holdMs = resolved.sim?['animHoldMs'] is num
+        ? (resolved.sim!['animHoldMs'] as num).round()
+        : postSlamAnimHoldDefault.inMilliseconds;
+    final nextActive = activeWithAnimLock(
+      advanced.active,
+      Duration(milliseconds: holdMs),
+    );
 
     final scoreByUser = <String, int>{
       for (final s in current.seats) s.userId: s.score,

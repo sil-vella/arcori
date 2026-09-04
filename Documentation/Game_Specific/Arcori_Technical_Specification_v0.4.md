@@ -1,7 +1,7 @@
 # Arcori Technical Specification
 
 Working Draft v0.4  
-**Last aligned:** 2026-08-27 (Pioneers: earlier mint)
+**Last aligned:** 2026-09-04 (3D slam physics)
 
 ## Arcori Model
 
@@ -11,7 +11,7 @@ Fields: internalId, themeCode, designCode, designFamily, design, inspiration, re
 
 **Match Arcori pairing SSOT:** after players are seated, `04_selection_weights.json` is the sole table for picking one design per seat (`printedRarity` weight × region standing multiplier; hostility boosts match chance). Design-level `selectionWeight` is **not** used for match pairing. Service: `POST /service/catalog/select_arcori`. Candidates = that player's `player_design_access` ids that are still circulating. Weight/parse failures → random among **those** candidates only — never the global circulating catalog. Empty player access → empty pick (client/Dart stub may fill Tiger).
 
-**Match slam / table:** at start, `table.pieces` holds one face-down disc per seat (`designId` from `arcoriIds`). Match create picks random **`firstSeatIndex`** (wire field); turn order wraps `(first + offset) % seats` every round. `match/action` slam resolves via Forge2D side-view sim (Dart SSOT; Flutter practice mirrors) from frozen slammer `gameplayAttributes` + raw `input` → `result: flip|miss`, `outcome.impulse`, `outcome.sim` (pose timeline), score deltas, then **restack face-down** so the next seat always starts from a clean stack. Round advance still increments `round`. **All clients** replay `outcome.sim` on the stack surface (spring impulse only if sim missing/empty). **Acting player only** gets a non-blocking 3s result `AppModal` (`FLIP`/`MISS`, flip count, score delta; X or auto-close) — turn clock is not paused. Scores/faces only from authority.
+**Match slam / table:** at start, `table.pieces` holds one face-down disc per seat (`designId` from `arcoriIds`). Match create picks random **`firstSeatIndex`** (wire field); turn order wraps `(first + offset) % seats` every round. `match/action` slam resolves via a **pure-Dart 3D thin-cylinder** sim (Dart SSOT; Flutter practice mirrors) from frozen slammer `gameplayAttributes` + raw `input` → `result: flip|miss`, `outcome.impulse`, `outcome.sim` (`space: "xyzq"` pose timeline `[id,x,y,z,qx,qy,qz,qw]`), score deltas, then **restack face-down** so the next seat always starts from a clean stack. Round advance still increments `round`. **All clients** replay `outcome.sim` on the stack surface (spring impulse only if sim missing/empty; legacy 2D frames ignored). **Acting player only** gets a non-blocking 3s result `AppModal` (`FLIP`/`MISS`, flip count, score delta; X or auto-close) — turn clock is not paused. Scores/faces only from authority. Face-up = local face normal · world up (or tumble ≥ ¾π).
 
 ## Architecture
 

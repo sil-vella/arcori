@@ -74,6 +74,24 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     _flushPendingSlamResultModal();
   }
 
+  /// Close the match fullscreen once it is the top route (after slam overlays).
+  void _scheduleMatchShellDismiss({int attempts = 0}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final route = ModalRoute.of(context);
+      if (route != null && route.isCurrent) {
+        AppModal.dismiss(context);
+        return;
+      }
+      if (attempts >= 25) return;
+      Future<void>.delayed(const Duration(milliseconds: 200), () {
+        if (!mounted) return;
+        if (!ref.read(matchSnapshotProvider).isEnded) return;
+        _scheduleMatchShellDismiss(attempts: attempts + 1);
+      });
+    });
+  }
+
   void _syncGraceTicker(bool inGrace) {
     if (inGrace && _graceTicker == null) {
       _graceTicker = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -122,6 +140,9 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     final userId = ref.read(authProvider).userId?.trim();
     if (userId == null || userId.isEmpty) return;
     if (!_isMyTurn(snap, userId)) return;
+    if (activeInputLocked(snap.active) || activeInGracePeriod(snap.active)) {
+      return;
+    }
 
     final input = payload.toJson();
     // Predictive spring only until authority sim arrives.
@@ -174,18 +195,19 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     final local = _isLocal(snap.matchId);
     final userId = ref.watch(authProvider.select((a) => a.userId?.trim()));
     final inGrace = activeInGracePeriod(snap.active);
-    _syncGraceTicker(inGrace);
+    final inputLocked = activeInputLocked(snap.active);
+    _syncGraceTicker(inGrace || inputLocked);
     final graceLeft = graceRemaining(snap.active);
     final myTurn = _isMyTurn(snap, userId);
-    final armed =
-        snap.phase == 'playing' && !snap.isEnded && myTurn && !inGrace;
+    final armed = snap.phase == 'playing' &&
+        !snap.isEnded &&
+        myTurn &&
+        !inGrace &&
+        !inputLocked;
 
     ref.listen(matchSnapshotProvider, (prev, next) {
       if (next.isEnded && prev?.isEnded != true && context.mounted) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!context.mounted) return;
-          AppModal.dismiss(context);
-        });
+        _scheduleMatchShellDismiss();
       }
 
       final event = next.lastEvent;
@@ -263,6 +285,19 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
             textAlign: TextAlign.center,
           ),
           AppSpacing.gapSm,
+        ] else if (inputLocked) ...[
+          Text(
+            'Resolving slam…',
+            style: context.appTypography.label,
+            textAlign: TextAlign.center,
+          ),
+          AppSpacing.gapXs,
+          Text(
+            'Wait for the table to settle',
+            style: context.appTypography.bodySmall,
+            textAlign: TextAlign.center,
+          ),
+          AppSpacing.gapSm,
         ] else if (armed) ...[
           ...() {
             final shakeProbe = ref.watch(slamShakeAvailableProvider);
@@ -294,11 +329,22 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
         Text('Stack', style: context.appTypography.label),
         AppSpacing.gapXs,
         ArcoriStackSurface(
-          key: ValueKey('stack-${snap.matchId}-v${snap.version}'),
+          // Key on slam event only — clearTurnAnimLock bumps version and must
+          // not remount mid-replay (that restarts anim / blanks the table).
+          key: ValueKey(
+            'stack-${snap.matchId}-s${(lastEvent != null && lastEvent['type'] == 'slam') ? lastEvent['version'] : 0}',
+          ),
           pieces: snap.pieces,
           impulse: stackImpulse,
           sim: authoritySim,
-          onAnimComplete: () => _onStackAnimComplete(snap.version),
+          onAnimComplete: () {
+            final v = (lastEvent != null &&
+                    lastEvent['type'] == 'slam' &&
+                    lastEvent['version'] is int)
+                ? lastEvent['version'] as int
+                : snap.version;
+            _onStackAnimComplete(v);
+          },
         ),
         AppSpacing.gapMd,
         Text(
@@ -366,10 +412,12 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
 
     // Key by turn identity so a rejected grace swipe cannot leave capture
     // stuck committed for the real first turn.
+    // Do NOT include snap.version — clearTurnAnimLock bumps version and would
+    // remount the stack, replaying the previous slam sim.
     return SlamInputCapture(
       key: ValueKey(
         'slam-${snap.matchId}-r${snap.round}-'
-        's${snap.active?['seatIndex']}-v${snap.version}-'
+        's${snap.active?['seatIndex']}-'
         '${inGrace ? 'grace' : 'live'}',
       ),
       armed: armed,

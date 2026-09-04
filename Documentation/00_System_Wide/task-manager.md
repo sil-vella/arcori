@@ -118,6 +118,8 @@ Body: { "username": "...", "password": "..." }
 
 Agents load `TM_USERNAME` / `TM_PASSWORD` from `.env.local`, call login, then pass `Authorization: Bearer $token` on label/task/item calls. On `401`, re-login once. If login works and board calls stay 401, Apache is not passing `Authorization` to PHP (see production path above) — do not “fix” that with nginx `fastcgi_param`. Do not log passwords or tokens.
 
+**Agent standing auth (this product):** when syncing active plans, agents **auto-load** those env creds and perform login / `label-get` / item add-check-update **without asking the user**. Only deletes and Ideas edits still require explicit permission (see active-plan rule).
+
 Optional server `BOARD_API_KEY` (Bearer or `X-Api-Key`) is an alternate auth path for automation services — product agents should use username/password → JWT.
 
 **Deploy note:** The VPS tree must include the full `web_codebase/api/*.php` set (including `login.php`). If board routes return Apache HTML 404, redeploy Task Manager from `/Users/sil/Documents/Work/00Utilities/task_manager`.

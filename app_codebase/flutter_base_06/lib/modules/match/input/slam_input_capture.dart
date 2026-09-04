@@ -11,7 +11,8 @@ import 'slam_input_models.dart';
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 /// Minimum downward drag (logical px) before a swipe commit is allowed.
-const double kMinDownSwipeDy = 12;
+/// Very short down-drag still counts as a (weak) slam.
+const double kMinDownSwipeDy = 4;
 
 typedef SlamInputCommitCallback = void Function(SlamInputPayload payload);
 
