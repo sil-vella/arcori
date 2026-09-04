@@ -22,9 +22,12 @@ Duration? graceRemaining(Map<String, dynamic>? active) {
   return remaining;
 }
 
-Map<String, dynamic> activeWithGrace(Duration grace) {
+Map<String, dynamic> activeWithGrace(
+  Duration grace, {
+  int seatIndex = 0,
+}) {
   return {
-    'seatIndex': 0,
+    'seatIndex': seatIndex,
     'action': 'slam',
     'graceEndsAt': DateTime.now().toUtc().add(grace).toIso8601String(),
   };

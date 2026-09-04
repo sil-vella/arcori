@@ -7,6 +7,7 @@ import '../../../core/modal/modal.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/ws/ws_connection_manager.dart';
+import '../../../utils/dev_logger.dart';
 import '../input/match_grace.dart';
 import '../input/slam_input_capture.dart';
 import '../input/slam_input_models.dart';
@@ -17,6 +18,8 @@ import '../state/match_snapshot_state.dart';
 import '../state/slam_motion_capability_provider.dart';
 import 'arcori_stack_surface.dart';
 import 'slam_result_modal.dart';
+
+const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 const _dartWsId = 'dart';
 
@@ -42,11 +45,33 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   Timer? _graceTicker;
   Map<String, dynamic>? _predictiveImpulse;
   int? _lastSlamResultModalVersion;
+  Map<String, dynamic>? _pendingSlamResultEvent;
+  int _pendingSlamResultDelta = 0;
 
   @override
   void dispose() {
     _graceTicker?.cancel();
     super.dispose();
+  }
+
+  void _flushPendingSlamResultModal() {
+    final event = _pendingSlamResultEvent;
+    if (event == null || !mounted) return;
+    _pendingSlamResultEvent = null;
+    final delta = _pendingSlamResultDelta;
+    showSlamResultModal(
+      context,
+      lastEvent: Map<String, dynamic>.from(event),
+      actorScoreDelta: delta,
+    );
+  }
+
+  void _onStackAnimComplete(int stackVersion) {
+    final pending = _pendingSlamResultEvent;
+    if (pending == null) return;
+    final pendingVersion = pending['version'];
+    if (pendingVersion is! int || pendingVersion != stackVersion) return;
+    _flushPendingSlamResultModal();
   }
 
   void _syncGraceTicker(bool inGrace) {
@@ -167,7 +192,12 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
       if (event == null || event['type'] != 'slam') return;
       final version = event['version'];
       if (version is! int) return;
-      if (_lastSlamResultModalVersion == version) return;
+
+      // Newer slam interrupted a pending local result — show it now.
+      final pending = _pendingSlamResultEvent;
+      if (pending != null && pending['version'] != version) {
+        _flushPendingSlamResultModal();
+      }
 
       final outcome = event['outcome'];
       final hasSim = outcome is Map &&
@@ -180,19 +210,20 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
       final actorId = event['actorUserId']?.toString();
       final me = ref.read(authProvider).userId?.trim();
       if (me == null || me.isEmpty || actorId != me) return;
+      if (_lastSlamResultModalVersion == version) return;
 
       _lastSlamResultModalVersion = version;
       final delta =
           prev == null ? 0 : _scoreFor(next, me) - _scoreFor(prev, me);
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!context.mounted) return;
-        showSlamResultModal(
-          context,
-          lastEvent: Map<String, dynamic>.from(event),
-          actorScoreDelta: delta,
+      // Show after flip anim completes (stack onAnimComplete).
+      _pendingSlamResultEvent = Map<String, dynamic>.from(event);
+      _pendingSlamResultDelta = delta;
+      if (LOGGING_SWITCH) {
+        customlog(
+          'slamResultModal: pending after anim version=$version '
+          'result=${event['result']}',
         );
-      });
+      }
     });
 
     final lastEvent = snap.lastEvent;
@@ -267,6 +298,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
           pieces: snap.pieces,
           impulse: stackImpulse,
           sim: authoritySim,
+          onAnimComplete: () => _onStackAnimComplete(snap.version),
         ),
         AppSpacing.gapMd,
         Text(

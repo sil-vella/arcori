@@ -2073,6 +2073,15 @@
       "description": "First arcori teaser ad for fb",
       "date": "2026-08-28",
       "created_at": "2026-08-28T23:15:53+0200"
+    },
+    {
+      "id": "dbd42b3b-8f79-4d59-bb62-fcd86e542297",
+      "type": "hosting",
+      "amount": 14.2,
+      "currency": "USD",
+      "description": "arcori.app domain",
+      "date": "2026-08-31",
+      "created_at": "2026-08-31T11:49:53+0200"
     }
   ],
   "filters": {

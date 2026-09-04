@@ -7,6 +7,7 @@ import '../../../utils/dev_logger.dart';
 import '../../play/play_models.dart';
 import '../input/match_grace.dart';
 import '../input/slam_resolver.dart';
+import '../input/turn_order.dart';
 import '../input/turn_pacing.dart';
 import '../practice_ai_pool.dart';
 import 'match_replay.dart';
@@ -63,6 +64,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     required PracticeLoadout loadout,
     List<String>? aiUserIds,
     Random? random,
+    int? firstSeatIndex,
   }) {
     final ais = aiUserIds ?? pickPracticeAiUserIds(random: random);
     if (ais.length != 2) {
@@ -106,6 +108,12 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         slammerId: stubSlammerId,
       ),
     ];
+    final rng = random ?? practiceTurnRandom ?? Random();
+    final first = firstSeatIndex ??
+        (seats.length <= 1 ? 0 : rng.nextInt(seats.length));
+    if (LOGGING_SWITCH) {
+      customlog('match: startLocalPractice firstSeat=$first');
+    }
     state = MatchSnapshotState(
       matchId: matchId,
       version: 1,
@@ -116,6 +124,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       callerUserId: humanUserId,
       matchType: const {'code': 'practice'},
       seats: seats,
+      firstSeatIndex: first,
       table: tableFromSeatViews(
         seats: [
           for (final s in seats)
@@ -126,7 +135,12 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
             ),
         ],
       ),
-      active: activeWithGrace(practiceMatchStartGrace),
+      active: practiceMatchStartGrace <= Duration.zero
+          ? <String, dynamic>{'seatIndex': first, 'action': 'slam'}
+          : activeWithGrace(
+              practiceMatchStartGrace,
+              seatIndex: first,
+            ),
     );
   }
 
@@ -144,28 +158,30 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       customlog(
         'match: practiceTurn start matchId=$matchId '
         'rounds=$roundsTotal seats=$seatCount '
+        'firstSeat=${state.firstSeatIndex} '
         'grace=${practiceMatchStartGrace.inSeconds}s',
       );
     }
 
     await _waitPracticeGrace(matchId);
 
+    final first = state.firstSeatIndex;
     for (var round = 1; round <= roundsTotal; round++) {
       if (!_stillRunning(matchId)) return;
 
-      if (state.round != round) {
-        state = state.copyWith(
-          round: round,
-          active: const {'seatIndex': 0, 'action': 'slam'},
-        );
-      }
-
-      for (var seatIndex = 0; seatIndex < seatCount; seatIndex++) {
+      final order = seatOrderForRound(
+        seatCount: seatCount,
+        firstSeatIndex: first,
+      );
+      for (final seatIndex in order) {
         if (!_stillRunning(matchId)) return;
 
-        state = state.copyWith(
-          active: {'seatIndex': seatIndex, 'action': 'slam'},
-        );
+        if (_activeSeatIndex(state) != seatIndex) {
+          state = state.copyWith(
+            round: round,
+            active: {'seatIndex': seatIndex, 'action': 'slam'},
+          );
+        }
 
         final actor = state.seats[seatIndex];
         if (actor.kind == 'human') {
@@ -371,27 +387,15 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     if (activeSeat is int && activeSeat != actor.seatIndex) return;
 
     final seatCount = current.seats.length;
-    final wrapping =
-        seatCount > 0 && actor.seatIndex == seatCount - 1;
-    final nextSeatIndex = wrapping ? 0 : actor.seatIndex + 1;
-
-    var nextRound = current.round;
-    var nextActive = <String, dynamic>{
-      'seatIndex': nextSeatIndex,
-      'action': 'slam',
-    };
-    if (wrapping) {
-      if (current.round < current.roundsTotal) {
-        nextRound = current.round + 1;
-        nextActive = {'seatIndex': 0, 'action': 'slam'};
-      } else {
-        // Final slam — park active past last seat (mirrors Dart core pack).
-        nextActive = {
-          'seatIndex': seatCount,
-          'action': 'slam',
-        };
-      }
-    }
+    final advanced = advanceTurnActive(
+      actorSeatIndex: actor.seatIndex,
+      seatCount: seatCount,
+      firstSeatIndex: current.firstSeatIndex,
+      round: current.round,
+      roundsTotal: current.roundsTotal,
+    );
+    final nextRound = advanced.round;
+    final nextActive = advanced.active;
 
     final slamInput = input ?? timeoutSlamInputMap();
     final attrs = practiceSlammerAttrs[actor.slammerId] ??

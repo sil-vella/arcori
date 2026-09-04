@@ -9,6 +9,7 @@ import 'match_models.dart';
 import 'match_service.dart';
 import 'match_store.dart';
 import 'slam_input.dart';
+import 'turn_order.dart';
 import 'turn_pacing.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
@@ -32,6 +33,9 @@ class MatchTurnRunner {
   final MatchStore _store;
   final MatchService _service;
   final Random _rng;
+
+  /// Shared RNG (AI pacing + first-seat pick at create).
+  Random get random => _rng;
 
   Duration matchStartGrace;
   Duration turnTimeout;
@@ -71,6 +75,7 @@ class MatchTurnRunner {
       customlog(
         'match: turnRunner start matchId=$matchId '
         'rounds=$roundsTotal seats=$seatCount '
+        'firstSeat=${snap.firstSeatIndex} '
         'grace=${matchStartGrace.inSeconds}s timeout=${turnTimeout.inSeconds}s',
       );
     }
@@ -78,7 +83,21 @@ class MatchTurnRunner {
     await _waitMatchGrace(matchId);
 
     for (var round = 1; round <= roundsTotal; round++) {
-      for (var seatIndex = 0; seatIndex < seatCount; seatIndex++) {
+      snap = _store.getSnapshot(matchId);
+      if (snap == null || snap.phase != 'playing') {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'match: turnRunner abort matchId=$matchId '
+            'phase=${snap?.phase ?? 'missing'}',
+          );
+        }
+        return;
+      }
+      final order = seatOrderForRound(
+        seatCount: seatCount,
+        firstSeatIndex: snap.firstSeatIndex,
+      );
+      for (final seatIndex in order) {
         snap = _store.getSnapshot(matchId);
         if (snap == null || snap.phase != 'playing') {
           if (LOGGING_SWITCH) {

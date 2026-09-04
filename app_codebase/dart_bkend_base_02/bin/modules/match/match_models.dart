@@ -80,6 +80,7 @@ class MatchSnapshot {
     required this.callerUserId,
     required this.matchType,
     required this.seats,
+    this.firstSeatIndex = 0,
     this.table = const {'pieces': <dynamic>[]},
     this.active,
     this.lastEvent,
@@ -95,6 +96,9 @@ class MatchSnapshot {
   final String callerUserId;
   final Map<String, dynamic> matchType;
   final List<MatchSeat> seats;
+
+  /// Seat that opens each round (random at match create).
+  final int firstSeatIndex;
   final Map<String, dynamic> table;
   final Map<String, dynamic>? active;
   final Map<String, dynamic>? lastEvent;
@@ -104,6 +108,7 @@ class MatchSnapshot {
     int? version,
     String? phase,
     int? round,
+    int? firstSeatIndex,
     Map<String, dynamic>? matchType,
     List<MatchSeat>? seats,
     Map<String, dynamic>? table,
@@ -124,6 +129,7 @@ class MatchSnapshot {
       callerUserId: callerUserId,
       matchType: matchType ?? Map<String, dynamic>.from(this.matchType),
       seats: seats ?? this.seats,
+      firstSeatIndex: firstSeatIndex ?? this.firstSeatIndex,
       table: table ?? this.table,
       active: clearActive ? null : (active ?? this.active),
       lastEvent: clearLastEvent ? null : (lastEvent ?? this.lastEvent),
@@ -142,6 +148,7 @@ class MatchSnapshot {
       'callerUserId': callerUserId,
       'matchType': Map<String, dynamic>.from(matchType),
       'seats': seats.map((s) => s.toPayload()).toList(),
+      'firstSeatIndex': firstSeatIndex,
       'table': Map<String, dynamic>.from(table),
       'active': active,
       'lastEvent': lastEvent,
@@ -162,6 +169,10 @@ class MatchSnapshot {
         ? Map<String, dynamic>.from(rawType)
         : <String, dynamic>{'code': 'practice'};
     final rawTable = payload['table'];
+    final firstRaw = payload['firstSeatIndex'];
+    final firstSeatIndex = firstRaw is int
+        ? firstRaw
+        : (seats.isEmpty ? 0 : 0);
     return MatchSnapshot(
       matchId: payload['matchId']?.toString() ?? '',
       version: payload['version'] is int ? payload['version'] as int : 0,
@@ -173,6 +184,7 @@ class MatchSnapshot {
       callerUserId: payload['callerUserId']?.toString() ?? '',
       matchType: matchType,
       seats: seats,
+      firstSeatIndex: firstSeatIndex,
       table: rawTable is Map
           ? Map<String, dynamic>.from(rawTable)
           : const {'pieces': <dynamic>[]},

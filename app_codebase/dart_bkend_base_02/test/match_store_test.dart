@@ -30,6 +30,7 @@ void main() {
 
       final created = store.createPracticeStub(
         callerUserId: 'usr_caller',
+        firstSeatIndex: 0,
         catalogById: catalog,
       );
 

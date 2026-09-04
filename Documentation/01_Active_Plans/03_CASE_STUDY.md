@@ -499,10 +499,9 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 
 ### Next (ordered by master plan)
 
-1. **Weighted slam / real turn logic / random first player** (practice + online)  
-2. Celebration + Match Summary + FastAPI durable rewards  
-3. Home sink Trove • PLAY • Market; first-time / returning flows  
-4. My Mastery tab; Trove UI; economy writers from matches  
+1. **Celebration / Match Summary + durable rewards** (next)
+2. Home sink Trove • PLAY • Market; first-time / returning flows
+3. My Mastery tab; Trove UI; economy writers from matches
 
 ---
 
@@ -523,6 +522,7 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Match Arcori pick after seats | Players do not choose loadout online; hostility pairs more often | `04_selection_weights.json` + `POST /service/catalog/select_arcori`; pool = that seat’s circulating `player_design_access` only (weighted, else random in-pool; never global catalog) |
 | Online stub turn stages before end | Prove seat order / round / slam event without physics | Dart `MatchStubLoop` after `startFromLobby`: 2×N stub slams (`lastEvent` includes `slammerId`); Flutter waits for `ended` |
 | Forge2D slam physics (Dart SSOT) | Discs can hit each other mid-air and change path; flip feels physical | `forge2d` 0.14 side-view sim @ 1/60; wire `outcome.sim` pose timeline; all clients replay; actor gets 3s non-blocking result modal |
+| Random first player | Fair who goes first; seat join order unchanged | Snapshot `firstSeatIndex`; turn order wraps `(first+offset)%n` each round |
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
 | Caller (not host/steward) | Table-feel product voice | `callerUserId` on snapshot |
 | Join-or-create + 5s + AI fill | Solo players still play | Shared matchmaking for quick/event |

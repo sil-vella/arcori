@@ -117,6 +117,7 @@ class MatchService implements MatchLifecycleContract {
     required List<String> aiUserIds,
     int targetSeats = 3,
     String arenaId = stubArenaId,
+    int? firstSeatIndex,
   }) async {
     if (humans.isEmpty) {
       throw AppError(matchInvalidRequest, message: 'humans required');
@@ -233,6 +234,8 @@ class MatchService implements MatchLifecycleContract {
       seats: assigned,
       catalogById: catalogById,
       arenaId: arenaId,
+      firstSeatIndex: firstSeatIndex,
+      random: stubLoop.random,
     );
 
     final grace = stubLoop.matchStartGrace;
@@ -264,7 +267,8 @@ class MatchService implements MatchLifecycleContract {
       customlog(
         'match: startFromLobby matchId=${snapshot.matchId} '
         'type=${snapshot.matchType} humans=${humans.length} '
-        'ai=${needAi} seats=${snapshot.seats.length}',
+        'ai=${needAi} seats=${snapshot.seats.length} '
+        'firstSeat=${snapshot.firstSeatIndex}',
       );
     }
     if (autoStubTurns) {

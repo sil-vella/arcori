@@ -23,6 +23,7 @@ void main() {
     MatchSnapshot _practice() {
       return store.createPracticeStub(
         callerUserId: 'usr_a',
+        firstSeatIndex: 0,
         catalogById: {
           stubArcoriId: {'internalId': stubArcoriId},
           stubAiArcoriId: {'internalId': stubAiArcoriId},
@@ -197,6 +198,7 @@ void main() {
       );
       final created = store.createPracticeStub(
         callerUserId: 'usr_a',
+        firstSeatIndex: 0,
         catalogById: {
           stubArcoriId: {'internalId': stubArcoriId},
           stubAiArcoriId: {'internalId': stubAiArcoriId},

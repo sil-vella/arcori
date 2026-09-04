@@ -23,6 +23,7 @@ void main() {
           slammerId: stubSlammerId,
         ),
         random: Random(1),
+        firstSeatIndex: 0,
       );
 
       var snap = container.read(matchSnapshotProvider);
@@ -83,6 +84,7 @@ void main() {
           slammerId: stubSlammerId,
         ),
         aiUserIds: [a, b],
+        firstSeatIndex: 0,
       );
 
       await notifier.runLocalPracticeStubMatch(stepDelay: Duration.zero);

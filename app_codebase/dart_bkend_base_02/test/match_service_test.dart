@@ -299,6 +299,7 @@ void main() {
         ],
         aiUserIds: ['ai-1'],
         targetSeats: 2,
+        firstSeatIndex: 0,
       );
 
       // Spy: wrap action to record slam lastEvents.
@@ -355,6 +356,7 @@ void main() {
         ],
         aiUserIds: ['ai-1'],
         targetSeats: 2,
+        firstSeatIndex: 0,
       );
       await service2.stubLoop.waitFor(snap2.matchId);
       final ended2 = store2.getSnapshot(snap2.matchId)!;

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -20,12 +21,16 @@ class ArcoriStackSurface extends StatefulWidget {
     this.impulse,
     this.sim,
     this.height = 160,
+    this.onAnimComplete,
   });
 
   final List<MatchPieceView> pieces;
   final Map<String, dynamic>? impulse;
   final Map<String, dynamic>? sim;
   final double height;
+
+  /// Fired once when sim replay (or impulse fallback) finishes.
+  final VoidCallback? onAnimComplete;
 
   @override
   State<ArcoriStackSurface> createState() => _ArcoriStackSurfaceState();
@@ -184,6 +189,7 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
       _replayingSim = false;
       _pieces = List<MatchPieceView>.from(widget.pieces);
       _settleToAuthority();
+      widget.onAnimComplete?.call();
     });
   }
 
@@ -238,7 +244,13 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
     final unitVelocity = -(power * 4.0 + spin);
     _scatter.stop();
     _scatter.value = 0;
-    _scatter.animateWith(SpringSimulation(spring, 0, 1, unitVelocity));
+    unawaited(
+      _scatter.animateWith(SpringSimulation(spring, 0, 1, unitVelocity))
+          .whenComplete(() {
+        if (!mounted) return;
+        widget.onAnimComplete?.call();
+      }),
+    );
 
     _flip.stop();
     _flip.value = 0;

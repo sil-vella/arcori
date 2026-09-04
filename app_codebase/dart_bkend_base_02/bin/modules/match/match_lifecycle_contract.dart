@@ -24,5 +24,6 @@ abstract interface class MatchLifecycleContract {
     required List<String> aiUserIds,
     int targetSeats = 3,
     String arenaId = stubArenaId,
+    int? firstSeatIndex,
   });
 }

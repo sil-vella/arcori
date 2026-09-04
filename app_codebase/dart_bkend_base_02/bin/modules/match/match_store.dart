@@ -38,6 +38,8 @@ class MatchStore {
     String? callerSlammerId,
     String aiArcoriId = stubAiArcoriId,
     String aiSlammerId = stubSlammerId,
+    int? firstSeatIndex,
+    Random? random,
   }) {
     final humanArcori = (callerArcoriIds != null && callerArcoriIds.isNotEmpty)
         ? List<String>.from(callerArcoriIds)
@@ -64,6 +66,10 @@ class MatchStore {
         slammerId: aiSlammerId,
       ),
     ];
+    final first = firstSeatIndex ??
+        (seats.length <= 1
+            ? 0
+            : (random ?? _random).nextInt(seats.length));
     final snapshot = MatchSnapshot(
       matchId: matchId,
       version: 1,
@@ -75,9 +81,10 @@ class MatchStore {
       // Practice: no subtype key.
       matchType: const {'code': 'practice'},
       seats: seats,
+      firstSeatIndex: first,
       table: tableFromSeats(seats),
-      active: const {
-        'seatIndex': 0,
+      active: {
+        'seatIndex': first,
         'action': 'slam',
       },
     );
@@ -125,11 +132,17 @@ class MatchStore {
     required List<MatchSeat> seats,
     required Map<String, Map<String, dynamic>> catalogById,
     String arenaId = stubArenaId,
+    int? firstSeatIndex,
+    Random? random,
   }) {
     if (seats.isEmpty) {
       throw ArgumentError('seats required');
     }
     final matchId = _newMatchId();
+    final first = firstSeatIndex ??
+        (seats.length <= 1
+            ? 0
+            : (random ?? _random).nextInt(seats.length));
     final snapshot = MatchSnapshot(
       matchId: matchId,
       version: 1,
@@ -140,9 +153,10 @@ class MatchStore {
       callerUserId: callerUserId,
       matchType: Map<String, dynamic>.from(matchType),
       seats: seats,
+      firstSeatIndex: first,
       table: tableFromSeats(seats),
-      active: const {
-        'seatIndex': 0,
+      active: {
+        'seatIndex': first,
         'action': 'slam',
       },
     );

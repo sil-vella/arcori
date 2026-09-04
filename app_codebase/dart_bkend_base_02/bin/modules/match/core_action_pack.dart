@@ -10,6 +10,7 @@ import 'match_store.dart';
 import 'slam_input.dart';
 import 'slam_resolver.dart';
 import 'table_pieces.dart';
+import 'turn_order.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
@@ -56,28 +57,15 @@ class CoreActionPack implements MatchActionPack {
     }
 
     final seatCount = current.seats.length;
-    final wrapping =
-        seatCount > 0 && actorSeat.seatIndex == seatCount - 1;
-    final nextSeatIndex = wrapping ? 0 : actorSeat.seatIndex + 1;
-
-    var nextRound = current.round;
-    var nextActive = <String, dynamic>{
-      'seatIndex': nextSeatIndex,
-      'action': 'slam',
-    };
-    if (wrapping) {
-      if (current.round < current.roundsTotal) {
-        nextRound = current.round + 1;
-        nextActive = {'seatIndex': 0, 'action': 'slam'};
-      } else {
-        // Final slam of the match — move active past the last seat so the
-        // turn runner does not wait/timeout again on the same seat.
-        nextActive = {
-          'seatIndex': seatCount,
-          'action': 'slam',
-        };
-      }
-    }
+    final advanced = advanceTurnActive(
+      actorSeatIndex: actorSeat.seatIndex,
+      seatCount: seatCount,
+      firstSeatIndex: current.firstSeatIndex,
+      round: current.round,
+      roundsTotal: current.roundsTotal,
+    );
+    final nextRound = advanced.round;
+    final nextActive = advanced.active;
 
     final seatIndex = actorSeat.seatIndex;
     final slammerId = actorSeat.slammerId;
