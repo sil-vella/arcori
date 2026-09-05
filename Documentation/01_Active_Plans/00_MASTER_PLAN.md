@@ -2,11 +2,11 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-09-04
+**Last Updated:** 2026-09-05
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
-**Next app build:** celebration / Match Summary + FastAPI durable rewards. **3D slam physics** done — [3d-slam-physics.md](3d-slam-physics.md).
+**Next app build:** celebration / Match Summary + FastAPI durable rewards. **Slam aim + Game Controls** done — [slam-aim-game-controls.md](slam-aim-game-controls.md).
 
 **Narrative:** [03_CASE_STUDY.md](03_CASE_STUDY.md) — full game implementation case study (design → matchmaking; template infra out of scope).
 
@@ -45,6 +45,7 @@ Open (ordered):
 - [x] 2D slam physics (Forge2D collisions + `outcome.sim` replay) — [2d-slam-physics.md](2d-slam-physics.md)
 - [x] **Random first player** — [random-first-player.md](random-first-player.md)
 - [x] **3D slam physics** (thin-cylinder xyzq; replaces Forge2D) — [3d-slam-physics.md](3d-slam-physics.md)
+- [x] **Slam aim + Game Controls** (exclusive accel/touch; aim miss footprint) — [slam-aim-game-controls.md](slam-aim-game-controls.md)
 - [ ] Celebration + Match Summary + FastAPI durable rewards *(next)*
 - [ ] Home sink Trove • PLAY • Market; first-time / returning startup
 - [ ] My Mastery tab + Trove UI + economy writers
@@ -83,6 +84,7 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 | [arcori-slam-impact.md](arcori-slam-impact.md) | Completed | Stack flip + spring motion; attrs × input → faceUp/score |
 | [2d-slam-physics.md](2d-slam-physics.md) | Completed | Forge2D side-view sim; collisions; `outcome.sim` timeline replay |
 | [3d-slam-physics.md](3d-slam-physics.md) | Completed | Pure-Dart 3D thin-cylinder; `xyzq` poses; Matrix4 replay |
+| [slam-aim-game-controls.md](slam-aim-game-controls.md) | Completed | Game Controls + aim marker; exclusive accel/touch; footprint miss |
 | [random-first-player.md](random-first-player.md) | Completed | Random `firstSeatIndex` at match start; wrap order every round |
 | [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
 | [core-match-loop.md](core-match-loop.md) | Spec | Matchmaking → match → celebration → Match Summary → exits |

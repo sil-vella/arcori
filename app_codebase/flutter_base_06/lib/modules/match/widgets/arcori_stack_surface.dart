@@ -7,6 +7,8 @@ import 'package:vector_math/vector_math_64.dart' show Quaternion, Vector3;
 
 import '../../../utils/dev_logger.dart';
 import '../state/match_snapshot_state.dart';
+import '../input/slam_input_models.dart';
+import '../input/slam_physics_world.dart';
 import '../input/turn_pacing.dart';
 import 'arcori_disc.dart';
 
@@ -21,6 +23,9 @@ class ArcoriStackSurface extends StatefulWidget {
     this.sim,
     this.height = 220,
     this.onAnimComplete,
+    this.showAimMarker = false,
+    this.aimX = 0,
+    this.aimZ = 0,
   });
 
   final List<MatchPieceView> pieces;
@@ -30,6 +35,11 @@ class ArcoriStackSurface extends StatefulWidget {
 
   /// Fired once when sim replay (or impulse fallback) finishes.
   final VoidCallback? onAnimComplete;
+
+  /// Live hit marker while the local seat is armed.
+  final bool showAimMarker;
+  final double aimX;
+  final double aimZ;
 
   @override
   State<ArcoriStackSurface> createState() => _ArcoriStackSurfaceState();
@@ -361,81 +371,153 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
     const restStackGap = 2.0;
     /// Dead-above camera — discs settle as full circles.
     const viewPitch = 0.0;
+    // Aim marker uses the same px/m as physics so Ø matches [discSize] (72).
+    final aimPpm = kSlamPhysicsPxPerMeter;
+    final slammerPx = kDiscRadius * 2 * aimPpm;
+    final aimIn =
+        !aimOutsideStackFootprint(widget.aimX, widget.aimZ);
+    final markerOffset = Offset(widget.aimX * aimPpm, -widget.aimZ * aimPpm);
 
     return SizedBox(
       height: widget.height,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // Dead-above table pad (round, under stack) — not a side-view strip.
-          Center(
-            child: Container(
-              width: discSize * 2.4,
-              height: discSize * 2.4,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    Colors.white.withValues(alpha: 0.10),
-                    Colors.black.withValues(alpha: 0.28),
-                  ],
-                ),
-                border: Border.all(color: Colors.white12),
+      width: double.infinity,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Fit zoom: keep every disc (+ aim marker) inside the viewport.
+          var maxAbsX = discSize * 0.5;
+          var maxAbsY = discSize * 0.5;
+          for (var i = 0; i < sorted.length; i++) {
+            final p = sorted[i];
+            final base =
+                _replayingSim ? Offset.zero : Offset(0, -i * restStackGap);
+            final scatter = (_offsets[p.pieceId] ?? Offset.zero) * t;
+            final o = base + scatter;
+            maxAbsX = max(maxAbsX, o.dx.abs() + discSize * 0.5);
+            maxAbsY = max(maxAbsY, o.dy.abs() + discSize * 0.5);
+          }
+          if (widget.showAimMarker) {
+            maxAbsX =
+                max(maxAbsX, markerOffset.dx.abs() + slammerPx * 0.5);
+            maxAbsY =
+                max(maxAbsY, markerOffset.dy.abs() + slammerPx * 0.5);
+          }
+          const pad = 10.0;
+          final halfW = max(1.0, constraints.maxWidth * 0.5 - pad);
+          final halfH = max(1.0, constraints.maxHeight * 0.5 - pad);
+          final fit =
+              min(halfW / maxAbsX, halfH / maxAbsY).clamp(0.18, 1.0);
+
+          return ClipRect(
+            child: Transform.scale(
+              scale: fit,
+              alignment: Alignment.center,
+              child: Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  // Dead-above table pad (round, under stack).
+                  Center(
+                    child: Container(
+                      width: discSize * 2.4,
+                      height: discSize * 2.4,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [
+                            Colors.white.withValues(alpha: 0.10),
+                            Colors.black.withValues(alpha: 0.28),
+                          ],
+                        ),
+                        border: Border.all(color: Colors.white12),
+                      ),
+                    ),
+                  ),
+                  for (var i = 0; i < sorted.length; i++)
+                    Builder(
+                      builder: (context) {
+                        final p = sorted[i];
+                        final base = _replayingSim
+                            ? Offset.zero
+                            : Offset(0, -i * restStackGap);
+                        final scatter =
+                            (_offsets[p.pieceId] ?? Offset.zero) * t;
+                        late final _Quat q;
+                        if (_replayingSim) {
+                          q = _quats[p.pieceId] ?? _Quat.faceDown();
+                        } else {
+                          final target =
+                              p.faceUp ? _Quat.faceUp() : _Quat.faceDown();
+                          final start =
+                              _quats[p.pieceId] ?? _Quat.faceDown();
+                          q = _nlerp(start, target, ft.clamp(0.0, 1.0));
+                          final wobble = (1 - ft.clamp(0.0, 1.0)) *
+                              sin(ft * pi) *
+                              ((_impulseNonce > 0) ? 0.25 : 0);
+                          if (wobble != 0) {
+                            final wob = Quaternion.axisAngle(
+                              Vector3(1, 0.2, 0.4),
+                              wobble,
+                            );
+                            final cur = Quaternion(q.x, q.y, q.z, q.w);
+                            final mixed = (wob * cur)..normalize();
+                            return ArcoriDisc(
+                              piece: p,
+                              size: discSize,
+                              offset: base + scatter,
+                              viewPitch: viewPitch,
+                              qx: mixed.x,
+                              qy: mixed.y,
+                              qz: mixed.z,
+                              qw: mixed.w,
+                              faceUpOverride: p.faceUp,
+                            );
+                          }
+                        }
+                        return ArcoriDisc(
+                          piece: p,
+                          size: discSize,
+                          offset: base + scatter,
+                          viewPitch: viewPitch,
+                          qx: q.x,
+                          qy: q.y,
+                          qz: q.z,
+                          qw: q.w,
+                          faceUpOverride:
+                              _replayingSim ? null : p.faceUp,
+                        );
+                      },
+                    ),
+                  if (widget.showAimMarker)
+                    Transform.translate(
+                      offset: markerOffset,
+                      child: Container(
+                        width: slammerPx,
+                        height: slammerPx,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: aimIn
+                                ? Colors.lightGreenAccent
+                                : Colors.redAccent,
+                            width: 2.5,
+                          ),
+                          color: (aimIn
+                                  ? Colors.lightGreenAccent
+                                  : Colors.redAccent)
+                              .withValues(alpha: 0.18),
+                        ),
+                      ),
+                    ),
+                  if (sorted.isEmpty)
+                    const Text(
+                      'No Arcori on table',
+                      textAlign: TextAlign.center,
+                    ),
+                ],
               ),
             ),
-          ),
-          for (var i = 0; i < sorted.length; i++)
-            Builder(
-              builder: (context) {
-                final p = sorted[i];
-                // Rest: perfect column; sim replay uses physics deltas only.
-                final base =
-                    _replayingSim ? Offset.zero : Offset(0, -i * restStackGap);
-                final scatter = (_offsets[p.pieceId] ?? Offset.zero) * t;
-                late final _Quat q;
-                if (_replayingSim) {
-                  q = _quats[p.pieceId] ?? _Quat.faceDown();
-                } else {
-                  final target = p.faceUp ? _Quat.faceUp() : _Quat.faceDown();
-                  final start = _quats[p.pieceId] ?? _Quat.faceDown();
-                  q = _nlerp(start, target, ft.clamp(0.0, 1.0));
-                  final wobble = (1 - ft.clamp(0.0, 1.0)) *
-                      sin(ft * pi) *
-                      ((_impulseNonce > 0) ? 0.25 : 0);
-                  if (wobble != 0) {
-                    final wob =
-                        Quaternion.axisAngle(Vector3(1, 0.2, 0.4), wobble);
-                    final cur = Quaternion(q.x, q.y, q.z, q.w);
-                    final mixed = (wob * cur)..normalize();
-                    return ArcoriDisc(
-                      piece: p,
-                      size: discSize,
-                      offset: base + scatter,
-                      viewPitch: viewPitch,
-                      qx: mixed.x,
-                      qy: mixed.y,
-                      qz: mixed.z,
-                      qw: mixed.w,
-                      faceUpOverride: p.faceUp,
-                    );
-                  }
-                }
-                return ArcoriDisc(
-                  piece: p,
-                  size: discSize,
-                  offset: base + scatter,
-                  viewPitch: viewPitch,
-                  qx: q.x,
-                  qy: q.y,
-                  qz: q.z,
-                  qw: q.w,
-                  faceUpOverride: _replayingSim ? null : p.faceUp,
-                );
-              },
-            ),
-          if (sorted.isEmpty)
-            const Text('No Arcori on table', textAlign: TextAlign.center),
-        ],
+          );
+        },
       ),
     );
   }

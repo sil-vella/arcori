@@ -3,22 +3,61 @@ library;
 
 import 'dart:math';
 
+import 'slam_physics_world.dart';
+
 /// Higher caps → same gesture maps to lower speed (weak slam still commits).
 const double swipeMaxPxPerSec = 3500;
 const double swipeMaxDragDy = 280;
 const double motionMaxMps2 = 28;
-const double swipeFusionWeight = 0.6;
-const double motionFusionWeight = 0.4;
-const double trajectorySwipeWeight = 0.7;
 
-/// Minimum user-accelerometer peak (m/s²) to commit a shake-only slam.
-const double kMinShakeMps2 = 1.0;
+/// Minimum user-accelerometer |Z| (m/s²) to commit a shake slam.
+/// Kept well above casual tilt noise; XY must not dominate (see capture).
+const double kMinShakeMps2 = 4.5;
 
-/// Raw accelerometer deviation from ~1g (m/s²) — fallback when user accel is flat.
-const double kMinRawShakeDelta = 0.8;
+/// Raw accelerometer |Z−g| (m/s²) — fallback when user accel is flat.
+const double kMinRawShakeDelta = 3.5;
 
 /// Standard gravity — raw accelerometer shake uses deviation from this.
 const double gravityMps2 = 9.80665;
+
+/// Stack footprint / slammer aim radius — same as a disc.
+const double kSlamAimHitRadius = kDiscRadius;
+
+/// Max aim travel on table (m) — matches physics wall soft limit.
+const double kSlamAimAxisLimit = kWallLimit;
+
+/// Kick direction from aim offset on the table (XZ). Center → straight into stack.
+({double dx, double dy}) kickDirectionFromAim(double aimX, double aimZ) {
+  final hitR = kSlamAimHitRadius;
+  final nx = (aimX / hitR).clamp(-1.0, 1.0);
+  final nz = (aimZ / hitR).clamp(-1.0, 1.0);
+  final dist = sqrt(nx * nx + nz * nz).clamp(0.0, 1.0);
+  final dx = nx * 0.95;
+  final dy = max(0.25, 1.0 - dist * 0.55);
+  final len = sqrt(dx * dx + dy * dy);
+  if (len < 1e-6) return (dx: 0.0, dy: 1.0);
+  return (dx: dx / len, dy: dy / len);
+}
+
+bool aimOutsideStackFootprint(double aimX, double aimZ) {
+  return aimX * aimX + aimZ * aimZ > kSlamAimHitRadius * kSlamAimHitRadius;
+}
+
+class SlamAim {
+  const SlamAim({required this.x, required this.z});
+
+  final double x;
+  final double z;
+
+  static const center = SlamAim(x: 0, z: 0);
+
+  SlamAim clampToTable() => SlamAim(
+        x: x.clamp(-kSlamAimAxisLimit, kSlamAimAxisLimit),
+        z: z.clamp(-kSlamAimAxisLimit, kSlamAimAxisLimit),
+      );
+
+  Map<String, dynamic> toJson() => {'x': x, 'z': z};
+}
 
 class SlamTrajectory {
   const SlamTrajectory({
@@ -36,27 +75,40 @@ class SlamTrajectory {
         'dy': dy,
         'angleDeg': angleDeg,
       };
+
+  factory SlamTrajectory.fromAim(SlamAim aim) {
+    final kick = kickDirectionFromAim(aim.x, aim.z);
+    return SlamTrajectory(
+      dx: kick.dx,
+      dy: kick.dy,
+      angleDeg: atan2(kick.dy, kick.dx) * 180 / pi,
+    );
+  }
 }
 
 class SlamInputPayload {
   const SlamInputPayload({
     required this.speed,
-    required this.trajectory,
+    required this.aim,
     required this.source,
+    this.trajectory,
     this.swipe,
     this.motion,
   });
 
   final double speed;
-  final SlamTrajectory trajectory;
+  final SlamAim aim;
   final String source;
+  final SlamTrajectory? trajectory;
   final Map<String, dynamic>? swipe;
   final Map<String, dynamic>? motion;
 
   Map<String, dynamic> toJson() {
+    final traj = trajectory ?? SlamTrajectory.fromAim(aim);
     return {
       'speed': speed,
-      'trajectory': trajectory.toJson(),
+      'aim': aim.toJson(),
+      'trajectory': traj.toJson(),
       'source': source,
       if (swipe != null) 'swipe': swipe,
       if (motion != null) 'motion': motion,
@@ -67,6 +119,7 @@ class SlamInputPayload {
 SlamInputPayload timeoutSlamInput({String source = 'timeout'}) {
   return SlamInputPayload(
     speed: 0,
+    aim: SlamAim.center,
     trajectory: const SlamTrajectory(dx: 0, dy: 1, angleDeg: 90),
     source: source,
   );
@@ -79,110 +132,49 @@ SlamInputPayload webFallbackSlamInput() {
   return timeoutSlamInput(source: 'web_fallback');
 }
 
-/// Fuse swipe + motion samples into raw speed and trajectory.
-SlamInputPayload fuseSlamInput({
+/// Touch swipe power commit — speed from vertical drag; aim already frozen.
+SlamInputPayload fuseTouchPowerSlam({
   required double swipePrimaryVelocity,
-  required double swipeDx,
   required double swipeDy,
-  required double motionPeakMagnitude,
-  double? motionPeakX,
-  double? motionPeakY,
-  double? motionPeakZ,
-  bool motionAvailable = true,
+  required SlamAim aim,
   String source = 'gesture',
 }) {
   final swipeSpeedFromVelocity =
       (swipePrimaryVelocity.abs() / swipeMaxPxPerSec).clamp(0.0, 1.0);
   final swipeSpeedFromDistance =
       (swipeDy / swipeMaxDragDy).clamp(0.0, 1.0);
-  final swipeSpeed = swipeSpeedFromVelocity > swipeSpeedFromDistance
+  final speed = swipeSpeedFromVelocity > swipeSpeedFromDistance
       ? swipeSpeedFromVelocity
       : swipeSpeedFromDistance;
-  final motionSpeed = motionAvailable
-      ? (motionPeakMagnitude / motionMaxMps2).clamp(0.0, 1.0)
-      : 0.0;
-  final speed =
-      (swipeFusionWeight * swipeSpeed + motionFusionWeight * motionSpeed)
-          .clamp(0.0, 1.0);
-
-  final swipeLen = sqrt(swipeDx * swipeDx + swipeDy * swipeDy);
-  var sdx = swipeLen > 1e-6 ? swipeDx / swipeLen : 0.0;
-  var sdy = swipeLen > 1e-6 ? swipeDy / swipeLen : 1.0;
-
-  if (motionAvailable &&
-      motionPeakX != null &&
-      motionPeakY != null &&
-      motionPeakZ != null) {
-    final mx = motionPeakX;
-    final my = motionPeakY;
-    final mz = motionPeakZ.abs();
-    final mLen = sqrt(mx * mx + my * my + mz * mz);
-    if (mLen > 1e-6) {
-      final mdx = mx / mLen;
-      final mdy = my / mLen;
-      final blend = trajectorySwipeWeight;
-      sdx = blend * sdx + (1 - blend) * mdx;
-      sdy = blend * sdy + (1 - blend) * mdy;
-      final tLen = sqrt(sdx * sdx + sdy * sdy);
-      if (tLen > 1e-6) {
-        sdx /= tLen;
-        sdy /= tLen;
-      }
-    }
-  }
-
-  final angleDeg = atan2(sdy, sdx) * 180 / pi;
 
   return SlamInputPayload(
     speed: speed,
-    trajectory: SlamTrajectory(dx: sdx, dy: sdy, angleDeg: angleDeg),
+    aim: aim.clampToTable(),
+    trajectory: SlamTrajectory.fromAim(aim),
     source: source,
     swipe: {
       'primaryVelocity': swipePrimaryVelocity,
       'velocityPxPerSec': {'x': 0.0, 'y': swipePrimaryVelocity},
-      'delta': {'dx': swipeDx, 'dy': swipeDy},
+      'delta': {'dx': 0.0, 'dy': swipeDy},
     },
-    motion: motionAvailable
-        ? {
-            'peakMagnitude': motionPeakMagnitude,
-            'peak': {
-              'x': motionPeakX ?? 0,
-              'y': motionPeakY ?? 0,
-              'z': motionPeakZ ?? 0,
-            },
-          }
-        : null,
   );
 }
 
-/// Shake-only slam — no swipe required; speed comes entirely from motion peak.
-SlamInputPayload fuseMotionSlamInput({
+/// Accel Z-shake power commit — aim already frozen from XY.
+SlamInputPayload fuseAccelPowerSlam({
   required double motionPeakMagnitude,
   required double motionPeakX,
   required double motionPeakY,
   required double motionPeakZ,
+  required SlamAim aim,
+  String source = 'shake',
 }) {
   final speed = (motionPeakMagnitude / motionMaxMps2).clamp(0.0, 1.0);
-  var sdx = motionPeakX;
-  var sdy = motionPeakY.abs();
-  if (motionPeakZ.abs() > sdy) {
-    sdy = motionPeakZ.abs();
-    sdx = motionPeakX * 0.5;
-  }
-  final len = sqrt(sdx * sdx + sdy * sdy);
-  if (len > 1e-6) {
-    sdx /= len;
-    sdy /= len;
-  } else {
-    sdx = 0;
-    sdy = 1;
-  }
-  final angleDeg = atan2(sdy, sdx) * 180 / pi;
-
   return SlamInputPayload(
     speed: speed,
-    trajectory: SlamTrajectory(dx: sdx, dy: sdy, angleDeg: angleDeg),
-    source: 'shake',
+    aim: aim.clampToTable(),
+    trajectory: SlamTrajectory.fromAim(aim),
+    source: source,
     swipe: const {
       'primaryVelocity': 0.0,
       'velocityPxPerSec': {'x': 0.0, 'y': 0.0},

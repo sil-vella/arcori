@@ -524,6 +524,7 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Online stub turn stages before end | Prove seat order / round / slam event without physics | Dart `MatchStubLoop` after `startFromLobby`: 2×N stub slams (`lastEvent` includes `slammerId`); Flutter waits for `ended` |
 | Forge2D slam physics (Dart SSOT) | Discs can hit each other mid-air and change path; flip feels physical | Superseded by 3D thin-cylinder sim (kept as history) |
 | 3D slam physics (Dart SSOT) | True x/y/z tumble; coins feel like pogs, not side-view circles | Pure-Dart OBB/cylinder world + `vector_math`; wire `outcome.sim` `space:"xyzq"`; Flutter Matrix4 replay; no FFI / no Flutter on Dart backend |
+| Aim marker + exclusive modes | Can miss the stack (not only soft-miss); no tilt vs swipe fights | `aim:{x,z}` on wire; footprint miss; Game Controls `accel`\|`touch`; equipped `slammerId` on find |
 | Random first player | Fair who goes first; seat join order unchanged | Snapshot `firstSeatIndex`; turn order wraps `(first+offset)%n` each round |
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
 | Caller (not host/steward) | Table-feel product voice | `callerUserId` on snapshot |

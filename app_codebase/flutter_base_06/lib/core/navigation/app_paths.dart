@@ -16,6 +16,7 @@ abstract final class AppPaths {
   static const arcoriDetail = '/velora/arcori';
   static const avari = '/avari';
   static const play = '/play';
+  static const gameControls = '/game-controls';
 
   static const _protectedPaths = {wsDemo};
 

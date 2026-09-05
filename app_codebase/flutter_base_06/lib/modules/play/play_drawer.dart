@@ -11,5 +11,11 @@ void registerPlayDrawer(AppDrawerSink drawer) {
       icon: Icons.sports_esports_outlined,
       selectedIcon: Icons.sports_esports,
     ),
+    AppDrawerDestination(
+      path: AppPaths.gameControls,
+      label: 'Game Controls',
+      icon: Icons.sports_mma_outlined,
+      selectedIcon: Icons.sports_mma,
+    ),
   ]);
 }

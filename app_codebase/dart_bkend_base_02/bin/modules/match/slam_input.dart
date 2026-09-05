@@ -1,15 +1,41 @@
 /// Raw slam gesture payload — validated wire shape; no slammer stat math.
 library;
 
+import 'dart:math';
+
 import '../../core/errors/app_error.dart';
 import 'match_errors.dart';
+import 'slam_physics_world.dart';
 
 const double slamInputSpeedMin = 0.0;
 const double slamInputSpeedMax = 1.0;
 
+/// Stack footprint / slammer aim radius — same as a disc.
+const double kSlamAimHitRadius = kDiscRadius;
+
+double _clampAimAxis(double v) => v.clamp(-kWallLimit, kWallLimit);
+
+/// Kick direction from aim offset on the table (XZ). Center → straight into stack.
+({double dx, double dy}) kickDirectionFromAim(double aimX, double aimZ) {
+  final hitR = kSlamAimHitRadius;
+  final nx = (aimX / hitR).clamp(-1.0, 1.0);
+  final nz = (aimZ / hitR).clamp(-1.0, 1.0);
+  final dist = sqrt(nx * nx + nz * nz).clamp(0.0, 1.0);
+  final dx = nx * 0.95;
+  final dy = max(0.25, 1.0 - dist * 0.55);
+  final len = sqrt(dx * dx + dy * dy);
+  if (len < 1e-6) return (dx: 0.0, dy: 1.0);
+  return (dx: dx / len, dy: dy / len);
+}
+
+bool aimOutsideStackFootprint(double aimX, double aimZ) {
+  return aimX * aimX + aimZ * aimZ > kSlamAimHitRadius * kSlamAimHitRadius;
+}
+
 /// Default down-vector when player times out or skips gesture.
 Map<String, dynamic> timeoutSlamInput({String source = 'timeout'}) => {
       'speed': 0.0,
+      'aim': {'x': 0.0, 'z': 0.0},
       'trajectory': {
         'dx': 0.0,
         'dy': 1.0,
@@ -79,31 +105,45 @@ Map<String, dynamic>? parseSlamInput(Map<String, dynamic> payload) {
     throw AppError(matchInvalidRequest, message: 'input.speed out of range');
   }
 
+  final aimRaw = map['aim'];
+  if (aimRaw is! Map) {
+    throw AppError(matchInvalidRequest, message: 'input.aim required');
+  }
+  final aimMap = Map<String, dynamic>.from(aimRaw);
+  final ax = aimMap['x'];
+  final az = aimMap['z'];
+  if (ax is! num || az is! num) {
+    throw AppError(matchInvalidRequest, message: 'input.aim x/z required');
+  }
+  final aimX = _clampAimAxis(ax.toDouble());
+  final aimZ = _clampAimAxis(az.toDouble());
+
+  // Optional legacy trajectory (debug / older clients). Kick bias prefers aim.
+  Map<String, dynamic>? trajOut;
   final trajectory = map['trajectory'];
-  if (trajectory is! Map) {
-    throw AppError(matchInvalidRequest, message: 'input.trajectory required');
-  }
-  final traj = Map<String, dynamic>.from(trajectory);
-  final dx = traj['dx'];
-  final dy = traj['dy'];
-  if (dx is! num || dy is! num) {
-    throw AppError(matchInvalidRequest, message: 'input.trajectory dx/dy required');
-  }
-  final dxVal = dx.toDouble();
-  final dyVal = dy.toDouble();
-  final len = (dxVal * dxVal + dyVal * dyVal);
-  if (len < 1e-6) {
-    throw AppError(matchInvalidRequest, message: 'input.trajectory zero vector');
+  if (trajectory is Map) {
+    final traj = Map<String, dynamic>.from(trajectory);
+    final dx = traj['dx'];
+    final dy = traj['dy'];
+    if (dx is num && dy is num) {
+      final dxVal = dx.toDouble();
+      final dyVal = dy.toDouble();
+      final len = (dxVal * dxVal + dyVal * dyVal);
+      if (len >= 1e-6) {
+        final angleDeg = traj['angleDeg'];
+        trajOut = <String, dynamic>{
+          'dx': dxVal,
+          'dy': dyVal,
+          if (angleDeg is num) 'angleDeg': angleDeg.toDouble(),
+        };
+      }
+    }
   }
 
-  final angleDeg = traj['angleDeg'];
   final out = <String, dynamic>{
     'speed': speedVal,
-    'trajectory': <String, dynamic>{
-      'dx': dxVal,
-      'dy': dyVal,
-      if (angleDeg is num) 'angleDeg': angleDeg.toDouble(),
-    },
+    'aim': {'x': aimX, 'z': aimZ},
+    if (trajOut != null) 'trajectory': trajOut,
     if (map['source'] != null) 'source': map['source']?.toString(),
   };
 

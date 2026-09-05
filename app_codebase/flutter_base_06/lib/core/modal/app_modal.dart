@@ -141,6 +141,7 @@ abstract final class AppModal {
     EdgeInsets? padding,
     bool barrierDismissible = false,
     bool useRootNavigator = true,
+    bool scrollable = true,
   }) {
     return showFullScreen<T>(
       context,
@@ -152,6 +153,7 @@ abstract final class AppModal {
           actions: actions,
           showCloseButton: showCloseButton,
           padding: padding,
+          scrollable: scrollable,
           child: child,
         ),
       ),

@@ -11,6 +11,7 @@ class AppFullScreenModal extends StatelessWidget {
     this.actions = const [],
     this.showCloseButton = true,
     this.padding,
+    this.scrollable = true,
     super.key,
   });
 
@@ -19,6 +20,8 @@ class AppFullScreenModal extends StatelessWidget {
   final List<Widget> actions;
   final bool showCloseButton;
   final EdgeInsets? padding;
+  /// When false, content does not scroll (e.g. match gestures).
+  final bool scrollable;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +41,9 @@ class AppFullScreenModal extends StatelessWidget {
               ),
             Expanded(
               child: SingleChildScrollView(
+                physics: scrollable
+                    ? null
+                    : const NeverScrollableScrollPhysics(),
                 padding: contentPadding,
                 child: child,
               ),

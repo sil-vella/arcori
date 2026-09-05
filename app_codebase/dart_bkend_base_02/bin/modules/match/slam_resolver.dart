@@ -4,6 +4,7 @@ library;
 import 'dart:math';
 
 import '../../utils/dev_logger.dart';
+import 'slam_input.dart';
 import 'slam_physics_world.dart';
 import 'table_pieces.dart';
 import 'turn_pacing.dart';
@@ -55,6 +56,24 @@ int seedFromMatch(String matchId, int version, int seatIndex) {
   return h == 0 ? 1 : h;
 }
 
+Map<String, dynamic> _emptySim() => withSlamAnimTiming({
+      'dt': kSlamPhysicsDt,
+      'sampleEvery': kSlamPhysicsSampleEvery,
+      'pxPerMeter': kSlamPhysicsPxPerMeter,
+      'space': kSlamPhysicsSpace,
+      'steps': 0,
+      'frames': <Map<String, dynamic>>[],
+    });
+
+({double x, double z}) _readAim(Map<String, dynamic>? input) {
+  if (input == null) return (x: 0.0, z: 0.0);
+  final aim = input['aim'];
+  if (aim is! Map) return (x: 0.0, z: 0.0);
+  final x = aim['x'] is num ? (aim['x'] as num).toDouble() : 0.0;
+  final z = aim['z'] is num ? (aim['z'] as num).toDouble() : 0.0;
+  return (x: x, z: z);
+}
+
 /// Resolve slam via 3D thin-cylinder sim (collisions change trajectory/speed).
 SlamResolveResult resolveSlam({
   required String matchId,
@@ -72,25 +91,14 @@ SlamResolveResult resolveSlam({
       flippedPieceIds: const [],
       impulse: _impulse(0, 0, 1, 0),
       result: 'miss',
-      sim: withSlamAnimTiming({
-        'dt': kSlamPhysicsDt,
-        'sampleEvery': kSlamPhysicsSampleEvery,
-        'pxPerMeter': kSlamPhysicsPxPerMeter,
-        'space': kSlamPhysicsSpace,
-        'steps': 0,
-        'frames': <Map<String, dynamic>>[],
-      }),
+      sim: _emptySim(),
     );
   }
 
   final speed = input != null && input['speed'] is num
       ? (input['speed'] as num).toDouble().clamp(0.0, 1.0)
       : 0.0;
-  final traj = input != null && input['trajectory'] is Map
-      ? Map<String, dynamic>.from(input['trajectory'] as Map)
-      : <String, dynamic>{'dx': 0.0, 'dy': 1.0};
-  var dx = traj['dx'] is num ? (traj['dx'] as num).toDouble() : 0.0;
-  var dy = traj['dy'] is num ? (traj['dy'] as num).toDouble() : 1.0;
+  final aim = _readAim(input);
 
   final impact = _attr(gameplayAttributes, 'impact');
   final precision = _attr(gameplayAttributes, 'precision');
@@ -98,6 +106,10 @@ SlamResolveResult resolveSlam({
   final spread = _attr(gameplayAttributes, 'spread');
 
   final rng = Random(seedFromMatch(matchId, version, actorSeatIndex));
+
+  final kick = kickDirectionFromAim(aim.x, aim.z);
+  var dx = kick.dx;
+  var dy = kick.dy;
 
   // Precision reduces angular jitter; control damps random aim noise.
   final jitterScale = (11 - precision) / 10.0 * (1.0 - control / 20.0);
@@ -113,6 +125,23 @@ SlamResolveResult resolveSlam({
   final maxAffect = max(1, ((spread / 10.0) * pieces.length).ceil());
   final impulse = _impulse(dx, dy, speed, power);
 
+  if (aimOutsideStackFootprint(aim.x, aim.z)) {
+    if (LOGGING_SWITCH) {
+      customlog(
+        'slamResolve: aimMiss x=${aim.x.toStringAsFixed(4)} '
+        'z=${aim.z.toStringAsFixed(4)} matchId=$matchId',
+      );
+    }
+    return SlamResolveResult(
+      pieces: pieces,
+      scoreDeltas: const {},
+      flippedPieceIds: const [],
+      impulse: impulse,
+      result: 'miss',
+      sim: _emptySim(),
+    );
+  }
+
   if (power < kSlamMinPower) {
     if (LOGGING_SWITCH) {
       customlog(
@@ -126,21 +155,15 @@ SlamResolveResult resolveSlam({
       flippedPieceIds: const [],
       impulse: impulse,
       result: 'miss',
-      sim: withSlamAnimTiming({
-        'dt': kSlamPhysicsDt,
-        'sampleEvery': kSlamPhysicsSampleEvery,
-        'pxPerMeter': kSlamPhysicsPxPerMeter,
-        'space': kSlamPhysicsSpace,
-        'steps': 0,
-        'frames': <Map<String, dynamic>>[],
-      }),
+      sim: _emptySim(),
     );
   }
 
   if (LOGGING_SWITCH) {
     customlog(
       'slamResolve: physics matchId=$matchId v=$version seat=$actorSeatIndex '
-      'power=${power.toStringAsFixed(3)} maxAffect=$maxAffect',
+      'power=${power.toStringAsFixed(3)} maxAffect=$maxAffect '
+      'aim=(${aim.x.toStringAsFixed(4)},${aim.z.toStringAsFixed(4)})',
     );
   }
 

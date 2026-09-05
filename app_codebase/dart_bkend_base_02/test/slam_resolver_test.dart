@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math.dart';
 
+import '../bin/modules/match/slam_input.dart';
 import '../bin/modules/match/slam_physics_world.dart';
 import '../bin/modules/match/slam_resolver.dart';
 import '../bin/modules/match/table_pieces.dart';
@@ -37,6 +38,7 @@ void main() {
         actorSeatIndex: 0,
         input: {
           'speed': 0.0,
+          'aim': {'x': 0.0, 'z': 0.0},
           'trajectory': {'dx': 0.0, 'dy': 1.0},
         },
         gameplayAttributes: defaultGameplayAttributes.map(
@@ -48,6 +50,30 @@ void main() {
       expect(r.flippedPieceIds, isEmpty);
     });
 
+    test('aim outside stack footprint misses with no kick', () {
+      final r = resolveSlam(
+        matchId: 'm_aim_miss',
+        version: 1,
+        actorSeatIndex: 0,
+        input: {
+          'speed': 0.95,
+          'aim': {'x': kSlamAimHitRadius * 3, 'z': 0.0},
+        },
+        gameplayAttributes: {
+          'impact': 10,
+          'precision': 8,
+          'control': 8,
+          'recovery': 5,
+          'spread': 9,
+        },
+        table: stack(),
+      );
+      expect(r.result, 'miss');
+      expect(r.flippedPieceIds, isEmpty);
+      expect((r.sim!['frames'] as List), isEmpty);
+      expect(aimOutsideStackFootprint(kSlamAimHitRadius * 3, 0), isTrue);
+    });
+
     test('high impact + speed flips at least one', () {
       final r = resolveSlam(
         matchId: 'm_flip',
@@ -55,6 +81,7 @@ void main() {
         actorSeatIndex: 0,
         input: {
           'speed': 0.95,
+          'aim': {'x': 0.0, 'z': 0.0},
           'trajectory': {'dx': 0.0, 'dy': 1.0},
         },
         gameplayAttributes: {
@@ -79,6 +106,7 @@ void main() {
         actorSeatIndex: 0,
         input: {
           'speed': 0.12,
+          'aim': {'x': 0.0, 'z': 0.0},
           'trajectory': {'dx': 0.0, 'dy': 1.0},
         },
         gameplayAttributes: {
@@ -120,6 +148,7 @@ void main() {
           actorSeatIndex: 0,
           input: {
             'speed': 0.55,
+          'aim': {'x': 0.0, 'z': 0.0},
             'trajectory': {'dx': 0.15, 'dy': 1.0},
           },
           gameplayAttributes: {
@@ -158,6 +187,7 @@ void main() {
         actorSeatIndex: 0,
         input: {
           'speed': 0.9,
+          'aim': {'x': 0.0, 'z': 0.0},
           'trajectory': {'dx': 0.0, 'dy': 1.0},
         },
         gameplayAttributes: {
@@ -200,6 +230,7 @@ void main() {
         actorSeatIndex: 1,
         input: {
           'speed': 0.95,
+          'aim': {'x': 0.0, 'z': 0.0},
           'trajectory': {'dx': 0.0, 'dy': 1.0},
         },
         gameplayAttributes: {
@@ -247,6 +278,7 @@ void main() {
     test('same seed yields identical sim frames', () {
       Map<String, dynamic> input() => {
             'speed': 0.8,
+          'aim': {'x': 0.0, 'z': 0.0},
             'trajectory': {'dx': 0.2, 'dy': 1.0},
           };
       Map<String, dynamic> attrs() => {
@@ -284,6 +316,7 @@ void main() {
         actorSeatIndex: 0,
         input: {
           'speed': 0.9,
+          'aim': {'x': 0.0, 'z': 0.0},
           'trajectory': {'dx': 0.7, 'dy': 1.0},
         },
         gameplayAttributes: {

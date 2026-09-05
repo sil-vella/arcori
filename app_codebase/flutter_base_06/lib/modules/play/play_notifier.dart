@@ -7,6 +7,7 @@ import '../../utils/dev_logger.dart';
 import '../match/state/match_notifier.dart';
 import '../match/state/match_snapshot_state.dart';
 import '../matchmaking/state/lobby_notifier.dart';
+import 'game_controls_prefs.dart';
 import 'play_models.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
@@ -214,12 +215,17 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
   /// Step delay override for practice tests (zero → instant timeout slams).
   Duration practiceStubStepDelay = Duration.zero;
 
+  String get _equippedSlammerId {
+    final id = ref.read(gameControlsProvider).equippedSlammerId.trim();
+    return id.isNotEmpty ? id : stubSlammerId;
+  }
+
   /// Flutter-only practice: local human + 2 AI. Auto stub loop then end.
   Future<void> _runPracticeLocal(PracticeLoadout? loadout) async {
     final effective = loadout ??
-        const PracticeLoadout(
+        PracticeLoadout(
           arcoriId: 'ANM-TIG-GEN001-0001',
-          slammerId: stubSlammerId,
+          slammerId: _equippedSlammerId,
         );
     final userId = ref.read(authProvider).userId?.trim();
     final humanId =
@@ -282,15 +288,22 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     }
 
     final matchType = _matchTypePayload(type);
+    final slammerId = _equippedSlammerId;
     if (LOGGING_SWITCH) {
-      customlog('play: onlineMatchmaking find matchType=$matchType');
+      customlog(
+        'play: onlineMatchmaking find matchType=$matchType '
+        'slammerId=$slammerId',
+      );
     }
 
     await manager.send(
       _dartWsId,
       type: 'event',
       channel: 'matchmaking/find',
-      payload: {'matchType': matchType},
+      payload: {
+        'matchType': matchType,
+        'slammerId': slammerId,
+      },
     );
 
     final promoted = await _waitForLobbyPromoted(
@@ -415,10 +428,11 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       inviteId,
       invitedUserId: invitedUserId,
     );
+    final slammerId = _equippedSlammerId;
     if (LOGGING_SWITCH) {
       customlog(
         'play: invite matchmaking find matchType=$matchType '
-        'createIfMissing=$createIfMissing',
+        'createIfMissing=$createIfMissing slammerId=$slammerId',
       );
     }
 
@@ -429,6 +443,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       payload: {
         'matchType': matchType,
         'createIfMissing': createIfMissing,
+        'slammerId': slammerId,
       },
     );
 

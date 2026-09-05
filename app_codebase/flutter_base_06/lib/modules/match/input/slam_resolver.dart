@@ -4,6 +4,7 @@ library;
 import 'dart:math';
 
 import '../../../utils/dev_logger.dart';
+import 'slam_input_models.dart';
 import 'slam_physics_world.dart';
 import 'turn_pacing.dart';
 
@@ -150,11 +151,16 @@ SlamResolveResult resolveSlam({
   final speed = input != null && input['speed'] is num
       ? (input['speed'] as num).toDouble().clamp(0.0, 1.0)
       : 0.0;
-  final traj = input != null && input['trajectory'] is Map
-      ? Map<String, dynamic>.from(input['trajectory'] as Map)
-      : <String, dynamic>{'dx': 0.0, 'dy': 1.0};
-  var dx = traj['dx'] is num ? (traj['dx'] as num).toDouble() : 0.0;
-  var dy = traj['dy'] is num ? (traj['dy'] as num).toDouble() : 1.0;
+  var aimX = 0.0;
+  var aimZ = 0.0;
+  final aimRaw = input != null ? input['aim'] : null;
+  if (aimRaw is Map) {
+    if (aimRaw['x'] is num) aimX = (aimRaw['x'] as num).toDouble();
+    if (aimRaw['z'] is num) aimZ = (aimRaw['z'] as num).toDouble();
+  }
+  final kick = kickDirectionFromAim(aimX, aimZ);
+  var dx = kick.dx;
+  var dy = kick.dy;
 
   final impact = _attr(gameplayAttributes, 'impact');
   final precision = _attr(gameplayAttributes, 'precision');
@@ -175,6 +181,32 @@ SlamResolveResult resolveSlam({
   final maxAffect = max(1, ((spread / 10.0) * pieces.length).ceil());
   final impulse = _impulse(dx, dy, speed, power);
 
+  Map<String, dynamic> emptySim() => withSlamAnimTiming({
+        'dt': kSlamPhysicsDt,
+        'sampleEvery': kSlamPhysicsSampleEvery,
+        'pxPerMeter': kSlamPhysicsPxPerMeter,
+        'space': kSlamPhysicsSpace,
+        'steps': 0,
+        'frames': <Map<String, dynamic>>[],
+      });
+
+  if (aimOutsideStackFootprint(aimX, aimZ)) {
+    if (LOGGING_SWITCH) {
+      customlog(
+        'slamResolve: aimMiss x=${aimX.toStringAsFixed(4)} '
+        'z=${aimZ.toStringAsFixed(4)} matchId=$matchId',
+      );
+    }
+    return SlamResolveResult(
+      pieces: pieces,
+      scoreDeltas: const {},
+      flippedPieceIds: const [],
+      impulse: impulse,
+      result: 'miss',
+      sim: emptySim(),
+    );
+  }
+
   if (power < kSlamMinPower) {
     if (LOGGING_SWITCH) {
       customlog(
@@ -188,21 +220,15 @@ SlamResolveResult resolveSlam({
       flippedPieceIds: const [],
       impulse: impulse,
       result: 'miss',
-      sim: withSlamAnimTiming({
-        'dt': kSlamPhysicsDt,
-        'sampleEvery': kSlamPhysicsSampleEvery,
-        'pxPerMeter': kSlamPhysicsPxPerMeter,
-        'space': kSlamPhysicsSpace,
-        'steps': 0,
-        'frames': <Map<String, dynamic>>[],
-      }),
+      sim: emptySim(),
     );
   }
 
   if (LOGGING_SWITCH) {
     customlog(
       'slamResolve: physics matchId=$matchId v=$version seat=$actorSeatIndex '
-      'power=${power.toStringAsFixed(3)} maxAffect=$maxAffect',
+      'power=${power.toStringAsFixed(3)} maxAffect=$maxAffect '
+      'aim=(${aimX.toStringAsFixed(4)},${aimZ.toStringAsFixed(4)})',
     );
   }
 

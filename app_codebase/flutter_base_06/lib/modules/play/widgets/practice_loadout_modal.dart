@@ -5,6 +5,7 @@ import '../../../core/modal/modal.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../velora/velora_api.dart';
+import '../game_controls_prefs.dart';
 import '../play_models.dart';
 
 /// Minimal practice loadout: pick 1 circulating Arcori + 1 slammer.
@@ -49,13 +50,20 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
   }
 
   Future<void> _load() async {
+    await ref.read(gameControlsProvider.notifier).reload();
+    final equipped = ref.read(gameControlsProvider).equippedSlammerId;
+
     final token = ref.read(authProvider).accessToken;
     if (token == null || token.isEmpty) {
+      final list = List<(String, String)>.from(_fallbackSlammers);
+      if (list.every((e) => e.$1 != equipped)) {
+        list.insert(0, (equipped, equipped));
+      }
       setState(() {
         _arcori = _fallbackArcori;
-        _slammers = _fallbackSlammers;
+        _slammers = list;
         _arcoriId = _arcori.first.$1;
-        _slammerId = _slammers.first.$1;
+        _slammerId = _pickDefaultSlammer(list, equipped);
         _loading = false;
       });
       return;
@@ -82,16 +90,30 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
       }
     }
 
+    final list = List<(String, String)>.from(
+      slammerItems.isNotEmpty ? slammerItems : _fallbackSlammers,
+    );
+    if (list.every((e) => e.$1 != equipped)) {
+      list.insert(0, (equipped, equipped));
+    }
     setState(() {
       _arcori = arcoriItems.isNotEmpty ? arcoriItems : _fallbackArcori;
-      _slammers = slammerItems.isNotEmpty ? slammerItems : _fallbackSlammers;
+      _slammers = list;
       _arcoriId = _arcori.first.$1;
-      _slammerId = _slammers.first.$1;
+      _slammerId = _pickDefaultSlammer(list, equipped);
       _error = (!animals.isSuccess && !slammers.isSuccess)
           ? 'Using offline defaults'
           : null;
       _loading = false;
     });
+  }
+
+  String _pickDefaultSlammer(
+    List<(String, String)> list,
+    String equipped,
+  ) {
+    if (list.any((e) => e.$1 == equipped)) return equipped;
+    return list.first.$1;
   }
 
   @override

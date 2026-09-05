@@ -30,9 +30,11 @@ const double kDiscFriction = 0.62;
 const double kDiscRestitution = 0.015;
 /// Heavier puck — collision response softer; kicks still set ω/v directly.
 const double kDiscMass = 2.8;
-/// Stronger lateral scatter; lighter tumble so discs don't linger on edge.
-const double kLinearKickScale = 0.98;
-const double kAngularKickScale = 0.38;
+/// Balanced feel (matches Dart `kDefaultSlamFeelProfile` / `slamFeelBalanced`).
+const double kLinearKickScale = 0.85;
+const double kAngularKickScale = 0.88;
+const double kTipMul = 1.45;
+const double kPunchThroughPower = 0.25;
 const double kSleepLin = 0.055;
 const double kSleepAng = 0.28;
 /// Past the equator (±deadzone) snaps to a face; edges stay upright.
@@ -44,13 +46,14 @@ const int kSolverIters = 12;
 const double kBaumgarte = 0.08;
 const double kSlop = 0.0002;
 const double kLinearDamping = 0.88;
-const double kAngularDamping = 0.96;
+const double kAngularDamping = 0.84;
 /// Softens low power more than high.
-const double kPowerKickExponent = 1.25;
-/// Below this, kicks taper further so ~0.08 rarely flips.
-const double kWeakKickFloor = 0.14;
-const double kMaxLinSpeed = 0.95;
-const double kMaxAngSpeed = 2.8;
+const double kPowerKickExponent = 1.05;
+/// Below this, kicks taper further so near-zero rarely flips.
+const double kWeakKickFloor = 0.06;
+/// Allow strong slams to travel farther in XYZ before clamp.
+const double kMaxLinSpeed = 1.7;
+const double kMaxAngSpeed = 4.2;
 const double kWallRestitution = 0.04;
 /// Quiet frames required before early exit.
 const int kSettledQuietSteps = 4;
@@ -97,7 +100,8 @@ SlamPhysicsResult runSlamPhysics({
     customlog(
       'slamPhysics: start pieces=${pieces.length} power=${power.toStringAsFixed(3)} '
       'speed=${speed.toStringAsFixed(3)} dx=${dx.toStringAsFixed(3)} '
-      'dy=${dy.toStringAsFixed(3)} maxAffect=$maxAffect space=$kSlamPhysicsSpace',
+      'dy=${dy.toStringAsFixed(3)} maxAffect=$maxAffect feel=balanced '
+      'space=$kSlamPhysicsSpace',
     );
   }
 
@@ -131,6 +135,10 @@ SlamPhysicsResult runSlamPhysics({
   }
 
   final punchedThrough = <int>{};
+  final kickedFaceDown = <int>{};
+  // 0..1 how far above mid power — drives flip energy, XYZ travel, chaos.
+  final strong =
+      power < 0.45 ? 0.0 : ((power - 0.45) / 0.55).clamp(0.0, 1.0);
   if (power >= kSlamMinPower && bodies.isNotEmpty) {
     final len = sqrt(dx * dx + dy * dy);
     final ndx = len > 1e-6 ? dx / len : 0.0;
@@ -160,61 +168,89 @@ SlamPhysicsResult runSlamPhysics({
     final powerForKick =
         power < kWeakKickFloor ? power * (power / kWeakKickFloor) : power;
     final powerCurve = pow(powerForKick, kPowerKickExponent).toDouble();
-    final kickLin = powerCurve * kLinearKickScale;
-    final kickAng = powerCurve * kAngularKickScale;
+    // Strong hits punch above the curve — more XYZ travel + flip chance.
+    final strongBoost = 1.0 + strong * 0.85;
+    final kickLin = powerCurve * kLinearKickScale * strongBoost;
+    final kickAng = powerCurve * kAngularKickScale * (1.0 + strong * 1.55);
     // Kick from the top; low/mid power hits fewer discs — collisions spread energy.
-    final affectBudget = power < 0.35
+    final affectBudget = power < 0.32
         ? 1
-        : (power < 0.65 ? min(2, maxAffect) : maxAffect);
+        : (power < 0.55 ? min(2, maxAffect) : maxAffect);
+
+    // Slight aim yaw chaos grows with power (unpredictability, not wild).
+    final yawJitter = (rng.nextDouble() - 0.5) * 0.28 * (0.2 + strong * 1.4);
+    final cosY = cos(yawJitter);
+    final sinY = sin(yawJitter);
+    final rvx = vx * cosY - vz * sinY;
+    final rvz = vx * sinY + vz * cosY;
 
     var affected = 0;
     for (var i = bodies.length - 1; i >= 0 && affected < affectBudget; i--) {
       final fromTop = bodies.length - 1 - i;
       if (wasFaceUp[i]) {
         // Shove face-up discs aside so face-down below can tip (punch-through).
-        if (power >= 0.4) {
+        if (power >= kPunchThroughPower) {
           final clear = kickLin * (0.95 + 0.5 * speed) * spreadMul;
-          final fan = (rng.nextDouble() - 0.5) * 2.8 * spreadMul;
+          final fan = (rng.nextDouble() - 0.5) * (2.8 + strong * 1.6) * spreadMul;
           bodies[i].linearVelocity.add(
             Vector3(
-              (vx + latX * fan) * clear * 2.15,
-              0.22 * clear,
-              (vz + latZ * fan) * clear * 2.05,
+              (rvx + latX * fan) * clear * 2.15,
+              (0.22 + strong * 0.35) * clear,
+              (rvz + latZ * fan) * clear * 2.05,
             ),
           );
         }
         continue;
       }
-      final jitterX = (rng.nextDouble() - 0.5) * 0.35 * (1.1 - power);
-      final jitterZ = (rng.nextDouble() - 0.5) * 0.35 * (1.1 - power);
+      // Unpredictability rises with power (was inverted before).
+      final chaos = 0.22 + strong * 0.95;
+      final jitterX = (rng.nextDouble() - 0.5) * chaos;
+      final jitterZ = (rng.nextDouble() - 0.5) * chaos;
+      final jitterY = (rng.nextDouble() - 0.15) * (0.12 + strong * 0.55);
       // Wide alternating fan — separate discs so collisions die sooner.
       final fan =
           ((affected % 2 == 0) ? 1.0 : -1.0) *
-          (1.05 + fromTop * 0.55 + rng.nextDouble() * 0.95) *
+          (1.05 + fromTop * 0.55 + rng.nextDouble() * (0.95 + strong * 0.7)) *
           spreadMul *
-          (0.9 + power);
-      final scale = kickLin * (1.15 + 0.45 * speed) * (1.0 + fromTop * 0.2);
+          (0.9 + power + strong * 0.45);
+      final scale =
+          kickLin * (1.2 + 0.55 * speed + strong * 0.5) * (1.0 + fromTop * 0.22);
+      // Hop off the table so tip spin isn't crushed by ground contacts.
+      final hop = 0.15 + strong * 0.75 + rng.nextDouble() * (0.1 + strong * 0.35);
+      bodies[i].position.y += 0.0015 + strong * 0.006;
       bodies[i].linearVelocity.add(
         Vector3(
-          (vx + latX * fan + jitterX) * scale,
-          vy * scale * 0.75,
-          (vz + latZ * fan + jitterZ) * scale,
+          (rvx + latX * fan + jitterX) * scale,
+          (vy * (0.85 + strong * 0.55) + jitterY + hop) * scale * 0.55,
+          (rvz + latZ * fan + jitterZ) * scale,
         ),
       );
-      // Short tip about X — cross equator fast; damping kills lingering edge spin.
+      // Tip needs ~π rad before soft-settle; strong hits get a harder shove.
       final spinSign = rng.nextBool() ? 1.0 : -1.0;
-      var ang = kickAng * (0.7 + 0.4 * speed);
+      var ang = kickAng * (1.05 + 0.55 * speed + strong * 1.15);
       final hasUpAbove = wasFaceUp.sublist(i + 1).any((u) => u);
       if (hasUpAbove) {
-        ang *= 1.2;
+        ang *= 1.25;
         punchedThrough.add(i);
       }
+      // Keep primary tip dominant; side chaos stays slight.
+      final tipSide = (rng.nextDouble() - 0.5) * ang * (0.06 + strong * 0.22);
+      final tipYaw = (rng.nextDouble() - 0.5) * ang * (0.04 + strong * 0.18);
       bodies[i].angularVelocity.add(
-        Vector3(spinSign * ang * 1.1, 0, -ndx * ang * 0.06),
+        Vector3(
+          spinSign * ang * kTipMul,
+          tipYaw,
+          -ndx * ang * 0.1 + tipSide,
+        ),
       );
+      kickedFaceDown.add(i);
       if (hasUpAbove) {
         bodies[i].linearVelocity.add(
-          Vector3(vx * kickLin * 0.45, -kickLin * 0.12, vz * kickLin * 0.4),
+          Vector3(
+            rvx * kickLin * 0.5,
+            -kickLin * (0.12 + strong * 0.1),
+            rvz * kickLin * 0.45,
+          ),
         );
       }
       affected++;
@@ -222,16 +258,18 @@ SlamPhysicsResult runSlamPhysics({
 
     if (affected == 0) {
       final top = bodies.length - 1;
-      final scale = kickLin * 1.15 * spreadMul;
-      final fan = (rng.nextDouble() - 0.5) * 2.2 * spreadMul;
+      final scale = kickLin * (1.15 + strong * 0.4) * spreadMul;
+      final fan = (rng.nextDouble() - 0.5) * (2.2 + strong * 1.2) * spreadMul;
       bodies[top].linearVelocity.add(
         Vector3(
-          (vx + latX * fan) * scale,
-          vy * scale * 0.75,
-          (vz + latZ * fan) * scale,
+          (rvx + latX * fan) * scale,
+          vy * scale * (0.85 + strong * 0.4),
+          (rvz + latZ * fan) * scale,
         ),
       );
-      bodies[top].angularVelocity.add(Vector3(kickAng * 0.22, 0, kickAng * 0.08));
+      bodies[top].angularVelocity.add(
+        Vector3(kickAng * (0.35 + strong * 0.4), 0, kickAng * 0.12),
+      );
       if (LOGGING_SWITCH) {
         customlog(
           'slamPhysics: punchThroughKick top=${ids[top]} '
@@ -241,7 +279,8 @@ SlamPhysicsResult runSlamPhysics({
     } else if (LOGGING_SWITCH) {
       customlog(
         'slamPhysics: kicked faceDown=$affected kickLin=${kickLin.toStringAsFixed(2)} '
-        'kickAng=${kickAng.toStringAsFixed(2)} spreadMul=${spreadMul.toStringAsFixed(2)}',
+        'kickAng=${kickAng.toStringAsFixed(2)} spreadMul=${spreadMul.toStringAsFixed(2)} '
+        'strong=${strong.toStringAsFixed(2)}',
       );
     }
   }
@@ -271,11 +310,17 @@ SlamPhysicsResult runSlamPhysics({
 
   var settledSteps = 0;
   var stepsRun = 0;
+  // Strong hits need longer free tumble before damping crush so tips can cross.
+  final softAt = strong > 0.45
+      ? kSlamPhysicsSoftSettleAt + 18
+      : kSlamPhysicsSoftSettleAt;
+  final softAngKill = strong > 0.45 ? 0.9 : 0.68;
+  final softLinKill = strong > 0.45 ? 0.88 : 0.78;
   for (var step = 1; step <= kSlamPhysicsMaxSteps; step++) {
-    if (step >= kSlamPhysicsSoftSettleAt) {
+    if (step >= softAt) {
       for (final b in bodies) {
-        b.linearVelocity.scale(0.78);
-        b.angularVelocity.scale(0.68);
+        b.linearVelocity.scale(softLinKill);
+        b.angularVelocity.scale(softAngKill);
         if (b.position.y > kDiscHalfHeight) {
           b.position.y += (kDiscHalfHeight - b.position.y) * 0.2;
         }
@@ -320,6 +365,19 @@ SlamPhysicsResult runSlamPhysics({
     var faceUp = ny >= kFaceUpDot;
     if (power >= 0.4 && punchedThrough.contains(i)) {
       faceUp = true;
+    }
+    // Strong kicks: ground contacts often kill tip mid-flight — bias flip
+    // chance up with power (slight unpredictability, not a wipe guarantee).
+    if (!faceUp &&
+        !wasFaceUp[i] &&
+        kickedFaceDown.contains(i) &&
+        strong >= 0.35) {
+      final tipProgress = ((ny + 1.0) * 0.5).clamp(0.0, 1.0);
+      final pFlip =
+          (0.42 + strong * 0.48 + tipProgress * 0.2).clamp(0.0, 0.96);
+      if (rng.nextDouble() < pFlip) {
+        faceUp = true;
+      }
     }
     if (wasFaceUp[i]) {
       faceUp = true;

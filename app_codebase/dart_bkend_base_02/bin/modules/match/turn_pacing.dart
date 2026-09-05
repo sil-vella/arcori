@@ -3,6 +3,8 @@ library;
 
 import 'dart:math';
 
+import 'slam_input.dart';
+
 const Duration matchStartGraceDefault = Duration(seconds: 5);
 const Duration turnTimeoutDefault = Duration(seconds: 5);
 const Duration aiDelayMinDefault = Duration(seconds: 2);
@@ -85,15 +87,18 @@ bool rollAiMiss(Random rng, {double probability = aiMissProbabilityDefault}) {
 
 Map<String, dynamic> syntheticAiSlamInput(Random rng) {
   // Soft AI band — often nudges / occasional flips, not wipeouts.
+  // Aim near stack center (inside footprint); slight offset for variety.
   final speed = 0.12 + rng.nextDouble() * 0.38;
-  final dx = (rng.nextDouble() - 0.5) * 0.25;
-  final dy = 0.88 + rng.nextDouble() * 0.12;
+  final aimX = (rng.nextDouble() - 0.5) * kSlamAimHitRadius * 0.6;
+  final aimZ = (rng.nextDouble() - 0.5) * kSlamAimHitRadius * 0.6;
+  final kick = kickDirectionFromAim(aimX, aimZ);
   return {
     'speed': speed,
+    'aim': {'x': aimX, 'z': aimZ},
     'trajectory': {
-      'dx': dx,
-      'dy': dy,
-      'angleDeg': atan2(dy, dx) * 180 / pi,
+      'dx': kick.dx,
+      'dy': kick.dy,
+      'angleDeg': atan2(kick.dy, kick.dx) * 180 / pi,
     },
     'source': 'ai_synthetic',
   };

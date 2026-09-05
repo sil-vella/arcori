@@ -35,9 +35,11 @@ Completed. Soft miss / restack / result modal / turn pacing unchanged. Flip outc
 
 ## Next Steps
 
-Tune kick/restitution/thickness for feel; optional catalog art on faces; later per-piece mass/friction.
+Celebration / Match Summary / rewards. Aim + Game Controls shipped separately — [slam-aim-game-controls.md](slam-aim-game-controls.md).
 
 **Feel pass (2026-09-04):** softer continuous kicks (no micro-nudge); score **only** settled face normal after hemisphere snap (`kFaceUpDot ≈ 0.18`); stronger angular tumble; punch-through shoves face-up tops aside; soft-miss `0.005`; easier swipe/shake commit; softer AI speeds.
+
+**Default feel (2026-09-05):** `kDefaultSlamFeelProfile` = **`balanced`** (prior high/`flippy` values; `flippy` remains the higher lever).
 
 **Scatter / settle (2026-09-04):** wider fan-out + higher linear kick; lower angular kick + mid-step face assist (less edge linger); near-zero restitution / stronger damping; quiet exit sooner (`maxSteps=110`); settleHold `1600ms` + pad `300ms`.
 

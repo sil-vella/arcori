@@ -85,7 +85,7 @@ void main() {
       expect((created.table['pieces'] as List), hasLength(2));
       final input = {
         'speed': 0.72,
-        'trajectory': {'dx': 0.02, 'dy': 0.99, 'angleDeg': 88.8},
+        'aim': {'x': 0.0, 'z': 0.0}, 'trajectory': {'dx': 0.02, 'dy': 0.99, 'angleDeg': 88.8},
         'source': 'gesture',
       };
       final next = dispatcher.dispatch(
@@ -111,7 +111,7 @@ void main() {
             'action': 'slam',
             'input': {
               'speed': 1.5,
-              'trajectory': {'dx': 0, 'dy': 1},
+              'aim': {'x': 0.0, 'z': 0.0}, 'trajectory': {'dx': 0, 'dy': 1},
             },
           },
         ),
@@ -137,7 +137,7 @@ void main() {
           'action': 'slam',
           'input': {
             'speed': 0.9,
-            'trajectory': {'dx': 0.0, 'dy': 1.0},
+            'aim': {'x': 0.0, 'z': 0.0}, 'trajectory': {'dx': 0.0, 'dy': 1.0},
             'source': 'gesture',
           },
         },

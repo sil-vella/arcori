@@ -4,13 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 import '../../../utils/dev_logger.dart';
+import '../../play/game_controls_prefs.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 /// How long to wait for at least one accelerometer sample at cold start.
 const Duration kSlamShakeProbeTimeout = Duration(milliseconds: 600);
 
-/// UI copy when shake may be used alongside swipe.
+/// UI copy when slam input is armed (mode-specific).
 class SlamTurnHints {
   const SlamTurnHints({
     required this.primary,
@@ -21,16 +22,21 @@ class SlamTurnHints {
   final String secondary;
 }
 
-SlamTurnHints slamTurnHints({required bool shakeAvailable}) {
-  if (shakeAvailable) {
+SlamTurnHints slamTurnHints({
+  required bool shakeAvailable,
+  SlamControlMode? controlMode,
+}) {
+  final mode = controlMode ??
+      (shakeAvailable ? SlamControlMode.accel : SlamControlMode.touch);
+  if (mode == SlamControlMode.accel) {
     return const SlamTurnHints(
-      primary: 'Your turn — swipe down or shake to slam',
-      secondary: '5s timer — shake works without a swipe',
+      primary: 'Your turn — tilt to aim, lock, then shake',
+      secondary: 'Lock freezes the marker so shake cannot move it',
     );
   }
   return const SlamTurnHints(
-    primary: 'Your turn — swipe down to slam',
-    secondary: '5s timer',
+    primary: 'Your turn — drag stack to aim, lock, then swipe down',
+    secondary: 'After lock, swipe anywhere on the stack for power',
   );
 }
 
