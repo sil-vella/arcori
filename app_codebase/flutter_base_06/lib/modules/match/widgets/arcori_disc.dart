@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' show Quaternion, Vector3;
 
 import '../state/match_snapshot_state.dart';
-import 'arcori_palette.dart';
+import 'arcori_cylinder.dart';
+import 'arcori_look.dart';
 
-/// Thin cylinder disc — oriented by world quaternion (local +Y = face normal).
+/// Thin cylinder disc — pose transform around [ArcoriCylinder] (look SSOT).
 class ArcoriDisc extends StatelessWidget {
   const ArcoriDisc({
     super.key,
@@ -33,15 +34,12 @@ class ArcoriDisc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final faceUp = faceUpOverride ?? faceUpFromQuat(qx, qy, qz, qw);
-    final accent = arcoriAccentForDesignId(piece.designId);
-    final labelColor = arcoriAccentLabelColor(accent);
-    final label = piece.designId.length > 8
-        ? piece.designId.substring(piece.designId.length - 8)
-        : piece.designId;
-    // Visual thickness cue — small offset circle behind the face (not a bar).
-    final thickness = size * 0.08;
+    final look = ArcoriLook(
+      designId: piece.designId,
+      imageUrl: piece.imageUrl,
+      colorHex: piece.color,
+    );
 
-    // Dead-above: no perspective foreshortening — face-up reads as a true circle.
     final transform = Matrix4.identity()..translate(offset.dx, offset.dy);
     if (viewPitch.abs() > 1e-6) {
       transform
@@ -53,71 +51,10 @@ class ArcoriDisc extends StatelessWidget {
     return Transform(
       alignment: Alignment.center,
       transform: transform,
-      child: SizedBox(
-        width: size,
-        height: size,
-        child: Stack(
-          alignment: Alignment.center,
-          clipBehavior: Clip.none,
-          children: [
-            // Rear rim / thickness (same circle, nudged down+back).
-            Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.translationValues(0, thickness * 0.55, -thickness),
-              child: Container(
-                width: size,
-                height: size,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.black.withValues(alpha: 0.4),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.12),
-                    width: 1,
-                  ),
-                ),
-              ),
-            ),
-            // Face — full opacity.
-            DecoratedBox(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: faceUp
-                      ? [
-                          accent.withValues(alpha: 0.98),
-                          accent.withValues(alpha: 0.62),
-                        ]
-                      : [
-                          const Color(0xFF3A3A3A),
-                          const Color(0xFF1A1A1A),
-                        ],
-                ),
-                border: Border.all(
-                  color: faceUp ? accent : Colors.white24,
-                  width: 2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.28),
-                    blurRadius: 5,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  faceUp ? label : '●',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: faceUp ? labelColor : Colors.white70,
-                    fontSize: size * 0.14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+      child: ArcoriCylinder(
+        look: look,
+        size: size,
+        faceUp: faceUp,
       ),
     );
   }

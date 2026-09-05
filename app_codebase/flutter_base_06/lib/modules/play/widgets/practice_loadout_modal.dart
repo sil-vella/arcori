@@ -4,11 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/modal/modal.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
-import '../../velora/velora_api.dart';
+import '../../avari/avari_models.dart';
+import '../../avari/avari_notifier.dart';
 import '../game_controls_prefs.dart';
 import '../play_models.dart';
 
-/// Minimal practice loadout: pick 1 circulating Arcori + 1 slammer.
+/// Practice loadout: player's circulating Arcori + owned slammers.
 Future<PracticeLoadout?> showPracticeLoadoutModal(BuildContext context) {
   return AppModal.showCenteredShell<PracticeLoadout>(
     context,
@@ -27,19 +28,10 @@ class _PracticeLoadoutBody extends ConsumerStatefulWidget {
 }
 
 class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
-  static const _fallbackArcori = [
-    ('ANM-TIG-GEN001-0001', 'Tiger'),
-    ('ANM-WTI-GEN001-0002', 'White Tiger'),
-  ];
-  static const _fallbackSlammers = [
-    ('SLM-STR-GEN001-0001', 'Starter Slammer'),
-    ('SLM-TTN-GEN001-0002', 'Titan Slammer'),
-  ];
-
   bool _loading = true;
   String? _error;
-  List<(String id, String label)> _arcori = const [];
-  List<(String id, String label)> _slammers = const [];
+  List<AvariInventoryItem> _arcori = const [];
+  List<AvariInventoryItem> _slammers = const [];
   String? _arcoriId;
   String? _slammerId;
 
@@ -55,72 +47,82 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
 
     final token = ref.read(authProvider).accessToken;
     if (token == null || token.isEmpty) {
-      final list = List<(String, String)>.from(_fallbackSlammers);
-      if (list.every((e) => e.$1 != equipped)) {
-        list.insert(0, (equipped, equipped));
-      }
+      const fallbackArcori = [
+        AvariInventoryItem(
+          designId: 'ANM-TIG-GEN001-0001',
+          displayName: 'Tiger',
+          imageUrl: '/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp',
+          color: '#C6A15B',
+        ),
+      ];
+      const fallbackSlammers = [
+        AvariInventoryItem(
+          designId: 'SLM-STR-GEN001-0001',
+          displayName: 'Starter Slammer',
+        ),
+      ];
       setState(() {
-        _arcori = _fallbackArcori;
-        _slammers = list;
-        _arcoriId = _arcori.first.$1;
-        _slammerId = _pickDefaultSlammer(list, equipped);
+        _arcori = fallbackArcori;
+        _slammers = fallbackSlammers;
+        _arcoriId = fallbackArcori.first.designId;
+        _slammerId = _pickDefaultSlammer(fallbackSlammers, equipped);
+        _error = 'Offline defaults — sign in to use your collection';
         _loading = false;
       });
       return;
     }
 
-    final api = VeloraApiClient();
-    final animals = await api.fetchIndex(accessToken: token, theme: 'Animals');
-    final slammers = await api.fetchIndex(accessToken: token, theme: 'Slammers');
-
+    await ref.read(avariProfileProvider.notifier).load(force: true);
     if (!mounted) return;
-
-    final arcoriItems = <(String, String)>[];
-    if (animals.isSuccess) {
-      for (final d in animals.data!.items.take(12)) {
-        if (d.internalId.isEmpty) continue;
-        arcoriItems.add((d.internalId, d.displayName));
-      }
-    }
-    final slammerItems = <(String, String)>[];
-    if (slammers.isSuccess) {
-      for (final d in slammers.data!.items.take(12)) {
-        if (d.internalId.isEmpty) continue;
-        slammerItems.add((d.internalId, d.displayName));
-      }
+    final state = ref.read(avariProfileProvider);
+    final profile = state.profile;
+    if (profile == null) {
+      setState(() {
+        _error = state.errorMessage?.trim().isNotEmpty == true
+            ? state.errorMessage
+            : 'Could not load your collection';
+        _loading = false;
+      });
+      return;
     }
 
-    final list = List<(String, String)>.from(
-      slammerItems.isNotEmpty ? slammerItems : _fallbackSlammers,
-    );
-    if (list.every((e) => e.$1 != equipped)) {
-      list.insert(0, (equipped, equipped));
-    }
+    final arcori = profile.access.where((e) => e.designId.isNotEmpty).toList();
+    final slammers =
+        profile.slammers.where((e) => e.designId.isNotEmpty).toList();
     setState(() {
-      _arcori = arcoriItems.isNotEmpty ? arcoriItems : _fallbackArcori;
-      _slammers = list;
-      _arcoriId = _arcori.first.$1;
-      _slammerId = _pickDefaultSlammer(list, equipped);
-      _error = (!animals.isSuccess && !slammers.isSuccess)
-          ? 'Using offline defaults'
+      _arcori = arcori;
+      _slammers = slammers;
+      _arcoriId = arcori.isNotEmpty ? arcori.first.designId : null;
+      _slammerId = _pickDefaultSlammer(slammers, equipped);
+      _error = (arcori.isEmpty || slammers.isEmpty)
+          ? 'Your collection needs at least one Arcori and one slammer.'
           : null;
       _loading = false;
     });
   }
 
-  String _pickDefaultSlammer(
-    List<(String, String)> list,
+  String? _pickDefaultSlammer(
+    List<AvariInventoryItem> list,
     String equipped,
   ) {
-    if (list.any((e) => e.$1 == equipped)) return equipped;
-    return list.first.$1;
+    if (list.isEmpty) return null;
+    if (list.any((e) => e.designId == equipped)) return equipped;
+    return list.first.designId;
+  }
+
+  AvariInventoryItem? _itemById(List<AvariInventoryItem> list, String? id) {
+    if (id == null) return null;
+    for (final e in list) {
+      if (e.designId == id) return e;
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     if (_loading) {
       return const Padding(
-        padding: EdgeInsets.all(24),
+        padding: EdgeInsets.all(AppSpacing.lg),
         child: Center(child: CircularProgressIndicator()),
       );
     }
@@ -139,9 +141,11 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
           value: _arcoriId,
           items: [
             for (final e in _arcori)
-              DropdownMenuItem(value: e.$1, child: Text(e.$2)),
+              DropdownMenuItem(value: e.designId, child: Text(e.displayName)),
           ],
-          onChanged: (v) => setState(() => _arcoriId = v),
+          onChanged: _arcori.isEmpty
+              ? null
+              : (v) => setState(() => _arcoriId = v),
         ),
         AppSpacing.gapMd,
         Text('Slammer', style: context.appTypography.label),
@@ -150,20 +154,27 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
           value: _slammerId,
           items: [
             for (final e in _slammers)
-              DropdownMenuItem(value: e.$1, child: Text(e.$2)),
+              DropdownMenuItem(value: e.designId, child: Text(e.displayName)),
           ],
-          onChanged: (v) => setState(() => _slammerId = v),
+          onChanged: _slammers.isEmpty
+              ? null
+              : (v) => setState(() => _slammerId = v),
         ),
         AppSpacing.gapLg,
         FilledButton(
           onPressed: (_arcoriId != null && _slammerId != null)
-              ? () => AppModal.dismiss(
+              ? () {
+                  final arcori = _itemById(_arcori, _arcoriId);
+                  AppModal.dismiss(
                     context,
                     PracticeLoadout(
                       arcoriId: _arcoriId!,
                       slammerId: _slammerId!,
+                      arcoriImageUrl: arcori?.imageUrl,
+                      arcoriColor: arcori?.color,
                     ),
-                  )
+                  );
+                }
               : null,
           child: const Text('Continue'),
         ),

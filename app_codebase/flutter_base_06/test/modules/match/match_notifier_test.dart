@@ -37,6 +37,11 @@ void main() {
       expect(snap.seats[2].arcoriIds, isNotEmpty);
       expect(snap.pieces, hasLength(3));
       expect(snap.pieces.every((p) => !p.faceUp), isTrue);
+      expect(
+        snap.pieces.first.imageUrl,
+        contains('ANM-TIG-GEN001-0001.webp'),
+      );
+      expect(snap.pieces.first.color, '#C6A15B');
 
       notifier.localSlam(
         actorUserId: 'usr_local',
@@ -100,8 +105,8 @@ void main() {
       ]);
       expect(snap.isEnded, isTrue);
       expect(snap.round, 2);
-      // start v1 + 6 slams + end
-      expect(snap.version, 8);
+      // start v1 + 6 slams + 6 anim-lock clears + end
+      expect(snap.version, 14);
       expect(snap.lastEvent?['type'], 'match_ended');
       expect(snap.result?['winnerUserIds'], ['usr_local']);
     });

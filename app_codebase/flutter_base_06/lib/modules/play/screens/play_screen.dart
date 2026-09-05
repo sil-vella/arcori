@@ -6,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/theme/theme.dart';
+import '../../avari/avari_models.dart';
+import '../../avari/avari_notifier.dart';
+import '../../match/widgets/arcori_image_prefetch.dart';
 import '../../match/widgets/practice_match_surface.dart';
 import '../../matchmaking/widgets/matchmaking_lobby_modal.dart';
 import '../play_models.dart';
@@ -16,14 +19,47 @@ import '../widgets/play_failure_modal.dart';
 import '../widgets/practice_loadout_modal.dart';
 
 /// Play hub — start and end of the match pipeline.
-class PlayScreen extends ConsumerWidget {
+class PlayScreen extends ConsumerStatefulWidget {
   const PlayScreen({super.key});
 
-  Future<void> _onPlayPressed(BuildContext context, WidgetRef ref) async {
+  @override
+  ConsumerState<PlayScreen> createState() => _PlayScreenState();
+}
+
+class _PlayScreenState extends ConsumerState<PlayScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(_warmArcoriArt);
+  }
+
+  List<String> _artUrlsFor(AvariProfile? profile) {
+    return collectArcoriArtUrls(
+      extra: [
+        if (profile != null) ...[
+          ...profile.access.map((e) => e.imageUrl),
+          ...profile.slammers.map((e) => e.imageUrl),
+        ],
+      ],
+    );
+  }
+
+  Future<void> _warmArcoriArt() async {
+    await ref.read(avariProfileProvider.notifier).load();
+    if (!mounted) return;
+    unawaited(
+      precacheArcoriArt(
+        context,
+        _artUrlsFor(ref.read(avariProfileProvider).profile),
+      ),
+    );
+  }
+
+  Future<void> _onPlayPressed() async {
     final notifier = ref.read(matchFlowProvider.notifier);
     notifier.startPlay();
     final type = await showMatchTypeSelectModal(context);
-    if (!context.mounted) return;
+    if (!mounted) return;
     if (type == null) {
       notifier.cancelSelection();
       return;
@@ -32,7 +68,7 @@ class PlayScreen extends ConsumerWidget {
     PracticeLoadout? loadout;
     if (type == MatchType.practice) {
       loadout = await showPracticeLoadoutModal(context);
-      if (!context.mounted) return;
+      if (!mounted) return;
       if (loadout == null) {
         notifier.cancelSelection();
         return;
@@ -41,7 +77,7 @@ class PlayScreen extends ConsumerWidget {
 
     if (type == MatchType.invite) {
       final setup = await showInviteSetupModal(context: context, ref: ref);
-      if (!context.mounted) return;
+      if (!mounted) return;
       if (setup == null ||
           setup.inviteId.trim().isEmpty ||
           setup.invitedUserId.trim().isEmpty) {
@@ -60,9 +96,20 @@ class PlayScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final flow = ref.watch(matchFlowProvider);
     final canPlay = flow.isIdle && flow.errorMessage == null;
+
+    ref.listen(avariProfileProvider, (prev, next) {
+      if (next.profile == null) return;
+      if (identical(prev?.profile, next.profile)) return;
+      unawaited(
+        precacheArcoriArt(
+          context,
+          _artUrlsFor(next.profile),
+        ),
+      );
+    });
 
     ref.listen(matchFlowProvider, (prev, next) {
       final enteredOnlineLobby = next.phase == MatchFlowPhase.typeSetup &&
@@ -131,7 +178,7 @@ class PlayScreen extends ConsumerWidget {
               ],
               AppSpacing.gapLg,
               FilledButton(
-                onPressed: canPlay ? () => _onPlayPressed(context, ref) : null,
+                onPressed: canPlay ? _onPlayPressed : null,
                 child: const Text('Play'),
               ),
             ],

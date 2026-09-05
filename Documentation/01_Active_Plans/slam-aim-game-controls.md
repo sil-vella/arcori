@@ -10,6 +10,8 @@ Related: [3d-slam-physics.md](3d-slam-physics.md) · [player-slam-input.md](play
 
 Add a module-aligned **Game Controls** screen (equipped slammer + exclusive Accel/Touch mode) and wire slam aim so players can miss the stack (no kick) when the hit marker is outside the footprint.
 
+Show the **current slam control mode** on the match screen with the same icon + label used on Game Controls.
+
 ## Decisions
 
 | Decision | Choice |
@@ -22,6 +24,7 @@ Add a module-aligned **Game Controls** screen (equipped slammer + exclusive Acce
 | Aim miss | Outside `kDiscRadius` (slammer-sized footprint) → miss, empty sim, no kick |
 | Online loadout | `slammerId` on `matchmaking/find` |
 | Practice | Defaults to equipped slammer |
+| Match HUD | `SlamControlModeIndicator` — icon + label + caption; SSOT in `slam_control_mode_ui.dart` |
 
 ## Implementation Steps
 
@@ -31,14 +34,32 @@ Add a module-aligned **Game Controls** screen (equipped slammer + exclusive Acce
 - [x] Mode-gated capture; freeze aim on commit
 - [x] Hit marker on stack (in/out footprint)
 - [x] Tests + tech spec + TM sync
+- [x] Match HUD shows current slam mode with icon (same SSOT as Game Controls)
+
+## Current Progress
+
+Match HUD shows Phone motion (`screen_rotation`) or Touch (`swipe_down`) for the whole match, using the same labels as Game Controls.
+
+## Next Steps
+
+None for this plan.
 
 ## Files Modified
 
 - Flutter: `game_controls_prefs.dart`, `game_controls_screen.dart`, `play_routes.dart`, `play_drawer.dart`, `app_paths.dart`, `play_notifier.dart`, `practice_loadout_modal.dart`, slam input/capture/resolver/physics stack widgets
 - Dart: `slam_input.dart`, `slam_resolver.dart`, `slam_physics_world.dart` (feel damping), `turn_pacing.dart`, tests
+- Flutter HUD: `slam_control_mode_ui.dart`, `practice_match_surface.dart`, `slam_control_mode_ui_test.dart`
 
 ## Notes
 
 - Modes are exclusive during gameplay (no simultaneous tilt+swipe).
 - Catalog art on hit marker out of scope (simple ring).
-- Task Manager: App Dev checklist for slam direction + Game Controls checked off.
+- Task Manager: App Dev checklist for slam direction + Game Controls + match HUD mode indicator.
+
+## Case study
+
+n/a — HUD polish; no architecture/game-logic change.
+
+## Task Manager
+
+App Dev (`32`) checklist item `240`: Match HUD shows slam control mode + icon — checked.

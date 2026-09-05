@@ -91,8 +91,12 @@ class PracticeLoadout {
   const PracticeLoadout({
     required this.arcoriId,
     required this.slammerId,
+    this.arcoriImageUrl,
+    this.arcoriColor,
   });
 
   final String arcoriId;
   final String slammerId;
+  final String? arcoriImageUrl;
+  final String? arcoriColor;
 }

@@ -115,6 +115,22 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     if (LOGGING_SWITCH) {
       customlog('match: startLocalPractice firstSeat=$first');
     }
+    final faces = <String, Map<String, String?>>{
+      for (final e in practiceFaceDefaults.entries)
+        e.key: Map<String, String?>.from(e.value),
+    };
+    final loadoutUrl = loadout.arcoriImageUrl?.trim() ?? '';
+    final loadoutColor = loadout.arcoriColor?.trim() ?? '';
+    if (loadoutUrl.isNotEmpty || loadoutColor.isNotEmpty) {
+      faces[loadout.arcoriId] = {
+        'imageUrl': loadoutUrl.isNotEmpty
+            ? loadoutUrl
+            : faces[loadout.arcoriId]?['imageUrl'],
+        'color': loadoutColor.isNotEmpty
+            ? loadoutColor
+            : faces[loadout.arcoriId]?['color'],
+      };
+    }
     state = MatchSnapshotState(
       matchId: matchId,
       version: 1,
@@ -135,6 +151,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
               arcoriIds: s.arcoriIds,
             ),
         ],
+        facesByDesignId: faces,
       ),
       active: practiceMatchStartGrace <= Duration.zero
           ? <String, dynamic>{'seatIndex': first, 'action': 'slam'}

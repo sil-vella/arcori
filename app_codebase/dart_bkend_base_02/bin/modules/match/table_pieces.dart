@@ -6,13 +6,19 @@ import 'match_models.dart';
 Map<String, dynamic> emptyTable() => {'pieces': <dynamic>[]};
 
 /// Build one face-down piece per seat that has an Arcori design id.
-Map<String, dynamic> tableFromSeats(List<MatchSeat> seats) {
+Map<String, dynamic> tableFromSeats(
+  List<MatchSeat> seats, {
+  Map<String, Map<String, dynamic>>? catalogById,
+}) {
   final pieces = <Map<String, dynamic>>[];
   var stackIndex = 0;
   for (final seat in seats) {
     final designId =
         seat.arcoriIds.isNotEmpty ? seat.arcoriIds.first.trim() : '';
     if (designId.isEmpty) continue;
+    final frozen = catalogById?[designId];
+    final imageUrl = frozen?['imageUrl']?.toString().trim() ?? '';
+    final color = frozen?['color']?.toString().trim() ?? '';
     pieces.add(
       piecePayload(
         pieceId: 'p${seat.seatIndex}',
@@ -21,6 +27,8 @@ Map<String, dynamic> tableFromSeats(List<MatchSeat> seats) {
         seatIndex: seat.seatIndex,
         faceUp: false,
         stackIndex: stackIndex,
+        imageUrl: imageUrl.isNotEmpty ? imageUrl : null,
+        color: color.isNotEmpty ? color : null,
       ),
     );
     stackIndex++;
@@ -35,6 +43,8 @@ Map<String, dynamic> piecePayload({
   required int seatIndex,
   required bool faceUp,
   required int stackIndex,
+  String? imageUrl,
+  String? color,
 }) {
   return {
     'pieceId': pieceId,
@@ -43,6 +53,8 @@ Map<String, dynamic> piecePayload({
     'seatIndex': seatIndex,
     'faceUp': faceUp,
     'stackIndex': stackIndex,
+    if (imageUrl != null && imageUrl.isNotEmpty) 'imageUrl': imageUrl,
+    if (color != null && color.isNotEmpty) 'color': color,
   };
 }
 

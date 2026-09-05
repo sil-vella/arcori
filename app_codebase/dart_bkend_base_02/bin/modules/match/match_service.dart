@@ -8,6 +8,7 @@ import '../../core/http/fastapi_service_client.dart';
 import '../../core/state/state_registry.dart';
 import '../../utils/dev_logger.dart';
 import 'action_dispatcher.dart';
+import 'match_avari_client.dart';
 import 'match_catalog_client.dart';
 import 'match_errors.dart';
 import 'match_lifecycle_contract.dart';
@@ -24,6 +25,7 @@ class MatchService implements MatchLifecycleContract {
     MatchStore? store,
     FastApiServiceClient? fastApi,
     MatchCatalogClient? catalog,
+    MatchAvariClient? avari,
     ActionDispatcher? dispatcher,
     bool autoStubTurns = true,
     Duration? turnTimeout,
@@ -31,6 +33,7 @@ class MatchService implements MatchLifecycleContract {
     Random? turnRandom,
   })  : _store = store ?? matchStore,
         _catalog = catalog ?? MatchCatalogClient(fastApi: fastApi),
+        _avari = avari ?? MatchAvariClient(fastApi: fastApi),
         _dispatcher =
             dispatcher ?? ActionDispatcher(store: store ?? matchStore),
         autoStubTurns = autoStubTurns {
@@ -45,6 +48,7 @@ class MatchService implements MatchLifecycleContract {
 
   final MatchStore _store;
   final MatchCatalogClient _catalog;
+  final MatchAvariClient _avari;
   final ActionDispatcher _dispatcher;
 
   /// When true, [startFromLobby] schedules the online turn runner.
@@ -134,12 +138,12 @@ class MatchService implements MatchLifecycleContract {
       );
     }
 
-    final seats = <MatchSeat>[];
+    final requestedSeats = <MatchSeat>[];
     for (var i = 0; i < humans.length; i++) {
       final h = humans[i];
       final slammer =
           h.slammerId.trim().isNotEmpty ? h.slammerId.trim() : stubSlammerId;
-      seats.add(
+      requestedSeats.add(
         MatchSeat(
           userId: h.userId,
           seatIndex: i,
@@ -150,13 +154,53 @@ class MatchService implements MatchLifecycleContract {
       );
     }
     for (var i = 0; i < needAi; i++) {
-      seats.add(
+      requestedSeats.add(
         MatchSeat(
           userId: aiUserIds[i],
           seatIndex: humans.length + i,
           kind: 'ai',
           arcoriIds: const [],
           slammerId: stubSlammerId,
+        ),
+      );
+    }
+
+    Map<String, String> verifiedSlammers = {};
+    try {
+      verifiedSlammers = await _avari.verifySlammers(
+        seats: [
+          for (final s in requestedSeats)
+            {'userId': s.userId, 'slammerId': s.slammerId},
+        ],
+      );
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match: startFromLobby verify_slammers ok '
+          'picks=${verifiedSlammers.entries.map((e) => '${e.key}:${e.value}').join(',')}',
+        );
+      }
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match: startFromLobby verify_slammers failed → stub slammer err=$e',
+        );
+      }
+      verifiedSlammers = {};
+    }
+
+    final seats = <MatchSeat>[];
+    for (final s in requestedSeats) {
+      final verified = verifiedSlammers[s.userId]?.trim() ?? '';
+      final slammer = verified.isNotEmpty ? verified : stubSlammerId;
+      seats.add(
+        MatchSeat(
+          userId: s.userId,
+          seatIndex: s.seatIndex,
+          kind: s.kind,
+          arcoriIds: s.arcoriIds,
+          slammerId: slammer,
+          score: s.score,
+          connected: s.connected,
         ),
       );
     }

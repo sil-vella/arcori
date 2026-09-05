@@ -82,7 +82,7 @@ class MatchStore {
       matchType: const {'code': 'practice'},
       seats: seats,
       firstSeatIndex: first,
-      table: tableFromSeats(seats),
+      table: tableFromSeats(seats, catalogById: catalogById),
       active: {
         'seatIndex': first,
         'action': 'slam',
@@ -154,7 +154,7 @@ class MatchStore {
       matchType: Map<String, dynamic>.from(matchType),
       seats: seats,
       firstSeatIndex: first,
-      table: tableFromSeats(seats),
+      table: tableFromSeats(seats, catalogById: catalogById),
       active: {
         'seatIndex': first,
         'action': 'slam',

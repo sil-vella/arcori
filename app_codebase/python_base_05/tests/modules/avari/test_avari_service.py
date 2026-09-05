@@ -90,7 +90,9 @@ class AvariServiceTests(unittest.TestCase):
         self.assertEqual(payload["economy"]["goldCaps"], 5)
         self.assertEqual(payload["kin"]["subtheme"], "Entelairs")
         self.assertEqual(payload["access"][0]["designId"], "ANM-TIG-GEN001-0001")
+        self.assertTrue(payload["access"][0].get("displayName"))
         self.assertEqual(payload["slammers"][0]["designId"], "SLM-STR-GEN001-0001")
+        self.assertTrue(payload["slammers"][0].get("displayName"))
         self.assertTrue(payload["onboarding"]["completed"])
         self.assertEqual(payload["trove"], [])
 

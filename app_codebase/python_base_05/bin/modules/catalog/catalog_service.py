@@ -73,6 +73,7 @@ def design_summary(
         "worldState": design.get("worldState"),
         "seasonState": design.get("seasonState"),
         "type": design.get("type"),
+        "color": design.get("color"),
         "generation": gen_out,
         "imageUrl": image_url_for(
             series_key=series_key,

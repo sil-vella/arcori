@@ -2,7 +2,7 @@
 
 **Status:** Implemented (read API + Profile screen + drawer avatar header); persistence via [player-profile-schema.md](player-profile-schema.md)  
 **Created:** 2026-07-26  
-**Last Updated:** 2026-08-09
+**Last Updated:** 2026-09-05
 
 Related: [GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · [first-time-player-flow.md](first-time-player-flow.md) · [arcori-standings-surface.md](arcori-standings-surface.md)
 
@@ -24,7 +24,7 @@ One `avatarUrl` on the user profile. Account uploads; Avari screen + drawer head
 
 ## API
 
-`GET /authuser/avari/profile` — identity from user row; `rank` / `titles` / `kin` / `mastery` / `stats` stubs.
+`GET /authuser/avari/profile` — identity from user row; `rank` / `titles` / `kin` / `mastery` / `stats`; **`access`** = circulating `player_design_access` with catalog `displayName` / `imageUrl` / `color`; **`slammers`** = owned `player_slammers` with the same face fields. Profile UI lists those collections (not the global Velora catalog).
 
 ## Module files
 

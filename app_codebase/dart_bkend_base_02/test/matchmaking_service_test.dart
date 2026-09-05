@@ -6,7 +6,6 @@ import 'package:test/test.dart';
 
 import '../bin/core/http/fastapi_service_client.dart';
 import '../bin/core/state/state_registry.dart';
-import '../bin/modules/match/match_catalog_client.dart';
 import '../bin/modules/match/match_models.dart';
 import '../bin/modules/match/match_service.dart';
 import '../bin/modules/match/match_store.dart';
@@ -27,6 +26,28 @@ void main() {
       lobbyStore = MatchmakingStore();
       final fastApi = FastApiServiceClient(
         client: MockClient((request) async {
+          if (request.url.path == '/service/avari/verify_slammers') {
+            final body = jsonDecode(request.body) as Map;
+            final seats = body['seats'] as List? ?? [];
+            final assignments = <Map<String, dynamic>>[];
+            for (final raw in seats) {
+              final seat = raw as Map;
+              final requested = seat['slammerId']?.toString().trim() ?? '';
+              assignments.add({
+                'userId': seat['userId']?.toString() ?? '',
+                'slammerId':
+                    requested.isNotEmpty ? requested : stubSlammerId,
+                'source': 'owned',
+              });
+            }
+            return http.Response(
+              jsonEncode({
+                'ok': true,
+                'data': {'assignments': assignments},
+              }),
+              200,
+            );
+          }
           if (request.url.path == '/service/catalog/select_arcori') {
             final body = jsonDecode(request.body) as Map;
             final seats = body['seats'] as List? ?? [];
@@ -124,7 +145,7 @@ void main() {
       );
       matchSvc = MatchService(
         store: matchStoreLocal,
-        catalog: MatchCatalogClient(fastApi: fastApi),
+        fastApi: fastApi,
         autoStubTurns: false,
       );
       mm = MatchmakingService(

@@ -54,6 +54,8 @@ class MatchPieceView {
     required this.seatIndex,
     required this.faceUp,
     required this.stackIndex,
+    this.imageUrl,
+    this.color,
   });
 
   final String pieceId;
@@ -62,8 +64,12 @@ class MatchPieceView {
   final int seatIndex;
   final bool faceUp;
   final int stackIndex;
+  final String? imageUrl;
+  final String? color;
 
   factory MatchPieceView.fromJson(Map<String, dynamic> json) {
+    final imageUrl = json['imageUrl']?.toString().trim() ?? '';
+    final color = json['color']?.toString().trim() ?? '';
     return MatchPieceView(
       pieceId: json['pieceId']?.toString() ?? '',
       designId: json['designId']?.toString() ?? '',
@@ -71,6 +77,8 @@ class MatchPieceView {
       seatIndex: json['seatIndex'] is int ? json['seatIndex'] as int : 0,
       faceUp: json['faceUp'] == true,
       stackIndex: json['stackIndex'] is int ? json['stackIndex'] as int : 0,
+      imageUrl: imageUrl.isNotEmpty ? imageUrl : null,
+      color: color.isNotEmpty ? color : null,
     );
   }
 
@@ -81,6 +89,8 @@ class MatchPieceView {
         'seatIndex': seatIndex,
         'faceUp': faceUp,
         'stackIndex': stackIndex,
+        if (imageUrl != null && imageUrl!.isNotEmpty) 'imageUrl': imageUrl,
+        if (color != null && color!.isNotEmpty) 'color': color,
       };
 }
 

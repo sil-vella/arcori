@@ -17,6 +17,8 @@ import '../state/match_notifier.dart';
 import '../state/match_snapshot_state.dart';
 import '../state/slam_motion_capability_provider.dart';
 import '../../play/game_controls_prefs.dart';
+import '../../play/slam_control_mode_ui.dart';
+import 'arcori_image_prefetch.dart';
 import 'arcori_stack_surface.dart';
 import 'slam_result_modal.dart';
 
@@ -52,6 +54,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   SlamAim _liveAim = SlamAim.center;
   double? _powerPreview;
   int? _lastPowerGaugeLogVersion;
+  String? _prefetchedArtFp;
 
   @override
   void dispose() {
@@ -231,6 +234,16 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     );
   }
 
+  void _precacheTableArt(MatchSnapshotState snap) {
+    final urls = collectArcoriArtUrls(
+      extra: snap.pieces.map((p) => p.imageUrl),
+    );
+    final fp = urls.join('|');
+    if (fp.isEmpty || fp == _prefetchedArtFp) return;
+    _prefetchedArtFp = fp;
+    unawaited(precacheArcoriArt(context, urls));
+  }
+
   @override
   Widget build(BuildContext context) {
     final snap = ref.watch(matchSnapshotProvider);
@@ -247,6 +260,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
         !inGrace &&
         !inputLocked;
     final controlMode = ref.watch(gameControlsProvider).slamControlMode;
+    _precacheTableArt(snap);
 
     ref.listen(matchSnapshotProvider, (prev, next) {
       if (next.isEnded && prev?.isEnded != true && context.mounted) {
@@ -447,6 +461,10 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (!snap.isEnded) ...[
+              SlamControlModeIndicator(mode: controlMode),
+              AppSpacing.gapSm,
+            ],
             if (inGrace) ...[
               Text(
                 'Get ready…',

@@ -31,6 +31,17 @@ const Map<String, Map<String, dynamic>> practiceSlammerAttrs = {
 
 const stubPracticeAiArcoriId = 'ANM-WTI-GEN001-0002';
 
+const Map<String, Map<String, String>> practiceFaceDefaults = {
+  'ANM-TIG-GEN001-0001': {
+    'imageUrl': '/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp',
+    'color': '#C6A15B',
+  },
+  stubPracticeAiArcoriId: {
+    'imageUrl': '/catalog-media/genesis/animals/ANM-WTI-GEN001-0002.webp',
+    'color': '#A8B0B8',
+  },
+};
+
 class SlamResolveResult {
   const SlamResolveResult({
     required this.pieces,
@@ -57,6 +68,7 @@ Map<String, dynamic> tableFromSeatViews({
             List<String> arcoriIds,
           })>
       seats,
+  Map<String, Map<String, String?>>? facesByDesignId,
 }) {
   final pieces = <Map<String, dynamic>>[];
   var stackIndex = 0;
@@ -64,6 +76,9 @@ Map<String, dynamic> tableFromSeatViews({
     final designId =
         seat.arcoriIds.isNotEmpty ? seat.arcoriIds.first.trim() : '';
     if (designId.isEmpty) continue;
+    final face = facesByDesignId?[designId];
+    final imageUrl = face?['imageUrl']?.trim() ?? '';
+    final color = face?['color']?.trim() ?? '';
     pieces.add({
       'pieceId': 'p${seat.seatIndex}',
       'designId': designId,
@@ -71,6 +86,8 @@ Map<String, dynamic> tableFromSeatViews({
       'seatIndex': seat.seatIndex,
       'faceUp': false,
       'stackIndex': stackIndex,
+      if (imageUrl.isNotEmpty) 'imageUrl': imageUrl,
+      if (color.isNotEmpty) 'color': color,
     });
     stackIndex++;
   }

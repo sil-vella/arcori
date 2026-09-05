@@ -101,6 +101,43 @@ class AvariStats {
   final int flips;
 }
 
+/// Circulating Arcori access or owned slammer — catalog face fields included.
+class AvariInventoryItem {
+  const AvariInventoryItem({
+    required this.designId,
+    required this.displayName,
+    this.imageUrl,
+    this.color,
+    this.source,
+    this.permanent,
+    this.chargesRemaining,
+  });
+
+  factory AvariInventoryItem.fromJson(Map<String, dynamic> json) {
+    final id = json['designId']?.toString() ?? '';
+    final name = json['displayName']?.toString().trim() ?? '';
+    return AvariInventoryItem(
+      designId: id,
+      displayName: name.isNotEmpty ? name : id,
+      imageUrl: json['imageUrl']?.toString(),
+      color: json['color']?.toString(),
+      source: json['source']?.toString(),
+      permanent: json['permanent'] is bool ? json['permanent'] as bool : null,
+      chargesRemaining: json['chargesRemaining'] is int
+          ? json['chargesRemaining'] as int
+          : int.tryParse('${json['chargesRemaining'] ?? ''}'),
+    );
+  }
+
+  final String designId;
+  final String displayName;
+  final String? imageUrl;
+  final String? color;
+  final String? source;
+  final bool? permanent;
+  final int? chargesRemaining;
+}
+
 class AvariProfile {
   const AvariProfile({
     required this.identity,
@@ -109,11 +146,22 @@ class AvariProfile {
     required this.mastery,
     required this.stats,
     this.kin,
+    this.access = const [],
+    this.slammers = const [],
   });
 
   factory AvariProfile.fromJson(Map<String, dynamic> json) {
     final identityRaw = json['identity'];
     final titlesRaw = json['titles'];
+    List<AvariInventoryItem> parseItems(Object? raw) {
+      if (raw is! List) return const [];
+      return raw
+          .whereType<Map>()
+          .map((e) => AvariInventoryItem.fromJson(Map<String, dynamic>.from(e)))
+          .where((e) => e.designId.isNotEmpty)
+          .toList();
+    }
+
     return AvariProfile(
       identity: identityRaw is Map
           ? AvariIdentity.fromJson(Map<String, dynamic>.from(identityRaw))
@@ -142,6 +190,8 @@ class AvariProfile {
             ? Map<String, dynamic>.from(json['stats'] as Map)
             : null,
       ),
+      access: parseItems(json['access']),
+      slammers: parseItems(json['slammers']),
     );
   }
 
@@ -151,4 +201,6 @@ class AvariProfile {
   final Object? kin;
   final AvariMasterySummary mastery;
   final AvariStats stats;
+  final List<AvariInventoryItem> access;
+  final List<AvariInventoryItem> slammers;
 }

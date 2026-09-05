@@ -10,6 +10,7 @@ import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../avari_models.dart';
 import '../avari_notifier.dart';
+import '../widgets/inventory_face_chip.dart';
 
 class AvariProfileScreen extends ConsumerStatefulWidget {
   const AvariProfileScreen({super.key});
@@ -170,6 +171,40 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
       _KeyValue('Matches', '${profile.stats.matchesPlayed}'),
       _KeyValue('Wins', '${profile.stats.wins}'),
       _KeyValue('Flips', '${profile.stats.flips}'),
+      AppSpacing.gapMd,
+      _SectionTitle(text: 'Arcori'),
+      Text(
+        'Circulating designs you can play — same pool as online match pairing.',
+        style: context.appTypography.bodySmall,
+      ),
+      AppSpacing.gapSm,
+      if (profile.access.isEmpty)
+        Text('None yet', style: context.appTypography.bodyMuted)
+      else
+        Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            for (final item in profile.access) InventoryFaceChip(item: item),
+          ],
+        ),
+      AppSpacing.gapMd,
+      _SectionTitle(text: 'Slammers'),
+      Text(
+        'Slammers you own — Game Controls equips from this list.',
+        style: context.appTypography.bodySmall,
+      ),
+      AppSpacing.gapSm,
+      if (profile.slammers.isEmpty)
+        Text('None yet', style: context.appTypography.bodyMuted)
+      else
+        Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            for (final item in profile.slammers) InventoryFaceChip(item: item),
+          ],
+        ),
     ];
   }
 }

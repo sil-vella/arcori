@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
-import '../../../core/errors/error_policy.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../../utils/dev_logger.dart';
+import '../../avari/avari_notifier.dart';
 import '../../match/input/slam_motion_capability.dart';
-import '../../match/state/match_notifier.dart';
-import '../../velora/velora_api.dart';
 import '../game_controls_prefs.dart';
+import '../slam_control_mode_ui.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
@@ -25,13 +24,8 @@ class GameControlsScreen extends ConsumerStatefulWidget {
 }
 
 class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
-  static const _fallbackSlammers = [
-    ('SLM-STR-GEN001-0001', 'Starter Slammer'),
-    ('SLM-TTN-GEN001-0002', 'Titan Slammer'),
-  ];
-
-  bool _loadingCatalog = true;
-  String? _catalogError;
+  bool _loadingInventory = true;
+  String? _inventoryError;
   List<(String id, String label)> _slammers = const [];
   bool? _motionAvailable;
 
@@ -40,57 +34,62 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
     super.initState();
     Future.microtask(() async {
       await ref.read(gameControlsProvider.notifier).reload();
-      await _loadCatalog();
+      await _loadOwnedSlammers();
       final motion = await probeSlamShakeAvailable();
       if (mounted) setState(() => _motionAvailable = motion);
     });
   }
 
-  Future<void> _loadCatalog() async {
+  Future<void> _loadOwnedSlammers() async {
     final token = ref.read(authProvider).accessToken;
     if (token == null || token.isEmpty) {
       setState(() {
-        _slammers = _fallbackSlammers;
-        _catalogError = null;
-        _loadingCatalog = false;
+        _slammers = const [];
+        _inventoryError = 'Sign in to load your slammers';
+        _loadingInventory = false;
       });
       return;
     }
 
-    final outcome =
-        await VeloraApiClient().fetchIndex(accessToken: token, theme: 'Slammers');
+    await ref.read(avariProfileProvider.notifier).load(force: true);
     if (!mounted) return;
-
-    if (!outcome.isSuccess) {
-      String msg = 'Could not load slammers';
-      if (outcome.isNetworkError) {
-        msg = 'Network error — check your connection';
-      } else if (outcome.error != null) {
-        actionForApiError(outcome.error!, isWebSocket: false);
-        msg = outcome.error!.message;
+    final state = ref.read(avariProfileProvider);
+    if (state.profile == null) {
+      String msg = state.errorMessage?.trim() ?? 'Could not load slammers';
+      if (state.errorMessage == null && LOGGING_SWITCH) {
+        customlog('gameControls: avari profile empty');
       }
       if (LOGGING_SWITCH) {
-        customlog(
-          'gameControls: catalog fail code=${outcome.error?.code} msg=$msg',
-        );
+        customlog('gameControls: inventory fail msg=$msg');
       }
       setState(() {
-        _slammers = _fallbackSlammers;
-        _catalogError = msg;
-        _loadingCatalog = false;
+        _slammers = const [];
+        _inventoryError = msg;
+        _loadingInventory = false;
       });
       return;
     }
 
     final items = <(String, String)>[];
-    for (final d in outcome.data!.items.take(24)) {
-      if (d.internalId.isEmpty) continue;
-      items.add((d.internalId, d.displayName));
+    for (final s in state.profile!.slammers) {
+      if (s.designId.isEmpty) continue;
+      items.add((s.designId, s.displayName));
     }
+
+    final equipped = ref.read(gameControlsProvider).equippedSlammerId.trim();
+    if (items.isNotEmpty && items.every((e) => e.$1 != equipped)) {
+      await ref
+          .read(gameControlsProvider.notifier)
+          .setEquippedSlammerId(items.first.$1);
+    }
+
+    if (!mounted) return;
     setState(() {
-      _slammers = items.isNotEmpty ? items : _fallbackSlammers;
-      _catalogError = items.isEmpty ? 'Using offline defaults' : null;
-      _loadingCatalog = false;
+      _slammers = items;
+      _inventoryError = items.isEmpty
+          ? 'No slammers in your collection yet.'
+          : null;
+      _loadingInventory = false;
     });
   }
 
@@ -102,8 +101,11 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
     final motionOk = _motionAvailable ?? false;
 
     final slammerOptions = List<(String, String)>.from(_slammers);
-    if (slammerOptions.every((e) => e.$1 != equipped)) {
-      slammerOptions.insert(0, (equipped, equipped));
+    String? dropdownValue;
+    if (slammerOptions.isNotEmpty) {
+      dropdownValue = slammerOptions.any((e) => e.$1 == equipped)
+          ? equipped
+          : slammerOptions.first.$1;
     }
 
     return ModuleScreenRegistrar(
@@ -117,15 +119,20 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
             Text('Equipped slammer', style: context.appTypography.label),
             AppSpacing.gapXs,
             Text(
-              'Used for online matchmaking and practice defaults.',
+              'From your collection. Used for online matches and practice defaults.',
               style: context.appTypography.bodySmall,
             ),
             AppSpacing.gapSm,
-            if (_loadingCatalog)
+            if (_loadingInventory)
               const Center(child: CircularProgressIndicator())
+            else if (slammerOptions.isEmpty)
+              Text(
+                _inventoryError ?? 'No slammers in your collection yet.',
+                style: context.appTypography.bodySmall,
+              )
             else ...[
               DropdownButtonFormField<String>(
-                value: equipped,
+                value: dropdownValue,
                 items: [
                   for (final s in slammerOptions)
                     DropdownMenuItem(value: s.$1, child: Text(s.$2)),
@@ -140,9 +147,9 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
                 },
                 decoration: const InputDecoration(border: OutlineInputBorder()),
               ),
-              if (_catalogError != null) ...[
+              if (_inventoryError != null) ...[
                 AppSpacing.gapXs,
-                Text(_catalogError!, style: context.appTypography.bodySmall),
+                Text(_inventoryError!, style: context.appTypography.bodySmall),
               ],
             ],
             AppSpacing.gapLg,
@@ -157,14 +164,14 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
               segments: [
                 ButtonSegment(
                   value: SlamControlMode.accel,
-                  label: const Text('Phone motion'),
-                  icon: const Icon(Icons.phone_android),
+                  label: Text(SlamControlMode.accel.label),
+                  icon: Icon(SlamControlMode.accel.icon),
                   enabled: motionOk,
                 ),
-                const ButtonSegment(
+                ButtonSegment(
                   value: SlamControlMode.touch,
-                  label: Text('Touch'),
-                  icon: Icon(Icons.touch_app_outlined),
+                  label: Text(SlamControlMode.touch.label),
+                  icon: Icon(SlamControlMode.touch.icon),
                 ),
               ],
               selected: {mode},
@@ -179,9 +186,7 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
             ),
             AppSpacing.gapSm,
             Text(
-              mode == SlamControlMode.accel
-                  ? 'Tilt to aim. Shake (Z) to slam.'
-                  : 'Drag to aim. Swipe down to slam.',
+              mode.caption,
               style: context.appTypography.bodySmall,
             ),
             if (!motionOk) ...[
@@ -191,11 +196,6 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
                 style: context.appTypography.bodySmall,
               ),
             ],
-            AppSpacing.gapLg,
-            Text(
-              'Default stub if unset: $stubSlammerId',
-              style: context.appTypography.bodySmall,
-            ),
           ],
         ),
       ),

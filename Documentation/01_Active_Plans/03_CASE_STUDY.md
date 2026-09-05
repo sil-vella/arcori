@@ -525,6 +525,8 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Forge2D slam physics (Dart SSOT) | Discs can hit each other mid-air and change path; flip feels physical | Superseded by 3D thin-cylinder sim (kept as history) |
 | 3D slam physics (Dart SSOT) | True x/y/z tumble; coins feel like pogs, not side-view circles | Pure-Dart OBB/cylinder world + `vector_math`; wire `outcome.sim` `space:"xyzq"`; Flutter Matrix4 replay; no FFI / no Flutter on Dart backend |
 | Aim marker + exclusive modes | Can miss the stack (not only soft-miss); no tilt vs swipe fights | `aim:{x,z}` on wire; footprint miss; Game Controls `accel`\|`touch`; equipped `slammerId` on find |
+| Owned slammer + circulating Arcori on profile | Players see what they can actually play, not the whole Velora catalog | Avari `access` / `slammers` enriched with catalog `imageUrl`+`color`; Game Controls + practice dropdowns read that list; Dart `verify_slammers` before freeze |
+| Disc face from catalog | Flipped Arcori should look like the design, with its rim color; art ready before flip | Freeze stamps `imageUrl`/`color` on `table.pieces`; Flutter `ArcoriCylinder` SSOT; Play precaches circulating art; face-down still decodes `Image.network` |
 | Random first player | Fair who goes first; seat join order unchanged | Snapshot `firstSeatIndex`; turn order wraps `(first+offset)%n` each round |
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
 | Caller (not host/steward) | Table-feel product voice | `callerUserId` on snapshot |

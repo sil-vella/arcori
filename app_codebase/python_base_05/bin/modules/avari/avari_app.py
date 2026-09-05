@@ -6,8 +6,9 @@ from core.errors.app_error import AppError
 from core.http.contracts.register_route_contract import ApplicationRouteSink
 from core.http.contracts.response_contract import HttpResponseContract
 from core.http.request_context import get_auth_user_id
+from modules.auth.auth_service import parse_json_body
 from modules.avari.avari_errors import INVALID_QUERY
-from modules.avari.avari_service import get_avari_profile
+from modules.avari.avari_service import get_avari_profile, verify_slammers_for_seats
 
 
 def register_avari_routes(
@@ -15,6 +16,7 @@ def register_avari_routes(
     res: HttpResponseContract,
 ) -> None:
     routes.authuser_get("/avari/profile", lambda: _handle_profile(res))
+    routes.service_post("/avari/verify_slammers", lambda: _handle_verify_slammers(res))
 
 
 def _require_user_id() -> str:
@@ -28,5 +30,18 @@ def _handle_profile(res: HttpResponseContract):
     try:
         user_id = _require_user_id()
         return res.json_ok(get_avari_profile(user_id))
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_verify_slammers(res: HttpResponseContract):
+    try:
+        body = parse_json_body()
+        seats = body.get("seats")
+        if seats is not None and not isinstance(seats, list):
+            raise AppError(INVALID_QUERY, message="seats must be a list")
+        return res.json_ok(
+            verify_slammers_for_seats(seats if isinstance(seats, list) else [])
+        )
     except AppError as err:
         return err.to_http_response()
