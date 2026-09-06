@@ -34,6 +34,7 @@ class MatchStore {
     required String callerUserId,
     required Map<String, Map<String, dynamic>> catalogById,
     String arenaId = stubArenaId,
+    String? arenaImageUrl,
     List<String>? callerArcoriIds,
     String? callerSlammerId,
     String aiArcoriId = stubAiArcoriId,
@@ -77,6 +78,7 @@ class MatchStore {
       round: 1,
       roundsTotal: 2,
       arenaId: arenaId,
+      arenaImageUrl: arenaImageUrl,
       callerUserId: callerUserId,
       // Practice: no subtype key.
       matchType: const {'code': 'practice'},
@@ -132,6 +134,7 @@ class MatchStore {
     required List<MatchSeat> seats,
     required Map<String, Map<String, dynamic>> catalogById,
     String arenaId = stubArenaId,
+    String? arenaImageUrl,
     int? firstSeatIndex,
     Random? random,
   }) {
@@ -150,6 +153,7 @@ class MatchStore {
       round: 1,
       roundsTotal: 2,
       arenaId: arenaId,
+      arenaImageUrl: arenaImageUrl,
       callerUserId: callerUserId,
       matchType: Map<String, dynamic>.from(matchType),
       seats: seats,

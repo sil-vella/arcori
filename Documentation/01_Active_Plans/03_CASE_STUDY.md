@@ -305,9 +305,10 @@ Plan: [match-setting-core-flow.md](match-setting-core-flow.md).
 2. Predictive animations yes; predictive scores no.  
 3. **Full snapshots** on the wire.  
 4. Lean **seats**, not rich Player stubs.  
-5. `arcoriIds[]` + `slammerId` per seat; `arenaId` + **`callerUserId`** on the snapshot.  
+5. `arcoriIds[]` + `slammerId` per seat; `arenaId` + optional `arenaImageUrl` + **`callerUserId`** on the snapshot.  
 6. Match type is an **object** (code + subtype / event fields), not a bare string.  
-7. Catalog stats for physics: Dart calls FastAPI **service** batch at match init and **freezes** per match — no mid-match reload.
+7. Catalog stats for physics: Dart calls FastAPI **service** batch at match init and **freezes** per match — no mid-match reload.  
+8. **Quick Start / Invite arena** from seated Arcori regions (`POST /service/catalog/select_arena`); Special Event stays stub until its own rules.
 
 **Channels (authuser WS):**  
 `match/create`, `join`, `leave`, `end`, `action`, broadcast `match/state`.
@@ -496,13 +497,17 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 - Online Quick Start / Special Event: lobby → AI fill → match room → stub end → idle  
 - Friend Match: contacts invite → instant notification Accept → 2-seat lobby → match room → stub end  
 - 500 AI players + admin test Avari in local DB  
-- Match slam: 3D thin-cylinder physics (Dart SSOT) + Flutter `xyzq` replay  
+- Match slam: 3D thin-cylinder physics (Dart SSOT) + Flutter `xyzq` replay; rest keeps in-plane yaw  
+- Quick Start / Invite: arena image from seated Arcori regions as match background  
+- Arena mural follows the stack camera (zoomed in at rest; contain is max zoom-out; opaque table under rest-sized Arcori)  
 
 ### Next (ordered by master plan)
 
 1. **Celebration / Match Summary + durable rewards** (next)
-2. Home sink Trove • PLAY • Market; first-time / returning flows
-3. My Mastery tab; Trove UI; economy writers from matches
+2. **Kin creation start to finish** (lineage → customize → name → Genesis + `player_kin`) — [kin-creation.md](kin-creation.md)
+3. Home sink Trove • PLAY • Market; remaining first-time / returning flows
+4. My Mastery tab; Trove UI; economy writers from matches
+5. Special Event arena rules (not the Quick Start / Invite region pick)
 
 ---
 
@@ -521,12 +526,14 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Five launch regions; standing −2…+2 | Politics without good/evil factions; travel and collecting stay open | Region Catalog `01_regions.json`; region-to-region standings, not design IDs |
 | Pioneers series exists | First Trove mints should be reachable before Genesis generations fill | Legacy 100 / 200 vs Genesis 500 / 1000; ten seed designs only (`GEN002`) |
 | Match Arcori pick after seats | Players do not choose loadout online; hostility pairs more often | `04_selection_weights.json` + `POST /service/catalog/select_arcori`; pool = that seat’s circulating `player_design_access` only (weighted, else random in-pool; never global catalog) |
+| Match arena from seated regions | The table should feel like the lands that showed up | FastAPI `select_arena` after Arcori ids; 2+ same region → that land’s arenas; else random catalog region. Dart stamps `arenaId`+`arenaImageUrl` only for `quickStart`/`invite`. Special Event later. |
+| Arena mural locked to stack POV | Pulling the camera back for a wide scatter should pull the place back with it | One Flutter camera: mural laid out oversized (`viewport / kStackPovFitMin`), discs at rest Ø, camera scale 1→min so we never upscale a screen bitmap. Table is opaque and under the stack. HUD stays unzoomed. |
 | Online stub turn stages before end | Prove seat order / round / slam event without physics | Dart `MatchStubLoop` after `startFromLobby`: 2×N stub slams (`lastEvent` includes `slammerId`); Flutter waits for `ended` |
 | Forge2D slam physics (Dart SSOT) | Discs can hit each other mid-air and change path; flip feels physical | Superseded by 3D thin-cylinder sim (kept as history) |
-| 3D slam physics (Dart SSOT) | True x/y/z tumble; coins feel like pogs, not side-view circles | Pure-Dart OBB/cylinder world + `vector_math`; wire `outcome.sim` `space:"xyzq"`; Flutter Matrix4 replay; no FFI / no Flutter on Dart backend |
+| 3D slam physics (Dart SSOT) | True x/y/z tumble; coins feel like pogs, not side-view circles | Pure-Dart OBB/cylinder world + `vector_math`; wire `outcome.sim` `space:"xyzq"`; Flutter Matrix4 replay. Rest keeps in-plane yaw; when flat the widget stays facing the camera (art vs back from `faceUp`, not a 180° flip). Kick rolls ⟂ slam. Every face-down disc in the stack gets a direct kick (~5% less per layer); `spread` fans them, it does not skip the bottom. Strong slams free-tumble until flatten near land so flips read in the air; late pull still kills rim stands. No FFI / no Flutter on Dart backend |
 | Aim marker + exclusive modes | Can miss the stack (not only soft-miss); no tilt vs swipe fights | `aim:{x,z}` on wire; footprint miss; Game Controls `accel`\|`touch`; equipped `slammerId` on find |
 | Owned slammer + circulating Arcori on profile | Players see what they can actually play, not the whole Velora catalog | Avari `access` / `slammers` enriched with catalog `imageUrl`+`color`; Game Controls + practice dropdowns read that list; Dart `verify_slammers` before freeze |
-| Disc face from catalog | Flipped Arcori should look like the design, with its rim color; art ready before flip | Freeze stamps `imageUrl`/`color` on `table.pieces`; Flutter `ArcoriCylinder` SSOT; Play precaches circulating art; face-down still decodes `Image.network` |
+| Disc face from catalog | Flipped Arcori should look like the design, with its rim color; art ready before flip | Freeze stamps `imageUrl`/`color` on `table.pieces`; Flutter `ArcoriCylinder` SSOT (match, Avari, Velora browse/Detail); Play precaches circulating art; face-down still decodes `Image.network` |
 | Random first player | Fair who goes first; seat join order unchanged | Snapshot `firstSeatIndex`; turn order wraps `(first+offset)%n` each round |
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
 | Caller (not host/steward) | Table-feel product voice | `callerUserId` on snapshot |

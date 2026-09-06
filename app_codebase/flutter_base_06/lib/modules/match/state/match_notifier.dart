@@ -481,6 +481,12 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
 
     // Always restack face-down after a slam so the next seat starts clean.
     final nextTable = restackFaceDown({'pieces': resolved.pieces});
+    if (LOGGING_SWITCH) {
+      customlog(
+        'match: restack faceDown n=${nextTable['pieces'] is List ? (nextTable['pieces'] as List).length : 0} '
+        'wasFlipped=${resolved.flippedPieceIds}',
+      );
+    }
 
     final nextVersion = current.version + 1;
     final arcoriId =

@@ -30,6 +30,13 @@ void main() {
             'color': '#C6A15B',
             'permanent': true,
             'source': 'starter',
+            'gameplayAttributes': {
+              'impact': 5,
+              'precision': 5,
+              'control': 5,
+              'recovery': 5,
+              'spread': 5,
+            },
           },
         ],
       });
@@ -37,8 +44,35 @@ void main() {
       expect(profile.access.first.displayName, 'Tiger');
       expect(profile.access.first.imageUrl, contains('ANM-TIG'));
       expect(profile.access.first.color, '#C6A15B');
+      expect(profile.access.first.gameplayAttributes, isNull);
       expect(profile.slammers.single.designId, 'SLM-STR-GEN001-0001');
       expect(profile.slammers.single.permanent, isTrue);
+      final attrs = profile.slammers.single.gameplayAttributes!;
+      expect(attrs.impact, 5);
+      expect(attrs.labeledValues, [
+        ('Impact', 5),
+        ('Precision', 5),
+        ('Control', 5),
+        ('Recovery', 5),
+        ('Spread', 5),
+      ]);
+    });
+
+    test('clamps gameplayAttributes to 1–10 and skips empty maps', () {
+      final high = AvariInventoryItem.fromJson({
+        'designId': 'SLM-X',
+        'displayName': 'X',
+        'gameplayAttributes': {'impact': 99, 'precision': 0},
+      });
+      expect(high.gameplayAttributes!.impact, 10);
+      expect(high.gameplayAttributes!.precision, 1);
+
+      final empty = AvariInventoryItem.fromJson({
+        'designId': 'SLM-Y',
+        'displayName': 'Y',
+        'gameplayAttributes': {'impact': true},
+      });
+      expect(empty.gameplayAttributes, isNull);
     });
   });
 

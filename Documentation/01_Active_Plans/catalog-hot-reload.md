@@ -2,7 +2,7 @@
 
 **Status:** Implemented (v1 read API + media + Flutter Velora browse)  
 **Created:** 2026-07-24  
-**Last Updated:** 2026-07-25
+**Last Updated:** 2026-09-06
 
 Related: [Tech Spec](../Game_Specific/Arcori_Technical_Specification_v0.4.md) · [arcori-standings-surface.md](arcori-standings-surface.md)
 
@@ -18,6 +18,7 @@ Serve Arcori catalog JSON from `bin/modules/catalog/data/` over existing **authu
 - Override root: `CATALOG_DATA_ROOT` or test `set_data_root_override`
 - Debug compose mounts `bin` → live file edits visible in container
 - Catalog artwork: `assets/images/arcori` → `/data/catalog-media` (`CATALOG_MEDIA_ROOT`, `:ro`)
+- Region arena art: `assets/images/velora/{region-slug}/{arenaId}.webp` → `/data/catalog-velora` (`CATALOG_VELORA_MEDIA_ROOT`, sibling bind at the same host level as `arcori`). Public URL `/catalog-media/velora/…` via a dedicated StaticFiles mount (do not nest a bind under the `:ro` Arcori tree).
 - Path convention: `series/{series_slug}/{theme_slug}.json` and art `/{series_slug}/{theme_slug}/{internalId}.webp` (e.g. `genesis/animals/…`)
 
 ## Media (public)
@@ -37,6 +38,7 @@ Router is exact-match (no path params) — ids via query:
 | GET | `/authuser/catalog/index` | `series`, `theme`, `subtheme`, `circulating`, `limit`, `offset` | Velora list (`circulating=1` → `worldState == Active`) |
 | GET | `/authuser/catalog/theme` | `code` or `theme_code` | Full theme document |
 | GET | `/authuser/catalog/design` | `id` or `internal_id` | Single design |
+| POST | `/authuser/catalog/select_arena` | body `{ "arcoriIds": ["…"] }` | Same pick as service (available; practice does not call it) |
 
 Client payloads omit `artworkPrompt`. Envelope: `{ok, data}` / `{ok, error}` with `catalog/*` codes.
 
@@ -45,12 +47,14 @@ Client payloads omit `artworkPrompt`. Envelope: `{ok, data}` / `{ok, error}` wit
 | Method | Path | Body | Purpose |
 |--------|------|------|---------|
 | POST | `/service/catalog/designs` | `{ "ids": ["…"] }` | Batch designs for Dart match freeze (fail-closed) |
+| POST | `/service/catalog/select_arcori` | `{ "seats": [...] }` | Weighted Arcori pick after seats exist |
+| POST | `/service/catalog/select_arena` | `{ "arcoriIds": ["…"] }` | Arena from seated regions (Quick Start / Invite) |
 
 ## Flutter (Velora slice)
 
-- Module `lib/modules/velora/` — index (theme → series) + Arcori Detail circle art
+- Module `lib/modules/velora/` — index (theme → series) + Arcori Detail via `ArcoriCylinder` (catalog art + color rim)
 - Paths: `/velora`, `/velora/arcori?id=`
-- Uses authuser catalog GETs + `resolveMediaUrl(imageUrl)`
+- Uses authuser catalog GETs + catalog `imageUrl` / `color`
 
 ## Module files
 

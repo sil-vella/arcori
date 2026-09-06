@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/http/media_url.dart';
 import '../../../core/modal/modal.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
@@ -20,6 +21,7 @@ import '../../play/game_controls_prefs.dart';
 import '../../play/slam_control_mode_ui.dart';
 import 'arcori_image_prefetch.dart';
 import 'arcori_stack_surface.dart';
+import 'arena_pov_backdrop.dart';
 import 'slam_result_modal.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
@@ -55,10 +57,13 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   double? _powerPreview;
   int? _lastPowerGaugeLogVersion;
   String? _prefetchedArtFp;
+  final _stackAreaKey = GlobalKey();
+  final _arenaPovScale = ValueNotifier<double>(1.0);
 
   @override
   void dispose() {
     _graceTicker?.cancel();
+    _arenaPovScale.dispose();
     super.dispose();
   }
 
@@ -236,7 +241,10 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
 
   void _precacheTableArt(MatchSnapshotState snap) {
     final urls = collectArcoriArtUrls(
-      extra: snap.pieces.map((p) => p.imageUrl),
+      extra: [
+        ...snap.pieces.map((p) => p.imageUrl),
+        snap.arenaImageUrl,
+      ],
     );
     final fp = urls.join('|');
     if (fp.isEmpty || fp == _prefetchedArtFp) return;
@@ -380,6 +388,8 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
       },
       onCommit: (payload) => unawaited(_commitSlam(payload)),
       builder: (context, handle) {
+        final arenaUrl = resolveMediaUrl(snap.arenaImageUrl);
+        final hasArena = arenaUrl.isNotEmpty;
         final stack = ArcoriStackSurface(
           // Key on slam event only — clearTurnAnimLock bumps version and must
           // not remount mid-replay (that restarts anim / blanks the table).
@@ -390,6 +400,11 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
           showAimMarker: armed,
           aimX: _liveAim.x,
           aimZ: _liveAim.z,
+          applyFitZoom: !hasArena,
+          onPovScale: (fit) {
+            if ((_arenaPovScale.value - fit).abs() < 0.002) return;
+            _arenaPovScale.value = fit;
+          },
           onAnimComplete: () {
             final v = (lastEvent != null &&
                     lastEvent['type'] == 'slam' &&
@@ -401,63 +416,67 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
         );
 
         final locked = handle.aimLocked;
-        final Widget stackTouch;
+        Widget? aimOverlay;
         if (controlMode == SlamControlMode.touch) {
-          stackTouch = SizedBox(
-            height: 220,
-            width: double.infinity,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                stack,
-                // Full stack hit-target: aim when unlocked, power swipe when locked.
-                // VerticalDrag (locked) claims against the modal SingleChildScrollView.
-                Positioned.fill(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final area = Size(
-                        constraints.maxWidth,
-                        constraints.maxHeight,
-                      );
-                      return GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onPanStart: (!armed || locked)
-                            ? null
-                            : (d) =>
-                                handle.onAimAtLocal(d.localPosition, area),
-                        onPanUpdate: (!armed || locked)
-                            ? null
-                            : (d) =>
-                                handle.onAimAtLocal(d.localPosition, area),
-                        onVerticalDragStart:
-                            (armed && locked) ? (_) {} : null,
-                        onVerticalDragUpdate: (armed && locked)
-                            ? handle.onPowerDragUpdate
-                            : null,
-                        onVerticalDragEnd: (armed && locked)
-                            ? handle.onPowerDragEnd
-                            : null,
-                      );
-                    },
+          aimOverlay = Positioned.fill(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final area = Size(
+                  constraints.maxWidth,
+                  constraints.maxHeight,
+                );
+                return Listener(
+                  behavior: HitTestBehavior.opaque,
+                  onPointerDown: (!armed || locked)
+                      ? null
+                      : (e) => handle.onAimAtLocal(
+                            e.localPosition,
+                            area,
+                          ),
+                  onPointerMove: (!armed || locked)
+                      ? null
+                      : (e) => handle.onAimAtLocal(
+                            e.localPosition,
+                            area,
+                          ),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onVerticalDragStart:
+                        (armed && locked) ? (_) {} : null,
+                    onVerticalDragUpdate: (armed && locked)
+                        ? handle.onPowerDragUpdate
+                        : null,
+                    onVerticalDragEnd: (armed && locked)
+                        ? handle.onPowerDragEnd
+                        : null,
+                    child: const SizedBox.expand(),
                   ),
-                ),
-              ],
+                );
+              },
             ),
           );
-        } else {
-          stackTouch = stack;
         }
 
-        final stackRow = Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(child: stackTouch),
-            const SizedBox(width: 12),
-            handle.aimLockButton(),
-          ],
+        final stackRow = SizedBox(
+          key: _stackAreaKey,
+          height: 220,
+          width: double.infinity,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              if (!hasArena) Positioned.fill(child: stack),
+              if (aimOverlay != null) aimOverlay,
+              Positioned(
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: Center(child: handle.aimLockButton()),
+              ),
+            ],
+          ),
         );
 
-        return Column(
+        final matchColumn = Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -595,7 +614,57 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
             ],
           ],
         );
+
+        return ScrollConfiguration(
+          behavior: const _MatchNoScrollBehavior(),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (hasArena)
+                Positioned.fill(
+                  child: ArenaPovBackdrop(
+                    imageUrl: arenaUrl,
+                    povScale: _arenaPovScale,
+                    stackAreaKey: _stackAreaKey,
+                    stackLayer: stack,
+                  ),
+                ),
+              Positioned.fill(
+                child: SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  primary: false,
+                  child: matchColumn,
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
   }
+}
+
+/// Match gestures must not lose to overscroll / parent scrollables.
+class _MatchNoScrollBehavior extends ScrollBehavior {
+  const _MatchNoScrollBehavior();
+
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) =>
+      child;
+
+  @override
+  Widget buildScrollbar(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) =>
+      child;
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) =>
+      const NeverScrollableScrollPhysics();
 }

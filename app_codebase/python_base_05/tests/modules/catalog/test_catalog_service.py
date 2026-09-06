@@ -58,12 +58,17 @@ def catalog_root(tmp_path: Path):
                 "worldState": "Active",
                 "seasonState": "Active",
                 "type": "arcori",
+                "color": "#C6A15B",
                 "artworkPrompt": "secret prompt",
                 "loreDescription": "A tiger",
                 "generation": {
                     "roman": "I",
                     "number": 1,
                     "creator": {"type": "system", "playerId": None},
+                },
+                "legacy": {
+                    "preservationRequirement": 500,
+                    "closureMilestone": 1000,
                 },
             }
         ],
@@ -86,6 +91,7 @@ def test_meta_and_index(catalog_root: Path):
         idx["items"][0]["imageUrl"]
         == "/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp"
     )
+    assert idx["items"][0]["color"] == "#C6A15B"
 
 
 def test_theme_strips_artwork_prompt(catalog_root: Path):
@@ -106,6 +112,9 @@ def test_design_strips_artwork_prompt(catalog_root: Path):
     assert "artworkPrompt" not in design
     assert design["seriesKey"] == "Genesis"
     assert design["imageUrl"] == "/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp"
+    assert design["color"] == "#C6A15B"
+    assert design["legacy"]["preservationRequirement"] == 500
+    assert design["legacy"]["closureMilestone"] == 1000
 
 
 def test_not_found(catalog_root: Path):

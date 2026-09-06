@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:vector_math/vector_math.dart' as vm;
 import 'package:vector_math/vector_math_64.dart' show Quaternion, Vector3;
 
 import '../../../utils/dev_logger.dart';
@@ -10,7 +11,8 @@ import '../state/match_snapshot_state.dart';
 import '../input/slam_input_models.dart';
 import '../input/slam_physics_world.dart';
 import '../input/turn_pacing.dart';
-import 'arcori_disc.dart';
+import 'arcori_disc.dart' show ArcoriDisc, faceUpFromQuat;
+import 'arena_pov_backdrop.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
@@ -26,6 +28,9 @@ class ArcoriStackSurface extends StatefulWidget {
     this.showAimMarker = false,
     this.aimX = 0,
     this.aimZ = 0,
+    this.onPovScale,
+    this.applyFitZoom = true,
+    this.worldScale = 1.0,
   });
 
   final List<MatchPieceView> pieces;
@@ -40,6 +45,16 @@ class ArcoriStackSurface extends StatefulWidget {
   final bool showAimMarker;
   final double aimX;
   final double aimZ;
+
+  /// Stack camera scale (1 = rest, lower = zoomed out to keep discs on screen).
+  final ValueChanged<double>? onPovScale;
+
+  /// When false, parent (arena camera) owns zoom; this widget still emits [onPovScale].
+  final bool applyFitZoom;
+
+  /// Extra paint scale before the parent camera. Arena path leaves this at 1
+  /// so discs are drawn at rest Ø (scaling them down then up pixelates rims).
+  final double worldScale;
 
   @override
   State<ArcoriStackSurface> createState() => _ArcoriStackSurfaceState();
@@ -59,6 +74,7 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
   List<_SimFrame> _simFrames = const [];
   double _pxPerMeter = 80;
   double _simDurationSec = 1.0;
+  double? _lastEmittedPovScale;
   final Map<String, _Vec3> _restWorld = {};
   Timer? _settleHoldTimer;
   /// Fingerprint of the sim currently playing / last finished — skip restarts.
@@ -155,7 +171,24 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
   void _syncRest(List<MatchPieceView> pieces) {
     for (final p in pieces) {
       _offsets[p.pieceId] ??= Offset.zero;
-      _quats[p.pieceId] ??= p.faceUp ? _Quat.faceUp() : _Quat.faceDown();
+      final cur = _quats[p.pieceId];
+      if (cur == null) {
+        _quats[p.pieceId] = p.faceUp ? _Quat.faceUp() : _Quat.faceDown();
+      } else if (!_replayingSim) {
+        _quats[p.pieceId] = _restingQuat(cur, p.faceUp);
+      }
+    }
+  }
+
+  bool _restFaceUp(MatchPieceView p, _Quat cur) {
+    return p.faceUp || faceUpFromQuat(cur.x, cur.y, cur.z, cur.w);
+  }
+
+  void _flattenLiveQuatsToRest() {
+    for (final p in widget.pieces) {
+      final cur = _quats[p.pieceId] ??
+          (p.faceUp ? _Quat.faceUp() : _Quat.faceDown());
+      _quats[p.pieceId] = _restingQuat(cur, _restFaceUp(p, cur));
     }
   }
 
@@ -222,6 +255,7 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
       if (!mounted) return;
       // Freeze on last poses, then hold before stack snap.
       _applySimAt(_simDurationSec, dt);
+      _flattenLiveQuatsToRest();
       if (mounted) setState(() {});
       if (LOGGING_SWITCH) {
         customlog(
@@ -233,7 +267,10 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
       _settleHoldTimer = Timer(settleHold, () {
         if (!mounted) return;
         if (LOGGING_SWITCH) {
-          customlog('arcoriStack: settle authority after hold');
+          customlog(
+            'arcoriStack: settle authority after hold '
+            'tableFaceUp=${widget.pieces.map((p) => '${p.pieceId}:${p.faceUp}').join(',')}',
+          );
         }
         _replayingSim = false;
         _pieces = List<MatchPieceView>.from(widget.pieces);
@@ -344,7 +381,10 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
 
     for (final p in _pieces) {
       _offsets[p.pieceId] = Offset.zero;
-      _quats[p.pieceId] = p.faceUp ? _Quat.faceUp() : _Quat.faceDown();
+      final cur = _quats[p.pieceId] ??
+          (p.faceUp ? _Quat.faceUp() : _Quat.faceDown());
+      // Table after restack is all face-down — do not keep slam-result faces.
+      _quats[p.pieceId] = _restingQuat(cur, p.faceUp);
     }
   }
 
@@ -360,18 +400,33 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
     super.dispose();
   }
 
+  void _emitPovScale(double fit) {
+    final cb = widget.onPovScale;
+    if (cb == null) return;
+    if (_lastEmittedPovScale != null &&
+        (fit - _lastEmittedPovScale!).abs() < 0.002) {
+      return;
+    }
+    _lastEmittedPovScale = fit;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      widget.onPovScale?.call(fit);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final sorted = List<MatchPieceView>.from(widget.pieces)
       ..sort((a, b) => a.stackIndex.compareTo(b.stackIndex));
     final t = _replayingSim ? 1.0 : _scatter.value.clamp(0.0, 1.5);
     final ft = _replayingSim ? 1.0 : _flip.value.clamp(0.0, 1.5);
-    const discSize = 72.0;
+    final restDiscSize = kDiscRadius * 2 * kSlamPhysicsPxPerMeter;
+    final discSize = restDiscSize;
     /// Screen gap for stacked discs under dead-above (near-concentric).
     const restStackGap = 2.0;
     /// Dead-above camera — discs settle as full circles.
     const viewPitch = 0.0;
-    // Aim marker uses the same px/m as physics so Ø matches [discSize] (72).
+    // Aim marker uses the same px/m as physics so Ø matches rest disc size.
     final aimPpm = kSlamPhysicsPxPerMeter;
     final slammerPx = kDiscRadius * 2 * aimPpm;
     final aimIn =
@@ -384,34 +439,36 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
       child: LayoutBuilder(
         builder: (context, constraints) {
           // Fit zoom: keep every disc (+ aim marker) inside the viewport.
-          var maxAbsX = discSize * 0.5;
-          var maxAbsY = discSize * 0.5;
+          // Use rest (unscaled) sizes so shared arena camera still pulls back
+          // when pieces would leave the table slot.
+          var maxAbsX = restDiscSize * 0.5;
+          var maxAbsY = restDiscSize * 0.5;
           for (var i = 0; i < sorted.length; i++) {
             final p = sorted[i];
             final base =
                 _replayingSim ? Offset.zero : Offset(0, -i * restStackGap);
             final scatter = (_offsets[p.pieceId] ?? Offset.zero) * t;
             final o = base + scatter;
-            maxAbsX = max(maxAbsX, o.dx.abs() + discSize * 0.5);
-            maxAbsY = max(maxAbsY, o.dy.abs() + discSize * 0.5);
+            maxAbsX = max(maxAbsX, o.dx.abs() + restDiscSize * 0.5);
+            maxAbsY = max(maxAbsY, o.dy.abs() + restDiscSize * 0.5);
           }
           if (widget.showAimMarker) {
-            maxAbsX =
-                max(maxAbsX, markerOffset.dx.abs() + slammerPx * 0.5);
-            maxAbsY =
-                max(maxAbsY, markerOffset.dy.abs() + slammerPx * 0.5);
+            final restAim = kDiscRadius * 2 * kSlamPhysicsPxPerMeter;
+            final restMarker = Offset(
+              widget.aimX * kSlamPhysicsPxPerMeter,
+              -widget.aimZ * kSlamPhysicsPxPerMeter,
+            );
+            maxAbsX = max(maxAbsX, restMarker.dx.abs() + restAim * 0.5);
+            maxAbsY = max(maxAbsY, restMarker.dy.abs() + restAim * 0.5);
           }
           const pad = 10.0;
           final halfW = max(1.0, constraints.maxWidth * 0.5 - pad);
           final halfH = max(1.0, constraints.maxHeight * 0.5 - pad);
           final fit =
-              min(halfW / maxAbsX, halfH / maxAbsY).clamp(0.18, 1.0);
+              min(halfW / maxAbsX, halfH / maxAbsY).clamp(kStackPovFitMin, 1.0);
+          _emitPovScale(fit);
 
-          return ClipRect(
-            child: Transform.scale(
-              scale: fit,
-              alignment: Alignment.center,
-              child: Stack(
+          Widget table = Stack(
                 alignment: Alignment.center,
                 clipBehavior: Clip.none,
                 children: [
@@ -441,14 +498,14 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
                             : Offset(0, -i * restStackGap);
                         final scatter =
                             (_offsets[p.pieceId] ?? Offset.zero) * t;
+                        final paintOffset = base + scatter;
                         late final _Quat q;
                         if (_replayingSim) {
                           q = _quats[p.pieceId] ?? _Quat.faceDown();
                         } else {
-                          final target =
-                              p.faceUp ? _Quat.faceUp() : _Quat.faceDown();
                           final start =
                               _quats[p.pieceId] ?? _Quat.faceDown();
+                          final target = _restingQuat(start, p.faceUp);
                           q = _nlerp(start, target, ft.clamp(0.0, 1.0));
                           final wobble = (1 - ft.clamp(0.0, 1.0)) *
                               sin(ft * pi) *
@@ -463,7 +520,7 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
                             return ArcoriDisc(
                               piece: p,
                               size: discSize,
-                              offset: base + scatter,
+                              offset: paintOffset,
                               viewPitch: viewPitch,
                               qx: mixed.x,
                               qy: mixed.y,
@@ -476,7 +533,7 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
                         return ArcoriDisc(
                           piece: p,
                           size: discSize,
-                          offset: base + scatter,
+                          offset: paintOffset,
                           viewPitch: viewPitch,
                           qx: q.x,
                           qy: q.y,
@@ -514,9 +571,25 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
                       textAlign: TextAlign.center,
                     ),
                 ],
-              ),
-            ),
           );
+
+          if ((widget.worldScale - 1.0).abs() > 1e-6) {
+            table = Transform.scale(
+              scale: widget.worldScale,
+              alignment: Alignment.center,
+              child: table,
+            );
+          }
+          if (widget.applyFitZoom) {
+            table = ClipRect(
+              child: Transform.scale(
+                scale: fit,
+                alignment: Alignment.center,
+                child: table,
+              ),
+            );
+          }
+          return table;
         },
       ),
     );
@@ -573,6 +646,14 @@ class _SimFrame {
 
   final int stepIndex;
   final List<_SimPose> poses;
+}
+
+_Quat _restingQuat(_Quat q, bool faceUp) {
+  final rest = restingOrientationFrom(
+    vm.Quaternion(q.x, q.y, q.z, q.w)..normalize(),
+    faceUp: faceUp,
+  );
+  return _Quat(rest.x, rest.y, rest.z, rest.w);
 }
 
 _Quat _nlerp(_Quat a, _Quat b, double t) {

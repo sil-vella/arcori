@@ -9,8 +9,11 @@ import pytest
 
 from modules.catalog import catalog_loader as loader
 from modules.catalog.catalog_select import (
+    SOURCE_MAJORITY,
     SOURCE_RANDOM_FALLBACK,
+    SOURCE_RANDOM_REGION,
     SOURCE_WEIGHTED,
+    select_arena_for_arcori_ids,
     select_for_seats,
 )
 
@@ -215,3 +218,106 @@ def test_retired_access_filtered_out(select_root: Path):
     pick = out["selections"][0]
     assert pick["arcoriId"] == ""
     assert pick.get("reason") == "empty_player_access"
+
+
+def _install_arenas(root: Path) -> None:
+    (root / "01_regions.json").write_text(
+        json.dumps(
+            {
+                "regions": [
+                    {
+                        "regionCode": "ASH",
+                        "slug": "ashdrift-hill",
+                        "arenas": [
+                            {
+                                "arenaId": "ARN-ASH-HIL001-0001",
+                                "name": "Ashdrift Hill",
+                            },
+                            {
+                                "arenaId": "ARN-ASH-HSP001-0001",
+                                "name": "Hospital",
+                            },
+                        ],
+                    },
+                    {
+                        "regionCode": "EVG",
+                        "slug": "everlight-grove",
+                        "arenas": [
+                            {
+                                "arenaId": "ARN-EVG-GRV001-0001",
+                                "name": "Everlight Grove",
+                            },
+                        ],
+                    },
+                    {
+                        "regionCode": "MWB",
+                        "slug": "moonwake-bay",
+                        "arenas": [
+                            {
+                                "arenaId": "ARN-MWB-BAY001-0001",
+                                "name": "Moonwake Bay",
+                            },
+                        ],
+                    },
+                    {
+                        "regionCode": "AMB",
+                        "slug": "amberwild",
+                        "arenas": [
+                            {
+                                "arenaId": "ARN-AMB-WLD001-0001",
+                                "name": "Amberwild",
+                            },
+                        ],
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    loader.clear_caches()
+
+
+def test_select_arena_majority_region(select_root: Path):
+    import random
+
+    _install_arenas(select_root)
+    out = select_arena_for_arcori_ids(
+        ["ASH-COMMON-1", "ASH-COMMON-1", "EVG-COMMON-1"],
+        rng=random.Random(0),
+    )
+    assert out["source"] == SOURCE_MAJORITY
+    assert out["regionCode"] == "ASH"
+    assert out["arenaId"].startswith("ARN-ASH-")
+    assert (
+        out["imageUrl"]
+        == f"/catalog-media/velora/ashdrift-hill/{out['arenaId']}.webp"
+    )
+
+
+def test_select_arena_all_different_picks_catalog_region(select_root: Path):
+    import random
+
+    _install_arenas(select_root)
+    rng = random.Random(7)
+    out = select_arena_for_arcori_ids(
+        ["ASH-COMMON-1", "EVG-COMMON-1", "MWB-COMMON-1"],
+        rng=rng,
+    )
+    assert out["source"] == SOURCE_RANDOM_REGION
+    assert out["regionCode"] in {"ASH", "EVG", "MWB", "AMB"}
+    assert out["imageUrl"].startswith("/catalog-media/velora/")
+    assert out["imageUrl"].endswith(f"/{out['arenaId']}.webp")
+
+    again = select_arena_for_arcori_ids(
+        ["ASH-COMMON-1", "EVG-COMMON-1", "MWB-COMMON-1"],
+        rng=random.Random(7),
+    )
+    assert again["arenaId"] == out["arenaId"]
+
+
+def test_select_arena_no_catalog_arenas(select_root: Path):
+    from core.errors.app_error import AppError
+
+    with pytest.raises(AppError) as exc:
+        select_arena_for_arcori_ids(["ASH-COMMON-1"])
+    assert exc.value.code == "catalog/invalid_query"

@@ -2,9 +2,9 @@
 
 **Status:** Spec captured — not implemented  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-07-24
+**Last Updated:** 2026-09-05
 
-Related: [returning-player-startup-flow.md](returning-player-startup-flow.md) · [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [core-match-loop.md](core-match-loop.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · catalog Kin data `bin/modules/catalog/data/02_kin.json`
+Related: [kin-creation.md](kin-creation.md) · [returning-player-startup-flow.md](returning-player-startup-flow.md) · [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [core-match-loop.md](core-match-loop.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · catalog Kin data `bin/modules/catalog/data/02_kin.json`
 
 ## Objective
 
@@ -41,8 +41,8 @@ Splash
 
 - [ ] Splash + optional intro screens
 - [ ] Account / sign-in gate for first install
-- [ ] Kin subtheme selection (catalog-backed)
-- [ ] Kin Arcori customize + name → Genesis created
+- [ ] Kin subtheme selection (catalog-backed) — see [kin-creation.md](kin-creation.md)
+- [ ] Kin Arcori customize + name → Genesis created — see [kin-creation.md](kin-creation.md)
 - [ ] Starter mastery-access grant (10 designs + starter slammer)
 - [ ] Guided practice match + match summary handoff
 - [ ] Velora, Trove, Rank/XP, Museum, Daily Missions intros
@@ -54,7 +54,7 @@ Spec restored from Caps GDD drafts; 2026-07-24 aligned with mastery vs mint / Ve
 
 ## Next Steps
 
-Wire Flutter route graph and auth/guest gates to this sequence; catalog module supplies Kin + Arcori defs.
+Kin wizard + persist is tracked separately in [kin-creation.md](kin-creation.md). Remaining work: starter grant, guided practice, intros, Home gate.
 
 ## Notes
 

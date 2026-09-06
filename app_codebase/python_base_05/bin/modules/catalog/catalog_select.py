@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import random
+from collections import Counter
 from typing import Any
 
 from core.errors.app_error import AppError
@@ -319,3 +320,109 @@ def select_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
                 seated_regions.append(region)
 
     return {"selections": selections}
+
+
+SOURCE_MAJORITY = "majority"
+SOURCE_RANDOM_REGION = "random_region"
+
+
+def arena_image_url(*, slug: str, arena_id: str) -> str:
+    return f"/catalog-media/velora/{slug}/{arena_id}.webp"
+
+
+def _arenas_by_region() -> dict[str, list[dict[str, Any]]]:
+    """regionCode → arena dicts with arenaId, name, regionCode, slug, imageUrl."""
+    try:
+        meta = loader.load_meta("regions")
+    except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+        return {}
+    if not isinstance(meta, dict):
+        return {}
+    out: dict[str, list[dict[str, Any]]] = {}
+    for region in meta.get("regions") or []:
+        if not isinstance(region, dict):
+            continue
+        code = str(region.get("regionCode") or "").strip()
+        if not code:
+            continue
+        slug = str(region.get("slug") or "").strip() or code.lower()
+        arenas: list[dict[str, Any]] = []
+        for raw in region.get("arenas") or []:
+            if not isinstance(raw, dict):
+                continue
+            arena_id = str(raw.get("arenaId") or "").strip()
+            if not arena_id:
+                continue
+            arenas.append(
+                {
+                    "arenaId": arena_id,
+                    "name": str(raw.get("name") or arena_id),
+                    "regionCode": code,
+                    "slug": slug,
+                    "imageUrl": arena_image_url(slug=slug, arena_id=arena_id),
+                }
+            )
+        if arenas:
+            out[code] = arenas
+    return out
+
+
+def select_arena_for_arcori_ids(
+    arcori_ids: list[str],
+    *,
+    rng: random.Random | None = None,
+) -> dict[str, Any]:
+    """Pick an arena from seated Arcori regions.
+
+    2+ seats in the same region → random arena in that region.
+    Otherwise → random catalog region that has arenas, then a random arena.
+    """
+    if not isinstance(arcori_ids, list):
+        raise AppError(INVALID_QUERY, message="arcoriIds must be a list")
+
+    picker = rng or random.Random()
+    by_region = _arenas_by_region()
+    if not by_region:
+        raise AppError(INVALID_QUERY, message="no arenas in catalog")
+
+    seated: list[str] = []
+    for raw_id in arcori_ids:
+        iid = str(raw_id or "").strip()
+        if not iid:
+            continue
+        design = loader.find_design_by_internal_id(iid)
+        region = _region_of(design)
+        if region:
+            seated.append(region)
+
+    counts = Counter(seated)
+    majority = [code for code, n in counts.items() if n >= 2 and code in by_region]
+    if majority:
+        chosen_region = picker.choice(majority)
+        source = SOURCE_MAJORITY
+    else:
+        chosen_region = picker.choice(list(by_region.keys()))
+        source = SOURCE_RANDOM_REGION
+
+    arenas = by_region.get(chosen_region) or []
+    if not arenas:
+        arenas = [arena for pool in by_region.values() for arena in pool]
+        source = SOURCE_RANDOM_REGION
+        chosen_region = arenas[0]["regionCode"] if arenas else chosen_region
+    if not arenas:
+        raise AppError(INVALID_QUERY, message="no arenas in catalog")
+
+    arena = picker.choice(arenas)
+    if LOGGING_SWITCH:
+        customlog(
+            f"catalog_select: select_arena source={source} "
+            f"region={arena['regionCode']} arenaId={arena['arenaId']} "
+            f"seated={seated} majority={majority}"
+        )
+    return {
+        "arenaId": arena["arenaId"],
+        "regionCode": arena["regionCode"],
+        "name": arena["name"],
+        "imageUrl": arena["imageUrl"],
+        "source": source,
+    }

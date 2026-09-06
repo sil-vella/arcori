@@ -64,6 +64,25 @@ def _is_circulating(design: dict[str, Any] | None) -> bool:
     return not world or world == "active"
 
 
+def _gameplay_attributes(design: dict[str, Any]) -> dict[str, int] | None:
+    """Catalog slam stats 1–10. Omitted when the design has none."""
+    raw = design.get("gameplayAttributes")
+    if not isinstance(raw, dict):
+        return None
+    out: dict[str, int] = {}
+    for key in ("impact", "precision", "control", "recovery", "spread"):
+        value = raw.get(key)
+        if isinstance(value, bool):
+            continue
+        if isinstance(value, int):
+            out[key] = max(1, min(10, value))
+        elif isinstance(value, float):
+            out[key] = max(1, min(10, int(value)))
+        elif isinstance(value, str) and value.strip().isdigit():
+            out[key] = max(1, min(10, int(value.strip())))
+    return out or None
+
+
 def catalog_card_for_design(design_id: str) -> dict[str, Any] | None:
     """Catalog face fields for profile / inventory (None if missing)."""
     iid = (design_id or "").strip()
@@ -79,7 +98,8 @@ def catalog_card_for_design(design_id: str) -> dict[str, Any] | None:
     image_url = design.get("imageUrl")
     color_raw = design.get("color")
     color = str(color_raw).strip() if color_raw else ""
-    return {
+    attrs = _gameplay_attributes(design)
+    card: dict[str, Any] = {
         "designId": iid,
         "displayName": name,
         "imageUrl": image_url if isinstance(image_url, str) and image_url.strip() else None,
@@ -87,6 +107,9 @@ def catalog_card_for_design(design_id: str) -> dict[str, Any] | None:
         "circulating": _is_circulating(design),
         "theme": str(design.get("theme") or "").strip() or None,
     }
+    if attrs is not None:
+        card["gameplayAttributes"] = attrs
+    return card
 
 
 def _fallback_slammer_id(rows: list[Any]) -> str:
@@ -282,17 +305,19 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
                 continue
             seen_slammers.add(design_id)
             card = catalog_card_for_design(design_id) or {}
-            slammer_payload.append(
-                {
-                    "designId": design_id,
-                    "displayName": card.get("displayName") or design_id,
-                    "imageUrl": card.get("imageUrl"),
-                    "color": card.get("color"),
-                    "permanent": bool(row.permanent),
-                    "chargesRemaining": row.charges_remaining,
-                    "source": row.source,
-                }
-            )
+            entry: dict[str, Any] = {
+                "designId": design_id,
+                "displayName": card.get("displayName") or design_id,
+                "imageUrl": card.get("imageUrl"),
+                "color": card.get("color"),
+                "permanent": bool(row.permanent),
+                "chargesRemaining": row.charges_remaining,
+                "source": row.source,
+            }
+            attrs = card.get("gameplayAttributes")
+            if isinstance(attrs, dict) and attrs:
+                entry["gameplayAttributes"] = attrs
+            slammer_payload.append(entry)
         trove_payload = [
             {
                 "designId": row.design_id,

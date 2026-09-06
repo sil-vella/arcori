@@ -26,4 +26,4 @@ round advance → restackFaceDown
 
 ## Next
 
-Random first player; celebration / Match Summary.
+Celebration / Match Summary. **Deferred:** slammer Recovery slam-stat + charge spend / Gold Cap recharge — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md).

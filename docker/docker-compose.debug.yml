@@ -72,6 +72,7 @@ services:
       REDIS_HOST: Arcori_redis
       ARCORI_PRESENCE_ENABLED: "true"
       ARCORI_RATE_LIMIT_ENABLED: "true"
+      CATALOG_VELORA_MEDIA_ROOT: /data/catalog-velora
     ports:
       - "8000:8000"
     volumes:
@@ -81,6 +82,7 @@ services:
       - arcori_uploads:/data/uploads
       # Read-only Arcori catalog artwork (filenames = internalId.webp)
       - ../assets/images/arcori:/data/catalog-media:ro
+      - ../assets/images/velora:/data/catalog-velora:ro
     command: ["./entrypoint.dev.sh"]
     depends_on:
       Arcori_postgres:

@@ -2,7 +2,7 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-09-05
+**Last Updated:** 2026-09-06
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
@@ -47,9 +47,13 @@ Open (ordered):
 - [x] **3D slam physics** (thin-cylinder xyzq; replaces Forge2D) — [3d-slam-physics.md](3d-slam-physics.md)
 - [x] **Slam aim + Game Controls** (exclusive accel/touch; aim miss footprint) — [slam-aim-game-controls.md](slam-aim-game-controls.md)
 - [x] **Inventory slammer + disc face** (owned slammers, circulating Arcori on Avari, catalog art on discs) — [inventory-slammer-and-disc-art.md](inventory-slammer-and-disc-art.md)
+- [x] **Match arena from Arcori regions** (Quick Start / Invite background) — [match-arena-from-arcori.md](match-arena-from-arcori.md)
+- [x] **Arena mural locked to stack POV** (rest 1:1 crop, contain on zoom-out, opaque under stack) — [arena-pov-zoom.md](arena-pov-zoom.md)
 - [ ] Celebration + Match Summary + FastAPI durable rewards *(next)*
+- [ ] **Kin creation start to finish** (lineage → customize → name → Genesis + `player_kin`) — [kin-creation.md](kin-creation.md)
 - [ ] Home sink Trove • PLAY • Market; first-time / returning startup
 - [ ] My Mastery tab + Trove UI + economy writers
+- [ ] Slammer recovery slam-stat + charge spend / Gold Cap recharge *(future)* — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
 
 Standings surface is live with an open tail (My Mastery / Trove) covered by the last open line.
 
@@ -71,6 +75,7 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 | Plan | Status | Focus |
 |------|--------|--------|
 | [first-time-player-flow.md](first-time-player-flow.md) | Spec | Splash → Kin/Genesis → starter access → guided practice → intros → Home |
+| [kin-creation.md](kin-creation.md) | Planned | Kin wizard + persist Genesis; slice of first-time flow |
 | [returning-player-startup-flow.md](returning-player-startup-flow.md) | Spec | Auto login → sync → overnight → notification queue → Home |
 | [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Spec | Home layout, Velora entry, sink Trove • PLAY • Market |
 | [match-setting-core-flow.md](match-setting-core-flow.md) | Partial | Play hub + types; practice offline; quick/event/invite online |
@@ -87,6 +92,8 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 | [3d-slam-physics.md](3d-slam-physics.md) | Completed | Pure-Dart 3D thin-cylinder; `xyzq` poses; Matrix4 replay |
 | [slam-aim-game-controls.md](slam-aim-game-controls.md) | Completed | Game Controls + aim marker; exclusive accel/touch; footprint miss |
 | [inventory-slammer-and-disc-art.md](inventory-slammer-and-disc-art.md) | Completed | Owned slammers; circulating Arcori on Avari; catalog face on discs |
+| [match-arena-from-arcori.md](match-arena-from-arcori.md) | Completed | Quick Start / Invite: majority-region arena art as match background |
+| [arena-pov-zoom.md](arena-pov-zoom.md) | Completed | Arena mural shares stack camera; rest is 1:1 crop (no upscale); contain on zoom-out; opaque under stack |
 | [random-first-player.md](random-first-player.md) | Completed | Random `firstSeatIndex` at match start; wrap order every round |
 | [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
 | [core-match-loop.md](core-match-loop.md) | Spec | Matchmaking → match → celebration → Match Summary → exits |

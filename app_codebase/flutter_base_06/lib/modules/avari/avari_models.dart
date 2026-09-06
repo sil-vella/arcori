@@ -101,6 +101,75 @@ class AvariStats {
   final int flips;
 }
 
+/// Catalog slam stats (1–10). Recovery is shown on profile even though slam does not use it yet.
+class SlammerGameplayAttributes {
+  const SlammerGameplayAttributes({
+    this.impact,
+    this.precision,
+    this.control,
+    this.recovery,
+    this.spread,
+  });
+
+  static const List<(String key, String label)> displayOrder = [
+    ('impact', 'Impact'),
+    ('precision', 'Precision'),
+    ('control', 'Control'),
+    ('recovery', 'Recovery'),
+    ('spread', 'Spread'),
+  ];
+
+  static SlammerGameplayAttributes? tryParse(Object? raw) {
+    if (raw is! Map) return null;
+    int? parseOne(Object? value) {
+      if (value == null || value is bool) return null;
+      int? n;
+      if (value is int) {
+        n = value;
+      } else if (value is num) {
+        n = value.toInt();
+      } else {
+        n = int.tryParse(value.toString().trim());
+      }
+      if (n == null) return null;
+      if (n < 1) return 1;
+      if (n > 10) return 10;
+      return n;
+    }
+
+    final parsed = SlammerGameplayAttributes(
+      impact: parseOne(raw['impact']),
+      precision: parseOne(raw['precision']),
+      control: parseOne(raw['control']),
+      recovery: parseOne(raw['recovery']),
+      spread: parseOne(raw['spread']),
+    );
+    if (parsed.labeledValues.isEmpty) return null;
+    return parsed;
+  }
+
+  final int? impact;
+  final int? precision;
+  final int? control;
+  final int? recovery;
+  final int? spread;
+
+  /// GDD order: Impact, Precision, Control, Recovery, Spread.
+  List<(String label, int value)> get labeledValues {
+    final byKey = <String, int?>{
+      'impact': impact,
+      'precision': precision,
+      'control': control,
+      'recovery': recovery,
+      'spread': spread,
+    };
+    return [
+      for (final entry in displayOrder)
+        if (byKey[entry.$1] != null) (entry.$2, byKey[entry.$1]!),
+    ];
+  }
+}
+
 /// Circulating Arcori access or owned slammer — catalog face fields included.
 class AvariInventoryItem {
   const AvariInventoryItem({
@@ -111,6 +180,7 @@ class AvariInventoryItem {
     this.source,
     this.permanent,
     this.chargesRemaining,
+    this.gameplayAttributes,
   });
 
   factory AvariInventoryItem.fromJson(Map<String, dynamic> json) {
@@ -126,6 +196,9 @@ class AvariInventoryItem {
       chargesRemaining: json['chargesRemaining'] is int
           ? json['chargesRemaining'] as int
           : int.tryParse('${json['chargesRemaining'] ?? ''}'),
+      gameplayAttributes: SlammerGameplayAttributes.tryParse(
+        json['gameplayAttributes'],
+      ),
     );
   }
 
@@ -136,6 +209,7 @@ class AvariInventoryItem {
   final String? source;
   final bool? permanent;
   final int? chargesRemaining;
+  final SlammerGameplayAttributes? gameplayAttributes;
 }
 
 class AvariProfile {

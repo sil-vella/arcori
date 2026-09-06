@@ -12,14 +12,16 @@ const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 const double kSlamPhysicsDt = 1.0 / 60.0;
 const int kSlamPhysicsSampleEvery = 2;
 /// Shorter budget — soft settle + snap blend should finish well under this.
-const int kSlamPhysicsMaxSteps = 70;
+const int kSlamPhysicsMaxSteps = 84;
 /// After this step, damp hard so quiet-exit can fire.
-const int kSlamPhysicsSoftSettleAt = 36;
+const int kSlamPhysicsSoftSettleAt = 48;
 /// Multi-frame orientation/height blend to flat (avoids abrupt last-frame snap).
-const int kSlamPhysicsSnapBlendSteps = 16;
+const int kSlamPhysicsSnapBlendSteps = 28;
 /// ~50mm diameter draws near the 72px disc widget.
 const double kSlamPhysicsPxPerMeter = 1440.0;
 const String kSlamPhysicsSpace = 'xyzq';
+/// Very slight kick falloff per disc below the top (top=1.00, next=0.95, …).
+const double kStackDepthKickFade = 0.05;
 
 /// Real-ish Arcori puck: Ø50mm × 3mm thick.
 const double kDiscRadius = 0.025;
@@ -79,12 +81,12 @@ class SlamFeelProfile {
 const SlamFeelProfile slamFeelScatter = SlamFeelProfile(
   id: 'scatter',
   linearKickScale: 0.98,
-  angularKickScale: 0.38,
+  angularKickScale: 0.72,
   weakKickFloor: 0.14,
   powerKickExponent: 1.25,
-  angularDamping: 0.96,
-  maxAngSpeed: 2.8,
-  tipMul: 1.1,
+  angularDamping: 0.7,
+  maxAngSpeed: 6.5,
+  tipMul: 1.45,
   punchThroughPower: 0.4,
 );
 
@@ -92,12 +94,12 @@ const SlamFeelProfile slamFeelScatter = SlamFeelProfile(
 const SlamFeelProfile slamFeelBalanced = SlamFeelProfile(
   id: 'balanced',
   linearKickScale: 0.85,
-  angularKickScale: 0.88,
+  angularKickScale: 1.65,
   weakKickFloor: 0.06,
   powerKickExponent: 1.05,
-  angularDamping: 0.84,
-  maxAngSpeed: 4.2,
-  tipMul: 1.45,
+  angularDamping: 0.48,
+  maxAngSpeed: 11.0,
+  tipMul: 2.55,
   punchThroughPower: 0.25,
 );
 
@@ -105,11 +107,11 @@ const SlamFeelProfile slamFeelBalanced = SlamFeelProfile(
 const SlamFeelProfile slamFeelFlippy = SlamFeelProfile(
   id: 'flippy',
   linearKickScale: 1.05,
-  angularKickScale: 1.65,
+  angularKickScale: 1.85,
   weakKickFloor: 0.04,
   powerKickExponent: 0.9,
-  angularDamping: 0.68,
-  maxAngSpeed: 9.5,
+  angularDamping: 0.42,
+  maxAngSpeed: 12.0,
   tipMul: 2.55,
   punchThroughPower: 0.16,
 );
@@ -152,6 +154,35 @@ bool isFaceUpOrientation(Quaternion q) {
 Quaternion faceOrientation({required bool faceUp}) {
   if (faceUp) return Quaternion.identity();
   return Quaternion.axisAngle(Vector3(1, 0, 0), pi);
+}
+
+/// Flatten [q] onto the table while keeping in-plane spin (yaw around world +Y).
+Quaternion restingOrientationFrom(Quaternion q, {required bool faceUp}) {
+  final localX = q.rotated(Vector3(1, 0, 0));
+  var hx = localX.x;
+  var hz = localX.z;
+  var hLen = sqrt(hx * hx + hz * hz);
+  if (hLen < 1e-5) {
+    final localZ = q.rotated(Vector3(0, 0, 1));
+    hx = localZ.x;
+    hz = localZ.z;
+    hLen = sqrt(hx * hx + hz * hz);
+  }
+  final yaw = hLen < 1e-5 ? 0.0 : atan2(-hz, hx);
+  final yawQ = Quaternion.axisAngle(Vector3(0, 1, 0), yaw);
+  if (faceUp) {
+    yawQ.normalize();
+    return yawQ;
+  }
+  final down = yawQ * Quaternion.axisAngle(Vector3(1, 0, 0), pi);
+  down.normalize();
+  return down;
+}
+
+/// Face normal is world ±Y (lying on the table, not on edge).
+bool isFlatOnTable(Quaternion q, {double eps = 0.02}) {
+  final n = q.rotated(Vector3(0, 1, 0));
+  return (n.y.abs() - 1.0).abs() <= eps && n.x.abs() <= eps && n.z.abs() <= eps;
 }
 
 /// Run fixed-timestep 3D sim; thin discs collide and tumble to resting faces.
@@ -243,10 +274,7 @@ SlamPhysicsResult runSlamPhysics({
     final strongBoost = 1.0 + strong * 0.85;
     final kickLin = powerCurve * feel.linearKickScale * strongBoost;
     final kickAng = powerCurve * feel.angularKickScale * (1.0 + strong * 1.55);
-    // Kick from the top; low/mid power hits fewer discs — collisions spread energy.
-    final affectBudget = power < 0.32
-        ? 1
-        : (power < 0.55 ? min(2, maxAffect) : maxAffect);
+    // Every face-down disc gets a direct kick; only a hair weaker further down.
 
     // Slight aim yaw chaos grows with power (unpredictability, not wild).
     final yawJitter = (rng.nextDouble() - 0.5) * 0.28 * (0.2 + strong * 1.4);
@@ -256,8 +284,10 @@ SlamPhysicsResult runSlamPhysics({
     final rvz = vx * sinY + vz * cosY;
 
     var affected = 0;
-    for (var i = bodies.length - 1; i >= 0 && affected < affectBudget; i--) {
+    for (var i = bodies.length - 1; i >= 0; i--) {
       final fromTop = bodies.length - 1 - i;
+      final depthFade =
+          (1.0 - fromTop * kStackDepthKickFade).clamp(0.82, 1.0);
       if (wasFaceUp[i]) {
         // Shove face-up discs aside so face-down below can tip (punch-through).
         if (power >= feel.punchThroughPower) {
@@ -285,9 +315,11 @@ SlamPhysicsResult runSlamPhysics({
           spreadMul *
           (0.9 + power + strong * 0.45);
       final scale =
-          kickLin * (1.2 + 0.55 * speed + strong * 0.5) * (1.0 + fromTop * 0.22);
+          kickLin * (1.2 + 0.55 * speed + strong * 0.5) * depthFade;
       // Hop off the table so tip spin isn't crushed by ground contacts.
-      final hop = 0.15 + strong * 0.75 + rng.nextDouble() * (0.1 + strong * 0.35);
+      final hop =
+          (0.22 + strong * 0.9 + rng.nextDouble() * (0.12 + strong * 0.4)) *
+              depthFade;
       bodies[i].position.y += 0.0015 + strong * 0.006;
       bodies[i].linearVelocity.add(
         Vector3(
@@ -296,22 +328,22 @@ SlamPhysicsResult runSlamPhysics({
           (rvz + latZ * fan + jitterZ) * scale,
         ),
       );
-      // Tip needs ~π rad before soft-settle; strong hits get a harder shove.
+      // Roll around table-plane axis ⟂ slam (pog flip in the hit direction) + yaw.
       final spinSign = rng.nextBool() ? 1.0 : -1.0;
-      var ang = kickAng * (1.05 + 0.55 * speed + strong * 1.15);
+      var ang = kickAng * (1.25 + 0.65 * speed + strong * 1.35) * depthFade;
       final hasUpAbove = wasFaceUp.sublist(i + 1).any((u) => u);
       if (hasUpAbove) {
         ang *= 1.25;
         punchedThrough.add(i);
       }
-      // Keep primary tip dominant; side chaos stays slight.
-      final tipSide = (rng.nextDouble() - 0.5) * ang * (0.06 + strong * 0.22);
-      final tipYaw = (rng.nextDouble() - 0.5) * ang * (0.04 + strong * 0.18);
+      final tip = spinSign * ang * feel.tipMul;
+      final tipYaw = (rng.nextDouble() * 2 - 1) * ang * (0.45 + strong * 0.55);
+      final tipTwist = (rng.nextDouble() - 0.5) * ang * (0.18 + strong * 0.35);
       bodies[i].angularVelocity.add(
         Vector3(
-          spinSign * ang * feel.tipMul,
+          latX * tip + rvx * tipTwist,
           tipYaw,
-          -ndx * ang * 0.1 + tipSide,
+          latZ * tip + rvz * tipTwist,
         ),
       );
       kickedFaceDown.add(i);
@@ -338,8 +370,10 @@ SlamPhysicsResult runSlamPhysics({
           (rvz + latZ * fan) * scale,
         ),
       );
+      final tip = kickAng * (0.9 + strong * 0.7);
+      final yaw = kickAng * (0.4 + strong * 0.5) * (rng.nextBool() ? 1.0 : -1.0);
       bodies[top].angularVelocity.add(
-        Vector3(kickAng * (0.35 + strong * 0.4), 0, kickAng * 0.12),
+        Vector3(latX * tip, yaw, latZ * tip),
       );
       if (LOGGING_SWITCH) {
         customlog(
@@ -381,12 +415,18 @@ SlamPhysicsResult runSlamPhysics({
 
   var settledSteps = 0;
   var stepsRun = 0;
-  // Strong hits need longer free tumble before damping crush so tips can cross.
-  final softAt = strong > 0.45
-      ? kSlamPhysicsSoftSettleAt + 18
-      : kSlamPhysicsSoftSettleAt;
-  final softAngKill = strong > 0.45 ? 0.9 : 0.68;
+  // Strong hits need longer free tumble; weak taps quiet before they creep over.
+  final softAt = power < 0.22
+      ? 20
+      : (strong > 0.45
+          ? kSlamPhysicsSoftSettleAt + 18
+          : kSlamPhysicsSoftSettleAt);
+  final softAngKill = power < 0.22
+      ? 0.7
+      : (strong > 0.45 ? 0.97 : 0.93);
   final softLinKill = strong > 0.45 ? 0.88 : 0.78;
+  // Free tumble first; flatten only as they come down so flips read in the air.
+  final flattenStart = power < 0.22 ? 18 : 38;
   for (var step = 1; step <= kSlamPhysicsMaxSteps; step++) {
     if (step >= softAt) {
       for (final b in bodies) {
@@ -397,15 +437,23 @@ SlamPhysicsResult runSlamPhysics({
         }
       }
     }
-    _stepWorld(bodies, feel);
+    _stepWorld(
+      bodies,
+      feel,
+      flattenPull: step < flattenStart
+          ? 0.0
+          : ((step - flattenStart) / 22).clamp(0.0, 1.0),
+    );
     stepsRun = step;
     if (step % kSlamPhysicsSampleEvery == 0) {
       frames.add({'i': step, 'p': samplePoses()});
     }
     var allQuiet = true;
     for (final b in bodies) {
+      final tip2 = b.angularVelocity.x * b.angularVelocity.x +
+          b.angularVelocity.z * b.angularVelocity.z;
       if (b.linearVelocity.length2 > kSleepLin * kSleepLin ||
-          b.angularVelocity.length2 > kSleepAng * kSleepAng) {
+          tip2 > kSleepAng * kSleepAng) {
         allQuiet = false;
         break;
       }
@@ -453,7 +501,7 @@ SlamPhysicsResult runSlamPhysics({
     if (wasFaceUp[i]) {
       faceUp = true;
     }
-    targetQ.add(faceOrientation(faceUp: faceUp));
+    targetQ.add(restingOrientationFrom(fromQ[i], faceUp: faceUp));
   }
 
   final blendStart = stepsRun;
@@ -471,6 +519,13 @@ SlamPhysicsResult runSlamPhysics({
     if (s % kSlamPhysicsSampleEvery == 0 || s == kSlamPhysicsSnapBlendSteps) {
       frames.add({'i': stepsRun, 'p': samplePoses()});
     }
+  }
+  for (var i = 0; i < bodies.length; i++) {
+    bodies[i].orientation = targetQ[i];
+    bodies[i].position.y = kDiscHalfHeight;
+  }
+  if (frames.isNotEmpty) {
+    frames[frames.length - 1] = {'i': stepsRun, 'p': samplePoses()};
   }
 
   final flipped = <String>[];
@@ -519,7 +574,11 @@ SlamPhysicsResult runSlamPhysics({
   );
 }
 
-void _stepWorld(List<_Body3> bodies, SlamFeelProfile feel) {
+void _stepWorld(
+  List<_Body3> bodies,
+  SlamFeelProfile feel, {
+  double flattenPull = 0,
+}) {
   const dt = kSlamPhysicsDt;
   final gravity = Vector3(0, -10, 0);
 
@@ -530,7 +589,7 @@ void _stepWorld(List<_Body3> bodies, SlamFeelProfile feel) {
     _clampVel(b, feel);
     b.position.add(b.linearVelocity * dt);
     _integrateOrientation(b.orientation, b.angularVelocity, dt);
-    _assistFaceSettle(b);
+    _assistFaceSettle(b, flattenPull: flattenPull);
   }
 
   final contacts = <_Contact>[];
@@ -872,27 +931,46 @@ class _Contact {
 
 double _round4(double v) => (v * 10000).roundToDouble() / 10000;
 
-/// Nudge off the rim without sustaining wake; kill spin once past equator.
-void _assistFaceSettle(_Body3 b) {
-  final ny = b.orientation.rotated(Vector3(0, 1, 0)).y;
-  if (ny.abs() < 0.28) {
-    b.angularVelocity.scale(0.62);
-    if (b.angularVelocity.length2 < 0.65) {
-      b.angularVelocity.x += (ny >= 0 ? 1.0 : -1.0) * 2.0;
+/// Pull off the rim toward the nearer face; damp leftover tip once nearly flat.
+/// Keep in-plane spin (yaw). Do not inject a world-X tip (that stands on edge).
+void _assistFaceSettle(_Body3 b, {double flattenPull = 0}) {
+  final n = b.orientation.rotated(Vector3(0, 1, 0));
+  final ny = n.y;
+  if (flattenPull > 0 && ny.abs() < 0.88) {
+    final targetY = ny >= 0 ? 1.0 : -1.0;
+    final axis = n.cross(Vector3(0, targetY, 0));
+    final len = axis.length;
+    if (len > 1e-6) {
+      axis.scale(1.0 / len);
+      final rim = (1.0 - ny.abs()).clamp(0.0, 1.0);
+      b.angularVelocity.add(axis * (16.0 * rim * flattenPull));
     }
-  } else if (ny.abs() > 0.5) {
-    b.angularVelocity.scale(0.4);
+  }
+  // Ground friction can hold a rim stand; blend toward flat once the heading
+  // is stable enough to keep in-plane yaw (do not nlerp on the equator).
+  if (flattenPull > 0.4 && ny.abs() > 0.18) {
+    final rest = restingOrientationFrom(b.orientation, faceUp: ny >= 0);
+    b.orientation = _nlerpQuat(b.orientation, rest, 0.14 * flattenPull);
+    b.angularVelocity.x *= 1.0 - 0.45 * flattenPull;
+    b.angularVelocity.z *= 1.0 - 0.45 * flattenPull;
+  }
+  final w2 = b.angularVelocity.length2;
+  if (ny.abs() > 0.72) {
+    b.angularVelocity.x *= 0.55;
+    b.angularVelocity.z *= 0.55;
+  } else if (w2 < 0.55 && ny.abs() > 0.2) {
+    b.angularVelocity.x *= 0.45;
+    b.angularVelocity.z *= 0.45;
   }
 }
 
 void _snapRestingFace(_Body3 b) {
   final ny = b.orientation.rotated(Vector3(0, 1, 0)).y;
-  if (ny >= kFaceUpDot) {
-    b.orientation = Quaternion.identity();
-  } else if (ny <= -kFaceUpDot) {
-    b.orientation = faceOrientation(faceUp: false);
-  }
-  // |ny| < kFaceUpDot: leave on edge — no flip credit.
+  if (ny.abs() < kFaceUpDot) return;
+  b.orientation = restingOrientationFrom(
+    b.orientation,
+    faceUp: ny >= kFaceUpDot,
+  );
 }
 
 Quaternion _nlerpQuat(Quaternion a, Quaternion b, double t) {

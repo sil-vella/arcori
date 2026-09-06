@@ -6,9 +6,10 @@ import '../../../core/navigation/app_navigation.dart';
 import '../../../core/navigation/app_paths.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/theme/theme.dart';
+import '../../match/widgets/arcori_cylinder.dart';
+import '../../match/widgets/arcori_look.dart';
 import '../velora_models.dart';
 import '../velora_notifier.dart';
-import '../widgets/circle_crop_image.dart';
 
 /// Lazy-loaded circulating designs for one theme (series subsections).
 class VeloraThemeScreen extends ConsumerStatefulWidget {
@@ -174,9 +175,24 @@ class _DesignTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppSpacing.sm),
       child: Column(
         children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: CircleCropImage(imageUrl: design.imageUrl),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final box = constraints.biggest.shortestSide;
+                final size = (box / (1 + kArcoriThicknessFactor * 0.55))
+                    .clamp(1.0, box);
+                return Center(
+                  child: ArcoriCylinder(
+                    look: ArcoriLook(
+                      designId: design.internalId,
+                      imageUrl: design.imageUrl,
+                      colorHex: design.color,
+                    ),
+                    size: size,
+                  ),
+                );
+              },
+            ),
           ),
           AppSpacing.gapXxs,
           Text(

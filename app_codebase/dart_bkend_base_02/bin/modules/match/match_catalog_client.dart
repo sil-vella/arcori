@@ -152,4 +152,74 @@ class MatchCatalogClient {
       );
     }
   }
+
+  /// Region-based arena for Quick Start / Invite. Returns null on failure.
+  Future<MatchArenaPick?> selectArena({required List<String> arcoriIds}) async {
+    final uri = Uri.parse('${_fastApi.baseUrl}/service/catalog/select_arena');
+    try {
+      final response = await _fastApi.client
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Service-Key': serviceKey(),
+            },
+            body: jsonEncode({'arcoriIds': arcoriIds}),
+          )
+          .timeout(const Duration(seconds: 10));
+      final body = jsonDecode(response.body);
+      if (body is! Map) return null;
+      final map = Map<String, dynamic>.from(body);
+      if (response.statusCode < 200 ||
+          response.statusCode >= 300 ||
+          map['ok'] != true) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'match catalog select_arena not ok status=${response.statusCode}',
+          );
+        }
+        return null;
+      }
+      final data = map['data'];
+      if (data is! Map) return null;
+      final arenaId = data['arenaId']?.toString().trim() ?? '';
+      if (arenaId.isEmpty) return null;
+      final imageUrl = data['imageUrl']?.toString().trim() ?? '';
+      final pick = MatchArenaPick(
+        arenaId: arenaId,
+        regionCode: data['regionCode']?.toString(),
+        name: data['name']?.toString(),
+        imageUrl: imageUrl.isEmpty ? null : imageUrl,
+        source: data['source']?.toString(),
+      );
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match catalog select_arena ok arenaId=${pick.arenaId} '
+          'region=${pick.regionCode} source=${pick.source}',
+        );
+      }
+      return pick;
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('match catalog select_arena error: $e');
+      }
+      return null;
+    }
+  }
+}
+
+class MatchArenaPick {
+  const MatchArenaPick({
+    required this.arenaId,
+    this.regionCode,
+    this.name,
+    this.imageUrl,
+    this.source,
+  });
+
+  final String arenaId;
+  final String? regionCode;
+  final String? name;
+  final String? imageUrl;
+  final String? source;
 }

@@ -1,6 +1,6 @@
 {
   "catalog": "Launch Regions",
-  "version": 3,
+  "version": 4,
   "description": "Velora's five starting lands plus the Realm Beyond. Velora relationships are political and cultural, not permanent moral alignments. An Avari's region influences reputation and story opportunities — it does not prevent friendships, travel, or collecting Arcori. The Realm Beyond sits outside that map and has no affinities or hostilities.",
   "standingScale": {
     "affinity": 2,
@@ -10,20 +10,29 @@
     "hostility": -2
   },
   "centralConflict": {
-    "regions": ["ASH", "EVG"],
+    "regions": [
+      "ASH",
+      "EVG"
+    ],
     "summary": "Ashdrift Hill and Everlight Grove disagree over whether the mystery beneath the falling ash should be contained, extinguished or left untouched."
   },
   "alliances": [
     {
       "allianceCode": "VEILED_ACCORD",
       "name": "The Veiled Accord",
-      "members": ["ASH", "MWB"],
+      "members": [
+        "ASH",
+        "MWB"
+      ],
       "purpose": "Cooperate in studying lost memories and places that appear only briefly."
     },
     {
       "allianceCode": "LIVING_PACT",
       "name": "The Living Pact",
-      "members": ["EVG", "AMB"],
+      "members": [
+        "EVG",
+        "AMB"
+      ],
       "purpose": "Defend living wilderness and ancient forces."
     }
   ],
@@ -31,6 +40,7 @@
     {
       "regionCode": "ASH",
       "name": "Ashdrift Hill",
+      "slug": "ashdrift-hill",
       "type": "region",
       "worldState": "Active",
       "seasonState": "Active",
@@ -52,14 +62,47 @@
         "longitude": null,
         "radiusMeters": null
       },
+      "arenas": [
+        {
+          "arenaId": "ARN-ASH-HIL001-0001",
+          "name": "Ashdrift Hill",
+          "imageFile": "ARN-ASH-HIL001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-ASH-HSP001-0001",
+          "name": "Hospital",
+          "imageFile": "ARN-ASH-HSP001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-ASH-OTH001-0001",
+          "name": "Operating Theatre",
+          "imageFile": "ARN-ASH-OTH001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-ASH-COR001-0001",
+          "name": "Hospital Corridor",
+          "imageFile": "ARN-ASH-COR001-0001.webp"
+        }
+      ],
       "relationships": {
-        "affinity": ["MWB"],
+        "affinity": [
+          "MWB"
+        ],
         "favourable": [],
-        "neutral": ["AMB", "LFR"],
+        "neutral": [
+          "AMB",
+          "LFR"
+        ],
         "tension": [],
-        "hostility": ["EVG"],
-        "allies": ["MWB"],
-        "enemies": ["EVG"],
+        "hostility": [
+          "EVG"
+        ],
+        "allies": [
+          "MWB"
+        ],
+        "enemies": [
+          "EVG"
+        ],
         "standings": {
           "MWB": {
             "value": 2,
@@ -87,6 +130,7 @@
     {
       "regionCode": "EVG",
       "name": "Everlight Grove",
+      "slug": "everlight-grove",
       "type": "region",
       "worldState": "Active",
       "seasonState": "Active",
@@ -108,14 +152,48 @@
         "longitude": null,
         "radiusMeters": null
       },
+      "arenas": [
+        {
+          "arenaId": "ARN-EVG-GRV001-0001",
+          "name": "Everlight Grove",
+          "imageFile": "ARN-EVG-GRV001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-EVG-ROF001-0001",
+          "name": "Rooftop",
+          "imageFile": "ARN-EVG-ROF001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-EVG-MTF001-0001",
+          "name": "Mountain Facility",
+          "imageFile": "ARN-EVG-MTF001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-EVG-OCS001-0001",
+          "name": "Ocean Sanctuary",
+          "imageFile": "ARN-EVG-OCS001-0001.webp"
+        }
+      ],
       "relationships": {
-        "affinity": ["AMB"],
-        "favourable": ["LFR"],
+        "affinity": [
+          "AMB"
+        ],
+        "favourable": [
+          "LFR"
+        ],
         "neutral": [],
-        "tension": ["MWB"],
-        "hostility": ["ASH"],
-        "allies": ["AMB"],
-        "enemies": ["ASH"],
+        "tension": [
+          "MWB"
+        ],
+        "hostility": [
+          "ASH"
+        ],
+        "allies": [
+          "AMB"
+        ],
+        "enemies": [
+          "ASH"
+        ],
         "standings": {
           "AMB": {
             "value": 2,
@@ -143,6 +221,7 @@
     {
       "regionCode": "LFR",
       "name": "Little Frost",
+      "slug": "little-frost",
       "type": "region",
       "worldState": "Active",
       "seasonState": "Active",
@@ -164,11 +243,40 @@
         "longitude": null,
         "radiusMeters": null
       },
+      "arenas": [
+        {
+          "arenaId": "ARN-LFR-TWN001-0001",
+          "name": "Little Frost",
+          "imageFile": "ARN-LFR-TWN001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-LFR-SCH001-0001",
+          "name": "School Interior",
+          "imageFile": "ARN-LFR-SCH001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-LFR-CAF001-0001",
+          "name": "School Cafeteria",
+          "imageFile": "ARN-LFR-CAF001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-LFR-HLW001-0001",
+          "name": "School Hallway",
+          "imageFile": "ARN-LFR-HLW001-0001.webp"
+        }
+      ],
       "relationships": {
         "affinity": [],
-        "favourable": ["EVG", "MWB"],
-        "neutral": ["ASH"],
-        "tension": ["AMB"],
+        "favourable": [
+          "EVG",
+          "MWB"
+        ],
+        "neutral": [
+          "ASH"
+        ],
+        "tension": [
+          "AMB"
+        ],
         "hostility": [],
         "allies": [],
         "enemies": [],
@@ -199,6 +307,7 @@
     {
       "regionCode": "MWB",
       "name": "Moonwake Bay",
+      "slug": "moonwake-bay",
       "type": "region",
       "worldState": "Active",
       "seasonState": "Active",
@@ -220,13 +329,44 @@
         "longitude": null,
         "radiusMeters": null
       },
+      "arenas": [
+        {
+          "arenaId": "ARN-MWB-BAY001-0001",
+          "name": "Moonwake Bay",
+          "imageFile": "ARN-MWB-BAY001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-MWB-LTD001-0001",
+          "name": "Low Tide",
+          "imageFile": "ARN-MWB-LTD001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-MWB-CAV001-0001",
+          "name": "Tideglass Caves",
+          "imageFile": "ARN-MWB-CAV001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-MWB-OBS001-0001",
+          "name": "Tidal Observatory",
+          "imageFile": "ARN-MWB-OBS001-0001.webp"
+        }
+      ],
       "relationships": {
-        "affinity": ["ASH"],
-        "favourable": ["LFR"],
+        "affinity": [
+          "ASH"
+        ],
+        "favourable": [
+          "LFR"
+        ],
         "neutral": [],
-        "tension": ["EVG", "AMB"],
+        "tension": [
+          "EVG",
+          "AMB"
+        ],
         "hostility": [],
-        "allies": ["ASH"],
+        "allies": [
+          "ASH"
+        ],
         "enemies": [],
         "standings": {
           "ASH": {
@@ -255,6 +395,7 @@
     {
       "regionCode": "AMB",
       "name": "Amberwild",
+      "slug": "amberwild",
       "type": "region",
       "worldState": "Active",
       "seasonState": "Active",
@@ -277,13 +418,44 @@
         "longitude": null,
         "radiusMeters": null
       },
+      "arenas": [
+        {
+          "arenaId": "ARN-AMB-WLD001-0001",
+          "name": "Amberwild",
+          "imageFile": "ARN-AMB-WLD001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-AMB-STF001-0001",
+          "name": "Stillstorm Forest",
+          "imageFile": "ARN-AMB-STF001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-AMB-BAS001-0001",
+          "name": "Stormglass Basin",
+          "imageFile": "ARN-AMB-BAS001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-AMB-RAV001-0001",
+          "name": "Amberfall Ravine",
+          "imageFile": "ARN-AMB-RAV001-0001.webp"
+        }
+      ],
       "relationships": {
-        "affinity": ["EVG"],
+        "affinity": [
+          "EVG"
+        ],
         "favourable": [],
-        "neutral": ["ASH"],
-        "tension": ["MWB", "LFR"],
+        "neutral": [
+          "ASH"
+        ],
+        "tension": [
+          "MWB",
+          "LFR"
+        ],
         "hostility": [],
-        "allies": ["EVG"],
+        "allies": [
+          "EVG"
+        ],
         "enemies": [],
         "standings": {
           "EVG": {
@@ -312,6 +484,7 @@
     {
       "regionCode": "RBY",
       "name": "Realm Beyond",
+      "slug": "realm-beyond",
       "type": "region",
       "worldState": "Active",
       "seasonState": "Active",
@@ -333,6 +506,28 @@
         "longitude": null,
         "radiusMeters": null
       },
+      "arenas": [
+        {
+          "arenaId": "ARN-RBY-RLM001-0001",
+          "name": "Realm Beyond",
+          "imageFile": "ARN-RBY-RLM001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-RBY-PAS001-0001",
+          "name": "Passageway",
+          "imageFile": "ARN-RBY-PAS001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-RBY-CON001-0001",
+          "name": "Transit Concourse",
+          "imageFile": "ARN-RBY-CON001-0001.webp"
+        },
+        {
+          "arenaId": "ARN-RBY-CIV001-0001",
+          "name": "Broken Civic Interior",
+          "imageFile": "ARN-RBY-CIV001-0001.webp"
+        }
+      ],
       "relationships": {
         "affinity": [],
         "favourable": [],
@@ -344,5 +539,10 @@
         "standings": {}
       }
     }
-  ]
+  ],
+  "arenaAssets": {
+    "idFormat": "ARN-{regionCode}-{place}001-0001",
+    "directory": "assets/images/velora/{region-slug}/",
+    "file": "{arenaId}.webp"
+  }
 }

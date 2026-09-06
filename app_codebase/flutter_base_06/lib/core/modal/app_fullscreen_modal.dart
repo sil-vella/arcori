@@ -40,13 +40,22 @@ class AppFullScreenModal extends StatelessWidget {
                 showCloseButton: showCloseButton,
               ),
             Expanded(
-              child: SingleChildScrollView(
-                physics: scrollable
-                    ? null
-                    : const NeverScrollableScrollPhysics(),
-                padding: contentPadding,
-                child: child,
-              ),
+              child: scrollable
+                  ? SingleChildScrollView(
+                      padding: contentPadding,
+                      child: child,
+                    )
+                  : ScrollConfiguration(
+                      behavior: const ScrollBehavior().copyWith(
+                        scrollbars: false,
+                        overscroll: false,
+                        physics: const NeverScrollableScrollPhysics(),
+                      ),
+                      child: Padding(
+                        padding: contentPadding,
+                        child: child,
+                      ),
+                    ),
             ),
             if (actions.isNotEmpty)
               Padding(

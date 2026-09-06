@@ -247,6 +247,39 @@ class MatchService implements MatchLifecycleContract {
       );
     }
 
+    var resolvedArenaId = arenaId;
+    String? arenaImageUrl;
+    if (matchTypeUsesArcoriRegionArena(matchType)) {
+      try {
+        final pick = await _catalog.selectArena(
+          arcoriIds: [
+            for (final s in assigned) ...s.arcoriIds,
+          ],
+        );
+        if (pick != null && pick.arenaId.isNotEmpty) {
+          resolvedArenaId = pick.arenaId;
+          arenaImageUrl = pick.imageUrl;
+          if (LOGGING_SWITCH) {
+            customlog(
+              'match: startFromLobby select_arena ok '
+              'arenaId=${pick.arenaId} region=${pick.regionCode} '
+              'source=${pick.source}',
+            );
+          }
+        }
+      } catch (e) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'match: startFromLobby select_arena failed → stub arena err=$e',
+          );
+        }
+      }
+    } else if (LOGGING_SWITCH) {
+      customlog(
+        'match: startFromLobby skip select_arena type=${matchType['code']}',
+      );
+    }
+
     final ids = <String>{
       for (final s in assigned) ...s.arcoriIds,
       for (final s in assigned) s.slammerId,
@@ -278,7 +311,8 @@ class MatchService implements MatchLifecycleContract {
       matchType: matchType,
       seats: assigned,
       catalogById: catalogById,
-      arenaId: arenaId,
+      arenaId: resolvedArenaId,
+      arenaImageUrl: arenaImageUrl,
       firstSeatIndex: firstSeatIndex,
       random: stubLoop.random,
     );

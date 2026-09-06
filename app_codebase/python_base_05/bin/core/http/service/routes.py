@@ -114,6 +114,17 @@ def _mount_media(app: FastAPI) -> None:
     if not catalog_root:
         catalog_root = "/data/catalog-media"
     os.makedirs(catalog_root, exist_ok=True)
+
+    # Sibling of Arcori disc art — own bind, not nested under the :ro catalog tree.
+    velora_root = os.environ.get("CATALOG_VELORA_MEDIA_ROOT", "").strip()
+    if velora_root:
+        os.makedirs(velora_root, exist_ok=True)
+        app.mount(
+            "/catalog-media/velora",
+            StaticFiles(directory=velora_root),
+            name="catalog_media_velora",
+        )
+
     app.mount(
         "/catalog-media",
         StaticFiles(directory=catalog_root),

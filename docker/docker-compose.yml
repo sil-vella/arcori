@@ -63,6 +63,7 @@ services:
       MIGRATION_DATABASE_URL: postgresql://${POSTGRES_USER:-arcori}:${POSTGRES_PASSWORD}@Arcori_postgres:5432/${POSTGRES_DB:-arcori}
       DART_SERVICE_URL: http://Arcori_dart:8080
       REDIS_HOST: Arcori_redis
+      CATALOG_VELORA_MEDIA_ROOT: /data/catalog-velora
     depends_on:
       Arcori_postgres:
         condition: service_healthy
@@ -72,6 +73,7 @@ services:
       - arcori_uploads:/data/uploads
       # Read-only Arcori catalog artwork (host path or synced tree; filenames = internalId.webp)
       - ../assets/images/arcori:/data/catalog-media:ro
+      - ../assets/images/velora:/data/catalog-velora:ro
     networks:
       - app-network
     restart: unless-stopped

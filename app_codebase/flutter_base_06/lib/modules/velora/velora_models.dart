@@ -30,6 +30,32 @@ class DesignGeneration {
   }
 }
 
+class DesignLegacy {
+  const DesignLegacy({
+    this.preservationRequirement,
+    this.closureMilestone,
+  });
+
+  factory DesignLegacy.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return const DesignLegacy();
+    int? asInt(Object? raw) {
+      if (raw is int) return raw;
+      return int.tryParse('$raw');
+    }
+
+    return DesignLegacy(
+      preservationRequirement: asInt(json['preservationRequirement']),
+      closureMilestone: asInt(json['closureMilestone']),
+    );
+  }
+
+  final int? preservationRequirement;
+  final int? closureMilestone;
+
+  bool get isEmpty =>
+      preservationRequirement == null && closureMilestone == null;
+}
+
 class DesignSummary {
   const DesignSummary({
     required this.internalId,
@@ -45,6 +71,7 @@ class DesignSummary {
     this.seasonState,
     this.type,
     this.imageUrl,
+    this.color,
     this.generation,
   });
 
@@ -64,6 +91,7 @@ class DesignSummary {
       seasonState: json['seasonState']?.toString(),
       type: json['type']?.toString(),
       imageUrl: json['imageUrl']?.toString(),
+      color: json['color']?.toString(),
       generation: gen is Map
           ? DesignGeneration.fromJson(Map<String, dynamic>.from(gen))
           : null,
@@ -83,6 +111,7 @@ class DesignSummary {
   final String? seasonState;
   final String? type;
   final String? imageUrl;
+  final String? color;
   final DesignGeneration? generation;
 
   String get displayName =>
@@ -104,12 +133,15 @@ class DesignDetail {
     this.seasonState,
     this.type,
     this.imageUrl,
+    this.color,
     this.loreDescription,
     this.generation,
+    this.legacy,
   });
 
   factory DesignDetail.fromJson(Map<String, dynamic> json) {
     final gen = json['generation'];
+    final legacyRaw = json['legacy'];
     return DesignDetail(
       internalId: json['internalId']?.toString() ?? '',
       design: json['design']?.toString(),
@@ -124,9 +156,13 @@ class DesignDetail {
       seasonState: json['seasonState']?.toString(),
       type: json['type']?.toString(),
       imageUrl: json['imageUrl']?.toString(),
+      color: json['color']?.toString(),
       loreDescription: json['loreDescription']?.toString(),
       generation: gen is Map
           ? DesignGeneration.fromJson(Map<String, dynamic>.from(gen))
+          : null,
+      legacy: legacyRaw is Map
+          ? DesignLegacy.fromJson(Map<String, dynamic>.from(legacyRaw))
           : null,
     );
   }
@@ -144,8 +180,10 @@ class DesignDetail {
   final String? seasonState;
   final String? type;
   final String? imageUrl;
+  final String? color;
   final String? loreDescription;
   final DesignGeneration? generation;
+  final DesignLegacy? legacy;
 
   String get displayName =>
       (design != null && design!.isNotEmpty) ? design! : internalId;

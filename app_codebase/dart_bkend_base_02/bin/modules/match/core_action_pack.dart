@@ -131,6 +131,13 @@ class CoreActionPack implements MatchActionPack {
 
     // Always restack face-down after a slam so the next seat starts clean.
     final nextTable = restackFaceDown({'pieces': resolved.pieces});
+    if (LOGGING_SWITCH) {
+      final n = piecesFromTable(nextTable).length;
+      customlog(
+        'match: restack faceDown n=$n '
+        'wasFlipped=${resolved.flippedPieceIds}',
+      );
+    }
 
     return store.bump(current.matchId, (snap) {
       final lastEvent = <String, dynamic>{

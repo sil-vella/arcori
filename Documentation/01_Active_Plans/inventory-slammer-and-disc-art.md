@@ -22,10 +22,11 @@ Game Controls and practice list **owned slammers** (`player_slammers`). Avari Pr
 - [x] Back-face inner line auto-colors from fill (same hue; lighten dark backs, darken light backs)
 - [x] Prefetch circulating Arcori art on Play screen load (not on flip)
 - [x] Tests + tech spec / case study
+- [x] Velora browse + Detail use `ArcoriCylinder` (catalog rim, not a plain crop)
 
 ## Current Progress
 
-Complete. Stack discs inset the face so the catalog rim shows. Back-face inner hairline uses `arcoriBackInnerLineColor`. Play screen precaches circulating + practice art into `ImageCache`; face-down discs still mount `Image.network` so a flip does not start the download.
+Complete. Stack discs inset the face so the catalog rim shows. Back-face inner hairline uses `arcoriBackInnerLineColor`. Play screen precaches circulating + practice art into `ImageCache`; face-down discs still mount `Image.network` so a flip does not start the download. Velora theme tiles and Arcori Detail hero use the same `ArcoriCylinder` as match / Avari.
 
 ## Next Steps
 
@@ -35,13 +36,14 @@ Celebration / Match Summary (master plan).
 
 - Python: `avari_service.py`, `avari_app.py`, catalog `design_summary` color, tests
 - Dart: `match_avari_client.dart`, `match_service.dart`, `table_pieces.dart`, match tests
-- Flutter: Avari models/profile/chip, Game Controls, practice loadout, disc, snapshot pieces, `arcori_look.dart`, `arcori_cylinder.dart`, `arcori_palette.dart`, `arcori_image_prefetch.dart`, `play_screen.dart`
+- Flutter: Avari models/profile/chip, Game Controls, practice loadout, disc, snapshot pieces, `arcori_look.dart`, `arcori_cylinder.dart`, `arcori_palette.dart`, `arcori_image_prefetch.dart`, `play_screen.dart`, Velora theme/detail
 
 ## Notes
 
 - Online Arcori pick is unchanged: weighted/random among that seat’s circulating `player_design_access`.
 - Unowned equipped slammer is not used; FastAPI returns an owned fallback (starter if present).
 - Catalog freeze stays server-private; face fields ride on `table.pieces`.
+- Velora was still a plain `ClipOval` crop; it now parses catalog `color` and paints `ArcoriCylinder` like the stack.
 - `DecoratedBox` default paints behind the child, so a full-size `ClipOval` image hid the rim on the anim stack.
 - Back inner line is not white/black: it stays the catalog hue and auto-shifts lightness (and a little saturation) from the fill.
 - Catalog art is precached when Play opens (`collectArcoriArtUrls` + `precacheImage`). Face-down discs keep `Image.network` mounted under the back fill so flip is a cache hit.

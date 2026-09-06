@@ -203,6 +203,43 @@ void main() {
       expect(r.flippedPieceIds.length, greaterThanOrEqualTo(1));
     });
 
+    test('starter slam kicks every face-down disc in a 3-stack', () {
+      final r = runSlamPhysics(
+        pieces: [
+          for (var i = 0; i < 3; i++)
+            piecePayload(
+              pieceId: 'p$i',
+              designId: 'D$i',
+              ownerUserId: 'u$i',
+              seatIndex: i,
+              faceUp: false,
+              stackIndex: i,
+            ),
+        ],
+        dx: 0.0,
+        dy: -1.0,
+        speed: 1.0,
+        power: 0.5,
+        maxAffect: 2,
+        rng: Random(7),
+      );
+      final frames = r.sim['frames'] as List;
+      expect(frames.length, greaterThan(2));
+      final start = (frames[0] as Map)['p'] as List;
+      final early = (frames[2] as Map)['p'] as List;
+      var spun = 0;
+      for (var i = 0; i < 3; i++) {
+        final a = start[i] as List;
+        final b = early[i] as List;
+        var dq = 0.0;
+        for (var k = 4; k <= 7; k++) {
+          dq += ((a[k] as num) - (b[k] as num)).abs();
+        }
+        if (dq > 0.02) spun++;
+      }
+      expect(spun, 3);
+    });
+
     test('punches through face-up top to flip face-down disc below', () {
       final table = {
         'pieces': [
@@ -356,6 +393,168 @@ void main() {
         isFaceUpOrientation(Quaternion.axisAngle(Vector3(1, 0, 0), pi / 2)),
         isFalse,
       );
+    });
+
+    test('restingOrientationFrom keeps in-plane yaw', () {
+      const yaw = 0.7;
+      final spun = Quaternion.axisAngle(Vector3(0, 1, 0), yaw);
+      final rest = restingOrientationFrom(spun, faceUp: true);
+      expect(isFaceUpOrientation(rest), isTrue);
+      final x = rest.rotated(Vector3(1, 0, 0));
+      expect(atan2(-x.z, x.x), closeTo(yaw, 0.05));
+
+      final flipped = spun * Quaternion.axisAngle(Vector3(1, 0, 0), pi);
+      final down = restingOrientationFrom(flipped, faceUp: false);
+      expect(isFaceUpOrientation(down), isFalse);
+      final dx = down.rotated(Vector3(1, 0, 0));
+      expect(atan2(-dx.z, dx.x), closeTo(yaw, 0.05));
+    });
+
+    test('restingOrientationFrom is exactly flat on the table', () {
+      const yaw = 0.7;
+      final tipped = Quaternion.axisAngle(Vector3(0, 1, 0), yaw) *
+          Quaternion.axisAngle(Vector3(1, 0, 0), 0.4);
+      final up = restingOrientationFrom(tipped, faceUp: true);
+      expect(isFlatOnTable(up), isTrue);
+      expect(isFaceUpOrientation(up), isTrue);
+      final x = up.rotated(Vector3(1, 0, 0));
+      expect(atan2(-x.z, x.x), closeTo(yaw, 0.08));
+
+      final down = restingOrientationFrom(tipped, faceUp: false);
+      expect(isFlatOnTable(down), isTrue);
+      expect(isFaceUpOrientation(down), isFalse);
+    });
+
+    test('stack start and settled poses lie flat', () {
+      final r = runSlamPhysics(
+        pieces: [
+          for (var i = 0; i < 3; i++)
+            piecePayload(
+              pieceId: 'p$i',
+              designId: 'D$i',
+              ownerUserId: 'u$i',
+              seatIndex: i,
+              faceUp: false,
+              stackIndex: i,
+            ),
+        ],
+        dx: 0.4,
+        dy: -0.8,
+        speed: 0.85,
+        power: 0.9,
+        maxAffect: 3,
+        rng: Random(42),
+      );
+      final frames = r.sim['frames'] as List;
+      final first = (frames.first as Map)['p'] as List;
+      final last = (frames.last as Map)['p'] as List;
+      var spun = 0;
+      for (final row in first) {
+        final p = row as List;
+        final q = Quaternion(
+          (p[4] as num).toDouble(),
+          (p[5] as num).toDouble(),
+          (p[6] as num).toDouble(),
+          (p[7] as num).toDouble(),
+        )..normalize();
+        expect(isFlatOnTable(q), isTrue);
+      }
+      for (final row in last) {
+        final p = row as List;
+        final qx = (p[4] as num).toDouble();
+        final qy = (p[5] as num).toDouble();
+        final qz = (p[6] as num).toDouble();
+        final qw = (p[7] as num).toDouble();
+        final q = Quaternion(qx, qy, qz, qw)..normalize();
+        expect(isFlatOnTable(q), isTrue);
+        final identity = qx.abs() + qy.abs() + qz.abs() < 0.08 && qw.abs() > 0.95;
+        final downX = qx.abs() > 0.95 && qy.abs() + qz.abs() < 0.08;
+        if (!identity && !downX) spun++;
+      }
+      expect(spun, greaterThan(0));
+    });
+
+    test('tumble does not linger on the rim for most of the timeline', () {
+      final r = runSlamPhysics(
+        pieces: [
+          for (var i = 0; i < 3; i++)
+            piecePayload(
+              pieceId: 'p$i',
+              designId: 'D$i',
+              ownerUserId: 'u$i',
+              seatIndex: i,
+              faceUp: false,
+              stackIndex: i,
+            ),
+        ],
+        dx: 0.35,
+        dy: -0.75,
+        speed: 0.8,
+        power: 0.75,
+        maxAffect: 3,
+        rng: Random(7),
+      );
+      final frames = r.sim['frames'] as List;
+      final start = (frames.length * 0.65).floor();
+      var rim = 0;
+      var total = 0;
+      for (var f = start; f < frames.length; f++) {
+        final poses = (frames[f] as Map)['p'] as List;
+        for (final row in poses) {
+          final p = row as List;
+          final q = Quaternion(
+            (p[4] as num).toDouble(),
+            (p[5] as num).toDouble(),
+            (p[6] as num).toDouble(),
+            (p[7] as num).toDouble(),
+          )..normalize();
+          final ny = q.rotated(Vector3(0, 1, 0)).y.abs();
+          total++;
+          if (ny < 0.35) rim++;
+        }
+      }
+      expect(total, greaterThan(0));
+      expect(rim / total, lessThan(0.35));
+    });
+
+    test('tumble shows flips in the air before flatten', () {
+      final r = runSlamPhysics(
+        pieces: [
+          for (var i = 0; i < 3; i++)
+            piecePayload(
+              pieceId: 'p$i',
+              designId: 'D$i',
+              ownerUserId: 'u$i',
+              seatIndex: i,
+              faceUp: false,
+              stackIndex: i,
+            ),
+        ],
+        dx: 0.35,
+        dy: -0.75,
+        speed: 0.8,
+        power: 0.75,
+        maxAffect: 3,
+        rng: Random(7),
+      );
+      final frames = r.sim['frames'] as List;
+      final end = (frames.length * 0.45).ceil().clamp(1, frames.length);
+      var tipped = 0;
+      for (var f = 0; f < end; f++) {
+        final poses = (frames[f] as Map)['p'] as List;
+        for (final row in poses) {
+          final p = row as List;
+          final q = Quaternion(
+            (p[4] as num).toDouble(),
+            (p[5] as num).toDouble(),
+            (p[6] as num).toDouble(),
+            (p[7] as num).toDouble(),
+          )..normalize();
+          final ny = q.rotated(Vector3(0, 1, 0)).y.abs();
+          if (ny < 0.55) tipped++;
+        }
+      }
+      expect(tipped, greaterThan(0));
     });
   });
 }

@@ -2,7 +2,7 @@
 
 **Status:** Completed  
 **Created:** 2026-09-04  
-**Last Updated:** 2026-09-04
+**Last Updated:** 2026-09-06
 
 Related: [2d-slam-physics.md](2d-slam-physics.md) · [arcori-slam-impact.md](arcori-slam-impact.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md)
 
@@ -28,6 +28,22 @@ Replace the Forge2D side-view (2D) slam sim with a **pure-Dart 3D thin-cylinder*
 - [x] `ArcoriStackSurface` nlerp quaternions; dead-above (XZ→screen, pitch 0); ignore legacy 2D frames
 - [x] `ArcoriDisc` full-circle face + rear thickness; no pitch foreshortening when settled
 - [x] Tests + tech spec + case study + master plan
+- [x] Tumble / rest yaw — `restingOrientationFrom`; kick rolls ⟂ slam; client keeps spin
+- [x] Rest/stack lie flat in view — physics Y-up yaw conjugated to screen Z (in-plane spin, not tip)
+- [x] Flat rest keeps painted face toward camera (yaw-only view; art vs back from faceUp)
+- [x] Restack uses table face-down (client settle); physics pulls off the rim mid-sim
+- [x] More air tumble before land — delayed flatten + higher kick/hop
+- [x] Full-stack kick — every face-down disc gets a direct hit; ~5% less per layer
+
+**Tumble / rest yaw (2026-09-06):** settle keeps in-plane spin (`restingOrientationFrom`); kick rolls ⟂ slam + yaw; no world-X edge assist. Client no longer nlerps to identity / π-X after replay.
+
+**Flat rest in view (2026-09-06):** applying physics yaw around Y directly to the disc widget tipped coins on edge (widget face is Z). `physicsToViewQuat` conjugates by +90° around X so rest and stack stay full circles; heading from just before flatten is kept. Last sim frame is exact rest.
+
+**Rim linger (2026-09-06):** `_assistFaceSettle` now pulls toward the nearer face after flatten starts (not only damping). Snap blend 28 frames. Restack leftover face-up was **client**: settle ORed live slam quat with restacked `faceUp:false`. Backend `restackFaceDown` was already clean (next slam starts ny=-1).
+
+**Air tumble (2026-09-06):** flatten used to start ~step 14 and ate mid-air flips. Strong slams now free-tumble until step 38, then ramp flatten over 22 steps. Balanced kick is hotter (`angularKickScale` 1.65, `tipMul` 2.55, `maxAngSpeed` 11, extra hop) so flips read before land; late pull still kills rim stands.
+
+**Full-stack kick (2026-09-06):** every face-down disc gets the same kind of slam as the top (`affectBudget` no longer 1–2). Falloff is ~5% per layer (`kStackDepthKickFade`). `spread` still fans pieces; it no longer gates who gets a flip impulse. Weak taps still rarely wipe because power itself is tiny.
 
 ## Current Progress
 
@@ -45,6 +61,8 @@ Celebration / Match Summary / rewards. Aim + Game Controls shipped separately �
 
 **Anim timing (2026-09-04):** server `postSlamAnimHold` = `steps×dt + settleHold + pad` from `outcome.sim.animHoldMs`. Client replays sim 1:1 with steps then holds `settleHoldMs` before snap.
 
+**Tumble / rest yaw (2026-09-06):** settle keeps in-plane spin (`restingOrientationFrom`); kick rolls ⟂ slam + yaw; no world-X edge assist. Client no longer nlerps to identity / π-X after replay. Dead-above view conjugates physics Y-up into screen Z so rest/stack stay flat circles.
+
 ## Files Modified
 
 - `app_codebase/dart_bkend_base_02/pubspec.yaml` (forge2d → vector_math)
@@ -55,6 +73,7 @@ Celebration / Match Summary / rewards. Aim + Game Controls shipped separately �
 - `app_codebase/flutter_base_06/lib/modules/match/input/slam_physics_world.dart`
 - `app_codebase/flutter_base_06/lib/modules/match/input/slam_resolver.dart`
 - `app_codebase/flutter_base_06/lib/modules/match/widgets/arcori_disc.dart`
+- `app_codebase/flutter_base_06/test/modules/match/arcori_disc_test.dart`
 - `app_codebase/flutter_base_06/lib/modules/match/widgets/arcori_stack_surface.dart`
 - `Documentation/Game_Specific/Arcori_Technical_Specification_v0.4.md`
 - `Documentation/01_Active_Plans/00_MASTER_PLAN.md`
@@ -65,7 +84,7 @@ Celebration / Match Summary / rewards. Aim + Game Controls shipped separately �
 - Pose wire: `sim.space = "xyzq"`; clients ignore non-xyzq / short legacy poses.
 - Table: XZ ground, Y up; stack along Y; soft walls ±3.5.
 - Disc size: Ø50mm × 3mm (`kDiscRadius=0.025`, `kDiscHalfHeight=0.0015`); `pxPerMeter=1440`.
-- Flutter POV: dead-above (`viewPitch=0`), round table pad, settled discs as full circles.
+- Flutter POV: dead-above (`viewPitch=0`); when flat, `discViewQuat` is yaw-only so catalog art stays on camera.
 - No three_js / Glint / Flutter GPU in the match HUD.
 
 ## Case study
@@ -74,4 +93,4 @@ Recorded in [03_CASE_STUDY.md](03_CASE_STUDY.md) — §4.6 + major decisions (Fo
 
 ## Task Manager
 
-Synced 2026-09-04 on **App Dev**: checked off 3D slam / POV / anim-lock / modal+replay fixes / feel profiles; open checklist **slam direction miss-stack**; updated Next note.
+Synced 2026-09-06 on **App Dev** (`32`): restack-client `256` + rim pull `257`; notes `258`. Air tumble `259`/`260`. Full-stack kick checklist `261` + note `262`.

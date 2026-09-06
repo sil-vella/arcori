@@ -70,7 +70,7 @@ Dart calls this through module-owned [`MatchCatalogClient`](../../app_codebase/d
 3. ~~Invite Friend Match~~ — **done** ([ws-invite-match.md](ws-invite-match.md))
 4. **Flutter SharedPrefs catalog hydrate** — optional, separate
 5. **No mid-match catalog reload** — still forbidden
-6. **Arena content catalog** — `arenaId` string only
+6. ~~**Arena content catalog** — `arenaId` string only~~ — **done** for Quick Start / Invite (`arenaId` + `arenaImageUrl` from seated Arcori regions). Special Event still stub.
 7. **Piece physics on Arcori** — add to catalog when designed
 8. Full slam UI; durable rewards / Match Summary
 9. **Flutter `error_policy` for `match/…` + `matchmaking/…`** — partial (OK modal for play gate/timeout)

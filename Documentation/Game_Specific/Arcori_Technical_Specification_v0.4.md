@@ -1,7 +1,7 @@
 # Arcori Technical Specification
 
 Working Draft v0.4  
-**Last aligned:** 2026-09-05 (inventory slammers + disc face art)
+**Last aligned:** 2026-09-06 (Quick Start / Invite arena from seated Arcori)
 
 ## Arcori Model
 
@@ -11,11 +11,15 @@ Fields: internalId, themeCode, designCode, designFamily, design, inspiration, re
 
 **Match Arcori pairing SSOT:** after players are seated, `04_selection_weights.json` is the sole table for picking one design per seat (`printedRarity` weight × region standing multiplier; hostility boosts match chance). Design-level `selectionWeight` is **not** used for match pairing. Service: `POST /service/catalog/select_arcori`. Candidates = that player's `player_design_access` ids that are still circulating. Weight/parse failures → random among **those** candidates only — never the global circulating catalog. Empty player access → empty pick (client/Dart stub may fill Tiger).
 
+**Match arena (Quick Start / Invite):** after those Arcori ids exist, `POST /service/catalog/select_arena` counts `location.regionCode`. Two or more from the same region → random arena in that region. All different (or no majority) → random catalog region that has arenas, then a random arena. Snapshot fields: `arenaId` + `arenaImageUrl` (`/catalog-media/velora/{slug}/{arenaId}.webp`). Fail closed to stub `arena_velora_plaza` with no image. **Special Event** does not use this pick (separate rules later). Practice stays on the stub arena.
+
 **Match slam / table:** at start, `table.pieces` holds one face-down disc per seat (`designId` from `arcoriIds`, plus catalog `imageUrl` and `color` stamped from the freeze). Match create picks random **`firstSeatIndex`** (wire field); turn order wraps `(first + offset) % seats` every round. `match/action` slam resolves via a **pure-Dart 3D thin-cylinder** sim (Dart SSOT; Flutter practice mirrors) from **verified** frozen slammer `gameplayAttributes` + raw `input` (`speed`, `aim: {x,z}`, optional `source`) → `result: flip|miss`, `outcome.impulse`, `outcome.sim` (`space: "xyzq"` pose timeline `[id,x,y,z,qx,qy,qz,qw]`), score deltas, then **restack face-down** so the next seat always starts from a clean stack. **Aim outside** stack footprint (`kDiscRadius`, same as the slammer) → **aimMiss** (no kick, empty sim) — distinct from soft-miss (`power ≈ 0`). Kick direction is biased from aim contact when inside the footprint. Round advance still increments `round`. **All clients** replay `outcome.sim` on the stack surface (spring impulse only if sim missing/empty; legacy 2D frames ignored). Face-up discs show catalog artwork with a slightly thick rim from design `color` (art is inset so the rim is not covered). Face-down backs fill with that color; the inner hairline is the same hue with auto lightness/saturation (`arcoriBackInnerLineColor`: dark fill → lighter line, light fill → darker line). Catalog art is precached when the Play screen loads (player circulating access + slammers + practice stubs); face-down stack discs still mount `Image.network` so a flip does not start the download. **Acting player only** gets a non-blocking 3s result `AppModal` (`FLIP`/`MISS`, flip count, score delta; X or auto-close) — turn clock is not paused. Scores/faces only from authority. Face-up = local face normal · world up (or tumble ≥ ¾π).
 
 **Game Controls / slam modes:** Flutter `/game-controls` lists **owned** slammers from Avari `player_slammers` (not the Velora catalog). Persists `equippedSlammerId` + exclusive `slamControlMode` (`accel` \| `touch`). Default: accel if motion sensors available, else touch. Online `matchmaking/find` sends `slammerId`; Dart `POST /service/avari/verify_slammers` accepts it only if owned, else the player's permanent/first slammer, then freezes catalog attrs. Practice loadout uses the same owned slammers + circulating `player_design_access`. **Accel:** XY aims hit marker, Z shake commits power. **Touch:** drag aims, swipe commits power. Hit marker shown while armed (miss-zone tint outside footprint). Match HUD shows the equipped mode with the same icon + label as Game Controls (`SlamControlModeIndicator`).
 
 **Avari inventory:** `GET /authuser/avari/profile` `access` = circulating play/mastery designs (catalog `displayName` / `imageUrl` / `color`); `slammers` = owned slammer instances with the same face fields. Profile UI shows those lists only — not the global Velora catalog.
+
+**Velora browse:** theme tiles and Arcori Detail hero use the same `ArcoriCylinder` as the match stack (catalog `imageUrl` inset, rim from catalog `color`).
 
 ## Architecture
 
@@ -89,7 +93,9 @@ Hot-reload: memory cache invalidated when file mtime/size changes; new theme fil
 
 Launch codes: **ASH** Ashdrift Hill, **EVG** Everlight Grove, **LFR** Little Frost, **MWB** Moonwake Bay, **AMB** Amberwild. Outside the political map: **RBY** Realm Beyond (no affinity/hostility).
 
-Fields: regionCode, name, type (`region`), worldState, seasonState, allianceCode, loreDescription, identity{summary,traits[]}, location{regionCode,locationCode,latitude,longitude,radiusMeters}, relationships.
+Fields: regionCode, name, slug, type (`region`), worldState, seasonState, allianceCode, loreDescription, identity{summary,traits[]}, location{regionCode,locationCode,latitude,longitude,radiusMeters}, arenas[{arenaId,name,imageFile}], relationships.
+
+Match arenas live on the region. Quick Start / Invite stamp a chosen `arenaId` + `arenaImageUrl` on the match snapshot. Art: `assets/images/velora/{slug}/{arenaId}.webp` (`ARN-{regionCode}-{place}001-0001`), served at `/catalog-media/velora/{slug}/{arenaId}.webp`. Host layout sits beside disc art (`assets/images/arcori`); Docker binds Velora to `/data/catalog-velora`, not nested inside the `:ro` Arcori volume.
 
 `location` slots match design `location` (coords unset at launch). `allianceCode` is `VEILED_ACCORD`, `LIVING_PACT`, or null (Little Frost is independent).
 

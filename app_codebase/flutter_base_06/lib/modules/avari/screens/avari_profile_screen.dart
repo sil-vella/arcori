@@ -11,6 +11,7 @@ import '../../../core/theme/theme.dart';
 import '../avari_models.dart';
 import '../avari_notifier.dart';
 import '../widgets/inventory_face_chip.dart';
+import '../widgets/slammer_inventory_tile.dart';
 
 class AvariProfileScreen extends ConsumerStatefulWidget {
   const AvariProfileScreen({super.key});
@@ -198,13 +199,10 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
       if (profile.slammers.isEmpty)
         Text('None yet', style: context.appTypography.bodyMuted)
       else
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.sm,
-          children: [
-            for (final item in profile.slammers) InventoryFaceChip(item: item),
-          ],
-        ),
+        for (final item in profile.slammers) ...[
+          SlammerInventoryTile(item: item),
+          AppSpacing.gapSm,
+        ],
     ];
   }
 }

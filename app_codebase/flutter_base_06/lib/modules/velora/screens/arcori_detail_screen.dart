@@ -4,9 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/theme/theme.dart';
+import '../../match/widgets/arcori_cylinder.dart';
+import '../../match/widgets/arcori_look.dart';
 import '../velora_models.dart';
 import '../velora_notifier.dart';
-import '../widgets/circle_crop_image.dart';
 
 /// Arcori Detail SSOT — Details + Standings (My Mastery deferred).
 class ArcoriDetailScreen extends ConsumerStatefulWidget {
@@ -120,9 +121,16 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen>
                             children: [
                               SizedBox(
                                 width: _artSize,
-                                height: _artSize,
-                                child: CircleCropImage(
-                                  imageUrl: design.imageUrl,
+                                height: _artSize * (1 + kArcoriThicknessFactor),
+                                child: Center(
+                                  child: ArcoriCylinder(
+                                    look: ArcoriLook(
+                                      designId: design.internalId,
+                                      imageUrl: design.imageUrl,
+                                      colorHex: design.color,
+                                    ),
+                                    size: _artSize,
+                                  ),
                                 ),
                               ),
                               AppSpacing.gapSm,
@@ -182,6 +190,14 @@ class _DetailsTab extends StatelessWidget {
       MapEntry('Generation', design.generation?.display),
       MapEntry('World', design.worldState),
       MapEntry('Season', design.seasonState),
+      MapEntry(
+        'Preservation requirement',
+        design.legacy?.preservationRequirement?.toString(),
+      ),
+      MapEntry(
+        'Closure milestone',
+        design.legacy?.closureMilestone?.toString(),
+      ),
       MapEntry('Lore', design.loreDescription),
     ];
 

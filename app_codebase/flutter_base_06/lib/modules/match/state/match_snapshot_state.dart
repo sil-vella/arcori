@@ -102,6 +102,7 @@ class MatchSnapshotState {
     this.round = 1,
     this.roundsTotal = 2,
     this.arenaId,
+    this.arenaImageUrl,
     this.callerUserId,
     this.matchType = const {},
     this.seats = const [],
@@ -118,6 +119,7 @@ class MatchSnapshotState {
   final int round;
   final int roundsTotal;
   final String? arenaId;
+  final String? arenaImageUrl;
   final String? callerUserId;
   final Map<String, dynamic> matchType;
   final List<MatchSeatView> seats;
@@ -145,6 +147,7 @@ class MatchSnapshotState {
     int? round,
     int? roundsTotal,
     String? arenaId,
+    String? arenaImageUrl,
     String? callerUserId,
     Map<String, dynamic>? matchType,
     List<MatchSeatView>? seats,
@@ -166,6 +169,7 @@ class MatchSnapshotState {
       round: round ?? this.round,
       roundsTotal: roundsTotal ?? this.roundsTotal,
       arenaId: arenaId ?? this.arenaId,
+      arenaImageUrl: arenaImageUrl ?? this.arenaImageUrl,
       callerUserId: callerUserId ?? this.callerUserId,
       matchType: matchType ?? this.matchType,
       seats: seats ?? this.seats,
@@ -196,6 +200,10 @@ class MatchSnapshotState {
       roundsTotal:
           payload['roundsTotal'] is int ? payload['roundsTotal'] as int : 2,
       arenaId: payload['arenaId']?.toString(),
+      arenaImageUrl: () {
+        final raw = payload['arenaImageUrl']?.toString().trim() ?? '';
+        return raw.isEmpty ? null : raw;
+      }(),
       callerUserId: payload['callerUserId']?.toString(),
       matchType: rawType is Map
           ? Map<String, dynamic>.from(rawType)

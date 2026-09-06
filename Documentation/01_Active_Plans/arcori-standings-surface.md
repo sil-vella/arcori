@@ -46,7 +46,7 @@ Response shape:
 
 ## Done
 
-- Velora theme buttons → theme browse → Detail (circle art)
+- Velora theme buttons → theme browse → Detail (`ArcoriCylinder` + catalog rim)
 - Detail tabs: Details | Standings (HTTP on Standings tab enter)
 - Catalog authuser APIs + `/catalog-media`
 - wfrun: `automation/backend/seed_or_clear_standings.py` — prompt **seed** or **clear** for Tiger Genesis `ANM-TIG-GEN001-0001`

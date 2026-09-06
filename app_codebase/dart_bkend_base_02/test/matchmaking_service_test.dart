@@ -69,6 +69,22 @@ void main() {
               200,
             );
           }
+          if (request.url.path == '/service/catalog/select_arena') {
+            return http.Response(
+              jsonEncode({
+                'ok': true,
+                'data': {
+                  'arenaId': 'ARN-AMB-WLD001-0001',
+                  'regionCode': 'AMB',
+                  'name': 'Amberwild',
+                  'imageUrl':
+                      '/catalog-media/velora/amberwild/ARN-AMB-WLD001-0001.webp',
+                  'source': 'majority',
+                },
+              }),
+              200,
+            );
+          }
           if (request.url.path == '/service/catalog/designs') {
             return http.Response(
               jsonEncode({

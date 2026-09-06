@@ -37,6 +37,24 @@ http.Response _verifySlammersOk(http.Request request) {
   );
 }
 
+http.Response _selectArenaOk() {
+  return http.Response(
+    jsonEncode({
+      'ok': true,
+      'data': {
+        'arenaId': 'ARN-AMB-WLD001-0001',
+        'regionCode': 'AMB',
+        'name': 'Amberwild',
+        'imageUrl':
+            '/catalog-media/velora/amberwild/ARN-AMB-WLD001-0001.webp',
+        'source': 'majority',
+      },
+    }),
+    200,
+    headers: {'content-type': 'application/json'},
+  );
+}
+
 void main() {
   group('MatchService', () {
     setUp(() {
@@ -166,6 +184,9 @@ void main() {
               headers: {'content-type': 'application/json'},
             );
           }
+          if (request.url.path == '/service/catalog/select_arena') {
+            return _selectArenaOk();
+          }
           if (request.url.path == '/service/catalog/designs') {
             return http.Response(
               jsonEncode({
@@ -216,13 +237,94 @@ void main() {
 
       expect(paths.first, '/service/avari/verify_slammers');
       expect(paths, contains('/service/catalog/select_arcori'));
+      expect(paths, contains('/service/catalog/select_arena'));
       expect(paths, contains('/service/catalog/designs'));
+      expect(snapshot.arenaId, 'ARN-AMB-WLD001-0001');
+      expect(
+        snapshot.arenaImageUrl,
+        '/catalog-media/velora/amberwild/ARN-AMB-WLD001-0001.webp',
+      );
       expect(snapshot.seats[0].arcoriIds, [stubArcoriId]);
       expect(snapshot.seats[1].arcoriIds, [stubAiArcoriId]);
       expect(snapshot.seats[1].kind, 'ai');
       final pieces = snapshot.table['pieces'] as List;
       expect(pieces.first['imageUrl'], contains('ANM-TIG-GEN001-0001.webp'));
       expect(pieces.first['color'], '#C6A15B');
+    });
+
+    test('startFromLobby skips select_arena for specialEvent', () async {
+      final store = MatchStore();
+      final paths = <String>[];
+      final fastApi = FastApiServiceClient(
+        client: MockClient((request) async {
+          paths.add(request.url.path);
+          if (request.url.path == '/service/avari/verify_slammers') {
+            return _verifySlammersOk(request);
+          }
+          if (request.url.path == '/service/catalog/select_arcori') {
+            return http.Response(
+              jsonEncode({
+                'ok': true,
+                'data': {
+                  'selections': [
+                    {
+                      'userId': 'usr_a',
+                      'arcoriId': stubArcoriId,
+                      'source': 'weighted',
+                    },
+                    {
+                      'userId': 'ai-1',
+                      'arcoriId': stubAiArcoriId,
+                      'source': 'weighted',
+                    },
+                  ],
+                },
+              }),
+              200,
+              headers: {'content-type': 'application/json'},
+            );
+          }
+          if (request.url.path == '/service/catalog/designs') {
+            return http.Response(
+              jsonEncode({
+                'ok': true,
+                'data': {
+                  'designs': {
+                    stubArcoriId: {'internalId': stubArcoriId},
+                    stubAiArcoriId: {'internalId': stubAiArcoriId},
+                    stubSlammerId: {'internalId': stubSlammerId},
+                  },
+                },
+              }),
+              200,
+              headers: {'content-type': 'application/json'},
+            );
+          }
+          return http.Response('not found', 404);
+        }),
+        baseUrl: 'http://catalog.test',
+      );
+
+      final service = MatchService(
+        store: store,
+        fastApi: fastApi,
+        autoStubTurns: false,
+      );
+      final snapshot = await service.startFromLobby(
+        matchType: {'code': 'specialEvent', 'subtype': 'royal-battle'},
+        humans: [
+          LobbyHumanSeat(
+            userId: 'usr_a',
+            connectionId: 'conn-1',
+          ),
+        ],
+        aiUserIds: ['ai-1'],
+        targetSeats: 2,
+      );
+
+      expect(paths, isNot(contains('/service/catalog/select_arena')));
+      expect(snapshot.arenaId, stubArenaId);
+      expect(snapshot.arenaImageUrl, isNull);
     });
 
     test('startFromLobby uses verified slammer not the requested unowned id',
@@ -276,6 +378,9 @@ void main() {
               headers: {'content-type': 'application/json'},
             );
           }
+          if (request.url.path == '/service/catalog/select_arena') {
+            return _selectArenaOk();
+          }
           if (request.url.path == '/service/catalog/designs') {
             return http.Response(
               jsonEncode({
@@ -328,6 +433,9 @@ void main() {
           }
           if (request.url.path == '/service/catalog/select_arcori') {
             return http.Response('boom', 500);
+          }
+          if (request.url.path == '/service/catalog/select_arena') {
+            return _selectArenaOk();
           }
           if (request.url.path == '/service/catalog/designs') {
             return http.Response(
@@ -401,6 +509,9 @@ void main() {
               200,
               headers: {'content-type': 'application/json'},
             );
+          }
+          if (request.url.path == '/service/catalog/select_arena') {
+            return _selectArenaOk();
           }
           if (request.url.path == '/service/catalog/designs') {
             return http.Response(

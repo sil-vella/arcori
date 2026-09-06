@@ -146,6 +146,8 @@ void main() {
           'round': 1,
           'roundsTotal': 2,
           'arenaId': 'arena_velora_plaza',
+          'arenaImageUrl':
+              '/catalog-media/velora/amberwild/ARN-AMB-WLD001-0001.webp',
           'callerUserId': 'usr_a',
           'matchType': {'code': 'practice'},
           'seats': [
@@ -169,6 +171,10 @@ void main() {
       expect(container.read(matchSnapshotProvider).matchId, 'm_1');
       expect(container.read(matchSnapshotProvider).version, 2);
       expect(container.read(matchSnapshotProvider).phase, 'playing');
+      expect(
+        container.read(matchSnapshotProvider).arenaImageUrl,
+        '/catalog-media/velora/amberwild/ARN-AMB-WLD001-0001.webp',
+      );
 
       notifier.applyWsFrame({
         'channel': 'match/state',

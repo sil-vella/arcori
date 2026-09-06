@@ -15,7 +15,7 @@ from modules.catalog.catalog_service import (
     get_meta,
     get_theme,
 )
-from modules.catalog.catalog_select import select_for_seats
+from modules.catalog.catalog_select import select_arena_for_arcori_ids, select_for_seats
 
 
 def register_catalog_routes(
@@ -29,6 +29,14 @@ def register_catalog_routes(
     routes.authuser_get("/catalog/design", lambda: _handle_design(res))
     routes.service_post("/catalog/designs", lambda: _handle_designs_batch(res))
     routes.service_post("/catalog/select_arcori", lambda: _handle_select_arcori(res))
+    routes.authuser_post(
+        "/catalog/select_arena",
+        lambda: _handle_select_arena(res, require_user=True),
+    )
+    routes.service_post(
+        "/catalog/select_arena",
+        lambda: _handle_select_arena(res, require_user=False),
+    )
 
 
 def _require_user_id() -> str:
@@ -135,5 +143,20 @@ def _handle_select_arcori(res: HttpResponseContract):
         if seats is not None and not isinstance(seats, list):
             raise AppError(INVALID_QUERY, message="seats must be a list")
         return res.json_ok(select_for_seats(seats if isinstance(seats, list) else []))
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_select_arena(res: HttpResponseContract, *, require_user: bool):
+    try:
+        if require_user:
+            _require_user_id()
+        body = parse_json_body()
+        ids = body.get("arcoriIds")
+        if ids is not None and not isinstance(ids, list):
+            raise AppError(INVALID_QUERY, message="arcoriIds must be a list")
+        return res.json_ok(
+            select_arena_for_arcori_ids(ids if isinstance(ids, list) else [])
+        )
     except AppError as err:
         return err.to_http_response()

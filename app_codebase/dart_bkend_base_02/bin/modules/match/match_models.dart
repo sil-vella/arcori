@@ -6,6 +6,13 @@ const stubArcoriId = 'ANM-TIG-GEN001-0001';
 const stubAiArcoriId = 'ANM-WTI-GEN001-0002';
 const stubSlammerId = 'SLM-STR-GEN001-0001';
 
+/// Quick Start and Invite pick a Velora arena from seated Arcori regions.
+/// Special Event uses other rules later; practice stays on [stubArenaId].
+bool matchTypeUsesArcoriRegionArena(Map<String, dynamic> matchType) {
+  final code = matchType['code']?.toString();
+  return code == 'quickStart' || code == 'invite';
+}
+
 class MatchSeat {
   const MatchSeat({
     required this.userId,
@@ -80,6 +87,7 @@ class MatchSnapshot {
     required this.callerUserId,
     required this.matchType,
     required this.seats,
+    this.arenaImageUrl,
     this.firstSeatIndex = 0,
     this.table = const {'pieces': <dynamic>[]},
     this.active,
@@ -93,6 +101,7 @@ class MatchSnapshot {
   final int round;
   final int roundsTotal;
   final String arenaId;
+  final String? arenaImageUrl;
   final String callerUserId;
   final Map<String, dynamic> matchType;
   final List<MatchSeat> seats;
@@ -126,6 +135,7 @@ class MatchSnapshot {
       round: round ?? this.round,
       roundsTotal: roundsTotal,
       arenaId: arenaId,
+      arenaImageUrl: arenaImageUrl,
       callerUserId: callerUserId,
       matchType: matchType ?? Map<String, dynamic>.from(this.matchType),
       seats: seats ?? this.seats,
@@ -145,6 +155,8 @@ class MatchSnapshot {
       'round': round,
       'roundsTotal': roundsTotal,
       'arenaId': arenaId,
+      if (arenaImageUrl != null && arenaImageUrl!.isNotEmpty)
+        'arenaImageUrl': arenaImageUrl,
       'callerUserId': callerUserId,
       'matchType': Map<String, dynamic>.from(matchType),
       'seats': seats.map((s) => s.toPayload()).toList(),
@@ -181,6 +193,10 @@ class MatchSnapshot {
       roundsTotal:
           payload['roundsTotal'] is int ? payload['roundsTotal'] as int : 2,
       arenaId: payload['arenaId']?.toString() ?? stubArenaId,
+      arenaImageUrl: () {
+        final raw = payload['arenaImageUrl']?.toString().trim() ?? '';
+        return raw.isEmpty ? null : raw;
+      }(),
       callerUserId: payload['callerUserId']?.toString() ?? '',
       matchType: matchType,
       seats: seats,
