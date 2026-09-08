@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "embeds": [
+    {
+      "serial": "KEMB-0001",
+      "displayName": "Blue gem spark",
+      "assetPath": "assets/images/branding/icon_foreground.png"
+    },
+    {
+      "serial": "KEMB-0002",
+      "displayName": "Brand mark",
+      "assetPath": "assets/images/branding/icon.png"
+    }
+  ]
+}

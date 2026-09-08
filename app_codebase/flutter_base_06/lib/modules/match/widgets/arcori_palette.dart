@@ -27,6 +27,20 @@ const List<String> kArcoriAccentNames = [
   'Charcoal plum',
 ];
 
+/// Catalog `#RRGGBB` strings matching [kArcoriAccentPalette] order.
+const List<String> kArcoriAccentHexes = [
+  '#C6A15B',
+  '#A8B0B8',
+  '#7A3142',
+  '#B8734A',
+  '#D8CDB8',
+  '#4E7A78',
+  '#7A8458',
+  '#3E5270',
+  '#B5817A',
+  '#5C4A58',
+];
+
 /// Stable accent for [designId] from [kArcoriAccentPalette].
 Color arcoriAccentForDesignId(String designId) {
   if (designId.isEmpty) return kArcoriAccentPalette.first;

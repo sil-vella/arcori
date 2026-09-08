@@ -125,6 +125,16 @@ def _mount_media(app: FastAPI) -> None:
             name="catalog_media_velora",
         )
 
+    # Kin template Lotties live under assets/lottie/kin (not images/arcori).
+    kin_root = os.environ.get("CATALOG_KIN_MEDIA_ROOT", "").strip()
+    if kin_root:
+        os.makedirs(kin_root, exist_ok=True)
+        app.mount(
+            "/catalog-media/kin",
+            StaticFiles(directory=kin_root),
+            name="catalog_media_kin",
+        )
+
     app.mount(
         "/catalog-media",
         StaticFiles(directory=catalog_root),

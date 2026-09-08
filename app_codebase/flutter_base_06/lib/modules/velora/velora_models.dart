@@ -71,6 +71,7 @@ class DesignSummary {
     this.seasonState,
     this.type,
     this.imageUrl,
+    this.lottieUrl,
     this.color,
     this.generation,
   });
@@ -91,6 +92,7 @@ class DesignSummary {
       seasonState: json['seasonState']?.toString(),
       type: json['type']?.toString(),
       imageUrl: json['imageUrl']?.toString(),
+      lottieUrl: json['lottieUrl']?.toString(),
       color: json['color']?.toString(),
       generation: gen is Map
           ? DesignGeneration.fromJson(Map<String, dynamic>.from(gen))
@@ -111,6 +113,7 @@ class DesignSummary {
   final String? seasonState;
   final String? type;
   final String? imageUrl;
+  final String? lottieUrl;
   final String? color;
   final DesignGeneration? generation;
 
@@ -133,6 +136,7 @@ class DesignDetail {
     this.seasonState,
     this.type,
     this.imageUrl,
+    this.lottieUrl,
     this.color,
     this.loreDescription,
     this.generation,
@@ -156,6 +160,7 @@ class DesignDetail {
       seasonState: json['seasonState']?.toString(),
       type: json['type']?.toString(),
       imageUrl: json['imageUrl']?.toString(),
+      lottieUrl: json['lottieUrl']?.toString(),
       color: json['color']?.toString(),
       loreDescription: json['loreDescription']?.toString(),
       generation: gen is Map
@@ -180,6 +185,7 @@ class DesignDetail {
   final String? seasonState;
   final String? type;
   final String? imageUrl;
+  final String? lottieUrl;
   final String? color;
   final String? loreDescription;
   final DesignGeneration? generation;

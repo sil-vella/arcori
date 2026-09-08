@@ -13,6 +13,26 @@ INVALID_QUERY = ErrorSpec(
     "Invalid avari query",
     http_status=400,
 )
+KIN_ALREADY_CLAIMED = ErrorSpec(
+    "avari/kin_already_claimed",
+    "Kin already claimed for this account",
+    http_status=409,
+)
+INVALID_KIN_REGION = ErrorSpec(
+    "avari/invalid_kin_region",
+    "Invalid Kin region",
+    http_status=400,
+)
+INVALID_KIN_COLOR = ErrorSpec(
+    "avari/invalid_kin_color",
+    "Invalid Kin Arcori color",
+    http_status=400,
+)
+KIN_CLAIM_FAILED = ErrorSpec(
+    "avari/kin_claim_failed",
+    "Could not claim Kin",
+    http_status=500,
+)
 
 
 def register_avari_errors(registrar: ModuleErrorRegistrar) -> None:
@@ -21,5 +41,9 @@ def register_avari_errors(registrar: ModuleErrorRegistrar) -> None:
         [
             NOT_FOUND,
             INVALID_QUERY,
+            KIN_ALREADY_CLAIMED,
+            INVALID_KIN_REGION,
+            INVALID_KIN_COLOR,
+            KIN_CLAIM_FAILED,
         ],
     )

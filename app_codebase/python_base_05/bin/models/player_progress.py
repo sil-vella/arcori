@@ -40,6 +40,7 @@ class PlayerKin(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     customization: Mapped[dict] = mapped_column(
         JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
     )
+    catalog_design: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),

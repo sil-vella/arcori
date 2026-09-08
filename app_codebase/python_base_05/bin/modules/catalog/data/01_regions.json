@@ -1,6 +1,6 @@
 {
   "catalog": "Launch Regions",
-  "version": 4,
+  "version": 5,
   "description": "Velora's five starting lands plus the Realm Beyond. Velora relationships are political and cultural, not permanent moral alignments. An Avari's region influences reputation and story opportunities — it does not prevent friendships, travel, or collecting Arcori. The Realm Beyond sits outside that map and has no affinities or hostilities.",
   "standingScale": {
     "affinity": 2,
@@ -542,7 +542,20 @@
   ],
   "arenaAssets": {
     "idFormat": "ARN-{regionCode}-{place}001-0001",
-    "directory": "assets/images/velora/{region-slug}/",
-    "file": "{arenaId}.webp"
+    "directory": "assets/images/velora/arenas/{region-slug}/",
+    "file": "{arenaId}.webp",
+    "publicPrefix": "/catalog-media/velora/arenas/{region-slug}/",
+    "publicFile": "{arenaId}.webp"
+  },
+  "regionAssets": {
+    "directory": "assets/images/velora/regions/{region-slug}/",
+    "regionFile": "region.png",
+    "locationsDirectory": "locations/",
+    "publicPrefix": "/catalog-media/velora/regions/{region-slug}/"
+  },
+  "mapAssets": {
+    "directory": "assets/images/velora/maps/",
+    "file": "{name}.png",
+    "publicPrefix": "/catalog-media/velora/maps/"
   }
 }

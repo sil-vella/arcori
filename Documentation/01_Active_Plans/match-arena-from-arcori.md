@@ -27,7 +27,7 @@ Count `location.regionCode` on the seated designs:
 | FastAPI catalog | `select_arena_for_arcori_ids` — region counts + RNG arena |
 | Dart match room | After `select_arcori`, **only** if `matchType.code` is `quickStart` or `invite`: `POST /service/catalog/select_arena`; stamp `arenaId` + `arenaImageUrl` |
 | Flutter | Paints `arenaImageUrl` when the snapshot has it (online Quick Start / Invite). No practice HTTP pick. |
-| `/catalog-media` | discs from `assets/images/arcori`; arenas from sibling `assets/images/velora` served at `/catalog-media/velora/…` |
+| `/catalog-media` | discs from `assets/images/arcori`; arenas from sibling `assets/images/velora/arenas/…` served at `/catalog-media/velora/arenas/…` |
 
 Do **not** parse `01_regions.json` in Dart or Flutter. Special Event keeps the stub arena until its own rules exist.
 

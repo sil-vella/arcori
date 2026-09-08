@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "types": [
+    {
+      "serial": "KTYPE-0001",
+      "code": "guardians",
+      "displayName": "Guardians"
+    },
+    {
+      "serial": "KTYPE-0002",
+      "code": "entelairs",
+      "displayName": "Entelairs"
+    },
+    {
+      "serial": "KTYPE-0003",
+      "code": "walkies",
+      "displayName": "Walkies"
+    }
+  ]
+}

@@ -18,7 +18,9 @@ Serve Arcori catalog JSON from `bin/modules/catalog/data/` over existing **authu
 - Override root: `CATALOG_DATA_ROOT` or test `set_data_root_override`
 - Debug compose mounts `bin` → live file edits visible in container
 - Catalog artwork: `assets/images/arcori` → `/data/catalog-media` (`CATALOG_MEDIA_ROOT`, `:ro`)
-- Region arena art: `assets/images/velora/{region-slug}/{arenaId}.webp` → `/data/catalog-velora` (`CATALOG_VELORA_MEDIA_ROOT`, sibling bind at the same host level as `arcori`). Public URL `/catalog-media/velora/…` via a dedicated StaticFiles mount (do not nest a bind under the `:ro` Arcori tree).
+- Region arena art: `assets/images/velora/arenas/{region-slug}/{arenaId}.webp` → `/data/catalog-velora` (`CATALOG_VELORA_MEDIA_ROOT`, sibling bind at the same host level as `arcori`). Public URL `/catalog-media/velora/arenas/…`. Region/location art under `assets/images/velora/regions/{region-slug}/`; world maps under `assets/images/velora/maps/`. Via a dedicated StaticFiles mount (do not nest a bind under the `:ro` Arcori tree).
+- **Derived client fields (same posture as design `imageUrl`):** `GET /authuser/catalog/meta` enriches regions with `imageUrl` (`…/regions/{slug}/region.png`), each arena with `imageUrl` (honors `imageFile`), `locations[]` from a mtime-cached scan of `locations/*.png`, and top-level `maps[]` from `maps/*.png`. Helpers live in `velora_media.py`; match `select_arena` uses the same arena URL helper.
+- Kin template Lotties: `assets/lottie/kin/gen001/{type}/` → `/data/catalog-kin` (`CATALOG_KIN_MEDIA_ROOT`). Public URL `/catalog-media/kin/…` via a dedicated StaticFiles mount (same sibling pattern as Velora).
 - Path convention: `series/{series_slug}/{theme_slug}.json` and art `/{series_slug}/{theme_slug}/{internalId}.webp` (e.g. `genesis/animals/…`)
 
 ## Media (public)

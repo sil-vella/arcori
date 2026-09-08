@@ -50,7 +50,7 @@ Open (ordered):
 - [x] **Match arena from Arcori regions** (Quick Start / Invite background) — [match-arena-from-arcori.md](match-arena-from-arcori.md)
 - [x] **Arena mural locked to stack POV** (rest 1:1 crop, contain on zoom-out, opaque under stack) — [arena-pov-zoom.md](arena-pov-zoom.md)
 - [ ] Celebration + Match Summary + FastAPI durable rewards *(next)*
-- [ ] **Kin creation start to finish** (lineage → customize → name → Genesis + `player_kin`) — [kin-creation.md](kin-creation.md)
+- [ ] **Kin creation** (wizard + Genesis claim live; production Lottie / idle anims open) — [kin-creation.md](kin-creation.md)
 - [ ] Home sink Trove • PLAY • Market; first-time / returning startup
 - [ ] My Mastery tab + Trove UI + economy writers
 - [ ] Slammer recovery slam-stat + charge spend / Gold Cap recharge *(future)* — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
@@ -75,7 +75,7 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 | Plan | Status | Focus |
 |------|--------|--------|
 | [first-time-player-flow.md](first-time-player-flow.md) | Spec | Splash → Kin/Genesis → starter access → guided practice → intros → Home |
-| [kin-creation.md](kin-creation.md) | Planned | Kin wizard + persist Genesis; slice of first-time flow |
+| [kin-creation.md](kin-creation.md) | In Progress | Customize + POST kin claim; catalog_design mirrors regular Arcori |
 | [returning-player-startup-flow.md](returning-player-startup-flow.md) | Spec | Auto login → sync → overnight → notification queue → Home |
 | [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Spec | Home layout, Velora entry, sink Trove • PLAY • Market |
 | [match-setting-core-flow.md](match-setting-core-flow.md) | Partial | Play hub + types; practice offline; quick/event/invite online |

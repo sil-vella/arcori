@@ -55,7 +55,13 @@ Logical aggregate after `011_player_profile` (password hashed with `modules.auth
       "effect": "None",
       "genesisDesignId": "KIN-SIL202607092145-GEN001-0001",
       "chosenName": "Admin",
-      "customization": {}
+      "customization": {},
+      "regionCode": "EVG",
+      "color": "#C6A15B",
+      "series": "Genesis Series",
+      "generation": { "roman": "I", "number": 1 },
+      "lottieUrl": "/media/kin/players/KIN-SIL202607092145-GEN001-0001.json",
+      "catalogDesign": { "...": "same keys as a regular Genesis Arcori design" }
     }
   },
 
@@ -95,7 +101,7 @@ Local login: `admin@reignofplay.com` / `qepiarcori1!`
 |-------|------|
 | `users` | Auth identity (unchanged columns) |
 | `avari_profiles` | 1:1 Rank/XP, economy, stats, titles, onboarding, daily, prefs |
-| `player_kin` | Genesis Kin customization (1:1) |
+| `player_kin` | Genesis Kin customization (1:1). `customization` JSONB = Lottie runtime knobs; `catalog_design` JSONB = mirrored regular Arcori design object — see [kin-creation.md](kin-creation.md) |
 | `player_design_access` | Circulating play/mastery access (not ownership) |
 | `player_mastery` | Points per `(user, design, generation)` |
 | `player_slammers` | Owned slammer instances + charges |

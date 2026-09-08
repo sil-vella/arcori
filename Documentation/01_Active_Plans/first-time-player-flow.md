@@ -2,7 +2,7 @@
 
 **Status:** Spec captured — not implemented  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-09-05
+**Last Updated:** 2026-09-07
 
 Related: [kin-creation.md](kin-creation.md) · [returning-player-startup-flow.md](returning-player-startup-flow.md) · [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [core-match-loop.md](core-match-loop.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · catalog Kin data `bin/modules/catalog/data/02_kin.json`
 
@@ -34,6 +34,7 @@ Splash
 ## Design notes
 
 - The **Kin Arcori** is effectively the player’s avatar, but in-world it is their personal **Genesis Arcori**.
+- Customize is a **layered Lottie rig** (transparent PNG body parts aligned to the flattened original), not a single baked image. Contract: [kin-creation.md](kin-creation.md) § Visual / Lottie.
 - Starter grant: **play/mastery access** to 10 random **circulating** designs + **permanent starter slammer** — **not** Trove mints. Mastery ≠ ownership.
 - Guided practice is AI-only (no economy / progression rewards per GDD).
 

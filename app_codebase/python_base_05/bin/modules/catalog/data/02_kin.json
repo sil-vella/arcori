@@ -6,9 +6,9 @@
     {
       "internalId": "KIN-SIL202607092145-GEN001-0001",
       "themeCode": "KIN",
-      "designCode": "Pla_202607092145",
-      "designFamily": "PLAYER_CHOSEN_NAME",
-      "design": "Player chosen name",
+      "designCode": "SIL",
+      "designFamily": "SILVESTER",
+      "design": "Silvester",
       "inspiration": null,
       "location": {
         "regionCode": "EVG",
@@ -36,6 +36,7 @@
       "subtheme": "Entelairs",
       "style": "Chibi",
       "finish": "Standard",
+      "color": "#C6A15B",
       "effect": "None",
       "printedRarity": "Common",
       "selectionWeight": null,

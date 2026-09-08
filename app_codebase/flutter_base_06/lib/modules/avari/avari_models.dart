@@ -212,6 +212,106 @@ class AvariInventoryItem {
   final SlammerGameplayAttributes? gameplayAttributes;
 }
 
+/// Server Genesis Kin (player_kin + catalog_design summary fields).
+class AvariKin {
+  const AvariKin({
+    required this.subtheme,
+    required this.style,
+    required this.finish,
+    required this.effect,
+    required this.genesisDesignId,
+    required this.chosenName,
+    this.customization = const {},
+    this.regionCode,
+    this.color,
+    this.series,
+    this.generationRoman,
+    this.generationNumber,
+    this.lottieUrl,
+    this.catalogDesign,
+  });
+
+  factory AvariKin.fromJson(Map<String, dynamic> json) {
+    final gen = json['generation'];
+    Map<String, dynamic>? genMap;
+    if (gen is Map) {
+      genMap = Map<String, dynamic>.from(gen);
+    }
+    final custom = json['customization'];
+    final design = json['catalogDesign'];
+    String? regionFromDesign;
+    String? colorFromDesign;
+    String? seriesFromDesign;
+    String? romanFromDesign;
+    if (design is Map) {
+      colorFromDesign = design['color']?.toString();
+      seriesFromDesign = design['series']?.toString();
+      final loc = design['location'];
+      if (loc is Map) {
+        regionFromDesign = loc['regionCode']?.toString();
+      }
+      final dGen = design['generation'];
+      if (dGen is Map) {
+        romanFromDesign = dGen['roman']?.toString();
+      }
+    }
+    return AvariKin(
+      subtheme: json['subtheme']?.toString() ?? '',
+      style: json['style']?.toString() ?? 'Chibi',
+      finish: json['finish']?.toString() ?? 'Standard',
+      effect: json['effect']?.toString() ?? 'None',
+      genesisDesignId: json['genesisDesignId']?.toString() ?? '',
+      chosenName: json['chosenName']?.toString() ?? '',
+      customization: custom is Map
+          ? Map<String, dynamic>.from(custom)
+          : const {},
+      regionCode: json['regionCode']?.toString() ?? regionFromDesign,
+      color: json['color']?.toString() ?? colorFromDesign,
+      series: json['series']?.toString() ?? seriesFromDesign,
+      generationRoman: genMap?['roman']?.toString() ?? romanFromDesign,
+      generationNumber: genMap?['number'] is int
+          ? genMap!['number'] as int
+          : int.tryParse('${genMap?['number'] ?? ''}'),
+      lottieUrl: json['lottieUrl']?.toString(),
+      catalogDesign:
+          design is Map ? Map<String, dynamic>.from(design) : null,
+    );
+  }
+
+  final String subtheme;
+  final String style;
+  final String finish;
+  final String effect;
+  final String genesisDesignId;
+  final String chosenName;
+  final Map<String, dynamic> customization;
+  final String? regionCode;
+  final String? color;
+  final String? series;
+  final String? generationRoman;
+  final int? generationNumber;
+  final String? lottieUrl;
+  final Map<String, dynamic>? catalogDesign;
+
+  Map<String, dynamic>? get background {
+    final raw = customization['background'];
+    if (raw is Map) return Map<String, dynamic>.from(raw);
+    return null;
+  }
+
+  String? get backgroundImageUrl {
+    final url = background?['imageUrl']?.toString().trim();
+    if (url == null || url.isEmpty) return null;
+    return url;
+  }
+
+  String? get backgroundColorHex {
+    final hex = background?['colorHex']?.toString().trim();
+    if (hex == null || hex.isEmpty) return null;
+    return hex;
+  }
+}
+
 class AvariProfile {
   const AvariProfile({
     required this.identity,
@@ -236,6 +336,12 @@ class AvariProfile {
           .toList();
     }
 
+    AvariKin? kin;
+    final kinRaw = json['kin'];
+    if (kinRaw is Map) {
+      kin = AvariKin.fromJson(Map<String, dynamic>.from(kinRaw));
+    }
+
     return AvariProfile(
       identity: identityRaw is Map
           ? AvariIdentity.fromJson(Map<String, dynamic>.from(identityRaw))
@@ -253,7 +359,7 @@ class AvariProfile {
       titles: titlesRaw is List
           ? titlesRaw.map((e) => e.toString()).where((s) => s.isNotEmpty).toList()
           : const ['Avari'],
-      kin: json['kin'],
+      kin: kin,
       mastery: AvariMasterySummary.fromJson(
         json['mastery'] is Map
             ? Map<String, dynamic>.from(json['mastery'] as Map)
@@ -272,7 +378,7 @@ class AvariProfile {
   final AvariIdentity identity;
   final AvariRank rank;
   final List<String> titles;
-  final Object? kin;
+  final AvariKin? kin;
   final AvariMasterySummary mastery;
   final AvariStats stats;
   final List<AvariInventoryItem> access;

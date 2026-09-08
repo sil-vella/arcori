@@ -15,6 +15,9 @@ abstract final class AppPaths {
   static const veloraTheme = '/velora/theme';
   static const arcoriDetail = '/velora/arcori';
   static const avari = '/avari';
+  static const kinTypes = '/kin/types';
+  static const kinList = '/kin/kins';
+  static const kinCustomize = '/kin/customize';
   static const play = '/play';
   static const gameControls = '/game-controls';
 

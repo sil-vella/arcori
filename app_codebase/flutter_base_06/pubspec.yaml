@@ -44,6 +44,8 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   web_socket_channel: ^3.0.2
   lottie: ^3.3.1
+  image: ^4.5.4
+  path_provider: ^2.1.5
   sensors_plus: ^6.1.1
 
   # Firebase GA4 — pinned for Xcode 15.2 / Firebase iOS SDK 10.x compatibility.
@@ -102,6 +104,7 @@ flutter:
   assets:
     - assets/images/
     - assets/lottie/
+    - assets/kin/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

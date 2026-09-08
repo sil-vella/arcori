@@ -1,0 +1,1354 @@
+{
+  "version": 1,
+  "kins": [
+    {
+      "serial": "KIN-ALC-GEN001-0005",
+      "typeSerial": "KTYPE-0002",
+      "displayName": "Antler Lace",
+      "designCode": "ALC",
+      "lottieUrl": "/catalog-media/kin/gen001/entelairs/KIN-ALC-GEN001-0005.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0025",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0027",
+          "layerName": "head_mouth_hair_antlers",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head_mouth_hair_antlers"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0028",
+          "layerName": "body_with_lower_tail",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "body_with_lower_tail"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0029",
+          "layerName": "left_arm",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_arm",
+            "right_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0208",
+          "layerName": "background",
+          "displayName": "Background",
+          "anatomical": null,
+          "affectsLayers": [
+            "background"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-ASP-GEN001-0006",
+      "typeSerial": "KTYPE-0002",
+      "displayName": "Antler Spirit",
+      "designCode": "ASP",
+      "lottieUrl": "/catalog-media/kin/gen001/entelairs/KIN-ASP-GEN001-0006.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0032",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0035",
+          "layerName": "head_mouth_hair_antlers",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head_mouth_hair_antlers"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0034",
+          "layerName": "body_with_lower_tail",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "body_with_lower_tail"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0031",
+          "layerName": "hand_at_face",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "hand_at_face",
+            "raised_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0210",
+          "layerName": "background",
+          "displayName": "Background",
+          "anatomical": null,
+          "affectsLayers": [
+            "background"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-BRZ-GEN001-0001",
+      "typeSerial": "KTYPE-0001",
+      "displayName": "Bronze Genie",
+      "designCode": "BRZ",
+      "lottieUrl": "/catalog-media/kin/gen001/guardians/KIN-BRZ-GEN001-0001.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0001",
+          "layerName": "Left eye | character left / viewer right",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "Left eye | character left / viewer right",
+            "Right eye | character right / viewer left"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0003",
+          "layerName": "Head | neck pivot",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "Head | neck pivot"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0004",
+          "layerName": "Left arm | shoulder pivot / viewer right",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "Left arm | shoulder pivot / viewer right",
+            "Right arm | shoulder pivot / viewer left"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0006",
+          "layerName": "Body | torso and complete lower tail",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "Body | torso and complete lower tail"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-CLD-GEN001-0009",
+      "typeSerial": "KTYPE-0003",
+      "displayName": "Cloud Character",
+      "designCode": "CLD",
+      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-CLD-GEN001-0009.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0049",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0055",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0058",
+          "layerName": "torso",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso",
+            "left_arm",
+            "right_arm",
+            "left_leg",
+            "right_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-CRY-GEN001-0010",
+      "typeSerial": "KTYPE-0003",
+      "displayName": "Crystal Character",
+      "designCode": "CRY",
+      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-CRY-GEN001-0010.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0073",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0076",
+          "layerName": "torso",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso",
+            "left_arm",
+            "right_arm",
+            "left_leg",
+            "right_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-DRP-GEN001-0011",
+      "typeSerial": "KTYPE-0003",
+      "displayName": "Droplet Character",
+      "designCode": "DRP",
+      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-DRP-GEN001-0011.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0085",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0091",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0092",
+          "layerName": "torso",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso",
+            "left_arm",
+            "right_arm",
+            "left_leg",
+            "right_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-FIR-GEN001-0012",
+      "typeSerial": "KTYPE-0003",
+      "displayName": "Fire Character",
+      "designCode": "FIR",
+      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-FIR-GEN001-0012.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0109",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0112",
+          "layerName": "torso",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso",
+            "left_arm",
+            "right_arm",
+            "left_leg",
+            "right_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-GLD-GEN001-0002",
+      "typeSerial": "KTYPE-0001",
+      "displayName": "Gold Genie",
+      "designCode": "GLD",
+      "lottieUrl": "/catalog-media/kin/gen001/guardians/KIN-GLD-GEN001-0002.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0007",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0009",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0010",
+          "layerName": "left_arm",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_arm",
+            "right_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0012",
+          "layerName": "body",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "body"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-HGD-GEN001-0007",
+      "typeSerial": "KTYPE-0002",
+      "displayName": "Horned Guardian",
+      "designCode": "HGD",
+      "lottieUrl": "/catalog-media/kin/gen001/entelairs/KIN-HGD-GEN001-0007.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0037",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0039",
+          "layerName": "head_mouth_hair_horns",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head_mouth_hair_horns"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0040",
+          "layerName": "body_with_lower_tail",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "body_with_lower_tail"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0041",
+          "layerName": "left_arm",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_arm",
+            "right_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0212",
+          "layerName": "background",
+          "displayName": "Background",
+          "anatomical": null,
+          "affectsLayers": [
+            "background"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-HMG-GEN001-0008",
+      "typeSerial": "KTYPE-0002",
+      "displayName": "Horned Mage",
+      "designCode": "HMG",
+      "lottieUrl": "/catalog-media/kin/gen001/entelairs/KIN-HMG-GEN001-0008.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0043",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0045",
+          "layerName": "head_mouth_hair_horns",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head_mouth_hair_horns"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0046",
+          "layerName": "body_with_lower_tail",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "body_with_lower_tail"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0047",
+          "layerName": "left_arm",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_arm",
+            "right_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0214",
+          "layerName": "background",
+          "displayName": "Background",
+          "anatomical": null,
+          "affectsLayers": [
+            "background"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-IVY-GEN001-0003",
+      "typeSerial": "KTYPE-0001",
+      "displayName": "Ivory Genie",
+      "designCode": "IVY",
+      "lottieUrl": "/catalog-media/kin/gen001/guardians/KIN-IVY-GEN001-0003.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0013",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0015",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0016",
+          "layerName": "left_arm",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_arm",
+            "right_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0018",
+          "layerName": "body",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "body"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-MON-GEN001-0013",
+      "typeSerial": "KTYPE-0003",
+      "displayName": "Moon Character",
+      "designCode": "MON",
+      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-MON-GEN001-0013.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0121",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0124",
+          "layerName": "torso",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso",
+            "left_arm",
+            "right_arm",
+            "left_leg",
+            "right_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-PLN-GEN001-0018",
+      "typeSerial": "KTYPE-0003",
+      "displayName": "Planet Character",
+      "designCode": "PLN",
+      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-PLN-GEN001-0018.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0215",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0216",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0217",
+          "layerName": "torso",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso",
+            "left_arm",
+            "right_arm",
+            "left_leg",
+            "right_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-RBT-GEN001-0014",
+      "typeSerial": "KTYPE-0003",
+      "displayName": "Robot Character",
+      "designCode": "RBT",
+      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-RBT-GEN001-0014.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0133",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0135",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0138",
+          "layerName": "torso",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso",
+            "left_arm",
+            "right_arm",
+            "left_leg",
+            "right_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-SLV-GEN001-0004",
+      "typeSerial": "KTYPE-0001",
+      "displayName": "Silver Genie",
+      "designCode": "SLV",
+      "lottieUrl": "/catalog-media/kin/gen001/guardians/KIN-SLV-GEN001-0004.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0019",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0021",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0022",
+          "layerName": "left_arm",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_arm",
+            "right_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0024",
+          "layerName": "body",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "body"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-SPR-GEN001-0015",
+      "typeSerial": "KTYPE-0003",
+      "displayName": "Sprout Character",
+      "designCode": "SPR",
+      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-SPR-GEN001-0015.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0149",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0155",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0158",
+          "layerName": "torso",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso",
+            "left_arm",
+            "right_arm",
+            "left_leg",
+            "right_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-STR-GEN001-0016",
+      "typeSerial": "KTYPE-0003",
+      "displayName": "Star Character",
+      "designCode": "STR",
+      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-STR-GEN001-0016.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0173",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0180",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0179",
+          "layerName": "torso",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso",
+            "left_arm",
+            "right_arm",
+            "left_leg",
+            "right_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    },
+    {
+      "serial": "KIN-WTR-GEN001-0017",
+      "typeSerial": "KTYPE-0003",
+      "displayName": "Water Character",
+      "designCode": "WTR",
+      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-WTR-GEN001-0017.json",
+      "thumbnailUrl": null,
+      "parts": [
+        {
+          "serial": "KPART-0197",
+          "layerName": "left_eye",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "left_eye",
+            "right_eye"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0004",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0203",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        },
+        {
+          "serial": "KPART-0206",
+          "layerName": "torso",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso",
+            "left_arm",
+            "right_arm",
+            "left_leg",
+            "right_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0001",
+            "CUS-0002",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": [
+            "KEMB-0001",
+            "KEMB-0002"
+          ]
+        }
+      ]
+    }
+  ]
+}

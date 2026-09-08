@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "customs": [
+    {
+      "serial": "CUS-0001",
+      "customType": "hue",
+      "displayName": "Metal hue",
+      "params": { "min": -180, "max": 180, "step": 1, "default": 0 }
+    },
+    {
+      "serial": "CUS-0002",
+      "customType": "saturation",
+      "displayName": "Metal saturation",
+      "params": { "min": 0, "max": 2, "step": 0.01, "default": 1 }
+    },
+    {
+      "serial": "CUS-0003",
+      "customType": "hue",
+      "displayName": "Eye hue",
+      "params": { "min": -180, "max": 180, "step": 1, "default": 0 }
+    },
+    {
+      "serial": "CUS-0004",
+      "customType": "saturation",
+      "displayName": "Eye saturation",
+      "params": { "min": 0, "max": 2, "step": 0.01, "default": 1 }
+    },
+    {
+      "serial": "CUS-0005",
+      "customType": "color",
+      "displayName": "Accent color",
+      "params": {
+        "allowedColors": ["#3BA7FF", "#5CE1A8", "#F5C542", "#E85D5D", "#C6A15B"],
+        "default": "#3BA7FF"
+      }
+    },
+    {
+      "serial": "CUS-0006",
+      "customType": "embedImage",
+      "displayName": "Embed image",
+      "params": {}
+    },
+    {
+      "serial": "CUS-0007",
+      "customType": "swapPart",
+      "displayName": "Swap part art",
+      "params": {}
+    },
+    {
+      "serial": "CUS-0008",
+      "customType": "lightDark",
+      "displayName": "Light / dark",
+      "params": { "min": -1, "max": 1, "step": 0.01, "default": 0 }
+    }
+  ]
+}

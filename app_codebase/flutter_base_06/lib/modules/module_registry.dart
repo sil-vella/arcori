@@ -14,6 +14,7 @@ import 'auth/auth_drawer.dart';
 import 'auth/auth_routes.dart';
 import 'avari/avari_drawer.dart';
 import 'avari/avari_routes.dart';
+import 'kin/kin_routes.dart';
 import 'match/register_match_state.dart';
 import 'matchmaking/register_matchmaking_state.dart';
 import 'notifications/notifications_drawer.dart';
@@ -50,6 +51,7 @@ void registerApplicationModules(
   registerAuthDrawer(drawer);
   registerAvariRoutes(routes, notificationScreens);
   registerAvariDrawer(drawer);
+  registerKinRoutes(routes, notificationScreens);
   registerPlayRoutes(routes, notificationScreens);
   registerPlayNotifications();
   registerPlayDrawer(drawer);

@@ -15,12 +15,16 @@ class ArcoriCylinder extends StatelessWidget {
     required this.size,
     this.faceUp = true,
     this.showThickness = true,
+    this.face,
   });
 
   final ArcoriLook look;
   final double size;
   final bool faceUp;
   final bool showThickness;
+
+  /// Optional face art (e.g. Kin scene). When set, replaces catalog [look.imageUrl].
+  final Widget? face;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +67,15 @@ class ArcoriCylinder extends StatelessWidget {
           ),
           // Keep Image.network mounted while face-down so art is already
           // decoded before a flip (Play-screen prefetch fills ImageCache).
-          if (imageUrl.isNotEmpty)
+          if (face != null && faceUp)
+            ClipOval(
+              child: SizedBox(
+                width: faceSize,
+                height: faceSize,
+                child: face,
+              ),
+            )
+          else if (imageUrl.isNotEmpty)
             ClipOval(
               child: SizedBox(
                 width: faceSize,
@@ -98,7 +110,7 @@ class ArcoriCylinder extends StatelessWidget {
                 child: ColoredBox(color: look.backColor),
               ),
             )
-          else if (imageUrl.isEmpty)
+          else if (face == null && imageUrl.isEmpty)
             ClipOval(
               child: SizedBox(
                 width: faceSize,

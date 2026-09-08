@@ -64,6 +64,7 @@ services:
       DART_SERVICE_URL: http://Arcori_dart:8080
       REDIS_HOST: Arcori_redis
       CATALOG_VELORA_MEDIA_ROOT: /data/catalog-velora
+      CATALOG_KIN_MEDIA_ROOT: /data/catalog-kin
     depends_on:
       Arcori_postgres:
         condition: service_healthy
@@ -74,6 +75,7 @@ services:
       # Read-only Arcori catalog artwork (host path or synced tree; filenames = internalId.webp)
       - ../assets/images/arcori:/data/catalog-media:ro
       - ../assets/images/velora:/data/catalog-velora:ro
+      - ../assets/lottie/kin:/data/catalog-kin:ro
     networks:
       - app-network
     restart: unless-stopped

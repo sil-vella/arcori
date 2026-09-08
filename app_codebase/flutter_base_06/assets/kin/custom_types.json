@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "types": [
+    {
+      "code": "hue",
+      "displayName": "Hue",
+      "valueShape": "degrees",
+      "defaultRange": { "min": -180, "max": 180, "step": 1 }
+    },
+    {
+      "code": "saturation",
+      "displayName": "Saturation",
+      "valueShape": "factor",
+      "defaultRange": { "min": 0, "max": 2, "step": 0.01 }
+    },
+    {
+      "code": "lightDark",
+      "displayName": "Light / dark",
+      "valueShape": "offset",
+      "defaultRange": { "min": -1, "max": 1, "step": 0.01 }
+    },
+    {
+      "code": "color",
+      "displayName": "Color",
+      "valueShape": "hex",
+      "defaultRange": null
+    },
+    {
+      "code": "embedImage",
+      "displayName": "Embed image",
+      "valueShape": "embedSerial",
+      "defaultRange": null
+    },
+    {
+      "code": "swapPart",
+      "displayName": "Swap part",
+      "valueShape": "embedSerial",
+      "defaultRange": null
+    }
+  ]
+}

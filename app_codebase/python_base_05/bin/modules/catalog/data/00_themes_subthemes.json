@@ -77,9 +77,11 @@
     },
     {
       "theme": "Kin",
-      "themeCode": null,
+      "themeCode": "KIN",
       "subthemes": [
-        "Entelairs"
+        "Guardians",
+        "Entelairs",
+        "Walkies"
       ]
     },
     {

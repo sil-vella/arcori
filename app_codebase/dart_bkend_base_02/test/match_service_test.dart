@@ -46,7 +46,7 @@ http.Response _selectArenaOk() {
         'regionCode': 'AMB',
         'name': 'Amberwild',
         'imageUrl':
-            '/catalog-media/velora/amberwild/ARN-AMB-WLD001-0001.webp',
+            '/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp',
         'source': 'majority',
       },
     }),
@@ -242,7 +242,7 @@ void main() {
       expect(snapshot.arenaId, 'ARN-AMB-WLD001-0001');
       expect(
         snapshot.arenaImageUrl,
-        '/catalog-media/velora/amberwild/ARN-AMB-WLD001-0001.webp',
+        '/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp',
       );
       expect(snapshot.seats[0].arcoriIds, [stubArcoriId]);
       expect(snapshot.seats[1].arcoriIds, [stubAiArcoriId]);

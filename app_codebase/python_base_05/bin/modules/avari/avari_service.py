@@ -8,12 +8,32 @@ from typing import Any
 from core.state.session_scope import session_scope
 from core.errors.app_error import AppError
 from core.utils.dev_logger import customlog
+from models.player_progress import PlayerKin
 from modules.auth.auth_service import get_user_profile
 from modules.avari import avari_repository as repo
-from modules.avari.avari_errors import INVALID_QUERY, NOT_FOUND
+from modules.avari.avari_errors import (
+    INVALID_KIN_COLOR,
+    INVALID_KIN_REGION,
+    INVALID_QUERY,
+    KIN_ALREADY_CLAIMED,
+    KIN_CLAIM_FAILED,
+    NOT_FOUND,
+)
+from modules.avari.kin_genesis import (
+    EXCLUDED_KIN_REGION,
+    assert_design_key_parity,
+    build_kin_catalog_design,
+    mint_internal_id,
+    normalize_color,
+    subtheme_for_type,
+)
 from modules.catalog.catalog_errors import NOT_FOUND as CATALOG_NOT_FOUND
 from modules.catalog.catalog_service import get_design
-
+from modules.catalog.kin_design_store import (
+    lottie_public_url,
+    write_design_file,
+    write_lottie_file,
+)
 LOGGING_SWITCH = True
 
 SOURCE_OWNED = "owned"
@@ -354,3 +374,168 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         "slammers": slammer_payload,
         "trove": trove_payload,
     }
+
+
+def _valid_region_codes() -> set[str]:
+    from modules.catalog import catalog_loader as loader
+
+    meta = loader.load_meta("regions")
+    regions = meta.get("regions") if isinstance(meta, dict) else None
+    out: set[str] = set()
+    if not isinstance(regions, list):
+        return out
+    for row in regions:
+        if not isinstance(row, dict):
+            continue
+        code = str(row.get("regionCode") or "").strip().upper()
+        if code:
+            out.add(code)
+    return out
+
+
+def _write_kin_media(
+    internal_id: str,
+    *,
+    catalog_design: dict[str, Any],
+    lottie: dict[str, Any] | None,
+) -> None:
+    """One design JSON + optional Lottie per Kin (atomic files; no shared category)."""
+    write_design_file(internal_id, catalog_design)
+    if isinstance(lottie, dict):
+        write_lottie_file(internal_id, lottie)
+
+
+def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
+    """Create player_kin + mirrored Genesis catalog_design; write per-Kin files."""
+    uid = (user_id or "").strip()
+    if not uid:
+        raise AppError(INVALID_QUERY, message="Unauthorized")
+    if not isinstance(body, dict):
+        raise AppError(INVALID_QUERY, message="JSON body required")
+
+    kin_serial = str(body.get("kinSerial") or "").strip()
+    type_serial = str(body.get("typeSerial") or "").strip()
+    chosen_name = str(body.get("chosenName") or "").strip()
+    region_code = str(body.get("regionCode") or "").strip().upper()
+    color = normalize_color(str(body.get("color") or ""))
+    applied = body.get("applied")
+    lottie = body.get("lottie")
+    background = body.get("background")
+
+    if not kin_serial or not type_serial:
+        raise AppError(INVALID_QUERY, message="kinSerial and typeSerial are required")
+    if not chosen_name:
+        raise AppError(INVALID_QUERY, message="chosenName is required")
+    if len(chosen_name) > 64:
+        raise AppError(INVALID_QUERY, message="chosenName too long")
+    if not region_code or region_code == EXCLUDED_KIN_REGION:
+        raise AppError(INVALID_KIN_REGION, message="Realm Beyond is not assignable")
+    valid_regions = _valid_region_codes()
+    if valid_regions and region_code not in valid_regions:
+        raise AppError(INVALID_KIN_REGION, message=f"Unknown region: {region_code}")
+    if color is None:
+        raise AppError(INVALID_KIN_COLOR)
+    if applied is not None and not isinstance(applied, list):
+        raise AppError(INVALID_QUERY, message="applied must be a list")
+    if lottie is not None and not isinstance(lottie, dict):
+        raise AppError(INVALID_QUERY, message="lottie must be an object")
+    if background is not None and not isinstance(background, dict):
+        raise AppError(INVALID_QUERY, message="background must be an object")
+
+    profile = get_user_profile(uid)
+    if profile is None:
+        raise AppError(NOT_FOUND, message="Avari profile not found")
+    username = str(profile.get("username") or "player")
+
+    subtheme = subtheme_for_type(type_serial)
+    style = "Chibi"
+    finish = "Standard"
+    effect = "None"
+
+    with session_scope() as session:
+        existing = repo.find_player_kin(session, uid)
+        if existing is not None:
+            raise AppError(KIN_ALREADY_CLAIMED)
+
+        avari = repo.ensure_avari_profile(
+            session,
+            user_id=uuid.UUID(uid),
+            display_name=username,
+        )
+        seq = repo.count_player_kin(session) + 1
+        internal_id = mint_internal_id(username=username, seq=seq)
+        try:
+            catalog_design = build_kin_catalog_design(
+                internal_id=internal_id,
+                chosen_name=chosen_name,
+                region_code=region_code,
+                color=color,
+                subtheme=subtheme,
+                player_id=uid,
+                style=style,
+                finish=finish,
+                effect=effect,
+            )
+            assert_design_key_parity(catalog_design)
+        except ValueError as exc:
+            if LOGGING_SWITCH:
+                customlog(f"avari: kin design parity fail {exc}")
+            raise AppError(KIN_CLAIM_FAILED, message=str(exc)) from exc
+
+        customization: dict[str, Any] = {
+            "kinSerial": kin_serial,
+            "typeSerial": type_serial,
+            "regionCode": region_code,
+            "color": color,
+            "applied": applied if isinstance(applied, list) else [],
+            "lottieRelativePath": f"kin/players/{internal_id}.json",
+            "designRelativePath": f"kin/designs/{internal_id}.json",
+        }
+        if isinstance(background, dict) and background:
+            customization["background"] = {
+                "id": str(background.get("id") or "").strip() or None,
+                "colorHex": str(background.get("colorHex") or "").strip() or None,
+                "colorHexB": str(background.get("colorHexB") or "").strip() or None,
+                "imageUrl": str(background.get("imageUrl") or "").strip() or None,
+                "theme": str(background.get("theme") or "").strip() or None,
+                "style": str(background.get("style") or "").strip() or None,
+                "fileName": str(background.get("fileName") or "").strip() or None,
+                "angleDegrees": background.get("angleDegrees"),
+                "saturation": background.get("saturation"),
+                "lightDark": background.get("lightDark"),
+                "textureId": str(background.get("textureId") or "").strip() or None,
+                "textureIntensity": background.get("textureIntensity"),
+            }
+
+        try:
+            _write_kin_media(
+                internal_id,
+                catalog_design=catalog_design,
+                lottie=lottie if isinstance(lottie, dict) else None,
+            )
+        except OSError as exc:
+            if LOGGING_SWITCH:
+                customlog(f"avari: kin media write fail {exc}")
+            raise AppError(KIN_CLAIM_FAILED, message="Could not store Kin files") from exc
+
+        row = PlayerKin(
+            user_id=uuid.UUID(uid),
+            subtheme=subtheme,
+            style=style,
+            finish=finish,
+            effect=effect,
+            genesis_design_id=internal_id,
+            chosen_name=chosen_name[:64],
+            customization=customization,
+            catalog_design=catalog_design,
+        )
+        session.add(row)
+        avari.onboarding_kin_chosen = True
+        avari.onboarding_genesis_created = True
+        session.flush()
+        if LOGGING_SWITCH:
+            customlog(
+                f"avari: kin claimed user={uid} design={internal_id} "
+                f"region={region_code} color={color} url={lottie_public_url(internal_id)}"
+            )
+        return {"kin": repo.serialize_kin(row)}

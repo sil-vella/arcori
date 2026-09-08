@@ -73,6 +73,7 @@ services:
       ARCORI_PRESENCE_ENABLED: "true"
       ARCORI_RATE_LIMIT_ENABLED: "true"
       CATALOG_VELORA_MEDIA_ROOT: /data/catalog-velora
+      CATALOG_KIN_MEDIA_ROOT: /data/catalog-kin
     ports:
       - "8000:8000"
     volumes:
@@ -83,6 +84,7 @@ services:
       # Read-only Arcori catalog artwork (filenames = internalId.webp)
       - ../assets/images/arcori:/data/catalog-media:ro
       - ../assets/images/velora:/data/catalog-velora:ro
+      - ../assets/lottie/kin:/data/catalog-kin:ro
     command: ["./entrypoint.dev.sh"]
     depends_on:
       Arcori_postgres:

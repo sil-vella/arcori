@@ -17,6 +17,7 @@ from core.errors.app_error import AppError
 from core.utils.dev_logger import customlog
 from modules.catalog import catalog_loader as loader
 from modules.catalog.catalog_errors import INVALID_QUERY
+from modules.catalog.velora_media import arena_image_url
 
 LOGGING_SWITCH = True
 
@@ -326,10 +327,6 @@ SOURCE_MAJORITY = "majority"
 SOURCE_RANDOM_REGION = "random_region"
 
 
-def arena_image_url(*, slug: str, arena_id: str) -> str:
-    return f"/catalog-media/velora/{slug}/{arena_id}.webp"
-
-
 def _arenas_by_region() -> dict[str, list[dict[str, Any]]]:
     """regionCode → arena dicts with arenaId, name, regionCode, slug, imageUrl."""
     try:
@@ -353,13 +350,18 @@ def _arenas_by_region() -> dict[str, list[dict[str, Any]]]:
             arena_id = str(raw.get("arenaId") or "").strip()
             if not arena_id:
                 continue
+            image_file = str(raw.get("imageFile") or "").strip() or None
             arenas.append(
                 {
                     "arenaId": arena_id,
                     "name": str(raw.get("name") or arena_id),
                     "regionCode": code,
                     "slug": slug,
-                    "imageUrl": arena_image_url(slug=slug, arena_id=arena_id),
+                    "imageUrl": arena_image_url(
+                        slug=slug,
+                        arena_id=arena_id,
+                        image_file=image_file,
+                    ),
                 }
             )
         if arenas:

@@ -8,6 +8,12 @@ import '../../../core/navigation/app_paths.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../kin/kin_backgrounds.dart';
+import '../../kin/kin_notifier.dart';
+import '../../kin/widgets/kin_lottie_preview.dart';
+import '../../match/widgets/arcori_cylinder.dart';
+import '../../match/widgets/arcori_look.dart';
+import '../../match/widgets/arcori_palette.dart';
 import '../avari_models.dart';
 import '../avari_notifier.dart';
 import '../widgets/inventory_face_chip.dart';
@@ -30,6 +36,7 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
       if (ref.read(authProvider).isAuthenticated) {
         ref.read(avariProfileProvider.notifier).load(force: true);
       }
+      ref.read(kinActiveSaveProvider.notifier).refresh();
     });
   }
 
@@ -37,6 +44,7 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
   Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
     final state = ref.watch(avariProfileProvider);
+    final localKin = ref.watch(kinActiveSaveProvider);
 
     ref.listen(authProvider, (previous, next) {
       if (!next.isBootstrapping &&
@@ -99,23 +107,35 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
                       ),
                     )
                   : RefreshIndicator(
-                      onRefresh: () => ref
-                          .read(avariProfileProvider.notifier)
-                          .load(force: true),
+                      onRefresh: () async {
+                        await ref
+                            .read(avariProfileProvider.notifier)
+                            .load(force: true);
+                        await ref.read(kinActiveSaveProvider.notifier).refresh();
+                      },
                       child: ListView(
                         padding: AppSpacing.screenPadding,
                         children: [
                           if (state.profile != null)
-                            ..._profileBody(context, state.profile!),
+                            ..._profileBody(
+                              context,
+                              state.profile!,
+                              localKin,
+                            ),
                         ],
                       ),
                     ),
     );
   }
 
-  List<Widget> _profileBody(BuildContext context, AvariProfile profile) {
+  List<Widget> _profileBody(
+    BuildContext context,
+    AvariProfile profile,
+    KinActiveSaveState localKin,
+  ) {
     final identity = profile.identity;
     final scheme = context.appColorScheme;
+    final localDraft = localKin.draft;
     return [
       Center(
         child: Column(
@@ -155,10 +175,85 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
       ),
       AppSpacing.gapMd,
       _SectionTitle(text: 'Kin'),
-      Text(
-        profile.kin == null ? 'Not claimed yet' : profile.kin.toString(),
-        style: context.appTypography.bodyMuted,
-      ),
+      if (profile.kin != null) ...[
+        Center(
+          child: ArcoriCylinder(
+            look: ArcoriLook(
+              designId: profile.kin!.genesisDesignId,
+              colorHex: profile.kin!.color,
+            ),
+            size: 200,
+            face: KinSceneStack(
+              lottieUrl: profile.kin!.lottieUrl,
+              file: (profile.kin!.lottieUrl == null ||
+                      profile.kin!.lottieUrl!.isEmpty)
+                  ? localKin.lottieFile
+                  : null,
+              scene: KinBackgroundScene.fromClaimJson(profile.kin!.background),
+            ),
+          ),
+        ),
+        AppSpacing.gapSm,
+        Text(
+          profile.kin!.chosenName,
+          style: context.appTypography.body,
+          textAlign: TextAlign.center,
+        ),
+        AppSpacing.gapXxs,
+        Text(
+          [
+            profile.kin!.subtheme,
+            if (profile.kin!.regionCode != null) profile.kin!.regionCode!,
+            if (profile.kin!.series != null) profile.kin!.series!,
+            if (profile.kin!.generationRoman != null)
+              'Gen ${profile.kin!.generationRoman}',
+          ].join(' · '),
+          textAlign: TextAlign.center,
+          style: context.appTypography.caption.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
+        ),
+        AppSpacing.gapXxs,
+        Text(
+          profile.kin!.genesisDesignId,
+          textAlign: TextAlign.center,
+          style: context.appTypography.caption.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
+        ),
+      ] else if (localDraft != null) ...[
+        _LocalKinDisc(localKin: localKin),
+        AppSpacing.gapSm,
+        Text(
+          localDraft.displayName,
+          style: context.appTypography.body,
+          textAlign: TextAlign.center,
+        ),
+        AppSpacing.gapXxs,
+        Text(
+          'Local draft ${localDraft.serial} · base ${localDraft.kinSerial}',
+          textAlign: TextAlign.center,
+          style: context.appTypography.caption.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
+        ),
+      ] else
+        Text(
+          'Not claimed yet',
+          style: context.appTypography.bodyMuted,
+        ),
+      if (profile.kin == null) ...[
+        AppSpacing.gapSm,
+        Align(
+          alignment: Alignment.centerLeft,
+          child: FilledButton(
+            onPressed: () => Nav.push(context, AppPaths.kinTypes),
+            child: Text(
+              localDraft == null ? 'Create Kin' : 'Continue Kin draft',
+            ),
+          ),
+        ),
+      ],
       AppSpacing.gapMd,
       _SectionTitle(text: 'Mastery'),
       _KeyValue('Designs tracked', '${profile.mastery.designsTracked}'),
@@ -204,6 +299,39 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
           AppSpacing.gapSm,
         ],
     ];
+  }
+}
+
+class _LocalKinDisc extends ConsumerWidget {
+  const _LocalKinDisc({required this.localKin});
+
+  final KinActiveSaveState localKin;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final draft = localKin.draft;
+    if (draft == null) return const SizedBox.shrink();
+    final bgCatalog =
+        ref.watch(kinBackgroundCatalogProvider).asData?.value ??
+            KinBackgroundCatalog.empty;
+    final bg = bgCatalog.byId(draft.backgroundId);
+    return Center(
+      child: ArcoriCylinder(
+        look: ArcoriLook(
+          designId: draft.kinSerial,
+          colorHex: draft.colorHex,
+        ),
+        size: 200,
+        face: KinSceneStack(
+          file: localKin.lottieFile,
+          backgroundColor: bg?.isColor == true
+              ? parseCatalogColor(bg!.colorHex)
+              : null,
+          backgroundImageUrl:
+              bg?.isImage == true ? bg!.imageUrl : null,
+        ),
+      ),
+    );
   }
 }
 

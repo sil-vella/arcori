@@ -78,7 +78,7 @@ void main() {
                   'regionCode': 'AMB',
                   'name': 'Amberwild',
                   'imageUrl':
-                      '/catalog-media/velora/amberwild/ARN-AMB-WLD001-0001.webp',
+                      '/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp',
                   'source': 'majority',
                 },
               }),

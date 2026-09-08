@@ -66,6 +66,23 @@ def find_player_kin(session: Session, user_id: str) -> PlayerKin | None:
     return session.scalars(select(PlayerKin).where(PlayerKin.user_id == uid)).first()
 
 
+def find_player_kin_by_design_id(
+    session: Session, genesis_design_id: str
+) -> PlayerKin | None:
+    design_id = (genesis_design_id or "").strip()
+    if not design_id:
+        return None
+    return session.scalars(
+        select(PlayerKin).where(PlayerKin.genesis_design_id == design_id)
+    ).first()
+
+
+def count_player_kin(session: Session) -> int:
+    from sqlalchemy import func
+
+    return int(session.scalar(select(func.count()).select_from(PlayerKin)) or 0)
+
+
 def list_design_access(session: Session, user_id: str) -> list[PlayerDesignAccess]:
     uid = _as_uuid(user_id)
     if uid is None:
@@ -126,7 +143,15 @@ def list_trove(session: Session, user_id: str) -> list[PlayerTrove]:
 def serialize_kin(row: PlayerKin | None) -> dict[str, Any] | None:
     if row is None:
         return None
-    return {
+    raw_design = getattr(row, "catalog_design", None)
+    design = dict(raw_design) if isinstance(raw_design, dict) else {}
+    location = design.get("location") if isinstance(design.get("location"), dict) else {}
+    generation = (
+        design.get("generation") if isinstance(design.get("generation"), dict) else {}
+    )
+    from modules.avari.kin_genesis import lottie_public_url
+
+    out: dict[str, Any] = {
         "subtheme": row.subtheme,
         "style": row.style,
         "finish": row.finish,
@@ -135,3 +160,15 @@ def serialize_kin(row: PlayerKin | None) -> dict[str, Any] | None:
         "chosenName": row.chosen_name,
         "customization": dict(row.customization or {}),
     }
+    if design:
+        out["catalogDesign"] = design
+        out["color"] = design.get("color")
+        out["series"] = design.get("series")
+        out["regionCode"] = location.get("regionCode")
+        out["generation"] = {
+            "roman": generation.get("roman"),
+            "number": generation.get("number"),
+        }
+        out["lottieUrl"] = lottie_public_url(row.genesis_design_id)
+    return out
+

@@ -6,6 +6,7 @@ import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/theme/theme.dart';
 import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
+import '../../kin/widgets/kin_lottie_preview.dart';
 import '../velora_models.dart';
 import '../velora_notifier.dart';
 
@@ -123,13 +124,36 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen>
                                 width: _artSize,
                                 height: _artSize * (1 + kArcoriThicknessFactor),
                                 child: Center(
-                                  child: ArcoriCylinder(
-                                    look: ArcoriLook(
-                                      designId: design.internalId,
-                                      imageUrl: design.imageUrl,
-                                      colorHex: design.color,
-                                    ),
-                                    size: _artSize,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      if (design.lottieUrl != null &&
+                                          design.lottieUrl!.isNotEmpty) ...[
+                                        SizedBox(
+                                          width: _artSize * 0.72,
+                                          height: _artSize * 0.72,
+                                          child: KinLottiePreview(
+                                            lottieUrl: design.lottieUrl,
+                                            height: _artSize * 0.72,
+                                          ),
+                                        ),
+                                        AppSpacing.gapMd,
+                                      ],
+                                      ArcoriCylinder(
+                                        look: ArcoriLook(
+                                          designId: design.internalId,
+                                          imageUrl: design.lottieUrl == null ||
+                                                  design.lottieUrl!.isEmpty
+                                              ? design.imageUrl
+                                              : null,
+                                          colorHex: design.color,
+                                        ),
+                                        size: design.lottieUrl != null &&
+                                                design.lottieUrl!.isNotEmpty
+                                            ? _artSize * 0.55
+                                            : _artSize,
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

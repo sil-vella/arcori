@@ -290,7 +290,7 @@ def test_select_arena_majority_region(select_root: Path):
     assert out["arenaId"].startswith("ARN-ASH-")
     assert (
         out["imageUrl"]
-        == f"/catalog-media/velora/ashdrift-hill/{out['arenaId']}.webp"
+        == f"/catalog-media/velora/arenas/ashdrift-hill/{out['arenaId']}.webp"
     )
 
 
