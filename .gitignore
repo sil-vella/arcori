@@ -142,6 +142,9 @@ Documentation/02_FlowCharts/charts/**/*.pdf
 *.tiff
 *.tif
 
+# --- Kin Lottie media (large; local / Docker CATALOG_KIN_MEDIA_ROOT) ---
+assets/lottie/
+
 # --- Video ---
 *.mp4
 *.mov
