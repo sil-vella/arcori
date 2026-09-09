@@ -29,6 +29,24 @@ class MatchStore {
     return 'm_${stamp.toRadixString(16)}_$n';
   }
 
+  /// Rematch match ids: `{seriesRoot}_{NNN}` (3-digit, zero-padded). Index 1 = root.
+  static String seriesMatchId({
+    required String seriesId,
+    required int seriesIndex,
+  }) {
+    final root = seriesId.trim();
+    if (root.isEmpty) {
+      throw ArgumentError('seriesId required');
+    }
+    if (seriesIndex <= 1) return root;
+    return '${root}_${seriesIndex.toString().padLeft(3, '0')}';
+  }
+
+  static bool _isRematchMatchType(Map<String, dynamic> matchType) {
+    final raw = matchType['rematch'];
+    return raw == true || raw?.toString() == 'true';
+  }
+
   /// Practice: human caller + AI seat; [matchType] has `code: practice` and no subtype.
   MatchSnapshot createPracticeStub({
     required String callerUserId,
@@ -84,6 +102,8 @@ class MatchStore {
       matchType: const {'code': 'practice'},
       seats: seats,
       firstSeatIndex: first,
+      seriesId: matchId,
+      seriesIndex: 1,
       table: tableFromSeats(seats, catalogById: catalogById),
       active: {
         'seatIndex': first,
@@ -128,6 +148,9 @@ class MatchStore {
   }
 
   /// Online match from lobby: humans + AI seats; [matchType] carries game type.
+  ///
+  /// Rematch (`matchType.rematch == true`): mints `{seriesId}_{NNN}` instead of
+  /// a fresh random id. Non-rematch openers set `seriesId = matchId`, index 1.
   MatchSnapshot createFromLobby({
     required String callerUserId,
     required Map<String, dynamic> matchType,
@@ -141,7 +164,35 @@ class MatchStore {
     if (seats.isEmpty) {
       throw ArgumentError('seats required');
     }
-    final matchId = _newMatchId();
+
+    final rematch = _isRematchMatchType(matchType);
+    late final String matchId;
+    late final String seriesId;
+    late final int seriesIndex;
+
+    if (rematch) {
+      final rawSeries = matchType['seriesId']?.toString().trim() ?? '';
+      final rawIndex = matchType['seriesIndex'];
+      final index = rawIndex is int
+          ? rawIndex
+          : int.tryParse(rawIndex?.toString() ?? '') ?? 0;
+      if (rawSeries.isEmpty || index < 2) {
+        throw ArgumentError(
+          'rematch requires seriesId and seriesIndex >= 2',
+        );
+      }
+      seriesId = rawSeries;
+      seriesIndex = index;
+      matchId = seriesMatchId(seriesId: seriesId, seriesIndex: seriesIndex);
+      if (_snapshots.containsKey(matchId)) {
+        throw StateError('rematch matchId already exists: $matchId');
+      }
+    } else {
+      matchId = _newMatchId();
+      seriesId = matchId;
+      seriesIndex = 1;
+    }
+
     final first = firstSeatIndex ??
         (seats.length <= 1
             ? 0
@@ -158,6 +209,8 @@ class MatchStore {
       matchType: Map<String, dynamic>.from(matchType),
       seats: seats,
       firstSeatIndex: first,
+      seriesId: seriesId,
+      seriesIndex: seriesIndex,
       table: tableFromSeats(seats, catalogById: catalogById),
       active: {
         'seatIndex': first,

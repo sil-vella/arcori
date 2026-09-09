@@ -14,6 +14,7 @@ from modules.avari import avari_repository as repo
 from modules.avari.avari_errors import (
     INVALID_KIN_COLOR,
     INVALID_KIN_REGION,
+    INVALID_MATCH_FINALIZE,
     INVALID_QUERY,
     KIN_ALREADY_CLAIMED,
     KIN_CLAIM_FAILED,
@@ -530,12 +531,82 @@ def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
             catalog_design=catalog_design,
         )
         session.add(row)
+        # Claimed Kin is circulating match stock: creator gets play/mastery access.
+        repo.ensure_design_access(
+            session,
+            user_id=uid,
+            design_id=internal_id,
+            source="kin",
+        )
         avari.onboarding_kin_chosen = True
         avari.onboarding_genesis_created = True
         session.flush()
         if LOGGING_SWITCH:
             customlog(
                 f"avari: kin claimed user={uid} design={internal_id} "
-                f"region={region_code} color={color} url={lottie_public_url(internal_id)}"
+                f"region={region_code} color={color} url={lottie_public_url(internal_id)} "
+                f"access=granted"
             )
         return {"kin": repo.serialize_kin(row)}
+
+
+def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
+    """Stub post-match persistence — validates body; no economy writes yet."""
+    uid = (user_id or "").strip()
+    if not uid:
+        raise AppError(INVALID_QUERY, message="Unauthorized")
+    if not isinstance(body, dict):
+        raise AppError(INVALID_MATCH_FINALIZE, message="JSON body required")
+
+    match_id = str(body.get("matchId") or "").strip()
+    match_type = str(body.get("matchType") or "").strip()
+    practice = body.get("practice") is True
+    design_ids = body.get("designIds")
+    result = body.get("result")
+
+    if not match_id:
+        raise AppError(INVALID_MATCH_FINALIZE, message="matchId is required")
+    if design_ids is not None and not isinstance(design_ids, list):
+        raise AppError(INVALID_MATCH_FINALIZE, message="designIds must be a list")
+    if result is not None and not isinstance(result, dict):
+        raise AppError(INVALID_MATCH_FINALIZE, message="result must be an object")
+
+    cleaned_ids = (
+        [str(x).strip() for x in design_ids if str(x).strip()]
+        if isinstance(design_ids, list)
+        else []
+    )
+
+    if practice:
+        if LOGGING_SWITCH:
+            customlog(
+                f"avari: match finalize skipped practice user={uid} "
+                f"matchId={match_id} type={match_type or '-'}"
+            )
+        return {
+            "applied": False,
+            "reason": "practice",
+            "matchId": match_id,
+            "goldFragmentsDelta": 0,
+            "rankXpDelta": 0,
+            "masteryChanges": [],
+            "daily": None,
+            "mint": None,
+        }
+
+    # Durable writers land later — return stub deltas for post-match UI wiring.
+    if LOGGING_SWITCH:
+        customlog(
+            f"avari: match finalize stub user={uid} matchId={match_id} "
+            f"type={match_type or '-'} designs={len(cleaned_ids)}"
+        )
+    return {
+        "applied": False,
+        "reason": "stub",
+        "matchId": match_id,
+        "goldFragmentsDelta": 0,
+        "rankXpDelta": 0,
+        "masteryChanges": [],
+        "daily": None,
+        "mint": None,
+    }

@@ -36,6 +36,18 @@ friend_match_inviteNotPending = ErrorSpec(
     http_status=409,
 )
 
+friend_match_inviteRematchNoHumans = ErrorSpec(
+    "friend_match_invite/rematch_no_humans",
+    "Rematch requires at least one opponent",
+    http_status=400,
+)
+
+friend_match_inviteRematchSeriesInvalid = ErrorSpec(
+    "friend_match_invite/rematch_series_invalid",
+    "Rematch series fields are invalid",
+    http_status=400,
+)
+
 
 def register_friend_match_invite_errors(registrar: ModuleErrorRegistrar) -> None:
     registrar.register_module(
@@ -46,6 +58,8 @@ def register_friend_match_invite_errors(registrar: ModuleErrorRegistrar) -> None
             friend_match_inviteNotFound,
             friend_match_inviteForbidden,
             friend_match_inviteNotPending,
+            friend_match_inviteRematchNoHumans,
+            friend_match_inviteRematchSeriesInvalid,
         ],
     )
 

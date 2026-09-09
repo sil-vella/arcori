@@ -197,7 +197,8 @@ def build_kin_catalog_design(
         "color": color,
         "effect": effect,
         "printedRarity": "Common",
-        "selectionWeight": None,
+        # Same default Common weight as many Genesis Animals (e.g. Tiger).
+        "selectionWeight": 3.0,
         "series": series_display,
         "worldState": "Active",
         "seasonState": "Active",

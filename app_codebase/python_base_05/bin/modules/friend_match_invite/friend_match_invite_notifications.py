@@ -79,10 +79,11 @@ def purge_expired_invite_notifications() -> int:
     expired = cancel_expired_invites()
     deleted = 0
     for rec in expired:
-        deleted += discard_invite_notification(
-            rec.invite_id,
-            user_id=rec.invited_user_id,
-        )
+        for uid in rec.all_invited_user_ids():
+            deleted += discard_invite_notification(
+                rec.invite_id,
+                user_id=uid,
+            )
     return deleted
 
 
@@ -91,10 +92,11 @@ def cancel_invite_and_notification(invite_id: str) -> InviteRecord | None:
     purge_expired_invite_notifications()
     rec = pop_invite(invite_id)
     # Always soft-delete by msg_id — covers Python restart / already-expired cases.
-    discard_invite_notification(
-        invite_id,
-        user_id=rec.invited_user_id if rec is not None else None,
-    )
+    if rec is not None:
+        for uid in rec.all_invited_user_ids():
+            discard_invite_notification(invite_id, user_id=uid)
+    else:
+        discard_invite_notification(invite_id, user_id=None)
     return rec
 
 

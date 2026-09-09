@@ -16,6 +16,7 @@ import '../play_notifier.dart';
 import '../widgets/match_type_select_modal.dart';
 import '../widgets/invite_setup_modal.dart';
 import '../widgets/play_failure_modal.dart';
+import '../widgets/post_match_modal.dart';
 import '../widgets/practice_loadout_modal.dart';
 
 /// Play hub — start and end of the match pipeline.
@@ -128,6 +129,15 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!context.mounted) return;
           unawaited(showPracticeMatchSurface(context, ref));
+        });
+      }
+
+      final enteredPostMatch = next.phase == MatchFlowPhase.postMatch &&
+          prev?.phase != MatchFlowPhase.postMatch;
+      if (enteredPostMatch && context.mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!context.mounted) return;
+          unawaited(showPostMatchModal(context, ref));
         });
       }
 

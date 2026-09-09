@@ -93,6 +93,8 @@ void main() {
         ),
       ),
     );
+    // Allow asset decode (or errorBuilder) for back-side.webp.
+    await tester.pump();
 
     final paint = tester.widgetList<CustomPaint>(find.byType(CustomPaint)).firstWhere(
           (w) => w.painter is ArcoriRimPainter,
@@ -101,6 +103,9 @@ void main() {
     expect(painter.paintInnerLine, isTrue);
     expect(painter.innerLineWidth, kArcoriInnerLineWidth);
     expect(painter.innerLineColor, look.innerLineColor);
+    expect(find.text('Genesis'), findsOneWidget);
+    expect(find.text('I'), findsOneWidget);
+    expect(find.text('0001'), findsOneWidget);
   });
 }
 

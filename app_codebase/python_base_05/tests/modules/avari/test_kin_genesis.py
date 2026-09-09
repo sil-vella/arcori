@@ -69,7 +69,7 @@ class KinGenesisTests(unittest.TestCase):
         self.assertEqual(design["generation"]["creator"]["type"], "player")
         self.assertEqual(design["location"]["regionCode"], "EVG")
         self.assertEqual(design["color"], "#C6A15B")
-        self.assertIsNone(design["selectionWeight"])
+        self.assertEqual(design["selectionWeight"], 3.0)
         self.assertIn("AMB", design["affinity"])  # EVG Living Pact
         self.assertEqual(
             design["legacy"]["preservationRequirement"],

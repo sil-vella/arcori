@@ -94,6 +94,37 @@ def list_design_access(session: Session, user_id: str) -> list[PlayerDesignAcces
     )
 
 
+def ensure_design_access(
+    session: Session,
+    *,
+    user_id: str | uuid.UUID,
+    design_id: str,
+    source: str = "kin",
+) -> PlayerDesignAccess:
+    """Grant circulating play/mastery access (idempotent on user+design)."""
+    uid = _as_uuid(user_id) if not isinstance(user_id, uuid.UUID) else user_id
+    if uid is None:
+        raise ValueError("user_id required")
+    did = (design_id or "").strip()
+    if not did:
+        raise ValueError("design_id required")
+    existing = session.scalar(
+        select(PlayerDesignAccess).where(
+            PlayerDesignAccess.user_id == uid,
+            PlayerDesignAccess.design_id == did,
+        )
+    )
+    if existing is not None:
+        return existing
+    row = PlayerDesignAccess(
+        user_id=uid,
+        design_id=did,
+        source=(source or "kin").strip()[:32] or "kin",
+    )
+    session.add(row)
+    return row
+
+
 def list_mastery_top(
     session: Session,
     user_id: str,

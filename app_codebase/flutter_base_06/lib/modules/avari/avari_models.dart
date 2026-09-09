@@ -384,3 +384,53 @@ class AvariProfile {
   final List<AvariInventoryItem> access;
   final List<AvariInventoryItem> slammers;
 }
+
+/// Stub payload from `POST /authuser/avari/match/finalize`.
+class MatchFinalizeResult {
+  const MatchFinalizeResult({
+    required this.applied,
+    required this.reason,
+    required this.matchId,
+    this.goldFragmentsDelta = 0,
+    this.rankXpDelta = 0,
+    this.masteryChanges = const [],
+    this.daily,
+    this.mint,
+  });
+
+  factory MatchFinalizeResult.fromJson(Map<String, dynamic> json) {
+    final rawChanges = json['masteryChanges'];
+    return MatchFinalizeResult(
+      applied: json['applied'] == true,
+      reason: json['reason']?.toString() ?? '',
+      matchId: json['matchId']?.toString() ?? '',
+      goldFragmentsDelta: json['goldFragmentsDelta'] is int
+          ? json['goldFragmentsDelta'] as int
+          : int.tryParse('${json['goldFragmentsDelta']}') ?? 0,
+      rankXpDelta: json['rankXpDelta'] is int
+          ? json['rankXpDelta'] as int
+          : int.tryParse('${json['rankXpDelta']}') ?? 0,
+      masteryChanges: rawChanges is List
+          ? rawChanges
+              .whereType<Map>()
+              .map((e) => Map<String, dynamic>.from(e))
+              .toList()
+          : const [],
+      daily: json['daily'] is Map
+          ? Map<String, dynamic>.from(json['daily'] as Map)
+          : null,
+      mint: json['mint'] is Map
+          ? Map<String, dynamic>.from(json['mint'] as Map)
+          : null,
+    );
+  }
+
+  final bool applied;
+  final String reason;
+  final String matchId;
+  final int goldFragmentsDelta;
+  final int rankXpDelta;
+  final List<Map<String, dynamic>> masteryChanges;
+  final Map<String, dynamic>? daily;
+  final Map<String, dynamic>? mint;
+}

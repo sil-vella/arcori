@@ -4,6 +4,18 @@ import 'package:arcori/modules/match/state/match_notifier.dart';
 import 'package:arcori/modules/play/play_models.dart';
 import 'package:arcori/modules/play/play_notifier.dart';
 
+Future<void> _waitUntil(
+  bool Function() pred, {
+  Duration timeout = const Duration(seconds: 5),
+}) async {
+  final deadline = DateTime.now().add(timeout);
+  while (DateTime.now().isBefore(deadline)) {
+    if (pred()) return;
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+  }
+  fail('waitUntil timed out');
+}
+
 void main() {
   group('MatchFlowNotifier', () {
     test('startPlay enters selectingType; cancel returns idle', () {
@@ -22,21 +34,37 @@ void main() {
       expect(container.read(matchFlowProvider).selectedType, isNull);
     });
 
-    test('practice auto stub loop returns to idle without manual End',
-        () async {
+    test('practice holds ended snapshot until Done', () async {
       final container = ProviderContainer();
       addTearDown(container.dispose);
       final flow = container.read(matchFlowProvider.notifier);
-      flow.practiceStubStepDelay = Duration.zero;
+      flow.practiceFastStub = true;
 
       flow.startPlay();
-      await flow.selectType(
+      final pipeline = flow.selectType(
         MatchType.practice,
         practiceLoadout: const PracticeLoadout(
           arcoriId: 'ANM-TIG-GEN001-0001',
           slammerId: stubSlammerId,
         ),
       );
+
+      await _waitUntil(
+        () =>
+            container.read(matchFlowProvider).phase == MatchFlowPhase.postMatch,
+      );
+      expect(container.read(matchSnapshotProvider).isEnded, isTrue);
+      expect(container.read(matchSnapshotProvider).matchId, isNotNull);
+
+      // Practice has no other humans — Rematch stays disabled.
+      expect(flow.rematchAvailable(), isFalse);
+      expect(
+        flow.rematchDisabledReason(),
+        contains('Practice'),
+      );
+
+      flow.completePostMatchDone();
+      await pipeline;
 
       expect(container.read(matchFlowProvider).isIdle, isTrue);
       expect(container.read(matchSnapshotProvider).matchId, isNull);
@@ -79,6 +107,10 @@ void main() {
       final notifier = container.read(matchFlowProvider.notifier);
 
       notifier.startPlay();
+      expect(
+        container.read(matchFlowProvider).phase,
+        MatchFlowPhase.selectingType,
+      );
       notifier.startPlay();
       expect(
         container.read(matchFlowProvider).phase,

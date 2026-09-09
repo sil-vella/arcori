@@ -5,16 +5,16 @@ import 'package:arcori/modules/match/practice_ai_pool.dart';
 
 void main() {
   group('practiceAiPool', () {
-    test('pool has 10 distinct userIds', () {
-      expect(practiceAiPoolUserIds, hasLength(10));
-      expect(practiceAiPoolUserIds.toSet(), hasLength(10));
+    test('pool has exactly 2 distinct userIds', () {
+      expect(practiceAiPoolUserIds, hasLength(2));
+      expect(practiceAiPoolUserIds.toSet(), hasLength(2));
     });
 
-    test('pickPracticeAiUserIds returns 2 distinct pool members', () {
+    test('pickPracticeAiUserIds returns both pool members', () {
       final picked = pickPracticeAiUserIds(random: Random(7));
       expect(picked, hasLength(2));
       expect(picked[0], isNot(picked[1]));
-      expect(practiceAiPoolUserIds, containsAll(picked));
+      expect(picked.toSet(), practiceAiPoolUserIds.toSet());
     });
 
     test('pickPracticeAiUserIds is deterministic with seeded Random', () {

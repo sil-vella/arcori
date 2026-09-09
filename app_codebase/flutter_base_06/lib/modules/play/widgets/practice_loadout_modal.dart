@@ -9,11 +9,11 @@ import '../../avari/avari_notifier.dart';
 import '../game_controls_prefs.dart';
 import '../play_models.dart';
 
-/// Practice loadout: player's circulating Arcori + owned slammers.
+/// Practice setup: pick owned slammer only (Arcori auto-assigned from collection).
 Future<PracticeLoadout?> showPracticeLoadoutModal(BuildContext context) {
   return AppModal.showCenteredShell<PracticeLoadout>(
     context,
-    title: 'Practice loadout',
+    title: 'Practice slammer',
     barrierDismissible: true,
     child: const _PracticeLoadoutBody(),
   );
@@ -30,10 +30,21 @@ class _PracticeLoadoutBody extends ConsumerStatefulWidget {
 class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
   bool _loading = true;
   String? _error;
-  List<AvariInventoryItem> _arcori = const [];
+  AvariInventoryItem? _autoArcori;
   List<AvariInventoryItem> _slammers = const [];
-  String? _arcoriId;
   String? _slammerId;
+
+  static const _fallbackArcori = AvariInventoryItem(
+    designId: 'ANM-TIG-GEN001-0001',
+    displayName: 'Tiger',
+    imageUrl: '/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp',
+    color: '#C6A15B',
+  );
+
+  static const _fallbackSlammer = AvariInventoryItem(
+    designId: 'SLM-STR-GEN001-0001',
+    displayName: 'Starter Slammer',
+  );
 
   @override
   void initState() {
@@ -47,25 +58,10 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
 
     final token = ref.read(authProvider).accessToken;
     if (token == null || token.isEmpty) {
-      const fallbackArcori = [
-        AvariInventoryItem(
-          designId: 'ANM-TIG-GEN001-0001',
-          displayName: 'Tiger',
-          imageUrl: '/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp',
-          color: '#C6A15B',
-        ),
-      ];
-      const fallbackSlammers = [
-        AvariInventoryItem(
-          designId: 'SLM-STR-GEN001-0001',
-          displayName: 'Starter Slammer',
-        ),
-      ];
       setState(() {
-        _arcori = fallbackArcori;
-        _slammers = fallbackSlammers;
-        _arcoriId = fallbackArcori.first.designId;
-        _slammerId = _pickDefaultSlammer(fallbackSlammers, equipped);
+        _autoArcori = _fallbackArcori;
+        _slammers = const [_fallbackSlammer];
+        _slammerId = _pickDefaultSlammer(const [_fallbackSlammer], equipped);
         _error = 'Offline defaults — sign in to use your collection';
         _loading = false;
       });
@@ -90,12 +86,11 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
     final slammers =
         profile.slammers.where((e) => e.designId.isNotEmpty).toList();
     setState(() {
-      _arcori = arcori;
+      _autoArcori = arcori.isNotEmpty ? arcori.first : _fallbackArcori;
       _slammers = slammers;
-      _arcoriId = arcori.isNotEmpty ? arcori.first.designId : null;
       _slammerId = _pickDefaultSlammer(slammers, equipped);
-      _error = (arcori.isEmpty || slammers.isEmpty)
-          ? 'Your collection needs at least one Arcori and one slammer.'
+      _error = slammers.isEmpty
+          ? 'Your collection needs at least one slammer.'
           : null;
       _loading = false;
     });
@@ -108,14 +103,6 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
     if (list.isEmpty) return null;
     if (list.any((e) => e.designId == equipped)) return equipped;
     return list.first.designId;
-  }
-
-  AvariInventoryItem? _itemById(List<AvariInventoryItem> list, String? id) {
-    if (id == null) return null;
-    for (final e in list) {
-      if (e.designId == id) return e;
-    }
-    return null;
   }
 
   @override
@@ -135,19 +122,6 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
           Text(_error!, style: context.appTypography.bodySmall),
           AppSpacing.gapSm,
         ],
-        Text('Arcori', style: context.appTypography.label),
-        AppSpacing.gapXs,
-        DropdownButtonFormField<String>(
-          value: _arcoriId,
-          items: [
-            for (final e in _arcori)
-              DropdownMenuItem(value: e.designId, child: Text(e.displayName)),
-          ],
-          onChanged: _arcori.isEmpty
-              ? null
-              : (v) => setState(() => _arcoriId = v),
-        ),
-        AppSpacing.gapMd,
         Text('Slammer', style: context.appTypography.label),
         AppSpacing.gapXs,
         DropdownButtonFormField<String>(
@@ -162,16 +136,16 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
         ),
         AppSpacing.gapLg,
         FilledButton(
-          onPressed: (_arcoriId != null && _slammerId != null)
+          onPressed: (_autoArcori != null && _slammerId != null)
               ? () {
-                  final arcori = _itemById(_arcori, _arcoriId);
+                  final arcori = _autoArcori!;
                   AppModal.dismiss(
                     context,
                     PracticeLoadout(
-                      arcoriId: _arcoriId!,
+                      arcoriId: arcori.designId,
                       slammerId: _slammerId!,
-                      arcoriImageUrl: arcori?.imageUrl,
-                      arcoriColor: arcori?.color,
+                      arcoriImageUrl: arcori.imageUrl,
+                      arcoriColor: arcori.color,
                     ),
                   );
                 }

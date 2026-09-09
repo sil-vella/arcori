@@ -26,13 +26,20 @@ enum MatchFlowPhase {
   postMatch,
 }
 
+/// How the player leaves the post-match screen.
+enum PostMatchExitAction {
+  done,
+  playNew,
+  rematch,
+}
+
 extension MatchFlowPhaseLabel on MatchFlowPhase {
   String get label => switch (this) {
         MatchFlowPhase.idle => 'Ready',
         MatchFlowPhase.selectingType => 'Select match type',
         MatchFlowPhase.typeSetup => 'Setting up…',
         MatchFlowPhase.inMatch => 'In match',
-        MatchFlowPhase.postMatch => 'Post-match (stub)',
+        MatchFlowPhase.postMatch => 'Post-match',
       };
 }
 
@@ -42,6 +49,7 @@ class MatchFlowState {
     this.selectedType,
     this.practiceLoadout,
     this.errorMessage,
+    this.postMatchSoftError,
   });
 
   final MatchFlowPhase phase;
@@ -51,6 +59,9 @@ class MatchFlowState {
   /// Set when a play attempt aborts; UI shows an OK modal then [clearError].
   final String? errorMessage;
 
+  /// Soft finalize / post-match message (does not abort the pipeline).
+  final String? postMatchSoftError;
+
   bool get isIdle => phase == MatchFlowPhase.idle;
 
   MatchFlowState copyWith({
@@ -58,9 +69,11 @@ class MatchFlowState {
     MatchType? selectedType,
     PracticeLoadout? practiceLoadout,
     String? errorMessage,
+    String? postMatchSoftError,
     bool clearSelectedType = false,
     bool clearPracticeLoadout = false,
     bool clearError = false,
+    bool clearPostMatchSoftError = false,
   }) {
     return MatchFlowState(
       phase: phase ?? this.phase,
@@ -71,6 +84,9 @@ class MatchFlowState {
           ? null
           : (practiceLoadout ?? this.practiceLoadout),
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      postMatchSoftError: clearPostMatchSoftError
+          ? null
+          : (postMatchSoftError ?? this.postMatchSoftError),
     );
   }
 }
@@ -86,7 +102,32 @@ class InviteSetupResult {
   final String invitedUserId;
 }
 
-/// Practice loadout — one Arcori + one slammer (arena fixed locally).
+/// Captured from an ended online match for rematch invite + lobby find.
+class RematchHostContext {
+  const RematchHostContext({
+    required this.priorMatchId,
+    required this.seriesId,
+    required this.seriesIndex,
+    required this.otherHumanIds,
+    required this.priorAiUserIds,
+    required this.rematchSeats,
+    required this.rematchTargetSeats,
+  });
+
+  final String priorMatchId;
+  final String seriesId;
+  final int seriesIndex;
+  final List<String> otherHumanIds;
+  final List<String> priorAiUserIds;
+  final List<Map<String, dynamic>> rematchSeats;
+  final int rematchTargetSeats;
+
+  bool get canRematch =>
+      seriesId.isNotEmpty &&
+      (otherHumanIds.isNotEmpty || priorAiUserIds.isNotEmpty);
+}
+
+/// Practice loadout — slammer chosen in setup; Arcori auto-assigned.
 class PracticeLoadout {
   const PracticeLoadout({
     required this.arcoriId,

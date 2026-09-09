@@ -1,4 +1,4 @@
-"""Avari HTTP routes (authuser read + Kin claim)."""
+"""Avari HTTP routes (authuser read + Kin claim + match finalize stub)."""
 
 from __future__ import annotations
 
@@ -10,6 +10,7 @@ from modules.auth.auth_service import parse_json_body
 from modules.avari.avari_errors import INVALID_QUERY
 from modules.avari.avari_service import (
     claim_kin,
+    finalize_match,
     get_avari_profile,
     verify_slammers_for_seats,
 )
@@ -26,6 +27,10 @@ def register_avari_routes(
         lambda: _handle_kin_backgrounds(res),
     )
     routes.authuser_post("/avari/kin", lambda: _handle_claim_kin(res))
+    routes.authuser_post(
+        "/avari/match/finalize",
+        lambda: _handle_match_finalize(res),
+    )
     routes.service_post("/avari/verify_slammers", lambda: _handle_verify_slammers(res))
 
 
@@ -57,6 +62,15 @@ def _handle_claim_kin(res: HttpResponseContract):
         user_id = _require_user_id()
         body = parse_json_body()
         return res.json_ok(claim_kin(user_id, body))
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_match_finalize(res: HttpResponseContract):
+    try:
+        user_id = _require_user_id()
+        body = parse_json_body()
+        return res.json_ok(finalize_match(user_id, body))
     except AppError as err:
         return err.to_http_response()
 

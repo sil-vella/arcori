@@ -18,6 +18,8 @@ import '../state/match_notifier.dart';
 import '../state/match_snapshot_state.dart';
 import '../state/slam_motion_capability_provider.dart';
 import '../../play/game_controls_prefs.dart';
+import '../../play/play_models.dart';
+import '../../play/play_notifier.dart';
 import '../../play/slam_control_mode_ui.dart';
 import 'arcori_image_prefetch.dart';
 import 'arcori_stack_surface.dart';
@@ -87,6 +89,24 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     _flushPendingSlamResultModal();
   }
 
+  /// Close this shell even when another modal is on top (post-match / lobby).
+  void _forceCloseShell({required String reason}) {
+    if (!mounted) return;
+    final route = ModalRoute.of(context);
+    if (route == null) return;
+    if (LOGGING_SWITCH) {
+      customlog(
+        'matchSurface: forceClose reason=$reason current=${route.isCurrent}',
+      );
+    }
+    if (route.isCurrent) {
+      AppModal.dismiss(context);
+      return;
+    }
+    // Orphan under post-match: remove without popping the top route.
+    Navigator.of(context, rootNavigator: true).removeRoute(route);
+  }
+
   /// Close the match fullscreen once it is the top route (after slam overlays).
   void _scheduleMatchShellDismiss({int attempts = 0}) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -96,9 +116,18 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
         AppModal.dismiss(context);
         return;
       }
-      if (attempts >= 25) return;
+      if (attempts >= 25) {
+        _forceCloseShell(reason: 'ended-timeout');
+        return;
+      }
       Future<void>.delayed(const Duration(milliseconds: 200), () {
         if (!mounted) return;
+        // Flow already left the match — force-remove even if not current.
+        final phase = ref.read(matchFlowProvider).phase;
+        if (phase != MatchFlowPhase.inMatch) {
+          _forceCloseShell(reason: 'phase=${phase.name}');
+          return;
+        }
         if (!ref.read(matchSnapshotProvider).isEnded) return;
         _scheduleMatchShellDismiss(attempts: attempts + 1);
       });
@@ -340,6 +369,18 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
           'result=${event['result']}',
         );
       }
+    });
+
+    // Leave inMatch → remove this shell even when buried under post-match.
+    // Otherwise Done/clear cancels isEnded-dismiss and the next match stacks
+    // another surface on a stale rematch shell.
+    ref.listen(matchFlowProvider, (prev, next) {
+      if (next.phase == MatchFlowPhase.inMatch) return;
+      if (prev?.phase != MatchFlowPhase.inMatch &&
+          prev?.phase != MatchFlowPhase.postMatch) {
+        return;
+      }
+      _forceCloseShell(reason: 'flow=${next.phase.name}');
     });
 
     final lastEvent = snap.lastEvent;

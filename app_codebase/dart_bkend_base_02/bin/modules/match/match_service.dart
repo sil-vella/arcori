@@ -139,28 +139,66 @@ class MatchService implements MatchLifecycleContract {
     }
 
     final requestedSeats = <MatchSeat>[];
+    final rematch = matchType['rematch'] == true ||
+        matchType['rematch']?.toString() == 'true';
+    final rematchSeatHints = <String, Map<String, dynamic>>{};
+    final rawRematchSeats = matchType['rematchSeats'];
+    if (rawRematchSeats is List) {
+      for (final entry in rawRematchSeats) {
+        if (entry is! Map) continue;
+        final map = Map<String, dynamic>.from(entry);
+        final uid = map['userId']?.toString().trim() ?? '';
+        if (uid.isEmpty) continue;
+        rematchSeatHints[uid] = map;
+      }
+    }
+
     for (var i = 0; i < humans.length; i++) {
       final h = humans[i];
-      final slammer =
-          h.slammerId.trim().isNotEmpty ? h.slammerId.trim() : stubSlammerId;
+      final hint = rematchSeatHints[h.userId];
+      final hintSlammer = hint?['slammerId']?.toString().trim() ?? '';
+      final slammer = h.slammerId.trim().isNotEmpty
+          ? h.slammerId.trim()
+          : (hintSlammer.isNotEmpty ? hintSlammer : stubSlammerId);
+      final hintArcori = hint?['arcoriIds'];
+      final priorArcori = hintArcori is List
+          ? hintArcori
+              .map((e) => e.toString())
+              .where((e) => e.isNotEmpty)
+              .toList()
+          : const <String>[];
       requestedSeats.add(
         MatchSeat(
           userId: h.userId,
           seatIndex: i,
           kind: 'human',
-          arcoriIds: const [],
+          arcoriIds: rematch && priorArcori.isNotEmpty
+              ? priorArcori
+              : (h.arcoriIds.isNotEmpty ? h.arcoriIds : const []),
           slammerId: slammer,
         ),
       );
     }
     for (var i = 0; i < needAi; i++) {
+      final aiUserId = aiUserIds[i];
+      final hint = rematchSeatHints[aiUserId];
+      final hintSlammer = hint?['slammerId']?.toString().trim() ?? '';
+      final hintArcori = hint?['arcoriIds'];
+      final priorArcori = hintArcori is List
+          ? hintArcori
+              .map((e) => e.toString())
+              .where((e) => e.isNotEmpty)
+              .toList()
+          : const <String>[];
       requestedSeats.add(
         MatchSeat(
-          userId: aiUserIds[i],
+          userId: aiUserId,
           seatIndex: humans.length + i,
           kind: 'ai',
-          arcoriIds: const [],
-          slammerId: stubSlammerId,
+          arcoriIds: rematch && priorArcori.isNotEmpty
+              ? priorArcori
+              : const [],
+          slammerId: hintSlammer.isNotEmpty ? hintSlammer : stubSlammerId,
         ),
       );
     }
@@ -188,10 +226,42 @@ class MatchService implements MatchLifecycleContract {
       verifiedSlammers = {};
     }
 
+    Map<String, String> selected = {};
+    final needsCatalogSelect =
+        requestedSeats.any((s) => s.arcoriIds.isEmpty);
+    if (needsCatalogSelect) {
+      try {
+        selected = await _catalog.selectArcori(
+          seats: [
+            for (final s in requestedSeats)
+              if (s.arcoriIds.isEmpty) {'userId': s.userId},
+          ],
+        );
+        if (LOGGING_SWITCH) {
+          customlog(
+            'match: startFromLobby select_arcori ok '
+            'picks=${selected.entries.map((e) => '${e.key}:${e.value}').join(',')}',
+          );
+        }
+      } catch (e) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'match: startFromLobby select_arcori failed → stub Tiger/WhiteTiger err=$e',
+          );
+        }
+        selected = {};
+      }
+    } else if (LOGGING_SWITCH) {
+      customlog(
+        'match: startFromLobby skip select_arcori rematch=$rematch '
+        '(prior arcori loadouts present)',
+      );
+    }
+
     final seats = <MatchSeat>[];
     for (final s in requestedSeats) {
       final verified = verifiedSlammers[s.userId]?.trim() ?? '';
-      final slammer = verified.isNotEmpty ? verified : stubSlammerId;
+      final slammer = verified.isNotEmpty ? verified : s.slammerId;
       seats.add(
         MatchSeat(
           userId: s.userId,
@@ -205,31 +275,13 @@ class MatchService implements MatchLifecycleContract {
       );
     }
 
-    Map<String, String> selected = {};
-    try {
-      selected = await _catalog.selectArcori(
-        seats: [
-          for (final s in seats) {'userId': s.userId},
-        ],
-      );
-      if (LOGGING_SWITCH) {
-        customlog(
-          'match: startFromLobby select_arcori ok '
-          'picks=${selected.entries.map((e) => '${e.key}:${e.value}').join(',')}',
-        );
-      }
-    } catch (e) {
-      if (LOGGING_SWITCH) {
-        customlog(
-          'match: startFromLobby select_arcori failed → stub Tiger/WhiteTiger err=$e',
-        );
-      }
-      selected = {};
-    }
-
     final assigned = <MatchSeat>[];
     for (var i = 0; i < seats.length; i++) {
       final s = seats[i];
+      if (s.arcoriIds.isNotEmpty) {
+        assigned.add(s);
+        continue;
+      }
       final picked = selected[s.userId]?.trim() ?? '';
       final arcoriId = picked.isNotEmpty
           ? picked

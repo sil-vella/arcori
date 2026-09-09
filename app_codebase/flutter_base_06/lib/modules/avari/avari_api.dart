@@ -58,6 +58,41 @@ class AvariApiClient {
     }
   }
 
+  /// POST /authuser/avari/match/finalize — stub durable rewards path.
+  Future<AvariApiOutcome<MatchFinalizeResult>> finalizeMatch({
+    required String accessToken,
+    required String matchId,
+    required String matchType,
+    required bool practice,
+    required List<String> designIds,
+    Map<String, dynamic>? result,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/authuser/avari/match/finalize');
+    final body = <String, dynamic>{
+      'matchId': matchId,
+      'matchType': matchType,
+      'practice': practice,
+      'designIds': designIds,
+      if (result != null) 'result': result,
+    };
+    try {
+      final response = await _client.post(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+      return _parseFinalize(response);
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const AvariApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
+  }
+
   AvariApiOutcome<AvariProfile> _parseProfile(http.Response response) {
     final envelope = _decodeEnvelope(response.body);
     if (envelope == null) {
@@ -86,6 +121,37 @@ class AvariApiClient {
     }
     return AvariApiOutcome.success(
       AvariProfile.fromJson(Map<String, dynamic>.from(data)),
+    );
+  }
+
+  AvariApiOutcome<MatchFinalizeResult> _parseFinalize(http.Response response) {
+    final envelope = _decodeEnvelope(response.body);
+    if (envelope == null) {
+      return AvariApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    if (envelope['ok'] != true) {
+      return AvariApiOutcome.failure(
+        error: ApiError.fromEnvelope(envelope),
+      );
+    }
+    final data = envelope['data'];
+    if (data is! Map) {
+      return AvariApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    return AvariApiOutcome.success(
+      MatchFinalizeResult.fromJson(Map<String, dynamic>.from(data)),
     );
   }
 

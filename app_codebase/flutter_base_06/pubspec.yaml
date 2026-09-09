@@ -103,6 +103,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/arcori/
     - assets/lottie/
     - assets/kin/
 

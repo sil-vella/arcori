@@ -503,11 +503,10 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 
 ### Next (ordered by master plan)
 
-1. **Celebration / Match Summary + durable rewards** (next)
-2. **Kin creation** — Flutter wizard + `POST /authuser/avari/kin` Genesis claim (region, palette color, mirrored `catalog_design`) — [kin-creation.md](kin-creation.md)
-3. Home sink Trove • PLAY • Market; remaining first-time / returning flows
-4. My Mastery tab; Trove UI; economy writers from matches
-5. Special Event arena rules (not the Quick Start / Invite region pick)
+1. **Celebration / durable reward writers** (Rematch invite wiring done — [core-match-loop.md](core-match-loop.md))
+2. Home sink Trove • PLAY • Market; remaining first-time / returning flows
+3. My Mastery tab; Trove UI; economy writers from matches
+4. Special Event arena rules (not the Quick Start / Invite region pick)
 
 ---
 
@@ -534,8 +533,11 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Aim marker + exclusive modes | Can miss the stack (not only soft-miss); no tilt vs swipe fights | `aim:{x,z}` on wire; footprint miss; Game Controls `accel`\|`touch`; equipped `slammerId` on find |
 | Owned slammer + circulating Arcori on profile | Players see what they can actually play, not the whole Velora catalog | Avari `access` / `slammers` enriched with catalog `imageUrl`+`color`; Game Controls + practice dropdowns read that list; Dart `verify_slammers` before freeze |
 | Disc face from catalog | Flipped Arcori should look like the design, with its rim color; art ready before flip | Freeze stamps `imageUrl`/`color` on `table.pieces`; Flutter `ArcoriCylinder` SSOT (match, Avari, Velora browse/Detail); Play precaches circulating art; face-down still decodes `Image.network` |
-| Kin as layered Lottie, not a baked PNG | Players customize a living Genesis (colors, parts, motion) without redrawing the character | Transparent PNG body-part layers aligned to the flattened original. **Lottie templates** on backend `/catalog-media/kin/…`. Claim writes **one design JSON + one Lottie per Kin** under `/media/kin/designs/` and `/media/kin/players/` (no shared category file — avoids claim races). Velora Kin theme (`themeCode: KIN`) indexes those files. Plan: [kin-creation.md](kin-creation.md) |
+| Kin as layered Lottie, not a baked PNG | Players customize a living Genesis (colors, parts, motion) without redrawing the character | Transparent PNG body-part layers aligned to the flattened original. **Lottie templates** on backend `/catalog-media/kin/…`. Claim writes **one design JSON + one Lottie per Kin** under `/media/kin/designs/` and `/media/kin/players/` (no shared category file — avoids claim races). Design object uses the **same keys** as regular Genesis Arcori (`animals.json`). Claimed Kin is **circulating match stock** (`worldState` Active, `selectionWeight` 3.0) and grants the creator `player_design_access` (`source=kin`). Velora Kin theme (`themeCode: KIN`) indexes those files. Plan: [kin-creation.md](kin-creation.md) |
 | Random first player | Fair who goes first; seat join order unchanged | Snapshot `firstSeatIndex`; turn order wraps `(first+offset)%n` each round |
+| Post-match holds ended snapshot until leave | Rematch needs prior seats/Arcori context; celebration can read scores without re-fetch | Flutter stays in `postMatch` with `matchSnapshot` intact; `match/leave` + clear on Done / Play New / Rematch exit. Rematch = Friend Match–style invite notify + Dart lobby with `rematch` flags; new `matchId = {seriesId}_{NNN}` (not a fresh random mint). Stub `POST /authuser/avari/match/finalize` (no writers yet). Play New → Quick Start from top |
+| Rematch series ids on hot snapshot | Tournament/history can later group games without colliding WS rooms | Opener: `seriesId = matchId`, `seriesIndex = 1`. Rematch: mint `{seriesId}_002` etc. Postgres series table deferred until finalize writers |
+| Rematch only vs Practice | Practice stays local / no rematch lobby | Rematch enabled for online matches with other humans and/or prior AI seats (Quick Start 1H+2AI rematches the same AI). Disabled for Practice. |
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
 | Caller (not host/steward) | Table-feel product voice | `callerUserId` on snapshot |
 | Join-or-create + 5s + AI fill | Solo players still play | Shared matchmaking for quick/event |

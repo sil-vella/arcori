@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../core/http/media_url.dart';
 import '../../../core/theme/theme.dart';
+import 'arcori_design_labels.dart';
 import 'arcori_look.dart';
 
-/// Shared Arcori disc: catalog art, color rim, color back, color thickness.
+/// Shared Arcori disc: catalog art, color rim, art back + labels, thickness.
 ///
 /// Used by the match stack, Avari inventory, and Velora. [ArcoriDisc] only
 /// adds the 3D pose transform.
@@ -30,7 +31,7 @@ class ArcoriCylinder extends StatelessWidget {
   Widget build(BuildContext context) {
     final thickness = size * kArcoriThicknessFactor;
     final scheme = context.appColorScheme;
-    final imageUrl = resolveMediaUrl(look.imageUrl);
+    final imageUrl = look.imageUrl?.trim() ?? '';
     final faceSize = (size - 2 * kArcoriRimWidth).clamp(1.0, size);
 
     return SizedBox(
@@ -65,8 +66,7 @@ class ArcoriCylinder extends StatelessWidget {
             ),
             child: SizedBox(width: size, height: size),
           ),
-          // Keep Image.network mounted while face-down so art is already
-          // decoded before a flip (Play-screen prefetch fills ImageCache).
+          // Keep face art mounted while face-down so a flip is instant.
           if (face != null && faceUp)
             ClipOval(
               child: SizedBox(
@@ -76,28 +76,16 @@ class ArcoriCylinder extends StatelessWidget {
               ),
             )
           else if (imageUrl.isNotEmpty)
-            ClipOval(
-              child: SizedBox(
-                width: faceSize,
-                height: faceSize,
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.center,
-                  gaplessPlayback: true,
-                  errorBuilder: (_, __, ___) => ColoredBox(
-                    color: look.backColor,
-                    child: Center(
-                      child: Text(
-                        look.fallbackLabel,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: look.labelColor,
-                          fontSize: size * 0.14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+            Opacity(
+              opacity: faceUp ? 1 : 0,
+              child: ClipOval(
+                child: SizedBox(
+                  width: faceSize,
+                  height: faceSize,
+                  child: _ArcoriMediaImage(
+                    path: imageUrl,
+                    size: faceSize,
+                    fallback: look,
                   ),
                 ),
               ),
@@ -107,7 +95,7 @@ class ArcoriCylinder extends StatelessWidget {
               child: SizedBox(
                 width: faceSize,
                 height: faceSize,
-                child: ColoredBox(color: look.backColor),
+                child: _ArcoriBackFace(look: look, size: faceSize),
               ),
             )
           else if (face == null && imageUrl.isEmpty)
@@ -141,6 +129,123 @@ class ArcoriCylinder extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ArcoriMediaImage extends StatelessWidget {
+  const _ArcoriMediaImage({
+    required this.path,
+    required this.size,
+    required this.fallback,
+  });
+
+  final String path;
+  final double size;
+  final ArcoriLook fallback;
+
+  @override
+  Widget build(BuildContext context) {
+    final err = ColoredBox(
+      color: fallback.backColor,
+      child: Center(
+        child: Text(
+          fallback.fallbackLabel,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: fallback.labelColor,
+            fontSize: size * 0.14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+
+    if (isBundleAssetMedia(path)) {
+      return Image.asset(
+        bundleAssetPath(path),
+        fit: BoxFit.cover,
+        alignment: Alignment.center,
+        gaplessPlayback: true,
+        errorBuilder: (_, __, ___) => err,
+      );
+    }
+
+    final url = resolveMediaUrl(path);
+    if (url.isEmpty) return err;
+    return Image.network(
+      url,
+      fit: BoxFit.cover,
+      alignment: Alignment.center,
+      gaplessPlayback: true,
+      errorBuilder: (_, __, ___) => err,
+    );
+  }
+}
+
+/// Shared back art + bottom-up serial / generation / series labels.
+class _ArcoriBackFace extends StatelessWidget {
+  const _ArcoriBackFace({required this.look, required this.size});
+
+  final ArcoriLook look;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final labels = ArcoriDesignLabels.fromDesignId(look.designId);
+    final pad = (size * 0.08).clamp(2.0, 10.0);
+    final fontSize = (size * 0.085).clamp(5.0, 14.0);
+    final style = TextStyle(
+      color: const Color(0xFFE8E4DC),
+      fontSize: fontSize,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      letterSpacing: 0.3,
+      shadows: const [
+        Shadow(color: Color(0xCC000000), blurRadius: 2, offset: Offset(0, 0.5)),
+      ],
+    );
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.asset(
+          kArcoriBackAssetPath,
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+          gaplessPlayback: true,
+          errorBuilder: (_, __, ___) => ColoredBox(color: look.backColor),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(pad, pad, pad, pad * 1.2),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                labels.series,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: style,
+              ),
+              Text(
+                labels.generation,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: style,
+              ),
+              Text(
+                labels.serial,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: style.copyWith(fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

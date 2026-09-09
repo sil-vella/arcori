@@ -29,16 +29,24 @@ const Map<String, Map<String, dynamic>> practiceSlammerAttrs = {
   },
 };
 
-const stubPracticeAiArcoriId = 'ANM-WTI-GEN001-0002';
+/// Practice AI seat 0 / seat 1 design ids (bundle art — not catalog).
+const List<String> practiceAiArcoriIds = [
+  'PRA-ARC-GEN001-0001',
+  'PRA-ARC-GEN001-0002',
+];
 
 const Map<String, Map<String, String>> practiceFaceDefaults = {
   'ANM-TIG-GEN001-0001': {
     'imageUrl': '/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp',
     'color': '#C6A15B',
   },
-  stubPracticeAiArcoriId: {
-    'imageUrl': '/catalog-media/genesis/animals/ANM-WTI-GEN001-0002.webp',
-    'color': '#A8B0B8',
+  'PRA-ARC-GEN001-0001': {
+    'imageUrl': 'assets/images/arcori/practice_arcori_001.webp',
+    'color': '#6B5B95',
+  },
+  'PRA-ARC-GEN001-0002': {
+    'imageUrl': 'assets/images/arcori/practice_arcori_002.webp',
+    'color': '#C6A15B',
   },
 };
 

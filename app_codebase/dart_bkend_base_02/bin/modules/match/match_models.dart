@@ -89,6 +89,8 @@ class MatchSnapshot {
     required this.seats,
     this.arenaImageUrl,
     this.firstSeatIndex = 0,
+    this.seriesId,
+    this.seriesIndex = 1,
     this.table = const {'pieces': <dynamic>[]},
     this.active,
     this.lastEvent,
@@ -108,6 +110,13 @@ class MatchSnapshot {
 
   /// Seat that opens each round (random at match create).
   final int firstSeatIndex;
+
+  /// Rematch series root (first matchId). Defaults to [matchId] for game 1.
+  final String? seriesId;
+
+  /// 1-based index within the series (1 = opener, 2+ = rematch).
+  final int seriesIndex;
+
   final Map<String, dynamic> table;
   final Map<String, dynamic>? active;
   final Map<String, dynamic>? lastEvent;
@@ -118,6 +127,8 @@ class MatchSnapshot {
     String? phase,
     int? round,
     int? firstSeatIndex,
+    String? seriesId,
+    int? seriesIndex,
     Map<String, dynamic>? matchType,
     List<MatchSeat>? seats,
     Map<String, dynamic>? table,
@@ -140,6 +151,8 @@ class MatchSnapshot {
       matchType: matchType ?? Map<String, dynamic>.from(this.matchType),
       seats: seats ?? this.seats,
       firstSeatIndex: firstSeatIndex ?? this.firstSeatIndex,
+      seriesId: seriesId ?? this.seriesId,
+      seriesIndex: seriesIndex ?? this.seriesIndex,
       table: table ?? this.table,
       active: clearActive ? null : (active ?? this.active),
       lastEvent: clearLastEvent ? null : (lastEvent ?? this.lastEvent),
@@ -148,6 +161,9 @@ class MatchSnapshot {
   }
 
   Map<String, dynamic> toPayload() {
+    final series = (seriesId != null && seriesId!.isNotEmpty)
+        ? seriesId!
+        : matchId;
     return {
       'matchId': matchId,
       'version': version,
@@ -161,6 +177,8 @@ class MatchSnapshot {
       'matchType': Map<String, dynamic>.from(matchType),
       'seats': seats.map((s) => s.toPayload()).toList(),
       'firstSeatIndex': firstSeatIndex,
+      'seriesId': series,
+      'seriesIndex': seriesIndex,
       'table': Map<String, dynamic>.from(table),
       'active': active,
       'lastEvent': lastEvent,
@@ -185,8 +203,14 @@ class MatchSnapshot {
     final firstSeatIndex = firstRaw is int
         ? firstRaw
         : (seats.isEmpty ? 0 : 0);
+    final matchId = payload['matchId']?.toString() ?? '';
+    final seriesRaw = payload['seriesId']?.toString().trim() ?? '';
+    final seriesIndexRaw = payload['seriesIndex'];
+    final seriesIndex = seriesIndexRaw is int && seriesIndexRaw >= 1
+        ? seriesIndexRaw
+        : 1;
     return MatchSnapshot(
-      matchId: payload['matchId']?.toString() ?? '',
+      matchId: matchId,
       version: payload['version'] is int ? payload['version'] as int : 0,
       phase: payload['phase']?.toString() ?? 'waiting',
       round: payload['round'] is int ? payload['round'] as int : 1,
@@ -201,6 +225,8 @@ class MatchSnapshot {
       matchType: matchType,
       seats: seats,
       firstSeatIndex: firstSeatIndex,
+      seriesId: seriesRaw.isNotEmpty ? seriesRaw : matchId,
+      seriesIndex: seriesIndex,
       table: rawTable is Map
           ? Map<String, dynamic>.from(rawTable)
           : const {'pieces': <dynamic>[]},

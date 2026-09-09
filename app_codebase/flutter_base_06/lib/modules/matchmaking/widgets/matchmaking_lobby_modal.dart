@@ -42,7 +42,12 @@ class _LobbyBodyState extends ConsumerState<_LobbyBody> {
     MatchFlowState flow,
     MatchSnapshotState match,
   ) {
-    if (match.matchId != null && match.matchId!.isNotEmpty) return true;
+    // Live match only — ignore leftover ended snapshots after Play New leave.
+    if (match.matchId != null &&
+        match.matchId!.isNotEmpty &&
+        !match.isEnded) {
+      return true;
+    }
     if (lobby.isPromoted) return true;
     if (lobby.phase == 'cancelled') return true;
     if (flow.errorMessage != null && flow.errorMessage!.isNotEmpty) {

@@ -33,6 +33,11 @@ KIN_CLAIM_FAILED = ErrorSpec(
     "Could not claim Kin",
     http_status=500,
 )
+INVALID_MATCH_FINALIZE = ErrorSpec(
+    "avari/invalid_match_finalize",
+    "Invalid match finalize payload",
+    http_status=400,
+)
 
 
 def register_avari_errors(registrar: ModuleErrorRegistrar) -> None:
@@ -45,5 +50,6 @@ def register_avari_errors(registrar: ModuleErrorRegistrar) -> None:
             INVALID_KIN_REGION,
             INVALID_KIN_COLOR,
             KIN_CLAIM_FAILED,
+            INVALID_MATCH_FINALIZE,
         ],
     )

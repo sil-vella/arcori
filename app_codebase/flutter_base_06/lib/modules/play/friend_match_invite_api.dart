@@ -58,7 +58,7 @@ class FriendMatchInviteApiClient {
           'invited_user_id': invitedUserId,
         }),
       );
-      return _parseOutcome(response);
+      return _parseInviteIdOutcome(response);
     } on Exception catch (e) {
       if (_isNetworkError(e)) {
         return const FriendMatchInviteApiOutcome.networkFailure();
@@ -67,7 +67,41 @@ class FriendMatchInviteApiClient {
     }
   }
 
-  FriendMatchInviteApiOutcome<String> _parseOutcome(http.Response response) {
+  Future<FriendMatchInviteApiOutcome<String>> createRematch({
+    required String accessToken,
+    required String priorMatchId,
+    required String seriesId,
+    required int seriesIndex,
+    required List<String> invitedUserIds,
+  }) async {
+    final uri =
+        Uri.parse('$_baseUrl/authuser/friend_match_invites/create_rematch');
+    try {
+      final response = await _client.post(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'priorMatchId': priorMatchId,
+          'seriesId': seriesId,
+          'seriesIndex': seriesIndex,
+          'invitedUserIds': invitedUserIds,
+        }),
+      );
+      return _parseInviteIdOutcome(response);
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const FriendMatchInviteApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
+  }
+
+  FriendMatchInviteApiOutcome<String> _parseInviteIdOutcome(
+    http.Response response,
+  ) {
     Map<String, dynamic>? envelope;
     try {
       envelope = jsonDecode(response.body) as Map<String, dynamic>;

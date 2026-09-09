@@ -3,15 +3,20 @@ import 'package:arcori/modules/match/widgets/arcori_image_prefetch.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('collectArcoriArtUrls always includes practice stubs', () {
+  test('collectArcoriArtUrls includes practice faces + shared back', () {
     final urls = collectArcoriArtUrls();
     expect(urls, isNotEmpty);
+    expect(urls, contains(kArcoriBackAssetPath));
     expect(
       urls.any((u) => u.contains('ANM-TIG-GEN001-0001')),
       isTrue,
     );
     expect(
-      urls.any((u) => u.contains('ANM-WTI-GEN001-0002')),
+      urls.any((u) => u.contains('practice_arcori_001')),
+      isTrue,
+    );
+    expect(
+      urls.any((u) => u.contains('practice_arcori_002')),
       isTrue,
     );
   });

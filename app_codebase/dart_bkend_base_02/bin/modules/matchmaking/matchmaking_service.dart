@@ -258,10 +258,21 @@ class MatchmakingService {
       );
     }
 
+    final rematch = matchType['rematch'] == true ||
+        matchType['rematch']?.toString() == 'true';
     final rawCreateIfMissing = payload['createIfMissing'];
     final createIfMissing = rawCreateIfMissing is bool ? rawCreateIfMissing : true;
 
-    final effectiveTargetSeats = (code == 'invite') ? 2 : targetSeats;
+    var effectiveTargetSeats = (code == 'invite') ? 2 : targetSeats;
+    final rematchTargetRaw = matchType['rematchTargetSeats'];
+    if (rematch) {
+      final rematchTarget = rematchTargetRaw is int
+          ? rematchTargetRaw
+          : int.tryParse(rematchTargetRaw?.toString() ?? '');
+      if (rematchTarget != null && rematchTarget >= 2) {
+        effectiveTargetSeats = rematchTarget;
+      }
+    }
 
     final existing = _store.lobbyForUser(userId);
     if (existing != null && existing.phase == 'waiting') {
@@ -307,9 +318,29 @@ class MatchmakingService {
           'queueKey=$queueKey user=$userId endsAt=${lobby.endsAt.toIso8601String()}',
         );
       }
-      // Invite contract special-case: if the invited user is an offline AI,
-      // we can auto-promote immediately (so the waiting modal doesn't stick).
-      if (code == 'invite' && lobby.members.length == lobby.targetSeats - 1) {
+      // Rematch: fill empty seats from prior AI immediately (1 human + N AI).
+      // Invite (non-rematch): if only one seat open, try AI invitee auto-promote.
+      if (rematch) {
+        final needAi = lobby.targetSeats - lobby.members.length;
+        final rawPrior = matchType['priorAiUserIds'];
+        final priorAi = rawPrior is List
+            ? rawPrior
+                .map((e) => e.toString().trim())
+                .where((e) => e.isNotEmpty)
+                .toList()
+            : <String>[];
+        if (needAi <= 0 || priorAi.length >= needAi) {
+          try {
+            return await promoteLobby(lobby.lobbyId);
+          } on AppError catch (e) {
+            if (e.code == matchmakingInviteNeedsMoreHumans.code) {
+              return lobby;
+            }
+            rethrow;
+          }
+        }
+      } else if (code == 'invite' &&
+          lobby.members.length == lobby.targetSeats - 1) {
         try {
           return await promoteLobby(lobby.lobbyId);
         } on AppError catch (e) {
@@ -337,18 +368,40 @@ class MatchmakingService {
       return await promoteLobby(lobby.lobbyId);
     }
 
-    // Invite contract special-case: if we have host + one missing seat,
-    // and that missing invitee is an offline AI, auto-promote immediately.
-    final isInvite = lobby.matchType['code']?.toString() == 'invite';
-    if (isInvite && lobby.members.length == lobby.targetSeats - 1) {
-      try {
-        return await promoteLobby(lobby.lobbyId);
-      } on AppError catch (e) {
-        if (e.code == matchmakingInviteNeedsMoreHumans.code) {
-          // Invited seat isn't an AI (or resolve failed); stay waiting.
-          return lobby;
+    // Rematch / invite: fill remaining seats from prior AI or offline AI invitee.
+    final lobbyRematch = lobby.matchType['rematch'] == true ||
+        lobby.matchType['rematch']?.toString() == 'true';
+    if (lobbyRematch) {
+      final needAi = lobby.targetSeats - lobby.members.length;
+      final rawPrior = lobby.matchType['priorAiUserIds'];
+      final priorAi = rawPrior is List
+          ? rawPrior
+              .map((e) => e.toString().trim())
+              .where((e) => e.isNotEmpty)
+              .toList()
+          : <String>[];
+      if (needAi > 0 && priorAi.length >= needAi) {
+        try {
+          return await promoteLobby(lobby.lobbyId);
+        } on AppError catch (e) {
+          if (e.code == matchmakingInviteNeedsMoreHumans.code) {
+            return lobby;
+          }
+          rethrow;
         }
-        rethrow;
+      }
+    } else {
+      final isInvite = lobby.matchType['code']?.toString() == 'invite';
+      if (isInvite && lobby.members.length == lobby.targetSeats - 1) {
+        try {
+          return await promoteLobby(lobby.lobbyId);
+        } on AppError catch (e) {
+          if (e.code == matchmakingInviteNeedsMoreHumans.code) {
+            // Invited seat isn't an AI (or resolve failed); stay waiting.
+            return lobby;
+          }
+          rethrow;
+        }
       }
     }
     return lobby;
@@ -408,8 +461,34 @@ class MatchmakingService {
       List<String> aiIds = const [];
 
       final isInvite = lobby.matchType['code']?.toString() == 'invite';
+      final rematch = lobby.matchType['rematch'] == true ||
+          lobby.matchType['rematch']?.toString() == 'true';
       if (needAi > 0) {
-        if (isInvite) {
+        if (rematch) {
+          // Rematch: never random-fill. Re-seat prior AI ids only.
+          final rawPrior = lobby.matchType['priorAiUserIds'];
+          final priorAi = rawPrior is List
+              ? rawPrior
+                  .map((e) => e.toString().trim())
+                  .where((e) => e.isNotEmpty && !exclude.contains(e))
+                  .toList()
+              : <String>[];
+          if (priorAi.length < needAi) {
+            if (LOGGING_SWITCH) {
+              customlog(
+                'matchmaking: rematch missing prior AI lobby=$lobbyId '
+                'need=$needAi have=${priorAi.length}',
+              );
+            }
+            throw AppError(matchmakingInviteNeedsMoreHumans);
+          }
+          aiIds = priorAi.take(needAi).toList();
+          if (LOGGING_SWITCH) {
+            customlog(
+              'matchmaking: rematch prior AI fill ids=$aiIds lobby=$lobbyId',
+            );
+          }
+        } else if (isInvite) {
           // For invite lobbies we normally require a 2nd human (no AI fill).
           // If the invited user is an offline AI, we auto-fill that seat.
           if (needAi != 1) {

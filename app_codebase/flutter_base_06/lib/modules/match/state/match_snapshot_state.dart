@@ -107,6 +107,8 @@ class MatchSnapshotState {
     this.matchType = const {},
     this.seats = const [],
     this.firstSeatIndex = 0,
+    this.seriesId,
+    this.seriesIndex = 1,
     this.table = const {'pieces': <dynamic>[]},
     this.active,
     this.result,
@@ -124,6 +126,8 @@ class MatchSnapshotState {
   final Map<String, dynamic> matchType;
   final List<MatchSeatView> seats;
   final int firstSeatIndex;
+  final String? seriesId;
+  final int seriesIndex;
   final Map<String, dynamic> table;
   final Map<String, dynamic>? active;
   final Map<String, dynamic>? result;
@@ -152,6 +156,8 @@ class MatchSnapshotState {
     Map<String, dynamic>? matchType,
     List<MatchSeatView>? seats,
     int? firstSeatIndex,
+    String? seriesId,
+    int? seriesIndex,
     Map<String, dynamic>? table,
     Map<String, dynamic>? active,
     Map<String, dynamic>? result,
@@ -174,6 +180,8 @@ class MatchSnapshotState {
       matchType: matchType ?? this.matchType,
       seats: seats ?? this.seats,
       firstSeatIndex: firstSeatIndex ?? this.firstSeatIndex,
+      seriesId: seriesId ?? this.seriesId,
+      seriesIndex: seriesIndex ?? this.seriesIndex,
       table: table ?? this.table,
       active: clearActive ? null : (active ?? this.active),
       result: result ?? this.result,
@@ -192,8 +200,14 @@ class MatchSnapshotState {
     final rawType = payload['matchType'];
     final rawTable = payload['table'];
     final firstRaw = payload['firstSeatIndex'];
+    final matchId = payload['matchId']?.toString();
+    final seriesRaw = payload['seriesId']?.toString().trim() ?? '';
+    final seriesIndexRaw = payload['seriesIndex'];
+    final seriesIndex = seriesIndexRaw is int && seriesIndexRaw >= 1
+        ? seriesIndexRaw
+        : 1;
     return MatchSnapshotState(
-      matchId: payload['matchId']?.toString(),
+      matchId: matchId,
       version: payload['version'] is int ? payload['version'] as int : 0,
       phase: payload['phase']?.toString(),
       round: payload['round'] is int ? payload['round'] as int : 1,
@@ -210,6 +224,8 @@ class MatchSnapshotState {
           : const <String, dynamic>{},
       seats: seats,
       firstSeatIndex: firstRaw is int ? firstRaw : 0,
+      seriesId: seriesRaw.isNotEmpty ? seriesRaw : matchId,
+      seriesIndex: seriesIndex,
       table: rawTable is Map
           ? Map<String, dynamic>.from(rawTable)
           : const {'pieces': <dynamic>[]},

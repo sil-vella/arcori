@@ -108,6 +108,9 @@ class ClaimKinTests(unittest.TestCase):
         ), patch(
             "modules.avari.avari_repository.count_player_kin", return_value=0
         ), patch(
+            "modules.avari.avari_repository.ensure_design_access",
+            return_value=SimpleNamespace(design_id="KIN-X", source="kin"),
+        ) as grant_access, patch(
             "modules.avari.avari_repository.serialize_kin",
             return_value={
                 "chosenName": "Bronze",
@@ -122,9 +125,15 @@ class ClaimKinTests(unittest.TestCase):
         self.assertTrue(avari.onboarding_genesis_created)
         session.add.assert_called_once()
         write_media.assert_called_once()
+        grant_access.assert_called_once()
+        grant_kwargs = grant_access.call_args.kwargs
+        self.assertEqual(grant_kwargs["user_id"], self.user_id)
+        self.assertEqual(grant_kwargs["source"], "kin")
+        self.assertTrue(str(grant_kwargs["design_id"]).startswith("KIN-"))
         added = session.add.call_args[0][0]
         self.assertEqual(added.subtheme, "Guardians")
         self.assertEqual(added.catalog_design["color"], "#C6A15B")
+        self.assertEqual(added.catalog_design["selectionWeight"], 3.0)
         self.assertEqual(
             frozenset(added.catalog_design.keys()),
             __import__(

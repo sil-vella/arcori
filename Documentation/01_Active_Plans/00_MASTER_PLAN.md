@@ -6,7 +6,7 @@
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
-**Next app build:** celebration / Match Summary + FastAPI durable rewards. **Inventory slammer + disc face** — [inventory-slammer-and-disc-art.md](inventory-slammer-and-disc-art.md).
+**Next app build:** Celebration anims + FastAPI durable reward writers. Rematch invite wiring shipped — [core-match-loop.md](core-match-loop.md).
 
 **Narrative:** [03_CASE_STUDY.md](03_CASE_STUDY.md) — full game implementation case study (design → matchmaking; template infra out of scope).
 
@@ -49,7 +49,9 @@ Open (ordered):
 - [x] **Inventory slammer + disc face** (owned slammers, circulating Arcori on Avari, catalog art on discs) — [inventory-slammer-and-disc-art.md](inventory-slammer-and-disc-art.md)
 - [x] **Match arena from Arcori regions** (Quick Start / Invite background) — [match-arena-from-arcori.md](match-arena-from-arcori.md)
 - [x] **Arena mural locked to stack POV** (rest 1:1 crop, contain on zoom-out, opaque under stack) — [arena-pov-zoom.md](arena-pov-zoom.md)
-- [ ] Celebration + Match Summary + FastAPI durable rewards *(next)*
+- [x] **Post-match modal shell** (hold snapshot; Done / Play New; Rematch stub; finalize stub) — [core-match-loop.md](core-match-loop.md)
+- [x] **Rematch (invite-style)** — `create_rematch` + series `{root}_{NNN}` matchIds; same prior AI when no other humans — [core-match-loop.md](core-match-loop.md)
+- [ ] Celebration anims + FastAPI durable reward writers *(next)* — [core-match-loop.md](core-match-loop.md)
 - [ ] **Kin creation** (wizard + Genesis claim live; production Lottie / idle anims open) — [kin-creation.md](kin-creation.md)
 - [ ] Home sink Trove • PLAY • Market; first-time / returning startup
 - [ ] My Mastery tab + Trove UI + economy writers
@@ -96,7 +98,7 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 | [arena-pov-zoom.md](arena-pov-zoom.md) | Completed | Arena mural shares stack camera; rest is 1:1 crop (no upscale); contain on zoom-out; opaque under stack |
 | [random-first-player.md](random-first-player.md) | Completed | Random `firstSeatIndex` at match start; wrap order every round |
 | [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
-| [core-match-loop.md](core-match-loop.md) | Spec | Matchmaking → match → celebration → Match Summary → exits |
+| [core-match-loop.md](core-match-loop.md) | In Progress | Rematch invite wiring done; celebration/writers next |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Partial | Standings + Detail tab; My Mastery/Trove still open |
 | [catalog-hot-reload.md](catalog-hot-reload.md) | Done | Catalog JSON mtime cache, authuser APIs, Flutter Velora |
 | [pioneers-catalog-expansion.md](pioneers-catalog-expansion.md) | Completed | 75 new Genesis Arcori (Nostalgia / Music / Television); Pioneers stays original 10 |

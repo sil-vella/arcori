@@ -33,6 +33,9 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
   Duration practicePostSlamAnimHold = postSlamAnimHoldDefault;
   Random? practiceTurnRandom;
 
+  /// Match ids left after post-match — ignore late WS frames (Play New race).
+  final Set<String> _ignoredMatchIds = <String>{};
+
   @override
   MatchSnapshotState build() {
     ref.listen<MatchPending?>(matchReplayProvider, (_, next) {
@@ -45,17 +48,63 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     final pending = ref.read(matchReplayProvider);
     if (pending != null) {
       Future.microtask(ref.read(matchReplayProvider.notifier).take);
+      final id = pending.data['matchId']?.toString().trim() ?? '';
+      if (id.isNotEmpty && _ignoredMatchIds.contains(id)) {
+        if (LOGGING_SWITCH) {
+          customlog('match: drop stale pending on build matchId=$id');
+        }
+        return const MatchSnapshotState();
+      }
       return _applyFrame(const MatchSnapshotState(), pending.data);
     }
     return const MatchSnapshotState();
   }
 
-  void clear() {
+  void clear({String? ignoreMatchId}) {
+    final ignore = (ignoreMatchId ?? '').trim();
+    if (ignore.isNotEmpty) {
+      _ignoredMatchIds.add(ignore);
+      if (LOGGING_SWITCH) {
+        customlog('match: clear+ignore matchId=$ignore');
+      }
+    }
+    // Drop any queued WS frame so practice / Play New cannot revive the
+    // previous ended online snapshot when build() or reconnect races.
+    final pending = ref.read(matchReplayProvider);
+    if (pending != null) {
+      ref.read(matchReplayProvider.notifier).take();
+      if (LOGGING_SWITCH) {
+        final pid = pending.data['matchId']?.toString() ?? '-';
+        customlog('match: clear dropped pending replay matchId=$pid');
+      }
+    }
     _humanTurnWait = null;
     state = const MatchSnapshotState();
   }
 
+  bool isIgnoredMatchId(String? matchId) {
+    final id = (matchId ?? '').trim();
+    return id.isNotEmpty && _ignoredMatchIds.contains(id);
+  }
+
   void applyWsFrame(Map<String, dynamic> data) {
+    final id = data['matchId']?.toString().trim() ?? '';
+    if (id.isNotEmpty && _ignoredMatchIds.contains(id)) {
+      if (LOGGING_SWITCH) {
+        customlog('match: drop stale frame matchId=$id');
+      }
+      return;
+    }
+    // Local practice must not be overwritten by late online room frames.
+    final current = state.matchId?.trim() ?? '';
+    if (current.startsWith('local_practice_') &&
+        id.isNotEmpty &&
+        !id.startsWith('local_practice_')) {
+      if (LOGGING_SWITCH) {
+        customlog('match: drop online frame during practice matchId=$id');
+      }
+      return;
+    }
     state = _applyFrame(state, data);
   }
 
@@ -96,7 +145,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         kind: 'ai',
         score: 0,
         connected: true,
-        arcoriIds: const [stubPracticeAiArcoriId],
+        arcoriIds: [practiceAiArcoriIds[0]],
         slammerId: stubSlammerId,
       ),
       MatchSeatView(
@@ -105,7 +154,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         kind: 'ai',
         score: 0,
         connected: true,
-        arcoriIds: const [stubPracticeAiArcoriId],
+        arcoriIds: [practiceAiArcoriIds[1]],
         slammerId: stubSlammerId,
       ),
     ];

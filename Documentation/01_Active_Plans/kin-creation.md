@@ -91,6 +91,7 @@ Avari Profile → Create Kin
 - [x] LottieDelegates live preview (hue/sat/color)
 - [x] Region + Arcori color + name on customize; claim `POST /authuser/avari/kin`
 - [x] `catalog_design` key parity with regular Arcori; `02_kin.json` aligned
+- [x] Claimed Kin is circulating catalog stock (`selectionWeight` 3.0) + creator `player_design_access` (`source=kin`)
 - [ ] Replace stub with externally authored Bronze Genie Lottie (same backend path)
 - [ ] Adjustments + predefined animations on designated layers
 - [ ] Gate Create Kin when server Kin already claimed (UI done; product polish)
@@ -98,7 +99,7 @@ Avari Profile → Create Kin
 
 ## Current Progress
 
-Client wizard + server Genesis claim shipped. Per-Kin design + Lottie files under `/media/kin/`. Velora theme `KIN` lists claimed Kins. Catalog design mirrors regular Arcori field-for-field.
+Client wizard + server Genesis claim shipped. Per-Kin design + Lottie files under `/media/kin/`. Velora theme `KIN` lists claimed Kins. Catalog design mirrors regular Arcori field-for-field. Claim grants the creator circulating play/mastery access so the Kin is selectable match stock.
 
 ## Next Steps
 
@@ -121,6 +122,7 @@ Production Bronze Genie Lottie drop-in. Designated-layer idle animations. Alembi
 ## Notes
 
 - **Not in this plan:** 10 circulating starter access, permanent slammer grant, guided practice, intros, Home sink.
+- Claimed Kin **is** match stock: Active catalog design + `player_design_access` for the creator (`source=kin`). Other players still need grants (starter / packs) to select it.
 - Local saves: documents `kin_saves/` + secure-storage active `KSAVE` serial.
 - Customize preview applies live `LottieDelegates`; save bakes fills; claim posts baked Lottie JSON.
 - Disc rim/back = catalog `color` from the 10 predefined Arcori accents (same as inventory discs).

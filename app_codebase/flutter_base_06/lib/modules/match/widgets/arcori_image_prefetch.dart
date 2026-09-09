@@ -6,17 +6,24 @@ import '../input/slam_resolver.dart' show practiceFaceDefaults;
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
-/// Absolute catalog-media URLs to warm before a match (Play screen / stack).
+/// Media paths to warm before a match (Play screen / stack).
 ///
-/// Always includes practice Tiger / White Tiger stubs. Pass inventory and
-/// table-piece URLs as [extra].
+/// Includes practice faces + shared back. Pass inventory / table URLs as [extra].
+/// Bundle assets stay as `assets/...`; catalog paths are absolute http(s) URLs.
 List<String> collectArcoriArtUrls({Iterable<String?> extra = const []}) {
   final out = <String>{};
   void add(String? raw) {
-    final url = resolveMediaUrl(raw);
+    final path = raw?.trim() ?? '';
+    if (path.isEmpty) return;
+    if (isBundleAssetMedia(path)) {
+      out.add(bundleAssetPath(path));
+      return;
+    }
+    final url = resolveMediaUrl(path);
     if (url.isNotEmpty) out.add(url);
   }
 
+  out.add(kArcoriBackAssetPath);
   for (final face in practiceFaceDefaults.values) {
     add(face['imageUrl']);
   }
@@ -26,7 +33,7 @@ List<String> collectArcoriArtUrls({Iterable<String?> extra = const []}) {
   return out.toList(growable: false);
 }
 
-/// Decode catalog art into Flutter's [ImageCache] so a later flip is instant.
+/// Decode art into Flutter's [ImageCache] so a later flip is instant.
 Future<void> precacheArcoriArt(
   BuildContext context,
   Iterable<String> urls,
@@ -34,8 +41,12 @@ Future<void> precacheArcoriArt(
   var n = 0;
   for (final url in urls) {
     if (!context.mounted) return;
+    final ImageProvider provider =
+        isBundleAssetMedia(url) || url.startsWith('assets/')
+            ? AssetImage(bundleAssetPath(url))
+            : NetworkImage(url);
     await precacheImage(
-      NetworkImage(url),
+      provider,
       context,
       onError: (e, _) {
         if (LOGGING_SWITCH) {
