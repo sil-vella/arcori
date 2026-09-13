@@ -8,7 +8,7 @@ Related: [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [match-hot-state.
 
 ## Objective
 
-After players are seated in the online match stub, pick one Arcori per seat from that player's accessible **circulating** list using `04_selection_weights.json` (printed rarity × region standing). Weight failures fall back to random **among that player's circulating access only** — never the global catalog. Log picks. No slam or other match-rule changes.
+After players are seated in the online match stub, pick one Arcori per seat from that player's accessible **circulating** list using design **`selectionWeight`** × region standing (`04_selection_weights.json`). Weight failures fall back to random **among that player's circulating access only** — never the global catalog. Log picks. No slam or other match-rule changes.
 
 ## Flow
 

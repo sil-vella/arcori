@@ -323,7 +323,6 @@ def build_design(
         "finish": "Standard",
         "color": COLOR,
         "effect": "None",
-        "printedRarity": "Common",
         "selectionWeight": WEIGHT,
         "series": SERIES_DISPLAY,
         "worldState": "Active",

@@ -73,7 +73,6 @@ def design_summary(
         "design": design.get("design"),
         "theme": design.get("theme"),
         "subtheme": design.get("subtheme"),
-        "printedRarity": design.get("printedRarity"),
         "selectionWeight": design.get("selectionWeight"),
         "series": design.get("series"),
         "seriesKey": series_key,
@@ -103,13 +102,11 @@ def get_meta() -> dict[str, Any]:
     themes = _load_guarded(loader.load_meta, "themes_subthemes")
     regions = enrich_regions_meta(_load_guarded(loader.load_meta, "regions"))
     kin = _load_guarded(loader.load_meta, "kin")
-    rarities = _load_guarded(loader.load_meta, "printed_rarity")
     return strip_for_client(
         {
             "themes_subthemes": themes,
             "regions": regions,
             "kin": kin,
-            "printed_rarity": rarities,
         }
     )
 

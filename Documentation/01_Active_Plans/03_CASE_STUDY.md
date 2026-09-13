@@ -83,6 +83,7 @@ These names are product decisions, not cosmetic labels. They drove schemas, scre
 | **Legacy Owner** | Preservation title | Earned when a mint enters Trove |
 | **Generation Creator** | Historical title | Named on a preserved generation |
 | **Mastery** | Progress on a circulating design (not ownership) | Own played: 0→−1 / 1→0 / 2→+2; other flipped: 0→0 / 1→+1 / 2→+2 |
+| **Mastery Value** | Density label from weighted mastery vs circulating catalog size | `Value=Σ pts×(10/w)`; `density=Value/N`; Fair→…→Priceless; profile label only |
 | **Trove** | Personal vault of **minted closed** Arcori only | Sink destination; empty until closures |
 | **Museum** | World factual history of closed gens | Not live stats; not personal Trove |
 | **Chronicle** | Mythology | What cannot be proven |
@@ -525,11 +526,13 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Five launch regions; standing −2…+2 | Politics without good/evil factions; travel and collecting stay open | Region Catalog `01_regions.json`; region-to-region standings, not design IDs |
 | Pioneers series exists | First Trove mints should be reachable before Genesis generations fill | Legacy 100 / 200 vs Genesis 500 / 1000; ten seed designs only (`SER002`) |
 | Foundations series | Civilization / society catalog between Pioneers and Genesis | Legacy 250 / 500; 40 themes × 3 designs (`SER003`); art `003_foundations/{theme}/` |
-| Creation series | Primordial Light / Dark pair before Genesis numbering | `SER000`; art `000_creation/`; The Light→ASH, The Dark→AMB; Rare + `selectionWeight` 0.1; not in starter pool |
+| Creation series | Primordial Light / Dark pair before Genesis numbering | `SER000`; art `000_creation/`; The Light→ASH, The Dark→AMB; `selectionWeight` **0.01**; not in starter pool |
+| Pioneers selectionWeight | Ten seed companions stay maximally common for early mint / starter common band | All Pioneers designs `selectionWeight` **10.0** |
+| Starter pack bands | New profiles get mostly common + one scarcer echo | Gen/Pio only: **9× [8–10]** + **1× [3–4]** weight; not Creation/Foundations |
 | Match Arcori pick after seats | Players do not choose loadout online; hostility pairs more often | Pool = that seat’s circulating `player_design_access` (DB), designs resolved via `get_design` (static + player Kin). Weighted pick (`04_selection_weights.json`) else random in-pool; never global catalog. **Unique ids across seats** (exclude already chosen). Trove = ownership only, not match stock. Access requires mastery > 0 (own Kin floored at 100). |
 | Mastery-gated access pool | Collection grows by flipping others; dead progress leaves the pool | Finalize: other +mastery grants `source=mastery` access; 0 mastery revokes (except creator Kin floor 100). Starters seed mastery 1 if still 0. |
 | Match arena from seated regions | The table should feel like the lands that showed up | FastAPI `select_arena` after Arcori ids; 2+ same region → that land’s arenas; else random catalog region. Dart stamps `arenaId`+`arenaImageUrl` only for `quickStart`/`invite`. Special Event later. |
-| Match Gatherer Arcori | Extra non-player echo from the match land; not a seat / not a “host” | Same `select_arena` response: circulating catalog in chosen region (any series), exclude SLM/KIN/slammer + seated ids; weight `04_selection_weights` printedRarity. Snapshot `gathererArcoriId` + catalog freeze. Practice/SE: none. Rematch re-picks. |
+| Match Gatherer Arcori | Extra non-player echo from the match land; not a seat / not a “host” | Same `select_arena` response: circulating catalog in chosen region (any series), exclude SLM/KIN/slammer + seated ids; weight design `selectionWeight`. Snapshot `gathererArcoriId` + catalog freeze. Practice/SE: none. Rematch re-picks. |
 | Arena mural locked to stack POV | Pulling the camera back for a wide scatter should pull the place back with it | One Flutter camera: mural laid out oversized (`viewport / kStackPovFitMin`), discs at rest Ø, camera scale 1→min so we never upscale a screen bitmap. Table is opaque and under the stack. HUD stays unzoomed. |
 | Online stub turn stages before end | Prove seat order / round / slam event without physics | Dart `MatchStubLoop` after `startFromLobby`: 2×N stub slams (`lastEvent` includes `slammerId`); Flutter waits for `ended` |
 | Forge2D slam physics (Dart SSOT) | Discs can hit each other mid-air and change path; flip feels physical | Superseded by 3D thin-cylinder sim (kept as history) |
@@ -545,6 +548,9 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
 | Gold Cap → Gold Arcori; fee 2 frags; +1 frag/flip | Wallet currency feels like solid-gold Arcori, not coins; fee/reward tied to flips | `gold_arcori` + `gold_fragments`; finalize deducts fee then adds flips; 4:1 normalize; signup `gold_arcori=20`; not catalog |
 | Mastery: own vs other curves | Your walked piece is risky (blank match hurts); flipping others is always non-negative | Own seat flips 0/−1, 1/0, 2/+2 on played design; other actor flips 0/0, 1/+1, 2/+2; practice skip; `player_mastery` per user; profile `access.masteryPoints` — [mastery.md](mastery.md) |
+| Mastery Value = selectionWeight-scaled sum | Raw point totals treat common and rare the same | `Σ masteryPoints × (10.0 / selectionWeight)`; clamp `[0.01, 10.00]`. No printedRarity. |
+| Mastery Value label vs circulating N | Absolute score drifts as catalog grows; players need a stable Fair→Priceless read | `density = Value / N` (`N` = circulating playable catalog); bands Fair / Notable / Sought / Coveted / Exquisite / Priceless. Profile shows label only. |
+| selectionWeight only (no printedRarity) | One number for how-often and Mastery Value; tiers were confusing | Design field `0.01`…`10.00`; match/Gatherer × region mult from `04_selection_weights`; deleted `03_printed_rarity.json` |
 | Join-or-create + 5s + AI fill | Solo players still play | Shared matchmaking for quick/event |
 | Friend Match via notification reply | Guest can accept from any screen; invite is one-shot (soft-deleted after reply / lobby timeout) | `create_for_user` instant + `data.response` reply; cancel + inbox prune clear stale popups |
 | Invite = 2 humans, no AI | Friend Match is a human table | Separate invite queueKey; cancel if second human never arrives |

@@ -102,7 +102,7 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 | [random-first-player.md](random-first-player.md) | Completed | Random `firstSeatIndex` at match start; wrap order every round |
 | [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
 | [core-match-loop.md](core-match-loop.md) | In Progress | Rematch + gold writers done; mastery curves locked; celebration next |
-| [mastery.md](mastery.md) | Writers live | Own/other finalize + collection masteryPoints; My Mastery tab open |
+| [mastery.md](mastery.md) | Writers live | Own/other finalize + collection masteryPoints; Mastery Value formula locked; My Mastery tab / profile wire open |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Partial | Standings + Detail tab; My Mastery/Trove still open |
 | [catalog-hot-reload.md](catalog-hot-reload.md) | Done | Catalog JSON mtime cache, authuser APIs, Flutter Velora |
 | [pioneers-catalog-expansion.md](pioneers-catalog-expansion.md) | Completed | 75 new Genesis Arcori (Nostalgia / Music / Television); Pioneers stays original 10 |

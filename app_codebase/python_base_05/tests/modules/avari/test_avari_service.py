@@ -63,6 +63,7 @@ class AvariServiceTests(unittest.TestCase):
                 "color": "#AABBCC",
                 "worldState": "Active",
                 "theme": "Kin",
+                "selectionWeight": 3.0,
                 "generation": {"roman": "I", "number": 1},
                 "legacy": {"preservationRequirement": 500},
             },
@@ -124,6 +125,9 @@ class AvariServiceTests(unittest.TestCase):
         self.assertEqual(payload["access"][1]["masteryPoints"], 3)
         self.assertEqual(payload["access"][1].get("mintReach"), 500)
         self.assertEqual(payload["mastery"]["designsTracked"], 1)
+        # Tiger 3 @ 3.0 + Kin 4 @ 3.0 → value 23; density 23/N → Fair for large N
+        self.assertEqual(payload["mastery"]["masteryValueLabel"], "Fair")
+        self.assertNotIn("masteryValue", payload["mastery"])
         self.assertTrue(payload["access"][0].get("displayName"))
         self.assertEqual(payload["slammers"][0]["designId"], "SLM-STR-SER001-0001")
         self.assertTrue(payload["slammers"][0].get("displayName"))

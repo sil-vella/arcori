@@ -1,9 +1,12 @@
-"""Match-time Arcori selection from 04_selection_weights.json.
+"""Match-time Arcori selection from design selectionWeight × region standing.
 
 After seats exist, pick one design per seat from that player's accessible list
-(still in circulation). Prefer weighted score (printedRarity × region standing);
-if weights fail or the weighted pool is empty, random among that player's
-circulating candidates only. Never pick from the global circulating catalog.
+(still in circulation). Prefer weighted score (design.selectionWeight × region
+standing from 04_selection_weights.json); if weights fail or the weighted pool
+is empty, random among that player's circulating candidates only. Never pick
+from the global circulating catalog.
+
+selectionWeight on each design: 0.01 (rarest) … 10.00 (most common).
 
 Candidate ids come from DB (`player_design_access` or seat `candidateIds`).
 Design docs resolve via catalog `get_design` (static JSON + player Kin files/DB)
@@ -29,6 +32,10 @@ LOGGING_SWITCH = True
 
 SOURCE_WEIGHTED = "weighted"
 SOURCE_RANDOM_FALLBACK = "random_fallback"
+
+SELECTION_WEIGHT_MIN = 0.01
+SELECTION_WEIGHT_MAX = 10.0
+SELECTION_WEIGHT_DEFAULT = 3.0
 
 
 def _is_circulating(design: dict[str, Any] | None) -> bool:
@@ -89,41 +96,45 @@ def _load_weights_table() -> tuple[dict[str, Any] | None, str | None]:
         return None, f"weights_load_failed:{exc}"
     if not isinstance(raw, dict):
         return None, "weights_not_object"
-    rarity = raw.get("printedRarity")
     region = raw.get("regionStanding")
-    if not isinstance(rarity, dict) or not isinstance(region, dict):
+    if not isinstance(region, dict):
         return None, "weights_shape_invalid"
-    weights = rarity.get("weights")
     pairs = region.get("pairs")
-    if not isinstance(weights, dict) or not isinstance(pairs, dict):
+    if not isinstance(pairs, dict):
         return None, "weights_shape_invalid"
     return raw, None
 
 
-def _rarity_weight(table: dict[str, Any], design: dict[str, Any]) -> float | None:
-    rarity_block = table["printedRarity"]
-    weights = rarity_block["weights"]
-    printed = design.get("printedRarity")
-    if printed is None or str(printed).strip() == "":
-        missing = rarity_block.get("missingPrintedRarity", 3.0)
-        try:
-            return float(missing)
-        except (TypeError, ValueError):
-            return 3.0
-    key = str(printed).strip()
-    if key not in weights:
-        missing = rarity_block.get("missingPrintedRarity", 3.0)
-        try:
-            return float(missing)
-        except (TypeError, ValueError):
-            return 3.0
-    raw = weights[key]
+def _design_selection_weight(
+    table: dict[str, Any],
+    design: dict[str, Any],
+) -> float | None:
+    """Design selectionWeight for match scoring (clamped). None = exclude."""
+    sw_block = table.get("selectionWeight")
+    if not isinstance(sw_block, dict):
+        sw_block = {}
+    raw = design.get("selectionWeight")
     if raw is None:
-        return None
+        try:
+            missing = float(sw_block.get("missingSelectionWeight", SELECTION_WEIGHT_DEFAULT))
+        except (TypeError, ValueError):
+            missing = SELECTION_WEIGHT_DEFAULT
+        return max(SELECTION_WEIGHT_MIN, min(SELECTION_WEIGHT_MAX, missing))
     try:
-        return float(raw)
+        val = float(raw)
     except (TypeError, ValueError):
         return None
+    if val <= 0:
+        return None
+    try:
+        lo = float(sw_block.get("min", SELECTION_WEIGHT_MIN))
+    except (TypeError, ValueError):
+        lo = SELECTION_WEIGHT_MIN
+    try:
+        hi = float(sw_block.get("max", SELECTION_WEIGHT_MAX))
+    except (TypeError, ValueError):
+        hi = SELECTION_WEIGHT_MAX
+    return max(lo, min(hi, val))
 
 
 def _region_multiplier(
@@ -240,12 +251,12 @@ def _pick_one(
         found = _resolve_design(design_id)
         if found is None or not _is_circulating(found):
             continue
-        rarity_w = _rarity_weight(table, found)
-        if rarity_w is None or rarity_w <= 0:
+        sel_w = _design_selection_weight(table, found)
+        if sel_w is None or sel_w <= 0:
             continue
         region = _region_of(found)
         mult = _region_multiplier(table, region, seated_regions)
-        score = rarity_w * mult
+        score = sel_w * mult
         if score <= 0:
             continue
         pool_ids.append(design_id)
@@ -371,6 +382,34 @@ def _is_playable_match_arcori(design: dict[str, Any]) -> bool:
     return True
 
 
+def count_circulating_playable_arcori() -> int:
+    """Global N for Mastery Value density: Active playable static catalog designs."""
+    seen: set[str] = set()
+    try:
+        docs = loader.list_theme_documents()
+    except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+        return 0
+    for doc in docs:
+        if not isinstance(doc, dict):
+            continue
+        doc_theme = str(doc.get("themeCode") or "").strip().upper()
+        if doc_theme in {"SLM", "KIN"}:
+            continue
+        designs = doc.get("designs")
+        if not isinstance(designs, list):
+            continue
+        for design in designs:
+            if not isinstance(design, dict):
+                continue
+            if not _is_playable_match_arcori(design):
+                continue
+            iid = str(design.get("internalId") or "").strip()
+            if not iid or iid in seen:
+                continue
+            seen.add(iid)
+    return len(seen)
+
+
 def _circulating_ids_in_region(region_code: str) -> list[str]:
     """Static catalog ids in region (any series), playable match stock only."""
     code = (region_code or "").strip().upper()
@@ -414,7 +453,7 @@ def select_gatherer_for_region(
 ) -> dict[str, Any] | None:
     """Weighted Gatherer from circulating catalog designs in ``region_code``.
 
-    Uses ``04_selection_weights`` printedRarity only. Excludes seated player
+    Uses each design's ``selectionWeight`` (0.01–10.00). Excludes seated player
     ids, slammers, and Kin. Returns None if the pool is empty.
     """
     picker = rng or random.Random()
@@ -454,11 +493,11 @@ def select_gatherer_for_region(
         found = _resolve_design(design_id)
         if found is None or not _is_playable_match_arcori(found):
             continue
-        rarity_w = _rarity_weight(table, found)
-        if rarity_w is None or rarity_w <= 0:
+        sel_w = _design_selection_weight(table, found)
+        if sel_w is None or sel_w <= 0:
             continue
         pool_ids.append(design_id)
-        pool_weights.append(rarity_w)
+        pool_weights.append(sel_w)
 
     if not pool_ids:
         chosen = picker.choice(pool)

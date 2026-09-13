@@ -28,10 +28,6 @@ def catalog_root(tmp_path: Path):
     )
     (root / "01_regions.json").write_text(json.dumps({"regions": []}), encoding="utf-8")
     (root / "02_kin.json").write_text(json.dumps({"kin": []}), encoding="utf-8")
-    (root / "03_printed_rarity.json").write_text(
-        json.dumps({"rarities": []}),
-        encoding="utf-8",
-    )
     (root / "04_selection_weights.json").write_text(
         json.dumps({"version": 1}),
         encoding="utf-8",

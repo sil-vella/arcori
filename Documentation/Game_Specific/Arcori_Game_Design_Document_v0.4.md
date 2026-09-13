@@ -1,7 +1,7 @@
 # Arcori Game Design Document
 
 Working Draft v0.4  
-**Last aligned:** 2026-09-11 (Mastery own vs other curves)
+**Last aligned:** 2026-09-13 (Mastery Value label Fair→Priceless)
 
 ## Gameplay
 
@@ -87,7 +87,36 @@ Starter balanced slammer. Rechargeable variants with Impact, Precision, Control,
 
 Practice skips mastery. Persist on `player_mastery`; floor at 0 on write. Detail: [mastery.md](../01_Active_Plans/mastery.md).
 
-Events keep design identity; mastery continues on the design’s active generation rules.
+### Selection weight (sole rarity signal)
+
+Each design has one number: **`selectionWeight`** from **0.01** (rarest) to **10.00** (most common). There is **no** `printedRarity` tier. The same field drives match seat pick, Gatherer pick, and Mastery Value.
+
+### Mastery Value (player aggregate → profile label)
+
+```text
+MasteryValue = Σ_i ( masteryPoints_i × (10.0 / selectionWeight_i) )
+N            = circulating playable catalog Arcori count
+               (Active; exclude SLM / KIN / slammer)
+density      = MasteryValue / max(1, N)
+```
+
+- Sum every `player_mastery` row for that Avari.
+- Clamp each design’s `selectionWeight` to `[0.01, 10.00]` (missing → 3.0).
+- Rarer (lower weight) → higher value per point.
+- **N** is global catalog size (not the player’s pool). Larger catalog → same value ranks lower.
+
+Profile shows **label only** (backend computes). Density bands:
+
+| Label | Density |
+|-------|---------|
+| Fair | `< 0.5` |
+| Notable | `0.5 – < 1.5` |
+| Sought | `1.5 – < 4` |
+| Coveted | `4 – < 10` |
+| Exquisite | `10 – < 25` |
+| Priceless | `≥ 25` |
+
+Wire: `mastery.masteryValueLabel`. Events keep design identity; mastery continues on the design’s active generation rules.
 
 ## Events
 

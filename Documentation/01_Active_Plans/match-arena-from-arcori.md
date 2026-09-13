@@ -24,7 +24,7 @@ Count `location.regionCode` on the seated designs:
 
 1. Pool = circulating static catalog designs with `location.regionCode == chosen_region` (any series).
 2. Exclude SLM / KIN / `type=slammer` and all seated player `arcoriIds`.
-3. Weighted pick by `04_selection_weights.json` **printedRarity** (region standing is constant within one region).
+3. Weighted pick by each design’s `selectionWeight` (0.01–10.00; region standing is constant within one region).
 4. Fail closed: omit `gathererArcoriId` if the pool is empty.
 
 **Seat uniqueness** (upstream `select_arcori` / `select_for_seats`): no duplicate Arcori ids across seats; Gatherer also excludes those ids.

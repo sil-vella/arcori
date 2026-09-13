@@ -18,7 +18,6 @@ _META_FILES = {
     "themes_subthemes": "00_themes_subthemes.json",
     "regions": "01_regions.json",
     "kin": "02_kin.json",
-    "printed_rarity": "03_printed_rarity.json",
     "selection_weights": "04_selection_weights.json",
 }
 
@@ -69,7 +68,7 @@ def load_json_file(path: Path) -> Any:
 
 
 def load_meta(name: str) -> Any:
-    """Load a rooted meta file by logical name (themes_subthemes, regions, kin, printed_rarity, selection_weights)."""
+    """Load a rooted meta file by logical name (themes_subthemes, regions, kin, selection_weights)."""
     filename = _META_FILES.get(name)
     if filename is None:
         raise KeyError(f"Unknown meta name: {name}")

@@ -7,6 +7,11 @@ import unittest
 from modules.avari.mastery_economy import (
     clamp_points,
     compute_mastery_deltas,
+    compute_mastery_value,
+    mastery_value_contribution,
+    mastery_value_density,
+    mastery_value_factor,
+    mastery_value_label,
     other_design_delta,
     own_played_delta,
 )
@@ -52,6 +57,34 @@ class MasteryEconomyTests(unittest.TestCase):
             flips_by_design={"FOX": 0},
         )
         self.assertEqual(rows, [])
+
+    def test_mastery_value_from_selection_weight(self) -> None:
+        self.assertAlmostEqual(mastery_value_factor(10.0), 1.0)
+        self.assertAlmostEqual(mastery_value_factor(0.1), 100.0)
+        self.assertAlmostEqual(mastery_value_factor(0.01), 1000.0)
+        self.assertAlmostEqual(mastery_value_contribution(10, 0.1), 1000.0)
+        self.assertAlmostEqual(
+            compute_mastery_value([(10, 0.1), (10, 10.0)]),
+            1010.0,
+        )
+
+    def test_mastery_value_label_bands(self) -> None:
+        # density = value / N
+        self.assertEqual(mastery_value_label(0, 100), "Fair")
+        self.assertEqual(mastery_value_label(49, 100), "Fair")  # 0.49
+        self.assertEqual(mastery_value_label(50, 100), "Notable")  # 0.50
+        self.assertEqual(mastery_value_label(149, 100), "Notable")
+        self.assertEqual(mastery_value_label(150, 100), "Sought")
+        self.assertEqual(mastery_value_label(399, 100), "Sought")
+        self.assertEqual(mastery_value_label(400, 100), "Coveted")
+        self.assertEqual(mastery_value_label(999, 100), "Coveted")
+        self.assertEqual(mastery_value_label(1000, 100), "Exquisite")
+        self.assertEqual(mastery_value_label(2499, 100), "Exquisite")
+        self.assertEqual(mastery_value_label(2500, 100), "Priceless")
+        self.assertAlmostEqual(mastery_value_density(250, 100), 2.5)
+        # N scales: same value, larger catalog → lower band
+        self.assertEqual(mastery_value_label(2500, 100), "Priceless")
+        self.assertEqual(mastery_value_label(2500, 10_000), "Fair")
 
 
 if __name__ == "__main__":

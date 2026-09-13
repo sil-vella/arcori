@@ -210,7 +210,10 @@ class _DetailsTab extends StatelessWidget {
       MapEntry('Theme', design.theme),
       MapEntry('Subtheme', design.subtheme),
       MapEntry('Series', seriesLabel),
-      MapEntry('Rarity', design.printedRarity),
+      MapEntry(
+        'Selection weight',
+        design.selectionWeight?.toString(),
+      ),
       MapEntry('Generation', design.generation?.display),
       MapEntry('World', design.worldState),
       MapEntry('Season', design.seasonState),

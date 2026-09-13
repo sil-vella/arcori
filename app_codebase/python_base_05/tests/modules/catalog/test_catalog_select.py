@@ -20,19 +20,13 @@ from modules.catalog.catalog_select import (
 
 def _weights_doc() -> dict:
     return {
-        "version": 1,
-        "pipeline": ["printedRarity", "regionStanding"],
+        "version": 2,
+        "pipeline": ["selectionWeight", "regionStanding"],
         "combine": "multiply",
-        "printedRarity": {
-            "weights": {
-                "Common": 3.0,
-                "Uncommon": 2.0,
-                "Rare": 1.2,
-                "Epic": 0.8,
-                "Legendary": 0.5,
-                "Unique": None,
-            },
-            "missingPrintedRarity": 3.0,
+        "selectionWeight": {
+            "min": 0.01,
+            "max": 10.0,
+            "missingSelectionWeight": 3.0,
             "nullWeightMeans": "exclude_from_weighted_pool",
         },
         "regionStanding": {
@@ -67,10 +61,6 @@ def select_root(tmp_path: Path):
     )
     (root / "01_regions.json").write_text(json.dumps({"regions": []}), encoding="utf-8")
     (root / "02_kin.json").write_text(json.dumps({"kin": []}), encoding="utf-8")
-    (root / "03_printed_rarity.json").write_text(
-        json.dumps({"rarities": []}),
-        encoding="utf-8",
-    )
     (root / "04_selection_weights.json").write_text(
         json.dumps(_weights_doc()),
         encoding="utf-8",
@@ -84,28 +74,28 @@ def select_root(tmp_path: Path):
             {
                 "internalId": "ASH-COMMON-1",
                 "design": "Ash Common",
-                "printedRarity": "Common",
+                "selectionWeight": 3.0,
                 "worldState": "Active",
                 "location": {"regionCode": "ASH"},
             },
             {
                 "internalId": "EVG-COMMON-1",
                 "design": "Everlight Common",
-                "printedRarity": "Common",
+                "selectionWeight": 3.0,
                 "worldState": "Active",
                 "location": {"regionCode": "EVG"},
             },
             {
                 "internalId": "MWB-COMMON-1",
                 "design": "Moonwake Common",
-                "printedRarity": "Common",
+                "selectionWeight": 3.0,
                 "worldState": "Active",
                 "location": {"regionCode": "MWB"},
             },
             {
                 "internalId": "UNIQUE-1",
                 "design": "Unique Piece",
-                "printedRarity": "Unique",
+                "selectionWeight": 0.01,
                 "worldState": "Active",
                 "location": {"regionCode": "RBY"},
             },
@@ -157,7 +147,7 @@ def test_player_kin_access_stays_in_pool(
     kin_doc = {
         "internalId": kin_id,
         "design": "Admin Kin",
-        "printedRarity": "Common",
+        "selectionWeight": 3.0,
         "worldState": "Active",
         "theme": "Kin",
         "themeCode": "KIN",
@@ -222,7 +212,8 @@ def test_corrupt_weights_random_fallback(select_root: Path):
     assert "weights_load_failed" in str(pick.get("reason", ""))
 
 
-def test_unique_only_pool_random_fallback(select_root: Path):
+def test_lowest_weight_still_weighted(select_root: Path):
+    """0.01 selectionWeight stays in the weighted pool (not excluded)."""
     out = select_for_seats(
         [
             {
@@ -233,8 +224,8 @@ def test_unique_only_pool_random_fallback(select_root: Path):
     )
     pick = out["selections"][0]
     assert pick["arcoriId"] == "UNIQUE-1"
-    assert pick["source"] == SOURCE_RANDOM_FALLBACK
-    assert pick.get("reason") == "empty_weighted_pool"
+    assert pick["source"] == SOURCE_WEIGHTED
+    assert pick["weight"] == pytest.approx(0.01)
 
 
 def test_empty_player_access_no_catalog_fallback(select_root: Path):
@@ -252,7 +243,7 @@ def test_retired_access_filtered_out(select_root: Path):
         {
             "internalId": "RETIRED-1",
             "design": "Retired",
-            "printedRarity": "Common",
+            "selectionWeight": 3.0,
             "worldState": "Retired",
             "location": {"regionCode": "ASH"},
         }
@@ -445,7 +436,7 @@ def test_select_arena_includes_gatherer(select_root: Path):
         {
             "internalId": "ASH-COMMON-2",
             "design": "Ash Common Two",
-            "printedRarity": "Common",
+            "selectionWeight": 3.0,
             "worldState": "Active",
             "location": {"regionCode": "ASH"},
         }

@@ -17,6 +17,36 @@ void main() {
       expect(item.masteryOverMintReach, '7/500');
     });
 
+    test('parses masteryValueLabel on profile', () {
+      final profile = AvariProfile.fromJson({
+        'identity': {
+          'userId': 'u1',
+          'displayName': 'Admin',
+          'title': 'Avari',
+          'accountType': 'Regular',
+        },
+        'mastery': {
+          'designsTracked': 2,
+          'top': ['ANM-TIG-SER001-0001:10'],
+          'masteryValueLabel': 'Sought',
+        },
+      });
+      expect(profile.mastery.designsTracked, 2);
+      expect(profile.mastery.masteryValueLabel, 'Sought');
+    });
+
+    test('masteryValueLabel defaults to Fair when missing', () {
+      final profile = AvariProfile.fromJson({
+        'identity': {
+          'userId': 'u1',
+          'displayName': 'Admin',
+          'title': 'Avari',
+          'accountType': 'Regular',
+        },
+      });
+      expect(profile.mastery.masteryValueLabel, 'Fair');
+    });
+
     test('parses economy wallet', () {
       final profile = AvariProfile.fromJson({
         'identity': {

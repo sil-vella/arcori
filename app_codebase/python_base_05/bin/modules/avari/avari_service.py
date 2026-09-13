@@ -28,7 +28,10 @@ from modules.avari.mastery_economy import (
     KIN_CREATOR_MASTERY_FLOOR,
     STARTER_INITIAL_MASTERY,
     compute_mastery_deltas,
+    compute_mastery_value,
+    mastery_value_label,
 )
+from modules.catalog.catalog_select import count_circulating_playable_arcori
 from modules.avari.kin_genesis import (
     EXCLUDED_KIN_REGION,
     assert_design_key_parity,
@@ -212,6 +215,75 @@ def catalog_card_for_design(design_id: str) -> dict[str, Any] | None:
         return None
     return catalog_card_from_design_doc(iid, design)
 
+
+def _selection_weight_for_design(
+    design_id: str,
+    *,
+    kin_design_id: str | None = None,
+    kin_design_doc: dict[str, Any] | None = None,
+) -> Any:
+    """Resolve catalog selectionWeight for Mastery Value (None → formula default)."""
+    iid = (design_id or "").strip()
+    if (
+        kin_design_id
+        and iid == kin_design_id
+        and isinstance(kin_design_doc, dict)
+        and "selectionWeight" in kin_design_doc
+    ):
+        return kin_design_doc.get("selectionWeight")
+    try:
+        design = get_design(iid)
+    except AppError:
+        return None
+    if isinstance(design, dict):
+        return design.get("selectionWeight")
+    return None
+
+
+def compute_profile_mastery_value(
+    mastery_by_design: dict[str, int],
+    *,
+    kin_design_id: str | None = None,
+    kin_design_doc: dict[str, Any] | None = None,
+) -> int:
+    """Rounded Mastery Value: Σ points × (10 / selectionWeight)."""
+    rows: list[tuple[int, Any]] = []
+    for design_id, pts in mastery_by_design.items():
+        did = str(design_id or "").strip()
+        if not did:
+            continue
+        weight = _selection_weight_for_design(
+            did,
+            kin_design_id=kin_design_id,
+            kin_design_doc=kin_design_doc,
+        )
+        rows.append((int(pts), weight))
+    return int(round(compute_mastery_value(rows)))
+
+
+def compute_profile_mastery_value_label(
+    mastery_by_design: dict[str, int],
+    *,
+    kin_design_id: str | None = None,
+    kin_design_doc: dict[str, Any] | None = None,
+    circulating_count: int | None = None,
+) -> tuple[int, str]:
+    """Return (rounded MasteryValue, Fair…Priceless label).
+
+    density = MasteryValue / max(1, N) where N is global circulating playable
+    catalog count (static, not Kin).
+    """
+    value = compute_profile_mastery_value(
+        mastery_by_design,
+        kin_design_id=kin_design_id,
+        kin_design_doc=kin_design_doc,
+    )
+    n = (
+        int(circulating_count)
+        if circulating_count is not None
+        else count_circulating_playable_arcori()
+    )
+    return value, mastery_value_label(value, n)
 
 def mint_reach_for_design(design: dict[str, Any] | None) -> int | None:
     """Catalog mint reach = legacy.preservationRequirement (Genesis 500 / Pioneers 100)."""
@@ -553,6 +625,11 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         mastery_top = [
             f"{row.design_id}:{row.points}" for row in mastery_rows
         ]
+        _, mastery_label = compute_profile_mastery_value_label(
+            mastery_by_design,
+            kin_design_id=kin_design_id,
+            kin_design_doc=kin_design_doc if isinstance(kin_design_doc, dict) else None,
+        )
         if isinstance(kin_payload, dict) and kin is not None and kin_design_id:
             kin_payload["masteryPoints"] = int(
                 mastery_by_design.get(kin_design_id, 0)
@@ -684,6 +761,7 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         "mastery": {
             "designsTracked": designs_tracked,
             "top": mastery_top,
+            "masteryValueLabel": mastery_label,
         },
         "stats": stats,
         "economy": economy,

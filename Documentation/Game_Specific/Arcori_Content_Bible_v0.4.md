@@ -1,7 +1,7 @@
 # Arcori Content Bible
 
 Working Draft v0.4  
-**Last aligned:** 2026-08-27 (Pioneers: earlier mint)
+**Last aligned:** 2026-09-13 (Mastery Value)
 
 ## Content Structure
 
@@ -28,7 +28,7 @@ Players are **Avari**. Copy and lore should prefer **Avari** over generic “pla
 | Title | Kind | Content use |
 |-------|------|-------------|
 | **Avari** | Identity | Default address for the player in world-facing text |
-| **Master** | Competitive title | Standings / mastery celebration copy |
+| **Master** | Competitive title | Standings / Mastery Value celebration copy |
 | **Legacy Owner** | Preservation achievement | Mint / Trove / preservation moments |
 | **Generation Creator** | Historical title | Closed-generation attribution in Museum / Chronicle |
 

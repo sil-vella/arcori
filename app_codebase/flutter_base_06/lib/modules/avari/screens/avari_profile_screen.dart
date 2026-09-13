@@ -286,6 +286,13 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
       _KeyValue('Wins', '${profile.stats.wins}'),
       _KeyValue('Flips', '${profile.stats.flips}'),
       AppSpacing.gapMd,
+      _SectionTitle(text: 'Mastery Value'),
+      AppSpacing.gapSm,
+      Text(
+        profile.mastery.masteryValueLabel,
+        style: context.appTypography.body,
+      ),
+      AppSpacing.gapMd,
       _SectionTitle(text: 'Arcori'),
       Text(
         'Circulating designs you can play — mastery / mint reach per design.',

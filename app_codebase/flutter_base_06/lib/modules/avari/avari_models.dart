@@ -59,11 +59,13 @@ class AvariMasterySummary {
   const AvariMasterySummary({
     this.designsTracked = 0,
     this.top = const [],
+    this.masteryValueLabel = 'Fair',
   });
 
   factory AvariMasterySummary.fromJson(Map<String, dynamic>? json) {
     if (json == null) return const AvariMasterySummary();
     final rawTop = json['top'];
+    final rawLabel = json['masteryValueLabel']?.toString().trim() ?? '';
     return AvariMasterySummary(
       designsTracked: json['designsTracked'] is int
           ? json['designsTracked'] as int
@@ -71,11 +73,15 @@ class AvariMasterySummary {
       top: rawTop is List
           ? rawTop.map((e) => e.toString()).where((s) => s.isNotEmpty).toList()
           : const [],
+      masteryValueLabel: rawLabel.isNotEmpty ? rawLabel : 'Fair',
     );
   }
 
   final int designsTracked;
   final List<String> top;
+
+  /// Fair … Priceless — computed on the backend from Mastery Value / circulating N.
+  final String masteryValueLabel;
 }
 
 class AvariStats {

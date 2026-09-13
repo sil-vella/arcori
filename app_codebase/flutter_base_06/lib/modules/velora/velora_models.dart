@@ -63,7 +63,6 @@ class DesignSummary {
     this.theme,
     this.subtheme,
     this.themeCode,
-    this.printedRarity,
     this.selectionWeight,
     this.series,
     this.seriesKey,
@@ -84,7 +83,6 @@ class DesignSummary {
       theme: json['theme']?.toString(),
       subtheme: json['subtheme']?.toString(),
       themeCode: json['themeCode']?.toString(),
-      printedRarity: json['printedRarity']?.toString(),
       selectionWeight: _readSelectionWeight(json['selectionWeight']),
       series: json['series']?.toString(),
       seriesKey: json['seriesKey']?.toString(),
@@ -105,7 +103,6 @@ class DesignSummary {
   final String? theme;
   final String? subtheme;
   final String? themeCode;
-  final String? printedRarity;
   final double? selectionWeight;
   final String? series;
   final String? seriesKey;
@@ -128,7 +125,6 @@ class DesignDetail {
     this.theme,
     this.subtheme,
     this.themeCode,
-    this.printedRarity,
     this.selectionWeight,
     this.series,
     this.seriesKey,
@@ -152,7 +148,6 @@ class DesignDetail {
       theme: json['theme']?.toString(),
       subtheme: json['subtheme']?.toString(),
       themeCode: json['themeCode']?.toString(),
-      printedRarity: json['printedRarity']?.toString(),
       selectionWeight: _readSelectionWeight(json['selectionWeight']),
       series: json['series']?.toString(),
       seriesKey: json['seriesKey']?.toString(),
@@ -177,7 +172,6 @@ class DesignDetail {
   final String? theme;
   final String? subtheme;
   final String? themeCode;
-  final String? printedRarity;
   final double? selectionWeight;
   final String? series;
   final String? seriesKey;

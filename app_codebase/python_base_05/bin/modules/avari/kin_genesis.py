@@ -32,7 +32,6 @@ REGULAR_ARCORI_DESIGN_KEYS: frozenset[str] = frozenset(
         "finish",
         "color",
         "effect",
-        "printedRarity",
         "selectionWeight",
         "series",
         "worldState",
@@ -205,8 +204,7 @@ def build_kin_catalog_design(
         "finish": finish,
         "color": color,
         "effect": effect,
-        "printedRarity": "Common",
-        # Same default Common weight as many Genesis Animals (e.g. Tiger).
+        # Mid-common default (scale 0.01 rarest … 10.00 most common).
         "selectionWeight": 3.0,
         "series": series_display,
         "worldState": "Active",

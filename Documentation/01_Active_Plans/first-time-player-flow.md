@@ -20,7 +20,7 @@ Splash
   → customize Kin Arcori
   → choose name
   → Genesis Arcori created
-  → receive play/mastery access to 10 random circulating Arcori + permanent starter slammer
+  → receive play/mastery access to 10 Genesis/Pioneers Arcori (9 weight 8–10, 1 weight 3–4) + permanent starter slammer
   → guided practice match
   → match summary
   → Velora intro
@@ -35,7 +35,7 @@ Splash
 
 - The **Kin Arcori** is effectively the player’s avatar, but in-world it is their personal **Genesis Arcori**.
 - Customize is a **layered Lottie rig** (transparent PNG body parts aligned to the flattened original), not a single baked image. Contract: [kin-creation.md](kin-creation.md) § Visual / Lottie.
-- Starter grant: **play/mastery access** to **10 random Genesis/Pioneers** designs (each starts at **10** mastery) + **permanent starter slammer** — **not** Trove mints. Foundations is out of the starter pool. Granted on Avari profile create (guest/regular). Mastery ≠ ownership; designs leave the pool at mastery < 1.
+- Starter grant: **play/mastery access** to **10 Genesis/Pioneers** designs — **9** with `selectionWeight` **[8.0, 10.0]**, **1** with **[3.0, 4.0]** (each starts at **10** mastery) + **permanent starter slammer** — **not** Trove mints. All Pioneers are weight **10.0**. Foundations / Creation are out of the starter pool. Granted on Avari profile create (guest/regular). Mastery ≠ ownership; designs leave the pool at mastery < 1.
 - Guided practice is AI-only (no economy / progression rewards per GDD).
 
 ## Implementation Steps
