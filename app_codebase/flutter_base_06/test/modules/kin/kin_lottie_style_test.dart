@@ -39,7 +39,7 @@ void main() {
       types: const [],
       kins: [
         KinTemplate.fromJson({
-          'serial': 'KIN-BRZ-GEN001-0001',
+          'serial': 'KIN-BRZ-SER001-0001',
           'typeSerial': 'KTYPE-0001',
           'displayName': 'Bronze',
           'parts': [
@@ -54,7 +54,7 @@ void main() {
         }),
       ],
     );
-    template = catalog.kinBySerial('KIN-BRZ-GEN001-0001')!;
+    template = catalog.kinBySerial('KIN-BRZ-SER001-0001')!;
   });
 
   test('resolveLayerStyles maps hue and color onto layer name', () {
@@ -100,7 +100,7 @@ void main() {
       types: const [],
       kins: [
         KinTemplate.fromJson({
-          'serial': 'KIN-IVY-GEN001-0003',
+          'serial': 'KIN-IVY-SER001-0003',
           'typeSerial': 'KTYPE-0001',
           'displayName': 'Ivory',
           'parts': [
@@ -117,7 +117,7 @@ void main() {
       ],
     );
     final styles = resolveLayerStyles(
-      template: combined.kinBySerial('KIN-IVY-GEN001-0003')!,
+      template: combined.kinBySerial('KIN-IVY-SER001-0003')!,
       catalog: combined,
       applied: const [
         KinAppliedCustom(

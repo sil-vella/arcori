@@ -31,7 +31,7 @@ Logical aggregate after `011_player_profile` (password hashed with `modules.auth
     "title": "Avari",
     "titles": ["Avari"],
     "rank": { "xp": 0, "level": 1, "label": null },
-    "economy": { "goldFragments": 0, "goldCaps": 5 },
+    "economy": { "goldFragments": 0, "goldArcori": 20 },
     "stats": { "matchesPlayed": 0, "wins": 0, "flips": 0 },
     "onboarding": {
       "completed": true,
@@ -53,36 +53,36 @@ Logical aggregate after `011_player_profile` (password hashed with `modules.auth
       "style": "Chibi",
       "finish": "Standard",
       "effect": "None",
-      "genesisDesignId": "KIN-SIL202607092145-GEN001-0001",
+      "genesisDesignId": "KIN-SIL202607092145-SER001-0001",
       "chosenName": "Admin",
       "customization": {},
       "regionCode": "EVG",
       "color": "#C6A15B",
       "series": "Genesis Series",
       "generation": { "roman": "I", "number": 1 },
-      "lottieUrl": "/media/kin/players/KIN-SIL202607092145-GEN001-0001.json",
+      "lottieUrl": "/media/kin/players/KIN-SIL202607092145-SER001-0001.json",
       "catalogDesign": { "...": "same keys as a regular Genesis Arcori design" }
     }
   },
 
   "access": [
-    { "designId": "ANM-TIG-GEN001-0001", "source": "starter" },
-    { "designId": "ANM-WTI-GEN001-0002", "source": "starter" },
-    { "designId": "ANM-LIO-GEN001-0003", "source": "starter" },
-    { "designId": "ANM-BPA-GEN001-0004", "source": "starter" },
-    { "designId": "ANM-CHE-GEN001-0005", "source": "starter" },
-    { "designId": "ANM-LEO-GEN001-0006", "source": "starter" },
-    { "designId": "ANM-SNL-GEN001-0007", "source": "starter" },
-    { "designId": "ANM-JAG-GEN001-0008", "source": "starter" },
-    { "designId": "ANM-AWO-GEN001-0009", "source": "starter" },
-    { "designId": "ANM-GWO-GEN001-0010", "source": "starter" }
+    { "designId": "ANM-TIG-SER001-0001", "source": "starter" },
+    { "designId": "ANM-WTI-SER001-0002", "source": "starter" },
+    { "designId": "ANM-LIO-SER001-0003", "source": "starter" },
+    { "designId": "ANM-BPA-SER001-0004", "source": "starter" },
+    { "designId": "ANM-CHE-SER001-0005", "source": "starter" },
+    { "designId": "ANM-LEO-SER001-0006", "source": "starter" },
+    { "designId": "ANM-SNL-SER001-0007", "source": "starter" },
+    { "designId": "ANM-JAG-SER001-0008", "source": "starter" },
+    { "designId": "ANM-AWO-SER001-0009", "source": "starter" },
+    { "designId": "ANM-GWO-SER001-0010", "source": "starter" }
   ],
 
   "mastery": [],
 
   "slammers": [
     {
-      "designId": "SLM-STR-GEN001-0001",
+      "designId": "SLM-STR-SER001-0001",
       "permanent": true,
       "chargesRemaining": null,
       "source": "starter"

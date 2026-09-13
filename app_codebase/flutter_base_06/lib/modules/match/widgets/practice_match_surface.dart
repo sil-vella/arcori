@@ -148,6 +148,25 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   bool _isLocal(String? matchId) =>
       matchId != null && matchId.startsWith('local_practice_');
 
+  /// Human seat actor for input / turn checks.
+  ///
+  /// Online: auth userId. Local practice: auth userId when seated, else the
+  /// snapshot human seat (`local` when logged out).
+  String? _humanActorUserId(MatchSnapshotState snap) {
+    final authId = ref.read(authProvider).userId?.trim();
+    if (authId != null && authId.isNotEmpty) {
+      if (_mySeatIndex(snap, authId) != null) return authId;
+    }
+    if (!_isLocal(snap.matchId)) {
+      return (authId != null && authId.isNotEmpty) ? authId : null;
+    }
+    for (final seat in snap.seats) {
+      if (seat.kind == 'human' && seat.userId.isNotEmpty) return seat.userId;
+    }
+    final caller = snap.callerUserId?.trim() ?? '';
+    return caller.isNotEmpty ? caller : null;
+  }
+
   void _resetLiveAim(String reason) {
     if (_liveAim.x == 0 && _liveAim.z == 0 && _powerPreview == null) {
       return;
@@ -214,7 +233,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     final matchId = snap.matchId;
     if (matchId == null || matchId.isEmpty || snap.isEnded) return;
 
-    final userId = ref.read(authProvider).userId?.trim();
+    final userId = _humanActorUserId(snap);
     if (userId == null || userId.isEmpty) return;
     if (!_isMyTurn(snap, userId)) return;
     if (activeInputLocked(snap.active) || activeInGracePeriod(snap.active)) {
@@ -285,7 +304,9 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   Widget build(BuildContext context) {
     final snap = ref.watch(matchSnapshotProvider);
     final local = _isLocal(snap.matchId);
-    final userId = ref.watch(authProvider.select((a) => a.userId?.trim()));
+    // Rebuild when auth changes; actor may still be snapshot human when logged out.
+    ref.watch(authProvider.select((a) => a.userId?.trim()));
+    final userId = _humanActorUserId(snap);
     final inGrace = activeInGracePeriod(snap.active);
     final inputLocked = activeInputLocked(snap.active);
     _syncGraceTicker(inGrace || inputLocked);
@@ -353,7 +374,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
       }
 
       final actorId = event['actorUserId']?.toString();
-      final me = ref.read(authProvider).userId?.trim();
+      final me = _humanActorUserId(next);
       if (me == null || me.isEmpty || actorId != me) return;
       if (_lastSlamResultModalVersion == version) return;
 

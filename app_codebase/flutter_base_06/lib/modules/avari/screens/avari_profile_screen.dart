@@ -9,6 +9,7 @@ import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../kin/kin_backgrounds.dart';
+import '../../kin/kin_models.dart';
 import '../../kin/kin_notifier.dart';
 import '../../kin/widgets/kin_lottie_preview.dart';
 import '../../match/widgets/arcori_cylinder.dart';
@@ -162,6 +163,15 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
         ),
       ),
       AppSpacing.gapLg,
+      _SectionTitle(text: 'Wallet'),
+      Text(
+        '4 Gold Fragments = 1 Gold Arcori',
+        style: context.appTypography.bodySmall,
+      ),
+      AppSpacing.gapSm,
+      _KeyValue('Gold Arcori', '${profile.economy.goldArcori}'),
+      _KeyValue('Gold Fragments', '${profile.economy.goldFragments}'),
+      AppSpacing.gapMd,
       _SectionTitle(text: 'Rank & XP'),
       _KeyValue('Level', '${profile.rank.level}'),
       _KeyValue('XP', '${profile.rank.xp}'),
@@ -201,6 +211,14 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
         ),
         AppSpacing.gapXxs,
         Text(
+          profile.kin!.masteryOverMintReach,
+          textAlign: TextAlign.center,
+          style: context.appTypography.caption.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
+        ),
+        AppSpacing.gapXxs,
+        Text(
           [
             profile.kin!.subtheme,
             if (profile.kin!.regionCode != null) profile.kin!.regionCode!,
@@ -231,6 +249,14 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
         ),
         AppSpacing.gapXxs,
         Text(
+          '0/500',
+          textAlign: TextAlign.center,
+          style: context.appTypography.caption.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
+        ),
+        AppSpacing.gapXxs,
+        Text(
           'Local draft ${localDraft.serial} · base ${localDraft.kinSerial}',
           textAlign: TextAlign.center,
           style: context.appTypography.caption.copyWith(
@@ -255,14 +281,6 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
         ),
       ],
       AppSpacing.gapMd,
-      _SectionTitle(text: 'Mastery'),
-      _KeyValue('Designs tracked', '${profile.mastery.designsTracked}'),
-      if (profile.mastery.top.isEmpty)
-        Text('No mastery yet', style: context.appTypography.bodyMuted)
-      else
-        for (final item in profile.mastery.top)
-          Text(item, style: context.appTypography.body),
-      AppSpacing.gapMd,
       _SectionTitle(text: 'Stats'),
       _KeyValue('Matches', '${profile.stats.matchesPlayed}'),
       _KeyValue('Wins', '${profile.stats.wins}'),
@@ -270,20 +288,37 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
       AppSpacing.gapMd,
       _SectionTitle(text: 'Arcori'),
       Text(
-        'Circulating designs you can play — same pool as online match pairing.',
+        'Circulating designs you can play — mastery / mint reach per design.',
         style: context.appTypography.bodySmall,
       ),
       AppSpacing.gapSm,
-      if (profile.access.isEmpty)
-        Text('None yet', style: context.appTypography.bodyMuted)
-      else
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.sm,
-          children: [
-            for (final item in profile.access) InventoryFaceChip(item: item),
-          ],
-        ),
+      Builder(
+        builder: (context) {
+          final items = _arcoriAccessWithKinFirst(
+            profile,
+            localDraft: localDraft,
+          );
+          if (items.isEmpty) {
+            return Text('None yet', style: context.appTypography.bodyMuted);
+          }
+          final draftId = localDraft?.serial.trim() ?? '';
+          return Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: [
+              for (final item in items)
+                InventoryFaceChip(
+                  item: item,
+                  lottieFile: (profile.kin == null &&
+                          draftId.isNotEmpty &&
+                          item.designId == draftId)
+                      ? localKin.lottieFile
+                      : null,
+                ),
+            ],
+          );
+        },
+      ),
       AppSpacing.gapMd,
       _SectionTitle(text: 'Slammers'),
       Text(
@@ -300,6 +335,87 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
         ],
     ];
   }
+}
+
+/// Kin first in Arcori wrap; uses claimed Kin, else local draft chip.
+List<AvariInventoryItem> _arcoriAccessWithKinFirst(
+  AvariProfile profile, {
+  KinSaveDraft? localDraft,
+}) {
+  final kin = profile.kin;
+  final kinId = kin?.genesisDesignId.trim() ?? '';
+  if (kin != null && kinId.isNotEmpty) {
+    AvariInventoryItem? fromAccess;
+    final rest = <AvariInventoryItem>[];
+    for (final item in profile.access) {
+      if (item.designId == kinId) {
+        fromAccess ??= item;
+      } else {
+        rest.add(item);
+      }
+    }
+    final kinItem = fromAccess ??
+        AvariInventoryItem(
+          designId: kinId,
+          displayName: kin.chosenName.trim().isNotEmpty
+              ? kin.chosenName.trim()
+              : kinId,
+          lottieUrl: kin.lottieUrl,
+          faceMedia: 'lottie',
+          background: kin.background,
+          color: kin.color,
+          source: 'kin',
+          masteryPoints: kin.masteryPoints,
+          mintReach: kin.mintReach ?? 500,
+        );
+    // Ensure Lottie face even if access row omitted it.
+    if (!kinItem.hasLottieFace &&
+        (kin.lottieUrl != null && kin.lottieUrl!.trim().isNotEmpty)) {
+      return [
+        AvariInventoryItem(
+          designId: kinItem.designId,
+          displayName: kinItem.displayName,
+          imageUrl: kinItem.imageUrl,
+          lottieUrl: kin.lottieUrl,
+          faceMedia: 'lottie',
+          background: kinItem.background ?? kin.background,
+          color: kinItem.color ?? kin.color,
+          source: kinItem.source ?? 'kin',
+          masteryPoints: kinItem.masteryPoints,
+          mintReach: kinItem.mintReach ?? kin.mintReach ?? 500,
+        ),
+        ...rest,
+      ];
+    }
+    return [kinItem, ...rest];
+  }
+
+  if (localDraft != null) {
+    final draftId = localDraft.serial.trim().isNotEmpty
+        ? localDraft.serial.trim()
+        : localDraft.kinSerial.trim();
+    if (draftId.isNotEmpty) {
+      final rest = profile.access
+          .where((i) => i.designId != draftId)
+          .toList();
+      return [
+        AvariInventoryItem(
+          designId: draftId,
+          displayName: localDraft.displayName.trim().isNotEmpty
+              ? localDraft.displayName.trim()
+              : draftId,
+          faceMedia: 'lottie',
+          color: localDraft.colorHex,
+          source: 'kin-draft',
+          masteryPoints: 0,
+          mintReach: 500,
+        ),
+        ...rest,
+      ];
+    }
+  }
+
+  return List<AvariInventoryItem>.from(profile.access);
 }
 
 class _LocalKinDisc extends ConsumerWidget {

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "TEC-HBT-GEN002-0009",
+      "internalId": "TEC-HBT-SER002-0009",
       "themeCode": "TEC",
       "designCode": "HBT",
       "designFamily": "HELPER_BOT",
@@ -41,7 +41,7 @@
       "series": "Pioneers Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a helper bot in comic style with a metallic finish and no effect. Use a background that is visually related to the helper bot. No borders, no frames. The helper bot should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-HBT-GEN002-0009.webp",
+      "artworkPrompt": "Give me an image with a helper bot in comic style with a metallic finish and no effect. Use a background that is visually related to the helper bot. No borders, no frames. The helper bot should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-HBT-SER002-0009.webp",
       "loreDescription": "A collectible Helper Bot Arcori generation I from the Technology Pioneers Series.",
       "legacy": {
         "preservationRequirement": 100,

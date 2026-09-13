@@ -1,0 +1,148 @@
+{
+  "catalog": "Wayfinding Foundations Series",
+  "theme": "Wayfinding",
+  "series": "Foundations",
+  "themeCode": "WAY",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "WAY-IMB-SER003-0001",
+      "themeCode": "WAY",
+      "designCode": "IMB",
+      "designFamily": "THE_IMPOSSIBLE_BEACON",
+      "design": "The Impossible Beacon",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Wayfinding",
+      "subtheme": "Wayfinding",
+      "style": "Neon",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Impossible Beacon in neon style with a standard finish and no effect. Use a background that is visually related to The Impossible Beacon. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-IMB-SER003-0001.webp",
+      "loreDescription": "A collectible The Impossible Beacon Arcori generation I from the Wayfinding Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "WAY-PFL-SER003-0002",
+      "themeCode": "WAY",
+      "designCode": "PFL",
+      "designFamily": "PATH_OF_FIVE_LIGHTS",
+      "design": "Path of Five Lights",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Wayfinding",
+      "subtheme": "Wayfinding",
+      "style": "Neon",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Path of Five Lights in neon style with a standard finish and no effect. Use a background that is visually related to Path of Five Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-PFL-SER003-0002.webp",
+      "loreDescription": "A collectible Path of Five Lights Arcori generation I from the Wayfinding Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "WAY-LAV-SER003-0003",
+      "themeCode": "WAY",
+      "designCode": "LAV",
+      "designFamily": "LANTERNS_ACROSS_THE_VANISHED_ROAD",
+      "design": "Lanterns Across the Vanished Road",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Wayfinding",
+      "subtheme": "Wayfinding",
+      "style": "Neon",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Lanterns Across the Vanished Road in neon style with a standard finish and no effect. Use a background that is visually related to Lanterns Across the Vanished Road. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-LAV-SER003-0003.webp",
+      "loreDescription": "A collectible Lanterns Across the Vanished Road Arcori generation I from the Wayfinding Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

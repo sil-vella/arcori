@@ -301,6 +301,7 @@ class MatchService implements MatchLifecycleContract {
 
     var resolvedArenaId = arenaId;
     String? arenaImageUrl;
+    String? gathererArcoriId;
     if (matchTypeUsesArcoriRegionArena(matchType)) {
       try {
         final pick = await _catalog.selectArena(
@@ -311,11 +312,12 @@ class MatchService implements MatchLifecycleContract {
         if (pick != null && pick.arenaId.isNotEmpty) {
           resolvedArenaId = pick.arenaId;
           arenaImageUrl = pick.imageUrl;
+          gathererArcoriId = pick.gathererArcoriId;
           if (LOGGING_SWITCH) {
             customlog(
               'match: startFromLobby select_arena ok '
               'arenaId=${pick.arenaId} region=${pick.regionCode} '
-              'source=${pick.source}',
+              'source=${pick.source} gatherer=${pick.gathererArcoriId}',
             );
           }
         }
@@ -335,6 +337,8 @@ class MatchService implements MatchLifecycleContract {
     final ids = <String>{
       for (final s in assigned) ...s.arcoriIds,
       for (final s in assigned) s.slammerId,
+      if (gathererArcoriId != null && gathererArcoriId.isNotEmpty)
+        gathererArcoriId,
     }.toList();
 
     late final Map<String, Map<String, dynamic>> catalogById;
@@ -365,6 +369,7 @@ class MatchService implements MatchLifecycleContract {
       catalogById: catalogById,
       arenaId: resolvedArenaId,
       arenaImageUrl: arenaImageUrl,
+      gathererArcoriId: gathererArcoriId,
       firstSeatIndex: firstSeatIndex,
       random: stubLoop.random,
     );

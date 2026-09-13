@@ -12,7 +12,7 @@ void main() {
         home: Scaffold(
           body: SlammerInventoryTile(
             item: AvariInventoryItem(
-              designId: 'SLM-STR-GEN001-0001',
+              designId: 'SLM-STR-SER001-0001',
               displayName: 'Starter Slammer',
               color: '#C6A15B',
               gameplayAttributes: const SlammerGameplayAttributes(

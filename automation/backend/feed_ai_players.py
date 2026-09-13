@@ -27,18 +27,18 @@ PYTHON_BIN = REPO_ROOT / "app_codebase" / "python_base_05" / "bin"
 DEFAULT_JSON = SCRIPT_DIR / "data" / "ai_players_500.json"
 
 STARTER_DESIGNS_FALLBACK = (
-    "ANM-TIG-GEN001-0001",
-    "ANM-WTI-GEN001-0002",
-    "ANM-LIO-GEN001-0003",
-    "ANM-BPA-GEN001-0004",
-    "ANM-CHE-GEN001-0005",
-    "ANM-LEO-GEN001-0006",
-    "ANM-SNL-GEN001-0007",
-    "ANM-JAG-GEN001-0008",
-    "ANM-AWO-GEN001-0009",
-    "ANM-GWO-GEN001-0010",
+    "ANM-TIG-SER001-0001",
+    "ANM-WTI-SER001-0002",
+    "ANM-LIO-SER001-0003",
+    "ANM-BPA-SER001-0004",
+    "ANM-CHE-SER001-0005",
+    "ANM-LEO-SER001-0006",
+    "ANM-SNL-SER001-0007",
+    "ANM-JAG-SER001-0008",
+    "ANM-AWO-SER001-0009",
+    "ANM-GWO-SER001-0010",
 )
-STARTER_SLAMMER_FALLBACK = "SLM-STR-GEN001-0001"
+STARTER_SLAMMER_FALLBACK = "SLM-STR-SER001-0001"
 
 
 def _require_wfrun() -> Path:
@@ -227,7 +227,7 @@ def _insert_player(
     style = str(kin.get("style") or "Chibi")
     finish = str(kin.get("finish") or "Standard")
     effect = str(kin.get("effect") or "None")
-    genesis_id = str(kin.get("genesisDesignId") or "KIN-SIL202607092145-GEN001-0001")
+    genesis_id = str(kin.get("genesisDesignId") or "KIN-SIL202607092145-SER001-0001")
     chosen_name = str(kin.get("chosenName") or display_name.split()[0])
 
     session.execute(
@@ -260,7 +260,7 @@ def _insert_player(
             INSERT INTO avari_profiles (
                 id, user_id, display_name, primary_title, titles,
                 rank_xp, rank_level, rank_label,
-                gold_fragments, gold_caps,
+                gold_fragments, gold_arcori,
                 matches_played, wins, flips,
                 onboarding_completed, onboarding_kin_chosen,
                 onboarding_genesis_created, onboarding_starter_granted,
@@ -271,7 +271,7 @@ def _insert_player(
             ) VALUES (
                 :id, :uid, :display_name, :primary_title, CAST(:titles AS jsonb),
                 :rank_xp, :rank_level, NULL,
-                :gold_fragments, :gold_caps,
+                :gold_fragments, :gold_arcori,
                 :matches_played, :wins, :flips,
                 :onboarded, :onboarded, :onboarded, :onboarded, :onboarded, :onboarded,
                 0, NULL, NULL, 0,
@@ -288,7 +288,11 @@ def _insert_player(
             "rank_xp": int(player.get("rankXp") or 0),
             "rank_level": int(player.get("rankLevel") or 1),
             "gold_fragments": int(player.get("goldFragments") or 0),
-            "gold_caps": int(player.get("goldCaps") or 0),
+            "gold_arcori": int(
+                player.get("goldArcori")
+                if player.get("goldArcori") is not None
+                else player.get("goldCaps") or 0
+            ),
             "matches_played": int(player.get("matchesPlayed") or 0),
             "wins": int(player.get("wins") or 0),
             "flips": int(player.get("flips") or 0),

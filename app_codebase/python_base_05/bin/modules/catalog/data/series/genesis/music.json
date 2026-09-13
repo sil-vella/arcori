@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "MUS-LPS-GEN001-0001",
+      "internalId": "MUS-LPS-SER001-0001",
       "themeCode": "MUS",
       "designCode": "LPS",
       "designFamily": "LIMITLESS_PULSE",
@@ -45,7 +45,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a limitless pulse in realistic style with a standard finish and no effect. Use a background that is visually related to the limitless pulse. No borders, no frames. The limitless pulse should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-LPS-GEN001-0001.webp",
+      "artworkPrompt": "Give me an image with a limitless pulse in realistic style with a standard finish and no effect. Use a background that is visually related to the limitless pulse. No borders, no frames. The limitless pulse should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-LPS-SER001-0001.webp",
       "loreDescription": "Two voices alternate over a relentless pulse that makes Everlight's separate civic lights flash as one.",
       "legacy": {
         "preservationRequirement": 500,
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "MUS-HBH-GEN001-0002",
+      "internalId": "MUS-HBH-SER001-0002",
       "themeCode": "MUS",
       "designCode": "HBH",
       "designFamily": "HARBOR_HOLIDAY",
@@ -90,7 +90,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a harbor holiday in comic style with a standard finish and no effect. Use a background that is visually related to the harbor holiday. No borders, no frames. The harbor holiday should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-HBH-GEN001-0002.webp",
+      "artworkPrompt": "Give me an image with a harbor holiday in comic style with a standard finish and no effect. Use a background that is visually related to the harbor holiday. No borders, no frames. The harbor holiday should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-HBH-SER001-0002.webp",
       "loreDescription": "Four travelling performers turn every Moonwake departure into a celebration, even when the returning boat reaches another shore.",
       "legacy": {
         "preservationRequirement": 500,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "MUS-ACS-GEN001-0003",
+      "internalId": "MUS-ACS-SER001-0003",
       "themeCode": "MUS",
       "designCode": "ACS",
       "designFamily": "ASHCORE_SIGNAL",
@@ -137,7 +137,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a ashcore signal in anime style with a standard finish and no effect. Use a background that is visually related to the ashcore signal. No borders, no frames. The ashcore signal should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-ACS-GEN001-0003.webp",
+      "artworkPrompt": "Give me an image with a ashcore signal in anime style with a standard finish and no effect. Use a background that is visually related to the ashcore signal. No borders, no frames. The ashcore signal should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-ACS-SER001-0003.webp",
       "loreDescription": "The DJ's fastest rhythm briefly reverses Ashdrift's endless fall, revealing roads hidden beneath the grey.",
       "legacy": {
         "preservationRequirement": 500,
@@ -145,7 +145,7 @@
       }
     },
     {
-      "internalId": "MUS-FRF-GEN001-0004",
+      "internalId": "MUS-FRF-SER001-0004",
       "themeCode": "MUS",
       "designCode": "FRF",
       "designFamily": "FROST_FREQUENCY",
@@ -180,7 +180,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a frost frequency in watercolor style with a standard finish and no effect. Use a background that is visually related to the frost frequency. No borders, no frames. The frost frequency should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-FRF-GEN001-0004.webp",
+      "artworkPrompt": "Give me an image with a frost frequency in watercolor style with a standard finish and no effect. Use a background that is visually related to the frost frequency. No borders, no frames. The frost frequency should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-FRF-SER001-0004.webp",
       "loreDescription": "Two rival mixers trade melodies so cheerful that Little Frost's snow begins falling upward between every chorus.",
       "legacy": {
         "preservationRequirement": 500,
@@ -188,7 +188,7 @@
       }
     },
     {
-      "internalId": "MUS-WBC-GEN001-0005",
+      "internalId": "MUS-WBC-SER001-0005",
       "themeCode": "MUS",
       "designCode": "WBC",
       "designFamily": "WILDBEAT_COLLECTIVE",
@@ -225,7 +225,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a wildbeat collective in minimalist style with a standard finish and no effect. Use a background that is visually related to the wildbeat collective. No borders, no frames. The wildbeat collective should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-WBC-GEN001-0005.webp",
+      "artworkPrompt": "Give me an image with a wildbeat collective in minimalist style with a standard finish and no effect. Use a background that is visually related to the wildbeat collective. No borders, no frames. The wildbeat collective should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-WBC-SER001-0005.webp",
       "loreDescription": "Four performers borrow the signs of Amberwild creatures, awakening a different animal echo with every jump.",
       "legacy": {
         "preservationRequirement": 500,
@@ -233,7 +233,7 @@
       }
     },
     {
-      "internalId": "MUS-TFR-GEN001-0006",
+      "internalId": "MUS-TFR-SER001-0006",
       "themeCode": "MUS",
       "designCode": "TFR",
       "designFamily": "TWENTY_FOUR_REFLECTIONS",
@@ -272,7 +272,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a twenty-four reflections in neon style with a standard finish and no effect. Use a background that is visually related to the twenty-four reflections. No borders, no frames. The twenty-four reflections should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TFR-GEN001-0006.webp",
+      "artworkPrompt": "Give me an image with a twenty-four reflections in neon style with a standard finish and no effect. Use a background that is visually related to the twenty-four reflections. No borders, no frames. The twenty-four reflections should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TFR-SER001-0006.webp",
       "loreDescription": "The trio performs continuously across mirrored rooms, although no reflection follows the same song.",
       "legacy": {
         "preservationRequirement": 500,
@@ -280,7 +280,7 @@
       }
     },
     {
-      "internalId": "MUS-EHM-GEN001-0007",
+      "internalId": "MUS-EHM-SER001-0007",
       "themeCode": "MUS",
       "designCode": "EHM",
       "designFamily": "EVERLIGHT_HOUSEMASTER",
@@ -319,7 +319,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a everlight housemaster in cartoon style with a standard finish and no effect. Use a background that is visually related to the everlight housemaster. No borders, no frames. The everlight housemaster should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-EHM-GEN001-0007.webp",
+      "artworkPrompt": "Give me an image with a everlight housemaster in cartoon style with a standard finish and no effect. Use a background that is visually related to the everlight housemaster. No borders, no frames. The everlight housemaster should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-EHM-SER001-0007.webp",
       "loreDescription": "Every record spun in the plaza draws forgotten residents toward Everlight's warmest gathering place.",
       "legacy": {
         "preservationRequirement": 500,
@@ -327,7 +327,7 @@
       }
     },
     {
-      "internalId": "MUS-TDT-GEN001-0008",
+      "internalId": "MUS-TDT-SER001-0008",
       "themeCode": "MUS",
       "designCode": "TDT",
       "designFamily": "TIDE_TRANCE",
@@ -364,7 +364,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a tide trance in pixel art style with a standard finish and no effect. Use a background that is visually related to the tide trance. No borders, no frames. The tide trance should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TDT-GEN001-0008.webp",
+      "artworkPrompt": "Give me an image with a tide trance in pixel art style with a standard finish and no effect. Use a background that is visually related to the tide trance. No borders, no frames. The tide trance should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TDT-SER001-0008.webp",
       "loreDescription": "Long rising tones illuminate pathways beneath the bay, each beat pulling another lost place closer.",
       "legacy": {
         "preservationRequirement": 500,
@@ -372,7 +372,7 @@
       }
     },
     {
-      "internalId": "MUS-WBD-GEN001-0009",
+      "internalId": "MUS-WBD-SER001-0009",
       "themeCode": "MUS",
       "designCode": "WBD",
       "designFamily": "WINTER_BALLADEER",
@@ -407,7 +407,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a winter balladeer in low poly style with a standard finish and no effect. Use a background that is visually related to the winter balladeer. No borders, no frames. The winter balladeer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-WBD-GEN001-0009.webp",
+      "artworkPrompt": "Give me an image with a winter balladeer in low poly style with a standard finish and no effect. Use a background that is visually related to the winter balladeer. No borders, no frames. The winter balladeer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-WBD-SER001-0009.webp",
       "loreDescription": "His songs preserve feelings the town would otherwise erase during its unexplained overnight repairs.",
       "legacy": {
         "preservationRequirement": 500,
@@ -415,7 +415,7 @@
       }
     },
     {
-      "internalId": "MUS-ASV-GEN001-0010",
+      "internalId": "MUS-ASV-SER001-0010",
       "themeCode": "MUS",
       "designCode": "ASV",
       "designFamily": "AMBERSTORM_VOICE",
@@ -452,7 +452,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a amberstorm voice in chibi style with a standard finish and no effect. Use a background that is visually related to the amberstorm voice. No borders, no frames. The amberstorm voice should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-ASV-GEN001-0010.webp",
+      "artworkPrompt": "Give me an image with a amberstorm voice in chibi style with a standard finish and no effect. Use a background that is visually related to the amberstorm voice. No borders, no frames. The amberstorm voice should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-ASV-SER001-0010.webp",
       "loreDescription": "A fierce guitar note travels through the amber formations until sealed creatures answer from within.",
       "legacy": {
         "preservationRequirement": 500,
@@ -460,7 +460,7 @@
       }
     },
     {
-      "internalId": "MUS-GSG-GEN001-0011",
+      "internalId": "MUS-GSG-SER001-0011",
       "themeCode": "MUS",
       "designCode": "GSG",
       "designFamily": "GROVE_SINGALONG",
@@ -499,7 +499,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a grove singalong in graffiti style with a standard finish and no effect. Use a background that is visually related to the grove singalong. No borders, no frames. The grove singalong should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-GSG-GEN001-0011.webp",
+      "artworkPrompt": "Give me an image with a grove singalong in graffiti style with a standard finish and no effect. Use a background that is visually related to the grove singalong. No borders, no frames. The grove singalong should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-GSG-SER001-0011.webp",
       "loreDescription": "Their uncomplicated songs spread across the city until strangers remember sharing the same summer.",
       "legacy": {
         "preservationRequirement": 500,
@@ -507,7 +507,7 @@
       }
     },
     {
-      "internalId": "MUS-TTD-GEN001-0012",
+      "internalId": "MUS-TTD-SER001-0012",
       "themeCode": "MUS",
       "designCode": "TTD",
       "designFamily": "TOTAL_TIDE",
@@ -544,7 +544,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a total tide in prismatic style with a standard finish and no effect. Use a background that is visually related to the total tide. No borders, no frames. The total tide should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TTD-GEN001-0012.webp",
+      "artworkPrompt": "Give me an image with a total tide in prismatic style with a standard finish and no effect. Use a background that is visually related to the total tide. No borders, no frames. The total tide should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TTD-SER001-0012.webp",
       "loreDescription": "A luminous voice divides across the water and returns as a complete harmony from beneath the tide.",
       "legacy": {
         "preservationRequirement": 500,
@@ -552,7 +552,7 @@
       }
     },
     {
-      "internalId": "MUS-TCS-GEN001-0013",
+      "internalId": "MUS-TCS-SER001-0013",
       "themeCode": "MUS",
       "designCode": "TCS",
       "designFamily": "TWO_CHAIRS",
@@ -587,7 +587,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a two chairs, one song in retro style with a standard finish and no effect. Use a background that is visually related to the two chairs, one song. No borders, no frames. The two chairs, one song should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TCS-GEN001-0013.webp",
+      "artworkPrompt": "Give me an image with a two chairs, one song in retro style with a standard finish and no effect. Use a background that is visually related to the two chairs, one song. No borders, no frames. The two chairs, one song should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TCS-SER001-0013.webp",
       "loreDescription": "The duo performs to an empty theatre whose seats laugh, sigh and applaud exactly as former audiences once did.",
       "legacy": {
         "preservationRequirement": 500,
@@ -595,7 +595,7 @@
       }
     },
     {
-      "internalId": "MUS-ACV-GEN001-0014",
+      "internalId": "MUS-ACV-SER001-0014",
       "themeCode": "MUS",
       "designCode": "ACV",
       "designFamily": "ASHEN_CAFE",
@@ -634,7 +634,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a ashen cafe voice in realistic style with a standard finish and no effect. Use a background that is visually related to the ashen cafe voice. No borders, no frames. The ashen cafe voice should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-ACV-GEN001-0014.webp",
+      "artworkPrompt": "Give me an image with a ashen cafe voice in realistic style with a standard finish and no effect. Use a background that is visually related to the ashen cafe voice. No borders, no frames. The ashen cafe voice should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-ACV-SER001-0014.webp",
       "loreDescription": "His sorrowful voice keeps one small cafe visible whenever the surrounding streets disappear beneath ash.",
       "legacy": {
         "preservationRequirement": 500,
@@ -642,7 +642,7 @@
       }
     },
     {
-      "internalId": "MUS-FDF-GEN001-0015",
+      "internalId": "MUS-FDF-SER001-0015",
       "themeCode": "MUS",
       "designCode": "FDF",
       "designFamily": "FOLDED_FIRE",
@@ -681,7 +681,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a folded fire in comic style with a standard finish and no effect. Use a background that is visually related to the folded fire. No borders, no frames. The folded fire should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-FDF-GEN001-0015.webp",
+      "artworkPrompt": "Give me an image with a folded fire in comic style with a standard finish and no effect. Use a background that is visually related to the folded fire. No borders, no frames. The folded fire should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-FDF-SER001-0015.webp",
       "loreDescription": "Their abrasive rhythm tears openings between incompatible platforms, stairways and fragments of remembered cities.",
       "legacy": {
         "preservationRequirement": 500,
@@ -689,7 +689,7 @@
       }
     },
     {
-      "internalId": "MUS-FVL-GEN001-0016",
+      "internalId": "MUS-FVL-SER001-0016",
       "themeCode": "MUS",
       "designCode": "FVL",
       "designFamily": "FIVE_LIGHTS",
@@ -728,7 +728,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a five lights in anime style with a standard finish and no effect. Use a background that is visually related to the five lights. No borders, no frames. The five lights should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-FVL-GEN001-0016.webp",
+      "artworkPrompt": "Give me an image with a five lights in anime style with a standard finish and no effect. Use a background that is visually related to the five lights. No borders, no frames. The five lights should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-FVL-SER001-0016.webp",
       "loreDescription": "Five distinct voices refuse to become one, yet together awaken every colour hidden across Everlight Grove.",
       "legacy": {
         "preservationRequirement": 500,
@@ -736,7 +736,7 @@
       }
     },
     {
-      "internalId": "MUS-RHA-GEN001-0017",
+      "internalId": "MUS-RHA-SER001-0017",
       "themeCode": "MUS",
       "designCode": "RHA",
       "designFamily": "RETURNING_HARMONY",
@@ -773,7 +773,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a returning harmony in watercolor style with a standard finish and no effect. Use a background that is visually related to the returning harmony. No borders, no frames. The returning harmony should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-RHA-GEN001-0017.webp",
+      "artworkPrompt": "Give me an image with a returning harmony in watercolor style with a standard finish and no effect. Use a background that is visually related to the returning harmony. No borders, no frames. The returning harmony should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-RHA-SER001-0017.webp",
       "loreDescription": "Five harmonies follow the retreating tide, returning from ruins that belong to five different eras.",
       "legacy": {
         "preservationRequirement": 500,
@@ -781,7 +781,7 @@
       }
     },
     {
-      "internalId": "MUS-GGR-GEN001-0018",
+      "internalId": "MUS-GGR-SER001-0018",
       "themeCode": "MUS",
       "designCode": "GGR",
       "designFamily": "GREY_GYM",
@@ -820,7 +820,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a grey gym rehearsal in minimalist style with a standard finish and no effect. Use a background that is visually related to the grey gym rehearsal. No borders, no frames. The grey gym rehearsal should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-GGR-GEN001-0018.webp",
+      "artworkPrompt": "Give me an image with a grey gym rehearsal in minimalist style with a standard finish and no effect. Use a background that is visually related to the grey gym rehearsal. No borders, no frames. The grey gym rehearsal should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-GGR-SER001-0018.webp",
       "loreDescription": "Three musicians rehearse beneath the falling ash, allowing forgotten anger to echo through an abandoned school.",
       "legacy": {
         "preservationRequirement": 500,
@@ -828,7 +828,7 @@
       }
     },
     {
-      "internalId": "MUS-NSS-GEN001-0019",
+      "internalId": "MUS-NSS-SER001-0019",
       "themeCode": "MUS",
       "designCode": "NSS",
       "designFamily": "NEON_SNOWSTAR",
@@ -863,7 +863,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a neon snowstar in neon style with a standard finish and no effect. Use a background that is visually related to the neon snowstar. No borders, no frames. The neon snowstar should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-NSS-GEN001-0019.webp",
+      "artworkPrompt": "Give me an image with a neon snowstar in neon style with a standard finish and no effect. Use a background that is visually related to the neon snowstar. No borders, no frames. The neon snowstar should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-NSS-SER001-0019.webp",
       "loreDescription": "Her bright performance turns Little Frost's repeated disasters into a carnival the town chooses to remember.",
       "legacy": {
         "preservationRequirement": 500,
@@ -871,7 +871,7 @@
       }
     },
     {
-      "internalId": "MUS-GMO-GEN001-0020",
+      "internalId": "MUS-GMO-SER001-0020",
       "themeCode": "MUS",
       "designCode": "GMO",
       "designFamily": "GOLDEN_MOTION",
@@ -908,7 +908,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a golden motion in cartoon style with a standard finish and no effect. Use a background that is visually related to the golden motion. No borders, no frames. The golden motion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-GMO-GEN001-0020.webp",
+      "artworkPrompt": "Give me an image with a golden motion in cartoon style with a standard finish and no effect. Use a background that is visually related to the golden motion. No borders, no frames. The golden motion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-GMO-SER001-0020.webp",
       "loreDescription": "Each movement leaves a trail of golden light that releases one preserved moment without breaking the amber around it.",
       "legacy": {
         "preservationRequirement": 500,

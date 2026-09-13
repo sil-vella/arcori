@@ -1,0 +1,108 @@
+{
+  "issuer": {
+    "name": "Silvester Vella",
+    "address": "",
+    "vat": "",
+    "email": "",
+    "phone": "",
+    "iban": "",
+    "bank": "",
+    "currency": "EUR"
+  },
+  "customers": [
+    {
+      "id": "895f4468-29db-4da3-8a04-b2acabd85a84",
+      "name": "AAM",
+      "address": "",
+      "email": "",
+      "vat": "",
+      "phone": ""
+    }
+  ],
+  "invoices": [
+    {
+      "id": "7a365813-6545-43ad-acb8-9cbb22c63d95",
+      "kind": "invoice",
+      "number": "INV-0001",
+      "date": "2026-09-11",
+      "valid_until": "",
+      "customer_id": "895f4468-29db-4da3-8a04-b2acabd85a84",
+      "customer": {
+        "id": "895f4468-29db-4da3-8a04-b2acabd85a84",
+        "name": "AAM",
+        "address": "",
+        "email": "",
+        "vat": "",
+        "phone": ""
+      },
+      "items": [
+        {
+          "description": "Website updates",
+          "qty": 1.0,
+          "unit": "hrs",
+          "rate": 40.0,
+          "amount": 40.0
+        }
+      ],
+      "notes": "",
+      "currency": "EUR",
+      "total": 40.0,
+      "issuer": {
+        "name": "Silvester Vella",
+        "address": "",
+        "vat": "",
+        "email": "",
+        "phone": "",
+        "iban": "",
+        "bank": "",
+        "currency": "EUR"
+      },
+      "pdf_rel": "accounts/invoices/INV-0001.pdf",
+      "created_at": "2026-09-11T10:40:51+0200"
+    }
+  ],
+  "quotations": [
+    {
+      "id": "410e358d-56b0-4d74-b55e-39357f720332",
+      "kind": "quotation",
+      "number": "QUO-0001",
+      "date": "2026-09-11",
+      "valid_until": "2026-10-11",
+      "customer_id": "895f4468-29db-4da3-8a04-b2acabd85a84",
+      "customer": {
+        "id": "895f4468-29db-4da3-8a04-b2acabd85a84",
+        "name": "AAM",
+        "address": "",
+        "email": "",
+        "vat": "",
+        "phone": ""
+      },
+      "items": [
+        {
+          "description": "Website redesign",
+          "qty": 10.0,
+          "unit": "hrs",
+          "rate": 40.0,
+          "amount": 400.0
+        }
+      ],
+      "notes": "Valid for 30 days.",
+      "currency": "EUR",
+      "total": 400.0,
+      "issuer": {
+        "name": "Silvester Vella",
+        "address": "",
+        "vat": "",
+        "email": "",
+        "phone": "",
+        "iban": "",
+        "bank": "",
+        "currency": "EUR"
+      },
+      "pdf_rel": "accounts/quotations/QUO-0001.pdf",
+      "created_at": "2026-09-11T10:41:26+0200"
+    }
+  ],
+  "next_invoice_number": 102,
+  "next_quotation_number": 93
+}

@@ -161,6 +161,6 @@ Stage 2 **Dart match module** is the online room SSOT. Practice is offline. quic
 - **Caller** — `callerUserId`
 - **Full wire snapshots**; private freeze not on wire
 - Dart practice stub seat `ai:seat_1`; Flutter offline practice uses `ai:seat_1` + `ai:seat_2`
-- Stub ids `ANM-TIG-GEN001-0001`, `ANM-WTI-GEN001-0002`, `SLM-STR-GEN001-0001`
+- Stub ids `ANM-TIG-SER001-0001`, `ANM-WTI-SER001-0002`, `SLM-STR-SER001-0001`
 - **Practice does not call Dart match** — local Flutter snapshot only
 - Catalog freeze client is **module-owned** (`MatchCatalogClient`) rather than extending core `FastApiServiceClient` (avoids core → match import)

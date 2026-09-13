@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('catalog hex drives rim; inner line stays in-family', () {
     const look = ArcoriLook(
-      designId: 'ARC-ANI-GEN001-0001',
+      designId: 'ARC-ANI-SER001-0001',
       colorHex: '#C6A15B',
     );
     expect(look.accent, const Color(0xFFC6A15B));
@@ -54,7 +54,7 @@ void main() {
           body: Center(
             child: ArcoriCylinder(
               look: ArcoriLook(
-                designId: 'ARC-ANI-GEN001-0001',
+                designId: 'ARC-ANI-SER001-0001',
                 colorHex: '#C6A15B',
               ),
               size: 72,
@@ -75,7 +75,7 @@ void main() {
 
   testWidgets('back face paints auto-contrast inner line at rim', (tester) async {
     const look = ArcoriLook(
-      designId: 'ARC-ANI-GEN001-0001',
+      designId: 'ARC-ANI-SER001-0001',
       colorHex: '#C6A15B',
     );
     await tester.pumpWidget(

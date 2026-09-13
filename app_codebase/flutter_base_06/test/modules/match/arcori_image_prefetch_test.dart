@@ -8,10 +8,6 @@ void main() {
     expect(urls, isNotEmpty);
     expect(urls, contains(kArcoriBackAssetPath));
     expect(
-      urls.any((u) => u.contains('ANM-TIG-GEN001-0001')),
-      isTrue,
-    );
-    expect(
       urls.any((u) => u.contains('practice_arcori_001')),
       isTrue,
     );
@@ -19,11 +15,19 @@ void main() {
       urls.any((u) => u.contains('practice_arcori_002')),
       isTrue,
     );
+    expect(
+      urls.any((u) => u.contains('practice_arcori_003')),
+      isTrue,
+    );
+    expect(
+      urls.any((u) => u.contains('ANM-TIG')),
+      isFalse,
+    );
   });
 
   test('collectArcoriArtUrls adds inventory extras once', () {
     const extra =
-        '/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp';
+        '/catalog-media/001_genesis/animals/ANM-TIG-SER001-0001.webp';
     final urls = collectArcoriArtUrls(extra: [extra, extra]);
     final tiger = resolveMediaUrl(extra);
     expect(urls.where((u) => u == tiger), hasLength(1));

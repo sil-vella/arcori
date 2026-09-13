@@ -2,9 +2,10 @@
 library;
 
 const stubArenaId = 'arena_velora_plaza';
-const stubArcoriId = 'ANM-TIG-GEN001-0001';
-const stubAiArcoriId = 'ANM-WTI-GEN001-0002';
-const stubSlammerId = 'SLM-STR-GEN001-0001';
+const stubArcoriId = 'ANM-TIG-SER001-0001';
+const stubAiArcoriId = 'ANM-WTI-SER001-0002';
+const stubGathererArcoriId = 'ANM-FOX-SER001-0003';
+const stubSlammerId = 'SLM-STR-SER001-0001';
 
 /// Quick Start and Invite pick a Velora arena from seated Arcori regions.
 /// Special Event uses other rules later; practice stays on [stubArenaId].
@@ -88,6 +89,7 @@ class MatchSnapshot {
     required this.matchType,
     required this.seats,
     this.arenaImageUrl,
+    this.gathererArcoriId,
     this.firstSeatIndex = 0,
     this.seriesId,
     this.seriesIndex = 1,
@@ -104,6 +106,9 @@ class MatchSnapshot {
   final int roundsTotal;
   final String arenaId;
   final String? arenaImageUrl;
+
+  /// Non-player region Gatherer Arcori (Quick Start / Invite); null if none.
+  final String? gathererArcoriId;
   final String callerUserId;
   final Map<String, dynamic> matchType;
   final List<MatchSeat> seats;
@@ -147,6 +152,7 @@ class MatchSnapshot {
       roundsTotal: roundsTotal,
       arenaId: arenaId,
       arenaImageUrl: arenaImageUrl,
+      gathererArcoriId: gathererArcoriId,
       callerUserId: callerUserId,
       matchType: matchType ?? Map<String, dynamic>.from(this.matchType),
       seats: seats ?? this.seats,
@@ -173,6 +179,8 @@ class MatchSnapshot {
       'arenaId': arenaId,
       if (arenaImageUrl != null && arenaImageUrl!.isNotEmpty)
         'arenaImageUrl': arenaImageUrl,
+      if (gathererArcoriId != null && gathererArcoriId!.isNotEmpty)
+        'gathererArcoriId': gathererArcoriId,
       'callerUserId': callerUserId,
       'matchType': Map<String, dynamic>.from(matchType),
       'seats': seats.map((s) => s.toPayload()).toList(),
@@ -219,6 +227,10 @@ class MatchSnapshot {
       arenaId: payload['arenaId']?.toString() ?? stubArenaId,
       arenaImageUrl: () {
         final raw = payload['arenaImageUrl']?.toString().trim() ?? '';
+        return raw.isEmpty ? null : raw;
+      }(),
+      gathererArcoriId: () {
+        final raw = payload['gathererArcoriId']?.toString().trim() ?? '';
         return raw.isEmpty ? null : raw;
       }(),
       callerUserId: payload['callerUserId']?.toString() ?? '',

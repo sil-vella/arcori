@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "TEL-SGD-GEN001-0001",
+      "internalId": "TEL-SGD-SER001-0001",
       "themeCode": "TEL",
       "designCode": "SGD",
       "designFamily": "SEALED_GATHERING",
@@ -45,7 +45,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a sealed gathering in realistic style with a standard finish and no effect. Use a background that is visually related to the sealed gathering. No borders, no frames. The sealed gathering should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-SGD-GEN001-0001.webp",
+      "artworkPrompt": "Give me an image with a sealed gathering in realistic style with a standard finish and no effect. Use a background that is visually related to the sealed gathering. No borders, no frames. The sealed gathering should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-SGD-SER001-0001.webp",
       "loreDescription": "A sealed letter interrupts an ordinary gathering in Everlight Grove, binding five lives to a secret none of them remembers creating.",
       "legacy": {
         "preservationRequirement": 500,
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "TEL-GRF-GEN001-0002",
+      "internalId": "TEL-GRF-SER001-0002",
       "themeCode": "TEL",
       "designCode": "GRF",
       "designFamily": "GOLDEN_RUIN",
@@ -90,7 +90,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a golden ruin feast in comic style with a standard finish and no effect. Use a background that is visually related to the golden ruin feast. No borders, no frames. The golden ruin feast should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-GRF-GEN001-0002.webp",
+      "artworkPrompt": "Give me an image with a golden ruin feast in comic style with a standard finish and no effect. Use a background that is visually related to the golden ruin feast. No borders, no frames. The golden ruin feast should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-GRF-SER001-0002.webp",
       "loreDescription": "A lavish garden meal ends in cheerful ruin as Amberwild pushes through the property and preserves every domestic disaster in gold.",
       "legacy": {
         "preservationRequirement": 500,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "TEL-UFC-GEN001-0003",
+      "internalId": "TEL-UFC-SER001-0003",
       "themeCode": "TEL",
       "designCode": "UFC",
       "designFamily": "UNFINISHED_CASE",
@@ -137,7 +137,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a unfinished case in anime style with a standard finish and no effect. Use a background that is visually related to the unfinished case. No borders, no frames. The unfinished case should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-UFC-GEN001-0003.webp",
+      "artworkPrompt": "Give me an image with a unfinished case in anime style with a standard finish and no effect. Use a background that is visually related to the unfinished case. No borders, no frames. The unfinished case should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-UFC-SER001-0003.webp",
       "loreDescription": "An investigator leaves one unfinished case beside the canal while ash erases the street and a solitary witness waits on the bridge.",
       "legacy": {
         "preservationRequirement": 500,
@@ -145,7 +145,7 @@
       }
     },
     {
-      "internalId": "TEL-OVR-GEN001-0004",
+      "internalId": "TEL-OVR-SER001-0004",
       "themeCode": "TEL",
       "designCode": "OVR",
       "designFamily": "OVERNIGHT_RITUALS",
@@ -180,7 +180,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a overnight rituals in watercolor style with a standard finish and no effect. Use a background that is visually related to the overnight rituals. No borders, no frames. The overnight rituals should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-OVR-GEN001-0004.webp",
+      "artworkPrompt": "Give me an image with a overnight rituals in watercolor style with a standard finish and no effect. Use a background that is visually related to the overnight rituals. No borders, no frames. The overnight rituals should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-OVR-SER001-0004.webp",
       "loreDescription": "Several generations share this warm Little Frost sitting room, where small mishaps vanish overnight but the family rituals remain.",
       "legacy": {
         "preservationRequirement": 500,
@@ -188,7 +188,7 @@
       }
     },
     {
-      "internalId": "TEL-OHP-GEN001-0005",
+      "internalId": "TEL-OHP-SER001-0005",
       "themeCode": "TEL",
       "designCode": "OHP",
       "designFamily": "ORDINARY_HAPPINESS",
@@ -223,7 +223,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a ordinary happiness in retro style with a standard finish and no effect. Use a background that is visually related to the ordinary happiness. No borders, no frames. The ordinary happiness should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-OHP-GEN001-0005.webp",
+      "artworkPrompt": "Give me an image with a ordinary happiness in retro style with a standard finish and no effect. Use a background that is visually related to the ordinary happiness. No borders, no frames. The ordinary happiness should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-OHP-SER001-0005.webp",
       "loreDescription": "A modest postwar room repeats itself at impossible angles, preserving an ordinary happiness whose owners can no longer be identified.",
       "legacy": {
         "preservationRequirement": 500,
@@ -231,7 +231,7 @@
       }
     },
     {
-      "internalId": "TEL-PKD-GEN001-0006",
+      "internalId": "TEL-PKD-SER001-0006",
       "themeCode": "TEL",
       "designCode": "PKD",
       "designFamily": "PACKED_DISAGREEMENT",
@@ -268,7 +268,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a packed disagreement in cartoon style with a standard finish and no effect. Use a background that is visually related to the packed disagreement. No borders, no frames. The packed disagreement should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-PKD-GEN001-0006.webp",
+      "artworkPrompt": "Give me an image with a packed disagreement in cartoon style with a standard finish and no effect. Use a background that is visually related to the packed disagreement. No borders, no frames. The packed disagreement should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-PKD-SER001-0006.webp",
       "loreDescription": "Two badly packed suitcases and a trail of wet socks mark another harmless disagreement beside Moonwake Bay's shifting shore.",
       "legacy": {
         "preservationRequirement": 500,
@@ -276,7 +276,7 @@
       }
     },
     {
-      "internalId": "TEL-SHK-GEN001-0007",
+      "internalId": "TEL-SHK-SER001-0007",
       "themeCode": "TEL",
       "designCode": "SHK",
       "designFamily": "SHARED_KITCHEN",
@@ -315,7 +315,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a shared kitchen in pixel art style with a standard finish and no effect. Use a background that is visually related to the shared kitchen. No borders, no frames. The shared kitchen should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-SHK-GEN001-0007.webp",
+      "artworkPrompt": "Give me an image with a shared kitchen in pixel art style with a standard finish and no effect. Use a background that is visually related to the shared kitchen. No borders, no frames. The shared kitchen should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-SHK-SER001-0007.webp",
       "loreDescription": "Five incompatible housemates leave five cups and one ruined supper behind, yet the shared kitchen remains the brightest room in the city.",
       "legacy": {
         "preservationRequirement": 500,
@@ -323,7 +323,7 @@
       }
     },
     {
-      "internalId": "TEL-FDW-GEN001-0008",
+      "internalId": "TEL-FDW-SER001-0008",
       "themeCode": "TEL",
       "designCode": "FDW",
       "designFamily": "FOLDED_WATCH",
@@ -362,7 +362,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a folded watch in neon style with a standard finish and no effect. Use a background that is visually related to the folded watch. No borders, no frames. The folded watch should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-FDW-GEN001-0008.webp",
+      "artworkPrompt": "Give me an image with a folded watch in neon style with a standard finish and no effect. Use a background that is visually related to the folded watch. No borders, no frames. The folded watch should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-FDW-SER001-0008.webp",
       "loreDescription": "A covert watch station records roads folding over an industrial district, but every camera shows the same place from a different reality.",
       "legacy": {
         "preservationRequirement": 500,
@@ -370,7 +370,7 @@
       }
     },
     {
-      "internalId": "TEL-DWD-GEN001-0009",
+      "internalId": "TEL-DWD-SER001-0009",
       "themeCode": "TEL",
       "designCode": "DWD",
       "designFamily": "DAWN_WARD",
@@ -405,7 +405,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a dawn ward in minimalist style with a standard finish and no effect. Use a background that is visually related to the dawn ward. No borders, no frames. The dawn ward should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-DWD-GEN001-0009.webp",
+      "artworkPrompt": "Give me an image with a dawn ward in minimalist style with a standard finish and no effect. Use a background that is visually related to the dawn ward. No borders, no frames. The dawn ward should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-DWD-SER001-0009.webp",
       "loreDescription": "At dawn, an empty wheelchair and a single flower quietly await the next patient while snow seals the hospital from the town.",
       "legacy": {
         "preservationRequirement": 500,
@@ -413,7 +413,7 @@
       }
     },
     {
-      "internalId": "TEL-RVK-GEN001-0010",
+      "internalId": "TEL-RVK-SER001-0010",
       "themeCode": "TEL",
       "designCode": "RVK",
       "designFamily": "RIVAL_KEELS",
@@ -450,7 +450,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a rival keels in low poly style with a standard finish and no effect. Use a background that is visually related to the rival keels. No borders, no frames. The rival keels should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-RVK-GEN001-0010.webp",
+      "artworkPrompt": "Give me an image with a rival keels in low poly style with a standard finish and no effect. Use a background that is visually related to the rival keels. No borders, no frames. The rival keels should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-RVK-SER001-0010.webp",
       "loreDescription": "Two unfinished ships face one another across a luminous tidal channel, carrying a family rivalry older than either vessel.",
       "legacy": {
         "preservationRequirement": 500,
@@ -458,7 +458,7 @@
       }
     },
     {
-      "internalId": "TEL-SCT-GEN001-0011",
+      "internalId": "TEL-SCT-SER001-0011",
       "themeCode": "TEL",
       "designCode": "SCT",
       "designFamily": "SIX_CUPS",
@@ -497,7 +497,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a six cups table in chibi style with a standard finish and no effect. Use a background that is visually related to the six cups table. No borders, no frames. The six cups table should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-SCT-GEN001-0011.webp",
+      "artworkPrompt": "Give me an image with a six cups table in chibi style with a standard finish and no effect. Use a background that is visually related to the six cups table. No borders, no frames. The six cups table should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-SCT-SER001-0011.webp",
       "loreDescription": "Six cups cool around a crowded table in Everlight Grove, holding the shape of friendships that always find their way back.",
       "legacy": {
         "preservationRequirement": 500,
@@ -505,7 +505,7 @@
       }
     },
     {
-      "internalId": "TEL-IHR-GEN001-0012",
+      "internalId": "TEL-IHR-SER001-0012",
       "themeCode": "TEL",
       "designCode": "IHR",
       "designFamily": "INHERITED_RULES",
@@ -542,7 +542,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a inherited rules in graffiti style with a standard finish and no effect. Use a background that is visually related to the inherited rules. No borders, no frames. The inherited rules should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-IHR-GEN001-0012.webp",
+      "artworkPrompt": "Give me an image with a inherited rules in graffiti style with a standard finish and no effect. Use a background that is visually related to the inherited rules. No borders, no frames. The inherited rules should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-IHR-SER001-0012.webp",
       "loreDescription": "A burst of street color transforms a formal mansion as Amberwild waits beyond its doors, ready to challenge every inherited rule.",
       "legacy": {
         "preservationRequirement": 500,
@@ -550,7 +550,7 @@
       }
     },
     {
-      "internalId": "TEL-EVK-GEN001-0013",
+      "internalId": "TEL-EVK-SER001-0013",
       "themeCode": "TEL",
       "designCode": "EVK",
       "designFamily": "EVENING_KEEPSAKES",
@@ -589,7 +589,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a evening keepsakes in prismatic style with a standard finish and no effect. Use a background that is visually related to the evening keepsakes. No borders, no frames. The evening keepsakes should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-EVK-GEN001-0013.webp",
+      "artworkPrompt": "Give me an image with a evening keepsakes in prismatic style with a standard finish and no effect. Use a background that is visually related to the evening keepsakes. No borders, no frames. The evening keepsakes should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-EVK-SER001-0013.webp",
       "loreDescription": "Abandoned bags and broken keepsakes catch the evening light, refracting one school day into competing versions of friendship and betrayal.",
       "legacy": {
         "preservationRequirement": 500,
@@ -597,7 +597,7 @@
       }
     },
     {
-      "internalId": "TEL-CFR-GEN001-0014",
+      "internalId": "TEL-CFR-SER001-0014",
       "themeCode": "TEL",
       "designCode": "CFR",
       "designFamily": "CLIFF_RESCUE",
@@ -634,7 +634,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a cliff rescue in realistic style with a standard finish and no effect. Use a background that is visually related to the cliff rescue. No borders, no frames. The cliff rescue should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-CFR-GEN001-0014.webp",
+      "artworkPrompt": "Give me an image with a cliff rescue in realistic style with a standard finish and no effect. Use a background that is visually related to the cliff rescue. No borders, no frames. The cliff rescue should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-CFR-SER001-0014.webp",
       "loreDescription": "A cliffside rescue post watches Moonwake Bay's dangerous luminous currents, where the sea may return the lost to an unfamiliar shore.",
       "legacy": {
         "preservationRequirement": 500,
@@ -642,7 +642,7 @@
       }
     },
     {
-      "internalId": "TEL-FLA-GEN001-0015",
+      "internalId": "TEL-FLA-SER001-0015",
       "themeCode": "TEL",
       "designCode": "FLA",
       "designFamily": "FLOODED_ARCHIVE",
@@ -679,7 +679,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a flooded archive in watercolor style with a standard finish and no effect. Use a background that is visually related to the flooded archive. No borders, no frames. The flooded archive should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-FLA-GEN001-0015.webp",
+      "artworkPrompt": "Give me an image with a flooded archive in watercolor style with a standard finish and no effect. Use a background that is visually related to the flooded archive. No borders, no frames. The flooded archive should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-FLA-SER001-0015.webp",
       "loreDescription": "A doorway appears only in the flooded reflection of an abandoned archive, suggesting the missing evidence was never stored in this reality.",
       "legacy": {
         "preservationRequirement": 500,
@@ -687,7 +687,7 @@
       }
     },
     {
-      "internalId": "TEL-AWD-GEN001-0016",
+      "internalId": "TEL-AWD-SER001-0016",
       "themeCode": "TEL",
       "designCode": "AWD",
       "designFamily": "ASHEN_WARD",
@@ -726,7 +726,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a ashen ward in comic style with a standard finish and no effect. Use a background that is visually related to the ashen ward. No borders, no frames. The ashen ward should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-AWD-GEN001-0016.webp",
+      "artworkPrompt": "Give me an image with a ashen ward in comic style with a standard finish and no effect. Use a background that is visually related to the ashen ward. No borders, no frames. The ashen ward should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-AWD-SER001-0016.webp",
       "loreDescription": "After the emergency doors stop swinging, pale ash enters the ward and slowly covers every trace of the night's frantic work.",
       "legacy": {
         "preservationRequirement": 500,
@@ -734,7 +734,7 @@
       }
     },
     {
-      "internalId": "TEL-IPB-GEN001-0017",
+      "internalId": "TEL-IPB-SER001-0017",
       "themeCode": "TEL",
       "designCode": "IPB",
       "designFamily": "IMPOSSIBLE_BREAKFAST",
@@ -769,7 +769,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a impossible breakfast in cartoon style with a standard finish and no effect. Use a background that is visually related to the impossible breakfast. No borders, no frames. The impossible breakfast should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-IPB-GEN001-0017.webp",
+      "artworkPrompt": "Give me an image with a impossible breakfast in cartoon style with a standard finish and no effect. Use a background that is visually related to the impossible breakfast. No borders, no frames. The impossible breakfast should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-IPB-SER001-0017.webp",
       "loreDescription": "An impossible breakfast tower survives another household calamity while Little Frost calmly repairs the damage beyond the door.",
       "legacy": {
         "preservationRequirement": 500,
@@ -777,7 +777,7 @@
       }
     },
     {
-      "internalId": "TEL-CVW-GEN001-0018",
+      "internalId": "TEL-CVW-SER001-0018",
       "themeCode": "TEL",
       "designCode": "CVW",
       "designFamily": "CIVIC_WRECKAGE",
@@ -812,7 +812,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a civic wreckage in low poly style with a standard finish and no effect. Use a background that is visually related to the civic wreckage. No borders, no frames. The civic wreckage should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-CVW-GEN001-0018.webp",
+      "artworkPrompt": "Give me an image with a civic wreckage in low poly style with a standard finish and no effect. Use a background that is visually related to the civic wreckage. No borders, no frames. The civic wreckage should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-CVW-SER001-0018.webp",
       "loreDescription": "The town square bears the remains of an unexplained celebration, yet every resident treats the wreckage as routine civic decoration.",
       "legacy": {
         "preservationRequirement": 500,
@@ -820,7 +820,7 @@
       }
     },
     {
-      "internalId": "TEL-FVR-GEN001-0019",
+      "internalId": "TEL-FVR-SER001-0019",
       "themeCode": "TEL",
       "designCode": "FVR",
       "designFamily": "FIVE_RELICS",
@@ -859,7 +859,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a five relics in anime style with a standard finish and no effect. Use a background that is visually related to the five relics. No borders, no frames. The five relics should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-FVR-GEN001-0019.webp",
+      "artworkPrompt": "Give me an image with a five relics in anime style with a standard finish and no effect. Use a background that is visually related to the five relics. No borders, no frames. The five relics should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-FVR-SER001-0019.webp",
       "loreDescription": "Five geometric relics awaken within a barren mountain sanctuary as colossal guardians gather above Everlight Grove.",
       "legacy": {
         "preservationRequirement": 500,
@@ -867,7 +867,7 @@
       }
     },
     {
-      "internalId": "TEL-ABC-GEN001-0020",
+      "internalId": "TEL-ABC-SER001-0020",
       "themeCode": "TEL",
       "designCode": "ABC",
       "designFamily": "AMBER_CAMP",
@@ -904,7 +904,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a amber camp in pixel art style with a standard finish and no effect. Use a background that is visually related to the amber camp. No borders, no frames. The amber camp should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-ABC-GEN001-0020.webp",
+      "artworkPrompt": "Give me an image with a amber camp in pixel art style with a standard finish and no effect. Use a background that is visually related to the amber camp. No borders, no frames. The amber camp should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEL-ABC-SER001-0020.webp",
       "loreDescription": "Six newly discovered creatures gather beside an abandoned camp while ancient relatives remain suspended inside Amberwild's glowing formations.",
       "legacy": {
         "preservationRequirement": 500,

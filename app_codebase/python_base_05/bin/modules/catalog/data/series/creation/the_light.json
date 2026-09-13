@@ -1,0 +1,56 @@
+{
+  "catalog": "The Light Creation Series",
+  "theme": "The Light",
+  "series": "Creation",
+  "themeCode": "LGT",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "LGT-TLT-SER000-0001",
+      "themeCode": "LGT",
+      "designCode": "TLT",
+      "designFamily": "THE_LIGHT",
+      "design": "The Light",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "The Light",
+      "subtheme": "The Light",
+      "style": "Surreal",
+      "finish": "Matte",
+      "color": "#E6DCC8",
+      "effect": "None",
+      "printedRarity": "Rare",
+      "selectionWeight": 0.1,
+      "series": "Creation Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Light in surreal style with a matte finish and no effect. Use a background that is visually related to Ashdrift Hill ash corridors. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LGT-TLT-SER000-0001.webp",
+      "loreDescription": "A collectible The Light Arcori generation I from the Creation Series, bound to Ashdrift Hill.",
+      "legacy": {
+        "preservationRequirement": 50,
+        "closureMilestone": 100
+      }
+    }
+  ]
+}

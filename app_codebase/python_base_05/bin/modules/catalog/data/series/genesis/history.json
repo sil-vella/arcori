@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "HIS-PHA-GEN001-0001",
+      "internalId": "HIS-PHA-SER001-0001",
       "themeCode": "HIS",
       "designCode": "PHA",
       "designFamily": "PHARAOH",
@@ -43,7 +43,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a pharaoh in realistic style with a foil finish and glow effect. Use a background that is visually related to the pharaoh. No borders, no frames. The pharaoh should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-PHA-GEN001-0001.webp",
+      "artworkPrompt": "Give me an image with a pharaoh in realistic style with a foil finish and glow effect. Use a background that is visually related to the pharaoh. No borders, no frames. The pharaoh should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-PHA-SER001-0001.webp",
       "loreDescription": "A collectible Pharaoh Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -51,7 +51,7 @@
       }
     },
     {
-      "internalId": "HIS-ANB-GEN001-0002",
+      "internalId": "HIS-ANB-SER001-0002",
       "themeCode": "HIS",
       "designCode": "ANB",
       "designFamily": "ANUBIS_GUARDIAN",
@@ -90,7 +90,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a anubis guardian in comic style with a metallic finish and fire effect. Use a background that is visually related to the anubis guardian. No borders, no frames. The anubis guardian should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-ANB-GEN001-0002.webp",
+      "artworkPrompt": "Give me an image with a anubis guardian in comic style with a metallic finish and fire effect. Use a background that is visually related to the anubis guardian. No borders, no frames. The anubis guardian should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-ANB-SER001-0002.webp",
       "loreDescription": "A collectible Anubis Guardian Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "HIS-SCR-GEN001-0003",
+      "internalId": "HIS-SCR-SER001-0003",
       "themeCode": "HIS",
       "designCode": "SCR",
       "designFamily": "ROYAL_SCRIBE",
@@ -137,7 +137,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a royal scribe in watercolor style with a matte finish and no effect. Use a background that is visually related to the royal scribe. No borders, no frames. The royal scribe should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-SCR-GEN001-0003.webp",
+      "artworkPrompt": "Give me an image with a royal scribe in watercolor style with a matte finish and no effect. Use a background that is visually related to the royal scribe. No borders, no frames. The royal scribe should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-SCR-SER001-0003.webp",
       "loreDescription": "A collectible Royal Scribe Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -145,7 +145,7 @@
       }
     },
     {
-      "internalId": "HIS-BSR-GEN001-0004",
+      "internalId": "HIS-BSR-SER001-0004",
       "themeCode": "HIS",
       "designCode": "BSR",
       "designFamily": "BERSERKER",
@@ -180,7 +180,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a berserker in comic style with a metallic finish and motion effect. Use a background that is visually related to the berserker. No borders, no frames. The berserker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-BSR-GEN001-0004.webp",
+      "artworkPrompt": "Give me an image with a berserker in comic style with a metallic finish and motion effect. Use a background that is visually related to the berserker. No borders, no frames. The berserker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-BSR-SER001-0004.webp",
       "loreDescription": "A collectible Berserker Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -188,7 +188,7 @@
       }
     },
     {
-      "internalId": "HIS-LSH-GEN001-0005",
+      "internalId": "HIS-LSH-SER001-0005",
       "themeCode": "HIS",
       "designCode": "LSH",
       "designFamily": "LONGSHIP_CAPTAIN",
@@ -225,7 +225,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a longship captain in realistic style with a chrome finish and pulse effect. Use a background that is visually related to the longship captain. No borders, no frames. The longship captain should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-LSH-GEN001-0005.webp",
+      "artworkPrompt": "Give me an image with a longship captain in realistic style with a chrome finish and pulse effect. Use a background that is visually related to the longship captain. No borders, no frames. The longship captain should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-LSH-SER001-0005.webp",
       "loreDescription": "A collectible Longship Captain Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -233,7 +233,7 @@
       }
     },
     {
-      "internalId": "HIS-RSM-GEN001-0006",
+      "internalId": "HIS-RSM-SER001-0006",
       "themeCode": "HIS",
       "designCode": "RSM",
       "designFamily": "RUNE_SHIELD",
@@ -272,7 +272,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a rune shield in anime style with a foil finish and glow effect. Use a background that is visually related to the rune shield. No borders, no frames. The rune shield should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-RSM-GEN001-0006.webp",
+      "artworkPrompt": "Give me an image with a rune shield in anime style with a foil finish and glow effect. Use a background that is visually related to the rune shield. No borders, no frames. The rune shield should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-RSM-SER001-0006.webp",
       "loreDescription": "A collectible Rune Shield Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -280,7 +280,7 @@
       }
     },
     {
-      "internalId": "HIS-KNG-GEN001-0007",
+      "internalId": "HIS-KNG-SER001-0007",
       "themeCode": "HIS",
       "designCode": "KNG",
       "designFamily": "ROYAL_KNIGHT",
@@ -319,7 +319,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a royal knight in realistic style with a standard finish and no effect. Use a background that is visually related to the royal knight. No borders, no frames. The royal knight should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-KNG-GEN001-0007.webp",
+      "artworkPrompt": "Give me an image with a royal knight in realistic style with a standard finish and no effect. Use a background that is visually related to the royal knight. No borders, no frames. The royal knight should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-KNG-SER001-0007.webp",
       "loreDescription": "A collectible Royal Knight Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -327,7 +327,7 @@
       }
     },
     {
-      "internalId": "HIS-PAL-GEN001-0008",
+      "internalId": "HIS-PAL-SER001-0008",
       "themeCode": "HIS",
       "designCode": "PAL",
       "designFamily": "PALADIN",
@@ -366,7 +366,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a paladin in comic style with a metallic finish and glow effect. Use a background that is visually related to the paladin. No borders, no frames. The paladin should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-PAL-GEN001-0008.webp",
+      "artworkPrompt": "Give me an image with a paladin in comic style with a metallic finish and glow effect. Use a background that is visually related to the paladin. No borders, no frames. The paladin should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-PAL-SER001-0008.webp",
       "loreDescription": "A collectible Paladin Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -374,7 +374,7 @@
       }
     },
     {
-      "internalId": "HIS-JST-GEN001-0009",
+      "internalId": "HIS-JST-SER001-0009",
       "themeCode": "HIS",
       "designCode": "JST",
       "designFamily": "JOUST_CHAMPION",
@@ -409,7 +409,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a joust champion in anime style with a chrome finish and motion effect. Use a background that is visually related to the joust champion. No borders, no frames. The joust champion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-JST-GEN001-0009.webp",
+      "artworkPrompt": "Give me an image with a joust champion in anime style with a chrome finish and motion effect. Use a background that is visually related to the joust champion. No borders, no frames. The joust champion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-JST-SER001-0009.webp",
       "loreDescription": "A collectible Joust Champion Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -417,7 +417,7 @@
       }
     },
     {
-      "internalId": "HIS-LEG-GEN001-0010",
+      "internalId": "HIS-LEG-SER001-0010",
       "themeCode": "HIS",
       "designCode": "LEG",
       "designFamily": "LEGIONNAIRE",
@@ -454,7 +454,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a legionnaire in realistic style with a foil finish and no effect. Use a background that is visually related to the legionnaire. No borders, no frames. The legionnaire should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-LEG-GEN001-0010.webp",
+      "artworkPrompt": "Give me an image with a legionnaire in realistic style with a foil finish and no effect. Use a background that is visually related to the legionnaire. No borders, no frames. The legionnaire should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-LEG-SER001-0010.webp",
       "loreDescription": "A collectible Legionnaire Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -462,7 +462,7 @@
       }
     },
     {
-      "internalId": "HIS-CES-GEN001-0011",
+      "internalId": "HIS-CES-SER001-0011",
       "themeCode": "HIS",
       "designCode": "CES",
       "designFamily": "CAESAR",
@@ -499,7 +499,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a caesar in watercolor style with a prismatic finish and glow effect. Use a background that is visually related to the caesar. No borders, no frames. The caesar should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-CES-GEN001-0011.webp",
+      "artworkPrompt": "Give me an image with a caesar in watercolor style with a prismatic finish and glow effect. Use a background that is visually related to the caesar. No borders, no frames. The caesar should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-CES-SER001-0011.webp",
       "loreDescription": "A collectible Caesar Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -507,7 +507,7 @@
       }
     },
     {
-      "internalId": "HIS-GLD-GEN001-0012",
+      "internalId": "HIS-GLD-SER001-0012",
       "themeCode": "HIS",
       "designCode": "GLD",
       "designFamily": "GLADIATOR",
@@ -544,7 +544,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a gladiator in comic style with a metallic finish and fire effect. Use a background that is visually related to the gladiator. No borders, no frames. The gladiator should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-GLD-GEN001-0012.webp",
+      "artworkPrompt": "Give me an image with a gladiator in comic style with a metallic finish and fire effect. Use a background that is visually related to the gladiator. No borders, no frames. The gladiator should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-GLD-SER001-0012.webp",
       "loreDescription": "A collectible Gladiator Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -552,7 +552,7 @@
       }
     },
     {
-      "internalId": "HIS-SAM-GEN001-0013",
+      "internalId": "HIS-SAM-SER001-0013",
       "themeCode": "HIS",
       "designCode": "SAM",
       "designFamily": "SAMURAI",
@@ -591,7 +591,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a samurai in realistic style with a matte finish and no effect. Use a background that is visually related to the samurai. No borders, no frames. The samurai should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-SAM-GEN001-0013.webp",
+      "artworkPrompt": "Give me an image with a samurai in realistic style with a matte finish and no effect. Use a background that is visually related to the samurai. No borders, no frames. The samurai should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-SAM-SER001-0013.webp",
       "loreDescription": "A collectible Samurai Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -599,7 +599,7 @@
       }
     },
     {
-      "internalId": "HIS-SHG-GEN001-0014",
+      "internalId": "HIS-SHG-SER001-0014",
       "themeCode": "HIS",
       "designCode": "SHG",
       "designFamily": "SHOGUN",
@@ -638,7 +638,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a shogun in anime style with a foil finish and glow effect. Use a background that is visually related to the shogun. No borders, no frames. The shogun should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-SHG-GEN001-0014.webp",
+      "artworkPrompt": "Give me an image with a shogun in anime style with a foil finish and glow effect. Use a background that is visually related to the shogun. No borders, no frames. The shogun should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-SHG-SER001-0014.webp",
       "loreDescription": "A collectible Shogun Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -646,7 +646,7 @@
       }
     },
     {
-      "internalId": "HIS-NIN-GEN001-0015",
+      "internalId": "HIS-NIN-SER001-0015",
       "themeCode": "HIS",
       "designCode": "NIN",
       "designFamily": "NINJA_SCOUT",
@@ -685,7 +685,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a ninja scout in comic style with a gloss finish and motion effect. Use a background that is visually related to the ninja scout. No borders, no frames. The ninja scout should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-NIN-GEN001-0015.webp",
+      "artworkPrompt": "Give me an image with a ninja scout in comic style with a gloss finish and motion effect. Use a background that is visually related to the ninja scout. No borders, no frames. The ninja scout should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-NIN-SER001-0015.webp",
       "loreDescription": "A collectible Ninja Scout Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -693,7 +693,7 @@
       }
     },
     {
-      "internalId": "HIS-SHF-GEN001-0016",
+      "internalId": "HIS-SHF-SER001-0016",
       "themeCode": "HIS",
       "designCode": "SHF",
       "designFamily": "LONE_SHERIFF",
@@ -728,7 +728,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a lone sheriff in comic style with a standard finish and no effect. Use a background that is visually related to the lone sheriff. No borders, no frames. The lone sheriff should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-SHF-GEN001-0016.webp",
+      "artworkPrompt": "Give me an image with a lone sheriff in comic style with a standard finish and no effect. Use a background that is visually related to the lone sheriff. No borders, no frames. The lone sheriff should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-SHF-SER001-0016.webp",
       "loreDescription": "A collectible Lone Sheriff Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -736,7 +736,7 @@
       }
     },
     {
-      "internalId": "HIS-GSL-GEN001-0017",
+      "internalId": "HIS-GSL-SER001-0017",
       "themeCode": "HIS",
       "designCode": "GSL",
       "designFamily": "GUNSLINGER",
@@ -773,7 +773,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a gunslinger in realistic style with a chrome finish and fire effect. Use a background that is visually related to the gunslinger. No borders, no frames. The gunslinger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-GSL-GEN001-0017.webp",
+      "artworkPrompt": "Give me an image with a gunslinger in realistic style with a chrome finish and fire effect. Use a background that is visually related to the gunslinger. No borders, no frames. The gunslinger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-GSL-SER001-0017.webp",
       "loreDescription": "A collectible Gunslinger Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -781,7 +781,7 @@
       }
     },
     {
-      "internalId": "HIS-OUT-GEN001-0018",
+      "internalId": "HIS-OUT-SER001-0018",
       "themeCode": "HIS",
       "designCode": "OUT",
       "designFamily": "OUTLAW",
@@ -818,7 +818,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a outlaw in graffiti style with a matte finish and smoke effect. Use a background that is visually related to the outlaw. No borders, no frames. The outlaw should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-OUT-GEN001-0018.webp",
+      "artworkPrompt": "Give me an image with a outlaw in graffiti style with a matte finish and smoke effect. Use a background that is visually related to the outlaw. No borders, no frames. The outlaw should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-OUT-SER001-0018.webp",
       "loreDescription": "A collectible Outlaw Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -826,7 +826,7 @@
       }
     },
     {
-      "internalId": "HIS-EXP-GEN001-0019",
+      "internalId": "HIS-EXP-SER001-0019",
       "themeCode": "HIS",
       "designCode": "EXP",
       "designFamily": "EXPLORER",
@@ -863,7 +863,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a explorer in watercolor style with a gloss finish and sparkle effect. Use a background that is visually related to the explorer. No borders, no frames. The explorer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-EXP-GEN001-0019.webp",
+      "artworkPrompt": "Give me an image with a explorer in watercolor style with a gloss finish and sparkle effect. Use a background that is visually related to the explorer. No borders, no frames. The explorer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-EXP-SER001-0019.webp",
       "loreDescription": "A collectible Explorer Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -871,7 +871,7 @@
       }
     },
     {
-      "internalId": "HIS-NAV-GEN001-0020",
+      "internalId": "HIS-NAV-SER001-0020",
       "themeCode": "HIS",
       "designCode": "NAV",
       "designFamily": "MASTER_NAVIGATOR",
@@ -908,7 +908,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a master navigator in minimalist style with a metallic finish and glow effect. Use a background that is visually related to the master navigator. No borders, no frames. The master navigator should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-NAV-GEN001-0020.webp",
+      "artworkPrompt": "Give me an image with a master navigator in minimalist style with a metallic finish and glow effect. Use a background that is visually related to the master navigator. No borders, no frames. The master navigator should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HIS-NAV-SER001-0020.webp",
       "loreDescription": "A collectible Master Navigator Arcori generation I from the History Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,

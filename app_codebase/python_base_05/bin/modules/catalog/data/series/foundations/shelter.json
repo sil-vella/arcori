@@ -1,0 +1,144 @@
+{
+  "catalog": "Shelter Foundations Series",
+  "theme": "Shelter",
+  "series": "Foundations",
+  "themeCode": "SHE",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "SHE-STR-SER003-0001",
+      "themeCode": "SHE",
+      "designCode": "STR",
+      "designFamily": "STORMWARD_REFUGE",
+      "design": "Stormward Refuge",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Shelter",
+      "subtheme": "Shelter",
+      "style": "Comic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Stormward Refuge in comic style with a standard finish and no effect. Use a background that is visually related to Stormward Refuge. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SHE-STR-SER003-0001.webp",
+      "loreDescription": "A collectible Stormward Refuge Arcori generation I from the Shelter Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "SHE-HLL-SER003-0002",
+      "themeCode": "SHE",
+      "designCode": "HLL",
+      "designFamily": "HARBOR_OF_THE_LAST_LANTERN",
+      "design": "Harbor of the Last Lantern",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Shelter",
+      "subtheme": "Shelter",
+      "style": "Comic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Harbor of the Last Lantern in comic style with a standard finish and no effect. Use a background that is visually related to Harbor of the Last Lantern. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SHE-HLL-SER003-0002.webp",
+      "loreDescription": "A collectible Harbor of the Last Lantern Arcori generation I from the Shelter Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "SHE-USG-SER003-0003",
+      "themeCode": "SHE",
+      "designCode": "USG",
+      "designFamily": "UNDER_THE_SLEEPING_GIANT",
+      "design": "Under the Sleeping Giant",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Shelter",
+      "subtheme": "Shelter",
+      "style": "Comic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Under the Sleeping Giant in comic style with a standard finish and no effect. Use a background that is visually related to Under the Sleeping Giant. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SHE-USG-SER003-0003.webp",
+      "loreDescription": "A collectible Under the Sleeping Giant Arcori generation I from the Shelter Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

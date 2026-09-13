@@ -158,6 +158,7 @@ class MatchStore {
     required Map<String, Map<String, dynamic>> catalogById,
     String arenaId = stubArenaId,
     String? arenaImageUrl,
+    String? gathererArcoriId,
     int? firstSeatIndex,
     Random? random,
   }) {
@@ -205,6 +206,7 @@ class MatchStore {
       roundsTotal: 2,
       arenaId: arenaId,
       arenaImageUrl: arenaImageUrl,
+      gathererArcoriId: gathererArcoriId,
       callerUserId: callerUserId,
       matchType: Map<String, dynamic>.from(matchType),
       seats: seats,

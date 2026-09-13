@@ -141,10 +141,25 @@ def find_theme_document_by_code(theme_code: str) -> dict[str, Any] | None:
     code = theme_code.strip().upper()
     if not code:
         return None
+    # Prefer Genesis when multiple series share a themeCode (e.g. Music, Animals).
+    _series_pref = ("Genesis", "Pioneers", "Foundations")
+    matches: list[dict[str, Any]] = []
     for doc in list_theme_documents():
         if str(doc.get("themeCode", "")).upper() == code:
-            return doc
-    return None
+            matches.append(doc)
+    if not matches:
+        return None
+    if len(matches) == 1:
+        return matches[0]
+
+    def _rank(doc: dict[str, Any]) -> int:
+        series = str(doc.get("series") or "").strip()
+        try:
+            return _series_pref.index(series)
+        except ValueError:
+            return len(_series_pref)
+
+    return sorted(matches, key=_rank)[0]
 
 
 def find_design_by_internal_id(internal_id: str) -> dict[str, Any] | None:

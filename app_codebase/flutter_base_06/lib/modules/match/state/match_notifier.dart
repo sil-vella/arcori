@@ -17,7 +17,7 @@ import 'match_snapshot_state.dart';
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 const stubArenaId = 'arena_velora_plaza';
-const stubSlammerId = 'SLM-STR-GEN001-0001';
+const stubSlammerId = 'SLM-STR-SER001-0001';
 
 class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
   Completer<void>? _humanTurnWait;
@@ -126,7 +126,8 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     if (LOGGING_SWITCH) {
       customlog(
         'match: startLocalPractice human=$humanUserId '
-        'ai=${ais.join(",")} arcori=${loadout.arcoriId}',
+        'ai=${ais.join(",")} arcori=$practiceHumanArcoriId '
+        'slammer=${loadout.slammerId}',
       );
     }
     final seats = [
@@ -136,7 +137,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         kind: 'human',
         score: 0,
         connected: true,
-        arcoriIds: [loadout.arcoriId],
+        arcoriIds: const [practiceHumanArcoriId],
         slammerId: loadout.slammerId,
       ),
       MatchSeatView(
@@ -168,18 +169,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       for (final e in practiceFaceDefaults.entries)
         e.key: Map<String, String?>.from(e.value),
     };
-    final loadoutUrl = loadout.arcoriImageUrl?.trim() ?? '';
-    final loadoutColor = loadout.arcoriColor?.trim() ?? '';
-    if (loadoutUrl.isNotEmpty || loadoutColor.isNotEmpty) {
-      faces[loadout.arcoriId] = {
-        'imageUrl': loadoutUrl.isNotEmpty
-            ? loadoutUrl
-            : faces[loadout.arcoriId]?['imageUrl'],
-        'color': loadoutColor.isNotEmpty
-            ? loadoutColor
-            : faces[loadout.arcoriId]?['color'],
-      };
-    }
+    // Human always uses practice 001 art (ignore inventory / tiger overrides).
     state = MatchSnapshotState(
       matchId: matchId,
       version: 1,

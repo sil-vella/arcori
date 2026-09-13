@@ -37,7 +37,7 @@ def catalog_root(tmp_path: Path):
         "version": 1,
         "designs": [
             {
-                "internalId": "ANM-TIG-GEN001-0001",
+                "internalId": "ANM-TIG-SER001-0001",
                 "design": "Tiger",
                 "theme": "Animals",
                 "subtheme": "Big Cats",
@@ -89,7 +89,7 @@ def test_new_theme_file_appears_in_listing(catalog_root: Path):
         "theme": "Fashion",
         "themeCode": "FSH",
         "version": 1,
-        "designs": [{"internalId": "FSH-HAT-GEN001-0001", "design": "Hat"}],
+        "designs": [{"internalId": "FSH-HAT-SER001-0001", "design": "Hat"}],
     }
     (series / "Fashion.json").write_text(json.dumps(fashion), encoding="utf-8")
 
@@ -108,7 +108,7 @@ def test_find_by_theme_and_internal_id(catalog_root: Path):
     assert theme is not None
     assert theme["theme"] == "Animals"
 
-    design = loader.find_design_by_internal_id("ANM-TIG-GEN001-0001")
+    design = loader.find_design_by_internal_id("ANM-TIG-SER001-0001")
     assert design is not None
     assert design["design"] == "Tiger"
     assert design.get("artworkPrompt") == "secret prompt"

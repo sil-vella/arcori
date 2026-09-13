@@ -1,0 +1,150 @@
+{
+  "catalog": "Memory Foundations Series",
+  "theme": "Memory",
+  "series": "Foundations",
+  "themeCode": "MEM",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "MEM-ETR-SER003-0001",
+      "themeCode": "MEM",
+      "designCode": "ETR",
+      "designFamily": "ECHOES_THAT_REMAIN",
+      "design": "Echoes That Remain",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Memory",
+      "subtheme": "Memory",
+      "style": "Neon",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Echoes That Remain in neon style with a standard finish and no effect. Use a background that is visually related to Echoes That Remain. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-ETR-SER003-0001.webp",
+      "loreDescription": "A collectible Echoes That Remain Arcori generation I from the Memory Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "MEM-FFA-SER003-0002",
+      "themeCode": "MEM",
+      "designCode": "FFA",
+      "designFamily": "FACES_IN_FALLING_ASH",
+      "design": "Faces in Falling Ash",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Memory",
+      "subtheme": "Memory",
+      "style": "Neon",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Faces in Falling Ash in neon style with a standard finish and no effect. Use a background that is visually related to Faces in Falling Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-FFA-SER003-0002.webp",
+      "loreDescription": "A collectible Faces in Falling Ash Arcori generation I from the Memory Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "MEM-EWT-SER003-0003",
+      "themeCode": "MEM",
+      "designCode": "EWT",
+      "designFamily": "ECHOES_WALKING_THROUGH_GREY",
+      "design": "Echoes Walking Through Grey",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Memory",
+      "subtheme": "Memory",
+      "style": "Neon",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Echoes Walking Through Grey in neon style with a standard finish and no effect. Use a background that is visually related to Echoes Walking Through Grey. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-EWT-SER003-0003.webp",
+      "loreDescription": "A collectible Echoes Walking Through Grey Arcori generation I from the Memory Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

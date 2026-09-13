@@ -2,11 +2,11 @@
   "version": 1,
   "kins": [
     {
-      "serial": "KIN-ALC-GEN001-0005",
+      "serial": "KIN-ALC-SER001-0005",
       "typeSerial": "KTYPE-0002",
       "displayName": "Antler Lace",
       "designCode": "ALC",
-      "lottieUrl": "/catalog-media/kin/gen001/entelairs/KIN-ALC-GEN001-0005.json",
+      "lottieUrl": "/catalog-media/kin/ser001/entelairs/KIN-ALC-SER001-0005.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -98,11 +98,11 @@
       ]
     },
     {
-      "serial": "KIN-ASP-GEN001-0006",
+      "serial": "KIN-ASP-SER001-0006",
       "typeSerial": "KTYPE-0002",
       "displayName": "Antler Spirit",
       "designCode": "ASP",
-      "lottieUrl": "/catalog-media/kin/gen001/entelairs/KIN-ASP-GEN001-0006.json",
+      "lottieUrl": "/catalog-media/kin/ser001/entelairs/KIN-ASP-SER001-0006.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -194,11 +194,11 @@
       ]
     },
     {
-      "serial": "KIN-BRZ-GEN001-0001",
+      "serial": "KIN-BRZ-SER001-0001",
       "typeSerial": "KTYPE-0001",
       "displayName": "Bronze Genie",
       "designCode": "BRZ",
-      "lottieUrl": "/catalog-media/kin/gen001/guardians/KIN-BRZ-GEN001-0001.json",
+      "lottieUrl": "/catalog-media/kin/ser001/guardians/KIN-BRZ-SER001-0001.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -277,11 +277,11 @@
       ]
     },
     {
-      "serial": "KIN-CLD-GEN001-0009",
+      "serial": "KIN-CLD-SER001-0009",
       "typeSerial": "KTYPE-0003",
       "displayName": "Cloud Character",
       "designCode": "CLD",
-      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-CLD-GEN001-0009.json",
+      "lottieUrl": "/catalog-media/kin/ser001/walkies/KIN-CLD-SER001-0009.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -346,11 +346,11 @@
       ]
     },
     {
-      "serial": "KIN-CRY-GEN001-0010",
+      "serial": "KIN-CRY-SER001-0010",
       "typeSerial": "KTYPE-0003",
       "displayName": "Crystal Character",
       "designCode": "CRY",
-      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-CRY-GEN001-0010.json",
+      "lottieUrl": "/catalog-media/kin/ser001/walkies/KIN-CRY-SER001-0010.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -396,11 +396,11 @@
       ]
     },
     {
-      "serial": "KIN-DRP-GEN001-0011",
+      "serial": "KIN-DRP-SER001-0011",
       "typeSerial": "KTYPE-0003",
       "displayName": "Droplet Character",
       "designCode": "DRP",
-      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-DRP-GEN001-0011.json",
+      "lottieUrl": "/catalog-media/kin/ser001/walkies/KIN-DRP-SER001-0011.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -465,11 +465,11 @@
       ]
     },
     {
-      "serial": "KIN-FIR-GEN001-0012",
+      "serial": "KIN-FIR-SER001-0012",
       "typeSerial": "KTYPE-0003",
       "displayName": "Fire Character",
       "designCode": "FIR",
-      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-FIR-GEN001-0012.json",
+      "lottieUrl": "/catalog-media/kin/ser001/walkies/KIN-FIR-SER001-0012.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -515,11 +515,11 @@
       ]
     },
     {
-      "serial": "KIN-GLD-GEN001-0002",
+      "serial": "KIN-GLD-SER001-0002",
       "typeSerial": "KTYPE-0001",
       "displayName": "Gold Genie",
       "designCode": "GLD",
-      "lottieUrl": "/catalog-media/kin/gen001/guardians/KIN-GLD-GEN001-0002.json",
+      "lottieUrl": "/catalog-media/kin/ser001/guardians/KIN-GLD-SER001-0002.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -598,11 +598,11 @@
       ]
     },
     {
-      "serial": "KIN-HGD-GEN001-0007",
+      "serial": "KIN-HGD-SER001-0007",
       "typeSerial": "KTYPE-0002",
       "displayName": "Horned Guardian",
       "designCode": "HGD",
-      "lottieUrl": "/catalog-media/kin/gen001/entelairs/KIN-HGD-GEN001-0007.json",
+      "lottieUrl": "/catalog-media/kin/ser001/entelairs/KIN-HGD-SER001-0007.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -694,11 +694,11 @@
       ]
     },
     {
-      "serial": "KIN-HMG-GEN001-0008",
+      "serial": "KIN-HMG-SER001-0008",
       "typeSerial": "KTYPE-0002",
       "displayName": "Horned Mage",
       "designCode": "HMG",
-      "lottieUrl": "/catalog-media/kin/gen001/entelairs/KIN-HMG-GEN001-0008.json",
+      "lottieUrl": "/catalog-media/kin/ser001/entelairs/KIN-HMG-SER001-0008.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -790,11 +790,11 @@
       ]
     },
     {
-      "serial": "KIN-IVY-GEN001-0003",
+      "serial": "KIN-IVY-SER001-0003",
       "typeSerial": "KTYPE-0001",
       "displayName": "Ivory Genie",
       "designCode": "IVY",
-      "lottieUrl": "/catalog-media/kin/gen001/guardians/KIN-IVY-GEN001-0003.json",
+      "lottieUrl": "/catalog-media/kin/ser001/guardians/KIN-IVY-SER001-0003.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -873,11 +873,11 @@
       ]
     },
     {
-      "serial": "KIN-MON-GEN001-0013",
+      "serial": "KIN-MON-SER001-0013",
       "typeSerial": "KTYPE-0003",
       "displayName": "Moon Character",
       "designCode": "MON",
-      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-MON-GEN001-0013.json",
+      "lottieUrl": "/catalog-media/kin/ser001/walkies/KIN-MON-SER001-0013.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -923,11 +923,11 @@
       ]
     },
     {
-      "serial": "KIN-PLN-GEN001-0018",
+      "serial": "KIN-PLN-SER001-0018",
       "typeSerial": "KTYPE-0003",
       "displayName": "Planet Character",
       "designCode": "PLN",
-      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-PLN-GEN001-0018.json",
+      "lottieUrl": "/catalog-media/kin/ser001/walkies/KIN-PLN-SER001-0018.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -992,11 +992,11 @@
       ]
     },
     {
-      "serial": "KIN-RBT-GEN001-0014",
+      "serial": "KIN-RBT-SER001-0014",
       "typeSerial": "KTYPE-0003",
       "displayName": "Robot Character",
       "designCode": "RBT",
-      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-RBT-GEN001-0014.json",
+      "lottieUrl": "/catalog-media/kin/ser001/walkies/KIN-RBT-SER001-0014.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -1061,11 +1061,11 @@
       ]
     },
     {
-      "serial": "KIN-SLV-GEN001-0004",
+      "serial": "KIN-SLV-SER001-0004",
       "typeSerial": "KTYPE-0001",
       "displayName": "Silver Genie",
       "designCode": "SLV",
-      "lottieUrl": "/catalog-media/kin/gen001/guardians/KIN-SLV-GEN001-0004.json",
+      "lottieUrl": "/catalog-media/kin/ser001/guardians/KIN-SLV-SER001-0004.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -1144,11 +1144,11 @@
       ]
     },
     {
-      "serial": "KIN-SPR-GEN001-0015",
+      "serial": "KIN-SPR-SER001-0015",
       "typeSerial": "KTYPE-0003",
       "displayName": "Sprout Character",
       "designCode": "SPR",
-      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-SPR-GEN001-0015.json",
+      "lottieUrl": "/catalog-media/kin/ser001/walkies/KIN-SPR-SER001-0015.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -1213,11 +1213,11 @@
       ]
     },
     {
-      "serial": "KIN-STR-GEN001-0016",
+      "serial": "KIN-STR-SER001-0016",
       "typeSerial": "KTYPE-0003",
       "displayName": "Star Character",
       "designCode": "STR",
-      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-STR-GEN001-0016.json",
+      "lottieUrl": "/catalog-media/kin/ser001/walkies/KIN-STR-SER001-0016.json",
       "thumbnailUrl": null,
       "parts": [
         {
@@ -1282,11 +1282,11 @@
       ]
     },
     {
-      "serial": "KIN-WTR-GEN001-0017",
+      "serial": "KIN-WTR-SER001-0017",
       "typeSerial": "KTYPE-0003",
       "displayName": "Water Character",
       "designCode": "WTR",
-      "lottieUrl": "/catalog-media/kin/gen001/walkies/KIN-WTR-GEN001-0017.json",
+      "lottieUrl": "/catalog-media/kin/ser001/walkies/KIN-WTR-SER001-0017.json",
       "thumbnailUrl": null,
       "parts": [
         {

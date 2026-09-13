@@ -1,11 +1,11 @@
 # Arcori Game Design Document
 
 Working Draft v0.4  
-**Last aligned:** 2026-08-27 (Pioneers: earlier mint)
+**Last aligned:** 2026-09-11 (Mastery own vs other curves)
 
 ## Gameplay
 
-2–4 players. One Arcori each. Two rounds. One flip = one point. Two flips increase Mastery. Practice mode is AI only with no progression.
+2–4 players. One Arcori each. Two rounds. One flip = one point. Mastery deltas use seat flip count (see Progression). Practice mode is AI only with no progression (no mastery).
 
 Players (**Avari**) select circulating designs they have **play/mastery access** to (starter unlocks, Market, etc.). That access is **not ownership**.
 
@@ -38,12 +38,22 @@ Catalog series share that loop; they differ in how soon a generation can close:
 |--------|------|-------------------------|------------------|
 | **Genesis** | Main launch catalog | 500 | 1000 |
 | **Pioneers** | Small companion series (ten seed designs) | 100 | 200 |
+| **Foundations** | Civilization / society themes (120 designs) | 250 | 500 |
 
 **Why Pioneers exists:** the lower preservation and closure numbers so those designs can be **minted earlier** than Genesis — first Trove pieces while Genesis generations are still filling. It is not a second art drop for its own sake.
 
+**Foundations** sits between them (250 / 500) with forty society themes (Hearth, Shelter, … Unity), three designs each (`SER003`).
+
 ## Economy
 
-4 Gold Fragments = 1 Gold Cap. Random multiplayer costs 1 Gold Cap. Practice is free. Market purchases and Slammer recharge use Gold Caps.
+**Gold Fragments** and **Gold Arcori** are wallet currency only (not catalog designs, not circulating, not playable).
+
+- **4 Gold Fragments = 1 Gold Arcori** (auto-convert).
+- Online match fee: **2 Gold Fragments** (special events may differ later).
+- Each flip the player scores: **+1 Gold Fragment**.
+- Practice is free (no fee, no fragment rewards).
+- New Avari profiles (guest or regular) start with **20 Gold Arcori**.
+- Market purchases and Slammer recharge use Gold Arcori.
 
 ## Slammers
 
@@ -56,6 +66,26 @@ Starter balanced slammer. Rechargeable variants with Impact, Precision, Control,
 | Profile XP → Rank | Avari progression |
 | Mastery → Design | Progress on a **circulating** design (not owned); path toward **Master** |
 | Generations → World | Design/world state; closure can mint into Trove (**Legacy Owner** / **Generation Creator**) |
+
+### Mastery deltas (per online match)
+
+**Own played Arcori** (the design you brought):
+
+| Seat flips | Mastery Δ |
+|------------|-----------|
+| 0 | −1 |
+| 1 | 0 |
+| 2 | +2 |
+
+**Other Arcori** (designs whose discs **you** flipped, not your own played piece) — per that design’s flip count:
+
+| Flips on that design | Mastery Δ |
+|----------------------|-----------|
+| 0 | 0 |
+| 1 | +1 |
+| 2 | +2 |
+
+Practice skips mastery. Persist on `player_mastery`; floor at 0 on write. Detail: [mastery.md](../01_Active_Plans/mastery.md).
 
 Events keep design identity; mastery continues on the design’s active generation rules.
 

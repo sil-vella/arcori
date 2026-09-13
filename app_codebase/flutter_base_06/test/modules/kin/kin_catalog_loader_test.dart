@@ -16,17 +16,17 @@ void main() {
 
     final guardiansType = catalog.typeBySerial('KTYPE-0001');
     expect(guardiansType?.code, 'guardians');
-    final bronze = catalog.kinBySerial('KIN-BRZ-GEN001-0001');
+    final bronze = catalog.kinBySerial('KIN-BRZ-SER001-0001');
     expect(bronze?.typeSerial, 'KTYPE-0001');
     expect(bronze?.parts, isNotEmpty);
     expect(
       bronze?.lottieUrl,
-      '/catalog-media/kin/gen001/guardians/KIN-BRZ-GEN001-0001.json',
+      '/catalog-media/kin/ser001/guardians/KIN-BRZ-SER001-0001.json',
     );
     final guardianKins = catalog.kinsForType('KTYPE-0001');
     expect(
       guardianKins.map((k) => k.serial),
-      containsAll(['KIN-BRZ-GEN001-0001', 'KIN-GLD-GEN001-0002', 'KIN-IVY-GEN001-0003', 'KIN-SLV-GEN001-0004']),
+      containsAll(['KIN-BRZ-SER001-0001', 'KIN-GLD-SER001-0002', 'KIN-IVY-SER001-0003', 'KIN-SLV-SER001-0004']),
     );
     expect(catalog.kinsForType('KTYPE-0002'), hasLength(4));
     expect(catalog.kinsForType('KTYPE-0003'), hasLength(9));
@@ -54,7 +54,7 @@ void main() {
       types: const [],
       kins: [
         KinTemplate.fromJson({
-          'serial': 'KIN-BRZ-GEN001-0001',
+          'serial': 'KIN-BRZ-SER001-0001',
           'typeSerial': 'KTYPE-0001',
           'displayName': 'Bronze',
           'parts': [
@@ -70,7 +70,7 @@ void main() {
       ],
     );
     final notifier = KinCustomizeNotifier(
-      kinSerial: 'KIN-BRZ-GEN001-0001',
+      kinSerial: 'KIN-BRZ-SER001-0001',
       catalog: catalog,
     );
     expect(

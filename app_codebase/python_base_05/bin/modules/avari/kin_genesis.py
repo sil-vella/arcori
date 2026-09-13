@@ -1,4 +1,4 @@
-"""Kin catalog design builder — series from catalog CURRENT_SERIES (GEN001 launch)."""
+"""Kin catalog design builder — series from catalog CURRENT_SERIES (SER001 launch)."""
 
 from __future__ import annotations
 
@@ -40,6 +40,15 @@ REGULAR_ARCORI_DESIGN_KEYS: frozenset[str] = frozenset(
         "artworkPrompt",
         "loreDescription",
         "legacy",
+    }
+)
+
+# Optional face media — webp (imageUrl) and/or lottie (lottieUrl). Kin uses lottie.
+OPTIONAL_ARCORI_FACE_KEYS: frozenset[str] = frozenset(
+    {
+        "faceMedia",  # "webp" | "lottie"
+        "imageUrl",
+        "lottieUrl",
     }
 )
 
@@ -112,7 +121,7 @@ def _player_token(username: str) -> str:
 
 
 def mint_internal_id(*, username: str, seq: int) -> str:
-    """Mint `KIN-…-{idToken}-####` using catalog CURRENT_SERIES (GEN001 today)."""
+    """Mint `KIN-…-{idToken}-####` using catalog CURRENT_SERIES (SER001 today)."""
     token = _player_token(username)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M")
     series_token = current_id_token()
@@ -222,7 +231,17 @@ def build_kin_catalog_design(
 
 def assert_design_key_parity(design: dict[str, Any]) -> None:
     keys = frozenset(design.keys())
-    if keys != REGULAR_ARCORI_DESIGN_KEYS:
-        missing = REGULAR_ARCORI_DESIGN_KEYS - keys
-        extra = keys - REGULAR_ARCORI_DESIGN_KEYS
+    missing = REGULAR_ARCORI_DESIGN_KEYS - keys
+    extra = keys - REGULAR_ARCORI_DESIGN_KEYS - OPTIONAL_ARCORI_FACE_KEYS
+    if missing or extra:
         raise ValueError(f"Kin design key mismatch missing={missing} extra={extra}")
+
+
+def attach_lottie_face(design: dict[str, Any], internal_id: str) -> dict[str, Any]:
+    """Stamp Kin face media: design art is the Lottie (not a webp)."""
+    out = dict(design)
+    out["faceMedia"] = "lottie"
+    out["lottieUrl"] = lottie_public_url(internal_id)
+    # No static webp for Kin — face is lottie-only.
+    out.pop("imageUrl", None)
+    return out

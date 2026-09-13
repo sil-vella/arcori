@@ -1,0 +1,146 @@
+{
+  "catalog": "Artistry Foundations Series",
+  "theme": "Artistry",
+  "series": "Foundations",
+  "themeCode": "ART",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "ART-REC-SER003-0001",
+      "themeCode": "ART",
+      "designCode": "REC",
+      "designFamily": "THE_REMEMBERED_CANVAS",
+      "design": "The Remembered Canvas",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Artistry",
+      "subtheme": "Artistry",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Remembered Canvas in retro style with a standard finish and no effect. Use a background that is visually related to The Remembered Canvas. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-REC-SER003-0001.webp",
+      "loreDescription": "A collectible The Remembered Canvas Arcori generation I from the Artistry Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "ART-FFR-SER003-0002",
+      "themeCode": "ART",
+      "designCode": "FFR",
+      "designFamily": "FORMS_THE_FOREST_REMEMBERED",
+      "design": "Forms the Forest Remembered",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Artistry",
+      "subtheme": "Artistry",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Forms the Forest Remembered in retro style with a standard finish and no effect. Use a background that is visually related to Forms the Forest Remembered. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-FFR-SER003-0002.webp",
+      "loreDescription": "A collectible Forms the Forest Remembered Arcori generation I from the Artistry Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "ART-CGF-SER003-0003",
+      "themeCode": "ART",
+      "designCode": "CGF",
+      "designFamily": "COLORS_GIVEN_FORM",
+      "design": "Colors Given Form",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Artistry",
+      "subtheme": "Artistry",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Colors Given Form in retro style with a standard finish and no effect. Use a background that is visually related to Colors Given Form. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-CGF-SER003-0003.webp",
+      "loreDescription": "A collectible Colors Given Form Arcori generation I from the Artistry Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

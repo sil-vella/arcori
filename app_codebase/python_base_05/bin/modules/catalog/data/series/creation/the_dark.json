@@ -1,0 +1,54 @@
+{
+  "catalog": "The Dark Creation Series",
+  "theme": "The Dark",
+  "series": "Creation",
+  "themeCode": "DRK",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "DRK-TDK-SER000-0001",
+      "themeCode": "DRK",
+      "designCode": "TDK",
+      "designFamily": "THE_DARK",
+      "design": "The Dark",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "The Dark",
+      "subtheme": "The Dark",
+      "style": "Surreal",
+      "finish": "Matte",
+      "color": "#1A1A1C",
+      "effect": "None",
+      "printedRarity": "Rare",
+      "selectionWeight": 0.1,
+      "series": "Creation Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Dark in surreal style with a matte finish and no effect. Use a background that is visually related to Amberwild forest and amber crystal. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DRK-TDK-SER000-0001.webp",
+      "loreDescription": "A collectible The Dark Arcori generation I from the Creation Series, bound to Amberwild.",
+      "legacy": {
+        "preservationRequirement": 50,
+        "closureMilestone": 100
+      }
+    }
+  ]
+}

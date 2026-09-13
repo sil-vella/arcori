@@ -1,0 +1,146 @@
+{
+  "catalog": "Council Foundations Series",
+  "theme": "Council",
+  "series": "Foundations",
+  "themeCode": "COU",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "COU-CMV-SER003-0001",
+      "themeCode": "COU",
+      "designCode": "CMV",
+      "designFamily": "CIRCLE_OF_MANY_VOICES",
+      "design": "Circle of Many Voices",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Council",
+      "subtheme": "Council",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Circle of Many Voices in minimalist style with a standard finish and no effect. Use a background that is visually related to Circle of Many Voices. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-CMV-SER003-0001.webp",
+      "loreDescription": "A collectible Circle of Many Voices Arcori generation I from the Council Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "COU-CQV-SER003-0002",
+      "themeCode": "COU",
+      "designCode": "CQV",
+      "designFamily": "THE_CIRCLE_OF_QUIET_VOICES",
+      "design": "The Circle of Quiet Voices",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Council",
+      "subtheme": "Council",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Circle of Quiet Voices in minimalist style with a standard finish and no effect. Use a background that is visually related to The Circle of Quiet Voices. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-CQV-SER003-0002.webp",
+      "loreDescription": "A collectible The Circle of Quiet Voices Arcori generation I from the Council Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "COU-COR-SER003-0003",
+      "themeCode": "COU",
+      "designCode": "COR",
+      "designFamily": "COUNCIL_OF_THE_OPEN_ROOT",
+      "design": "Council of the Open Root",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Council",
+      "subtheme": "Council",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Council of the Open Root in minimalist style with a standard finish and no effect. Use a background that is visually related to Council of the Open Root. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-COR-SER003-0003.webp",
+      "loreDescription": "A collectible Council of the Open Root Arcori generation I from the Council Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

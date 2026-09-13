@@ -1,0 +1,144 @@
+{
+  "catalog": "Stonework Foundations Series",
+  "theme": "Stonework",
+  "series": "Foundations",
+  "themeCode": "STN",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "STN-ARP-SER003-0001",
+      "themeCode": "STN",
+      "designCode": "ARP",
+      "designFamily": "ARCH_OF_RETURNING_PATHS",
+      "design": "Arch of Returning Paths",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Stonework",
+      "subtheme": "Stonework",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Arch of Returning Paths in minimalist style with a standard finish and no effect. Use a background that is visually related to Arch of Returning Paths. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-ARP-SER003-0001.webp",
+      "loreDescription": "A collectible Arch of Returning Paths Arcori generation I from the Stonework Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "STN-GGS-SER003-0002",
+      "themeCode": "STN",
+      "designCode": "GGS",
+      "designFamily": "GATE_OF_GOLDEN_STONE",
+      "design": "Gate of Golden Stone",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Stonework",
+      "subtheme": "Stonework",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Gate of Golden Stone in minimalist style with a standard finish and no effect. Use a background that is visually related to Gate of Golden Stone. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-GGS-SER003-0002.webp",
+      "loreDescription": "A collectible Gate of Golden Stone Arcori generation I from the Stonework Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "STN-SFR-SER003-0003",
+      "themeCode": "STN",
+      "designCode": "SFR",
+      "designFamily": "THE_STAIR_THE_FOREST_REVEALED",
+      "design": "The Stair the Forest Revealed",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Stonework",
+      "subtheme": "Stonework",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Stair the Forest Revealed in minimalist style with a standard finish and no effect. Use a background that is visually related to The Stair the Forest Revealed. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-SFR-SER003-0003.webp",
+      "loreDescription": "A collectible The Stair the Forest Revealed Arcori generation I from the Stonework Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

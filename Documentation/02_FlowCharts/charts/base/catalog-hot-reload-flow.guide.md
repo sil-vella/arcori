@@ -19,7 +19,7 @@ This chart shows how the FastAPI **catalog** module serves Velora design JSON fr
 | `GET /authuser/catalog/meta` | Themes, regions, kin, rarities |
 | `GET /authuser/catalog/index` | Velora list-everything (optional `series` / `theme` / `subtheme` / `limit` / `offset`) |
 | `GET /authuser/catalog/theme?code=ANM` | One theme document |
-| `GET /authuser/catalog/design?id=ANM-TIG-GEN001-0001` | One design |
+| `GET /authuser/catalog/design?id=ANM-TIG-SER001-0001` | One design |
 
 Responses use `{ok: true, data: …}` and omit `artworkPrompt`. Errors use `catalog/not_found`, `catalog/invalid_query`, `catalog/load_failed`.
 
@@ -48,7 +48,7 @@ curl -s 'http://127.0.0.1:8000/authuser/catalog/index?theme=Animals&limit=5' \
 curl -s 'http://127.0.0.1:8000/authuser/catalog/theme?code=ANM' \
   -H "Authorization: Bearer $TOKEN" | jq '.data.themeCode, (.data.designs|length)'
 
-curl -s 'http://127.0.0.1:8000/authuser/catalog/design?id=ANM-TIG-GEN001-0001' \
+curl -s 'http://127.0.0.1:8000/authuser/catalog/design?id=ANM-TIG-SER001-0001' \
   -H "Authorization: Bearer $TOKEN" | jq .
 ```
 

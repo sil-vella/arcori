@@ -101,6 +101,26 @@ class AvariStats {
   final int flips;
 }
 
+/// Wallet currency only (not catalog / not playable).
+class AvariEconomy {
+  const AvariEconomy({
+    this.goldArcori = 0,
+    this.goldFragments = 0,
+  });
+
+  factory AvariEconomy.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return const AvariEconomy();
+    int asInt(Object? v) => v is int ? v : int.tryParse('$v') ?? 0;
+    return AvariEconomy(
+      goldArcori: asInt(json['goldArcori']),
+      goldFragments: asInt(json['goldFragments']),
+    );
+  }
+
+  final int goldArcori;
+  final int goldFragments;
+}
+
 /// Catalog slam stats (1–10). Recovery is shown on profile even though slam does not use it yet.
 class SlammerGameplayAttributes {
   const SlammerGameplayAttributes({
@@ -176,20 +196,37 @@ class AvariInventoryItem {
     required this.designId,
     required this.displayName,
     this.imageUrl,
+    this.lottieUrl,
+    this.faceMedia,
+    this.background,
     this.color,
     this.source,
     this.permanent,
     this.chargesRemaining,
     this.gameplayAttributes,
+    this.masteryPoints = 0,
+    this.mintReach,
   });
 
   factory AvariInventoryItem.fromJson(Map<String, dynamic> json) {
     final id = json['designId']?.toString() ?? '';
     final name = json['displayName']?.toString().trim() ?? '';
+    final mintRaw = json['mintReach'];
+    int? mintReach;
+    if (mintRaw is int) {
+      mintReach = mintRaw > 0 ? mintRaw : null;
+    } else {
+      final parsed = int.tryParse('${mintRaw ?? ''}');
+      mintReach = (parsed != null && parsed > 0) ? parsed : null;
+    }
+    final bg = json['background'];
     return AvariInventoryItem(
       designId: id,
       displayName: name.isNotEmpty ? name : id,
       imageUrl: json['imageUrl']?.toString(),
+      lottieUrl: json['lottieUrl']?.toString(),
+      faceMedia: json['faceMedia']?.toString(),
+      background: bg is Map ? Map<String, dynamic>.from(bg) : null,
       color: json['color']?.toString(),
       source: json['source']?.toString(),
       permanent: json['permanent'] is bool ? json['permanent'] as bool : null,
@@ -199,17 +236,48 @@ class AvariInventoryItem {
       gameplayAttributes: SlammerGameplayAttributes.tryParse(
         json['gameplayAttributes'],
       ),
+      masteryPoints: json['masteryPoints'] is int
+          ? json['masteryPoints'] as int
+          : int.tryParse('${json['masteryPoints'] ?? ''}') ?? 0,
+      mintReach: mintReach,
     );
   }
 
   final String designId;
   final String displayName;
   final String? imageUrl;
+
+  /// Kin (and future Lottie faces) — public media URL.
+  final String? lottieUrl;
+
+  /// `webp` | `lottie` when known.
+  final String? faceMedia;
+
+  /// Kin disc background (claim JSON) when face is Lottie.
+  final Map<String, dynamic>? background;
   final String? color;
   final String? source;
   final bool? permanent;
   final int? chargesRemaining;
   final SlammerGameplayAttributes? gameplayAttributes;
+  final int masteryPoints;
+
+  /// Catalog `legacy.preservationRequirement` — mint reach for this design.
+  final int? mintReach;
+
+  bool get hasLottieFace {
+    final media = faceMedia?.trim().toLowerCase();
+    if (media == 'lottie') return true;
+    final url = lottieUrl?.trim() ?? '';
+    return url.isNotEmpty;
+  }
+
+  /// Profile label: mastery / mint reach (e.g. `3/500`).
+  String get masteryOverMintReach {
+    final reach = mintReach;
+    if (reach == null) return '$masteryPoints';
+    return '$masteryPoints/$reach';
+  }
 }
 
 /// Server Genesis Kin (player_kin + catalog_design summary fields).
@@ -229,6 +297,8 @@ class AvariKin {
     this.generationNumber,
     this.lottieUrl,
     this.catalogDesign,
+    this.masteryPoints = 0,
+    this.mintReach,
   });
 
   factory AvariKin.fromJson(Map<String, dynamic> json) {
@@ -243,6 +313,7 @@ class AvariKin {
     String? colorFromDesign;
     String? seriesFromDesign;
     String? romanFromDesign;
+    int? mintFromDesign;
     if (design is Map) {
       colorFromDesign = design['color']?.toString();
       seriesFromDesign = design['series']?.toString();
@@ -254,6 +325,24 @@ class AvariKin {
       if (dGen is Map) {
         romanFromDesign = dGen['roman']?.toString();
       }
+      final legacy = design['legacy'];
+      if (legacy is Map) {
+        final raw = legacy['preservationRequirement'];
+        if (raw is int && raw > 0) {
+          mintFromDesign = raw;
+        } else {
+          final parsed = int.tryParse('${raw ?? ''}');
+          if (parsed != null && parsed > 0) mintFromDesign = parsed;
+        }
+      }
+    }
+    final mintRaw = json['mintReach'];
+    int? mintReach;
+    if (mintRaw is int) {
+      mintReach = mintRaw > 0 ? mintRaw : null;
+    } else {
+      final parsed = int.tryParse('${mintRaw ?? ''}');
+      mintReach = (parsed != null && parsed > 0) ? parsed : mintFromDesign;
     }
     return AvariKin(
       subtheme: json['subtheme']?.toString() ?? '',
@@ -275,6 +364,10 @@ class AvariKin {
       lottieUrl: json['lottieUrl']?.toString(),
       catalogDesign:
           design is Map ? Map<String, dynamic>.from(design) : null,
+      masteryPoints: json['masteryPoints'] is int
+          ? json['masteryPoints'] as int
+          : int.tryParse('${json['masteryPoints'] ?? ''}') ?? 0,
+      mintReach: mintReach,
     );
   }
 
@@ -292,6 +385,13 @@ class AvariKin {
   final int? generationNumber;
   final String? lottieUrl;
   final Map<String, dynamic>? catalogDesign;
+  final int masteryPoints;
+  final int? mintReach;
+
+  String get masteryOverMintReach {
+    final reach = mintReach ?? 500;
+    return '$masteryPoints/$reach';
+  }
 
   Map<String, dynamic>? get background {
     final raw = customization['background'];
@@ -319,6 +419,7 @@ class AvariProfile {
     required this.titles,
     required this.mastery,
     required this.stats,
+    this.economy = const AvariEconomy(),
     this.kin,
     this.access = const [],
     this.slammers = const [],
@@ -370,6 +471,11 @@ class AvariProfile {
             ? Map<String, dynamic>.from(json['stats'] as Map)
             : null,
       ),
+      economy: AvariEconomy.fromJson(
+        json['economy'] is Map
+            ? Map<String, dynamic>.from(json['economy'] as Map)
+            : null,
+      ),
       access: parseItems(json['access']),
       slammers: parseItems(json['slammers']),
     );
@@ -381,17 +487,90 @@ class AvariProfile {
   final AvariKin? kin;
   final AvariMasterySummary mastery;
   final AvariStats stats;
+  final AvariEconomy economy;
   final List<AvariInventoryItem> access;
   final List<AvariInventoryItem> slammers;
 }
 
-/// Stub payload from `POST /authuser/avari/match/finalize`.
+/// One design mastery delta from match finalize.
+class MasteryChange {
+  const MasteryChange({
+    required this.designId,
+    required this.delta,
+    required this.pointsBefore,
+    required this.pointsAfter,
+    required this.flips,
+    required this.kind,
+    this.mintReach,
+    this.displayName,
+    this.imageUrl,
+    this.color,
+    this.generationNumber = 1,
+  });
+
+  factory MasteryChange.fromJson(Map<String, dynamic> json) {
+    int asInt(dynamic v) => v is int ? v : int.tryParse('$v') ?? 0;
+    final mintRaw = json['mintReach'];
+    int? mintReach;
+    if (mintRaw is int) {
+      mintReach = mintRaw > 0 ? mintRaw : null;
+    } else {
+      final parsed = int.tryParse('${mintRaw ?? ''}');
+      mintReach = (parsed != null && parsed > 0) ? parsed : null;
+    }
+    final name = json['displayName']?.toString().trim() ?? '';
+    final id = json['designId']?.toString() ?? '';
+    return MasteryChange(
+      designId: id,
+      delta: asInt(json['delta']),
+      pointsBefore: asInt(json['pointsBefore']),
+      pointsAfter: asInt(json['pointsAfter']),
+      flips: asInt(json['flips']),
+      kind: json['kind']?.toString() ?? 'own',
+      mintReach: mintReach,
+      displayName: name.isNotEmpty ? name : (id.isNotEmpty ? id : null),
+      imageUrl: json['imageUrl']?.toString(),
+      color: json['color']?.toString(),
+      generationNumber: asInt(json['generationNumber']).clamp(1, 9999),
+    );
+  }
+
+  final String designId;
+  final int delta;
+  final int pointsBefore;
+  final int pointsAfter;
+  final int flips;
+  final String kind;
+  final int? mintReach;
+  final String? displayName;
+  final String? imageUrl;
+  final String? color;
+  final int generationNumber;
+
+  String get masteryOverMintReach {
+    final reach = mintReach;
+    if (reach == null) return '$pointsAfter';
+    return '$pointsAfter/$reach';
+  }
+
+  String get relativeDeltaLabel {
+    final sign = delta >= 0 ? '+' : '';
+    return '$sign$delta';
+  }
+}
+
+/// Payload from `POST /authuser/avari/match/finalize`.
 class MatchFinalizeResult {
   const MatchFinalizeResult({
     required this.applied,
     required this.reason,
     required this.matchId,
     this.goldFragmentsDelta = 0,
+    this.goldArcoriDelta = 0,
+    this.goldFragments = 0,
+    this.goldArcori = 0,
+    this.feeFragments = 0,
+    this.flipsRewarded = 0,
     this.rankXpDelta = 0,
     this.masteryChanges = const [],
     this.daily,
@@ -400,20 +579,23 @@ class MatchFinalizeResult {
 
   factory MatchFinalizeResult.fromJson(Map<String, dynamic> json) {
     final rawChanges = json['masteryChanges'];
+    int asInt(dynamic v) =>
+        v is int ? v : int.tryParse('$v') ?? 0;
     return MatchFinalizeResult(
       applied: json['applied'] == true,
       reason: json['reason']?.toString() ?? '',
       matchId: json['matchId']?.toString() ?? '',
-      goldFragmentsDelta: json['goldFragmentsDelta'] is int
-          ? json['goldFragmentsDelta'] as int
-          : int.tryParse('${json['goldFragmentsDelta']}') ?? 0,
-      rankXpDelta: json['rankXpDelta'] is int
-          ? json['rankXpDelta'] as int
-          : int.tryParse('${json['rankXpDelta']}') ?? 0,
+      goldFragmentsDelta: asInt(json['goldFragmentsDelta']),
+      goldArcoriDelta: asInt(json['goldArcoriDelta']),
+      goldFragments: asInt(json['goldFragments']),
+      goldArcori: asInt(json['goldArcori']),
+      feeFragments: asInt(json['feeFragments']),
+      flipsRewarded: asInt(json['flipsRewarded']),
+      rankXpDelta: asInt(json['rankXpDelta']),
       masteryChanges: rawChanges is List
           ? rawChanges
               .whereType<Map>()
-              .map((e) => Map<String, dynamic>.from(e))
+              .map((e) => MasteryChange.fromJson(Map<String, dynamic>.from(e)))
               .toList()
           : const [],
       daily: json['daily'] is Map
@@ -429,8 +611,13 @@ class MatchFinalizeResult {
   final String reason;
   final String matchId;
   final int goldFragmentsDelta;
+  final int goldArcoriDelta;
+  final int goldFragments;
+  final int goldArcori;
+  final int feeFragments;
+  final int flipsRewarded;
   final int rankXpDelta;
-  final List<Map<String, dynamic>> masteryChanges;
+  final List<MasteryChange> masteryChanges;
   final Map<String, dynamic>? daily;
   final Map<String, dynamic>? mint;
 }

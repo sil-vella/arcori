@@ -1,0 +1,142 @@
+{
+  "catalog": "Hearth Foundations Series",
+  "theme": "Hearth",
+  "series": "Foundations",
+  "themeCode": "HEA",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "HEA-EMB-SER003-0001",
+      "themeCode": "HEA",
+      "designCode": "EMB",
+      "designFamily": "EMBERHOME",
+      "design": "Emberhome",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Hearth",
+      "subtheme": "Hearth",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Emberhome in realistic style with a standard finish and no effect. Use a background that is visually related to Emberhome. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-EMB-SER003-0001.webp",
+      "loreDescription": "A collectible Emberhome Arcori generation I from the Hearth Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "HEA-ROH-SER003-0002",
+      "themeCode": "HEA",
+      "designCode": "ROH",
+      "designFamily": "ROOTFIRE_HALL",
+      "design": "Rootfire Hall",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Hearth",
+      "subtheme": "Hearth",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Rootfire Hall in realistic style with a standard finish and no effect. Use a background that is visually related to Rootfire Hall. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-ROH-SER003-0002.webp",
+      "loreDescription": "A collectible Rootfire Hall Arcori generation I from the Hearth Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "HEA-FTK-SER003-0003",
+      "themeCode": "HEA",
+      "designCode": "FTK",
+      "designFamily": "THE_FIRE_THAT_KNEW_EVERY_NAME",
+      "design": "The Fire That Knew Every Name",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Hearth",
+      "subtheme": "Hearth",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Fire That Knew Every Name in realistic style with a standard finish and no effect. Use a background that is visually related to The Fire That Knew Every Name. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-FTK-SER003-0003.webp",
+      "loreDescription": "A collectible The Fire That Knew Every Name Arcori generation I from the Hearth Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

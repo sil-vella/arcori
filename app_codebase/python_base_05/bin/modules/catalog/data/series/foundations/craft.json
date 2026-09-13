@@ -1,0 +1,146 @@
+{
+  "catalog": "Craft Foundations Series",
+  "theme": "Craft",
+  "series": "Foundations",
+  "themeCode": "CRA",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "CRA-PAH-SER003-0001",
+      "themeCode": "CRA",
+      "designCode": "PAH",
+      "designFamily": "THE_PATIENT_HAND",
+      "design": "The Patient Hand",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Craft",
+      "subtheme": "Craft",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Patient Hand in watercolor style with a standard finish and no effect. Use a background that is visually related to The Patient Hand. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CRA-PAH-SER003-0001.webp",
+      "loreDescription": "A collectible The Patient Hand Arcori generation I from the Craft Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "CRA-TSI-SER003-0002",
+      "themeCode": "CRA",
+      "designCode": "TSI",
+      "designFamily": "THE_TIDECARVER_S_INSTRUMENT",
+      "design": "The Tidecarver's Instrument",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Craft",
+      "subtheme": "Craft",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Tidecarver's Instrument in watercolor style with a standard finish and no effect. Use a background that is visually related to The Tidecarver's Instrument. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CRA-TSI-SER003-0002.webp",
+      "loreDescription": "A collectible The Tidecarver's Instrument Arcori generation I from the Craft Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "CRA-HAG-SER003-0003",
+      "themeCode": "CRA",
+      "designCode": "HAG",
+      "designFamily": "HANDS_AGAINST_THE_GREY",
+      "design": "Hands Against the Grey",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Craft",
+      "subtheme": "Craft",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Hands Against the Grey in watercolor style with a standard finish and no effect. Use a background that is visually related to Hands Against the Grey. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CRA-HAG-SER003-0003.webp",
+      "loreDescription": "A collectible Hands Against the Grey Arcori generation I from the Craft Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

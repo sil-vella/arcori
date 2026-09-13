@@ -4,7 +4,7 @@
 **Created:** 2026-07-24  
 **Last Updated:** 2026-07-25
 
-Related: [GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · [Tech Spec](../Game_Specific/Arcori_Technical_Specification_v0.4.md) · [Content Bible](../Game_Specific/Arcori_Content_Bible_v0.4.md) · [catalog-hot-reload.md](catalog-hot-reload.md)
+Related: [GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · [Tech Spec](../Game_Specific/Arcori_Technical_Specification_v0.4.md) · [Content Bible](../Game_Specific/Arcori_Content_Bible_v0.4.md) · [catalog-hot-reload.md](catalog-hot-reload.md) · [mastery.md](mastery.md)
 
 ## Objective
 
@@ -49,7 +49,7 @@ Response shape:
 - Velora theme buttons → theme browse → Detail (`ArcoriCylinder` + catalog rim)
 - Detail tabs: Details | Standings (HTTP on Standings tab enter)
 - Catalog authuser APIs + `/catalog-media`
-- wfrun: `automation/backend/seed_or_clear_standings.py` — prompt **seed** or **clear** for Tiger Genesis `ANM-TIG-GEN001-0001`
+- wfrun: `automation/backend/seed_or_clear_standings.py` — prompt **seed** or **clear** for Tiger Genesis `ANM-TIG-SER001-0001`
 
 ## Transport
 

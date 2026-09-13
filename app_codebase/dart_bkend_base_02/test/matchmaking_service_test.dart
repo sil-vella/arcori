@@ -80,6 +80,7 @@ void main() {
                   'imageUrl':
                       '/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp',
                   'source': 'majority',
+                  'gathererArcoriId': stubGathererArcoriId,
                 },
               }),
               200,
@@ -93,6 +94,9 @@ void main() {
                   'designs': {
                     stubArcoriId: {'internalId': stubArcoriId},
                     stubAiArcoriId: {'internalId': stubAiArcoriId},
+                    stubGathererArcoriId: {
+                      'internalId': stubGathererArcoriId,
+                    },
                     stubSlammerId: {'internalId': stubSlammerId},
                   },
                 },

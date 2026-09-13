@@ -27,11 +27,12 @@ class KinGenesisTests(unittest.TestCase):
     def test_allowed_palette_size(self) -> None:
         self.assertEqual(len(ALLOWED_ARCORI_COLORS), 10)
 
-    def test_current_series_is_genesis_gen001(self) -> None:
-        """Launch matches static catalog Arcori (…-GEN001-…)."""
-        self.assertEqual(CURRENT_SERIES["idToken"], "GEN001")
+    def test_current_series_is_genesis_ser001(self) -> None:
+        """Launch matches static catalog Arcori (…-SER001-…)."""
+        self.assertEqual(CURRENT_SERIES["idToken"], "SER001")
         self.assertEqual(CURRENT_SERIES["seriesKey"], "Genesis")
         self.assertEqual(CURRENT_SERIES["seriesDisplay"], "Genesis Series")
+        self.assertEqual(CURRENT_SERIES["mediaFolder"], "001_genesis")
         self.assertEqual(CURRENT_SERIES["generation"]["number"], 1)
         self.assertEqual(CURRENT_SERIES["generation"]["roman"], "I")
         self.assertIs(CURRENT_KIN_SERIES, CURRENT_SERIES)
@@ -41,8 +42,8 @@ class KinGenesisTests(unittest.TestCase):
         self.assertIn(f"-{current_id_token()}-", iid)
         self.assertTrue(iid.startswith("KIN-"))
         self.assertTrue(iid.endswith("-0001"))
-        # Same token position as Tiger ANM-TIG-GEN001-0001
-        self.assertRegex(iid, r"^KIN-[A-Z0-9]+-GEN001-\d{4}$")
+        # Same token position as Tiger ANM-TIG-SER001-0001
+        self.assertRegex(iid, r"^KIN-[A-Z0-9]+-SER001-\d{4}$")
 
     def test_design_key_parity_vs_tiger(self) -> None:
         animals = loader.load_json_file(
@@ -50,10 +51,10 @@ class KinGenesisTests(unittest.TestCase):
         )
         tiger = animals["designs"][0]
         self.assertEqual(frozenset(tiger.keys()), REGULAR_ARCORI_DESIGN_KEYS)
-        self.assertIn("-GEN001-", tiger["internalId"])
+        self.assertIn("-SER001-", tiger["internalId"])
 
         design = build_kin_catalog_design(
-            internal_id="KIN-TEST202601010000-GEN001-0001",
+            internal_id="KIN-TEST202601010000-SER001-0001",
             chosen_name="Test Kin",
             region_code="EVG",
             color="#C6A15B",
@@ -81,7 +82,7 @@ class KinGenesisTests(unittest.TestCase):
         design = kin_meta["designs"][0]
         self.assertEqual(frozenset(design.keys()), REGULAR_ARCORI_DESIGN_KEYS)
         self.assertIn("color", design)
-        self.assertIn("-GEN001-", design["internalId"])
+        self.assertIn("-SER001-", design["internalId"])
 
 
 if __name__ == "__main__":

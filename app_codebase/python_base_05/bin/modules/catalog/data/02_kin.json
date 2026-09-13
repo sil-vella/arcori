@@ -4,7 +4,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "KIN-SIL202607092145-GEN001-0001",
+      "internalId": "KIN-SIL202607092145-SER001-0001",
       "themeCode": "KIN",
       "designCode": "SIL",
       "designFamily": "SILVESTER",
@@ -43,7 +43,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a Kin Arcori from the Entelairs lineage named Silvester in chibi style with a standard finish and no effect. The character should have antler-like features, a mystical but friendly appearance, and design elements inspired by the player's chosen customization. Use a background visually related to the Genesis origins of Velora. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KIN-SIL202607092145-GEN001-0001.webp",
+      "artworkPrompt": "Give me an image with a Kin Arcori from the Entelairs lineage named Silvester in chibi style with a standard finish and no effect. The character should have antler-like features, a mystical but friendly appearance, and design elements inspired by the player's chosen customization. Use a background visually related to the Genesis origins of Velora. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KIN-SIL202607092145-SER001-0001.webp",
       "loreDescription": "The first generation of the Silvester lineage. This Genesis Arcori belongs to the Entelairs Kin and marks the beginning of a unique family within Velora.",
       "legacy": {
         "preservationRequirement": 500,

@@ -1,0 +1,146 @@
+{
+  "catalog": "Music Foundations Series",
+  "theme": "Music",
+  "series": "Foundations",
+  "themeCode": "MUS",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "MUS-CCS-SER003-0001",
+      "themeCode": "MUS",
+      "designCode": "CCS",
+      "designFamily": "CHORUS_OF_CRYSTAL_SKIES",
+      "design": "Chorus of Crystal Skies",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Music",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Chorus of Crystal Skies in prismatic style with a standard finish and no effect. Use a background that is visually related to Chorus of Crystal Skies. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-CCS-SER003-0001.webp",
+      "loreDescription": "A collectible Chorus of Crystal Skies Arcori generation I from the Music Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "MUS-TIC-SER003-0002",
+      "themeCode": "MUS",
+      "designCode": "TIC",
+      "designFamily": "TIDESONG_CONSTELLATION",
+      "design": "Tidesong Constellation",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Music",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Tidesong Constellation in prismatic style with a standard finish and no effect. Use a background that is visually related to Tidesong Constellation. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TIC-SER003-0002.webp",
+      "loreDescription": "A collectible Tidesong Constellation Arcori generation I from the Music Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "MUS-SRP-SER003-0003",
+      "themeCode": "MUS",
+      "designCode": "SRP",
+      "designFamily": "SONG_OF_THE_RETURNING_PATHS",
+      "design": "Song of the Returning Paths",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Music",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Song of the Returning Paths in prismatic style with a standard finish and no effect. Use a background that is visually related to Song of the Returning Paths. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-SRP-SER003-0003.webp",
+      "loreDescription": "A collectible Song of the Returning Paths Arcori generation I from the Music Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

@@ -41,7 +41,9 @@ class AvariProfile(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     gold_fragments: Mapped[int] = mapped_column(
         Integer, nullable=False, default=0, server_default="0"
     )
-    gold_caps: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
+    gold_arcori: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
     matches_played: Mapped[int] = mapped_column(
         Integer, nullable=False, default=0, server_default="0"
     )

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "MYT-KAT-GEN001-0001",
+      "internalId": "MYT-KAT-SER001-0001",
       "themeCode": "MYT",
       "designCode": "KAT",
       "designFamily": "KATIE",
@@ -41,7 +41,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Katie in watercolor style with a standard finish and no effect. Katie is a stone-sculpted figure from urban legend with a quiet, observant personality, standing within a hand-drawn circle. Use a background visually related to myth and folklore with sketch-style old town buildings and soft watercolor washes. No borders, no frames. Katie should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MYT-KAT-GEN001-0001.webp.",
+      "artworkPrompt": "Give me an image with Katie in watercolor style with a standard finish and no effect. Katie is a stone-sculpted figure from urban legend with a quiet, observant personality, standing within a hand-drawn circle. Use a background visually related to myth and folklore with sketch-style old town buildings and soft watercolor washes. No borders, no frames. Katie should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MYT-KAT-SER001-0001.webp.",
       "loreDescription": "A collectible Katie Arcori generation I from the Myth Genesis Series. A figure whispered about in old towns, said to appear wherever stories outlive the people who tell them.",
       "legacy": {
         "preservationRequirement": 500,

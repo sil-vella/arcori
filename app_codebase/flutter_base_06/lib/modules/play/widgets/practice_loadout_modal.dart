@@ -6,10 +6,11 @@ import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../avari/avari_models.dart';
 import '../../avari/avari_notifier.dart';
+import '../../match/input/slam_resolver.dart' show practiceHumanArcoriId;
 import '../game_controls_prefs.dart';
 import '../play_models.dart';
 
-/// Practice setup: pick owned slammer only (Arcori auto-assigned from collection).
+/// Practice setup: pick owned slammer only (Arcori fixed to practice 001).
 Future<PracticeLoadout?> showPracticeLoadoutModal(BuildContext context) {
   return AppModal.showCenteredShell<PracticeLoadout>(
     context,
@@ -30,19 +31,18 @@ class _PracticeLoadoutBody extends ConsumerStatefulWidget {
 class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
   bool _loading = true;
   String? _error;
-  AvariInventoryItem? _autoArcori;
   List<AvariInventoryItem> _slammers = const [];
   String? _slammerId;
 
-  static const _fallbackArcori = AvariInventoryItem(
-    designId: 'ANM-TIG-GEN001-0001',
-    displayName: 'Tiger',
-    imageUrl: '/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp',
-    color: '#C6A15B',
+  static const _practiceArcori = AvariInventoryItem(
+    designId: practiceHumanArcoriId,
+    displayName: 'Practice Arcori',
+    imageUrl: 'assets/images/arcori/practice_arcori_001.webp',
+    color: '#6B5B95',
   );
 
   static const _fallbackSlammer = AvariInventoryItem(
-    designId: 'SLM-STR-GEN001-0001',
+    designId: 'SLM-STR-SER001-0001',
     displayName: 'Starter Slammer',
   );
 
@@ -59,10 +59,9 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
     final token = ref.read(authProvider).accessToken;
     if (token == null || token.isEmpty) {
       setState(() {
-        _autoArcori = _fallbackArcori;
         _slammers = const [_fallbackSlammer];
         _slammerId = _pickDefaultSlammer(const [_fallbackSlammer], equipped);
-        _error = 'Offline defaults — sign in to use your collection';
+        _error = 'Offline defaults — sign in to use your slammers';
         _loading = false;
       });
       return;
@@ -82,11 +81,9 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
       return;
     }
 
-    final arcori = profile.access.where((e) => e.designId.isNotEmpty).toList();
     final slammers =
         profile.slammers.where((e) => e.designId.isNotEmpty).toList();
     setState(() {
-      _autoArcori = arcori.isNotEmpty ? arcori.first : _fallbackArcori;
       _slammers = slammers;
       _slammerId = _pickDefaultSlammer(slammers, equipped);
       _error = slammers.isEmpty
@@ -136,16 +133,15 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
         ),
         AppSpacing.gapLg,
         FilledButton(
-          onPressed: (_autoArcori != null && _slammerId != null)
+          onPressed: _slammerId != null
               ? () {
-                  final arcori = _autoArcori!;
                   AppModal.dismiss(
                     context,
                     PracticeLoadout(
-                      arcoriId: arcori.designId,
+                      arcoriId: _practiceArcori.designId,
                       slammerId: _slammerId!,
-                      arcoriImageUrl: arcori.imageUrl,
-                      arcoriColor: arcori.color,
+                      arcoriImageUrl: _practiceArcori.imageUrl,
+                      arcoriColor: _practiceArcori.color,
                     ),
                   );
                 }

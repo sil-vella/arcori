@@ -185,17 +185,20 @@ class MatchCatalogClient {
       final arenaId = data['arenaId']?.toString().trim() ?? '';
       if (arenaId.isEmpty) return null;
       final imageUrl = data['imageUrl']?.toString().trim() ?? '';
+      final gathererRaw = data['gathererArcoriId']?.toString().trim() ?? '';
       final pick = MatchArenaPick(
         arenaId: arenaId,
         regionCode: data['regionCode']?.toString(),
         name: data['name']?.toString(),
         imageUrl: imageUrl.isEmpty ? null : imageUrl,
         source: data['source']?.toString(),
+        gathererArcoriId: gathererRaw.isEmpty ? null : gathererRaw,
       );
       if (LOGGING_SWITCH) {
         customlog(
           'match catalog select_arena ok arenaId=${pick.arenaId} '
-          'region=${pick.regionCode} source=${pick.source}',
+          'region=${pick.regionCode} source=${pick.source} '
+          'gatherer=${pick.gathererArcoriId}',
         );
       }
       return pick;
@@ -215,6 +218,7 @@ class MatchArenaPick {
     this.name,
     this.imageUrl,
     this.source,
+    this.gathererArcoriId,
   });
 
   final String arenaId;
@@ -222,4 +226,5 @@ class MatchArenaPick {
   final String? name;
   final String? imageUrl;
   final String? source;
+  final String? gathererArcoriId;
 }

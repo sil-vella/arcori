@@ -61,7 +61,7 @@ void main() {
       ],
       kins: [
         KinTemplate.fromJson({
-          'serial': 'KIN-BRZ-GEN001-0001',
+          'serial': 'KIN-BRZ-SER001-0001',
           'typeSerial': 'KTYPE-0001',
           'displayName': 'Bronze Genie',
           'lottieUrl': null,
@@ -98,13 +98,13 @@ void main() {
     test('filters kins by typeSerial', () {
       final guardians = catalog.kinsForType('KTYPE-0001');
       expect(guardians, hasLength(1));
-      expect(guardians.first.serial, 'KIN-BRZ-GEN001-0001');
+      expect(guardians.first.serial, 'KIN-BRZ-SER001-0001');
       expect(catalog.kinsForType('KTYPE-0002'), hasLength(1));
       expect(catalog.kinsForType('KTYPE-9999'), isEmpty);
     });
 
     test('allowedCustomsFor skips unknown serials', () {
-      final part = catalog.kinBySerial('KIN-BRZ-GEN001-0001')!.parts.first;
+      final part = catalog.kinBySerial('KIN-BRZ-SER001-0001')!.parts.first;
       final allowed = catalog.allowedCustomsFor(part);
       expect(allowed.map((c) => c.serial), ['CUS-0001', 'CUS-0006']);
       expect(part.allowsCustom('CUS-0099'), isFalse);
@@ -117,7 +117,7 @@ void main() {
 
     setUp(() {
       store = KinSaveStore();
-      template = catalog.kinBySerial('KIN-BRZ-GEN001-0001')!;
+      template = catalog.kinBySerial('KIN-BRZ-SER001-0001')!;
     });
 
     test('keeps allowed customs and drops disallowed', () {
@@ -174,7 +174,7 @@ void main() {
       );
 
       final draft = await store.save(
-        template: catalog.kinBySerial('KIN-BRZ-GEN001-0001')!,
+        template: catalog.kinBySerial('KIN-BRZ-SER001-0001')!,
         catalog: catalog,
         applied: const [
           KinAppliedCustom(
@@ -194,7 +194,7 @@ void main() {
       );
 
       expect(draft.serial, 'KSAVE-0001');
-      expect(draft.kinSerial, 'KIN-BRZ-GEN001-0001');
+      expect(draft.kinSerial, 'KIN-BRZ-SER001-0001');
       expect(draft.regionCode, 'EVG');
       expect(draft.colorHex, '#C6A15B');
       expect(draft.chosenName, 'My Genie');
@@ -219,7 +219,7 @@ void main() {
 
   group('KinCustomize allow-list behavior', () {
     test('part.allowsCustom gates unknown customs', () {
-      final part = catalog.kinBySerial('KIN-BRZ-GEN001-0001')!.parts.first;
+      final part = catalog.kinBySerial('KIN-BRZ-SER001-0001')!.parts.first;
       expect(part.allowsCustom('CUS-0001'), isTrue);
       expect(part.allowsCustom('CUS-0099'), isFalse);
       expect(part.allowsEmbed('KEMB-0001'), isTrue);

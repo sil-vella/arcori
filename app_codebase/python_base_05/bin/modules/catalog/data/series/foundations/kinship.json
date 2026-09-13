@@ -1,0 +1,142 @@
+{
+  "catalog": "Kinship Foundations Series",
+  "theme": "Kinship",
+  "series": "Foundations",
+  "themeCode": "KNS",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "KNS-FIK-SER003-0001",
+      "themeCode": "KNS",
+      "designCode": "FIK",
+      "designFamily": "FIRESIDE_KIN",
+      "design": "Fireside Kin",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Kinship",
+      "subtheme": "Kinship",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Fireside Kin in pixel art style with a standard finish and no effect. Use a background that is visually related to Fireside Kin. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-FIK-SER003-0001.webp",
+      "loreDescription": "A collectible Fireside Kin Arcori generation I from the Kinship Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "KNS-WIC-SER003-0002",
+      "themeCode": "KNS",
+      "designCode": "WIC",
+      "designFamily": "WINTERBLOOD_CIRCLE",
+      "design": "Winterblood Circle",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Kinship",
+      "subtheme": "Kinship",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Winterblood Circle in pixel art style with a standard finish and no effect. Use a background that is visually related to Winterblood Circle. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-WIC-SER003-0002.webp",
+      "loreDescription": "A collectible Winterblood Circle Arcori generation I from the Kinship Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "KNS-BSL-SER003-0003",
+      "themeCode": "KNS",
+      "designCode": "BSL",
+      "designFamily": "BRANCHES_OF_THE_SAME_LIGHT",
+      "design": "Branches of the Same Light",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Kinship",
+      "subtheme": "Kinship",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Branches of the Same Light in pixel art style with a standard finish and no effect. Use a background that is visually related to Branches of the Same Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-BSL-SER003-0003.webp",
+      "loreDescription": "A collectible Branches of the Same Light Arcori generation I from the Kinship Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

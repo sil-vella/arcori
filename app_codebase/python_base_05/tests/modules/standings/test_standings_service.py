@@ -43,7 +43,7 @@ def catalog_root(tmp_path: Path):
         "themeCode": "ANM",
         "designs": [
             {
-                "internalId": "ANM-TIG-GEN001-0001",
+                "internalId": "ANM-TIG-SER001-0001",
                 "design": "Tiger",
                 "theme": "Animals",
                 "themeCode": "ANM",
@@ -68,8 +68,8 @@ def test_get_standings_unknown_design(catalog_root: Path):
 def test_get_standings_empty_without_db_row(catalog_root: Path):
     if not os.environ.get("DATABASE_URL", "").strip():
         pytest.skip("DATABASE_URL not set")
-    payload = get_design_standings("ANM-TIG-GEN001-0001")
-    assert payload["internalId"] == "ANM-TIG-GEN001-0001"
+    payload = get_design_standings("ANM-TIG-SER001-0001")
+    assert payload["internalId"] == "ANM-TIG-SER001-0001"
     assert payload["generation"]["number"] == 1
     assert payload["fill"] == {"current": 0, "cap": 0}
     assert payload["ranks"] == []
@@ -78,9 +78,9 @@ def test_get_standings_empty_without_db_row(catalog_root: Path):
 def test_replace_and_clear_standings(catalog_root: Path):
     if not os.environ.get("DATABASE_URL", "").strip():
         pytest.skip("DATABASE_URL not set")
-    clear_design_standings("ANM-TIG-GEN001-0001", generation_number=1)
+    clear_design_standings("ANM-TIG-SER001-0001", generation_number=1)
     replaced = replace_design_standings(
-        "ANM-TIG-GEN001-0001",
+        "ANM-TIG-SER001-0001",
         generation_number=1,
         generation_roman="I",
         fill_current=12,
@@ -94,11 +94,11 @@ def test_replace_and_clear_standings(catalog_root: Path):
     assert len(replaced["ranks"]) == 2
     assert replaced["ranks"][0]["displayLabel"] == "Seed Player 1"
 
-    got = get_design_standings("ANM-TIG-GEN001-0001")
+    got = get_design_standings("ANM-TIG-SER001-0001")
     assert got["fill"]["cap"] == 100
     assert len(got["ranks"]) == 2
 
-    clear_design_standings("ANM-TIG-GEN001-0001", generation_number=1)
-    empty = get_design_standings("ANM-TIG-GEN001-0001")
+    clear_design_standings("ANM-TIG-SER001-0001", generation_number=1)
+    empty = get_design_standings("ANM-TIG-SER001-0001")
     assert empty["ranks"] == []
     assert empty["fill"]["current"] == 0

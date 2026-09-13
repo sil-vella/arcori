@@ -1,0 +1,150 @@
+{
+  "catalog": "Tradition Foundations Series",
+  "theme": "Tradition",
+  "series": "Foundations",
+  "themeCode": "TRN",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "TRN-GOP-SER003-0001",
+      "themeCode": "TRN",
+      "designCode": "GOP",
+      "designFamily": "THE_GOLDEN_PASSING",
+      "design": "The Golden Passing",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Tradition",
+      "subtheme": "Tradition",
+      "style": "Chibi",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Golden Passing in chibi style with a standard finish and no effect. Use a background that is visually related to The Golden Passing. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRN-GOP-SER003-0001.webp",
+      "loreDescription": "A collectible The Golden Passing Arcori generation I from the Tradition Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "TRN-KFL-SER003-0002",
+      "themeCode": "TRN",
+      "designCode": "KFL",
+      "designFamily": "KEEPING_OF_THE_FIRST_LANTERNS",
+      "design": "Keeping of the First Lanterns",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Tradition",
+      "subtheme": "Tradition",
+      "style": "Chibi",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Keeping of the First Lanterns in chibi style with a standard finish and no effect. Use a background that is visually related to Keeping of the First Lanterns. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRN-KFL-SER003-0002.webp",
+      "loreDescription": "A collectible Keeping of the First Lanterns Arcori generation I from the Tradition Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "TRN-ALP-SER003-0003",
+      "themeCode": "TRN",
+      "designCode": "ALP",
+      "designFamily": "THE_ASH_LANTERN_PROCESSION",
+      "design": "The Ash Lantern Procession",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Tradition",
+      "subtheme": "Tradition",
+      "style": "Chibi",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Ash Lantern Procession in chibi style with a standard finish and no effect. Use a background that is visually related to The Ash Lantern Procession. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRN-ALP-SER003-0003.webp",
+      "loreDescription": "A collectible The Ash Lantern Procession Arcori generation I from the Tradition Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

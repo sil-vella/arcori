@@ -1,0 +1,148 @@
+{
+  "catalog": "Legacy Foundations Series",
+  "theme": "Legacy",
+  "series": "Foundations",
+  "themeCode": "LEG",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "LEG-MLH-SER003-0001",
+      "themeCode": "LEG",
+      "designCode": "MLH",
+      "designFamily": "MONUMENT_OF_THE_LAST_HAND",
+      "design": "Monument of the Last Hand",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Legacy",
+      "subtheme": "Legacy",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Monument of the Last Hand in retro style with a standard finish and no effect. Use a background that is visually related to Monument of the Last Hand. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-MLH-SER003-0001.webp",
+      "loreDescription": "A collectible Monument of the Last Hand Arcori generation I from the Legacy Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "LEG-WTR-SER003-0002",
+      "themeCode": "LEG",
+      "designCode": "WTR",
+      "designFamily": "WHAT_THE_TIDE_REMEMBERED",
+      "design": "What the Tide Remembered",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Legacy",
+      "subtheme": "Legacy",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with What the Tide Remembered in retro style with a standard finish and no effect. Use a background that is visually related to What the Tide Remembered. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-WTR-SER003-0002.webp",
+      "loreDescription": "A collectible What the Tide Remembered Arcori generation I from the Legacy Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "LEG-LLT-SER003-0003",
+      "themeCode": "LEG",
+      "designCode": "LLT",
+      "designFamily": "LANTERNS_LEFT_FOR_TOMORROW",
+      "design": "Lanterns Left for Tomorrow",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Legacy",
+      "subtheme": "Legacy",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Lanterns Left for Tomorrow in retro style with a standard finish and no effect. Use a background that is visually related to Lanterns Left for Tomorrow. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-LLT-SER003-0003.webp",
+      "loreDescription": "A collectible Lanterns Left for Tomorrow Arcori generation I from the Legacy Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

@@ -234,7 +234,7 @@ class KinTemplate {
   final String typeSerial;
   final String displayName;
 
-  /// Backend-served Lottie path, e.g. `/catalog-media/kin/gen001/guardians/KIN-BRZ-GEN001-0001.json`.
+  /// Backend-served Lottie path, e.g. `/catalog-media/kin/ser001/guardians/KIN-BRZ-SER001-0001.json`.
   final String? lottieUrl;
   final String? thumbnailUrl;
   final List<KinPart> parts;

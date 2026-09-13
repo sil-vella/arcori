@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "OCN-CRF-GEN001-0001",
+      "internalId": "OCN-CRF-SER001-0001",
       "themeCode": "OCN",
       "designCode": "CRF",
       "designFamily": "CORAL_KINGDOM",
@@ -43,7 +43,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a coral kingdom in watercolor style with a gloss finish and sparkle effect. Use a background that is visually related to the coral kingdom. No borders, no frames. The coral kingdom should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-CRF-GEN001-0001.webp",
+      "artworkPrompt": "Give me an image with a coral kingdom in watercolor style with a gloss finish and sparkle effect. Use a background that is visually related to the coral kingdom. No borders, no frames. The coral kingdom should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-CRF-SER001-0001.webp",
       "loreDescription": "A collectible Coral Kingdom Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -51,7 +51,7 @@
       }
     },
     {
-      "internalId": "OCN-ANG-GEN001-0002",
+      "internalId": "OCN-ANG-SER001-0002",
       "themeCode": "OCN",
       "designCode": "ANG",
       "designFamily": "ANGLER_DEPTH",
@@ -88,7 +88,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a angler depth in realistic style with a chrome finish and glow effect. Use a background that is visually related to the angler depth. No borders, no frames. The angler depth should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-ANG-GEN001-0002.webp",
+      "artworkPrompt": "Give me an image with a angler depth in realistic style with a chrome finish and glow effect. Use a background that is visually related to the angler depth. No borders, no frames. The angler depth should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-ANG-SER001-0002.webp",
       "loreDescription": "A collectible Angler Depth Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "OCN-SQD-GEN001-0003",
+      "internalId": "OCN-SQD-SER001-0003",
       "themeCode": "OCN",
       "designCode": "SQD",
       "designFamily": "GIANT_SQUID",
@@ -133,7 +133,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a giant squid in comic style with a metallic finish and motion effect. Use a background that is visually related to the giant squid. No borders, no frames. The giant squid should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-SQD-GEN001-0003.webp",
+      "artworkPrompt": "Give me an image with a giant squid in comic style with a metallic finish and motion effect. Use a background that is visually related to the giant squid. No borders, no frames. The giant squid should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-SQD-SER001-0003.webp",
       "loreDescription": "A collectible Giant Squid Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -141,7 +141,7 @@
       }
     },
     {
-      "internalId": "OCN-KRK-GEN001-0004",
+      "internalId": "OCN-KRK-SER001-0004",
       "themeCode": "OCN",
       "designCode": "KRK",
       "designFamily": "KRAKEN",
@@ -178,7 +178,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a kraken in anime style with a foil finish and smoke effect. Use a background that is visually related to the kraken. No borders, no frames. The kraken should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-KRK-GEN001-0004.webp",
+      "artworkPrompt": "Give me an image with a kraken in anime style with a foil finish and smoke effect. Use a background that is visually related to the kraken. No borders, no frames. The kraken should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-KRK-SER001-0004.webp",
       "loreDescription": "A collectible Kraken Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -186,7 +186,7 @@
       }
     },
     {
-      "internalId": "OCN-PIR-GEN001-0005",
+      "internalId": "OCN-PIR-SER001-0005",
       "themeCode": "OCN",
       "designCode": "PIR",
       "designFamily": "PIRATE_CAPTAIN",
@@ -223,7 +223,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a pirate captain in comic style with a gloss finish and fire effect. Use a background that is visually related to the pirate captain. No borders, no frames. The pirate captain should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-PIR-GEN001-0005.webp",
+      "artworkPrompt": "Give me an image with a pirate captain in comic style with a gloss finish and fire effect. Use a background that is visually related to the pirate captain. No borders, no frames. The pirate captain should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-PIR-SER001-0005.webp",
       "loreDescription": "A collectible Pirate Captain Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -231,7 +231,7 @@
       }
     },
     {
-      "internalId": "OCN-BCC-GEN001-0006",
+      "internalId": "OCN-BCC-SER001-0006",
       "themeCode": "OCN",
       "designCode": "BCC",
       "designFamily": "BLACK_CORSAIR",
@@ -268,7 +268,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a black corsair in realistic style with a chrome finish and no effect. Use a background that is visually related to the black corsair. No borders, no frames. The black corsair should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-BCC-GEN001-0006.webp",
+      "artworkPrompt": "Give me an image with a black corsair in realistic style with a chrome finish and no effect. Use a background that is visually related to the black corsair. No borders, no frames. The black corsair should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-BCC-SER001-0006.webp",
       "loreDescription": "A collectible Black Corsair Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -276,7 +276,7 @@
       }
     },
     {
-      "internalId": "OCN-GAL-GEN001-0007",
+      "internalId": "OCN-GAL-SER001-0007",
       "themeCode": "OCN",
       "designCode": "GAL",
       "designFamily": "TREASURE_GALLEON",
@@ -313,7 +313,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a treasure galleon in watercolor style with a foil finish and glow effect. Use a background that is visually related to the treasure galleon. No borders, no frames. The treasure galleon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-GAL-GEN001-0007.webp",
+      "artworkPrompt": "Give me an image with a treasure galleon in watercolor style with a foil finish and glow effect. Use a background that is visually related to the treasure galleon. No borders, no frames. The treasure galleon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-GAL-SER001-0007.webp",
       "loreDescription": "A collectible Treasure Galleon Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -321,7 +321,7 @@
       }
     },
     {
-      "internalId": "OCN-SUB-GEN001-0008",
+      "internalId": "OCN-SUB-SER001-0008",
       "themeCode": "OCN",
       "designCode": "SUB",
       "designFamily": "DEEP_SUBMARINE",
@@ -358,7 +358,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a deep submarine in minimalist style with a standard finish and no effect. Use a background that is visually related to the deep submarine. No borders, no frames. The deep submarine should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-SUB-GEN001-0008.webp",
+      "artworkPrompt": "Give me an image with a deep submarine in minimalist style with a standard finish and no effect. Use a background that is visually related to the deep submarine. No borders, no frames. The deep submarine should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-SUB-SER001-0008.webp",
       "loreDescription": "A collectible Deep Submarine Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -366,7 +366,7 @@
       }
     },
     {
-      "internalId": "OCN-TRE-GEN001-0009",
+      "internalId": "OCN-TRE-SER001-0009",
       "themeCode": "OCN",
       "designCode": "TRE",
       "designFamily": "SUNKEN_TREASURE",
@@ -403,7 +403,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a sunken treasure in prismatic style with a prismatic finish and sparkle effect. Use a background that is visually related to the sunken treasure. No borders, no frames. The sunken treasure should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-TRE-GEN001-0009.webp",
+      "artworkPrompt": "Give me an image with a sunken treasure in prismatic style with a prismatic finish and sparkle effect. Use a background that is visually related to the sunken treasure. No borders, no frames. The sunken treasure should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-TRE-SER001-0009.webp",
       "loreDescription": "A collectible Sunken Treasure Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -411,7 +411,7 @@
       }
     },
     {
-      "internalId": "OCN-DOL-GEN001-0010",
+      "internalId": "OCN-DOL-SER001-0010",
       "themeCode": "OCN",
       "designCode": "DOL",
       "designFamily": "OCEAN_DOLPHIN",
@@ -448,7 +448,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a ocean dolphin in cartoon style with a gloss finish and motion effect. Use a background that is visually related to the ocean dolphin. No borders, no frames. The ocean dolphin should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-DOL-GEN001-0010.webp",
+      "artworkPrompt": "Give me an image with a ocean dolphin in cartoon style with a gloss finish and motion effect. Use a background that is visually related to the ocean dolphin. No borders, no frames. The ocean dolphin should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-DOL-SER001-0010.webp",
       "loreDescription": "A collectible Ocean Dolphin Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -456,7 +456,7 @@
       }
     },
     {
-      "internalId": "OCN-WHL-GEN001-0011",
+      "internalId": "OCN-WHL-SER001-0011",
       "themeCode": "OCN",
       "designCode": "WHL",
       "designFamily": "BLUE_WHALE",
@@ -493,7 +493,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a blue whale in realistic style with a matte finish and no effect. Use a background that is visually related to the blue whale. No borders, no frames. The blue whale should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-WHL-GEN001-0011.webp",
+      "artworkPrompt": "Give me an image with a blue whale in realistic style with a matte finish and no effect. Use a background that is visually related to the blue whale. No borders, no frames. The blue whale should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-WHL-SER001-0011.webp",
       "loreDescription": "A collectible Blue Whale Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -501,7 +501,7 @@
       }
     },
     {
-      "internalId": "OCN-SEA-GEN001-0012",
+      "internalId": "OCN-SEA-SER001-0012",
       "themeCode": "OCN",
       "designCode": "SEA",
       "designFamily": "SEA_TURTLE",
@@ -538,7 +538,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a sea turtle in watercolor style with a standard finish and glow effect. Use a background that is visually related to the sea turtle. No borders, no frames. The sea turtle should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-SEA-GEN001-0012.webp",
+      "artworkPrompt": "Give me an image with a sea turtle in watercolor style with a standard finish and glow effect. Use a background that is visually related to the sea turtle. No borders, no frames. The sea turtle should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named OCN-SEA-SER001-0012.webp",
       "loreDescription": "A collectible Sea Turtle Arcori generation I from the Ocean Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,

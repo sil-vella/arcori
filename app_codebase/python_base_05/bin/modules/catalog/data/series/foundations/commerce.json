@@ -1,0 +1,140 @@
+{
+  "catalog": "Commerce Foundations Series",
+  "theme": "Commerce",
+  "series": "Foundations",
+  "themeCode": "CMC",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "CMC-MRT-SER003-0001",
+      "themeCode": "CMC",
+      "designCode": "MRT",
+      "designFamily": "MARKET_OF_RETURNING_TIDES",
+      "design": "Market of Returning Tides",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Commerce",
+      "subtheme": "Commerce",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Market of Returning Tides in anime style with a standard finish and no effect. Use a background that is visually related to Market of Returning Tides. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-MRT-SER003-0001.webp",
+      "loreDescription": "A collectible Market of Returning Tides Arcori generation I from the Commerce Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "CMC-MUF-SER003-0002",
+      "themeCode": "CMC",
+      "designCode": "MUF",
+      "designFamily": "MARKET_UPON_THE_FROZEN_CANAL",
+      "design": "Market Upon the Frozen Canal",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Commerce",
+      "subtheme": "Commerce",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Market Upon the Frozen Canal in anime style with a standard finish and no effect. Use a background that is visually related to Market Upon the Frozen Canal. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-MUF-SER003-0002.webp",
+      "loreDescription": "A collectible Market Upon the Frozen Canal Arcori generation I from the Commerce Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "CMC-CAM-SER003-0003",
+      "themeCode": "CMC",
+      "designCode": "CAM",
+      "designFamily": "CARAVANS_AT_MIDWINTER",
+      "design": "Caravans at Midwinter",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Commerce",
+      "subtheme": "Commerce",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Caravans at Midwinter in anime style with a standard finish and no effect. Use a background that is visually related to Caravans at Midwinter. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-CAM-SER003-0003.webp",
+      "loreDescription": "A collectible Caravans at Midwinter Arcori generation I from the Commerce Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

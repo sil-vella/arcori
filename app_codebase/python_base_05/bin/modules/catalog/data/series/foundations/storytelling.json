@@ -1,0 +1,142 @@
+{
+  "catalog": "Storytelling Foundations Series",
+  "theme": "Storytelling",
+  "series": "Foundations",
+  "themeCode": "STY",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "STY-FIC-SER003-0001",
+      "themeCode": "STY",
+      "designCode": "FIC",
+      "designFamily": "FIRESIDE_CHRONICLE",
+      "design": "Fireside Chronicle",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Storytelling",
+      "subtheme": "Storytelling",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Fireside Chronicle in retro style with a standard finish and no effect. Use a background that is visually related to Fireside Chronicle. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STY-FIC-SER003-0001.webp",
+      "loreDescription": "A collectible Fireside Chronicle Arcori generation I from the Storytelling Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "STY-SHB-SER003-0002",
+      "themeCode": "STY",
+      "designCode": "SHB",
+      "designFamily": "SHADOWS_BENEATH_OLD_BOUGHS",
+      "design": "Shadows Beneath Old Boughs",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Storytelling",
+      "subtheme": "Storytelling",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Shadows Beneath Old Boughs in retro style with a standard finish and no effect. Use a background that is visually related to Shadows Beneath Old Boughs. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STY-SHB-SER003-0002.webp",
+      "loreDescription": "A collectible Shadows Beneath Old Boughs Arcori generation I from the Storytelling Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "STY-TTR-SER003-0003",
+      "themeCode": "STY",
+      "designCode": "TTR",
+      "designFamily": "THE_TALE_THAT_RETURNED_BY_DAWN",
+      "design": "The Tale That Returned by Dawn",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Storytelling",
+      "subtheme": "Storytelling",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Tale That Returned by Dawn in retro style with a standard finish and no effect. Use a background that is visually related to The Tale That Returned by Dawn. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STY-TTR-SER003-0003.webp",
+      "loreDescription": "A collectible The Tale That Returned by Dawn Arcori generation I from the Storytelling Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

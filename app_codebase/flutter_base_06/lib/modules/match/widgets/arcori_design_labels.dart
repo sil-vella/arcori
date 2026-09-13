@@ -1,6 +1,6 @@
 /// Series / generation / serial parsed from a catalog [designId].
 ///
-/// Wire shape: `THEME-CODE-GENnnn-ssss` (e.g. `ANM-TIG-GEN001-0001`).
+/// Wire shape: `THEME-CODE-GENnnn-ssss` (e.g. `ANM-TIG-SER001-0001`).
 class ArcoriDesignLabels {
   const ArcoriDesignLabels({
     required this.series,

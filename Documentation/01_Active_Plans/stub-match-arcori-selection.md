@@ -1,10 +1,10 @@
 # Stub Match Arcori Selection
 
-**Status:** Completed  
+**Status:** Completed (updated)  
 **Created:** 2026-08-21  
-**Last Updated:** 2026-08-21
+**Last Updated:** 2026-09-12
 
-Related: [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [match-hot-state.md](match-hot-state.md) · [Tech Spec](../Game_Specific/Arcori_Technical_Specification_v0.4.md) · catalog `04_selection_weights.json`
+Related: [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [match-hot-state.md](match-hot-state.md) · [kin-creation.md](kin-creation.md) · [Tech Spec](../Game_Specific/Arcori_Technical_Specification_v0.4.md) · catalog `04_selection_weights.json`
 
 ## Objective
 
@@ -32,13 +32,26 @@ Practice stays Flutter-only (loadout unchanged).
 - [x] Dart `MatchCatalogClient.selectArcori` + `startFromLobby` apply; HTTP fail → stubs
 - [x] Python + Dart unit tests
 - [x] Smoke: invite match both seats `source=weighted` after starter access granted
+- [x] Resolve candidate designs via `get_design` (static + player Kin file/DB) so claimed Kin stays in the pre-match pool; log pool `ids=`
 
 ## Current Progress
 
-Complete. Verified on invite match (admin + silvell): both seats `candidates=10` / `source=weighted`.
+Complete. Candidate source of truth is DB `player_design_access`. Design docs resolve through catalog `get_design` (not static-loader-only), so Kin and other player circulating stock are selectable. Trove mints remain ownership-only (not access) and stay out of the match pool.
 
 ## Next Steps
 
+- Optional: stamp Lottie face on match freeze for Kin picks (match disc face path).
+
+## Files Modified
+
+- Python: `catalog_select.py`, `catalog_app.py`, `catalog_loader.py`, `avari_service.list_design_access_ids`
+- Dart: `match_catalog_client.dart`, `match_service.dart` (`startFromLobby`)
+- Tests: `test_catalog_select.py`, `match_service_test.dart`
+
+## Notes
+
+- Empty player circulating access → empty `arcoriId` (Dart still applies Tiger / White Tiger stub for that seat). Random fallback never uses the full circulating catalog.
+- Pre-match pool = all circulating access rows that resolve Active; pick uses existing rarity × region weights.
 None on this plan. Next app build was stub turn stages — see [stub-match-turn-stages.md](stub-match-turn-stages.md); then weighted slam / real turns.
 
 ## Files Modified

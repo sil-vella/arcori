@@ -4,6 +4,11 @@ After seats exist, pick one design per seat from that player's accessible list
 (still in circulation). Prefer weighted score (printedRarity × region standing);
 if weights fail or the weighted pool is empty, random among that player's
 circulating candidates only. Never pick from the global circulating catalog.
+
+Candidate ids come from DB (`player_design_access` or seat `candidateIds`).
+Design docs resolve via catalog `get_design` (static JSON + player Kin files/DB)
+so claimed Kin and other player-minted circulating stock stay in the pool.
+Trove / closed mints are not access and are not selectable.
 """
 
 from __future__ import annotations
@@ -16,7 +21,8 @@ from typing import Any
 from core.errors.app_error import AppError
 from core.utils.dev_logger import customlog
 from modules.catalog import catalog_loader as loader
-from modules.catalog.catalog_errors import INVALID_QUERY
+from modules.catalog.catalog_errors import INVALID_QUERY, NOT_FOUND
+from modules.catalog.catalog_service import get_design
 from modules.catalog.velora_media import arena_image_url
 
 LOGGING_SWITCH = True
@@ -32,6 +38,20 @@ def _is_circulating(design: dict[str, Any] | None) -> bool:
     return not world or world == "active"
 
 
+def _resolve_design(design_id: str) -> dict[str, Any] | None:
+    """Static catalog or player Kin (design file / player_kin.catalog_design)."""
+    iid = (design_id or "").strip()
+    if not iid:
+        return None
+    try:
+        design = get_design(iid)
+    except AppError as err:
+        if err.code not in (NOT_FOUND.code, INVALID_QUERY.code) and LOGGING_SWITCH:
+            customlog(f"catalog_select: resolve fail id={iid} code={err.code}")
+        return None
+    return design if isinstance(design, dict) else None
+
+
 def _filter_circulating_candidates(candidate_ids: list[str]) -> list[str]:
     """Keep access ids that still resolve to an Active (circulating) design."""
     out: list[str] = []
@@ -40,7 +60,7 @@ def _filter_circulating_candidates(candidate_ids: list[str]) -> list[str]:
         iid = str(design_id or "").strip()
         if not iid or iid in seen:
             continue
-        found = loader.find_design_by_internal_id(iid)
+        found = _resolve_design(iid)
         if not _is_circulating(found):
             continue
         seen.add(iid)
@@ -217,7 +237,7 @@ def _pick_one(
     pool_ids: list[str] = []
     pool_weights: list[float] = []
     for design_id in candidates:
-        found = loader.find_design_by_internal_id(design_id)
+        found = _resolve_design(design_id)
         if found is None or not _is_circulating(found):
             continue
         rarity_w = _rarity_weight(table, found)
@@ -253,6 +273,7 @@ def _pick_one(
         customlog(
             f"catalog_select: seat={seat_index} user={user_id} "
             f"candidates={len(candidates)} pool={len(pool_ids)} "
+            f"ids={','.join(pool_ids)} "
             f"chosen={chosen} weight={chosen_weight:.4f} "
             f"source={SOURCE_WEIGHTED} seated_regions={seated_regions}"
         )
@@ -265,7 +286,11 @@ def _pick_one(
 
 
 def select_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
-    """Pick one Arcori per seat in order. Returns {selections: [...]}."""
+    """Pick one Arcori per seat in order. Returns {selections: [...]}.
+
+    Already-chosen design ids are excluded from later seats so no two seats
+    share the same Arcori in one match.
+    """
     if not isinstance(seats, list) or not seats:
         raise AppError(INVALID_QUERY, message="seats must be a non-empty list")
 
@@ -275,6 +300,7 @@ def select_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
 
     selections: list[dict[str, Any]] = []
     seated_regions: list[str] = []
+    taken_ids: set[str] = set()
 
     for index, raw in enumerate(seats):
         if not isinstance(raw, dict):
@@ -302,6 +328,8 @@ def select_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
             candidates = list_design_access_ids(user_id)
 
         candidates = _filter_circulating_candidates(candidates)
+        if taken_ids:
+            candidates = [c for c in candidates if c not in taken_ids]
 
         pick = _pick_one(
             user_id=user_id,
@@ -315,7 +343,8 @@ def select_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
 
         chosen_id = str(pick.get("arcoriId") or "").strip()
         if chosen_id:
-            design = loader.find_design_by_internal_id(chosen_id)
+            taken_ids.add(chosen_id)
+            design = _resolve_design(chosen_id)
             region = _region_of(design)
             if region:
                 seated_regions.append(region)
@@ -325,6 +354,154 @@ def select_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
 
 SOURCE_MAJORITY = "majority"
 SOURCE_RANDOM_REGION = "random_region"
+SOURCE_GATHERER_WEIGHTED = "gatherer_weighted"
+SOURCE_GATHERER_RANDOM = "gatherer_random"
+
+
+def _is_playable_match_arcori(design: dict[str, Any]) -> bool:
+    """Circulating non-slammer / non-Kin catalog design."""
+    if not _is_circulating(design):
+        return False
+    theme_code = str(design.get("themeCode") or "").strip().upper()
+    if theme_code in {"SLM", "KIN"}:
+        return False
+    dtype = str(design.get("type") or "").strip().lower()
+    if dtype in {"slammer"}:
+        return False
+    return True
+
+
+def _circulating_ids_in_region(region_code: str) -> list[str]:
+    """Static catalog ids in region (any series), playable match stock only."""
+    code = (region_code or "").strip().upper()
+    if not code:
+        return []
+    out: list[str] = []
+    seen: set[str] = set()
+    try:
+        docs = loader.list_theme_documents()
+    except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+        return []
+    for doc in docs:
+        if not isinstance(doc, dict):
+            continue
+        doc_theme = str(doc.get("themeCode") or "").strip().upper()
+        if doc_theme in {"SLM", "KIN"}:
+            continue
+        designs = doc.get("designs")
+        if not isinstance(designs, list):
+            continue
+        for design in designs:
+            if not isinstance(design, dict):
+                continue
+            if not _is_playable_match_arcori(design):
+                continue
+            if _region_of(design) != code:
+                continue
+            iid = str(design.get("internalId") or "").strip()
+            if not iid or iid in seen:
+                continue
+            seen.add(iid)
+            out.append(iid)
+    return out
+
+
+def select_gatherer_for_region(
+    region_code: str,
+    *,
+    exclude_ids: list[str] | None = None,
+    rng: random.Random | None = None,
+) -> dict[str, Any] | None:
+    """Weighted Gatherer from circulating catalog designs in ``region_code``.
+
+    Uses ``04_selection_weights`` printedRarity only. Excludes seated player
+    ids, slammers, and Kin. Returns None if the pool is empty.
+    """
+    picker = rng or random.Random()
+    excluded = {
+        str(x or "").strip()
+        for x in (exclude_ids or [])
+        if str(x or "").strip()
+    }
+    pool = [iid for iid in _circulating_ids_in_region(region_code) if iid not in excluded]
+    if not pool:
+        if LOGGING_SWITCH:
+            customlog(
+                f"catalog_select: gatherer empty region={region_code} "
+                f"excluded={len(excluded)}"
+            )
+        return None
+
+    table, table_fail = _load_weights_table()
+    if table is None:
+        chosen = picker.choice(pool)
+        if LOGGING_SWITCH:
+            customlog(
+                f"catalog_select: gatherer region={region_code} "
+                f"chosen={chosen} source={SOURCE_GATHERER_RANDOM} "
+                f"reason={table_fail or 'no_table'} pool={len(pool)}"
+            )
+        return {
+            "gathererArcoriId": chosen,
+            "regionCode": region_code.strip().upper(),
+            "source": SOURCE_GATHERER_RANDOM,
+            "reason": table_fail or "no_table",
+        }
+
+    pool_ids: list[str] = []
+    pool_weights: list[float] = []
+    for design_id in pool:
+        found = _resolve_design(design_id)
+        if found is None or not _is_playable_match_arcori(found):
+            continue
+        rarity_w = _rarity_weight(table, found)
+        if rarity_w is None or rarity_w <= 0:
+            continue
+        pool_ids.append(design_id)
+        pool_weights.append(rarity_w)
+
+    if not pool_ids:
+        chosen = picker.choice(pool)
+        if LOGGING_SWITCH:
+            customlog(
+                f"catalog_select: gatherer region={region_code} "
+                f"chosen={chosen} source={SOURCE_GATHERER_RANDOM} "
+                f"reason=empty_weighted_pool pool={len(pool)}"
+            )
+        return {
+            "gathererArcoriId": chosen,
+            "regionCode": region_code.strip().upper(),
+            "source": SOURCE_GATHERER_RANDOM,
+            "reason": "empty_weighted_pool",
+        }
+
+    # Prefer picker.choices when available for seeded tests; else _weighted_pick.
+    total = sum(pool_weights)
+    if total <= 0:
+        chosen = picker.choice(pool_ids)
+    else:
+        # Manual cumulative with picker.random for rng control.
+        r = picker.random() * total
+        acc = 0.0
+        chosen = pool_ids[-1]
+        for design_id, weight in zip(pool_ids, pool_weights):
+            acc += weight
+            if r <= acc:
+                chosen = design_id
+                break
+    chosen_weight = pool_weights[pool_ids.index(chosen)]
+    if LOGGING_SWITCH:
+        customlog(
+            f"catalog_select: gatherer region={region_code} "
+            f"chosen={chosen} weight={chosen_weight:.4f} "
+            f"source={SOURCE_GATHERER_WEIGHTED} pool={len(pool_ids)}"
+        )
+    return {
+        "gathererArcoriId": chosen,
+        "regionCode": region_code.strip().upper(),
+        "source": SOURCE_GATHERER_WEIGHTED,
+        "weight": chosen_weight,
+    }
 
 
 def _arenas_by_region() -> dict[str, list[dict[str, Any]]]:
@@ -388,11 +565,16 @@ def select_arena_for_arcori_ids(
         raise AppError(INVALID_QUERY, message="no arenas in catalog")
 
     seated: list[str] = []
+    seated_ids_for_exclude: list[str] = []
+    seen_ids: set[str] = set()
     for raw_id in arcori_ids:
         iid = str(raw_id or "").strip()
         if not iid:
             continue
-        design = loader.find_design_by_internal_id(iid)
+        if iid not in seen_ids:
+            seen_ids.add(iid)
+            seated_ids_for_exclude.append(iid)
+        design = _resolve_design(iid)
         region = _region_of(design)
         if region:
             seated.append(region)
@@ -415,16 +597,27 @@ def select_arena_for_arcori_ids(
         raise AppError(INVALID_QUERY, message="no arenas in catalog")
 
     arena = picker.choice(arenas)
+    region_code = str(arena["regionCode"])
+    gatherer = select_gatherer_for_region(
+        region_code,
+        exclude_ids=seated_ids_for_exclude,
+        rng=picker,
+    )
     if LOGGING_SWITCH:
         customlog(
             f"catalog_select: select_arena source={source} "
-            f"region={arena['regionCode']} arenaId={arena['arenaId']} "
-            f"seated={seated} majority={majority}"
+            f"region={region_code} arenaId={arena['arenaId']} "
+            f"seated={seated} majority={majority} "
+            f"gatherer={(gatherer or {}).get('gathererArcoriId')}"
         )
-    return {
+    out: dict[str, Any] = {
         "arenaId": arena["arenaId"],
-        "regionCode": arena["regionCode"],
+        "regionCode": region_code,
         "name": arena["name"],
         "imageUrl": arena["imageUrl"],
         "source": source,
     }
+    if gatherer and gatherer.get("gathererArcoriId"):
+        out["gathererArcoriId"] = gatherer["gathererArcoriId"]
+        out["gathererSource"] = gatherer.get("source")
+    return out

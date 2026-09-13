@@ -3,6 +3,13 @@
   "generatedFrom": "catalog JSON files in data/",
   "themes": [
     {
+      "theme": "Alliance",
+      "themeCode": "ALL",
+      "subthemes": [
+        "Alliance"
+      ]
+    },
+    {
       "theme": "Animals",
       "themeCode": "ANM",
       "subthemes": [
@@ -15,10 +22,94 @@
       ]
     },
     {
+      "theme": "Artistry",
+      "themeCode": "ART",
+      "subthemes": [
+        "Artistry"
+      ]
+    },
+    {
+      "theme": "Belief",
+      "themeCode": "BEL",
+      "subthemes": [
+        "Belief"
+      ]
+    },
+    {
+      "theme": "Celebration",
+      "themeCode": "CEL",
+      "subthemes": [
+        "Celebration"
+      ]
+    },
+    {
+      "theme": "Ceremony",
+      "themeCode": "CER",
+      "subthemes": [
+        "Ceremony"
+      ]
+    },
+    {
       "theme": "Characters",
       "themeCode": "CHR",
       "subthemes": [
         "Mascots"
+      ]
+    },
+    {
+      "theme": "Commerce",
+      "themeCode": "CMC",
+      "subthemes": [
+        "Commerce"
+      ]
+    },
+    {
+      "theme": "Community",
+      "themeCode": "CMY",
+      "subthemes": [
+        "Community"
+      ]
+    },
+    {
+      "theme": "Council",
+      "themeCode": "COU",
+      "subthemes": [
+        "Council"
+      ]
+    },
+    {
+      "theme": "Craft",
+      "themeCode": "CRA",
+      "subthemes": [
+        "Craft"
+      ]
+    },
+    {
+      "theme": "Devotion",
+      "themeCode": "DEV",
+      "subthemes": [
+        "Devotion"
+      ]
+    },
+    {
+      "theme": "Diplomacy",
+      "themeCode": "DIP",
+      "subthemes": [
+        "Diplomacy"
+      ]
+    },
+    {
+      "theme": "Discovery",
+      "themeCode": "DIS",
+      "subthemes": [
+        "Discovery"
+      ]
+    },
+    {
+      "theme": "Exploration",
+      "themeCode": "EXP",
+      "subthemes": [
+        "Exploration"
       ]
     },
     {
@@ -51,6 +142,20 @@
       ]
     },
     {
+      "theme": "Harvest",
+      "themeCode": "HAR",
+      "subthemes": [
+        "Harvest"
+      ]
+    },
+    {
+      "theme": "Hearth",
+      "themeCode": "HEA",
+      "subthemes": [
+        "Hearth"
+      ]
+    },
+    {
       "theme": "History",
       "themeCode": "HIS",
       "subthemes": [
@@ -76,12 +181,89 @@
       ]
     },
     {
+      "theme": "Hospitality",
+      "themeCode": "HOS",
+      "subthemes": [
+        "Hospitality"
+      ]
+    },
+    {
+      "theme": "Identity",
+      "themeCode": "IDN",
+      "subthemes": [
+        "Identity"
+      ]
+    },
+    {
+      "theme": "Ingenuity",
+      "themeCode": "IGY",
+      "subthemes": [
+        "Ingenuity"
+      ]
+    },
+    {
+      "theme": "Inheritance",
+      "themeCode": "INH",
+      "subthemes": [
+        "Inheritance"
+      ]
+    },
+    {
+      "theme": "Innovation",
+      "themeCode": "INN",
+      "subthemes": [
+        "Innovation"
+      ]
+    },
+    {
       "theme": "Kin",
       "themeCode": "KIN",
       "subthemes": [
         "Guardians",
         "Entelairs",
         "Walkies"
+      ]
+    },
+    {
+      "theme": "Kinship",
+      "themeCode": "KNS",
+      "subthemes": [
+        "Kinship"
+      ]
+    },
+    {
+      "theme": "Knowledge",
+      "themeCode": "KNO",
+      "subthemes": [
+        "Knowledge"
+      ]
+    },
+    {
+      "theme": "Language",
+      "themeCode": "LAN",
+      "subthemes": [
+        "Language"
+      ]
+    },
+    {
+      "theme": "Law",
+      "themeCode": "LAW",
+      "subthemes": [
+        "Law"
+      ]
+    },
+    {
+      "theme": "Leadership",
+      "themeCode": "LED",
+      "subthemes": [
+        "Leadership"
+      ]
+    },
+    {
+      "theme": "Legacy",
+      "themeCode": "LEG",
+      "subthemes": [
+        "Legacy"
       ]
     },
     {
@@ -94,6 +276,13 @@
         "Music",
         "Photography",
         "Travel"
+      ]
+    },
+    {
+      "theme": "Memory",
+      "themeCode": "MEM",
+      "subthemes": [
+        "Memory"
       ]
     },
     {
@@ -131,6 +320,13 @@
       ]
     },
     {
+      "theme": "Navigation",
+      "themeCode": "NAV",
+      "subthemes": [
+        "Navigation"
+      ]
+    },
+    {
       "theme": "Nostalgia",
       "themeCode": "NOS",
       "subthemes": [
@@ -153,6 +349,34 @@
         "Sea Monsters",
         "Ships",
         "Treasure"
+      ]
+    },
+    {
+      "theme": "Resilience",
+      "themeCode": "RES",
+      "subthemes": [
+        "Resilience"
+      ]
+    },
+    {
+      "theme": "Sanctuary",
+      "themeCode": "SAN",
+      "subthemes": [
+        "Sanctuary"
+      ]
+    },
+    {
+      "theme": "Settlement",
+      "themeCode": "SET",
+      "subthemes": [
+        "Settlement"
+      ]
+    },
+    {
+      "theme": "Shelter",
+      "themeCode": "SHE",
+      "subthemes": [
+        "Shelter"
       ]
     },
     {
@@ -201,6 +425,27 @@
       ]
     },
     {
+      "theme": "Stewardship",
+      "themeCode": "STE",
+      "subthemes": [
+        "Stewardship"
+      ]
+    },
+    {
+      "theme": "Stonework",
+      "themeCode": "STN",
+      "subthemes": [
+        "Stonework"
+      ]
+    },
+    {
+      "theme": "Storytelling",
+      "themeCode": "STY",
+      "subthemes": [
+        "Storytelling"
+      ]
+    },
+    {
       "theme": "Technology",
       "themeCode": "TEC",
       "subthemes": [
@@ -226,9 +471,44 @@
       ]
     },
     {
+      "theme": "The Dark",
+      "themeCode": "DRK",
+      "subthemes": [
+        "The Dark"
+      ]
+    },
+    {
+      "theme": "The Light",
+      "themeCode": "LGT",
+      "subthemes": [
+        "The Light"
+      ]
+    },
+    {
+      "theme": "Trade",
+      "themeCode": "TRD",
+      "subthemes": [
+        "Trade"
+      ]
+    },
+    {
+      "theme": "Tradition",
+      "themeCode": "TRN",
+      "subthemes": [
+        "Tradition"
+      ]
+    },
+    {
       "theme": "Travellers",
       "themeCode": "TRV",
       "subthemes": []
+    },
+    {
+      "theme": "Unity",
+      "themeCode": "UNI",
+      "subthemes": [
+        "Unity"
+      ]
     },
     {
       "theme": "Vehicles",
@@ -240,6 +520,13 @@
         "Motorcycles",
         "Supercars",
         "Trains"
+      ]
+    },
+    {
+      "theme": "Wayfinding",
+      "themeCode": "WAY",
+      "subthemes": [
+        "Wayfinding"
       ]
     }
   ]

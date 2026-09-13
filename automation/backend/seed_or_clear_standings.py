@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # dash Seed or clear standings for Tiger Genesis
-"""Interactive seed/clear of synthetic standings for ANM-TIG-GEN001-0001 — run via wfrun."""
+"""Interactive seed/clear of synthetic standings for ANM-TIG-SER001-0001 — run via wfrun."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 PYTHON_BIN = REPO_ROOT / "app_codebase" / "python_base_05" / "bin"
 
-TIGER_INTERNAL_ID = "ANM-TIG-GEN001-0001"
+TIGER_INTERNAL_ID = "ANM-TIG-SER001-0001"
 TIGER_GENERATION_NUMBER = 1
 TIGER_GENERATION_ROMAN = "I"
 

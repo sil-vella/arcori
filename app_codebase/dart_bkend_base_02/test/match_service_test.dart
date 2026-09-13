@@ -48,6 +48,7 @@ http.Response _selectArenaOk() {
         'imageUrl':
             '/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp',
         'source': 'majority',
+        'gathererArcoriId': stubGathererArcoriId,
       },
     }),
     200,
@@ -196,14 +197,17 @@ void main() {
                     stubArcoriId: {
                       'internalId': stubArcoriId,
                       'imageUrl':
-                          '/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp',
+                          '/catalog-media/001_genesis/animals/ANM-TIG-SER001-0001.webp',
                       'color': '#C6A15B',
                     },
                     stubAiArcoriId: {
                       'internalId': stubAiArcoriId,
                       'imageUrl':
-                          '/catalog-media/genesis/animals/ANM-WTI-GEN001-0002.webp',
+                          '/catalog-media/001_genesis/animals/ANM-WTI-SER001-0002.webp',
                       'color': '#A8B0B8',
+                    },
+                    stubGathererArcoriId: {
+                      'internalId': stubGathererArcoriId,
                     },
                     stubSlammerId: {'internalId': stubSlammerId},
                   },
@@ -244,11 +248,12 @@ void main() {
         snapshot.arenaImageUrl,
         '/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp',
       );
+      expect(snapshot.gathererArcoriId, stubGathererArcoriId);
       expect(snapshot.seats[0].arcoriIds, [stubArcoriId]);
       expect(snapshot.seats[1].arcoriIds, [stubAiArcoriId]);
       expect(snapshot.seats[1].kind, 'ai');
       final pieces = snapshot.table['pieces'] as List;
-      expect(pieces.first['imageUrl'], contains('ANM-TIG-GEN001-0001.webp'));
+      expect(pieces.first['imageUrl'], contains('ANM-TIG-SER001-0001.webp'));
       expect(pieces.first['color'], '#C6A15B');
     });
 
@@ -292,6 +297,9 @@ void main() {
                   'designs': {
                     stubArcoriId: {'internalId': stubArcoriId},
                     stubAiArcoriId: {'internalId': stubAiArcoriId},
+                    stubGathererArcoriId: {
+                      'internalId': stubGathererArcoriId,
+                    },
                     stubSlammerId: {'internalId': stubSlammerId},
                   },
                 },
@@ -330,7 +338,7 @@ void main() {
     test('startFromLobby uses verified slammer not the requested unowned id',
         () async {
       const owned = stubSlammerId;
-      const unowned = 'SLM-TTN-GEN001-0002';
+      const unowned = 'SLM-TTN-SER001-0002';
       final store = MatchStore();
       final fastApi = FastApiServiceClient(
         client: MockClient((request) async {
@@ -389,6 +397,9 @@ void main() {
                   'designs': {
                     stubArcoriId: {'internalId': stubArcoriId},
                     stubAiArcoriId: {'internalId': stubAiArcoriId},
+                    stubGathererArcoriId: {
+                      'internalId': stubGathererArcoriId,
+                    },
                     owned: {'internalId': owned},
                   },
                 },
@@ -445,6 +456,9 @@ void main() {
                   'designs': {
                     stubArcoriId: {'internalId': stubArcoriId},
                     stubAiArcoriId: {'internalId': stubAiArcoriId},
+                    stubGathererArcoriId: {
+                      'internalId': stubGathererArcoriId,
+                    },
                     stubSlammerId: {'internalId': stubSlammerId},
                   },
                 },
@@ -521,6 +535,9 @@ void main() {
                   'designs': {
                     stubArcoriId: {'internalId': stubArcoriId},
                     stubAiArcoriId: {'internalId': stubAiArcoriId},
+                    stubGathererArcoriId: {
+                      'internalId': stubGathererArcoriId,
+                    },
                     stubSlammerId: {'internalId': stubSlammerId},
                   },
                 },

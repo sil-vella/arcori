@@ -46,7 +46,7 @@ def catalog_root(tmp_path: Path):
         "version": 1,
         "designs": [
             {
-                "internalId": "ANM-TIG-GEN001-0001",
+                "internalId": "ANM-TIG-SER001-0001",
                 "designCode": "TIG",
                 "designFamily": "TIGER",
                 "design": "Tiger",
@@ -84,12 +84,12 @@ def test_meta_and_index(catalog_root: Path):
     assert "themes_subthemes" in meta
     idx = get_index()
     assert idx["total"] == 1
-    assert idx["items"][0]["internalId"] == "ANM-TIG-GEN001-0001"
+    assert idx["items"][0]["internalId"] == "ANM-TIG-SER001-0001"
     assert "artworkPrompt" not in idx["items"][0]
     assert idx["items"][0]["seriesKey"] == "Genesis"
     assert (
         idx["items"][0]["imageUrl"]
-        == "/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp"
+        == "/catalog-media/001_genesis/animals/ANM-TIG-SER001-0001.webp"
     )
     assert idx["items"][0]["color"] == "#C6A15B"
 
@@ -102,16 +102,16 @@ def test_theme_strips_artwork_prompt(catalog_root: Path):
     assert theme["designs"][0]["seriesKey"] == "Genesis"
     assert (
         theme["designs"][0]["imageUrl"]
-        == "/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp"
+        == "/catalog-media/001_genesis/animals/ANM-TIG-SER001-0001.webp"
     )
 
 
 def test_design_strips_artwork_prompt(catalog_root: Path):
-    design = get_design("ANM-TIG-GEN001-0001")
+    design = get_design("ANM-TIG-SER001-0001")
     assert design["design"] == "Tiger"
     assert "artworkPrompt" not in design
     assert design["seriesKey"] == "Genesis"
-    assert design["imageUrl"] == "/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp"
+    assert design["imageUrl"] == "/catalog-media/001_genesis/animals/ANM-TIG-SER001-0001.webp"
     assert design["color"] == "#C6A15B"
     assert design["legacy"]["preservationRequirement"] == 500
     assert design["legacy"]["closureMilestone"] == 1000
@@ -128,9 +128,9 @@ def test_not_found(catalog_root: Path):
 
 
 def test_designs_batch_happy_path(catalog_root: Path):
-    payload = get_designs_batch(["ANM-TIG-GEN001-0001", "ANM-TIG-GEN001-0001"])
-    assert set(payload["designs"].keys()) == {"ANM-TIG-GEN001-0001"}
-    design = payload["designs"]["ANM-TIG-GEN001-0001"]
+    payload = get_designs_batch(["ANM-TIG-SER001-0001", "ANM-TIG-SER001-0001"])
+    assert set(payload["designs"].keys()) == {"ANM-TIG-SER001-0001"}
+    design = payload["designs"]["ANM-TIG-SER001-0001"]
     assert design["design"] == "Tiger"
     assert "artworkPrompt" not in design
     assert design["catalogVersion"] == 1
@@ -138,7 +138,7 @@ def test_designs_batch_happy_path(catalog_root: Path):
 
 def test_designs_batch_fail_closed_missing_id(catalog_root: Path):
     with pytest.raises(AppError) as exc:
-        get_designs_batch(["ANM-TIG-GEN001-0001", "MISSING"])
+        get_designs_batch(["ANM-TIG-SER001-0001", "MISSING"])
     assert exc.value.code == "catalog/not_found"
 
 
@@ -165,7 +165,7 @@ def test_index_picks_up_new_theme_file(catalog_root: Path):
                 "catalog": "Fashion Genesis Series",
                 "designs": [
                     {
-                        "internalId": "FSH-HAT-GEN001-0001",
+                        "internalId": "FSH-HAT-SER001-0001",
                         "design": "Hat",
                         "theme": "Fashion",
                         "themeCode": "FSH",
@@ -180,8 +180,8 @@ def test_index_picks_up_new_theme_file(catalog_root: Path):
     )
     idx = get_index(circulating=True)
     ids = {item["internalId"] for item in idx["items"]}
-    assert "FSH-HAT-GEN001-0001" in ids
+    assert "FSH-HAT-SER001-0001" in ids
     assert idx["total"] == 2
     fashion = next(i for i in idx["items"] if i["internalId"].startswith("FSH"))
     assert fashion["seriesKey"] == "Genesis"
-    assert fashion["imageUrl"] == "/catalog-media/genesis/fashion/FSH-HAT-GEN001-0001.webp"
+    assert fashion["imageUrl"] == "/catalog-media/001_genesis/fashion/FSH-HAT-SER001-0001.webp"

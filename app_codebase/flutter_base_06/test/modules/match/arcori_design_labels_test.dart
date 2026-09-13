@@ -3,14 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('parses genesis design id into series / gen / serial', () {
-    final labels = ArcoriDesignLabels.fromDesignId('ANM-TIG-GEN001-0001');
+    final labels = ArcoriDesignLabels.fromDesignId('ANM-TIG-SER001-0001');
     expect(labels.series, 'Genesis');
     expect(labels.generation, 'I');
     expect(labels.serial, '0001');
   });
 
   test('parses pioneers generation II', () {
-    final labels = ArcoriDesignLabels.fromDesignId('SPC-DSR-GEN002-0008');
+    final labels = ArcoriDesignLabels.fromDesignId('SPC-DSR-SER002-0008');
     expect(labels.series, 'Pioneers');
     expect(labels.generation, 'II');
     expect(labels.serial, '0008');

@@ -1,0 +1,150 @@
+{
+  "catalog": "Harvest Foundations Series",
+  "theme": "Harvest",
+  "series": "Foundations",
+  "themeCode": "HAR",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "HAR-EVG-SER003-0001",
+      "themeCode": "HAR",
+      "designCode": "EVG",
+      "designFamily": "EVERGOLD_GATHERING",
+      "design": "Evergold Gathering",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Harvest",
+      "subtheme": "Harvest",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Evergold Gathering in anime style with a standard finish and no effect. Use a background that is visually related to Evergold Gathering. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-EVG-SER003-0001.webp",
+      "loreDescription": "A collectible Evergold Gathering Arcori generation I from the Harvest Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "HAR-BBP-SER003-0002",
+      "themeCode": "HAR",
+      "designCode": "BBP",
+      "designFamily": "BOUNTY_BENEATH_THE_PILLARS",
+      "design": "Bounty Beneath the Pillars",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Harvest",
+      "subtheme": "Harvest",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Bounty Beneath the Pillars in anime style with a standard finish and no effect. Use a background that is visually related to Bounty Beneath the Pillars. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-BBP-SER003-0002.webp",
+      "loreDescription": "A collectible Bounty Beneath the Pillars Arcori generation I from the Harvest Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "HAR-GAP-SER003-0003",
+      "themeCode": "HAR",
+      "designCode": "GAP",
+      "designFamily": "GATHERING_THE_PILLARFRUIT",
+      "design": "Gathering the Pillarfruit",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Harvest",
+      "subtheme": "Harvest",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Gathering the Pillarfruit in anime style with a standard finish and no effect. Use a background that is visually related to Gathering the Pillarfruit. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-GAP-SER003-0003.webp",
+      "loreDescription": "A collectible Gathering the Pillarfruit Arcori generation I from the Harvest Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

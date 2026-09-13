@@ -2,6 +2,10 @@
 ///
 /// GDD aliases: practice → Practice; quickStart → Random Match;
 /// specialEvent → Event Match; invite → Friend Match.
+library;
+
+import '../avari/avari_models.dart' show MatchFinalizeResult;
+
 enum MatchType {
   practice,
   quickStart,
@@ -50,6 +54,7 @@ class MatchFlowState {
     this.practiceLoadout,
     this.errorMessage,
     this.postMatchSoftError,
+    this.postMatchFinalize,
   });
 
   final MatchFlowPhase phase;
@@ -62,6 +67,9 @@ class MatchFlowState {
   /// Soft finalize / post-match message (does not abort the pipeline).
   final String? postMatchSoftError;
 
+  /// Last finalize economy payload for the post-match summary chips.
+  final MatchFinalizeResult? postMatchFinalize;
+
   bool get isIdle => phase == MatchFlowPhase.idle;
 
   MatchFlowState copyWith({
@@ -70,10 +78,12 @@ class MatchFlowState {
     PracticeLoadout? practiceLoadout,
     String? errorMessage,
     String? postMatchSoftError,
+    MatchFinalizeResult? postMatchFinalize,
     bool clearSelectedType = false,
     bool clearPracticeLoadout = false,
     bool clearError = false,
     bool clearPostMatchSoftError = false,
+    bool clearPostMatchFinalize = false,
   }) {
     return MatchFlowState(
       phase: phase ?? this.phase,
@@ -87,6 +97,9 @@ class MatchFlowState {
       postMatchSoftError: clearPostMatchSoftError
           ? null
           : (postMatchSoftError ?? this.postMatchSoftError),
+      postMatchFinalize: clearPostMatchFinalize
+          ? null
+          : (postMatchFinalize ?? this.postMatchFinalize),
     );
   }
 }

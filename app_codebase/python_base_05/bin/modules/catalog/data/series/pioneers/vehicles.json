@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "VEH-DNB-GEN002-0010",
+      "internalId": "VEH-DNB-SER002-0010",
       "themeCode": "VEH",
       "designCode": "DNB",
       "designFamily": "DUNE_BUGGY",
@@ -43,7 +43,7 @@
       "series": "Pioneers Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a dune buggy in cartoon style with a standard finish and no effect. Use a background that is visually related to the dune buggy. No borders, no frames. The dune buggy should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-DNB-GEN002-0010.webp",
+      "artworkPrompt": "Give me an image with a dune buggy in cartoon style with a standard finish and no effect. Use a background that is visually related to the dune buggy. No borders, no frames. The dune buggy should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named VEH-DNB-SER002-0010.webp",
       "loreDescription": "A collectible Dune Buggy Arcori generation I from the Vehicles Pioneers Series.",
       "legacy": {
         "preservationRequirement": 100,

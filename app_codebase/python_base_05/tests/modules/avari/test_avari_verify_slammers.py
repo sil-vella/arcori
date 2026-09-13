@@ -16,7 +16,7 @@ def _row(design_id: str, *, permanent: bool = False) -> SimpleNamespace:
 
 class VerifySlammersTests(unittest.TestCase):
     def test_owned_requested_id(self) -> None:
-        rows = [_row("SLM-STR-GEN001-0001", permanent=True)]
+        rows = [_row("SLM-STR-SER001-0001", permanent=True)]
         with patch(
             "modules.avari.avari_repository.list_slammers",
             return_value=rows,
@@ -30,17 +30,17 @@ class VerifySlammersTests(unittest.TestCase):
                 [
                     {
                         "userId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-                        "slammerId": "SLM-STR-GEN001-0001",
+                        "slammerId": "SLM-STR-SER001-0001",
                     }
                 ]
             )
-        self.assertEqual(out["assignments"][0]["slammerId"], "SLM-STR-GEN001-0001")
+        self.assertEqual(out["assignments"][0]["slammerId"], "SLM-STR-SER001-0001")
         self.assertEqual(out["assignments"][0]["source"], "owned")
 
     def test_not_owned_falls_back_to_permanent(self) -> None:
         rows = [
-            _row("SLM-STR-GEN001-0001", permanent=True),
-            _row("SLM-TTN-GEN001-0002", permanent=False),
+            _row("SLM-STR-SER001-0001", permanent=True),
+            _row("SLM-TTN-SER001-0002", permanent=False),
         ]
         with patch(
             "modules.avari.avari_repository.list_slammers",
@@ -59,7 +59,7 @@ class VerifySlammersTests(unittest.TestCase):
                     }
                 ]
             )
-        self.assertEqual(out["assignments"][0]["slammerId"], "SLM-STR-GEN001-0001")
+        self.assertEqual(out["assignments"][0]["slammerId"], "SLM-STR-SER001-0001")
         self.assertEqual(out["assignments"][0]["source"], "fallback")
         self.assertEqual(out["assignments"][0]["reason"], "not_owned")
 

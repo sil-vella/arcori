@@ -20,14 +20,14 @@ Serve Arcori catalog JSON from `bin/modules/catalog/data/` over existing **authu
 - Catalog artwork: `assets/images/arcori` → `/data/catalog-media` (`CATALOG_MEDIA_ROOT`, `:ro`)
 - Region arena art: `assets/images/velora/arenas/{region-slug}/{arenaId}.webp` → `/data/catalog-velora` (`CATALOG_VELORA_MEDIA_ROOT`, sibling bind at the same host level as `arcori`). Public URL `/catalog-media/velora/arenas/…`. Region/location art under `assets/images/velora/regions/{region-slug}/`; world maps under `assets/images/velora/maps/`. Via a dedicated StaticFiles mount (do not nest a bind under the `:ro` Arcori tree).
 - **Derived client fields (same posture as design `imageUrl`):** `GET /authuser/catalog/meta` enriches regions with `imageUrl` (`…/regions/{slug}/region.png`), each arena with `imageUrl` (honors `imageFile`), `locations[]` from a mtime-cached scan of `locations/*.png`, and top-level `maps[]` from `maps/*.png`. Helpers live in `velora_media.py`; match `select_arena` uses the same arena URL helper.
-- Kin template Lotties: `assets/lottie/kin/gen001/{type}/` → `/data/catalog-kin` (`CATALOG_KIN_MEDIA_ROOT`). Public URL `/catalog-media/kin/…` via a dedicated StaticFiles mount (same sibling pattern as Velora).
-- Path convention: `series/{series_slug}/{theme_slug}.json` and art `/{series_slug}/{theme_slug}/{internalId}.webp` (e.g. `genesis/animals/…`)
+- Kin template Lotties: `assets/lottie/kin/ser001/{type}/` → `/data/catalog-kin` (`CATALOG_KIN_MEDIA_ROOT`). Public URL `/catalog-media/kin/…` via a dedicated StaticFiles mount (same sibling pattern as Velora).
+- Path convention: catalog JSON `series/{series_slug}/{theme_slug}.json` (e.g. `genesis/animals.json`); art under numbered dirs `assets/images/arcori/{NNN_series_slug}/{theme_slug}/{internalId}.webp` (e.g. `001_genesis/animals/…`)
 
 ## Media (public)
 
 - FastAPI `StaticFiles` mount: `GET /catalog-media/*` from `CATALOG_MEDIA_ROOT` (same public posture as `/media` avatars)
-- Derived client field `imageUrl`: `/catalog-media/{series_slug}/{theme_slug}/{internalId}.webp`
-- Uses document-level `series` (`Genesis` → `genesis`) + design/theme name — not design’s `"Genesis Series"` display string
+- Derived client field `imageUrl`: `/catalog-media/{media_folder}/{theme_slug}/{internalId}.webp` (e.g. `001_genesis`)
+- Uses document-level `series` (`Genesis` → media folder `001_genesis` via `SERIES_MEDIA_FOLDERS`) + design/theme name — not design’s `"Genesis Series"` display string
 - Index/theme/design also expose `seriesKey` for grouping
 
 ## Endpoints (authuser)
@@ -40,7 +40,7 @@ Router is exact-match (no path params) — ids via query:
 | GET | `/authuser/catalog/index` | `series`, `theme`, `subtheme`, `circulating`, `limit`, `offset` | Velora list (`circulating=1` → `worldState == Active`) |
 | GET | `/authuser/catalog/theme` | `code` or `theme_code` | Full theme document |
 | GET | `/authuser/catalog/design` | `id` or `internal_id` | Single design |
-| POST | `/authuser/catalog/select_arena` | body `{ "arcoriIds": ["…"] }` | Same pick as service (available; practice does not call it) |
+| POST | `/authuser/catalog/select_arena` | body `{ "arcoriIds": ["…"] }` | Arena + optional Gatherer (same as service; practice does not call it) |
 
 Client payloads omit `artworkPrompt`. Envelope: `{ok, data}` / `{ok, error}` with `catalog/*` codes.
 
@@ -50,7 +50,7 @@ Client payloads omit `artworkPrompt`. Envelope: `{ok, data}` / `{ok, error}` wit
 |--------|------|------|---------|
 | POST | `/service/catalog/designs` | `{ "ids": ["…"] }` | Batch designs for Dart match freeze (fail-closed) |
 | POST | `/service/catalog/select_arcori` | `{ "seats": [...] }` | Weighted Arcori pick after seats exist |
-| POST | `/service/catalog/select_arena` | `{ "arcoriIds": ["…"] }` | Arena from seated regions (Quick Start / Invite) |
+| POST | `/service/catalog/select_arena` | `{ "arcoriIds": ["…"] }` | Arena + optional `gathererArcoriId` (Quick Start / Invite) |
 
 ## Flutter (Velora slice)
 

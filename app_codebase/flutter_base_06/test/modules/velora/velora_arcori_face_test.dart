@@ -8,9 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('DesignSummary parses catalog color for the rim', () {
     final summary = DesignSummary.fromJson({
-      'internalId': 'ANM-TIG-GEN001-0001',
+      'internalId': 'ANM-TIG-SER001-0001',
       'design': 'Tiger',
-      'imageUrl': '/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp',
+      'imageUrl': '/catalog-media/001_genesis/animals/ANM-TIG-SER001-0001.webp',
       'color': '#C6A15B',
     });
     expect(summary.color, '#C6A15B');
@@ -26,7 +26,7 @@ void main() {
 
   test('DesignDetail parses catalog color and legacy', () {
     final detail = DesignDetail.fromJson({
-      'internalId': 'ANM-TIG-GEN001-0001',
+      'internalId': 'ANM-TIG-SER001-0001',
       'design': 'Tiger',
       'color': '#C6A15B',
       'seasonState': 'Active',
@@ -48,7 +48,7 @@ void main() {
           body: Center(
             child: ArcoriCylinder(
               look: ArcoriLook(
-                designId: 'ANM-TIG-GEN001-0001',
+                designId: 'ANM-TIG-SER001-0001',
                 colorHex: '#C6A15B',
               ),
               size: 72,

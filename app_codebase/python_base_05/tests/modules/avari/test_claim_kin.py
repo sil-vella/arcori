@@ -25,7 +25,7 @@ class ClaimKinTests(unittest.TestCase):
             "account_type": "Regular",
         }
         self.body = {
-            "kinSerial": "KIN-BRZ-GEN001-0001",
+            "kinSerial": "KIN-BRZ-SER001-0001",
             "typeSerial": "KTYPE-0001",
             "chosenName": "Bronze",
             "regionCode": "EVG",
@@ -111,6 +111,9 @@ class ClaimKinTests(unittest.TestCase):
             "modules.avari.avari_repository.ensure_design_access",
             return_value=SimpleNamespace(design_id="KIN-X", source="kin"),
         ) as grant_access, patch(
+            "modules.avari.avari_repository.ensure_mastery_row",
+            return_value=SimpleNamespace(points=100),
+        ) as ensure_mastery, patch(
             "modules.avari.avari_repository.serialize_kin",
             return_value={
                 "chosenName": "Bronze",
@@ -126,6 +129,10 @@ class ClaimKinTests(unittest.TestCase):
         session.add.assert_called_once()
         write_media.assert_called_once()
         grant_access.assert_called_once()
+        ensure_mastery.assert_called_once()
+        mastery_kwargs = ensure_mastery.call_args.kwargs
+        self.assertEqual(mastery_kwargs["initial_points"], 100)
+        self.assertEqual(mastery_kwargs["floor"], 100)
         grant_kwargs = grant_access.call_args.kwargs
         self.assertEqual(grant_kwargs["user_id"], self.user_id)
         self.assertEqual(grant_kwargs["source"], "kin")
@@ -134,12 +141,19 @@ class ClaimKinTests(unittest.TestCase):
         self.assertEqual(added.subtheme, "Guardians")
         self.assertEqual(added.catalog_design["color"], "#C6A15B")
         self.assertEqual(added.catalog_design["selectionWeight"], 3.0)
-        self.assertEqual(
-            frozenset(added.catalog_design.keys()),
-            __import__(
-                "modules.avari.kin_genesis", fromlist=["REGULAR_ARCORI_DESIGN_KEYS"]
-            ).REGULAR_ARCORI_DESIGN_KEYS,
+        self.assertEqual(added.catalog_design["faceMedia"], "lottie")
+        self.assertTrue(
+            str(added.catalog_design.get("lottieUrl") or "").startswith("/media/")
         )
+        from modules.avari.kin_genesis import (
+            OPTIONAL_ARCORI_FACE_KEYS,
+            REGULAR_ARCORI_DESIGN_KEYS,
+        )
+
+        keys = frozenset(added.catalog_design.keys())
+        self.assertTrue(REGULAR_ARCORI_DESIGN_KEYS <= keys)
+        self.assertTrue(keys <= REGULAR_ARCORI_DESIGN_KEYS | OPTIONAL_ARCORI_FACE_KEYS)
+        self.assertNotIn("imageUrl", added.catalog_design)
         self.assertIn("designRelativePath", added.customization)
 
 

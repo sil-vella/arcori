@@ -9,6 +9,7 @@ import '../../core/ws/ws_connection_manager.dart';
 import '../../utils/dev_logger.dart';
 import '../avari/avari_api.dart';
 import '../avari/avari_notifier.dart';
+import '../match/input/slam_resolver.dart' show practiceHumanArcoriId;
 import '../match/input/turn_pacing.dart';
 import '../match/state/match_notifier.dart';
 import '../match/state/match_snapshot_state.dart';
@@ -37,8 +38,66 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
   Completer<PostMatchExitAction>? _postMatchExit;
   bool _finalizeStarted = false;
 
+  /// Actor-side flips of each design this match (for mastery "other" curve).
+  final Map<String, int> _actorFlipsByDesign = {};
+  int? _lastActorFlipEventVersion;
+
   @override
-  MatchFlowState build() => const MatchFlowState();
+  MatchFlowState build() {
+    ref.listen(matchSnapshotProvider, (previous, next) {
+      _accumulateActorFlips(previous, next);
+    });
+    return const MatchFlowState();
+  }
+
+  void _resetMasteryTracking() {
+    _actorFlipsByDesign.clear();
+    _lastActorFlipEventVersion = null;
+  }
+
+  void _accumulateActorFlips(
+    MatchSnapshotState? previous,
+    MatchSnapshotState next,
+  ) {
+    final event = next.lastEvent;
+    if (event == null) return;
+    if (event['type']?.toString() != 'slam') return;
+    final version = event['version'];
+    final v = version is int ? version : int.tryParse('$version');
+    if (v == null) return;
+    if (_lastActorFlipEventVersion == v) return;
+
+    final me = ref.read(authProvider).userId?.trim() ?? '';
+    final actor = event['actorUserId']?.toString().trim() ?? '';
+    if (actor.isEmpty) return;
+    // Online: actorUserId == auth user. Practice: actor is 'local'.
+    if (actor != me && actor != 'local') return;
+
+    final outcome = event['outcome'];
+    final flippedIds = outcome is Map && outcome['flippedPieceIds'] is List
+        ? (outcome['flippedPieceIds'] as List)
+            .map((e) => e.toString())
+            .where((e) => e.isNotEmpty)
+            .toList()
+        : const <String>[];
+    if (flippedIds.isEmpty) {
+      _lastActorFlipEventVersion = v;
+      return;
+    }
+
+    // Prefer previous table (pre-restack) but current pieces keep design ids.
+    final pieces = previous?.pieces.isNotEmpty == true
+        ? previous!.pieces
+        : next.pieces;
+    final byPiece = {for (final p in pieces) p.pieceId: p.designId};
+    for (final pieceId in flippedIds) {
+      final designId = (byPiece[pieceId] ?? '').trim();
+      if (designId.isEmpty) continue;
+      _actorFlipsByDesign[designId] =
+          (_actorFlipsByDesign[designId] ?? 0) + 1;
+    }
+    _lastActorFlipEventVersion = v;
+  }
 
   void startPlay() {
     if (!state.isIdle) return;
@@ -152,6 +211,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     if (!_isCurrentRun(runId, type)) return;
 
     if (type == MatchType.practice) {
+      _resetMasteryTracking();
       _setPhase(MatchFlowPhase.inMatch);
       await _runPracticeLocal(practiceLoadout);
       if (!_isCurrentRun(runId, type)) return;
@@ -327,7 +387,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
   Future<void> _runPracticeLocal(PracticeLoadout? loadout) async {
     final effective = loadout ??
         PracticeLoadout(
-          arcoriId: 'ANM-TIG-GEN001-0001',
+          arcoriId: practiceHumanArcoriId,
           slammerId: _equippedSlammerId,
         );
     final userId = ref.read(authProvider).userId?.trim();
@@ -440,6 +500,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       return;
     }
 
+    _resetMasteryTracking();
     _setPhase(MatchFlowPhase.inMatch);
 
     // Require a live (non-ended) snapshot so a stale post-leave ended frame
@@ -760,6 +821,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       return;
     }
 
+    _resetMasteryTracking();
     _setPhase(MatchFlowPhase.inMatch);
 
     final matchId = await _waitForMatchField(
@@ -908,6 +970,33 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       for (final piece in snap.pieces) piece.designId,
     }.where((id) => id.trim().isNotEmpty).toList();
 
+    final me = ref.read(authProvider).userId?.trim() ?? '';
+    var flips = 0;
+    String? playedDesignId;
+    for (final seat in snap.seats) {
+      if (seat.kind == 'human' &&
+          (me.isEmpty || seat.userId == me || seat.userId == 'local')) {
+        flips = seat.score;
+        if (seat.arcoriIds.isNotEmpty) {
+          playedDesignId = seat.arcoriIds.first.trim();
+        }
+        break;
+      }
+    }
+    if (playedDesignId == null || playedDesignId.isEmpty) {
+      for (final piece in snap.pieces) {
+        if (piece.ownerUserId == me ||
+            piece.ownerUserId == 'local' ||
+            (me.isEmpty && piece.seatIndex == 0)) {
+          final id = piece.designId.trim();
+          if (id.isNotEmpty) {
+            playedDesignId = id;
+            break;
+          }
+        }
+      }
+    }
+
     final api = ref.read(avariApiClientProvider);
     final outcome = await api.finalizeMatch(
       accessToken: token,
@@ -915,14 +1004,27 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       matchType: type.name,
       practice: practice,
       designIds: designIds,
+      flips: flips,
+      playedDesignId: playedDesignId,
+      flipsByDesign: Map<String, int>.from(_actorFlipsByDesign),
       result: snap.result,
     );
 
     if (outcome.isSuccess) {
+      final data = outcome.data!;
+      state = state.copyWith(postMatchFinalize: data);
+      if (data.applied) {
+        // Keep Avari wallet in sync after fee / flip rewards.
+        unawaited(
+          ref.read(avariProfileProvider.notifier).load(force: true),
+        );
+      }
       if (LOGGING_SWITCH) {
         customlog(
-          'play: finalize ok applied=${outcome.data!.applied} '
-          'reason=${outcome.data!.reason}',
+          'play: finalize ok applied=${data.applied} '
+          'reason=${data.reason} netFrags=${data.goldFragmentsDelta} '
+          'flips=${data.flipsRewarded} fee=${data.feeFragments} '
+          'mastery=${data.masteryChanges.length}',
         );
       }
       return;

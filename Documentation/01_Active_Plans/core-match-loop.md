@@ -1,10 +1,10 @@
 # Core Match Loop
 
-**Status:** In Progress — Rematch invite wiring done; celebration / durable writers next  
+**Status:** In Progress — Gold writers done; mastery curves locked; celebration / daily UI next  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-09-09
+**Last Updated:** 2026-09-11
 
-Related: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [match-hot-state.md](match-hot-state.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [ws-invite-match.md](ws-invite-match.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
+Related: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [match-hot-state.md](match-hot-state.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [ws-invite-match.md](ws-invite-match.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [mastery.md](mastery.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
 
 ## Objective
 
@@ -32,9 +32,11 @@ Play Hub
 | Invite matchmaking | Done — [ws-invite-match.md](ws-invite-match.md) |
 | Stub match Arcori selection (weights) | Done — [stub-match-arcori-selection.md](stub-match-arcori-selection.md) |
 | Post-match modal (summary + Done / Play New) | Done — hold snapshot until leave |
-| Stub `POST /authuser/avari/match/finalize` | Done — no economy writers yet |
+| Stub `POST /authuser/avari/match/finalize` | Superseded — economy writers live |
 | Rematch (invite-notify + series matchIds) | Done — online; other humans notified when present; same prior AI reseated when no/partial humans |
-| Celebration / mastery anims / daily / durable writers | Not started |
+| Gold Arcori economy (fee + flip fragments + signup 20) | Done |
+| Mastery match curves (own vs other) | Done writers — [mastery.md](mastery.md); My Mastery tab open |
+| Celebration / mastery anims / daily / durable series | Not started |
 
 ## Match Summary contents
 
@@ -72,19 +74,19 @@ After post-match the player chooses:
 - [x] Post-match modal; hold ended snapshot; Done / Play New leave
 - [x] Stub finalize endpoint + Flutter `AvariApiOutcome` soft-fail
 - [x] Rematch = invite notify + series-suffixed matchIds + prior loadout hints
+- [x] Gold Arcori economy — fee 2 fragments; +1 fragment/flip; signup 20; finalize writers
 - [ ] Celebration / mastery anims / daily / mission / cache UI
-- [ ] Durable reward writers (mastery, gold, Rank XP, mint)
 - [ ] Home / Velora / Trove exits from summary
 - [ ] Tournament / history UI sorting by series
 - [ ] Durable `match_series_links` (or results) when finalize writers land
 
 ## Next Steps
 
-Wire celebration anims + durable finalize writers. Tournament sorting / durable series table later.
+Wire celebration anims + daily / mission / cache UI. Tournament sorting / durable series table later.
 
 ## Notes
 
-Practice mode: AI only, no progression / economy (GDD) — finalize returns `applied: false, reason: practice`. Random multiplayer costs 1 Gold Cap.
+Practice mode: AI only, no progression / economy (GDD) — finalize returns `applied: false, reason: practice`. Online fee **2 Gold Fragments**; **+1 fragment per flip**; **4 fragments = 1 Gold Arcori** (currency only, not catalog). Signup grant **20 Gold Arcori**.
 Post-match keeps the Flutter ended snapshot until Done / Play New / Rematch so Rematch can capture series + seats; Dart `match/leave` runs on those exits before the rematch lobby find.
 
 Task Manager: skipped this turn — remote App Dev checklist sync was blocked by the environment approval gate; markdown plans/case study are updated. Re-sync App Dev card `32` when TM writes are allowed.

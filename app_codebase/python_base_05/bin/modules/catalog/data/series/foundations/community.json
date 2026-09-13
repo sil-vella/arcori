@@ -1,0 +1,138 @@
+{
+  "catalog": "Community Foundations Series",
+  "theme": "Community",
+  "series": "Foundations",
+  "themeCode": "CMY",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "CMY-COT-SER003-0001",
+      "themeCode": "CMY",
+      "designCode": "COT",
+      "designFamily": "THE_COMMON_TABLE",
+      "design": "The Common Table",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Community",
+      "subtheme": "Community",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Common Table in watercolor style with a standard finish and no effect. Use a background that is visually related to The Common Table. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMY-COT-SER003-0001.webp",
+      "loreDescription": "A collectible The Common Table Arcori generation I from the Community Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "CMY-SAB-SER003-0002",
+      "themeCode": "CMY",
+      "designCode": "SAB",
+      "designFamily": "SUPPER_AFTER_THE_BLIZZARD",
+      "design": "Supper After the Blizzard",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Community",
+      "subtheme": "Community",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Supper After the Blizzard in watercolor style with a standard finish and no effect. Use a background that is visually related to Supper After the Blizzard. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMY-SAB-SER003-0002.webp",
+      "loreDescription": "A collectible Supper After the Blizzard Arcori generation I from the Community Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "CMY-MHO-SER003-0003",
+      "themeCode": "CMY",
+      "designCode": "MHO",
+      "designFamily": "MANY_HANDS_ONE_ROOF",
+      "design": "Many Hands, One Roof",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Community",
+      "subtheme": "Community",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Many Hands, One Roof in watercolor style with a standard finish and no effect. Use a background that is visually related to Many Hands, One Roof. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMY-MHO-SER003-0003.webp",
+      "loreDescription": "A collectible Many Hands, One Roof Arcori generation I from the Community Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

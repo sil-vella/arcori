@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:arcori/core/state/app_state_registry.dart';
+import 'package:arcori/modules/match/input/slam_resolver.dart';
 import 'package:arcori/modules/match/practice_ai_pool.dart';
 import 'package:arcori/modules/match/register_match_state.dart';
 import 'package:arcori/modules/match/state/match_notifier.dart';
@@ -19,7 +20,7 @@ void main() {
       notifier.startLocalPractice(
         humanUserId: 'usr_local',
         loadout: const PracticeLoadout(
-          arcoriId: 'ANM-TIG-GEN001-0001',
+          arcoriId: practiceHumanArcoriId,
           slammerId: stubSlammerId,
         ),
         random: Random(1),
@@ -32,16 +33,19 @@ void main() {
       expect(snap.active?['seatIndex'], 0);
       expect(practiceAiPoolUserIds, contains(snap.seats[1].userId));
       expect(practiceAiPoolUserIds, contains(snap.seats[2].userId));
-      expect(snap.seats[1].arcoriIds, isNotEmpty);
+      expect(snap.seats[0].arcoriIds, [practiceHumanArcoriId]);
+      expect(snap.seats[1].arcoriIds, [practiceAiArcoriIds[0]]);
+      expect(snap.seats[2].arcoriIds, [practiceAiArcoriIds[1]]);
       expect(snap.seats[1].slammerId, stubSlammerId);
       expect(snap.seats[2].arcoriIds, isNotEmpty);
       expect(snap.pieces, hasLength(3));
       expect(snap.pieces.every((p) => !p.faceUp), isTrue);
       expect(
         snap.pieces.first.imageUrl,
-        contains('ANM-TIG-GEN001-0001.webp'),
+        contains('practice_arcori_001.webp'),
       );
-      expect(snap.pieces.first.color, '#C6A15B');
+      expect(snap.pieces[2].imageUrl, contains('practice_arcori_003.webp'));
+      expect(snap.pieces.first.color, '#6B5B95');
 
       notifier.localSlam(
         actorUserId: 'usr_local',
@@ -56,7 +60,7 @@ void main() {
       expect(snap.lastEvent?['seatIndex'], 0);
       expect(snap.lastEvent?['round'], 1);
       expect(snap.lastEvent?['slammerId'], stubSlammerId);
-      expect(snap.lastEvent?['arcoriId'], 'ANM-TIG-GEN001-0001');
+      expect(snap.lastEvent?['arcoriId'], practiceHumanArcoriId);
       expect(snap.lastEvent?['result'], anyOf('flip', 'miss'));
       expect(snap.lastEvent?['outcome'], isNotNull);
       expect(snap.active?['seatIndex'], 1);
@@ -85,7 +89,7 @@ void main() {
       notifier.startLocalPractice(
         humanUserId: 'usr_local',
         loadout: const PracticeLoadout(
-          arcoriId: 'ANM-TIG-GEN001-0001',
+          arcoriId: practiceHumanArcoriId,
           slammerId: stubSlammerId,
         ),
         aiUserIds: [a, b],
@@ -121,7 +125,7 @@ void main() {
       notifier.startLocalPractice(
         humanUserId: 'usr_local',
         loadout: const PracticeLoadout(
-          arcoriId: 'ANM-TIG-GEN001-0001',
+          arcoriId: practiceHumanArcoriId,
           slammerId: stubSlammerId,
         ),
         aiUserIds: [a, b],
@@ -148,6 +152,7 @@ void main() {
           'arenaId': 'arena_velora_plaza',
           'arenaImageUrl':
               '/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp',
+          'gathererArcoriId': 'ANM-FOX-SER001-0003',
           'callerUserId': 'usr_a',
           'matchType': {'code': 'practice'},
           'seats': [
@@ -157,8 +162,8 @@ void main() {
               'kind': 'human',
               'score': 0,
               'connected': true,
-              'arcoriIds': ['ANM-TIG-GEN001-0001'],
-              'slammerId': 'SLM-STR-GEN001-0001',
+              'arcoriIds': ['ANM-TIG-SER001-0001'],
+              'slammerId': 'SLM-STR-SER001-0001',
             },
           ],
           'table': {'pieces': []},
@@ -174,6 +179,10 @@ void main() {
       expect(
         container.read(matchSnapshotProvider).arenaImageUrl,
         '/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp',
+      );
+      expect(
+        container.read(matchSnapshotProvider).gathererArcoriId,
+        'ANM-FOX-SER001-0003',
       );
 
       notifier.applyWsFrame({

@@ -36,7 +36,7 @@ class KinBackgroundsTests(unittest.TestCase):
     def test_list_scans_directory(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            bg = root / "gen001" / "00backgrounds"
+            bg = root / "ser001" / "00backgrounds"
             bg.mkdir(parents=True)
             (bg / "KIN_BG_ABSTRACT_NEON_006.webp").write_bytes(b"x")
             (bg / "KIN_BG_SCENERY_RETRO_020.webp").write_bytes(b"x")

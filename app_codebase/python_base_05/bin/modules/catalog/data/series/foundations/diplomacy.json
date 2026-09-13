@@ -1,0 +1,148 @@
+{
+  "catalog": "Diplomacy Foundations Series",
+  "theme": "Diplomacy",
+  "series": "Foundations",
+  "themeCode": "DIP",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "DIP-ABP-SER003-0001",
+      "themeCode": "DIP",
+      "designCode": "ABP",
+      "designFamily": "ACCORD_BENEATH_THE_PILLARS",
+      "design": "Accord Beneath the Pillars",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Diplomacy",
+      "subtheme": "Diplomacy",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Accord Beneath the Pillars in watercolor style with a standard finish and no effect. Use a background that is visually related to Accord Beneath the Pillars. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-ABP-SER003-0001.webp",
+      "loreDescription": "A collectible Accord Beneath the Pillars Arcori generation I from the Diplomacy Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "DIP-SBO-SER003-0002",
+      "themeCode": "DIP",
+      "designCode": "SBO",
+      "designFamily": "THE_SAPLING_AT_THE_BOUNDARY",
+      "design": "The Sapling at the Boundary",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Diplomacy",
+      "subtheme": "Diplomacy",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Sapling at the Boundary in watercolor style with a standard finish and no effect. Use a background that is visually related to The Sapling at the Boundary. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-SBO-SER003-0002.webp",
+      "loreDescription": "A collectible The Sapling at the Boundary Arcori generation I from the Diplomacy Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "DIP-WAA-SER003-0003",
+      "themeCode": "DIP",
+      "designCode": "WAA",
+      "designFamily": "WORDS_ACROSS_THE_ASH",
+      "design": "Words Across the Ash",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Diplomacy",
+      "subtheme": "Diplomacy",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Words Across the Ash in watercolor style with a standard finish and no effect. Use a background that is visually related to Words Across the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-WAA-SER003-0003.webp",
+      "loreDescription": "A collectible Words Across the Ash Arcori generation I from the Diplomacy Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

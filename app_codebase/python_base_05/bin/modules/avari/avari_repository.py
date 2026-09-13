@@ -16,6 +16,7 @@ from models.player_progress import (
     PlayerSlammer,
     PlayerTrove,
 )
+from modules.avari.gold_economy import SIGNUP_GOLD_ARCORI
 
 
 def _as_uuid(user_id: str) -> uuid.UUID | None:
@@ -41,10 +42,14 @@ def ensure_avari_profile(
     display_name: str,
 ) -> AvariProfile:
     """Create a starter Avari profile row when the auth account has none yet."""
+    from modules.avari.starter_grant import grant_starter_pack
+
     existing = session.scalars(
         select(AvariProfile).where(AvariProfile.user_id == user_id)
     ).first()
     if existing is not None:
+        if not bool(existing.onboarding_starter_granted):
+            grant_starter_pack(session, user_id=user_id, profile=existing)
         return existing
 
     name = (display_name or "Avari").strip()[:64] or "Avari"
@@ -53,9 +58,11 @@ def ensure_avari_profile(
         display_name=name,
         primary_title="Avari",
         titles=["Avari"],
+        gold_arcori=SIGNUP_GOLD_ARCORI,
     )
     session.add(profile)
     session.flush()
+    grant_starter_pack(session, user_id=user_id, profile=profile)
     return profile
 
 
@@ -125,6 +132,31 @@ def ensure_design_access(
     return row
 
 
+def revoke_design_access(
+    session: Session,
+    *,
+    user_id: str | uuid.UUID,
+    design_id: str,
+) -> bool:
+    """Remove circulating access for user+design. Returns True if a row was deleted."""
+    uid = _as_uuid(user_id) if not isinstance(user_id, uuid.UUID) else user_id
+    if uid is None:
+        return False
+    did = (design_id or "").strip()
+    if not did:
+        return False
+    row = session.scalar(
+        select(PlayerDesignAccess).where(
+            PlayerDesignAccess.user_id == uid,
+            PlayerDesignAccess.design_id == did,
+        )
+    )
+    if row is None:
+        return False
+    session.delete(row)
+    return True
+
+
 def list_mastery_top(
     session: Session,
     user_id: str,
@@ -143,6 +175,131 @@ def list_mastery_top(
     return list(session.scalars(stmt).all())
 
 
+def list_mastery_rows(session: Session, user_id: str) -> list[PlayerMastery]:
+    uid = _as_uuid(user_id)
+    if uid is None:
+        return []
+    return list(
+        session.scalars(
+            select(PlayerMastery).where(PlayerMastery.user_id == uid)
+        ).all()
+    )
+
+
+def mastery_points_by_design(
+    session: Session,
+    user_id: str,
+) -> dict[str, int]:
+    """Best points per design_id (max across generations) for this player."""
+    best: dict[str, int] = {}
+    for row in list_mastery_rows(session, user_id):
+        did = str(row.design_id or "").strip()
+        if not did:
+            continue
+        pts = int(row.points)
+        prev = best.get(did)
+        if prev is None or pts > prev:
+            best[did] = pts
+    return best
+
+
+def ensure_mastery_row(
+    session: Session,
+    *,
+    user_id: str | uuid.UUID,
+    design_id: str,
+    generation_number: int = 1,
+    initial_points: int = 0,
+    floor: int = 0,
+) -> PlayerMastery:
+    """Idempotent player_mastery row; optional initial points / floor."""
+    from modules.avari.mastery_economy import clamp_points
+
+    uid = _as_uuid(user_id) if not isinstance(user_id, uuid.UUID) else user_id
+    if uid is None:
+        raise ValueError("user_id required")
+    did = (design_id or "").strip()
+    if not did:
+        raise ValueError("design_id required")
+    gen = max(1, int(generation_number))
+    floor_n = max(0, int(floor))
+    initial = clamp_points(initial_points, floor=floor_n)
+    existing = session.scalar(
+        select(PlayerMastery).where(
+            PlayerMastery.user_id == uid,
+            PlayerMastery.design_id == did,
+            PlayerMastery.generation_number == gen,
+        )
+    )
+    if existing is not None:
+        floored = clamp_points(int(existing.points), floor=floor_n)
+        if floored != int(existing.points):
+            existing.points = floored
+            session.flush()
+        return existing
+    row = PlayerMastery(
+        user_id=uid,
+        design_id=did,
+        generation_number=gen,
+        points=initial,
+    )
+    session.add(row)
+    session.flush()
+    return row
+
+
+def ensure_mastery_for_designs(
+    session: Session,
+    *,
+    user_id: str | uuid.UUID,
+    design_ids: list[str],
+    generation_number: int = 1,
+) -> None:
+    """Ensure a player_mastery row exists for each circulating access design."""
+    seen: set[str] = set()
+    for raw in design_ids:
+        did = str(raw or "").strip()
+        if not did or did in seen:
+            continue
+        seen.add(did)
+        ensure_mastery_row(
+            session,
+            user_id=user_id,
+            design_id=did,
+            generation_number=generation_number,
+        )
+
+
+def apply_mastery_delta(
+    session: Session,
+    *,
+    user_id: str | uuid.UUID,
+    design_id: str,
+    delta: int,
+    generation_number: int = 1,
+    floor: int = 0,
+) -> tuple[PlayerMastery, int, int]:
+    """
+    Apply delta to player_mastery, clamping at floor (default 0).
+
+    Returns (row, points_before, points_after).
+    """
+    from modules.avari.mastery_economy import clamp_points
+
+    row = ensure_mastery_row(
+        session,
+        user_id=user_id,
+        design_id=design_id,
+        generation_number=generation_number,
+        floor=floor,
+    )
+    before = int(row.points)
+    after = clamp_points(before + int(delta), floor=floor)
+    row.points = after
+    session.flush()
+    return row, before, after
+
+
 def count_mastery_designs(session: Session, user_id: str) -> int:
     uid = _as_uuid(user_id)
     if uid is None:
@@ -151,6 +308,46 @@ def count_mastery_designs(session: Session, user_id: str) -> int:
         select(PlayerMastery.design_id).where(PlayerMastery.user_id == uid).distinct()
     ).all()
     return len(rows)
+
+
+def ensure_slammer(
+    session: Session,
+    *,
+    user_id: str | uuid.UUID,
+    design_id: str,
+    permanent: bool = True,
+    charges_remaining: int | None = None,
+    source: str = "starter",
+) -> PlayerSlammer:
+    """Grant a slammer instance (idempotent on user+design)."""
+    uid = _as_uuid(user_id) if not isinstance(user_id, uuid.UUID) else user_id
+    if uid is None:
+        raise ValueError("user_id required")
+    did = (design_id or "").strip()
+    if not did:
+        raise ValueError("design_id required")
+    existing = session.scalar(
+        select(PlayerSlammer).where(
+            PlayerSlammer.user_id == uid,
+            PlayerSlammer.design_id == did,
+        )
+    )
+    if existing is not None:
+        if permanent and not bool(existing.permanent):
+            existing.permanent = True
+            existing.charges_remaining = None
+            session.flush()
+        return existing
+    row = PlayerSlammer(
+        user_id=uid,
+        design_id=did[:64],
+        permanent=bool(permanent),
+        charges_remaining=None if permanent else charges_remaining,
+        source=(source or "starter").strip()[:32] or "starter",
+    )
+    session.add(row)
+    session.flush()
+    return row
 
 
 def list_slammers(session: Session, user_id: str) -> list[PlayerSlammer]:

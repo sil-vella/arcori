@@ -37,7 +37,7 @@ Design SSOT remains under [`Documentation/Game_Specific/`](../Game_Specific/). L
 ## 1. What Arcori is
 
 **In plain terms:**  
-Arcori is a multiplayer slam / flip collectible game set in **Velora**. Players are **Avari** — people who walk beside circular Arcori pieces. Matches are short (2–4 seats, two rounds). Progress comes from **Mastery** on circulating designs and, eventually, **minting** closed generations into a personal **Trove**. Practice is free and AI-only; random multiplayer costs Gold Caps.
+Arcori is a multiplayer slam / flip collectible game set in **Velora**. Players are **Avari** — people who walk beside circular Arcori pieces. Matches are short (2–4 seats, two rounds). Progress comes from **Mastery** on circulating designs and, eventually, **minting** closed generations into a personal **Trove**. Practice is free and AI-only; online matches cost **2 Gold Fragments** (special events may differ); each flip earns **+1 fragment**; **4 fragments = 1 Gold Arcori** (wallet currency only).
 
 **Technically (game slice):**  
 A product monorepo where game features live as modules on three runtimes:
@@ -82,12 +82,12 @@ These names are product decisions, not cosmetic labels. They drove schemas, scre
 | **Master** | Competitive title | Earned via mastery / standing |
 | **Legacy Owner** | Preservation title | Earned when a mint enters Trove |
 | **Generation Creator** | Historical title | Named on a preserved generation |
-| **Mastery** | Progress on a circulating design | **Not ownership** |
+| **Mastery** | Progress on a circulating design (not ownership) | Own played: 0→−1 / 1→0 / 2→+2; other flipped: 0→0 / 1→+1 / 2→+2 |
 | **Trove** | Personal vault of **minted closed** Arcori only | Sink destination; empty until closures |
 | **Museum** | World factual history of closed gens | Not live stats; not personal Trove |
 | **Chronicle** | Mythology | What cannot be proven |
 | **Slammer** | Tool used to slam / flip | Starter permanent; rechargeable variants later |
-| **Gold Fragments / Caps** | Economy | 4 Fragments = 1 Cap; random MP costs 1 Cap |
+| **Gold Fragments / Gold Arcori** | Economy | 4 Fragments = 1 Gold Arcori; fee 2 frags; +1 frag/flip; signup 20 Gold Arcori |
 | **Caller** | Match initiator (`callerUserId`) | Arena / lobby authority (not “host/steward”) |
 | **Arena** | Match place (`arenaId`) | Backgrounds / FX for the whole match |
 | **Launch regions** | ASH / EVG / LFR / MWB / AMB (+ **RBY** Realm Beyond, no standing) | Politics + lore in Region Catalog; standing −2…+2, not a collect lock |
@@ -197,7 +197,7 @@ The permanent WS is a **nudge** channel (inbox-style), not a bulk pipe. ~hundred
 **Technical shape:**
 
 - Loader: `catalog_loader.py` — per-file `(mtime_ns, size)` cache; `CATALOG_DATA_ROOT` override for tests  
-- Paths: `series/{series_slug}/{theme_slug}.json`; art `/{series_slug}/{theme_slug}/{internalId}.webp`  
+- Paths: `series/{series_slug}/{theme_slug}.json`; art `/catalog-media/{NNN_series_slug}/{theme_slug}/{internalId}.webp` (e.g. `001_genesis`)  
 - Authuser GETs: `/authuser/catalog/meta|index|theme|design` (exact-match router; ids via query)  
 - Client payloads omit `artworkPrompt`  
 - Later for matches: `POST /service/catalog/designs` batch by ids (fail-closed)
@@ -305,10 +305,10 @@ Plan: [match-setting-core-flow.md](match-setting-core-flow.md).
 2. Predictive animations yes; predictive scores no.  
 3. **Full snapshots** on the wire.  
 4. Lean **seats**, not rich Player stubs.  
-5. `arcoriIds[]` + `slammerId` per seat; `arenaId` + optional `arenaImageUrl` + **`callerUserId`** on the snapshot.  
+5. `arcoriIds[]` + `slammerId` per seat; `arenaId` + optional `arenaImageUrl` + optional `gathererArcoriId` + **`callerUserId`** on the snapshot.  
 6. Match type is an **object** (code + subtype / event fields), not a bare string.  
 7. Catalog stats for physics: Dart calls FastAPI **service** batch at match init and **freezes** per match — no mid-match reload.  
-8. **Quick Start / Invite arena** from seated Arcori regions (`POST /service/catalog/select_arena`); Special Event stays stub until its own rules.
+8. **Quick Start / Invite arena + Gatherer** from seated Arcori regions (`POST /service/catalog/select_arena`); Special Event stays stub until its own rules.
 
 **Channels (authuser WS):**  
 `match/create`, `join`, `leave`, `end`, `action`, broadcast `match/state`.
@@ -348,7 +348,7 @@ Online types → WS path (matchmaking / invite)
 DB had 500 AI players for online fill. For practice: **embed 10 fixed `userId`s in Flutter** (`practice_ai_pool.dart`), sampled once from the seed JSON at implement time. Each practice match randomly picks **2**. No API/DB fetch on the practice path. Seat payload stays lean (in-match fields only).
 
 **Why:**  
-Practice must work without network and without spending Gold Caps. Embedding a tiny pool keeps the client honest about “offline.” Online matchmaking still samples AI from Postgres.
+Practice must work without network and without spending Gold Arcori. Embedding a tiny pool keeps the client honest about “offline.” Online matchmaking still samples AI from Postgres.
 
 **Type / subtype idea (for later packs):**  
 Core actions shared; subtypes (e.g. specialEvent `royal-battle`) register extra action packs. Practice has no subtype for now.
@@ -503,9 +503,9 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 
 ### Next (ordered by master plan)
 
-1. **Celebration / durable reward writers** (Rematch invite wiring done — [core-match-loop.md](core-match-loop.md))
+1. **Celebration anims + daily / mission UI** (Gold Arcori economy writers done — [core-match-loop.md](core-match-loop.md))
 2. Home sink Trove • PLAY • Market; remaining first-time / returning flows
-3. My Mastery tab; Trove UI; economy writers from matches
+3. My Mastery tab; Trove UI; Standings from real mastery ([mastery.md](mastery.md) writers live)
 4. Special Event arena rules (not the Quick Start / Invite region pick)
 
 ---
@@ -523,9 +523,13 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Dart hot match for online; Flutter-only practice | Offline practice must be free and local | Two apply paths, one snapshot shape |
 | Catalog freeze at match init | Fair mid-match balance | Service batch; strip prompts |
 | Five launch regions; standing −2…+2 | Politics without good/evil factions; travel and collecting stay open | Region Catalog `01_regions.json`; region-to-region standings, not design IDs |
-| Pioneers series exists | First Trove mints should be reachable before Genesis generations fill | Legacy 100 / 200 vs Genesis 500 / 1000; ten seed designs only (`GEN002`) |
-| Match Arcori pick after seats | Players do not choose loadout online; hostility pairs more often | `04_selection_weights.json` + `POST /service/catalog/select_arcori`; pool = that seat’s circulating `player_design_access` only (weighted, else random in-pool; never global catalog) |
+| Pioneers series exists | First Trove mints should be reachable before Genesis generations fill | Legacy 100 / 200 vs Genesis 500 / 1000; ten seed designs only (`SER002`) |
+| Foundations series | Civilization / society catalog between Pioneers and Genesis | Legacy 250 / 500; 40 themes × 3 designs (`SER003`); art `003_foundations/{theme}/` |
+| Creation series | Primordial Light / Dark pair before Genesis numbering | `SER000`; art `000_creation/`; The Light→ASH, The Dark→AMB; Rare + `selectionWeight` 0.1; not in starter pool |
+| Match Arcori pick after seats | Players do not choose loadout online; hostility pairs more often | Pool = that seat’s circulating `player_design_access` (DB), designs resolved via `get_design` (static + player Kin). Weighted pick (`04_selection_weights.json`) else random in-pool; never global catalog. **Unique ids across seats** (exclude already chosen). Trove = ownership only, not match stock. Access requires mastery > 0 (own Kin floored at 100). |
+| Mastery-gated access pool | Collection grows by flipping others; dead progress leaves the pool | Finalize: other +mastery grants `source=mastery` access; 0 mastery revokes (except creator Kin floor 100). Starters seed mastery 1 if still 0. |
 | Match arena from seated regions | The table should feel like the lands that showed up | FastAPI `select_arena` after Arcori ids; 2+ same region → that land’s arenas; else random catalog region. Dart stamps `arenaId`+`arenaImageUrl` only for `quickStart`/`invite`. Special Event later. |
+| Match Gatherer Arcori | Extra non-player echo from the match land; not a seat / not a “host” | Same `select_arena` response: circulating catalog in chosen region (any series), exclude SLM/KIN/slammer + seated ids; weight `04_selection_weights` printedRarity. Snapshot `gathererArcoriId` + catalog freeze. Practice/SE: none. Rematch re-picks. |
 | Arena mural locked to stack POV | Pulling the camera back for a wide scatter should pull the place back with it | One Flutter camera: mural laid out oversized (`viewport / kStackPovFitMin`), discs at rest Ø, camera scale 1→min so we never upscale a screen bitmap. Table is opaque and under the stack. HUD stays unzoomed. |
 | Online stub turn stages before end | Prove seat order / round / slam event without physics | Dart `MatchStubLoop` after `startFromLobby`: 2×N stub slams (`lastEvent` includes `slammerId`); Flutter waits for `ended` |
 | Forge2D slam physics (Dart SSOT) | Discs can hit each other mid-air and change path; flip feels physical | Superseded by 3D thin-cylinder sim (kept as history) |
@@ -539,7 +543,8 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Rematch series ids on hot snapshot | Tournament/history can later group games without colliding WS rooms | Opener: `seriesId = matchId`, `seriesIndex = 1`. Rematch: mint `{seriesId}_002` etc. Postgres series table deferred until finalize writers |
 | Rematch only vs Practice | Practice stays local / no rematch lobby | Rematch enabled for online matches with other humans and/or prior AI seats (Quick Start 1H+2AI rematches the same AI). Disabled for Practice. |
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
-| Caller (not host/steward) | Table-feel product voice | `callerUserId` on snapshot |
+| Gold Cap → Gold Arcori; fee 2 frags; +1 frag/flip | Wallet currency feels like solid-gold Arcori, not coins; fee/reward tied to flips | `gold_arcori` + `gold_fragments`; finalize deducts fee then adds flips; 4:1 normalize; signup `gold_arcori=20`; not catalog |
+| Mastery: own vs other curves | Your walked piece is risky (blank match hurts); flipping others is always non-negative | Own seat flips 0/−1, 1/0, 2/+2 on played design; other actor flips 0/0, 1/+1, 2/+2; practice skip; `player_mastery` per user; profile `access.masteryPoints` — [mastery.md](mastery.md) |
 | Join-or-create + 5s + AI fill | Solo players still play | Shared matchmaking for quick/event |
 | Friend Match via notification reply | Guest can accept from any screen; invite is one-shot (soft-deleted after reply / lobby timeout) | `create_for_user` instant + `data.response` reply; cancel + inbox prune clear stale popups |
 | Invite = 2 humans, no AI | Friend Match is a human table | Separate invite queueKey; cancel if second human never arrives |

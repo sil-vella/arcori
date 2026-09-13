@@ -1,0 +1,146 @@
+{
+  "catalog": "Law Foundations Series",
+  "theme": "Law",
+  "series": "Foundations",
+  "themeCode": "LAW",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "LAW-CAS-SER003-0001",
+      "themeCode": "LAW",
+      "designCode": "CAS",
+      "designFamily": "COVENANT_OF_ASH_AND_STONE",
+      "design": "Covenant of Ash and Stone",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Law",
+      "subtheme": "Law",
+      "style": "Graffiti",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Covenant of Ash and Stone in graffiti style with a standard finish and no effect. Use a background that is visually related to Covenant of Ash and Stone. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-CAS-SER003-0001.webp",
+      "loreDescription": "A collectible Covenant of Ash and Stone Arcori generation I from the Law Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "LAW-CFL-SER003-0002",
+      "themeCode": "LAW",
+      "designCode": "CFL",
+      "designFamily": "THE_COVENANT_OF_FIVE_LIGHTS",
+      "design": "The Covenant of Five Lights",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Law",
+      "subtheme": "Law",
+      "style": "Graffiti",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Covenant of Five Lights in graffiti style with a standard finish and no effect. Use a background that is visually related to The Covenant of Five Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-CFL-SER003-0002.webp",
+      "loreDescription": "A collectible The Covenant of Five Lights Arcori generation I from the Law Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "LAW-MBI-SER003-0003",
+      "themeCode": "LAW",
+      "designCode": "MBI",
+      "designFamily": "THE_MEASURE_BENEATH_THE_ICE",
+      "design": "The Measure Beneath the Ice",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Law",
+      "subtheme": "Law",
+      "style": "Graffiti",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Measure Beneath the Ice in graffiti style with a standard finish and no effect. Use a background that is visually related to The Measure Beneath the Ice. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-MBI-SER003-0003.webp",
+      "loreDescription": "A collectible The Measure Beneath the Ice Arcori generation I from the Law Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

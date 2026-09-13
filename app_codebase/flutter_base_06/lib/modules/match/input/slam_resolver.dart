@@ -20,7 +20,7 @@ const Map<String, int> defaultGameplayAttributes = {
 
 /// Starter-balanced attrs used for practice until client hydrates freeze.
 const Map<String, Map<String, dynamic>> practiceSlammerAttrs = {
-  'SLM-STR-GEN001-0001': {
+  'SLM-STR-SER001-0001': {
     'impact': 5,
     'precision': 5,
     'control': 5,
@@ -29,24 +29,27 @@ const Map<String, Map<String, dynamic>> practiceSlammerAttrs = {
   },
 };
 
-/// Practice AI seat 0 / seat 1 design ids (bundle art — not catalog).
+/// Practice disc art — human seat 0 = 001; AI seats 1/2 = 002/003.
+const String practiceHumanArcoriId = 'PRA-ARC-SER001-0001';
+
+/// Practice AI seatIndex 1 / 2 design ids (bundle art — not catalog).
 const List<String> practiceAiArcoriIds = [
-  'PRA-ARC-GEN001-0001',
-  'PRA-ARC-GEN001-0002',
+  'PRA-ARC-SER001-0002',
+  'PRA-ARC-SER001-0003',
 ];
 
 const Map<String, Map<String, String>> practiceFaceDefaults = {
-  'ANM-TIG-GEN001-0001': {
-    'imageUrl': '/catalog-media/genesis/animals/ANM-TIG-GEN001-0001.webp',
-    'color': '#C6A15B',
-  },
-  'PRA-ARC-GEN001-0001': {
+  practiceHumanArcoriId: {
     'imageUrl': 'assets/images/arcori/practice_arcori_001.webp',
     'color': '#6B5B95',
   },
-  'PRA-ARC-GEN001-0002': {
+  'PRA-ARC-SER001-0002': {
     'imageUrl': 'assets/images/arcori/practice_arcori_002.webp',
     'color': '#C6A15B',
+  },
+  'PRA-ARC-SER001-0003': {
+    'imageUrl': 'assets/images/arcori/practice_arcori_003.webp',
+    'color': '#4A7C59',
   },
 };
 

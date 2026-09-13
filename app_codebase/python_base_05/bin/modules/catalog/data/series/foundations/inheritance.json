@@ -1,0 +1,144 @@
+{
+  "catalog": "Inheritance Foundations Series",
+  "theme": "Inheritance",
+  "series": "Foundations",
+  "themeCode": "INH",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "INH-WEC-SER003-0001",
+      "themeCode": "INH",
+      "designCode": "WEC",
+      "designFamily": "WHAT_THE_ELDERS_CARRIED",
+      "design": "What the Elders Carried",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Inheritance",
+      "subtheme": "Inheritance",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with What the Elders Carried in pixel art style with a standard finish and no effect. Use a background that is visually related to What the Elders Carried. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INH-WEC-SER003-0001.webp",
+      "loreDescription": "A collectible What the Elders Carried Arcori generation I from the Inheritance Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "INH-KPT-SER003-0002",
+      "themeCode": "INH",
+      "designCode": "KPT",
+      "designFamily": "THE_KEY_PASSED_THROUGH_WINTER",
+      "design": "The Key Passed Through Winter",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Inheritance",
+      "subtheme": "Inheritance",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Key Passed Through Winter in pixel art style with a standard finish and no effect. Use a background that is visually related to The Key Passed Through Winter. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INH-KPT-SER003-0002.webp",
+      "loreDescription": "A collectible The Key Passed Through Winter Arcori generation I from the Inheritance Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "INH-LMF-SER003-0003",
+      "themeCode": "INH",
+      "designCode": "LMF",
+      "designFamily": "THE_LAST_MAP_OF_THE_FORGOTTEN",
+      "design": "The Last Map of the Forgotten",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Inheritance",
+      "subtheme": "Inheritance",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Last Map of the Forgotten in pixel art style with a standard finish and no effect. Use a background that is visually related to The Last Map of the Forgotten. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INH-LMF-SER003-0003.webp",
+      "loreDescription": "A collectible The Last Map of the Forgotten Arcori generation I from the Inheritance Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

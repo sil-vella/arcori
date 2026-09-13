@@ -17,7 +17,7 @@ _BG_FILE_RE = re.compile(
     re.IGNORECASE,
 )
 
-_PUBLIC_PREFIX = "/catalog-media/kin/gen001/00backgrounds"
+_PUBLIC_PREFIX = "/catalog-media/kin/ser001/00backgrounds"
 
 
 def _title_from_token(token: str) -> str:
@@ -34,7 +34,7 @@ def kin_media_root() -> Path:
 
 
 def backgrounds_dir() -> Path:
-    return kin_media_root() / "gen001" / "00backgrounds"
+    return kin_media_root() / "ser001" / "00backgrounds"
 
 
 def parse_background_filename(name: str) -> dict[str, Any] | None:

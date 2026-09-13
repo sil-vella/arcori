@@ -8,7 +8,7 @@ from typing import Any
 from core.errors.app_error import AppError
 from modules.catalog import catalog_loader as loader
 from modules.catalog.catalog_errors import INVALID_QUERY, LOAD_FAILED, NOT_FOUND
-from modules.catalog.current_series import current_series_key
+from modules.catalog.current_series import current_series_key, media_folder_for_series
 from modules.catalog.velora_media import enrich_regions_meta
 
 _CLIENT_OMIT_KEYS = frozenset({"artworkPrompt"})
@@ -39,9 +39,14 @@ def _slug(value: str) -> str:
 
 
 def image_url_for(*, series_key: str, theme: str, internal_id: str) -> str:
-    """Public path: /catalog-media/{series}/{theme}/{internalId}.webp"""
+    """Public path: /catalog-media/{media_folder}/{theme}/{internalId}.webp
+
+    ``media_folder`` is the numbered art dir (e.g. ``001_genesis``), not the
+    catalog JSON folder (``genesis``).
+    """
     return (
-        f"/catalog-media/{_slug(series_key)}/{_slug(theme)}/{internal_id.strip()}.webp"
+        f"/catalog-media/{media_folder_for_series(series_key)}/"
+        f"{_slug(theme)}/{internal_id.strip()}.webp"
     )
 
 

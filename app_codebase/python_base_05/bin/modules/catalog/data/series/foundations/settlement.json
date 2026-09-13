@@ -1,0 +1,144 @@
+{
+  "catalog": "Settlement Foundations Series",
+  "theme": "Settlement",
+  "series": "Foundations",
+  "themeCode": "SET",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "SET-DAH-SER003-0001",
+      "themeCode": "SET",
+      "designCode": "DAH",
+      "designFamily": "DAWNSTONE_HAVEN",
+      "design": "Dawnstone Haven",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Settlement",
+      "subtheme": "Settlement",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Dawnstone Haven in anime style with a standard finish and no effect. Use a background that is visually related to Dawnstone Haven. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SET-DAH-SER003-0001.webp",
+      "loreDescription": "A collectible Dawnstone Haven Arcori generation I from the Settlement Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "SET-FLN-SER003-0002",
+      "themeCode": "SET",
+      "designCode": "FLN",
+      "designFamily": "FIRST_LANTERNS_OF_THE_NEW_SHORE",
+      "design": "First Lanterns of the New Shore",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Settlement",
+      "subtheme": "Settlement",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with First Lanterns of the New Shore in anime style with a standard finish and no effect. Use a background that is visually related to First Lanterns of the New Shore. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SET-FLN-SER003-0002.webp",
+      "loreDescription": "A collectible First Lanterns of the New Shore Arcori generation I from the Settlement Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "SET-HAF-SER003-0003",
+      "themeCode": "SET",
+      "designCode": "HAF",
+      "designFamily": "HOMES_ALONG_THE_FORGOTTEN_ROAD",
+      "design": "Homes Along the Forgotten Road",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Settlement",
+      "subtheme": "Settlement",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Homes Along the Forgotten Road in anime style with a standard finish and no effect. Use a background that is visually related to Homes Along the Forgotten Road. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SET-HAF-SER003-0003.webp",
+      "loreDescription": "A collectible Homes Along the Forgotten Road Arcori generation I from the Settlement Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

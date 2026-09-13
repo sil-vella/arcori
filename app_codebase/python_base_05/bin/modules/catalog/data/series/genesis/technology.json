@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "TEC-TBT-GEN001-0001",
+      "internalId": "TEC-TBT-SER001-0001",
       "themeCode": "TEC",
       "designCode": "TBT",
       "designFamily": "TITAN_BOT",
@@ -45,7 +45,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a titan bot in comic style with a metallic finish and pulse effect. Use a background that is visually related to the titan bot. No borders, no frames. The titan bot should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-TBT-GEN001-0001.webp",
+      "artworkPrompt": "Give me an image with a titan bot in comic style with a metallic finish and pulse effect. Use a background that is visually related to the titan bot. No borders, no frames. The titan bot should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-TBT-SER001-0001.webp",
       "loreDescription": "A collectible Titan Bot Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "TEC-SRV-GEN001-0002",
+      "internalId": "TEC-SRV-SER001-0002",
       "themeCode": "TEC",
       "designCode": "SRV",
       "designFamily": "SERVICE_DROID",
@@ -88,7 +88,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a service droid in minimalist style with a standard finish and no effect. Use a background that is visually related to the service droid. No borders, no frames. The service droid should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-SRV-GEN001-0002.webp",
+      "artworkPrompt": "Give me an image with a service droid in minimalist style with a standard finish and no effect. Use a background that is visually related to the service droid. No borders, no frames. The service droid should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-SRV-SER001-0002.webp",
       "loreDescription": "A collectible Service Droid Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "TEC-GRD-GEN001-0003",
+      "internalId": "TEC-GRD-SER001-0003",
       "themeCode": "TEC",
       "designCode": "GRD",
       "designFamily": "GUARDIAN_ANDROID",
@@ -135,7 +135,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a guardian android in realistic style with a chrome finish and glow effect. Use a background that is visually related to the guardian android. No borders, no frames. The guardian android should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-GRD-GEN001-0003.webp",
+      "artworkPrompt": "Give me an image with a guardian android in realistic style with a chrome finish and glow effect. Use a background that is visually related to the guardian android. No borders, no frames. The guardian android should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-GRD-SER001-0003.webp",
       "loreDescription": "A collectible Guardian Android Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -143,7 +143,7 @@
       }
     },
     {
-      "internalId": "TEC-MEC-GEN001-0004",
+      "internalId": "TEC-MEC-SER001-0004",
       "themeCode": "TEC",
       "designCode": "MEC",
       "designFamily": "ATLAS_MECH",
@@ -182,7 +182,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a atlas mech in anime style with a foil finish and motion effect. Use a background that is visually related to the atlas mech. No borders, no frames. The atlas mech should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-MEC-GEN001-0004.webp",
+      "artworkPrompt": "Give me an image with a atlas mech in anime style with a foil finish and motion effect. Use a background that is visually related to the atlas mech. No borders, no frames. The atlas mech should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-MEC-SER001-0004.webp",
       "loreDescription": "A collectible Atlas Mech Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -190,7 +190,7 @@
       }
     },
     {
-      "internalId": "TEC-RGN-GEN001-0005",
+      "internalId": "TEC-RGN-SER001-0005",
       "themeCode": "TEC",
       "designCode": "RGN",
       "designFamily": "RAILGUN_MECH",
@@ -229,7 +229,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a railgun mech in comic style with a metallic finish and fire effect. Use a background that is visually related to the railgun mech. No borders, no frames. The railgun mech should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-RGN-GEN001-0005.webp",
+      "artworkPrompt": "Give me an image with a railgun mech in comic style with a metallic finish and fire effect. Use a background that is visually related to the railgun mech. No borders, no frames. The railgun mech should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-RGN-SER001-0005.webp",
       "loreDescription": "A collectible Railgun Mech Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -237,7 +237,7 @@
       }
     },
     {
-      "internalId": "TEC-SKT-GEN001-0006",
+      "internalId": "TEC-SKT-SER001-0006",
       "themeCode": "TEC",
       "designCode": "SKT",
       "designFamily": "SCOUT_MECH",
@@ -274,7 +274,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a scout mech in low poly style with a matte finish and no effect. Use a background that is visually related to the scout mech. No borders, no frames. The scout mech should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-SKT-GEN001-0006.webp",
+      "artworkPrompt": "Give me an image with a scout mech in low poly style with a matte finish and no effect. Use a background that is visually related to the scout mech. No borders, no frames. The scout mech should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-SKT-SER001-0006.webp",
       "loreDescription": "A collectible Scout Mech Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -282,7 +282,7 @@
       }
     },
     {
-      "internalId": "TEC-NMI-GEN001-0007",
+      "internalId": "TEC-NMI-SER001-0007",
       "themeCode": "TEC",
       "designCode": "NMI",
       "designFamily": "NEURAL_MIND",
@@ -321,7 +321,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a neural mind in neon style with a prismatic finish and glow effect. Use a background that is visually related to the neural mind. No borders, no frames. The neural mind should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-NMI-GEN001-0007.webp",
+      "artworkPrompt": "Give me an image with a neural mind in neon style with a prismatic finish and glow effect. Use a background that is visually related to the neural mind. No borders, no frames. The neural mind should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-NMI-SER001-0007.webp",
       "loreDescription": "A collectible Neural Mind Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -329,7 +329,7 @@
       }
     },
     {
-      "internalId": "TEC-QAI-GEN001-0008",
+      "internalId": "TEC-QAI-SER001-0008",
       "themeCode": "TEC",
       "designCode": "QAI",
       "designFamily": "QUANTUM_AI",
@@ -368,7 +368,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a quantum ai in minimalist style with a chrome finish and pulse effect. Use a background that is visually related to the quantum ai. No borders, no frames. The quantum ai should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-QAI-GEN001-0008.webp",
+      "artworkPrompt": "Give me an image with a quantum ai in minimalist style with a chrome finish and pulse effect. Use a background that is visually related to the quantum ai. No borders, no frames. The quantum ai should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-QAI-SER001-0008.webp",
       "loreDescription": "A collectible Quantum AI Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -376,7 +376,7 @@
       }
     },
     {
-      "internalId": "TEC-DAI-GEN001-0009",
+      "internalId": "TEC-DAI-SER001-0009",
       "themeCode": "TEC",
       "designCode": "DAI",
       "designFamily": "DIGITAL_ORACLE",
@@ -415,7 +415,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a digital oracle in watercolor style with a gloss finish and floating particles effect. Use a background that is visually related to the digital oracle. No borders, no frames. The digital oracle should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-DAI-GEN001-0009.webp",
+      "artworkPrompt": "Give me an image with a digital oracle in watercolor style with a gloss finish and floating particles effect. Use a background that is visually related to the digital oracle. No borders, no frames. The digital oracle should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-DAI-SER001-0009.webp",
       "loreDescription": "A collectible Digital Oracle Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -423,7 +423,7 @@
       }
     },
     {
-      "internalId": "TEC-NRN-GEN001-0010",
+      "internalId": "TEC-NRN-SER001-0010",
       "themeCode": "TEC",
       "designCode": "NRN",
       "designFamily": "NEON_RUNNER",
@@ -462,7 +462,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a neon runner in anime style with a chrome finish and motion effect. Use a background that is visually related to the neon runner. No borders, no frames. The neon runner should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-NRN-GEN001-0010.webp",
+      "artworkPrompt": "Give me an image with a neon runner in anime style with a chrome finish and motion effect. Use a background that is visually related to the neon runner. No borders, no frames. The neon runner should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-NRN-SER001-0010.webp",
       "loreDescription": "A collectible Neon Runner Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -470,7 +470,7 @@
       }
     },
     {
-      "internalId": "TEC-CSN-GEN001-0011",
+      "internalId": "TEC-CSN-SER001-0011",
       "themeCode": "TEC",
       "designCode": "CSN",
       "designFamily": "CYBER_SAMURAI",
@@ -509,7 +509,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a cyber samurai in comic style with a foil finish and lightning effect. Use a background that is visually related to the cyber samurai. No borders, no frames. The cyber samurai should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-CSN-GEN001-0011.webp",
+      "artworkPrompt": "Give me an image with a cyber samurai in comic style with a foil finish and lightning effect. Use a background that is visually related to the cyber samurai. No borders, no frames. The cyber samurai should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-CSN-SER001-0011.webp",
       "loreDescription": "A collectible Cyber Samurai Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -517,7 +517,7 @@
       }
     },
     {
-      "internalId": "TEC-HKR-GEN001-0012",
+      "internalId": "TEC-HKR-SER001-0012",
       "themeCode": "TEC",
       "designCode": "HKR",
       "designFamily": "NET_HACKER",
@@ -552,7 +552,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a net hacker in pixel art style with a gloss finish and pulse effect. Use a background that is visually related to the net hacker. No borders, no frames. The net hacker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-HKR-GEN001-0012.webp",
+      "artworkPrompt": "Give me an image with a net hacker in pixel art style with a gloss finish and pulse effect. Use a background that is visually related to the net hacker. No borders, no frames. The net hacker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-HKR-SER001-0012.webp",
       "loreDescription": "A collectible Net Hacker Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -560,7 +560,7 @@
       }
     },
     {
-      "internalId": "TEC-SDR-GEN001-0013",
+      "internalId": "TEC-SDR-SER001-0013",
       "themeCode": "TEC",
       "designCode": "SDR",
       "designFamily": "SKY_SCOUT",
@@ -599,7 +599,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a sky scout in minimalist style with a metallic finish and motion effect. Use a background that is visually related to the sky scout. No borders, no frames. The sky scout should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-SDR-GEN001-0013.webp",
+      "artworkPrompt": "Give me an image with a sky scout in minimalist style with a metallic finish and motion effect. Use a background that is visually related to the sky scout. No borders, no frames. The sky scout should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-SDR-SER001-0013.webp",
       "loreDescription": "A collectible Sky Scout Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -607,7 +607,7 @@
       }
     },
     {
-      "internalId": "TEC-WRD-GEN001-0014",
+      "internalId": "TEC-WRD-SER001-0014",
       "themeCode": "TEC",
       "designCode": "WRD",
       "designFamily": "WAR_DRONE",
@@ -646,7 +646,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a war drone in comic style with a chrome finish and fire effect. Use a background that is visually related to the war drone. No borders, no frames. The war drone should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-WRD-GEN001-0014.webp",
+      "artworkPrompt": "Give me an image with a war drone in comic style with a chrome finish and fire effect. Use a background that is visually related to the war drone. No borders, no frames. The war drone should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-WRD-SER001-0014.webp",
       "loreDescription": "A collectible War Drone Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -654,7 +654,7 @@
       }
     },
     {
-      "internalId": "TEC-RDR-GEN001-0015",
+      "internalId": "TEC-RDR-SER001-0015",
       "themeCode": "TEC",
       "designCode": "RDR",
       "designFamily": "RESCUE_DRONE",
@@ -693,7 +693,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a rescue drone in realistic style with a standard finish and no effect. Use a background that is visually related to the rescue drone. No borders, no frames. The rescue drone should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-RDR-GEN001-0015.webp",
+      "artworkPrompt": "Give me an image with a rescue drone in realistic style with a standard finish and no effect. Use a background that is visually related to the rescue drone. No borders, no frames. The rescue drone should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-RDR-SER001-0015.webp",
       "loreDescription": "A collectible Rescue Drone Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -701,7 +701,7 @@
       }
     },
     {
-      "internalId": "TEC-QWT-GEN001-0016",
+      "internalId": "TEC-QWT-SER001-0016",
       "themeCode": "TEC",
       "designCode": "QWT",
       "designFamily": "QUANTUM_WATCH",
@@ -740,7 +740,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a quantum watch in realistic style with a gloss finish and glow effect. Use a background that is visually related to the quantum watch. No borders, no frames. The quantum watch should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-QWT-GEN001-0016.webp",
+      "artworkPrompt": "Give me an image with a quantum watch in realistic style with a gloss finish and glow effect. Use a background that is visually related to the quantum watch. No borders, no frames. The quantum watch should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-QWT-SER001-0016.webp",
       "loreDescription": "A collectible Quantum Watch Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -748,7 +748,7 @@
       }
     },
     {
-      "internalId": "TEC-HLM-GEN001-0017",
+      "internalId": "TEC-HLM-SER001-0017",
       "themeCode": "TEC",
       "designCode": "HLM",
       "designFamily": "HOLO_LENS",
@@ -785,7 +785,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a holo lens in minimalist style with a transparent finish and sparkle effect. Use a background that is visually related to the holo lens. No borders, no frames. The holo lens should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-HLM-GEN001-0017.webp",
+      "artworkPrompt": "Give me an image with a holo lens in minimalist style with a transparent finish and sparkle effect. Use a background that is visually related to the holo lens. No borders, no frames. The holo lens should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-HLM-SER001-0017.webp",
       "loreDescription": "A collectible Holo Lens Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -793,7 +793,7 @@
       }
     },
     {
-      "internalId": "TEC-PLG-GEN001-0018",
+      "internalId": "TEC-PLG-SER001-0018",
       "themeCode": "TEC",
       "designCode": "PLG",
       "designFamily": "PLASMA_GAUNTLET",
@@ -832,7 +832,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a plasma gauntlet in comic style with a metallic finish and fire effect. Use a background that is visually related to the plasma gauntlet. No borders, no frames. The plasma gauntlet should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-PLG-GEN001-0018.webp",
+      "artworkPrompt": "Give me an image with a plasma gauntlet in comic style with a metallic finish and fire effect. Use a background that is visually related to the plasma gauntlet. No borders, no frames. The plasma gauntlet should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-PLG-SER001-0018.webp",
       "loreDescription": "A collectible Plasma Gauntlet Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -840,7 +840,7 @@
       }
     },
     {
-      "internalId": "TEC-NBC-GEN001-0019",
+      "internalId": "TEC-NBC-SER001-0019",
       "themeCode": "TEC",
       "designCode": "NBC",
       "designFamily": "NANO_BATTERY",
@@ -877,7 +877,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a nano battery in low poly style with a matte finish and pulse effect. Use a background that is visually related to the nano battery. No borders, no frames. The nano battery should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-NBC-GEN001-0019.webp",
+      "artworkPrompt": "Give me an image with a nano battery in low poly style with a matte finish and pulse effect. Use a background that is visually related to the nano battery. No borders, no frames. The nano battery should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-NBC-SER001-0019.webp",
       "loreDescription": "A collectible Nano Battery Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -885,7 +885,7 @@
       }
     },
     {
-      "internalId": "TEC-NSW-GEN001-0020",
+      "internalId": "TEC-NSW-SER001-0020",
       "themeCode": "TEC",
       "designCode": "NSW",
       "designFamily": "NANO_SWARM",
@@ -924,7 +924,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a nano swarm in neon style with a holographic finish and floating particles effect. Use a background that is visually related to the nano swarm. No borders, no frames. The nano swarm should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-NSW-GEN001-0020.webp",
+      "artworkPrompt": "Give me an image with a nano swarm in neon style with a holographic finish and floating particles effect. Use a background that is visually related to the nano swarm. No borders, no frames. The nano swarm should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TEC-NSW-SER001-0020.webp",
       "loreDescription": "A collectible Nano Swarm Arcori generation I from the Technology Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,

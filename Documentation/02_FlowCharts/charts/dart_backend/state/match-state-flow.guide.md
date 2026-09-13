@@ -26,7 +26,7 @@ This chart shows **create → freeze catalog → broadcast full snapshot → end
 curl -s -X POST http://127.0.0.1:8000/service/catalog/designs \
   -H 'Content-Type: application/json' \
   -H 'X-Service-Key: $SERVICE_KEY' \
-  -d '{"ids":["SLM-STR-GEN001-0001","ANM-TIG-GEN001-0001"]}'
+  -d '{"ids":["SLM-STR-SER001-0001","ANM-TIG-SER001-0001"]}'
 ```
 
 ```bash

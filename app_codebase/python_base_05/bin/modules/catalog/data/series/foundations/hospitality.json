@@ -1,0 +1,140 @@
+{
+  "catalog": "Hospitality Foundations Series",
+  "theme": "Hospitality",
+  "series": "Foundations",
+  "themeCode": "HOS",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "HOS-HEW-SER003-0001",
+      "themeCode": "HOS",
+      "designCode": "HEW",
+      "designFamily": "HEARTH_FOR_THE_WANDERER",
+      "design": "Hearth for the Wanderer",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Hospitality",
+      "subtheme": "Hospitality",
+      "style": "Chibi",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Hearth for the Wanderer in chibi style with a standard finish and no effect. Use a background that is visually related to Hearth for the Wanderer. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOS-HEW-SER003-0001.webp",
+      "loreDescription": "A collectible Hearth for the Wanderer Arcori generation I from the Hospitality Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "HOS-DTW-SER003-0002",
+      "themeCode": "HOS",
+      "designCode": "DTW",
+      "designFamily": "THE_DOOR_THROUGH_THE_WHITEOUT",
+      "design": "The Door Through the Whiteout",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Hospitality",
+      "subtheme": "Hospitality",
+      "style": "Chibi",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Door Through the Whiteout in chibi style with a standard finish and no effect. Use a background that is visually related to The Door Through the Whiteout. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOS-DTW-SER003-0002.webp",
+      "loreDescription": "A collectible The Door Through the Whiteout Arcori generation I from the Hospitality Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "HOS-LEP-SER003-0003",
+      "themeCode": "HOS",
+      "designCode": "LEP",
+      "designFamily": "THE_LANTERN_AT_THE_EMPTY_PIER",
+      "design": "The Lantern at the Empty Pier",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Hospitality",
+      "subtheme": "Hospitality",
+      "style": "Chibi",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Lantern at the Empty Pier in chibi style with a standard finish and no effect. Use a background that is visually related to The Lantern at the Empty Pier. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOS-LEP-SER003-0003.webp",
+      "loreDescription": "A collectible The Lantern at the Empty Pier Arcori generation I from the Hospitality Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

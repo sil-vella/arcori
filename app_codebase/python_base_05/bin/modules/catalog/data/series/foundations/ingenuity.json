@@ -1,0 +1,148 @@
+{
+  "catalog": "Ingenuity Foundations Series",
+  "theme": "Ingenuity",
+  "series": "Foundations",
+  "themeCode": "IGY",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "IGY-TSA-SER003-0001",
+      "themeCode": "IGY",
+      "designCode": "TSA",
+      "designFamily": "TIDEWRIGHT_S_ANSWER",
+      "design": "Tidewright's Answer",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Ingenuity",
+      "subtheme": "Ingenuity",
+      "style": "Low Poly",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Tidewright's Answer in low poly style with a standard finish and no effect. Use a background that is visually related to Tidewright's Answer. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-TSA-SER003-0001.webp",
+      "loreDescription": "A collectible Tidewright's Answer Arcori generation I from the Ingenuity Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "IGY-BWL-SER003-0002",
+      "themeCode": "IGY",
+      "designCode": "BWL",
+      "designFamily": "THE_BRIDGE_WOVEN_FROM_LIGHT",
+      "design": "The Bridge Woven from Light",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Ingenuity",
+      "subtheme": "Ingenuity",
+      "style": "Low Poly",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Bridge Woven from Light in low poly style with a standard finish and no effect. Use a background that is visually related to The Bridge Woven from Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-BWL-SER003-0002.webp",
+      "loreDescription": "A collectible The Bridge Woven from Light Arcori generation I from the Ingenuity Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    },
+    {
+      "internalId": "IGY-LLL-SER003-0003",
+      "themeCode": "IGY",
+      "designCode": "LLL",
+      "designFamily": "THE_LOOM_OF_LIVING_LIGHT",
+      "design": "The Loom of Living Light",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Ingenuity",
+      "subtheme": "Ingenuity",
+      "style": "Low Poly",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "printedRarity": "Common",
+      "selectionWeight": 3.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Loom of Living Light in low poly style with a standard finish and no effect. Use a background that is visually related to The Loom of Living Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-LLL-SER003-0003.webp",
+      "loreDescription": "A collectible The Loom of Living Light Arcori generation I from the Ingenuity Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 # Arcori Technical Specification
 
 Working Draft v0.4  
-**Last aligned:** 2026-09-06 (Quick Start / Invite arena from seated Arcori)
+**Last aligned:** 2026-09-13 (Match Gatherer Arcori + unique seat picks)
 
 ## Arcori Model
 
@@ -9,9 +9,11 @@ Fields: internalId, themeCode, designCode, designFamily, design, inspiration, re
 
 **Natural selection (catalog / circulation):** `03_printed_rarity.json` maps printedRarity → default `selectionWeight` (Common 3.0 … Legendary 0.5; Unique is custom / null). If a design sets `selectionWeight` to a number, that value **overrides** the printed-rarity default for circulation-style uses. Omit or `null` → use the table. Launch catalog: all designs `printedRarity: Common`, with per-design `selectionWeight` copied from their previous rarity so selection spread is unchanged.
 
-**Match Arcori pairing SSOT:** after players are seated, `04_selection_weights.json` is the sole table for picking one design per seat (`printedRarity` weight × region standing multiplier; hostility boosts match chance). Design-level `selectionWeight` is **not** used for match pairing. Service: `POST /service/catalog/select_arcori`. Candidates = that player's `player_design_access` ids that are still circulating. Weight/parse failures → random among **those** candidates only — never the global circulating catalog. Empty player access → empty pick (client/Dart stub may fill Tiger).
+**Match Arcori pairing SSOT:** after players are seated, `04_selection_weights.json` is the sole table for picking one design per seat (`printedRarity` weight × region standing multiplier; hostility boosts match chance). Design-level `selectionWeight` is **not** used for match pairing. Service: `POST /service/catalog/select_arcori`. Candidates = that player's DB `player_design_access` ids that resolve circulating via `get_design` (static catalog + player Kin) **and** have mastery > 0 (own Kin floored at 100). **Unique ids across seats:** when assigning seat N, exclude Arcori already chosen by seats 0..N−1 (fallback random only among remaining candidates). Weight/parse failures → random among **those** candidates only — never the global circulating catalog. Empty player access → empty pick (client/Dart stub may fill Tiger). Trove mints are ownership-only and are not match stock.
 
-**Match arena (Quick Start / Invite):** after those Arcori ids exist, `POST /service/catalog/select_arena` counts `location.regionCode`. Two or more from the same region → random arena in that region. All different (or no majority) → random catalog region that has arenas, then a random arena. Snapshot fields: `arenaId` + `arenaImageUrl` (`/catalog-media/velora/arenas/{slug}/{arenaId}.webp`). Fail closed to stub `arena_velora_plaza` with no image. **Special Event** does not use this pick (separate rules later). Practice stays on the stub arena.
+**Mastery ↔ access:** gaining +mastery on another player's design grants circulating access (`source=mastery`). Hitting 0 mastery revokes access, except the creator's own Kin (starts/floors at 100). Other players treat Kin like any Arcori on the other-flip curve. On Avari profile create (guest/regular), **starter** pack = 10 random designs from **Genesis + Pioneers** only (not Creation / Foundations) at **10** mastery each (`source=starter`) + permanent starter slammer. Pool still drops designs at mastery < 1.
+
+**Match arena + Gatherer (Quick Start / Invite):** after those Arcori ids exist, `POST /service/catalog/select_arena` counts `location.regionCode`. Two or more from the same region → random arena in that region. All different (or no majority) → random catalog region that has arenas, then a random arena. In the same response, after `chosen_region` is known, pick a non-player **Gatherer** Arcori: circulating static catalog designs in that region (any series), excluding SLM/KIN/slammer and all seated `arcoriIds`, weighted by `04_selection_weights` **printedRarity**. Snapshot fields: `arenaId` + `arenaImageUrl` (`/catalog-media/velora/arenas/{slug}/{arenaId}.webp`) + optional `gathererArcoriId` (fail closed: omit if pool empty). Gatherer is frozen with seat discs; it is **not** a `MatchSeat`. **Special Event** / Practice do not use this pick. Rematch re-runs arena+Gatherer with the new seated picks.
 
 **Match slam / table:** at start, `table.pieces` holds one face-down disc per seat (`designId` from `arcoriIds`, plus catalog `imageUrl` and `color` stamped from the freeze). Match create picks random **`firstSeatIndex`** (wire field); turn order wraps `(first + offset) % seats` every round. `match/action` slam resolves via a **pure-Dart 3D thin-cylinder** sim (Dart SSOT; Flutter practice mirrors) from **verified** frozen slammer `gameplayAttributes` + raw `input` (`speed`, `aim: {x,z}`, optional `source`) → `result: flip|miss`, `outcome.impulse`, `outcome.sim` (`space: "xyzq"` pose timeline `[id,x,y,z,qx,qy,qz,qw]`), score deltas, then **restack face-down** so the next seat always starts from a clean stack. **Aim outside** stack footprint (`kDiscRadius`, same as the slammer) → **aimMiss** (no kick, empty sim) — distinct from soft-miss (`power ≈ 0`). Kick direction is biased from aim contact when inside the footprint. Round advance still increments `round`. **All clients** replay `outcome.sim` on the stack surface (spring impulse only if sim missing/empty; legacy 2D frames ignored). Face-up discs show catalog artwork with a slightly thick rim from design `color` (art is inset so the rim is not covered). Face-down backs fill with that color; the inner hairline is the same hue with auto lightness/saturation (`arcoriBackInnerLineColor`: dark fill → lighter line, light fill → darker line). Catalog art is precached when the Play screen loads (player circulating access + slammers + practice stubs); face-down stack discs still mount `Image.network` so a flip does not start the download. **Acting player only** gets a non-blocking 3s result `AppModal` (`FLIP`/`MISS`, flip count, score delta; X or auto-close) — turn clock is not paused. Scores/faces only from authority. Face-up = local face normal · world up (or tumble ≥ ¾π).
 
@@ -31,7 +33,7 @@ Fields: internalId, themeCode, designCode, designFamily, design, inspiration, re
 | **Museum** | World historical snapshots of **closed** generations (factual archive) |
 | **Chronicle** | Mythology |
 | **Trove (Avari / player)** | Durable record of **minted** closed Arcori belonging to a player — out of circulation |
-| **Mastery (player×design)** | Circulating progress; **not ownership** |
+| **Mastery (player×design)** | Circulating progress; **not ownership**. Online match deltas: **own played** design 0/−1, 1/0, 2/+2 seat flips; **other** flipped designs 0/0, 1/+1, 2/+2. Practice skips. See [mastery.md](../01_Active_Plans/mastery.md) |
 
 ## Avari (player) titles
 
@@ -58,12 +60,14 @@ Not owned                            Minted legacy piece
 - `generation.creator`: System for launch content; Player (**Generation Creator**) when a preserved/minted generation attributes a creator.
 - `legacy.preservationRequirement` / `legacy.closureMilestone` are per-design. Launch defaults by series:
 
-| Series | JSON folder | `internalId` token | preservationRequirement | closureMilestone | Why |
-|--------|-------------|--------------------|-------------------------|------------------|-----|
-| **Genesis** | `series/genesis/` | `GEN001` | 500 | 1000 | Main launch catalog |
-| **Pioneers** | `series/pioneers/` | `GEN002` | 100 | 200 | **Exists so these designs can mint earlier** than Genesis |
+| Series | JSON folder | Art folder | `internalId` token | preservationRequirement | closureMilestone | Why |
+|--------|-------------|------------|--------------------|-------------------------|------------------|-----|
+| **Creation** | `series/creation/` | `assets/images/arcori/000_creation/` | `SER000` | 50 | 100 | Primordial pair (The Light / The Dark); Rare, `selectionWeight` 0.1 |
+| **Genesis** | `series/genesis/` | `assets/images/arcori/001_genesis/` | `SER001` | 500 | 1000 | Main launch catalog |
+| **Pioneers** | `series/pioneers/` | `assets/images/arcori/002_pioneers/` | `SER002` | 100 | 200 | **Exists so these designs can mint earlier** than Genesis |
+| **Foundations** | `series/foundations/` | `assets/images/arcori/003_foundations/` | `SER003` | 250 | 500 | Civilization / society themes (40 themes × 3 designs); mints between Pioneers and Genesis |
 
-`GEN002` marks the Pioneers series, not generation number (`generation.number` is still 1 / roman I at launch). Pioneers is the original ten seed designs; it is not a second full catalog.
+`SER000` / `SER002` / `SER003` mark series, not generation number (`generation.number` is still 1 / roman I at launch). Series id tokens use the `SER` prefix so they are not confused with generation. Pioneers is the original ten seed designs; it is not a second full catalog. Creation is excluded from the starter unlock pool (Genesis + Pioneers only).
 
 ## UI surfaces (client)
 
@@ -95,7 +99,7 @@ Launch codes: **ASH** Ashdrift Hill, **EVG** Everlight Grove, **LFR** Little Fro
 
 Fields: regionCode, name, slug, type (`region`), worldState, seasonState, allianceCode, loreDescription, identity{summary,traits[]}, location{regionCode,locationCode,latitude,longitude,radiusMeters}, arenas[{arenaId,name,imageFile}], relationships.
 
-Match arenas live on the region. Quick Start / Invite stamp a chosen `arenaId` + `arenaImageUrl` on the match snapshot. Art: `assets/images/velora/arenas/{slug}/{arenaId}.webp` (`ARN-{regionCode}-{place}001-0001`), served at `/catalog-media/velora/arenas/{slug}/{arenaId}.webp`. Host layout sits beside disc art (`assets/images/arcori`); Docker binds Velora to `/data/catalog-velora`, not nested inside the `:ro` Arcori volume.
+Match arenas live on the region. Quick Start / Invite stamp a chosen `arenaId` + `arenaImageUrl` and optional `gathererArcoriId` on the match snapshot. Art: `assets/images/velora/arenas/{slug}/{arenaId}.webp` (`ARN-{regionCode}-{place}001-0001`), served at `/catalog-media/velora/arenas/{slug}/{arenaId}.webp`. Host layout sits beside disc art (`assets/images/arcori`); Docker binds Velora to `/data/catalog-velora`, not nested inside the `:ro` Arcori volume.
 
 `location` slots match design `location` (coords unset at launch). `allianceCode` is `VEILED_ACCORD`, `LIVING_PACT`, or null (Little Frost is independent).
 

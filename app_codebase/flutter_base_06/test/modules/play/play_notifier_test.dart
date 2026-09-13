@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:arcori/modules/match/input/slam_resolver.dart'
+    show practiceHumanArcoriId;
 import 'package:arcori/modules/match/state/match_notifier.dart';
 import 'package:arcori/modules/play/play_models.dart';
 import 'package:arcori/modules/play/play_notifier.dart';
@@ -44,7 +46,7 @@ void main() {
       final pipeline = flow.selectType(
         MatchType.practice,
         practiceLoadout: const PracticeLoadout(
-          arcoriId: 'ANM-TIG-GEN001-0001',
+          arcoriId: practiceHumanArcoriId,
           slammerId: stubSlammerId,
         ),
       );

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LIF-RGT-GEN001-0001",
+      "internalId": "LIF-RGT-SER001-0001",
       "themeCode": "LIF",
       "designCode": "RGT",
       "designFamily": "ROCK_GUITARIST",
@@ -41,7 +41,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a rock guitarist in comic style with a gloss finish and glow effect. Use a background that is visually related to the rock guitarist. No borders, no frames. The rock guitarist should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-RGT-GEN001-0001.webp",
+      "artworkPrompt": "Give me an image with a rock guitarist in comic style with a gloss finish and glow effect. Use a background that is visually related to the rock guitarist. No borders, no frames. The rock guitarist should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-RGT-SER001-0001.webp",
       "loreDescription": "A collectible Rock Guitarist Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -49,7 +49,7 @@
       }
     },
     {
-      "internalId": "LIF-DDJ-GEN001-0002",
+      "internalId": "LIF-DDJ-SER001-0002",
       "themeCode": "LIF",
       "designCode": "DDJ",
       "designFamily": "DJ_PULSE",
@@ -88,7 +88,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a dj pulse in neon style with a chrome finish and pulse effect. Use a background that is visually related to the dj pulse. No borders, no frames. The dj pulse should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-DDJ-GEN001-0002.webp",
+      "artworkPrompt": "Give me an image with a dj pulse in neon style with a chrome finish and pulse effect. Use a background that is visually related to the dj pulse. No borders, no frames. The dj pulse should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-DDJ-SER001-0002.webp",
       "loreDescription": "A collectible DJ Pulse Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "LIF-VSO-GEN001-0003",
+      "internalId": "LIF-VSO-SER001-0003",
       "themeCode": "LIF",
       "designCode": "VSO",
       "designFamily": "VIOLIN_SOLOIST",
@@ -135,7 +135,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a violin soloist in watercolor style with a foil finish and sparkle effect. Use a background that is visually related to the violin soloist. No borders, no frames. The violin soloist should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-VSO-GEN001-0003.webp",
+      "artworkPrompt": "Give me an image with a violin soloist in watercolor style with a foil finish and sparkle effect. Use a background that is visually related to the violin soloist. No borders, no frames. The violin soloist should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-VSO-SER001-0003.webp",
       "loreDescription": "A collectible Violin Soloist Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -143,7 +143,7 @@
       }
     },
     {
-      "internalId": "LIF-BRK-GEN001-0004",
+      "internalId": "LIF-BRK-SER001-0004",
       "themeCode": "LIF",
       "designCode": "BRK",
       "designFamily": "STREET_BREAKER",
@@ -178,7 +178,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a street breaker in graffiti style with a gloss finish and motion effect. Use a background that is visually related to the street breaker. No borders, no frames. The street breaker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-BRK-GEN001-0004.webp",
+      "artworkPrompt": "Give me an image with a street breaker in graffiti style with a gloss finish and motion effect. Use a background that is visually related to the street breaker. No borders, no frames. The street breaker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-BRK-SER001-0004.webp",
       "loreDescription": "A collectible Street Breaker Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -186,7 +186,7 @@
       }
     },
     {
-      "internalId": "LIF-BAL-GEN001-0005",
+      "internalId": "LIF-BAL-SER001-0005",
       "themeCode": "LIF",
       "designCode": "BAL",
       "designFamily": "BALLET_STAR",
@@ -225,7 +225,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a ballet star in realistic style with a matte finish and glow effect. Use a background that is visually related to the ballet star. No borders, no frames. The ballet star should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-BAL-GEN001-0005.webp",
+      "artworkPrompt": "Give me an image with a ballet star in realistic style with a matte finish and glow effect. Use a background that is visually related to the ballet star. No borders, no frames. The ballet star should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-BAL-SER001-0005.webp",
       "loreDescription": "A collectible Ballet Star Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -233,7 +233,7 @@
       }
     },
     {
-      "internalId": "LIF-POP-GEN001-0006",
+      "internalId": "LIF-POP-SER001-0006",
       "themeCode": "LIF",
       "designCode": "POP",
       "designFamily": "POP_PERFORMER",
@@ -272,7 +272,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a pop performer in anime style with a prismatic finish and sparkle effect. Use a background that is visually related to the pop performer. No borders, no frames. The pop performer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-POP-GEN001-0006.webp",
+      "artworkPrompt": "Give me an image with a pop performer in anime style with a prismatic finish and sparkle effect. Use a background that is visually related to the pop performer. No borders, no frames. The pop performer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-POP-SER001-0006.webp",
       "loreDescription": "A collectible Pop Performer Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -280,7 +280,7 @@
       }
     },
     {
-      "internalId": "LIF-MBG-GEN001-0007",
+      "internalId": "LIF-MBG-SER001-0007",
       "themeCode": "LIF",
       "designCode": "MBG",
       "designFamily": "MEGA_BURGER",
@@ -315,7 +315,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a mega burger in cartoon style with a standard finish and no effect. Use a background that is visually related to the mega burger. No borders, no frames. The mega burger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-MBG-GEN001-0007.webp",
+      "artworkPrompt": "Give me an image with a mega burger in cartoon style with a standard finish and no effect. Use a background that is visually related to the mega burger. No borders, no frames. The mega burger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-MBG-SER001-0007.webp",
       "loreDescription": "A collectible Mega Burger Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -323,7 +323,7 @@
       }
     },
     {
-      "internalId": "LIF-SSH-GEN001-0008",
+      "internalId": "LIF-SSH-SER001-0008",
       "themeCode": "LIF",
       "designCode": "SSH",
       "designFamily": "SUSHI_MASTER",
@@ -360,7 +360,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a sushi master in minimalist style with a gloss finish and no effect. Use a background that is visually related to the sushi master. No borders, no frames. The sushi master should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-SSH-GEN001-0008.webp",
+      "artworkPrompt": "Give me an image with a sushi master in minimalist style with a gloss finish and no effect. Use a background that is visually related to the sushi master. No borders, no frames. The sushi master should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-SSH-SER001-0008.webp",
       "loreDescription": "A collectible Sushi Master Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -368,7 +368,7 @@
       }
     },
     {
-      "internalId": "LIF-PZA-GEN001-0009",
+      "internalId": "LIF-PZA-SER001-0009",
       "themeCode": "LIF",
       "designCode": "PZA",
       "designFamily": "PIZZA_CHEF",
@@ -403,7 +403,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a pizza chef in comic style with a metallic finish and fire effect. Use a background that is visually related to the pizza chef. No borders, no frames. The pizza chef should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-PZA-GEN001-0009.webp",
+      "artworkPrompt": "Give me an image with a pizza chef in comic style with a metallic finish and fire effect. Use a background that is visually related to the pizza chef. No borders, no frames. The pizza chef should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-PZA-SER001-0009.webp",
       "loreDescription": "A collectible Pizza Chef Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -411,7 +411,7 @@
       }
     },
     {
-      "internalId": "LIF-GEX-GEN001-0010",
+      "internalId": "LIF-GEX-SER001-0010",
       "themeCode": "LIF",
       "designCode": "GEX",
       "designFamily": "GLOBE_EXPLORER",
@@ -448,7 +448,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a globe explorer in watercolor style with a chrome finish and motion effect. Use a background that is visually related to the globe explorer. No borders, no frames. The globe explorer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-GEX-GEN001-0010.webp",
+      "artworkPrompt": "Give me an image with a globe explorer in watercolor style with a chrome finish and motion effect. Use a background that is visually related to the globe explorer. No borders, no frames. The globe explorer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-GEX-SER001-0010.webp",
       "loreDescription": "A collectible Globe Explorer Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -456,7 +456,7 @@
       }
     },
     {
-      "internalId": "LIF-TRB-GEN001-0011",
+      "internalId": "LIF-TRB-SER001-0011",
       "themeCode": "LIF",
       "designCode": "TRB",
       "designFamily": "TRAIL_BACKPACKER",
@@ -493,7 +493,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a trail backpacker in realistic style with a matte finish and no effect. Use a background that is visually related to the trail backpacker. No borders, no frames. The trail backpacker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-TRB-GEN001-0011.webp",
+      "artworkPrompt": "Give me an image with a trail backpacker in realistic style with a matte finish and no effect. Use a background that is visually related to the trail backpacker. No borders, no frames. The trail backpacker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-TRB-SER001-0011.webp",
       "loreDescription": "A collectible Trail Backpacker Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -501,7 +501,7 @@
       }
     },
     {
-      "internalId": "LIF-AFL-GEN001-0012",
+      "internalId": "LIF-AFL-SER001-0012",
       "themeCode": "LIF",
       "designCode": "AFL",
       "designFamily": "AROUND_THE_WORLD",
@@ -538,7 +538,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a around the world in minimalist style with a foil finish and glow effect. Use a background that is visually related to the around the world. No borders, no frames. The around the world should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-AFL-GEN001-0012.webp",
+      "artworkPrompt": "Give me an image with a around the world in minimalist style with a foil finish and glow effect. Use a background that is visually related to the around the world. No borders, no frames. The around the world should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-AFL-SER001-0012.webp",
       "loreDescription": "A collectible Around the World Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -546,7 +546,7 @@
       }
     },
     {
-      "internalId": "LIF-USR-GEN001-0013",
+      "internalId": "LIF-USR-SER001-0013",
       "themeCode": "LIF",
       "designCode": "USR",
       "designFamily": "URBAN_STREETWEAR",
@@ -581,7 +581,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a urban streetwear in graffiti style with a gloss finish and pulse effect. Use a background that is visually related to the urban streetwear. No borders, no frames. The urban streetwear should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-USR-GEN001-0013.webp",
+      "artworkPrompt": "Give me an image with a urban streetwear in graffiti style with a gloss finish and pulse effect. Use a background that is visually related to the urban streetwear. No borders, no frames. The urban streetwear should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-USR-SER001-0013.webp",
       "loreDescription": "A collectible Urban Streetwear Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -589,7 +589,7 @@
       }
     },
     {
-      "internalId": "LIF-RUN-GEN001-0014",
+      "internalId": "LIF-RUN-SER001-0014",
       "themeCode": "LIF",
       "designCode": "RUN",
       "designFamily": "RUNWAY_ICON",
@@ -628,7 +628,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a runway icon in realistic style with a prismatic finish and sparkle effect. Use a background that is visually related to the runway icon. No borders, no frames. The runway icon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-RUN-GEN001-0014.webp",
+      "artworkPrompt": "Give me an image with a runway icon in realistic style with a prismatic finish and sparkle effect. Use a background that is visually related to the runway icon. No borders, no frames. The runway icon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-RUN-SER001-0014.webp",
       "loreDescription": "A collectible Runway Icon Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -636,7 +636,7 @@
       }
     },
     {
-      "internalId": "LIF-VIN-GEN001-0015",
+      "internalId": "LIF-VIN-SER001-0015",
       "themeCode": "LIF",
       "designCode": "VIN",
       "designFamily": "VINTAGE_TAILOR",
@@ -675,7 +675,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a vintage tailor in watercolor style with a matte finish and no effect. Use a background that is visually related to the vintage tailor. No borders, no frames. The vintage tailor should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-VIN-GEN001-0015.webp",
+      "artworkPrompt": "Give me an image with a vintage tailor in watercolor style with a matte finish and no effect. Use a background that is visually related to the vintage tailor. No borders, no frames. The vintage tailor should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-VIN-SER001-0015.webp",
       "loreDescription": "A collectible Vintage Tailor Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -683,7 +683,7 @@
       }
     },
     {
-      "internalId": "LIF-NPH-GEN001-0016",
+      "internalId": "LIF-NPH-SER001-0016",
       "themeCode": "LIF",
       "designCode": "NPH",
       "designFamily": "NIGHT_PHOTOGRAPHER",
@@ -722,7 +722,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a night photographer in realistic style with a chrome finish and glow effect. Use a background that is visually related to the night photographer. No borders, no frames. The night photographer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-NPH-GEN001-0016.webp",
+      "artworkPrompt": "Give me an image with a night photographer in realistic style with a chrome finish and glow effect. Use a background that is visually related to the night photographer. No borders, no frames. The night photographer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-NPH-SER001-0016.webp",
       "loreDescription": "A collectible Night Photographer Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -730,7 +730,7 @@
       }
     },
     {
-      "internalId": "LIF-WLF-GEN001-0017",
+      "internalId": "LIF-WLF-SER001-0017",
       "themeCode": "LIF",
       "designCode": "WLF",
       "designFamily": "WILDLIFE_PHOTOGRAPHER",
@@ -767,7 +767,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a wildlife photographer in comic style with a standard finish and no effect. Use a background that is visually related to the wildlife photographer. No borders, no frames. The wildlife photographer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-WLF-GEN001-0017.webp",
+      "artworkPrompt": "Give me an image with a wildlife photographer in comic style with a standard finish and no effect. Use a background that is visually related to the wildlife photographer. No borders, no frames. The wildlife photographer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-WLF-SER001-0017.webp",
       "loreDescription": "A collectible Wildlife Photographer Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -775,7 +775,7 @@
       }
     },
     {
-      "internalId": "LIF-DRN-GEN001-0018",
+      "internalId": "LIF-DRN-SER001-0018",
       "themeCode": "LIF",
       "designCode": "DRN",
       "designFamily": "DRONE_PHOTOGRAPHER",
@@ -814,7 +814,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a drone photographer in minimalist style with a metallic finish and motion effect. Use a background that is visually related to the drone photographer. No borders, no frames. The drone photographer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-DRN-GEN001-0018.webp",
+      "artworkPrompt": "Give me an image with a drone photographer in minimalist style with a metallic finish and motion effect. Use a background that is visually related to the drone photographer. No borders, no frames. The drone photographer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-DRN-SER001-0018.webp",
       "loreDescription": "A collectible Drone Photographer Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -822,7 +822,7 @@
       }
     },
     {
-      "internalId": "LIF-BAR-GEN001-0019",
+      "internalId": "LIF-BAR-SER001-0019",
       "themeCode": "LIF",
       "designCode": "BAR",
       "designFamily": "MASTER_BARISTA",
@@ -857,7 +857,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a master barista in cartoon style with a gloss finish and sparkle effect. Use a background that is visually related to the master barista. No borders, no frames. The master barista should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-BAR-GEN001-0019.webp",
+      "artworkPrompt": "Give me an image with a master barista in cartoon style with a gloss finish and sparkle effect. Use a background that is visually related to the master barista. No borders, no frames. The master barista should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-BAR-SER001-0019.webp",
       "loreDescription": "A collectible Master Barista Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -865,7 +865,7 @@
       }
     },
     {
-      "internalId": "LIF-VINY-GEN001-0020",
+      "internalId": "LIF-VINY-SER001-0020",
       "themeCode": "LIF",
       "designCode": "VINY",
       "designFamily": "VINYL_COLLECTOR",
@@ -904,7 +904,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a vinyl collector in retro style with a foil finish and glow effect. Use a background that is visually related to the vinyl collector. No borders, no frames. The vinyl collector should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-VINY-GEN001-0020.webp",
+      "artworkPrompt": "Give me an image with a vinyl collector in retro style with a foil finish and glow effect. Use a background that is visually related to the vinyl collector. No borders, no frames. The vinyl collector should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LIF-VINY-SER001-0020.webp",
       "loreDescription": "A collectible Vinyl Collector Arcori generation I from the Lifestyle Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,

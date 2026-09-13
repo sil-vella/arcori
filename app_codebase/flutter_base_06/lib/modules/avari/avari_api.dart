@@ -58,13 +58,16 @@ class AvariApiClient {
     }
   }
 
-  /// POST /authuser/avari/match/finalize — stub durable rewards path.
+  /// POST /authuser/avari/match/finalize — fee + flip fragments + mastery.
   Future<AvariApiOutcome<MatchFinalizeResult>> finalizeMatch({
     required String accessToken,
     required String matchId,
     required String matchType,
     required bool practice,
     required List<String> designIds,
+    int flips = 0,
+    String? playedDesignId,
+    Map<String, int>? flipsByDesign,
     Map<String, dynamic>? result,
   }) async {
     final uri = Uri.parse('$_baseUrl/authuser/avari/match/finalize');
@@ -73,6 +76,11 @@ class AvariApiClient {
       'matchType': matchType,
       'practice': practice,
       'designIds': designIds,
+      'flips': flips,
+      if (playedDesignId != null && playedDesignId.trim().isNotEmpty)
+        'playedDesignId': playedDesignId.trim(),
+      if (flipsByDesign != null && flipsByDesign.isNotEmpty)
+        'flipsByDesign': flipsByDesign,
       if (result != null) 'result': result,
     };
     try {

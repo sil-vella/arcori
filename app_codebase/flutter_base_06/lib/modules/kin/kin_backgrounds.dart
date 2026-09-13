@@ -20,7 +20,7 @@ import '../match/widgets/arcori_palette.dart';
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 const String kKinBackgroundMediaPrefix =
-    '/catalog-media/kin/gen001/00backgrounds';
+    '/catalog-media/kin/ser001/00backgrounds';
 
 const String kKinDefaultBackgroundColorHex = '#2A2A2E';
 

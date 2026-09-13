@@ -35,7 +35,7 @@ Splash
 
 - The **Kin Arcori** is effectively the player’s avatar, but in-world it is their personal **Genesis Arcori**.
 - Customize is a **layered Lottie rig** (transparent PNG body parts aligned to the flattened original), not a single baked image. Contract: [kin-creation.md](kin-creation.md) § Visual / Lottie.
-- Starter grant: **play/mastery access** to 10 random **circulating** designs + **permanent starter slammer** — **not** Trove mints. Mastery ≠ ownership.
+- Starter grant: **play/mastery access** to **10 random Genesis/Pioneers** designs (each starts at **10** mastery) + **permanent starter slammer** — **not** Trove mints. Foundations is out of the starter pool. Granted on Avari profile create (guest/regular). Mastery ≠ ownership; designs leave the pool at mastery < 1.
 - Guided practice is AI-only (no economy / progression rewards per GDD).
 
 ## Implementation Steps
@@ -44,7 +44,7 @@ Splash
 - [ ] Account / sign-in gate for first install
 - [ ] Kin subtheme selection (catalog-backed) — see [kin-creation.md](kin-creation.md)
 - [ ] Kin Arcori customize + name → Genesis created — see [kin-creation.md](kin-creation.md)
-- [ ] Starter mastery-access grant (10 designs + starter slammer)
+- [x] Starter mastery-access grant (10 random circulating + 10 mastery each + starter slammer on profile create)
 - [ ] Guided practice match + match summary handoff
 - [ ] Velora, Trove, Rank/XP, Museum, Daily Missions intros
 - [ ] Land on Home with sink Trove • PLAY • Market

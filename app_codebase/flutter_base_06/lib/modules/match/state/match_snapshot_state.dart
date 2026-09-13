@@ -103,6 +103,7 @@ class MatchSnapshotState {
     this.roundsTotal = 2,
     this.arenaId,
     this.arenaImageUrl,
+    this.gathererArcoriId,
     this.callerUserId,
     this.matchType = const {},
     this.seats = const [],
@@ -122,6 +123,9 @@ class MatchSnapshotState {
   final int roundsTotal;
   final String? arenaId;
   final String? arenaImageUrl;
+
+  /// Non-player region Gatherer (Quick Start / Invite); null if none.
+  final String? gathererArcoriId;
   final String? callerUserId;
   final Map<String, dynamic> matchType;
   final List<MatchSeatView> seats;
@@ -152,6 +156,7 @@ class MatchSnapshotState {
     int? roundsTotal,
     String? arenaId,
     String? arenaImageUrl,
+    String? gathererArcoriId,
     String? callerUserId,
     Map<String, dynamic>? matchType,
     List<MatchSeatView>? seats,
@@ -176,6 +181,7 @@ class MatchSnapshotState {
       roundsTotal: roundsTotal ?? this.roundsTotal,
       arenaId: arenaId ?? this.arenaId,
       arenaImageUrl: arenaImageUrl ?? this.arenaImageUrl,
+      gathererArcoriId: gathererArcoriId ?? this.gathererArcoriId,
       callerUserId: callerUserId ?? this.callerUserId,
       matchType: matchType ?? this.matchType,
       seats: seats ?? this.seats,
@@ -216,6 +222,10 @@ class MatchSnapshotState {
       arenaId: payload['arenaId']?.toString(),
       arenaImageUrl: () {
         final raw = payload['arenaImageUrl']?.toString().trim() ?? '';
+        return raw.isEmpty ? null : raw;
+      }(),
+      gathererArcoriId: () {
+        final raw = payload['gathererArcoriId']?.toString().trim() ?? '';
         return raw.isEmpty ? null : raw;
       }(),
       callerUserId: payload['callerUserId']?.toString(),
