@@ -140,6 +140,48 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "DIP-AWB-SER003-0004",
+      "themeCode": "DIP",
+      "designCode": "AWB",
+      "designFamily": "ACCORD_AT_THE_WINTER_BRIDGE",
+      "design": "Accord at the Winter Bridge",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Diplomacy",
+      "subtheme": "Diplomacy",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 6.7,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Accord at the Winter Bridge in watercolor style with a standard finish and no effect. Use a background that is visually related to Accord at the Winter Bridge. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-AWB-SER003-0004.webp",
+      "loreDescription": "A collectible Accord at the Winter Bridge Arcori generation I from the Diplomacy Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

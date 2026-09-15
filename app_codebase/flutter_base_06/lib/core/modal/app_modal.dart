@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import '../theme/app_modal_theme.dart';
 import 'app_centered_modal.dart';
 import 'app_fullscreen_modal.dart';
+import 'modal_navigator.dart';
 
 export 'app_centered_modal.dart';
 export 'app_fullscreen_modal.dart';
+export 'modal_navigator.dart';
 
 /// Imperative modal API for overlays on top of the app shell.
 ///
@@ -160,13 +162,17 @@ abstract final class AppModal {
     );
   }
 
-  /// Dismisses the topmost modal route opened via [AppModal].
+  /// Dismisses the modal associated with [context].
+  ///
+  /// - When [context] is inside a [PopupRoute] (AppModal dialogs), removes
+  ///   **that** route even if a newer overlay buried it — so auto-close /
+  ///   programmatic dismiss cannot leave a MISS/lobby under achievements.
+  /// - Otherwise pops the top root-navigator route (legacy call sites that
+  ///   dismiss from the underlying screen).
   ///
   /// No-ops when the root navigator cannot pop — avoids emptying go_router
   /// (black screen) if dismiss is invoked after the modal is already gone.
   static void dismiss<T>(BuildContext context, [T? result]) {
-    final nav = Navigator.of(context, rootNavigator: true);
-    if (!nav.canPop()) return;
-    nav.pop<T>(result);
+    dismissModalRoute(context, result);
   }
 }

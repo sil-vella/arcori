@@ -514,6 +514,20 @@ Python registers the subtype + reply handler in `friend_match_invite_notificatio
 
 **Cleanup:** Reply success returns `delete_notification: true` so `handle_response` **soft-deletes** the row (not only mark-read). Lobby timeout / host cancel calls `POST /service/friend_match_invites/cancel`. Inbox list prunes dead `friend_match_invite` instants so they cannot reappear on app start.
 
+### Real example — Achievement unlock / daily complete (`achievements` / `daily_goals`)
+
+Match finalize (after commit) calls `create_for_user` once per newly unlocked achievement and once per newly completed daily/task:
+
+| Field | Unlock | Daily complete |
+|---|---|---|
+| `source` | `achievements` | `daily_goals` |
+| `type` | `instant` | `instant` |
+| `category` / `subtype` | `progress` / `unlock_v1` | `progress` / `complete_v1` |
+| `msg_id` | `achievement_unlock:{userId}:{achievementId}:{matchId}` | `daily_complete:{userId}:{goalId}:{dayKey}` |
+| `data` | `{ achievement, response.navigate View }` | `{ goal, response.navigate View }` |
+
+Python: `achievements_notifications.py`, `daily_goals_notifications.py` (registered from `register_notification_reply_handlers`). Flutter: `register_progress_notifications.dart`; NotificationHost **defers** these subtypes until Home or Play with match flow `idle` / `selectingType` so Rematch / lobby / in-match are never interrupted. Celebrate UI reuses achievement / daily modal bodies inside the generic notification sequence.
+
 ---
 
 ## Module integration — service tier (Dart / cross-process)

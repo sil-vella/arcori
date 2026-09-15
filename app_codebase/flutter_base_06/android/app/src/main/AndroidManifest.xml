@@ -52,6 +52,15 @@
                     android:host="your-domain.example"
                     android:pathPrefix="/arcori-verify-email" />
             </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="your-domain.example"
+                    android:pathPrefix="/legacy-preserve-complete" />
+            </intent-filter>
             <!-- Custom scheme (Safari same-site cannot use Universal Links) -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -60,6 +69,14 @@
                 <data
                     android:scheme="arcori"
                     android:host="arcori-verify-email" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="arcori"
+                    android:host="legacy-preserve-complete" />
             </intent-filter>
         </activity>
         <!-- Flutter built-in deep linking (go_router) -->

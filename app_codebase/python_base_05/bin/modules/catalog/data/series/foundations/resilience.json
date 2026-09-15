@@ -130,6 +130,48 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "RES-MOA-SER003-0004",
+      "themeCode": "RES",
+      "designCode": "MOA",
+      "designFamily": "MORNING_AFTER_THE_BREAKING",
+      "design": "Morning After the Breaking",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Resilience",
+      "subtheme": "Resilience",
+      "style": "Neon",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 6.2,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Morning After the Breaking in neon style with a standard finish and no effect. Use a background that is visually related to Morning After the Breaking. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named RES-MOA-SER003-0004.webp",
+      "loreDescription": "A collectible Morning After the Breaking Arcori generation I from the Resilience Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

@@ -138,6 +138,52 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "ART-CPL-SER003-0004",
+      "themeCode": "ART",
+      "designCode": "CPL",
+      "designFamily": "THE_CITY_PAINTED_BY_LIGHT",
+      "design": "The City Painted by Light",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Artistry",
+      "subtheme": "Artistry",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 6.5,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The City Painted by Light in retro style with a standard finish and no effect. Use a background that is visually related to The City Painted by Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-CPL-SER003-0004.webp",
+      "loreDescription": "A collectible The City Painted by Light Arcori generation I from the Artistry Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

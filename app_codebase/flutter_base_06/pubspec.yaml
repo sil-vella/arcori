@@ -47,6 +47,7 @@ dependencies:
   image: ^4.5.4
   path_provider: ^2.1.5
   sensors_plus: ^6.1.1
+  url_launcher: ^6.3.1
 
   # Firebase GA4 — pinned for Xcode 15.2 / Firebase iOS SDK 10.x compatibility.
   firebase_core: 3.3.0

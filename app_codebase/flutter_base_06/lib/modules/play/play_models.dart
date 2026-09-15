@@ -52,6 +52,11 @@ class MatchFlowState {
     this.phase = MatchFlowPhase.idle,
     this.selectedType,
     this.practiceLoadout,
+    this.selectedEventId,
+    this.selectedEventSubtype,
+    this.feeIntentId,
+    this.feeFragmentsPaid,
+    this.feeMatchType,
     this.errorMessage,
     this.postMatchSoftError,
     this.postMatchFinalize,
@@ -60,6 +65,17 @@ class MatchFlowState {
   final MatchFlowPhase phase;
   final MatchType? selectedType;
   final PracticeLoadout? practiceLoadout;
+  final String? selectedEventId;
+  final String? selectedEventSubtype;
+
+  /// Client UUID for pre-match fee pay/refund idempotency.
+  final String? feeIntentId;
+
+  /// Fragments charged for [feeIntentId] (refund amount on cancel).
+  final int? feeFragmentsPaid;
+
+  /// Match type string sent with fee pay/refund (e.g. specialEvent).
+  final String? feeMatchType;
 
   /// Set when a play attempt aborts; UI shows an OK modal then [clearError].
   final String? errorMessage;
@@ -72,15 +88,27 @@ class MatchFlowState {
 
   bool get isIdle => phase == MatchFlowPhase.idle;
 
+  bool get hasPaidFee =>
+      (feeIntentId ?? '').isNotEmpty &&
+      (feeFragmentsPaid ?? 0) > 0 &&
+      (feeMatchType ?? '').isNotEmpty;
+
   MatchFlowState copyWith({
     MatchFlowPhase? phase,
     MatchType? selectedType,
     PracticeLoadout? practiceLoadout,
+    String? selectedEventId,
+    String? selectedEventSubtype,
+    String? feeIntentId,
+    int? feeFragmentsPaid,
+    String? feeMatchType,
     String? errorMessage,
     String? postMatchSoftError,
     MatchFinalizeResult? postMatchFinalize,
     bool clearSelectedType = false,
     bool clearPracticeLoadout = false,
+    bool clearSelectedEvent = false,
+    bool clearFee = false,
     bool clearError = false,
     bool clearPostMatchSoftError = false,
     bool clearPostMatchFinalize = false,
@@ -93,6 +121,16 @@ class MatchFlowState {
       practiceLoadout: clearPracticeLoadout
           ? null
           : (practiceLoadout ?? this.practiceLoadout),
+      selectedEventId: clearSelectedEvent
+          ? null
+          : (selectedEventId ?? this.selectedEventId),
+      selectedEventSubtype: clearSelectedEvent
+          ? null
+          : (selectedEventSubtype ?? this.selectedEventSubtype),
+      feeIntentId: clearFee ? null : (feeIntentId ?? this.feeIntentId),
+      feeFragmentsPaid:
+          clearFee ? null : (feeFragmentsPaid ?? this.feeFragmentsPaid),
+      feeMatchType: clearFee ? null : (feeMatchType ?? this.feeMatchType),
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       postMatchSoftError: clearPostMatchSoftError
           ? null

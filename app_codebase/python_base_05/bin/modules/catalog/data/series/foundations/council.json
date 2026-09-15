@@ -138,6 +138,52 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "COU-VWA-SER003-0004",
+      "themeCode": "COU",
+      "designCode": "VWA",
+      "designFamily": "VOICES_WITHIN_THE_ASH",
+      "design": "Voices Within the Ash",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Council",
+      "subtheme": "Council",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 8.4,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Voices Within the Ash in minimalist style with a standard finish and no effect. Use a background that is visually related to Voices Within the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-VWA-SER003-0004.webp",
+      "loreDescription": "A collectible Voices Within the Ash Arcori generation I from the Council Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

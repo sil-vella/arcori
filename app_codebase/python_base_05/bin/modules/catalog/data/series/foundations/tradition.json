@@ -142,6 +142,48 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "TRN-FOF-SER003-0004",
+      "themeCode": "TRN",
+      "designCode": "FOF",
+      "designFamily": "FOLLOWING_THE_OLD_FOOTPRINTS",
+      "design": "Following the Old Footprints",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Tradition",
+      "subtheme": "Tradition",
+      "style": "Chibi",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 6.6,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Following the Old Footprints in chibi style with a standard finish and no effect. Use a background that is visually related to Following the Old Footprints. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRN-FOF-SER003-0004.webp",
+      "loreDescription": "A collectible Following the Old Footprints Arcori generation I from the Tradition Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

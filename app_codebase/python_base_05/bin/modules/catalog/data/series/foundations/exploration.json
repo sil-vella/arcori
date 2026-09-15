@@ -138,6 +138,50 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "EXP-BGC-SER003-0004",
+      "themeCode": "EXP",
+      "designCode": "BGC",
+      "designFamily": "BEYOND_THE_GOLDEN_CANOPY",
+      "design": "Beyond the Golden Canopy",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Exploration",
+      "subtheme": "Exploration",
+      "style": "Comic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 6.8,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Beyond the Golden Canopy in comic style with a standard finish and no effect. Use a background that is visually related to Beyond the Golden Canopy. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named EXP-BGC-SER003-0004.webp",
+      "loreDescription": "A collectible Beyond the Golden Canopy Arcori generation I from the Exploration Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

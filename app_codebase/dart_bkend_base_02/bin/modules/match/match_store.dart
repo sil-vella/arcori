@@ -198,12 +198,16 @@ class MatchStore {
         (seats.length <= 1
             ? 0
             : (random ?? _random).nextInt(seats.length));
+    final roundsRaw = matchType['roundsTotal'] ?? matchType['rounds'];
+    final roundsTotal = roundsRaw is int
+        ? roundsRaw.clamp(1, 10)
+        : (int.tryParse(roundsRaw?.toString() ?? '') ?? 2).clamp(1, 10);
     final snapshot = MatchSnapshot(
       matchId: matchId,
       version: 1,
       phase: 'playing',
       round: 1,
-      roundsTotal: 2,
+      roundsTotal: roundsTotal,
       arenaId: arenaId,
       arenaImageUrl: arenaImageUrl,
       gathererArcoriId: gathererArcoriId,

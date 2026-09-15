@@ -98,7 +98,7 @@ Convenience wrappers around the standard shell widgets.
 
 ### `AppModal.dismiss<T>(context, [result])`
 
-Pops the root modal route. Prefer close/actions calling `Navigator.of(context).pop()` inside the dialog context, or `AppModal.dismiss` from the underlying screen.
+Removes the **popup route that owns [context]** when called from inside an AppModal (even if a newer modal buried it). Otherwise pops the top root-navigator route. Prefer close/actions calling `AppModal.dismiss` from the dialog context — not a blind `Navigator.pop` that can leave buried slam/lobby overlays under achievements.
 
 ## Shell widgets
 
@@ -146,7 +146,8 @@ Access: `context.appModalTheme` (from `AppThemeContext`).
 |----|-------|
 | `AppModal.showCenteredShell` | `showDialog(context, builder: …)` |
 | `context.appTypography` / `context.appButtons` in modal body | Inline `TextStyle` / `ButtonStyle.styleFrom` |
-| `AppModal.dismiss` or `Navigator.pop` in actions | `Nav.pop` (go_router stack) |
+| `AppModal.dismiss` or `dismissModalRoute` in actions | Blind `Navigator.pop` that can leave buried overlays |
+
 | Custom `builder` only when shells are too rigid | Duplicate scrim/barrier per module |
 
 ## File reference

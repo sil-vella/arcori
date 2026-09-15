@@ -66,12 +66,27 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   void dispose() {
     _graceTicker?.cancel();
     _arenaPovScale.dispose();
+    _pendingSlamResultEvent = null;
     super.dispose();
+  }
+
+  bool _matchStillLive() {
+    final snap = ref.read(matchSnapshotProvider);
+    if (snap.isEnded) return false;
+    final phase = ref.read(matchFlowProvider).phase;
+    return phase == MatchFlowPhase.inMatch;
   }
 
   void _flushPendingSlamResultModal() {
     final event = _pendingSlamResultEvent;
     if (event == null || !mounted) return;
+    if (!_matchStillLive()) {
+      _pendingSlamResultEvent = null;
+      if (LOGGING_SWITCH) {
+        customlog('slamResultModal: drop pending (match not live)');
+      }
+      return;
+    }
     _pendingSlamResultEvent = null;
     final delta = _pendingSlamResultDelta;
     showSlamResultModal(
@@ -91,6 +106,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
 
   /// Close this shell even when another modal is on top (post-match / lobby).
   void _forceCloseShell({required String reason}) {
+    _pendingSlamResultEvent = null;
     if (!mounted) return;
     final route = ModalRoute.of(context);
     if (route == null) return;
@@ -100,11 +116,11 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
       );
     }
     if (route.isCurrent) {
-      AppModal.dismiss(context);
+      dismissModalRoute(context);
       return;
     }
     // Orphan under post-match: remove without popping the top route.
-    Navigator.of(context, rootNavigator: true).removeRoute(route);
+    dismissModalRoute(context);
   }
 
   /// Close the match fullscreen once it is the top route (after slam overlays).
@@ -113,7 +129,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
       if (!mounted) return;
       final route = ModalRoute.of(context);
       if (route != null && route.isCurrent) {
-        AppModal.dismiss(context);
+        dismissModalRoute(context);
         return;
       }
       if (attempts >= 25) {
@@ -122,7 +138,8 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
       }
       Future<void>.delayed(const Duration(milliseconds: 200), () {
         if (!mounted) return;
-        // Flow already left the match — force-remove even if not current.
+        // Flow already left the match — remove this shell if it is still alive.
+        // Do not call forceClose after dispose races; inactive routes no-op now.
         final phase = ref.read(matchFlowProvider).phase;
         if (phase != MatchFlowPhase.inMatch) {
           _forceCloseShell(reason: 'phase=${phase.name}');
@@ -291,6 +308,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     final urls = collectArcoriArtUrls(
       extra: [
         ...snap.pieces.map((p) => p.imageUrl),
+        ...snap.pieces.map((p) => p.lottieUrl),
         snap.arenaImageUrl,
       ],
     );
@@ -322,6 +340,8 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
 
     ref.listen(matchSnapshotProvider, (prev, next) {
       if (next.isEnded && prev?.isEnded != true && context.mounted) {
+        // Never show in-match MISS/FLIP after the match has ended.
+        _pendingSlamResultEvent = null;
         _scheduleMatchShellDismiss();
       }
 
@@ -393,14 +413,11 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     });
 
     // Leave inMatch → remove this shell even when buried under post-match.
-    // Otherwise Done/clear cancels isEnded-dismiss and the next match stacks
-    // another surface on a stale rematch shell.
+    // Only on the inMatch → * transition — finalize/copyWith while postMatch
+    // must not re-run forceClose (that used to nav.pop the post-match modal).
     ref.listen(matchFlowProvider, (prev, next) {
+      if (prev?.phase != MatchFlowPhase.inMatch) return;
       if (next.phase == MatchFlowPhase.inMatch) return;
-      if (prev?.phase != MatchFlowPhase.inMatch &&
-          prev?.phase != MatchFlowPhase.postMatch) {
-        return;
-      }
       _forceCloseShell(reason: 'flow=${next.phase.name}');
     });
 

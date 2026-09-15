@@ -27,6 +27,8 @@ import 'core/ws/app_lifecycle_observer.dart';
 import 'core/ws/app_ws_coordinator.dart';
 import 'firebase_options.dart';
 import 'modules/auth/email_verify_deep_link.dart';
+import 'modules/avari/avari_notifier.dart';
+import 'modules/legacy/legacy_preserve_flow.dart';
 import 'modules/match/state/slam_motion_capability_provider.dart';
 import 'modules/notifications/notification_host.dart';
 import 'modules/module_registry.dart';
@@ -145,6 +147,11 @@ class _AppBootstrapState extends ConsumerState<AppBootstrap> {
       EmailVerifyDeepLinkHandler.bind(
         apiFactory: () => ref.read(authApiClientProvider),
         onVerified: () => ref.read(userProfileProvider.notifier).refresh(),
+      );
+      bindLegacyPreserveDeepLink(
+        accessToken: () => ref.read(authProvider).accessToken,
+        onMintComplete: () =>
+            ref.read(avariProfileProvider.notifier).load(force: true),
       );
       await ref.read(authProvider.notifier).bootstrap();
       if (!mounted) return;

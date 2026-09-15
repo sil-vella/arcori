@@ -140,6 +140,50 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "WAY-LRX-SER003-0004",
+      "themeCode": "WAY",
+      "designCode": "LRX",
+      "designFamily": "THE_LANTERN_ROAD",
+      "design": "The Lantern Road",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Wayfinding",
+      "subtheme": "Wayfinding",
+      "style": "Neon",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 7.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Lantern Road in neon style with a standard finish and no effect. Use a background that is visually related to The Lantern Road. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-LRX-SER003-0004.webp",
+      "loreDescription": "A collectible The Lantern Road Arcori generation I from the Wayfinding Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

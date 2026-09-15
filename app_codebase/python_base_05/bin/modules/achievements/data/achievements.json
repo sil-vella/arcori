@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "achievements": [
+    {
+      "id": "first_flip",
+      "achievement_name": "First flip",
+      "description": "Land your first flip in an online match.",
+      "achievement_type": "total_flips",
+      "params": { "min": 1 },
+      "media": {
+        "animated_background": {
+          "type": "lottie",
+          "value": "/catalog-media/achievements/first_flip/animated_background.json"
+        },
+        "icon": {
+          "type": "image",
+          "value": "/catalog-media/achievements/first_flip/icon.webp"
+        },
+        "post_task": {
+          "animation": {
+            "type": "lottie",
+            "value": "/catalog-media/achievements/first_flip/post_task/animation.json"
+          }
+        }
+      },
+      "post_achieve_action": {
+        "type": "move_to_screen",
+        "screen": "achievements",
+        "cta_label": "View"
+      }
+    },
+    {
+      "id": "evt_stub_v1_flips_5",
+      "achievement_name": "Royal Battle — five flips",
+      "description": "Land 5 flips in the Royal Battle special event (across attempts).",
+      "achievement_type": "event_flips",
+      "params": { "event_id": "evt_stub_v1", "min": 5 },
+      "media": {
+        "animated_background": {
+          "type": "lottie",
+          "value": "/catalog-media/achievements/evt_stub_v1_flips_5/animated_background.json"
+        },
+        "icon": {
+          "type": "image",
+          "value": "/catalog-media/achievements/evt_stub_v1_flips_5/icon.webp"
+        }
+      },
+      "post_achieve_action": {
+        "type": "move_to_screen",
+        "screen": "achievements",
+        "cta_label": "View"
+      }
+    },
+    {
+      "id": "evt_stub_v1_clear_roster",
+      "achievement_name": "Royal Battle — full roster",
+      "description": "Flip every Royal Battle Arcori (same match or across attempts).",
+      "achievement_type": "event_arcori_cleared",
+      "params": { "event_id": "evt_stub_v1" },
+      "media": {
+        "animated_background": {
+          "type": "lottie",
+          "value": "/catalog-media/achievements/evt_stub_v1_clear_roster/animated_background.json"
+        },
+        "icon": {
+          "type": "image",
+          "value": "/catalog-media/achievements/evt_stub_v1_clear_roster/icon.webp"
+        }
+      },
+      "post_achieve_action": {
+        "type": "move_to_screen",
+        "screen": "achievements",
+        "cta_label": "View"
+      }
+    },
+    {
+      "id": "ten_flips",
+      "achievement_name": "Ten flips",
+      "description": "Land 10 flips across online matches.",
+      "achievement_type": "total_flips",
+      "params": { "min": 10 },
+      "media": {
+        "animated_background": {
+          "type": "lottie",
+          "value": "/catalog-media/achievements/ten_flips/animated_background.json"
+        },
+        "icon": {
+          "type": "image",
+          "value": "/catalog-media/achievements/ten_flips/icon.webp"
+        },
+        "post_task": {
+          "animation": {
+            "type": "lottie",
+            "value": "/catalog-media/achievements/ten_flips/post_task/animation.json"
+          }
+        }
+      },
+      "post_achieve_action": {
+        "type": "move_to_screen",
+        "screen": "achievements",
+        "cta_label": "View"
+      }
+    },
+    {
+      "id": "first_match",
+      "achievement_name": "First steps",
+      "description": "Finish your first online match.",
+      "achievement_type": "total_matches",
+      "params": { "min": 1 },
+      "media": {
+        "icon": {
+          "type": "image",
+          "value": "/catalog-media/achievements/first_match/icon.webp"
+        }
+      },
+      "post_achieve_action": {
+        "type": "none"
+      }
+    },
+    {
+      "id": "mastery_12_any",
+      "achievement_name": "Rising mastery",
+      "description": "Reach 12 mastery on any circulating design.",
+      "achievement_type": "mastery_points",
+      "params": { "min": 12 },
+      "media": {
+        "icon": {
+          "type": "image",
+          "value": "/catalog-media/achievements/mastery_12_any/icon.webp"
+        }
+      },
+      "post_achieve_action": {
+        "type": "move_to_screen",
+        "screen": "avari",
+        "cta_label": "View Avari"
+      }
+    }
+  ]
+}

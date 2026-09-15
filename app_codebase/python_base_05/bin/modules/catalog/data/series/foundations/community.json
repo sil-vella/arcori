@@ -130,6 +130,48 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "CMY-TTH-SER003-0004",
+      "themeCode": "CMY",
+      "designCode": "TTH",
+      "designFamily": "THE_TOWN_THAT_BUILDS_TOGETHER",
+      "design": "The Town That Builds Together",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Community",
+      "subtheme": "Community",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 7.8,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Town That Builds Together in watercolor style with a standard finish and no effect. Use a background that is visually related to The Town That Builds Together. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMY-TTH-SER003-0004.webp",
+      "loreDescription": "A collectible The Town That Builds Together Arcori generation I from the Community Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

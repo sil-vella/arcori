@@ -89,6 +89,7 @@ Map<String, dynamic> tableFromSeatViews({
     if (designId.isEmpty) continue;
     final face = facesByDesignId?[designId];
     final imageUrl = face?['imageUrl']?.trim() ?? '';
+    final lottieUrl = face?['lottieUrl']?.trim() ?? '';
     final color = face?['color']?.trim() ?? '';
     pieces.add({
       'pieceId': 'p${seat.seatIndex}',
@@ -98,6 +99,7 @@ Map<String, dynamic> tableFromSeatViews({
       'faceUp': false,
       'stackIndex': stackIndex,
       if (imageUrl.isNotEmpty) 'imageUrl': imageUrl,
+      if (lottieUrl.isNotEmpty) 'lottieUrl': lottieUrl,
       if (color.isNotEmpty) 'color': color,
     });
     stackIndex++;

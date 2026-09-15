@@ -132,6 +132,52 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "CMC-MAB-SER003-0004",
+      "themeCode": "CMC",
+      "designCode": "MAB",
+      "designFamily": "THE_MARKET_ABOVE_THE_BURIED_ROAD",
+      "design": "The Market Above the Buried Road",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Commerce",
+      "subtheme": "Commerce",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 10.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Market Above the Buried Road in anime style with a standard finish and no effect. Use a background that is visually related to The Market Above the Buried Road. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-MAB-SER003-0004.webp",
+      "loreDescription": "A collectible The Market Above the Buried Road Arcori generation I from the Commerce Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

@@ -229,12 +229,17 @@ class MatchService implements MatchLifecycleContract {
     Map<String, String> selected = {};
     final needsCatalogSelect =
         requestedSeats.any((s) => s.arcoriIds.isEmpty);
+    final eventId = matchType['eventId']?.toString().trim() ?? '';
     if (needsCatalogSelect) {
       try {
         selected = await _catalog.selectArcori(
           seats: [
             for (final s in requestedSeats)
-              if (s.arcoriIds.isEmpty) {'userId': s.userId},
+              if (s.arcoriIds.isEmpty)
+                {
+                  'userId': s.userId,
+                  if (eventId.isNotEmpty) 'eventId': eventId,
+                },
           ],
         );
         if (LOGGING_SWITCH) {
@@ -302,6 +307,20 @@ class MatchService implements MatchLifecycleContract {
     var resolvedArenaId = arenaId;
     String? arenaImageUrl;
     String? gathererArcoriId;
+
+    final resolvedFromRules = matchType['resolvedArena'];
+    if (resolvedFromRules is Map) {
+      final rid = resolvedFromRules['arenaId']?.toString().trim() ?? '';
+      final rimg = resolvedFromRules['imageUrl']?.toString().trim() ?? '';
+      final defer = resolvedFromRules['deferSelectArena'] == true;
+      if (!defer && rid.isNotEmpty) {
+        resolvedArenaId = rid;
+      }
+      if (rimg.isNotEmpty) {
+        arenaImageUrl = rimg;
+      }
+    }
+
     if (matchTypeUsesArcoriRegionArena(matchType)) {
       try {
         final pick = await _catalog.selectArena(
@@ -311,7 +330,19 @@ class MatchService implements MatchLifecycleContract {
         );
         if (pick != null && pick.arenaId.isNotEmpty) {
           resolvedArenaId = pick.arenaId;
-          arenaImageUrl = pick.imageUrl;
+          // Prefer event special background when present.
+          final media = matchType['eventMedia'];
+          String? specialBg;
+          if (media is Map) {
+            final bg = media['special_arena_background'] ??
+                media['specialArenaBackground'];
+            if (bg is Map) {
+              specialBg = bg['value']?.toString().trim();
+            }
+          }
+          arenaImageUrl = (specialBg != null && specialBg.isNotEmpty)
+              ? specialBg
+              : (arenaImageUrl ?? pick.imageUrl);
           gathererArcoriId = pick.gathererArcoriId;
           if (LOGGING_SWITCH) {
             customlog(

@@ -136,6 +136,50 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "SHE-RAT-SER003-0004",
+      "themeCode": "SHE",
+      "designCode": "RAT",
+      "designFamily": "REFUGE_ABOVE_THE_TIDE",
+      "design": "Refuge Above the Tide",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Shelter",
+      "subtheme": "Shelter",
+      "style": "Comic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 8.0,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Refuge Above the Tide in comic style with a standard finish and no effect. Use a background that is visually related to Refuge Above the Tide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SHE-RAT-SER003-0004.webp",
+      "loreDescription": "A collectible Refuge Above the Tide Arcori generation I from the Shelter Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

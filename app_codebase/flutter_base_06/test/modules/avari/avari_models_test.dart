@@ -17,7 +17,42 @@ void main() {
       expect(item.masteryOverMintReach, '7/500');
     });
 
-    test('parses masteryValueLabel on profile', () {
+    test('masteryCap preferred over mintReach in caption', () {
+      final item = AvariInventoryItem.fromJson({
+        'designId': 'ANM-GWO-SER001-0010',
+        'displayName': 'Grey Wolf',
+        'masteryPoints': 501,
+        'mintReach': 500,
+        'masteryCap': 502,
+      });
+      expect(item.masteryCap, 502);
+      expect(item.masteryOverMintReach, '501/502');
+    });
+
+    test('parses preservationWindows on profile', () {
+      final profile = AvariProfile.fromJson({
+        'identity': {
+          'userId': 'u1',
+          'displayName': 'Admin',
+          'title': 'Avari',
+          'accountType': 'Regular',
+        },
+        'preservationWindows': [
+          {
+            'designId': 'ANM-LIO-SER001-0003',
+            'displayName': 'Lion',
+            'masteryPoints': 501,
+            'mintReach': 500,
+            'masteryCap': 502,
+            'source': 'preservation_window',
+          },
+        ],
+      });
+      expect(profile.preservationWindows, hasLength(1));
+      expect(profile.preservationWindows.first.masteryOverMintReach, '501/502');
+    });
+
+    test('parses masteryValue and masteryValueLabel on profile', () {
       final profile = AvariProfile.fromJson({
         'identity': {
           'userId': 'u1',
@@ -28,10 +63,12 @@ void main() {
         'mastery': {
           'designsTracked': 2,
           'top': ['ANM-TIG-SER001-0001:10'],
+          'masteryValue': 42,
           'masteryValueLabel': 'Sought',
         },
       });
       expect(profile.mastery.designsTracked, 2);
+      expect(profile.mastery.masteryValue, 42);
       expect(profile.mastery.masteryValueLabel, 'Sought');
     });
 
@@ -111,6 +148,17 @@ void main() {
             },
           },
         ],
+        'trove': [
+          {
+            'designId': 'ANM-SNL-SER001-0007',
+            'serial': 'ANM-SNL-SER001-0007',
+            'displayName': 'Snail',
+            'generationNumber': 1,
+            'legacyTitle': 'Legacy Owner',
+            'creatorAttributed': true,
+            'imageUrl': '/catalog-media/001_genesis/animals/ANM-SNL-SER001-0007.webp',
+          },
+        ],
       });
       expect(profile.access, hasLength(1));
       expect(profile.access.first.displayName, 'Tiger');
@@ -120,6 +168,8 @@ void main() {
       expect(profile.access.first.gameplayAttributes, isNull);
       expect(profile.slammers.single.designId, 'SLM-STR-SER001-0001');
       expect(profile.slammers.single.permanent, isTrue);
+      expect(profile.trove, hasLength(1));
+      expect(profile.trove.first.caption, 'Gen 1 · Legacy Owner');
       final attrs = profile.slammers.single.gameplayAttributes!;
       expect(attrs.impact, 5);
       expect(attrs.labeledValues, [

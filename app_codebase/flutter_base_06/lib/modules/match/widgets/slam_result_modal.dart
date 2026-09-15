@@ -73,13 +73,9 @@ class _SlamResultBodyState extends State<_SlamResultBody> {
     _timer?.cancel();
     _timer = null;
     if (!mounted) return;
-    // Only pop *this* overlay. Blind rootNavigator.pop() after the route is
-    // already gone (barrier/X) would dismiss the match fullscreen underneath.
-    final route = ModalRoute.of(context);
-    if (route == null || !route.isCurrent || route.isActive != true) return;
-    final nav = Navigator.of(context);
-    if (!nav.canPop()) return;
-    nav.pop();
+    // AppModal.dismiss removes this PopupRoute even when buried under
+    // post-match / achievement modals (see AppModal.dismiss).
+    AppModal.dismiss(context);
   }
 
   @override

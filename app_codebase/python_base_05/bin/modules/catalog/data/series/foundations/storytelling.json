@@ -134,6 +134,48 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "STY-TTB-SER003-0004",
+      "themeCode": "STY",
+      "designCode": "TTB",
+      "designFamily": "TALES_THAT_BUILT_THE_TOWN",
+      "design": "Tales That Built the Town",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Storytelling",
+      "subtheme": "Storytelling",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 5.4,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Tales That Built the Town in retro style with a standard finish and no effect. Use a background that is visually related to Tales That Built the Town. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STY-TTB-SER003-0004.webp",
+      "loreDescription": "A collectible Tales That Built the Town Arcori generation I from the Storytelling Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

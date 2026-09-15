@@ -25,7 +25,7 @@ Splash
   → match summary
   → Velora intro
   → Trove intro (empty — mints only after closure)
-  → Rank / Profile XP intro
+  → Mastery Value intro
   → Museum intro
   → Daily Missions
   → Home

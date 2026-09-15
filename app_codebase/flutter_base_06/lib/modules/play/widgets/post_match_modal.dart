@@ -8,6 +8,7 @@ import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../../utils/dev_logger.dart';
 import '../../avari/avari_models.dart';
+import '../../kin/widgets/kin_lottie_preview.dart';
 import '../../match/state/match_notifier.dart';
 import '../../match/state/match_snapshot_state.dart';
 import '../../match/widgets/arcori_cylinder.dart';
@@ -37,6 +38,8 @@ class _PostMatchBody extends ConsumerStatefulWidget {
 
 class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
   bool _exiting = false;
+  /// Absorb residual slam/pointer-up so it cannot tap Done the frame we open.
+  bool _actionsArmed = false;
 
   /// Freeze at open so late WS / clear races cannot swap in a prior match.
   MatchSnapshotState? _frozenSnap;
@@ -59,6 +62,10 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
         ref.read(matchFlowProvider.notifier).requestPostMatchFinalize(),
       );
     });
+    Future<void>.delayed(const Duration(milliseconds: 400), () {
+      if (!mounted || _exiting) return;
+      setState(() => _actionsArmed = true);
+    });
   }
 
   Future<void> _exit(void Function() complete) async {
@@ -72,10 +79,12 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
     complete();
   }
 
-  void _done() {
-    unawaited(_exit(() {
+  /// Done: close summary → idle (unlock/daily/legacy via NotificationHost).
+  Future<void> _done() async {
+    if (_exiting) return;
+    await _exit(() {
       ref.read(matchFlowProvider.notifier).completePostMatchDone();
-    }));
+    });
   }
 
   void _playNew() {
@@ -113,15 +122,12 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
     final rematchOk = notifier.rematchAvailable();
     final rematchReason = notifier.rematchDisabledReason();
     final userId = ref.watch(authProvider).userId?.trim() ?? '';
-    final headline = _headlineFor(snap, userId);
 
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(headline, style: context.appTypography.h3),
-          AppSpacing.gapXs,
           Text(
             'Celebration & mastery animations — soon',
             style: context.appTypography.bodySmall,
@@ -132,16 +138,21 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
             snap: snap,
           ),
           AppSpacing.gapMd,
-          Text('Summary', style: context.appTypography.label),
+          Text('Flips', style: context.appTypography.label),
           AppSpacing.gapXs,
-          _MatchSummaryBlock(snap: snap),
+          _MatchSummaryBlock(snap: snap, localUserId: userId),
           AppSpacing.gapMd,
           Text('Daily', style: context.appTypography.label),
           AppSpacing.gapXs,
-          Text(
-            'Daily progress / missions / cache — soon',
-            style: context.appTypography.bodySmall,
-          ),
+          _DailyProgressBlock(daily: flow.postMatchFinalize?.daily),
+          if (flow.postMatchFinalize?.eventProgress != null) ...[
+            AppSpacing.gapMd,
+            Text('Event', style: context.appTypography.label),
+            AppSpacing.gapXs,
+            _EventProgressBlock(
+              progress: flow.postMatchFinalize!.eventProgress!,
+            ),
+          ],
           if (flow.postMatchSoftError != null &&
               flow.postMatchSoftError!.isNotEmpty) ...[
             AppSpacing.gapSm,
@@ -154,7 +165,8 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
           ],
           AppSpacing.gapLg,
           FilledButton(
-            onPressed: rematchOk && !_exiting ? _rematch : null,
+            onPressed:
+                rematchOk && !_exiting && _actionsArmed ? _rematch : null,
             child: const Text('Rematch'),
           ),
           if (!rematchOk && rematchReason != null) ...[
@@ -166,31 +178,19 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
           ],
           AppSpacing.gapSm,
           FilledButton(
-            onPressed: _playNew,
+            onPressed: !_exiting && _actionsArmed ? _playNew : null,
             child: const Text('Play New'),
           ),
           AppSpacing.gapSm,
           OutlinedButton(
-            onPressed: _done,
+            onPressed: !_exiting && _actionsArmed
+                ? () => unawaited(_done())
+                : null,
             child: const Text('Done'),
           ),
         ],
       ),
     );
-  }
-
-  String _headlineFor(MatchSnapshotState snap, String userId) {
-    final result = snap.result;
-    if (result == null) return 'Match ended';
-    final winners = result['winnerUserIds'];
-    if (winners is! List || winners.isEmpty) return 'Match ended';
-    final ids = winners.map((e) => e.toString()).toSet();
-    if (userId.isNotEmpty && ids.contains(userId)) {
-      if (ids.length == 1) return 'Victory';
-      return 'You placed among the winners';
-    }
-    if (userId.isNotEmpty) return 'Defeat';
-    return 'Match ended';
   }
 }
 
@@ -226,9 +226,6 @@ class _RewardRow extends StatelessWidget {
             Chip(
               label: Text(fragLabel, style: context.appTypography.bodySmall),
             ),
-            Chip(
-              label: Text('+0 Rank XP', style: context.appTypography.bodySmall),
-            ),
           ],
         ),
         if (detail != null) ...[
@@ -255,6 +252,20 @@ class _RewardRow extends StatelessWidget {
             _MasteryChangeRow(change: mastery[i], snap: snap),
             if (i < mastery.length - 1) AppSpacing.gapSm,
           ],
+        if (applied &&
+            (finalize?.achievementsUnlocked.isNotEmpty ?? false)) ...[
+          AppSpacing.gapSm,
+          Text('Achievements', style: context.appTypography.label),
+          AppSpacing.gapXs,
+          for (final ach in finalize!.achievementsUnlocked)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
+                '• ${ach.achievementName}',
+                style: context.appTypography.bodySmall,
+              ),
+            ),
+        ],
       ],
     );
   }
@@ -269,9 +280,15 @@ class _MasteryChangeRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final piece = _pieceFor(change.designId);
-    final imageUrl = (change.imageUrl != null && change.imageUrl!.isNotEmpty)
-        ? change.imageUrl
-        : piece?.imageUrl;
+    final lottieUrl = (change.lottieUrl != null && change.lottieUrl!.isNotEmpty)
+        ? change.lottieUrl
+        : piece?.lottieUrl;
+    final useLottie = (lottieUrl ?? '').trim().isNotEmpty;
+    final imageUrl = useLottie
+        ? null
+        : ((change.imageUrl != null && change.imageUrl!.isNotEmpty)
+            ? change.imageUrl
+            : piece?.imageUrl);
     final color = (change.color != null && change.color!.isNotEmpty)
         ? change.color
         : piece?.color;
@@ -293,6 +310,12 @@ class _MasteryChangeRow extends StatelessWidget {
           ),
           faceUp: true,
           showThickness: false,
+          face: useLottie
+              ? KinSceneStack(
+                  lottieUrl: lottieUrl,
+                  fit: BoxFit.cover,
+                )
+              : null,
         ),
         AppSpacing.gapSm,
         Expanded(
@@ -337,9 +360,13 @@ class _MasteryChangeRow extends StatelessWidget {
 }
 
 class _MatchSummaryBlock extends StatelessWidget {
-  const _MatchSummaryBlock({required this.snap});
+  const _MatchSummaryBlock({
+    required this.snap,
+    required this.localUserId,
+  });
 
   final MatchSnapshotState snap;
+  final String localUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -361,9 +388,7 @@ class _MatchSummaryBlock extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      seat.kind == 'ai'
-                          ? 'AI · seat ${seat.seatIndex + 1}'
-                          : 'Seat ${seat.seatIndex + 1}',
+                      _seatLabel(seat),
                       style: context.appTypography.body,
                     ),
                     Text(
@@ -376,7 +401,7 @@ class _MatchSummaryBlock extends StatelessWidget {
                 ),
               ),
               Text(
-                '${seat.score}',
+                '${seat.score} flip${seat.score == 1 ? '' : 's'}',
                 style: context.appTypography.h3,
               ),
             ],
@@ -387,9 +412,108 @@ class _MatchSummaryBlock extends StatelessWidget {
     );
   }
 
+  String _seatLabel(MatchSeatView seat) {
+    final isYou =
+        localUserId.isNotEmpty && seat.userId.trim() == localUserId;
+    if (seat.kind == 'ai') {
+      return 'AI · seat ${seat.seatIndex + 1}';
+    }
+    if (isYou) return 'You · seat ${seat.seatIndex + 1}';
+    return 'Seat ${seat.seatIndex + 1}';
+  }
+
   String _designLabel(MatchSeatView seat) {
     if (seat.arcoriIds.isEmpty) return '—';
     return seat.arcoriIds.first;
+  }
+}
+
+class _DailyProgressBlock extends StatelessWidget {
+  const _DailyProgressBlock({this.daily});
+
+  final Map<String, dynamic>? daily;
+
+  @override
+  Widget build(BuildContext context) {
+    final payload = daily;
+    if (payload == null || payload.isEmpty) {
+      return Text(
+        'No daily progress this match',
+        style: context.appTypography.bodySmall,
+      );
+    }
+
+    final changedRaw = payload['changedGoalIds'] ?? payload['changed_goal_ids'];
+    final changed = <String>{};
+    if (changedRaw is List) {
+      for (final id in changedRaw) {
+        final s = id.toString().trim();
+        if (s.isNotEmpty) changed.add(s);
+      }
+    }
+
+    final goalsRaw = payload['goals'];
+    final lines = <String>[];
+    if (goalsRaw is List) {
+      for (final item in goalsRaw) {
+        if (item is! Map) continue;
+        final map = Map<String, dynamic>.from(item);
+        final id = (map['goalId'] ?? map['goal_id'] ?? '').toString().trim();
+        final type =
+            (map['taskType'] ?? map['task_type'] ?? '').toString().toLowerCase();
+        // Prefer flip task + any newly completed rows.
+        final isFlip = type.contains('flip');
+        final highlight = changed.contains(id) || isFlip || id == 'land_three_flips';
+        if (!highlight) continue;
+        final progress = map['progressToday'] ?? map['progress_today'] ?? 0;
+        final target = map['target'] ?? 1;
+        final done = map['completedToday'] == true ||
+            map['completed_today'] == true;
+        final label = done ? 'Done' : '$progress / $target';
+        final name = (map['name']?.toString().trim().isNotEmpty == true)
+            ? map['name'].toString().trim()
+            : (id.isEmpty ? 'Daily goal' : id.replaceAll('_', ' '));
+        lines.add('$name — $label');
+      }
+    }
+
+    if (lines.isEmpty) {
+      return Text(
+        'Daily goals updated',
+        style: context.appTypography.bodySmall,
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final line in lines)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Text(line, style: context.appTypography.bodySmall),
+          ),
+      ],
+    );
+  }
+}
+
+class _EventProgressBlock extends StatelessWidget {
+  const _EventProgressBlock({required this.progress});
+
+  final Map<String, dynamic> progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final credited = progress['matchesCredited'] ?? progress['matches_credited'] ?? 0;
+    final required =
+        progress['matchesRequired'] ?? progress['matches_required'] ?? 1;
+    final flips = progress['flips'] ?? 0;
+    final eid = progress['eventId'] ?? progress['event_id'] ?? '';
+    return Text(
+      '${eid.toString().isEmpty ? 'Event' : eid}: '
+      '$credited/$required matches credited · $flips flips',
+      style: context.appTypography.bodySmall,
+    );
   }
 }
 
@@ -411,15 +535,22 @@ class _SeatFace extends StatelessWidget {
     final designId = piece?.designId.isNotEmpty == true
         ? piece!.designId
         : (seat.arcoriIds.isNotEmpty ? seat.arcoriIds.first : 'unknown');
+    final useLottie = piece?.hasLottieFace == true;
     return ArcoriCylinder(
       size: 40,
       look: ArcoriLook(
         designId: designId,
-        imageUrl: piece?.imageUrl,
+        imageUrl: useLottie ? null : piece?.imageUrl,
         colorHex: piece?.color,
       ),
       faceUp: true,
       showThickness: false,
+      face: useLottie
+          ? KinSceneStack(
+              lottieUrl: piece!.lottieUrl,
+              fit: BoxFit.cover,
+            )
+          : null,
     );
   }
 }

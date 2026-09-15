@@ -5,6 +5,8 @@ from __future__ import annotations
 import uuid
 from typing import Any
 
+from sqlalchemy.exc import IntegrityError
+
 from core.state.session_scope import session_scope
 from core.errors.app_error import AppError
 from core.utils.dev_logger import customlog
@@ -12,8 +14,10 @@ from models.player_progress import PlayerKin
 from modules.auth.auth_service import get_user_profile
 from modules.avari import avari_repository as repo
 from modules.avari.avari_errors import (
+    INSUFFICIENT_GOLD,
     INVALID_KIN_COLOR,
     INVALID_KIN_REGION,
+    INVALID_MATCH_FEE,
     INVALID_MATCH_FINALIZE,
     INVALID_QUERY,
     KIN_ALREADY_CLAIMED,
@@ -22,6 +26,7 @@ from modules.avari.avari_errors import (
 )
 from modules.avari.gold_economy import (
     apply_fragment_delta,
+    can_afford_fragments,
     match_fee_fragments,
 )
 from modules.avari.mastery_economy import (
@@ -30,6 +35,10 @@ from modules.avari.mastery_economy import (
     compute_mastery_deltas,
     compute_mastery_value,
     mastery_value_label,
+)
+from modules.achievements.achievements_service import (
+    apply_match_unlocks,
+    apply_win_streak,
 )
 from modules.catalog.catalog_select import count_circulating_playable_arcori
 from modules.avari.kin_genesis import (
@@ -625,7 +634,7 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         mastery_top = [
             f"{row.design_id}:{row.points}" for row in mastery_rows
         ]
-        _, mastery_label = compute_profile_mastery_value_label(
+        mastery_value, mastery_label = compute_profile_mastery_value_label(
             mastery_by_design,
             kin_design_id=kin_design_id,
             kin_design_doc=kin_design_doc if isinstance(kin_design_doc, dict) else None,
@@ -735,16 +744,85 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
             if isinstance(attrs, dict) and attrs:
                 entry["gameplayAttributes"] = attrs
             slammer_payload.append(entry)
-        trove_payload = [
-            {
-                "designId": row.design_id,
-                "generationNumber": int(row.generation_number),
-                "mintedAt": row.minted_at.isoformat() if row.minted_at else None,
-                "legacyTitle": row.legacy_title,
-                "creatorAttributed": bool(row.creator_attributed),
+        trove_payload = []
+        for row in trove_rows:
+            design_id = str(row.design_id or "").strip()
+            if not design_id:
+                continue
+            card = catalog_card_for_design(design_id) or {}
+            trove_payload.append(
+                {
+                    "designId": design_id,
+                    "serial": design_id,
+                    "displayName": card.get("displayName") or design_id,
+                    "imageUrl": card.get("imageUrl"),
+                    "lottieUrl": card.get("lottieUrl"),
+                    "faceMedia": card.get("faceMedia"),
+                    "color": card.get("color"),
+                    "generationNumber": int(row.generation_number),
+                    "mintedAt": row.minted_at.isoformat() if row.minted_at else None,
+                    "legacyTitle": row.legacy_title,
+                    "creatorAttributed": bool(row.creator_attributed),
+                }
+            )
+
+        from modules.legacy import legacy_repository as legacy_repo
+
+        preservation_windows_payload: list[dict[str, Any]] = []
+        player_design_ids = set(mastery_by_design.keys()) | seen_access
+        if kin_design_id:
+            player_design_ids.add(kin_design_id)
+        for life in legacy_repo.list_open_preservation_windows(session):
+            design_id = str(life.design_id or "").strip()
+            if not design_id:
+                continue
+            offer_uid = (
+                str(life.first_offer_user_id) if life.first_offer_user_id else ""
+            )
+            leader_uid = str(life.leader_user_id) if life.leader_user_id else ""
+            if (
+                design_id not in player_design_ids
+                and uid not in (offer_uid, leader_uid)
+            ):
+                continue
+            if kin_design_doc is not None and design_id == kin_design_id:
+                card = catalog_card_from_design_doc(
+                    design_id,
+                    kin_design_doc,
+                    display_name_override=str(getattr(kin, "chosen_name", "") or ""),
+                )
+            else:
+                card = catalog_card_for_design(design_id)
+            if card is None:
+                card = {
+                    "designId": design_id,
+                    "displayName": design_id,
+                    "imageUrl": None,
+                    "lottieUrl": None,
+                    "faceMedia": None,
+                    "color": None,
+                }
+            entry = _access_entry_from_card(
+                card,
+                source="preservation_window",
+                mastery_points=int(mastery_by_design.get(design_id, 0)),
+                background=kin_background if design_id == kin_design_id else None,
+            )
+            # Profile caption uses masteryCap (closure) instead of mint reach.
+            entry["masteryCap"] = int(life.closure_milestone)
+            entry["phase"] = str(life.phase or "")
+            entry["generationNumber"] = int(life.generation_number)
+            preservation_windows_payload.append(entry)
+
+        from modules.achievements import achievements_repository as ach_repo
+
+        achievements_unlocked_ids = ach_repo.list_unlocked_ids(session, uid)
+        if avari is not None:
+            stats = {
+                **stats,
+                "winStreakCurrent": int(getattr(avari, "win_streak_current", 0) or 0),
+                "winStreakBest": int(getattr(avari, "win_streak_best", 0) or 0),
             }
-            for row in trove_rows
-        ]
 
     return {
         "identity": {
@@ -761,6 +839,7 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         "mastery": {
             "designsTracked": designs_tracked,
             "top": mastery_top,
+            "masteryValue": mastery_value,
             "masteryValueLabel": mastery_label,
         },
         "stats": stats,
@@ -771,6 +850,8 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         "access": access_payload,
         "slammers": slammer_payload,
         "trove": trove_payload,
+        "preservationWindows": preservation_windows_payload,
+        "achievementsUnlockedIds": achievements_unlocked_ids,
     }
 
 
@@ -958,8 +1039,245 @@ def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
         return {"kin": repo.serialize_kin(row)}
 
 
+def _fee_cached_payload(stored: dict[str, Any] | None) -> dict[str, Any]:
+    """Replay cached fee pay/refund body (ok:true success; no second wallet move)."""
+    base: dict[str, Any] = dict(stored) if isinstance(stored, dict) else {}
+    if "reason" not in base:
+        base["reason"] = "already_applied"
+    return base
+
+
+def pay_match_fee(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
+    """Deduct online match fee before matchmaking. Practice must not call this."""
+    uid = (user_id or "").strip()
+    if not uid:
+        raise AppError(INVALID_QUERY, message="Unauthorized")
+    if not isinstance(body, dict):
+        raise AppError(INVALID_MATCH_FEE, message="JSON body required")
+
+    intent_id = str(body.get("feeIntentId") or body.get("fee_intent_id") or "").strip()
+    if not intent_id:
+        raise AppError(INVALID_MATCH_FEE, message="feeIntentId is required")
+
+    match_type = str(body.get("matchType") or "").strip()
+    if not match_type:
+        raise AppError(INVALID_MATCH_FEE, message="matchType is required")
+    if match_type.lower() == "practice":
+        raise AppError(INVALID_MATCH_FEE, message="Practice has no match fee")
+
+    event_id = str(body.get("eventId") or body.get("event_id") or "").strip()
+    fee = match_fee_fragments(match_type, event_id=event_id or None)
+
+    try:
+        with session_scope() as session:
+            existing = repo.get_match_fee(
+                session, uid, intent_id, repo.FEE_KIND_PAY
+            )
+            if existing is not None:
+                if LOGGING_SWITCH:
+                    customlog(
+                        f"avari: match fee pay already_applied user={uid} "
+                        f"intent={intent_id}"
+                    )
+                return _fee_cached_payload(
+                    existing.response_json
+                    if isinstance(existing.response_json, dict)
+                    else None
+                )
+
+            profile = get_user_profile(uid)
+            display_name = (
+                str((profile or {}).get("username") or "").strip() or "Avari"
+            )
+            avari = repo.ensure_avari_profile(
+                session,
+                user_id=uuid.UUID(uid),
+                display_name=display_name,
+            )
+            before_a = int(avari.gold_arcori)
+            before_f = int(avari.gold_fragments)
+            if not can_afford_fragments(before_a, before_f, fee):
+                raise AppError(
+                    INSUFFICIENT_GOLD,
+                    message=(
+                        f"Not enough Gold Fragments. Online matches cost "
+                        f"{fee} Gold Fragments."
+                    ),
+                )
+            after_a, after_f, arcori_delta, _ = apply_fragment_delta(
+                before_a, before_f, -fee
+            )
+            avari.gold_arcori = after_a
+            avari.gold_fragments = after_f
+            payload = {
+                "paid": True,
+                "matchType": match_type,
+                "feeIntentId": intent_id,
+                "feeFragments": fee,
+                "goldFragmentsDelta": -fee,
+                "goldArcoriDelta": arcori_delta,
+                "goldFragments": after_f,
+                "goldArcori": after_a,
+            }
+            repo.insert_match_fee(
+                session,
+                user_id=uid,
+                intent_id=intent_id,
+                kind=repo.FEE_KIND_PAY,
+                response=payload,
+            )
+            session.flush()
+            if LOGGING_SWITCH:
+                customlog(
+                    f"avari: match fee paid user={uid} type={match_type} "
+                    f"intent={intent_id} fee={fee} goldArcori={after_a} "
+                    f"frags={after_f}"
+                )
+            return payload
+    except IntegrityError:
+        with session_scope() as session:
+            raced = repo.get_match_fee(
+                session, uid, intent_id, repo.FEE_KIND_PAY
+            )
+            if raced is not None:
+                if LOGGING_SWITCH:
+                    customlog(
+                        f"avari: match fee pay race→already_applied user={uid} "
+                        f"intent={intent_id}"
+                    )
+                return _fee_cached_payload(
+                    raced.response_json
+                    if isinstance(raced.response_json, dict)
+                    else None
+                )
+        raise
+
+
+def refund_match_fee(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
+    """Refund pre-match fee when queue cancels before a match starts."""
+    uid = (user_id or "").strip()
+    if not uid:
+        raise AppError(INVALID_QUERY, message="Unauthorized")
+    if not isinstance(body, dict):
+        raise AppError(INVALID_MATCH_FEE, message="JSON body required")
+
+    intent_id = str(body.get("feeIntentId") or body.get("fee_intent_id") or "").strip()
+    if not intent_id:
+        raise AppError(INVALID_MATCH_FEE, message="feeIntentId is required")
+
+    match_type = str(body.get("matchType") or "").strip()
+    fee_raw = body.get("feeFragments")
+    if fee_raw is None:
+        fee = match_fee_fragments(match_type or "quickStart")
+    else:
+        try:
+            fee = max(0, int(fee_raw))
+        except (TypeError, ValueError) as exc:
+            raise AppError(
+                INVALID_MATCH_FEE, message="feeFragments must be an int"
+            ) from exc
+
+    if fee <= 0:
+        return {
+            "refunded": False,
+            "reason": "no_fee",
+            "feeIntentId": intent_id,
+            "feeFragments": 0,
+            "goldFragmentsDelta": 0,
+            "goldArcoriDelta": 0,
+            "goldFragments": 0,
+            "goldArcori": 0,
+        }
+
+    try:
+        with session_scope() as session:
+            existing = repo.get_match_fee(
+                session, uid, intent_id, repo.FEE_KIND_REFUND
+            )
+            if existing is not None:
+                if LOGGING_SWITCH:
+                    customlog(
+                        f"avari: match fee refund already_applied user={uid} "
+                        f"intent={intent_id}"
+                    )
+                return _fee_cached_payload(
+                    existing.response_json
+                    if isinstance(existing.response_json, dict)
+                    else None
+                )
+
+            profile = get_user_profile(uid)
+            display_name = (
+                str((profile or {}).get("username") or "").strip() or "Avari"
+            )
+            avari = repo.ensure_avari_profile(
+                session,
+                user_id=uuid.UUID(uid),
+                display_name=display_name,
+            )
+            before_a = int(avari.gold_arcori)
+            before_f = int(avari.gold_fragments)
+            after_a, after_f, arcori_delta, _ = apply_fragment_delta(
+                before_a, before_f, fee
+            )
+            avari.gold_arcori = after_a
+            avari.gold_fragments = after_f
+            payload = {
+                "refunded": True,
+                "matchType": match_type,
+                "feeIntentId": intent_id,
+                "feeFragments": fee,
+                "goldFragmentsDelta": fee,
+                "goldArcoriDelta": arcori_delta,
+                "goldFragments": after_f,
+                "goldArcori": after_a,
+            }
+            repo.insert_match_fee(
+                session,
+                user_id=uid,
+                intent_id=intent_id,
+                kind=repo.FEE_KIND_REFUND,
+                response=payload,
+            )
+            session.flush()
+            if LOGGING_SWITCH:
+                customlog(
+                    f"avari: match fee refunded user={uid} type={match_type or '-'} "
+                    f"intent={intent_id} fee={fee} goldArcori={after_a} "
+                    f"frags={after_f}"
+                )
+            return payload
+    except IntegrityError:
+        with session_scope() as session:
+            raced = repo.get_match_fee(
+                session, uid, intent_id, repo.FEE_KIND_REFUND
+            )
+            if raced is not None:
+                if LOGGING_SWITCH:
+                    customlog(
+                        f"avari: match fee refund race→already_applied "
+                        f"user={uid} intent={intent_id}"
+                    )
+                return _fee_cached_payload(
+                    raced.response_json
+                    if isinstance(raced.response_json, dict)
+                    else None
+                )
+        raise
+
+
+def _already_applied_payload(stored: dict[str, Any] | None, match_id: str) -> dict[str, Any]:
+    """Replay cached finalize body with applied=false (no second notify)."""
+    base: dict[str, Any] = dict(stored) if isinstance(stored, dict) else {}
+    base["applied"] = False
+    base["reason"] = "already_applied"
+    if "matchId" not in base:
+        base["matchId"] = match_id
+    return base
+
+
 def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
-    """Post-match economy: fee + flip fragments + per-player mastery."""
+    """Post-match economy: flip fragments + per-player mastery (fee already paid)."""
     uid = (user_id or "").strip()
     if not uid:
         raise AppError(INVALID_QUERY, message="Unauthorized")
@@ -967,7 +1285,16 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
         raise AppError(INVALID_MATCH_FINALIZE, message="JSON body required")
 
     match_id = str(body.get("matchId") or "").strip()
-    match_type = str(body.get("matchType") or "").strip()
+    event_id = str(body.get("eventId") or body.get("event_id") or "").strip()
+    match_type_raw = body.get("matchType")
+    if isinstance(match_type_raw, dict):
+        match_type = str(match_type_raw.get("code") or "").strip()
+        if not event_id:
+            event_id = str(
+                match_type_raw.get("eventId") or match_type_raw.get("event_id") or ""
+            ).strip()
+    else:
+        match_type = str(match_type_raw or "").strip()
     practice = body.get("practice") is True
     design_ids = body.get("designIds")
     result = body.get("result")
@@ -1014,9 +1341,10 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
         "goldArcori": 0,
         "feeFragments": 0,
         "flipsRewarded": 0,
-        "rankXpDelta": 0,
         "masteryChanges": [],
+        "achievementsUnlocked": [],
         "daily": None,
+        "eventProgress": None,
         "mint": None,
     }
 
@@ -1040,8 +1368,9 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
         # Fallback: first design id from client match table (prefer human seat client-side).
         played_design_id = cleaned_ids[0]
 
-    fee = match_fee_fragments(match_type)
-    net_fragments = flips - fee
+    # Fee is charged pre-match (`pay_match_fee`); finalize only awards flip fragments.
+    fee = 0
+    net_fragments = flips
     planned_mastery = compute_mastery_deltas(
         played_design_id=played_design_id or None,
         seat_flips=flips,
@@ -1054,122 +1383,362 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
         if isinstance(winners, list):
             won = any(str(w).strip() == uid for w in winners)
 
-    with session_scope() as session:
-        profile = get_user_profile(uid)
-        display_name = (
-            str((profile or {}).get("username") or "").strip() or "Avari"
-        )
-        avari = repo.ensure_avari_profile(
-            session,
-            user_id=uuid.UUID(uid),
-            display_name=display_name,
-        )
-        before_a = int(avari.gold_arcori)
-        before_f = int(avari.gold_fragments)
-        after_a, after_f, arcori_delta, _frag_field_delta = apply_fragment_delta(
-            before_a,
-            before_f,
-            net_fragments,
-        )
-        avari.gold_arcori = after_a
-        avari.gold_fragments = after_f
-        avari.matches_played = int(avari.matches_played) + 1
-        avari.flips = int(avari.flips) + flips
-        if won:
-            avari.wins = int(avari.wins) + 1
+    first_apply = False
+    applied_payload: dict[str, Any] | None = None
 
-        # Keep collection mastery rows present for every circulating access design.
-        access_rows = repo.list_design_access(session, uid)
-        for row in access_rows:
-            design_id = str(row.design_id or "").strip()
-            if not design_id:
-                continue
-            gen = generation_number_for_design_id(design_id)
-            repo.ensure_mastery_row(
+    try:
+        with session_scope() as session:
+            existing = repo.get_match_finalize(session, uid, match_id)
+            if existing is not None:
+                if LOGGING_SWITCH:
+                    customlog(
+                        f"avari: match finalize already_applied user={uid} "
+                        f"matchId={match_id}"
+                    )
+                return _already_applied_payload(
+                    existing.response_json
+                    if isinstance(existing.response_json, dict)
+                    else None,
+                    match_id,
+                )
+
+            profile = get_user_profile(uid)
+            display_name = (
+                str((profile or {}).get("username") or "").strip() or "Avari"
+            )
+            avari = repo.ensure_avari_profile(
                 session,
-                user_id=uid,
-                design_id=design_id,
-                generation_number=gen,
+                user_id=uuid.UUID(uid),
+                display_name=display_name,
             )
+            before_a = int(avari.gold_arcori)
+            before_f = int(avari.gold_fragments)
+            after_a, after_f, arcori_delta, _frag_field_delta = apply_fragment_delta(
+                before_a,
+                before_f,
+                net_fragments,
+            )
+            avari.gold_arcori = after_a
+            avari.gold_fragments = after_f
+            avari.matches_played = int(avari.matches_played) + 1
+            avari.flips = int(avari.flips) + flips
+            if won:
+                avari.wins = int(avari.wins) + 1
 
-        kin = repo.find_player_kin(session, uid)
-        own_kin_id = (
-            str(kin.genesis_design_id or "").strip() if kin is not None else ""
-        ) or None
+            streak_cur, streak_best = apply_win_streak(
+                current=int(getattr(avari, "win_streak_current", 0) or 0),
+                best=int(getattr(avari, "win_streak_best", 0) or 0),
+                won=won,
+            )
+            avari.win_streak_current = streak_cur
+            avari.win_streak_best = streak_best
 
-        mastery_changes: list[dict[str, Any]] = []
-        for planned in planned_mastery:
-            design_id = str(planned["designId"])
-            delta = int(planned["delta"])
-            gen = generation_number_for_design_id(design_id)
-            floor = (
-                KIN_CREATOR_MASTERY_FLOOR
-                if own_kin_id and design_id == own_kin_id
-                else 0
-            )
-            _row, before_pts, after_pts = repo.apply_mastery_delta(
-                session,
-                user_id=uid,
-                design_id=design_id,
-                delta=delta,
-                generation_number=gen,
-                floor=floor,
-            )
-            # +mastery on another player's design → join circulating pool.
-            if planned["kind"] == "other" and after_pts > before_pts and after_pts > 0:
-                repo.ensure_design_access(
+            # Keep collection mastery rows present for every circulating access design.
+            access_rows = repo.list_design_access(session, uid)
+            for row in access_rows:
+                design_id = str(row.design_id or "").strip()
+                if not design_id:
+                    continue
+                gen = generation_number_for_design_id(design_id)
+                repo.ensure_mastery_row(
                     session,
                     user_id=uid,
                     design_id=design_id,
-                    source="mastery",
+                    generation_number=gen,
                 )
-            # 0 mastery leaves the pool (own Kin floored above, never 0).
-            if after_pts <= 0 and design_id != own_kin_id:
-                repo.revoke_design_access(
-                    session, user_id=uid, design_id=design_id
+
+            kin = repo.find_player_kin(session, uid)
+            own_kin_id = (
+                str(kin.genesis_design_id or "").strip() if kin is not None else ""
+            ) or None
+
+            mastery_changes: list[dict[str, Any]] = []
+            for planned in planned_mastery:
+                design_id = str(planned["designId"])
+                delta = int(planned["delta"])
+                gen = generation_number_for_design_id(design_id)
+                floor = (
+                    KIN_CREATOR_MASTERY_FLOOR
+                    if own_kin_id and design_id == own_kin_id
+                    else 0
                 )
-            card = catalog_card_for_design(design_id) or {}
-            change: dict[str, Any] = {
-                "designId": design_id,
-                "delta": after_pts - before_pts,
-                "pointsBefore": before_pts,
-                "pointsAfter": after_pts,
-                "flips": int(planned["flips"]),
-                "kind": planned["kind"],
-                "generationNumber": gen,
-                "mintReach": card.get("mintReach"),
-                "displayName": card.get("displayName") or design_id,
-                "imageUrl": card.get("imageUrl"),
-                "lottieUrl": card.get("lottieUrl"),
-                "faceMedia": card.get("faceMedia"),
-                "color": card.get("color"),
+                _row, before_pts, after_pts = repo.apply_mastery_delta(
+                    session,
+                    user_id=uid,
+                    design_id=design_id,
+                    delta=delta,
+                    generation_number=gen,
+                    floor=floor,
+                )
+                # +mastery on another player's design → join circulating pool.
+                if planned["kind"] == "other" and after_pts > before_pts and after_pts > 0:
+                    repo.ensure_design_access(
+                        session,
+                        user_id=uid,
+                        design_id=design_id,
+                        source="mastery",
+                    )
+                # 0 mastery leaves the pool (own Kin floored above, never 0).
+                if after_pts <= 0 and design_id != own_kin_id:
+                    repo.revoke_design_access(
+                        session, user_id=uid, design_id=design_id
+                    )
+                card = catalog_card_for_design(design_id) or {}
+                change: dict[str, Any] = {
+                    "designId": design_id,
+                    "delta": after_pts - before_pts,
+                    "pointsBefore": before_pts,
+                    "pointsAfter": after_pts,
+                    "flips": int(planned["flips"]),
+                    "kind": planned["kind"],
+                    "generationNumber": gen,
+                    "mintReach": card.get("mintReach"),
+                    "displayName": card.get("displayName") or design_id,
+                    "imageUrl": card.get("imageUrl"),
+                    "lottieUrl": card.get("lottieUrl"),
+                    "faceMedia": card.get("faceMedia"),
+                    "color": card.get("color"),
+                }
+                mastery_changes.append(change)
+
+            sync_player_access_pool(session, uid)
+            session.flush()
+
+            mastery_after: dict[str, int] = {}
+            for mrow in repo.list_mastery_rows(session, uid):
+                did = str(mrow.design_id or "").strip()
+                if not did:
+                    continue
+                try:
+                    pts = int(mrow.points or 0)
+                except (TypeError, ValueError):
+                    pts = 0
+                prev = mastery_after.get(did, 0)
+                if pts > prev:
+                    mastery_after[did] = pts
+
+            legacy_offers: list[dict[str, Any]] = []
+            legacy_proximity: list[dict[str, Any]] = []
+            legacy_event: dict[str, Any] | None = None
+            mint_payload: dict[str, Any] | None = None
+            from modules.legacy.legacy_service import on_mastery_progress
+
+            for change in mastery_changes:
+                did = str(change.get("designId") or "").strip()
+                if not did:
+                    continue
+                try:
+                    pts_after = int(change.get("pointsAfter") or 0)
+                    pts_before = int(change.get("pointsBefore") or 0)
+                    gen_n = int(
+                        change.get("generationNumber")
+                        or generation_number_for_design_id(did)
+                    )
+                except (TypeError, ValueError):
+                    continue
+                ev = on_mastery_progress(
+                    session,
+                    user_id=uid,
+                    design_id=did,
+                    generation_number=gen_n,
+                    points_after=pts_after,
+                    points_before=pts_before,
+                )
+                if not isinstance(ev, dict):
+                    continue
+                if isinstance(ev.get("legacyOffer"), dict):
+                    offer = ev["legacyOffer"]
+                    legacy_offers.append(offer)
+                    if LOGGING_SWITCH:
+                        customlog(
+                            f"finalize_match: legacyOffer design={did} "
+                            f"phase={offer.get('phase')} "
+                            f"ptsAfter={pts_after} "
+                            f"offerN={len(legacy_offers)}"
+                        )
+                prox = ev.get("legacyProximity")
+                if isinstance(prox, list):
+                    for row in prox:
+                        if isinstance(row, dict):
+                            legacy_proximity.append(row)
+                    if LOGGING_SWITCH and prox:
+                        customlog(
+                            f"finalize_match: legacyProximity design={did} "
+                            f"n={len(prox)} ptsBefore={pts_before} "
+                            f"ptsAfter={pts_after}"
+                        )
+                if isinstance(ev.get("legacyEvent"), dict):
+                    legacy_event = ev["legacyEvent"]
+                    if isinstance(legacy_event.get("mint"), dict):
+                        mint_payload = legacy_event.get("mint")
+                    if LOGGING_SWITCH:
+                        customlog(
+                            f"finalize_match: legacyEvent design={did} "
+                            f"reason={legacy_event.get('reason')}"
+                        )
+
+            event_progress: dict[str, Any] = {}
+            is_special_event = match_type in ("specialEvent", "special_event")
+            if is_special_event and event_id:
+                from modules.special_events import special_events_repository as se_repo
+
+                flipped_ids = [
+                    did for did, count in flips_by_design.items() if int(count) > 0
+                ]
+                if (
+                    played_design_id
+                    and flips > 0
+                    and played_design_id not in flipped_ids
+                ):
+                    flipped_ids.append(played_design_id)
+                from modules.special_events.special_events_loader import event_by_id
+                from modules.special_events.special_events_service import (
+                    should_credit_match,
+                )
+
+                ev = event_by_id(event_id)
+                do_credit = bool(
+                    ev is not None and should_credit_match(ev, won=won, flips=flips)
+                )
+                snap = se_repo.apply_match_progress(
+                    session,
+                    user_id=uid,
+                    event_id=event_id,
+                    flips=flips,
+                    flipped_design_ids=flipped_ids,
+                    won=won,
+                    match_id=match_id,
+                    credit=do_credit,
+                )
+                event_progress[event_id] = snap
+
+            achievements_unlocked = apply_match_unlocks(
+                session,
+                user_id=uid,
+                wins=int(avari.wins),
+                matches_played=int(avari.matches_played),
+                flips=int(avari.flips),
+                win_streak_current=int(avari.win_streak_current),
+                is_winner=won,
+                mastery_after=mastery_after,
+                match_flags=set(),
+                event_id=event_id or None,
+                event_progress=event_progress,
+            )
+            session.flush()
+
+            from modules.daily_goals.daily_goals_service import apply_match_event
+
+            daily_payload = apply_match_event(
+                session,
+                user_id=uid,
+                avari=avari,
+                flips=flips,
+                won=won,
+            )
+            session.flush()
+
+            if LOGGING_SWITCH:
+                customlog(
+                    f"avari: match finalize applied user={uid} matchId={match_id} "
+                    f"type={match_type or '-'} fee={fee} flips={flips} "
+                    f"netFrags={net_fragments} goldArcori={after_a} frags={after_f} "
+                    f"played={played_design_id or '-'} mastery={len(mastery_changes)} "
+                    f"achievements={len(achievements_unlocked)} "
+                    f"dailyChanged={daily_payload.get('changedGoalIds')} "
+                    f"designs={len(cleaned_ids)}"
+                )
+
+            applied_payload = {
+                "applied": True,
+                "reason": "economy",
+                "matchId": match_id,
+                "goldFragmentsDelta": net_fragments,
+                "goldArcoriDelta": arcori_delta,
+                "goldFragments": after_f,
+                "goldArcori": after_a,
+                "feeFragments": fee,
+                "flipsRewarded": flips,
+                "masteryChanges": mastery_changes,
+                "achievementsUnlocked": achievements_unlocked,
+                "daily": daily_payload,
+                "eventProgress": event_progress.get(event_id) if event_id else None,
+                "mint": mint_payload,
+                # All first-offer / leader-eligible events this match.
+                "legacyOffers": legacy_offers,
+                # First offer only — kept for older clients.
+                "legacyOffer": legacy_offers[0] if legacy_offers else None,
+                "legacyProximity": legacy_proximity,
+                "legacyEvent": legacy_event,
             }
-            mastery_changes.append(change)
+            repo.insert_match_finalize(
+                session,
+                user_id=uid,
+                match_id=match_id,
+                response=applied_payload,
+            )
+            first_apply = True
+    except IntegrityError:
+        # Concurrent double-POST: other txn won the unique (user, match) insert.
+        with session_scope() as session:
+            raced = repo.get_match_finalize(session, uid, match_id)
+            if raced is not None:
+                if LOGGING_SWITCH:
+                    customlog(
+                        f"avari: match finalize race→already_applied user={uid} "
+                        f"matchId={match_id}"
+                    )
+                return _already_applied_payload(
+                    raced.response_json
+                    if isinstance(raced.response_json, dict)
+                    else None,
+                    match_id,
+                )
+        raise
 
-        sync_player_access_pool(session, uid)
-        session.flush()
+    if applied_payload is None:
+        raise AppError(INVALID_MATCH_FINALIZE, message="finalize produced no payload")
 
-        if LOGGING_SWITCH:
-            customlog(
-                f"avari: match finalize applied user={uid} matchId={match_id} "
-                f"type={match_type or '-'} fee={fee} flips={flips} "
-                f"netFrags={net_fragments} goldArcori={after_a} frags={after_f} "
-                f"played={played_design_id or '-'} mastery={len(mastery_changes)} "
-                f"designs={len(cleaned_ids)}"
+    # After DB commit: durable instant notes only on first apply (not replay).
+    if first_apply:
+        from modules.achievements.achievements_notifications import (
+            notify_achievement_unlocks,
+        )
+        from modules.daily_goals.daily_goals_notifications import (
+            notify_daily_completions,
+        )
+        from modules.legacy.legacy_notifications import (
+            notify_legacy_leader_proximity,
+            notify_legacy_offers,
+        )
+
+        unlocks = applied_payload.get("achievementsUnlocked") or []
+        if isinstance(unlocks, list) and unlocks:
+            notify_achievement_unlocks(
+                user_id=uid,
+                match_id=match_id,
+                unlocked_rows=[r for r in unlocks if isinstance(r, dict)],
+            )
+        daily = applied_payload.get("daily")
+        if isinstance(daily, dict):
+            completed = daily.get("goalsCompleted") or []
+            if isinstance(completed, list) and completed:
+                notify_daily_completions(
+                    user_id=uid,
+                    day_key=str(daily.get("dayKey") or ""),
+                    completed_rows=[r for r in completed if isinstance(r, dict)],
+                )
+        offers = applied_payload.get("legacyOffers") or []
+        if isinstance(offers, list) and offers:
+            notify_legacy_offers(
+                user_id=uid,
+                match_id=match_id,
+                offers=[r for r in offers if isinstance(r, dict)],
+            )
+        proximity = applied_payload.get("legacyProximity") or []
+        if isinstance(proximity, list) and proximity:
+            notify_legacy_leader_proximity(
+                events=[r for r in proximity if isinstance(r, dict)],
             )
 
-        return {
-            "applied": True,
-            "reason": "economy",
-            "matchId": match_id,
-            "goldFragmentsDelta": net_fragments,
-            "goldArcoriDelta": arcori_delta,
-            "goldFragments": after_f,
-            "goldArcori": after_a,
-            "feeFragments": fee,
-            "flipsRewarded": flips,
-            "rankXpDelta": 0,
-            "masteryChanges": mastery_changes,
-            "daily": None,
-            "mint": None,
-        }
+    return applied_payload

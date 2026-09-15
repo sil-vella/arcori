@@ -58,7 +58,7 @@ class AvariApiClient {
     }
   }
 
-  /// POST /authuser/avari/match/finalize — fee + flip fragments + mastery.
+  /// POST /authuser/avari/match/finalize — flip fragments + mastery (fee pre-paid).
   Future<AvariApiOutcome<MatchFinalizeResult>> finalizeMatch({
     required String accessToken,
     required String matchId,
@@ -67,6 +67,7 @@ class AvariApiClient {
     required List<String> designIds,
     int flips = 0,
     String? playedDesignId,
+    String? eventId,
     Map<String, int>? flipsByDesign,
     Map<String, dynamic>? result,
   }) async {
@@ -79,6 +80,8 @@ class AvariApiClient {
       'flips': flips,
       if (playedDesignId != null && playedDesignId.trim().isNotEmpty)
         'playedDesignId': playedDesignId.trim(),
+      if (eventId != null && eventId.trim().isNotEmpty)
+        'eventId': eventId.trim(),
       if (flipsByDesign != null && flipsByDesign.isNotEmpty)
         'flipsByDesign': flipsByDesign,
       if (result != null) 'result': result,
@@ -93,6 +96,69 @@ class AvariApiClient {
         body: jsonEncode(body),
       );
       return _parseFinalize(response);
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const AvariApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
+  }
+
+  /// POST /authuser/avari/match/pay_fee — deduct before matchmaking.
+  Future<AvariApiOutcome<MatchFeeResult>> payMatchFee({
+    required String accessToken,
+    required String matchType,
+    required String feeIntentId,
+    String? eventId,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/authuser/avari/match/pay_fee');
+    try {
+      final body = <String, dynamic>{
+        'matchType': matchType,
+        'feeIntentId': feeIntentId,
+      };
+      final eid = eventId?.trim() ?? '';
+      if (eid.isNotEmpty) body['eventId'] = eid;
+      final response = await _client.post(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+      return _parseFee(response);
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const AvariApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
+  }
+
+  /// POST /authuser/avari/match/refund_fee — restore fee if queue never started.
+  Future<AvariApiOutcome<MatchFeeResult>> refundMatchFee({
+    required String accessToken,
+    required String matchType,
+    required String feeIntentId,
+    int? feeFragments,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/authuser/avari/match/refund_fee');
+    final body = <String, dynamic>{
+      'matchType': matchType,
+      'feeIntentId': feeIntentId,
+      if (feeFragments != null) 'feeFragments': feeFragments,
+    };
+    try {
+      final response = await _client.post(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+      return _parseFee(response);
     } on Exception catch (e) {
       if (_isNetworkError(e)) {
         return const AvariApiOutcome.networkFailure();
@@ -160,6 +226,37 @@ class AvariApiClient {
     }
     return AvariApiOutcome.success(
       MatchFinalizeResult.fromJson(Map<String, dynamic>.from(data)),
+    );
+  }
+
+  AvariApiOutcome<MatchFeeResult> _parseFee(http.Response response) {
+    final envelope = _decodeEnvelope(response.body);
+    if (envelope == null) {
+      return AvariApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    if (envelope['ok'] != true) {
+      return AvariApiOutcome.failure(
+        error: ApiError.fromEnvelope(envelope),
+      );
+    }
+    final data = envelope['data'];
+    if (data is! Map) {
+      return AvariApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    return AvariApiOutcome.success(
+      MatchFeeResult.fromJson(Map<String, dynamic>.from(data)),
     );
   }
 

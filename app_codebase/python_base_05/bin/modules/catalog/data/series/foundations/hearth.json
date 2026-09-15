@@ -134,6 +134,52 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "HEA-HBA-SER003-0004",
+      "themeCode": "HEA",
+      "designCode": "HBA",
+      "designFamily": "THE_HEARTH_BENEATH_THE_ASH",
+      "design": "The Hearth Beneath the Ash",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Hearth",
+      "subtheme": "Hearth",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 3.5,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Hearth Beneath the Ash in realistic style with a standard finish and no effect. Use a background that is visually related to The Hearth Beneath the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-HBA-SER003-0004.webp",
+      "loreDescription": "A collectible The Hearth Beneath the Ash Arcori generation I from the Hearth Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

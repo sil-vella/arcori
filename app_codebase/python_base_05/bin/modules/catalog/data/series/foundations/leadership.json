@@ -136,6 +136,52 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "LED-FTG-SER003-0004",
+      "themeCode": "LED",
+      "designCode": "FTG",
+      "designFamily": "THE_FIRST_THROUGH_THE_GREY",
+      "design": "The First Through the Grey",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Leadership",
+      "subtheme": "Leadership",
+      "style": "Chibi",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 6.2,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The First Through the Grey in chibi style with a standard finish and no effect. Use a background that is visually related to The First Through the Grey. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LED-FTG-SER003-0004.webp",
+      "loreDescription": "A collectible The First Through the Grey Arcori generation I from the Leadership Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

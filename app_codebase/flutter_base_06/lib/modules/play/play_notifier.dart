@@ -14,6 +14,8 @@ import '../match/input/turn_pacing.dart';
 import '../match/state/match_notifier.dart';
 import '../match/state/match_snapshot_state.dart';
 import '../matchmaking/state/lobby_notifier.dart';
+import '../tasks/tasks_models.dart';
+import '../tasks/tasks_store.dart';
 import 'friend_match_invite_api.dart';
 import 'game_controls_prefs.dart';
 import 'play_models.dart';
@@ -104,15 +106,81 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     _setPhase(MatchFlowPhase.selectingType);
   }
 
-  void cancelSelection() {
+  /// Record a successful pre-match fee charge (idempotent intent for cancel refund).
+  void recordFeePaid({
+    required String feeIntentId,
+    required int feeFragments,
+    required String matchType,
+  }) {
+    final intent = feeIntentId.trim();
+    if (intent.isEmpty || feeFragments <= 0) return;
+    state = state.copyWith(
+      feeIntentId: intent,
+      feeFragmentsPaid: feeFragments,
+      feeMatchType: matchType.trim(),
+    );
+  }
+
+  Future<void> cancelSelection() async {
     if (state.phase != MatchFlowPhase.selectingType &&
         state.phase != MatchFlowPhase.typeSetup) {
       return;
     }
+    final intent = state.feeIntentId?.trim() ?? '';
+    final fee = state.feeFragmentsPaid ?? 0;
+    final matchType = state.feeMatchType?.trim() ?? '';
+    final shouldRefund = intent.isNotEmpty && fee > 0 && matchType.isNotEmpty;
+
     _runId++;
     state = const MatchFlowState();
     if (LOGGING_SWITCH) {
-      customlog('play: cancelSelection → idle');
+      customlog('play: cancelSelection → idle refund=$shouldRefund');
+    }
+    if (shouldRefund) {
+      await _refundPaidFee(
+        feeIntentId: intent,
+        feeFragments: fee,
+        matchType: matchType,
+      );
+    }
+  }
+
+  Future<void> _refundPaidFee({
+    required String feeIntentId,
+    required int feeFragments,
+    required String matchType,
+  }) async {
+    final token = ref.read(authProvider).accessToken ?? '';
+    if (token.isEmpty) {
+      if (LOGGING_SWITCH) {
+        customlog('play: fee refund skipped — no token');
+      }
+      return;
+    }
+    final outcome = await AvariApiClient().refundMatchFee(
+      accessToken: token,
+      matchType: matchType,
+      feeIntentId: feeIntentId,
+      feeFragments: feeFragments,
+    );
+    if (outcome.isSuccess) {
+      unawaited(ref.read(avariProfileProvider.notifier).load(force: true));
+      if (LOGGING_SWITCH) {
+        customlog(
+          'play: fee refund ok intent=$feeIntentId fee=$feeFragments',
+        );
+      }
+      return;
+    }
+    final error = outcome.error;
+    if (error != null) {
+      actionForApiError(error, isWebSocket: false);
+    }
+    if (LOGGING_SWITCH) {
+      customlog(
+        'play: fee refund soft-fail code=${error?.code} '
+        'network=${outcome.isNetworkError} intent=$feeIntentId',
+      );
     }
   }
 
@@ -178,6 +246,8 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     PracticeLoadout? practiceLoadout,
     String? inviteId,
     String? invitedUserId,
+    String? eventId,
+    String? eventSubtype,
   }) async {
     if (state.phase != MatchFlowPhase.selectingType) return;
 
@@ -197,11 +267,19 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       return;
     }
 
+    if (type == MatchType.specialEvent &&
+        (eventId == null || eventId.trim().isEmpty)) {
+      _abortWithMessage('Pick a special event to continue.');
+      return;
+    }
+
     final runId = ++_runId;
     state = MatchFlowState(
       phase: MatchFlowPhase.typeSetup,
       selectedType: type,
       practiceLoadout: practiceLoadout,
+      selectedEventId: eventId?.trim(),
+      selectedEventSubtype: eventSubtype?.trim(),
     );
     if (LOGGING_SWITCH) {
       customlog('play: selectType=${type.name} → typeSetup');
@@ -333,10 +411,27 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     }
     _postMatchExit = null;
     _finalizeStarted = false;
+
+    final intent = state.feeIntentId?.trim() ?? '';
+    final fee = state.feeFragmentsPaid ?? 0;
+    final matchType = state.feeMatchType?.trim() ?? '';
+    final shouldRefund = intent.isNotEmpty && fee > 0 && matchType.isNotEmpty;
+
     ref.read(lobbySnapshotProvider.notifier).clear();
     state = MatchFlowState(errorMessage: message);
     if (LOGGING_SWITCH) {
-      customlog('play: abort → idle message=$message');
+      customlog(
+        'play: abort → idle message=$message refund=$shouldRefund',
+      );
+    }
+    if (shouldRefund) {
+      unawaited(
+        _refundPaidFee(
+          feeIntentId: intent,
+          feeFragments: fee,
+          matchType: matchType,
+        ),
+      );
     }
   }
 
@@ -360,7 +455,11 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
   }
 
   void _setPhase(MatchFlowPhase phase) {
-    state = state.copyWith(phase: phase);
+    // Fee is consumed once a live match starts — do not refund after this.
+    state = state.copyWith(
+      phase: phase,
+      clearFee: phase == MatchFlowPhase.inMatch,
+    );
     if (LOGGING_SWITCH) {
       customlog('play: phase=${phase.name}');
     }
@@ -536,10 +635,16 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
 
   Map<String, dynamic> _matchTypePayload(MatchType type) {
     if (type == MatchType.specialEvent) {
+      final eid = (state.selectedEventId ?? '').trim().isNotEmpty
+          ? state.selectedEventId!.trim()
+          : stubSpecialEventId;
+      final subtype = (state.selectedEventSubtype ?? '').trim().isNotEmpty
+          ? state.selectedEventSubtype!.trim()
+          : stubSpecialEventSubtype;
       return {
         'code': 'specialEvent',
-        'subtype': stubSpecialEventSubtype,
-        'eventId': stubSpecialEventId,
+        'subtype': subtype,
+        'eventId': eid,
       };
     }
     return {'code': 'quickStart'};
@@ -998,6 +1103,14 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     }
 
     final api = ref.read(avariApiClientProvider);
+    final snapEventId = snap.matchType['eventId']?.toString().trim();
+    final eventId = (snapEventId != null && snapEventId.isNotEmpty)
+        ? snapEventId
+        : (type == MatchType.specialEvent
+            ? ((state.selectedEventId ?? '').trim().isNotEmpty
+                ? state.selectedEventId!.trim()
+                : stubSpecialEventId)
+            : null);
     final outcome = await api.finalizeMatch(
       accessToken: token,
       matchId: matchId,
@@ -1006,18 +1119,25 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       designIds: designIds,
       flips: flips,
       playedDesignId: playedDesignId,
+      eventId: eventId,
       flipsByDesign: Map<String, int>.from(_actorFlipsByDesign),
       result: snap.result,
     );
 
     if (outcome.isSuccess) {
       final data = outcome.data!;
+      // First apply or replay (`already_applied`): hydrate post-match from payload.
       state = state.copyWith(postMatchFinalize: data);
-      if (data.applied) {
-        // Keep Avari wallet in sync after fee / flip rewards.
+      final isReplay = data.reason == 'already_applied';
+      if (data.applied || isReplay) {
+        // Keep Avari wallet in sync after fee / flip rewards (or show cached).
         unawaited(
           ref.read(avariProfileProvider.notifier).load(force: true),
         );
+        final daily = data.daily;
+        if (daily != null && daily.isNotEmpty && data.applied) {
+          TasksStore.applyProgress(TasksProgressSnapshot.fromJson(daily));
+        }
       }
       if (LOGGING_SWITCH) {
         customlog(

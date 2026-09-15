@@ -138,6 +138,50 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "MUS-TCX-SER003-0004",
+      "themeCode": "MUS",
+      "designCode": "TCX",
+      "designFamily": "THE_TIDEKEEPERS_CHORUS",
+      "design": "The Tidekeepers' Chorus",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Music",
+      "subtheme": "Music",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 6.2,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Tidekeepers' Chorus in prismatic style with a standard finish and no effect. Use a background that is visually related to The Tidekeepers' Chorus. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TCX-SER003-0004.webp",
+      "loreDescription": "A collectible The Tidekeepers' Chorus Arcori generation I from the Music Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

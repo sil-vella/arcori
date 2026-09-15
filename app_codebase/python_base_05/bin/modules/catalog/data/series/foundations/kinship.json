@@ -134,6 +134,48 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "KNS-OWM-SER003-0004",
+      "themeCode": "KNS",
+      "designCode": "OWM",
+      "designFamily": "ONE_WINTER_MANY_HOMES",
+      "design": "One Winter, Many Homes",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Kinship",
+      "subtheme": "Kinship",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 8.3,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with One Winter, Many Homes in pixel art style with a standard finish and no effect. Use a background that is visually related to One Winter, Many Homes. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-OWM-SER003-0004.webp",
+      "loreDescription": "A collectible One Winter, Many Homes Arcori generation I from the Kinship Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

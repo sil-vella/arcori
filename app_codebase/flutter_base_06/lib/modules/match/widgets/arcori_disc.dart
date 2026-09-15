@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' show Quaternion, Vector3;
 
+import '../../kin/widgets/kin_lottie_preview.dart';
 import '../state/match_snapshot_state.dart';
 import 'arcori_cylinder.dart';
 import 'arcori_look.dart';
@@ -36,9 +37,10 @@ class ArcoriDisc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final faceUp = faceUpOverride ?? faceUpFromQuat(qx, qy, qz, qw);
+    final useLottie = piece.hasLottieFace;
     final look = ArcoriLook(
       designId: piece.designId,
-      imageUrl: piece.imageUrl,
+      imageUrl: useLottie ? null : piece.imageUrl,
       colorHex: piece.color,
     );
 
@@ -57,6 +59,12 @@ class ArcoriDisc extends StatelessWidget {
         look: look,
         size: size,
         faceUp: faceUp,
+        face: useLottie
+            ? KinSceneStack(
+                lottieUrl: piece.lottieUrl,
+                fit: BoxFit.cover,
+              )
+            : null,
       ),
     );
   }

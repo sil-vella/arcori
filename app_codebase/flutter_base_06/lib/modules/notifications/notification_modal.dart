@@ -12,6 +12,12 @@ import '../../core/theme/theme.dart';
 import 'notifications_api.dart';
 import 'notifications_notifier.dart';
 import 'notifications_state.dart';
+import '../achievements/achievement_unlock_modal.dart';
+import '../achievements/achievements_catalog_store.dart';
+import '../legacy/legacy_mint_complete_modal.dart';
+import '../legacy/legacy_preserve_flow.dart';
+import '../tasks/daily_goal_complete_modal.dart';
+import 'register_progress_notifications.dart';
 
 /// Shows one or more notifications in a single modal session.
 ///
@@ -90,6 +96,25 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
 
   NotificationMessage get _message => widget.pending[_index];
 
+  @override
+  void initState() {
+    super.initState();
+    _onMessageBecameCurrent(_message);
+  }
+
+  void _onMessageBecameCurrent(NotificationMessage message) {
+    if (!isAchievementUnlockNotification(
+      source: message.source,
+      subtype: message.subtype,
+    )) {
+      return;
+    }
+    final entry = achievementEntryFromNotificationData(message.data);
+    if (entry != null) {
+      AchievementsCatalogStore.markUnlocked([entry.id]);
+    }
+  }
+
   Future<void> _completeCurrentMessage({required bool runAcknowledged}) async {
     if (_advancing) {
       return;
@@ -119,12 +144,22 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
       _index++;
       _advancing = false;
     });
+    _onMessageBecameCurrent(_message);
   }
 
   @override
   Widget build(BuildContext context) {
     final message = _message;
     final config = _filteredResponseConfig(message);
+
+    final celebrate = _progressCelebrateChild(
+      context: context,
+      message: message,
+      config: config,
+    );
+    if (celebrate != null) {
+      return celebrate;
+    }
 
     if (config is NavigateResponseConfig) {
       return AppCenteredModal(
@@ -192,6 +227,145 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
           child: Text(_acknowledgeLabel(message)),
         ),
       ],
+    );
+  }
+
+  Widget? _progressCelebrateChild({
+    required BuildContext context,
+    required NotificationMessage message,
+    required NotificationResponseConfig? config,
+  }) {
+    final isUnlock = isAchievementUnlockNotification(
+      source: message.source,
+      subtype: message.subtype,
+    );
+    final isDaily = isDailyCompleteNotification(
+      source: message.source,
+      subtype: message.subtype,
+    );
+    final isLegacy = isLegacyOfferNotification(
+      source: message.source,
+      subtype: message.subtype,
+    );
+    if (!isUnlock && !isDaily && !isLegacy) {
+      return null;
+    }
+
+    if (isLegacy) {
+      final offers = legacyOffersFromNotificationData(message.data);
+      if (offers.isEmpty) {
+        return null;
+      }
+      final preservable = offers.where((o) => o.canPreserve).toList();
+      final token = widget.ref.read(authProvider).accessToken ?? '';
+      return AppCenteredModal(
+        title: message.title.isNotEmpty
+            ? message.title
+            : (preservable.length > 1
+                ? 'Legacy preserve (${preservable.length})'
+                : 'Legacy preserve available'),
+        showCloseButton: false,
+        child: LegacyOfferCelebrateBody(
+          offers: preservable.isNotEmpty ? preservable : offers,
+          actionsBuilder: (ctx, selected, unselected) => [
+            if (token.isNotEmpty) ...[
+              FilledButton(
+                style: context.appButtons.primary.filled,
+                onPressed: () async {
+                  final mint = await submitLegacyPreserveSelection(
+                    accessToken: token,
+                    selected: selected,
+                    decline: unselected,
+                  );
+                  await _completeCurrentMessage(runAcknowledged: true);
+                  if (mint != null) {
+                    await showLegacyMintCompleteModal(mint);
+                  }
+                },
+                child: Text(
+                  selected.isEmpty
+                      ? 'Open leader window'
+                      : (selected.length == 1
+                          ? 'Preserve selected'
+                          : 'Preserve ${selected.length} selected'),
+                ),
+              ),
+              AppSpacing.gapSm,
+              OutlinedButton(
+                onPressed: () async {
+                  await submitLegacyPreserveSelection(
+                    accessToken: token,
+                    selected: const [],
+                    decline: preservable.isNotEmpty ? preservable : offers,
+                  );
+                  await _completeCurrentMessage(runAcknowledged: true);
+                },
+                child: const Text('Preserve none'),
+              ),
+              AppSpacing.gapSm,
+            ],
+            OutlinedButton(
+              onPressed: () =>
+                  _completeCurrentMessage(runAcknowledged: true),
+              child: const Text('Dismiss'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final navigate = config is NavigateResponseConfig ? config : null;
+    final actionWidgets = <Widget>[
+      if (navigate != null)
+        for (var index = 0; index < navigate.buttons.length; index++) ...[
+          if (index > 0) AppSpacing.gapSm,
+          _navigateActionButton(
+            context: context,
+            message: message,
+            config: navigate,
+            button: navigate.buttons[index],
+            markRead: () async {
+              await widget.markRead?.call(message);
+            },
+            isPrimary: index == 0,
+            onComplete: () => _completeCurrentMessage(runAcknowledged: false),
+          ),
+        ],
+      AppSpacing.gapSm,
+      OutlinedButton(
+        onPressed: () => _completeCurrentMessage(runAcknowledged: true),
+        child: const Text('Dismiss'),
+      ),
+    ];
+
+    if (isUnlock) {
+      final entry = achievementEntryFromNotificationData(message.data);
+      if (entry == null) {
+        return null;
+      }
+      return AppCenteredModal(
+        title: message.title.isNotEmpty ? message.title : 'Achievement unlocked',
+        showCloseButton: false,
+        child: AchievementUnlockCelebrateBody(
+          entry: entry,
+          actions: actionWidgets,
+        ),
+      );
+    }
+
+    final entry = taskEntryFromNotificationData(message.data);
+    if (entry == null) {
+      return null;
+    }
+    return AppCenteredModal(
+      title: message.title.isNotEmpty
+          ? message.title
+          : (entry.isDailyGoal ? 'Daily goal complete' : 'Task complete'),
+      showCloseButton: false,
+      child: DailyGoalCompleteCelebrateBody(
+        entry: entry,
+        actions: actionWidgets,
+      ),
     );
   }
 }

@@ -10,6 +10,12 @@ _BUILTIN_SCREENS = frozenset(
         "sample",
         "account",
         "ws_demo",
+        "avari",
+        "achievements",
+        "daily_goals",
+        "tasks",
+        "play",
+        "velora",
     }
 )
 

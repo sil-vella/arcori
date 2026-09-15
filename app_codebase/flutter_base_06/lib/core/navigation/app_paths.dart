@@ -8,6 +8,8 @@ abstract final class AppPaths {
   static const register = '/register';
   /// Android/iOS App Link path (not a Flutter web UI).
   static const verifyEmail = '/arcori-verify-email';
+  /// Return from website checkout after physical mint payment.
+  static const legacyPreserveComplete = '/legacy-preserve-complete';
   static const wsDemo = '/ws-demo';
   static const exampleModule = '/example-module';
   static const notifications = '/notifications';
@@ -20,6 +22,9 @@ abstract final class AppPaths {
   static const kinCustomize = '/kin/customize';
   static const play = '/play';
   static const gameControls = '/game-controls';
+  static const achievements = '/achievements';
+  static const tasks = '/tasks';
+  static const taskDetail = '/tasks/detail';
 
   static const _protectedPaths = {wsDemo};
 

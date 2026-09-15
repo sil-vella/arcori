@@ -83,7 +83,7 @@ These names are product decisions, not cosmetic labels. They drove schemas, scre
 | **Legacy Owner** | Preservation title | Earned when a mint enters Trove |
 | **Generation Creator** | Historical title | Named on a preserved generation |
 | **Mastery** | Progress on a circulating design (not ownership) | Own played: 0→−1 / 1→0 / 2→+2; other flipped: 0→0 / 1→+1 / 2→+2 |
-| **Mastery Value** | Density label from weighted mastery vs circulating catalog size | `Value=Σ pts×(10/w)`; `density=Value/N`; Fair→…→Priceless; profile label only |
+| **Mastery Value** | Density label + number from weighted mastery vs circulating catalog size | `Value=Σ pts×(10/w)`; `density=Value/N`; Fair→…→Priceless; profile `masteryValue` + label |
 | **Trove** | Personal vault of **minted closed** Arcori only | Sink destination; empty until closures |
 | **Museum** | World factual history of closed gens | Not live stats; not personal Trove |
 | **Chronicle** | Mythology | What cannot be proven |
@@ -174,7 +174,7 @@ Before coding match screens, we wrote down who the player is in the world, what 
 | [core-match-loop.md](core-match-loop.md) | Play → matchmaking → match → celebration → Match Summary → exits |
 
 **Technical notes:**  
-Starter grant is **10 circulating design access + permanent starter slammer**, not Trove mints. Guided practice is AI-only with no economy. Match Summary must eventually show mastery, Gold Fragments, Rank XP, missions, cache, and possible mint → Trove.
+Starter grant is **10 circulating design access + permanent starter slammer**, not Trove mints. Guided practice is AI-only with no economy. Match Summary must eventually show mastery (Mastery Value, not Rank/XP), Gold Fragments, missions, cache, and possible mint → Trove.
 
 **Status:** Specs remain active; Home sink and onboarding UI are still future work. Play exists as drawer `/play` ahead of the full Home hub.
 
@@ -309,7 +309,7 @@ Plan: [match-setting-core-flow.md](match-setting-core-flow.md).
 5. `arcoriIds[]` + `slammerId` per seat; `arenaId` + optional `arenaImageUrl` + optional `gathererArcoriId` + **`callerUserId`** on the snapshot.  
 6. Match type is an **object** (code + subtype / event fields), not a bare string.  
 7. Catalog stats for physics: Dart calls FastAPI **service** batch at match init and **freezes** per match — no mid-match reload.  
-8. **Quick Start / Invite arena + Gatherer** from seated Arcori regions (`POST /service/catalog/select_arena`); Special Event stays stub until its own rules.
+8. **Quick Start / Invite arena + Gatherer** from seated Arcori regions (`POST /service/catalog/select_arena`); Special Event arena/media from event JSON (`fixed_*` or seated + `special_arena_background`).
 
 **Channels (authuser WS):**  
 `match/create`, `join`, `leave`, `end`, `action`, broadcast `match/state`.
@@ -501,13 +501,18 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 - Match slam: 3D thin-cylinder physics (Dart SSOT) + Flutter `xyzq` replay; rest keeps in-plane yaw  
 - Quick Start / Invite: arena image from seated Arcori regions as match background  
 - Arena mural follows the stack camera (zoomed in at rest; contain is max zoom-out; opaque table under rest-sized Arcori)  
+- Achievements: JSON SSOT + mtime reload; finalize returns unlocks + creates unlock_v1 notifications; celebrate on safe screens ([achievements.md](achievements.md))
 
 ### Next (ordered by master plan)
 
-1. **Celebration anims + daily / mission UI** (Gold Arcori economy writers done — [core-match-loop.md](core-match-loop.md))
-2. Home sink Trove • PLAY • Market; remaining first-time / returning flows
-3. My Mastery tab; Trove UI; Standings from real mastery ([mastery.md](mastery.md) writers live)
-4. Special Event arena rules (not the Quick Start / Invite region pick)
+### Next (ordered by master plan)
+
+1. **P0** Celebration / daily / mission / cache UI + Achievements env `016` + Daily Goals — [core-match-loop.md](core-match-loop.md) · [daily-goals.md](daily-goals.md) · [achievements.md](achievements.md)
+2. **P1** Real winners, standings-from-mastery, My Mastery REST, mint→Trove, finalize idempotency — [core-match-loop.md](core-match-loop.md) (Rank/XP cancelled → Mastery Value)
+3. **P2** Play Again, summary exits (Home/Velora/Trove), durable series, tournament history, `match_flags`, Special Event fees — [core-match-loop.md](core-match-loop.md)
+4. Docs lag: case study / player-profile-schema stub-finalize wording
+5. Home sink Trove • PLAY • Market; remaining first-time / returning flows
+6. Special Event arena rules (not the Quick Start / Invite region pick)
 
 ---
 
@@ -525,7 +530,10 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Catalog freeze at match init | Fair mid-match balance | Service batch; strip prompts |
 | Five launch regions; standing −2…+2 | Politics without good/evil factions; travel and collecting stay open | Region Catalog `01_regions.json`; region-to-region standings, not design IDs |
 | Pioneers series exists | First Trove mints should be reachable before Genesis generations fill | Legacy 100 / 200 vs Genesis 500 / 1000; ten seed designs only (`SER002`) |
-| Foundations series | Civilization / society catalog between Pioneers and Genesis | Legacy 250 / 500; 40 themes × 3 designs (`SER003`); art `003_foundations/{theme}/` |
+| Foundations series | Civilization / society catalog between Pioneers and Genesis | Legacy 250 / 500; 40 themes × 4 designs (`SER003`); art `003_foundations/{theme}/` |
+| Legacy preserve via external website checkout | Physical mint is store-safe; in-app never collects cards; digital mint stays server-authoritative | App `preserve/start` → system browser → website pays → `POST /service/legacy/fulfill` (idempotent `orderId`) → deep link `legacy-preserve-complete` → `preserve/complete` reads ledger only. Contract: [arcori-website-legacy-checkout.md](../00_System_Wide/arcori-website-legacy-checkout.md) |
+| Leader-window proximity alerts | Race urgency without spam; one alert per gap position | During `leader_window`, when challenger closes gap: notify leader (`pressure_v1`) + challenger (`chase_v1`) for each gap **5→1** crossed this match; `msg_id` includes gap; Play now → `play` |
+| Active-window play selection needed | “Play now” proximity / race UX is weak if seat Arcori stays weighted-random | Backlog: [active-window-arcori-play-selection.md](active-window-arcori-play-selection.md) — pin/prefer designs in open Legacy windows for match pick |
 | Creation series | Primordial Light / Dark pair before Genesis numbering | `SER000`; art `000_creation/`; The Light→ASH, The Dark→AMB; `selectionWeight` **0.01**; not in starter pool |
 | Pioneers selectionWeight | Ten seed companions stay maximally common for early mint / starter common band | All Pioneers designs `selectionWeight` **10.0** |
 | Starter pack bands | New profiles get mostly common + one scarcer echo | Gen/Pio only: **9× [8–10]** + **1× [3–4]** weight; not Creation/Foundations |
@@ -546,10 +554,13 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Rematch series ids on hot snapshot | Tournament/history can later group games without colliding WS rooms | Opener: `seriesId = matchId`, `seriesIndex = 1`. Rematch: mint `{seriesId}_002` etc. Postgres series table deferred until finalize writers |
 | Rematch only vs Practice | Practice stays local / no rematch lobby | Rematch enabled for online matches with other humans and/or prior AI seats (Quick Start 1H+2AI rematches the same AI). Disabled for Practice. |
 | Full snapshots | Tiny state; reconnect safety | `version` + replace |
-| Gold Cap → Gold Arcori; fee 2 frags; +1 frag/flip | Wallet currency feels like solid-gold Arcori, not coins; fee/reward tied to flips | `gold_arcori` + `gold_fragments`; finalize deducts fee then adds flips; 4:1 normalize; signup `gold_arcori=20`; not catalog |
+| Mastery Value replaces Rank/XP | One progression signal; Rank chip was always +0 | Profile `masteryValue` + `masteryValueLabel`; post-match Rank XP removed |
 | Mastery: own vs other curves | Your walked piece is risky (blank match hurts); flipping others is always non-negative | Own seat flips 0/−1, 1/0, 2/+2 on played design; other actor flips 0/0, 1/+1, 2/+2; practice skip; `player_mastery` per user; profile `access.masteryPoints` — [mastery.md](mastery.md) |
 | Mastery Value = selectionWeight-scaled sum | Raw point totals treat common and rare the same | `Σ masteryPoints × (10.0 / selectionWeight)`; clamp `[0.01, 10.00]`. No printedRarity. |
-| Mastery Value label vs circulating N | Absolute score drifts as catalog grows; players need a stable Fair→Priceless read | `density = Value / N` (`N` = circulating playable catalog); bands Fair / Notable / Sought / Coveted / Exquisite / Priceless. Profile shows label only. |
+| Mastery Value label vs circulating N | Absolute score drifts as catalog grows; players need a stable Fair→Priceless read | `density = Value / N` (`N` = circulating playable catalog); bands Fair / Notable / Sought / Coveted / Exquisite / Priceless. Profile shows **value + label**. Rank/XP retired. |
+| Achievements JSON SSOT ≠ GDD titles | Match unlocks (first win, streaks) without rebuilding apps; titles stay standing identity | `achievements.json` mtime hot-reload; type evaluator registry; Flutter `post_achieve_action` handlers; finalize returns `achievementsUnlocked[]` **and** creates `unlock_v1` instants; celebrate only on Home/Play-idle — [achievements.md](achievements.md) |
+| Special Event fully JSON-driven | Add events without forking matchmaking/match code | `special_events.json` v2 rules → service `match_rules` + authuser catalog; Dart applies seats/rounds/arena/media; multi-match open queue with `matches_credited` — [special-events.md](special-events.md) |
+| Daily / task complete via notifications | Rematch must not be blocked by celebrate modals; unlocks durable across restart | Finalize `create_for_user` `complete_v1` / `unlock_v1`; NotificationHost safe-surface gate; post-match keeps summary only — [daily-goals.md](daily-goals.md) |
 | selectionWeight only (no printedRarity) | One number for how-often and Mastery Value; tiers were confusing | Design field `0.01`…`10.00`; match/Gatherer × region mult from `04_selection_weights`; deleted `03_printed_rarity.json` |
 | Join-or-create + 5s + AI fill | Solo players still play | Shared matchmaking for quick/event |
 | Friend Match via notification reply | Guest can accept from any screen; invite is one-shot (soft-deleted after reply / lobby timeout) | `create_for_user` instant + `data.response` reply; cancel + inbox prune clear stale popups |

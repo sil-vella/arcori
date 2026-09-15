@@ -49,6 +49,12 @@ class AvariProfile(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     )
     wins: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
     flips: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
+    win_streak_current: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    win_streak_best: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
     onboarding_completed: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="false"
     )

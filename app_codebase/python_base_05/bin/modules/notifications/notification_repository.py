@@ -32,13 +32,68 @@ def insert_user_notification(
     data: dict[str, Any] | None = None,
     responses: list[dict[str, Any]] | None = None,
 ) -> UserNotification:
+    cleaned_msg = (msg_id or "").strip() or None
+    if cleaned_msg is None:
+        row = UserNotification(
+            user_id=user_id,
+            source=source.strip(),
+            type=notification_type,
+            category=category,
+            subtype=subtype,
+            msg_id=None,
+            title=title,
+            body=body,
+            data=data or {},
+            responses=responses or [],
+        )
+        session.add(row)
+        session.flush()
+        return row
+
+    stmt = (
+        insert(UserNotification)
+        .values(
+            id=uuid.uuid4(),
+            user_id=user_id,
+            source=source.strip(),
+            type=notification_type,
+            category=category,
+            subtype=subtype,
+            msg_id=cleaned_msg,
+            title=title,
+            body=body,
+            data=data or {},
+            responses=responses or [],
+        )
+        .on_conflict_do_nothing(
+            index_elements=["user_id", "msg_id"],
+            index_where=UserNotification.msg_id.is_not(None),
+        )
+        .returning(UserNotification.id)
+    )
+    inserted = session.execute(stmt).first()
+    if inserted is not None:
+        row = session.get(UserNotification, inserted[0])
+        if row is not None:
+            return row
+
+    existing = session.scalars(
+        select(UserNotification).where(
+            UserNotification.user_id == user_id,
+            UserNotification.msg_id == cleaned_msg,
+        )
+    ).first()
+    if existing is not None:
+        return existing
+
+    # Extremely unlikely race: conflict then soft-deleted. Fall back to plain insert.
     row = UserNotification(
         user_id=user_id,
         source=source.strip(),
         type=notification_type,
         category=category,
         subtype=subtype,
-        msg_id=msg_id,
+        msg_id=cleaned_msg,
         title=title,
         body=body,
         data=data or {},

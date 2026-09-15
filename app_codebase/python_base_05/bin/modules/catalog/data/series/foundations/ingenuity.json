@@ -140,6 +140,50 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "IGY-BBT-SER003-0004",
+      "themeCode": "IGY",
+      "designCode": "BBT",
+      "designFamily": "BUILT_BETWEEN_THE_TIDES",
+      "design": "Built Between the Tides",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Ingenuity",
+      "subtheme": "Ingenuity",
+      "style": "Low Poly",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 8.8,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Built Between the Tides in low poly style with a standard finish and no effect. Use a background that is visually related to Built Between the Tides. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-BBT-SER003-0004.webp",
+      "loreDescription": "A collectible Built Between the Tides Arcori generation I from the Ingenuity Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

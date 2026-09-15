@@ -1,10 +1,10 @@
 # Core Match Loop
 
-**Status:** In Progress — Gold writers done; mastery curves locked; celebration / daily UI next  
+**Status:** In Progress — post-match spine live (gold/mastery/achievements); gaps below  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-09-11
+**Last Updated:** 2026-09-14
 
-Related: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [match-hot-state.md](match-hot-state.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [ws-invite-match.md](ws-invite-match.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [mastery.md](mastery.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
+Related: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [match-hot-state.md](match-hot-state.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [ws-invite-match.md](ws-invite-match.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [mastery.md](mastery.md) · [daily-goals.md](daily-goals.md) · [achievements.md](achievements.md) · [Arcori GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md)
 
 ## Objective
 
@@ -32,17 +32,17 @@ Play Hub
 | Invite matchmaking | Done — [ws-invite-match.md](ws-invite-match.md) |
 | Stub match Arcori selection (weights) | Done — [stub-match-arcori-selection.md](stub-match-arcori-selection.md) |
 | Post-match modal (summary + Done / Play New) | Done — hold snapshot until leave |
-| Stub `POST /authuser/avari/match/finalize` | Superseded — economy writers live |
+| `POST /authuser/avari/match/finalize` | Live — gold, mastery/access, stats, achievements |
 | Rematch (invite-notify + series matchIds) | Done — online; other humans notified when present; same prior AI reseated when no/partial humans |
 | Gold Arcori economy (fee + flip fragments + signup 20) | Done |
 | Mastery match curves (own vs other) | Done writers — [mastery.md](mastery.md); My Mastery tab open |
-| Celebration / mastery anims / daily / durable series | Not started |
+| Celebration / daily / mint / real winners | Open — see Remaining gaps |
 
 ## Match Summary contents
 
-- Victory / defeat and match statistics
+- Flip counts per seat (no victory / defeat framing)
 - Gold Fragments earned
-- Profile XP and Rank progress
+- Mastery Value (replaces Rank / XP)
 - Mastery changes (circulating — not ownership)
 - Daily Mission progress
 - Daily Cache unlock
@@ -67,26 +67,56 @@ After post-match the player chooses:
 - Rematch N: `matchId = {seriesId}_{NNN}` (zero-padded 3 digits); snapshot carries `seriesId` + `seriesIndex`.
 - Hot-state only this slice (no Postgres series table yet).
 
-## Implementation Steps
+## Remaining gaps (post-match)
+
+Spine is live: end → modal → finalize → rematch/leave. Gold, mastery/access, stats, achievements writers are in.
+
+### P0 — next product slice
+
+- [ ] Celebration / mastery anims + daily / mission / cache UI (finalize still `daily: null`, `mint: null`) — [daily-goals.md](daily-goals.md)
+- [ ] Achievements env apply — Alembic `016` + smoke; optional catalog hydrate on auth — [achievements.md](achievements.md)
+
+### P1 — summary / progression correctness
+
+- [x] ~~Real winners — Dart/practice `winnerUserIds` = highest score (not all humans)~~ — **superseded**: post-match shows flip counts (no Victory/Defeat); do not implement highest-score winners
+- [ ] Standings from mastery — finalize writes standings
+- [ ] My Mastery tab + REST
+- [x] Legacy / mint → Trove (external checkout + service fulfill; finalize may still surface `mint`/`legacyOffer`) — [legacy-preserve.md](legacy-preserve.md)
+- [x] Finalize idempotency — same `matchId` must not double-apply gold/mastery (`match_finalize_ledger`, Alembic `020`; replay `applied: false`, `reason: already_applied`)
+
+### P2 — exits / series
+
+- [ ] Play Again (same-mode rematchmaking)
+- [ ] Home / Velora / Trove exits from summary
+- [ ] Durable series / results table (series is hot-state only)
+- [ ] Tournament / history by series
+- [ ] `match_flags` into achievements (today always empty)
+- [x] Special Event fee rules — JSON `fee_fragments` + Flutter pay (TM `291`)
+
+### Docs lag
+
+- [ ] Case study / player-profile-schema: remove “stub finalize / writers next” where writers already shipped
+
+## Implementation Steps (landed)
 
 - [x] Mode select → practice / quick / event pipelines (stub end)
 - [x] Invite pipeline — [ws-invite-match.md](ws-invite-match.md)
 - [x] Post-match modal; hold ended snapshot; Done / Play New leave
-- [x] Stub finalize endpoint + Flutter `AvariApiOutcome` soft-fail
+- [x] Finalize endpoint + Flutter `AvariApiOutcome` soft-fail
 - [x] Rematch = invite notify + series-suffixed matchIds + prior loadout hints
 - [x] Gold Arcori economy — fee 2 fragments; +1 fragment/flip; signup 20; finalize writers
-- [ ] Celebration / mastery anims / daily / mission / cache UI
-- [ ] Home / Velora / Trove exits from summary
-- [ ] Tournament / history UI sorting by series
-- [ ] Durable `match_series_links` (or results) when finalize writers land
+- [x] Mastery match writers + achievements unlock hook
+- [x] Finalize idempotency ledger — unique `(user_id, match_id)` + cached response; notify only on first apply
+- [x] Match fee idempotency — `feeIntentId` ledger (`021`); cancel/abort refund same intent; notify `msg_id` unique (`022`)
 
 ## Next Steps
 
-Wire celebration anims + daily / mission / cache UI. Tournament sorting / durable series table later.
+Work Remaining gaps in P0 → P1 → P2 order. Daily Goals module and celebration UI first.
 
 ## Notes
 
 Practice mode: AI only, no progression / economy (GDD) — finalize returns `applied: false, reason: practice`. Online fee **2 Gold Fragments**; **+1 fragment per flip**; **4 fragments = 1 Gold Arcori** (currency only, not catalog). Signup grant **20 Gold Arcori**.
 Post-match keeps the Flutter ended snapshot until Done / Play New / Rematch so Rematch can capture series + seats; Dart `match/leave` runs on those exits before the rematch lobby find.
-
-Task Manager: skipped this turn — remote App Dev checklist sync was blocked by the environment approval gate; markdown plans/case study are updated. Re-sync App Dev card `32` when TM writes are allowed.
+Online finalize is **idempotent** per `(userId, matchId)`: first apply writes economy/mastery/stats and stores the payload in `match_finalize_ledger`; repeats return `reason: already_applied` with the cached body (no second writers / notify).
+Pre-match fee is **idempotent** per `(userId, feeIntentId, kind)` in `match_fee_ledger`; lobby cancel / matchmaking abort refunds the paid intent once. Inbox celebrate rows unique on `(user_id, msg_id)` when `msg_id` is set.
+Post-match framing is **flips / mastery**, not Victory/Defeat or highest-score “real winners.”

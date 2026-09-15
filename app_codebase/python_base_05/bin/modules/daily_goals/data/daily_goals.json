@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "day_boundary": "utc",
+  "goals": [
+    {
+      "id": "play_one_match",
+      "name": "First Match of the Day",
+      "description": "Finish 1 online match today.",
+      "cadence": "daily",
+      "featured": true,
+      "task_type": "matches_completed",
+      "params": {
+        "min": 1
+      },
+      "value": {
+        "kind": "streak",
+        "on_complete_delta": 1,
+        "on_miss": "reset_to_zero"
+      },
+      "continue": {
+        "enabled": true,
+        "currency": "gold_arcori",
+        "cost": 1
+      },
+      "reward": {
+        "kind": "deferred",
+        "placeholder": true
+      },
+      "media": {
+        "background": {
+          "type": "image",
+          "value": "/catalog-media/daily_goals/play_one_match/background.webp"
+        },
+        "button": {
+          "type": "image",
+          "value": "/catalog-media/daily_goals/play_one_match/button.webp"
+        },
+        "icon": {
+          "type": "image",
+          "value": "/catalog-media/daily_goals/play_one_match/icon.webp"
+        },
+        "post_task": {
+          "animation": {
+            "type": "lottie",
+            "value": "/catalog-media/daily_goals/play_one_match/post_task/animation.json"
+          },
+          "burst": {
+            "type": "image",
+            "value": "/catalog-media/daily_goals/play_one_match/post_task/burst.webp"
+          },
+          "sfx": {
+            "type": "audio",
+            "value": "/catalog-media/daily_goals/play_one_match/post_task/cheer.mp3"
+          }
+        }
+      },
+      "post_complete_action": {
+        "type": "none"
+      },
+      "section": "daily_goals"
+    },
+    {
+      "id": "land_three_flips",
+      "name": "Three Flips",
+      "description": "Land 3 flips in online matches today. Checked after each match.",
+      "cadence": "daily",
+      "featured": true,
+      "task_type": "flips_completed",
+      "params": {
+        "min": 3
+      },
+      "value": {
+        "kind": "streak",
+        "on_complete_delta": 1,
+        "on_miss": "reset_to_zero"
+      },
+      "continue": {
+        "enabled": true,
+        "currency": "gold_arcori",
+        "cost": 1
+      },
+      "reward": {
+        "kind": "deferred",
+        "placeholder": true
+      },
+      "media": {
+        "animated_background": {
+          "type": "lottie",
+          "value": "/catalog-media/daily_goals/land_three_flips/animated_background.json"
+        },
+        "background": {
+          "type": "image",
+          "value": "/catalog-media/daily_goals/land_three_flips/background.webp"
+        },
+        "icon": {
+          "type": "image",
+          "value": "/catalog-media/daily_goals/land_three_flips/icon.webp"
+        },
+        "post_task": {
+          "animation": {
+            "type": "lottie",
+            "value": "/catalog-media/daily_goals/land_three_flips/post_task/animation.json"
+          }
+        }
+      },
+      "post_complete_action": {
+        "type": "move_to_screen",
+        "screen": "tasks",
+        "cta_label": "View"
+      },
+      "section": "daily_goals"
+    },
+    {
+      "id": "daily_login",
+      "name": "Daily Check-In",
+      "description": "Open Daily Goals today.",
+      "cadence": "daily",
+      "featured": false,
+      "task_type": "login",
+      "params": {
+        "min": 1
+      },
+      "value": {
+        "kind": "streak",
+        "on_complete_delta": 1,
+        "on_miss": "reset_to_zero"
+      },
+      "continue": {
+        "enabled": true,
+        "currency": "gold_arcori",
+        "cost": 1
+      },
+      "reward": {
+        "kind": "deferred",
+        "placeholder": true
+      },
+      "media": {},
+      "post_complete_action": {
+        "type": "none"
+      },
+      "section": "tasks"
+    },
+    {
+      "id": "daily_mystery_box",
+      "name": "Daily Mystery Box",
+      "description": "Claim today’s mystery box after all featured missions.",
+      "cadence": "daily",
+      "featured": false,
+      "task_type": "claim_gate",
+      "params": {
+        "requires_goal_ids": [
+          "play_one_match",
+          "land_three_flips"
+        ]
+      },
+      "value": {
+        "kind": "streak",
+        "on_complete_delta": 1,
+        "on_miss": "reset_to_zero"
+      },
+      "continue": {
+        "enabled": true,
+        "currency": "gold_arcori",
+        "cost": 2
+      },
+      "reward": {
+        "kind": "mystery_box",
+        "table_id": null
+      },
+      "media": {
+        "background": {
+          "type": "image",
+          "value": "/catalog-media/daily_goals/daily_mystery_box/background.webp"
+        },
+        "button": {
+          "type": "image",
+          "value": "/catalog-media/daily_goals/daily_mystery_box/button.webp"
+        },
+        "boxClosed": {
+          "type": "image",
+          "value": "/catalog-media/daily_goals/daily_mystery_box/box_closed.webp"
+        },
+        "boxOpen": {
+          "type": "lottie",
+          "value": "/catalog-media/daily_goals/daily_mystery_box/box_open.json"
+        },
+        "post_task": {
+          "animation": {
+            "type": "lottie",
+            "value": "/catalog-media/daily_goals/daily_mystery_box/post_task/open.json"
+          },
+          "glow": {
+            "type": "image",
+            "value": "/catalog-media/daily_goals/daily_mystery_box/post_task/glow.webp"
+          }
+        }
+      },
+      "post_complete_action": {
+        "type": "move_to_screen",
+        "screen": "daily_goals",
+        "cta_label": "View Daily Goals"
+      },
+      "section": "tasks"
+    }
+  ]
+}

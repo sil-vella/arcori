@@ -140,6 +140,48 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "LEG-WWK-SER003-0004",
+      "themeCode": "LEG",
+      "designCode": "WWK",
+      "designFamily": "WHAT_THE_WINTER_KEEPS",
+      "design": "What the Winter Keeps",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Legacy",
+      "subtheme": "Legacy",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 5.2,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with What the Winter Keeps in retro style with a standard finish and no effect. Use a background that is visually related to What the Winter Keeps. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-WWK-SER003-0004.webp",
+      "loreDescription": "A collectible What the Winter Keeps Arcori generation I from the Legacy Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

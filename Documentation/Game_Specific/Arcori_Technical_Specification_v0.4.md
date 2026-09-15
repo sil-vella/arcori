@@ -34,7 +34,7 @@ Fields: internalId, themeCode, designCode, designFamily, design, inspiration, re
 | **Chronicle** | Mythology |
 | **Trove (Avari / player)** | Durable record of **minted** closed Arcori belonging to a player — out of circulation |
 | **Mastery (player×design)** | Circulating progress; **not ownership**. Online match deltas: **own played** design 0/−1, 1/0, 2/+2 seat flips; **other** flipped designs 0/0, 1/+1, 2/+2. Practice skips. See [mastery.md](../01_Active_Plans/mastery.md) |
-| **Mastery Value (player aggregate)** | `MasteryValue = Σ points×(10/selectionWeight)`; `density = Value / N` (`N` = circulating playable catalog count). Label: Fair / Notable / Sought / Coveted / Exquisite / Priceless. Profile wire `mastery.masteryValueLabel` only. [mastery.md](../01_Active_Plans/mastery.md) |
+| **Mastery Value (player aggregate)** | `MasteryValue = Σ points×(10/selectionWeight)`; `density = Value / N` (`N` = circulating playable catalog count). Label: Fair / Notable / Sought / Coveted / Exquisite / Priceless. Profile wire `mastery.masteryValue` + `mastery.masteryValueLabel`. Replaces Rank/XP. [mastery.md](../01_Active_Plans/mastery.md) |
 
 ## Avari (player) titles
 
@@ -66,7 +66,7 @@ Not owned                            Minted legacy piece
 | **Creation** | `series/creation/` | `assets/images/arcori/000_creation/` | `SER000` | 50 | 100 | Primordial pair (The Light / The Dark); `selectionWeight` 0.1 |
 | **Genesis** | `series/genesis/` | `assets/images/arcori/001_genesis/` | `SER001` | 500 | 1000 | Main launch catalog |
 | **Pioneers** | `series/pioneers/` | `assets/images/arcori/002_pioneers/` | `SER002` | 100 | 200 | **Exists so these designs can mint earlier** than Genesis |
-| **Foundations** | `series/foundations/` | `assets/images/arcori/003_foundations/` | `SER003` | 250 | 500 | Civilization / society themes (40 themes × 3 designs); mints between Pioneers and Genesis |
+| **Foundations** | `series/foundations/` | `assets/images/arcori/003_foundations/` | `SER003` | 250 | 500 | Civilization / society themes (40 themes × 4 designs); mints between Pioneers and Genesis |
 
 `SER000` / `SER002` / `SER003` mark series, not generation number (`generation.number` is still 1 / roman I at launch). Series id tokens use the `SER` prefix so they are not confused with generation. Pioneers is the original ten seed designs; it is not a second full catalog. Creation is excluded from the starter unlock pool (Genesis + Pioneers only).
 

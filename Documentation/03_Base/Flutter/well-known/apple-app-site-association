@@ -8,7 +8,9 @@
         ],
         "paths": [
           "/arcori-verify-email",
-          "/arcori-verify-email/*"
+          "/arcori-verify-email/*",
+          "/legacy-preserve-complete",
+          "/legacy-preserve-complete/*"
         ],
         "components": [
           {
@@ -16,6 +18,12 @@
           },
           {
             "/": "/arcori-verify-email/*"
+          },
+          {
+            "/": "/legacy-preserve-complete"
+          },
+          {
+            "/": "/legacy-preserve-complete/*"
           }
         ]
       }

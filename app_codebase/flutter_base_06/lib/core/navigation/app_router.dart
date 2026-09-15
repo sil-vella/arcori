@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../state/auth/auth_providers.dart';
 import '../../modules/auth/email_verify_deep_link.dart';
+import '../../modules/legacy/legacy_preserve_flow.dart';
 import 'app_paths.dart';
 import 'app_shell.dart';
 import 'auth_redirect.dart';
@@ -23,10 +24,20 @@ GoRouter buildAppGoRouter(Ref ref) {
     redirect: (context, state) {
       final uri = state.uri;
       // Custom scheme: arcori://arcori-verify-email?token=…
+      // and arcori://legacy-preserve-complete?intentId=&orderId=
       if (uri.scheme == 'arcori') {
         final token = EmailVerifyDeepLinkHandler.tokenFromUri(uri);
         if (token != null) {
           EmailVerifyDeepLinkHandler.onToken(token);
+          return AppPaths.account;
+        }
+        final legacy = LegacyPreserveDeepLinkHandler.paramsFromUri(uri);
+        if (legacy != null) {
+          LegacyPreserveDeepLinkHandler.onReturn(
+            intentId: legacy.intentId,
+            orderId: legacy.orderId,
+          );
+          return AppPaths.play;
         }
         return AppPaths.account;
       }
@@ -36,7 +47,24 @@ GoRouter buildAppGoRouter(Ref ref) {
     routes: [
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
-        routes: routes,
+        routes: [
+          ...routes,
+          GoRoute(
+            path: AppPaths.legacyPreserveComplete,
+            redirect: (context, state) {
+              final legacy =
+                  LegacyPreserveDeepLinkHandler.paramsFromUri(state.uri);
+              if (legacy != null) {
+                LegacyPreserveDeepLinkHandler.onReturn(
+                  intentId: legacy.intentId,
+                  orderId: legacy.orderId,
+                );
+              }
+              return AppPaths.play;
+            },
+            builder: (context, state) => const SizedBox.shrink(),
+          ),
+        ],
       ),
     ],
   );

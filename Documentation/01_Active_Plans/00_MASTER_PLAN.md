@@ -2,11 +2,11 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-09-11
+**Last Updated:** 2026-09-14
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
-**Next app build:** Celebration anims + remaining post-match UI (daily). Mastery **curves locked** (writers next) — [mastery.md](mastery.md). Gold Arcori economy shipped — [core-match-loop.md](core-match-loop.md) / GDD.
+**Next app build:** Post-match remaining gaps (P0: celebration/daily UI + achievements env) — [core-match-loop.md](core-match-loop.md). Daily Goals — [daily-goals.md](daily-goals.md).
 
 **Narrative:** [03_CASE_STUDY.md](03_CASE_STUDY.md) — full game implementation case study (design → matchmaking; template infra out of scope).
 
@@ -37,7 +37,7 @@ Done:
 - [x] Stub match Arcori selection (Python weights + Dart startFromLobby) — [stub-match-arcori-selection.md](stub-match-arcori-selection.md)
 - [x] Stub match turn stages (2 rounds × slam, Dart auto loop) — [stub-match-turn-stages.md](stub-match-turn-stages.md)
 - [x] Catalog expansion (75 nostalgia / music / TV Arcori in Genesis) — [pioneers-catalog-expansion.md](pioneers-catalog-expansion.md)
-- [x] Foundations series (40 themes × 2 designs, `SER003`) — [foundations-catalog-import.md](foundations-catalog-import.md)
+- [x] Foundations series (40 themes × 4 designs, `SER003`) — [foundations-catalog-import.md](foundations-catalog-import.md)
 
 Open (ordered):
 
@@ -54,15 +54,32 @@ Open (ordered):
 - [x] **Rematch (invite-style)** — `create_rematch` + series `{root}_{NNN}` matchIds; same prior AI when no other humans — [core-match-loop.md](core-match-loop.md)
 - [x] **Gold Arcori economy** — rename Cap→Gold Arcori; fee 2 fragments; +1 fragment/flip; signup 20; finalize writers — [core-match-loop.md](core-match-loop.md)
 - [x] **Mastery match writers** (own: 0→−1 / 1→0 / 2→+2; other flipped: 0→0 / 1→+1 / 2→+2) — [mastery.md](mastery.md)
-- [ ] Celebration anims + daily / mission / cache UI *(next)* — [core-match-loop.md](core-match-loop.md)
+- [ ] **Achievements SSOT** (code landed; env apply `016` + smoke + optional auth hydrate) — [achievements.md](achievements.md)
+- [ ] **Daily Goals** (JSON catalog, miss-continue, mystery-box stub, media/`post_task`) — [daily-goals.md](daily-goals.md)
+- [ ] **Shared unlock_type + events** (goals/tasks/achievements; match_end / special_event / leaderboard…) — [unlock-types.md](unlock-types.md)
+- [ ] **P0** Celebration / mastery anims + daily / mission / cache UI — [core-match-loop.md](core-match-loop.md)
+- [ ] **P1** Real winners (highest score, not all humans) — [core-match-loop.md](core-match-loop.md)
+- [x] ~~**P1** Rank XP~~ — cancelled; **Mastery Value** replaces Rank/XP (`masteryValue` + label)
+- [ ] **P1** Standings from mastery on finalize — [core-match-loop.md](core-match-loop.md) · [arcori-standings-surface.md](arcori-standings-surface.md)
+- [ ] **P1** My Mastery tab + REST — [mastery.md](mastery.md)
+- [x] **P1** Legacy / mint → Trove (website fulfill + deep-link complete) — [legacy-preserve.md](legacy-preserve.md) · [core-match-loop.md](core-match-loop.md)
+- [ ] **P1** Active-window Arcori play selection (pin / prefer race design; today weighted-random only) — [active-window-arcori-play-selection.md](active-window-arcori-play-selection.md)
+- [ ] **P1** Finalize idempotency (no double-apply per `matchId`) — [core-match-loop.md](core-match-loop.md)
+- [ ] **P2** Play Again (same-mode rematchmaking) — [core-match-loop.md](core-match-loop.md)
+- [ ] **P2** Home / Velora / Trove exits from summary — [core-match-loop.md](core-match-loop.md)
+- [ ] **P2** Durable series / results table — [core-match-loop.md](core-match-loop.md)
+- [ ] **P2** Tournament / history by series — [core-match-loop.md](core-match-loop.md)
+- [ ] **P2** `match_flags` into achievements — [achievements.md](achievements.md)
+- [ ] **P2** Special Event fee rules — [core-match-loop.md](core-match-loop.md)
+- [ ] Docs lag: case study / player-profile-schema (stub finalize wording) — [03_CASE_STUDY.md](03_CASE_STUDY.md)
 - [ ] **Kin creation** (wizard + Genesis claim live; production Lottie / idle anims open) — [kin-creation.md](kin-creation.md)
 - [ ] Home sink Trove • PLAY • Market; first-time / returning startup
 - [ ] My Mastery tab + Trove UI
 - [ ] Slammer recovery slam-stat + charge spend / Gold Arcori recharge *(future)* — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
 
-Standings surface is live with an open tail (My Mastery / Trove) covered by the last open line.
+Standings surface is live with an open tail (My Mastery / Trove) covered above.
 
-**Board (2026-08-27):** Pioneers catalog expansion **Completed** on App Dev (`32`) — checklist `155`. **Ideas** (`18`) untouched.
+**Board:** App Dev (`32`) checklist mirrors post-match P0–P2 gaps. **Ideas** (`18`) untouched.
 
 ## Template / ops / project-wide (own TM cards — not App Dev)
 
@@ -101,7 +118,13 @@ Standings surface is live with an open tail (My Mastery / Trove) covered by the 
 | [arena-pov-zoom.md](arena-pov-zoom.md) | Completed | Arena mural shares stack camera; rest is 1:1 crop (no upscale); contain on zoom-out; opaque under stack |
 | [random-first-player.md](random-first-player.md) | Completed | Random `firstSeatIndex` at match start; wrap order every round |
 | [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
-| [core-match-loop.md](core-match-loop.md) | In Progress | Rematch + gold writers done; mastery curves locked; celebration next |
+| [core-match-loop.md](core-match-loop.md) | In Progress | Spine live; P0–P2 remaining gaps tracked |
+| [legacy-preserve.md](legacy-preserve.md) | In Progress | External checkout + fulfill + proximity notifs; Museum / play-select follow-on |
+| [active-window-arcori-play-selection.md](active-window-arcori-play-selection.md) | Spec / backlog | Let players prefer/pin active-window Arcori for match pick (vs weighted random) |
+| [achievements.md](achievements.md) | In Progress | JSON SSOT + finalize unlocks + Flutter list/celebration; Alembic 016 apply open |
+| [unlock-types.md](unlock-types.md) | Spec | Shared unlock_type + event dispatch across goals/tasks/achievements |
+| [special-event-achievements.md](special-event-achievements.md) | In Progress | Per-event flips / roster clear → same celebrate + View pipeline |
+| [special-events.md](special-events.md) | In Progress | JSON-driven match rules, arena/media, multi-match progress |
 | [mastery.md](mastery.md) | Writers live | Own/other finalize + collection masteryPoints; Mastery Value formula locked; My Mastery tab / profile wire open |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Partial | Standings + Detail tab; My Mastery/Trove still open |
 | [catalog-hot-reload.md](catalog-hot-reload.md) | Done | Catalog JSON mtime cache, authuser APIs, Flutter Velora |

@@ -1,4 +1,4 @@
-"""Avari HTTP routes (authuser read + Kin claim + match finalize stub)."""
+"""Avari HTTP routes (authuser read + Kin claim + match fee/finalize)."""
 
 from __future__ import annotations
 
@@ -12,6 +12,8 @@ from modules.avari.avari_service import (
     claim_kin,
     finalize_match,
     get_avari_profile,
+    pay_match_fee,
+    refund_match_fee,
     verify_slammers_for_seats,
 )
 from modules.avari.kin_backgrounds import list_kin_backgrounds
@@ -27,6 +29,14 @@ def register_avari_routes(
         lambda: _handle_kin_backgrounds(res),
     )
     routes.authuser_post("/avari/kin", lambda: _handle_claim_kin(res))
+    routes.authuser_post(
+        "/avari/match/pay_fee",
+        lambda: _handle_match_pay_fee(res),
+    )
+    routes.authuser_post(
+        "/avari/match/refund_fee",
+        lambda: _handle_match_refund_fee(res),
+    )
     routes.authuser_post(
         "/avari/match/finalize",
         lambda: _handle_match_finalize(res),
@@ -62,6 +72,24 @@ def _handle_claim_kin(res: HttpResponseContract):
         user_id = _require_user_id()
         body = parse_json_body()
         return res.json_ok(claim_kin(user_id, body))
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_match_pay_fee(res: HttpResponseContract):
+    try:
+        user_id = _require_user_id()
+        body = parse_json_body()
+        return res.json_ok(pay_match_fee(user_id, body))
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_match_refund_fee(res: HttpResponseContract):
+    try:
+        user_id = _require_user_id()
+        body = parse_json_body()
+        return res.json_ok(refund_match_fee(user_id, body))
     except AppError as err:
         return err.to_http_response()
 

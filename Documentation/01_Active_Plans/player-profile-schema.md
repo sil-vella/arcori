@@ -100,7 +100,7 @@ Local login: `admin@reignofplay.com` / `qepiarcori1!`
 | Table | Role |
 |-------|------|
 | `users` | Auth identity (unchanged columns) |
-| `avari_profiles` | 1:1 Rank/XP, economy, stats, titles, onboarding, daily, prefs |
+| `avari_profiles` | 1:1 economy, stats, titles, onboarding, daily, prefs (legacy `rank_*` columns unused; Mastery Value is computed) |
 | `player_kin` | Genesis Kin customization (1:1). `customization` JSONB = Lottie runtime knobs; `catalog_design` JSONB = mirrored regular Arcori design object — see [kin-creation.md](kin-creation.md) |
 | `player_design_access` | Circulating play/mastery access (not ownership) |
 | `player_mastery` | Points per `(user, design, generation)` |

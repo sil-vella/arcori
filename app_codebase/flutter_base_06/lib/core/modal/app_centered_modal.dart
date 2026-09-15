@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_modal_theme.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_theme.dart';
+import 'modal_navigator.dart';
 
 /// Centered modal shell with dimmed scrim. Modules supply [child] and optional
 /// [actions]; styling comes from the theme module.
@@ -98,7 +99,7 @@ class _Header extends StatelessWidget {
             IconButton(
               style: context.appButtons.primary.icon,
               tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => dismissModalRoute(context),
               icon: const Icon(Icons.close),
             ),
         ],

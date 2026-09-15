@@ -7,11 +7,20 @@ const stubAiArcoriId = 'ANM-WTI-SER001-0002';
 const stubGathererArcoriId = 'ANM-FOX-SER001-0003';
 const stubSlammerId = 'SLM-STR-SER001-0001';
 
-/// Quick Start and Invite pick a Velora arena from seated Arcori regions.
-/// Special Event uses other rules later; practice stays on [stubArenaId].
+/// Quick Start / Invite always use seated-region arena pick.
+/// Special Event uses seated pick when rules say so (or no fixed resolve).
 bool matchTypeUsesArcoriRegionArena(Map<String, dynamic> matchType) {
   final code = matchType['code']?.toString();
-  return code == 'quickStart' || code == 'invite';
+  if (code == 'quickStart' || code == 'invite') return true;
+  if (code == 'specialEvent' || code == 'special_event') {
+    final mode = matchType['arenaMode']?.toString().trim() ?? '';
+    if (mode == 'fixed_arena' || mode == 'fixed_region') {
+      // Still allow select when resolve deferred (media override only).
+      return matchType['deferSelectArena'] == true;
+    }
+    return true;
+  }
+  return false;
 }
 
 class MatchSeat {

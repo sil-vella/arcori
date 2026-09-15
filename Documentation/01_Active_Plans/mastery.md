@@ -72,7 +72,7 @@ density      = MasteryValue / max(1, N)
 | Inputs | Every `player_mastery` row; design catalog `selectionWeight` |
 | Clamp | `[0.01, 10.00]`; missing → **3.0** |
 | N | Global static catalog via `count_circulating_playable_arcori` — not player pool |
-| Profile | **Label only** — `mastery.masteryValueLabel` |
+| Profile | `mastery.masteryValue` (number) + `mastery.masteryValueLabel` |
 
 Helpers: `mastery_value_label` / `compute_profile_mastery_value_label`.
 
@@ -84,13 +84,13 @@ Helpers: `mastery_value_label` / `compute_profile_mastery_value_label`.
 - [x] Flutter finalize sends `playedDesignId` + `flipsByDesign`; post-match chips; inventory `M#`
 - [x] Access sync: grant on other +mastery; revoke at 0; Kin creator floor 100; starter seed 1
 - [x] Remove `printedRarity`; Mastery Value from `selectionWeight` only
-- [x] Expose Mastery Value on profile (`mastery.masteryValueLabel` Fair→Priceless; UI label only)
+- [x] Expose Mastery Value on profile (`mastery.masteryValue` + `masteryValueLabel` Fair→Priceless)
 - [ ] Standings apply from real user mastery (replace synthetic ranks when ready)
 - [ ] REST My Mastery + Arcori Detail tab
 
 ## Current Progress
 
-Writers + access-pool sync live. `printedRarity` removed. Profile shows `mastery.masteryValueLabel` (density = Value / circulating N).
+Writers + access-pool sync live. `printedRarity` removed. Profile shows `mastery.masteryValue` and `mastery.masteryValueLabel` (density = Value / circulating N). Rank/XP is not used — Mastery Value replaces it.
 
 ## Next Steps
 

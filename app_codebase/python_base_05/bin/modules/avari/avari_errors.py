@@ -38,6 +38,16 @@ INVALID_MATCH_FINALIZE = ErrorSpec(
     "Invalid match finalize payload",
     http_status=400,
 )
+INSUFFICIENT_GOLD = ErrorSpec(
+    "avari/insufficient_gold",
+    "Not enough Gold Fragments for this match",
+    http_status=402,
+)
+INVALID_MATCH_FEE = ErrorSpec(
+    "avari/invalid_match_fee",
+    "Invalid match fee request",
+    http_status=400,
+)
 
 
 def register_avari_errors(registrar: ModuleErrorRegistrar) -> None:
@@ -51,5 +61,7 @@ def register_avari_errors(registrar: ModuleErrorRegistrar) -> None:
             INVALID_KIN_COLOR,
             KIN_CLAIM_FAILED,
             INVALID_MATCH_FINALIZE,
+            INSUFFICIENT_GOLD,
+            INVALID_MATCH_FEE,
         ],
     )

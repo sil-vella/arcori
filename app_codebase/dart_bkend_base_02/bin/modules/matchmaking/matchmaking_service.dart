@@ -18,6 +18,7 @@ import 'matchmaking_ai_client.dart';
 import 'matchmaking_errors.dart';
 import 'matchmaking_models.dart';
 import 'matchmaking_store.dart';
+import '../special_events/special_events_client.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
@@ -235,7 +236,7 @@ class MatchmakingService {
 
     late final Map<String, dynamic> matchType;
     try {
-      matchType = parseMatchType(payload);
+      matchType = Map<String, dynamic>.from(parseMatchType(payload));
     } catch (_) {
       throw AppError(
         matchmakingInvalidRequest,
@@ -258,12 +259,46 @@ class MatchmakingService {
       );
     }
 
+    final eventId = matchType['eventId']?.toString().trim() ?? '';
+    if (code == 'specialEvent' && eventId.isEmpty) {
+      throw AppError(
+        matchmakingInvalidRequest,
+        message: 'specialEvent requires matchType.eventId',
+      );
+    }
+
+    SpecialEventMatchRules? eventRules;
+    if (code == 'specialEvent' && eventId.isNotEmpty) {
+      eventRules = await SpecialEventsClient(fastApi: _fastApi)
+          .fetchMatchRules(eventId);
+      if (eventRules != null) {
+        matchType['roundsTotal'] = eventRules.rounds;
+        matchType['arenaMode'] = eventRules.arenaMode;
+        matchType['eventMedia'] = eventRules.media;
+        matchType['aiFill'] = eventRules.aiFill;
+        final resolved = eventRules.resolvedArena;
+        if (resolved != null) {
+          matchType['resolvedArena'] = resolved;
+          if (resolved['deferSelectArena'] == true) {
+            matchType['deferSelectArena'] = true;
+          }
+        }
+        if (eventRules.subtype.isNotEmpty &&
+            (matchType['subtype']?.toString().trim().isEmpty ?? true)) {
+          matchType['subtype'] = eventRules.subtype;
+        }
+      }
+    }
+
     final rematch = matchType['rematch'] == true ||
         matchType['rematch']?.toString() == 'true';
     final rawCreateIfMissing = payload['createIfMissing'];
     final createIfMissing = rawCreateIfMissing is bool ? rawCreateIfMissing : true;
 
     var effectiveTargetSeats = (code == 'invite') ? 2 : targetSeats;
+    if (eventRules != null && eventRules.players >= 2) {
+      effectiveTargetSeats = eventRules.players;
+    }
     final rematchTargetRaw = matchType['rematchTargetSeats'];
     if (rematch) {
       final rematchTarget = rematchTargetRaw is int
@@ -300,8 +335,11 @@ class MatchmakingService {
       if (code == 'invite' && !createIfMissing) {
         throw AppError(matchmakingInviteNotFound);
       }
-      final effectiveFillWindow =
-          code == 'invite' ? const Duration(seconds: 20) : fillWindow;
+      final effectiveFillWindow = code == 'invite'
+          ? const Duration(seconds: 20)
+          : (eventRules != null
+              ? Duration(seconds: eventRules.fillWindowSec.clamp(1, 120))
+              : fillWindow);
       final endsAt = DateTime.now().toUtc().add(effectiveFillWindow);
       lobby = _store.createLobby(
         matchType: matchType,
@@ -512,6 +550,9 @@ class MatchmakingService {
             );
           }
         } else {
+          if (lobby.matchType['aiFill'] == false) {
+            throw AppError(matchmakingInviteNeedsMoreHumans);
+          }
           try {
             aiIds = await _ai.sampleAiUserIds(
               count: needAi,

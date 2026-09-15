@@ -136,6 +136,50 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "STE-KRE-SER003-0004",
+      "themeCode": "STE",
+      "designCode": "KRE",
+      "designFamily": "KEEPERS_OF_THE_RETURNING_PATHS",
+      "design": "Keepers of the Returning Paths",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Stewardship",
+      "subtheme": "Stewardship",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 4.5,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Keepers of the Returning Paths in realistic style with a standard finish and no effect. Use a background that is visually related to Keepers of the Returning Paths. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STE-KRE-SER003-0004.webp",
+      "loreDescription": "A collectible Keepers of the Returning Paths Arcori generation I from the Stewardship Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

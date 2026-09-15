@@ -55,6 +55,7 @@ class MatchPieceView {
     required this.faceUp,
     required this.stackIndex,
     this.imageUrl,
+    this.lottieUrl,
     this.color,
   });
 
@@ -65,10 +66,17 @@ class MatchPieceView {
   final bool faceUp;
   final int stackIndex;
   final String? imageUrl;
+  final String? lottieUrl;
   final String? color;
+
+  bool get hasLottieFace {
+    final url = lottieUrl?.trim() ?? '';
+    return url.isNotEmpty;
+  }
 
   factory MatchPieceView.fromJson(Map<String, dynamic> json) {
     final imageUrl = json['imageUrl']?.toString().trim() ?? '';
+    final lottieUrl = json['lottieUrl']?.toString().trim() ?? '';
     final color = json['color']?.toString().trim() ?? '';
     return MatchPieceView(
       pieceId: json['pieceId']?.toString() ?? '',
@@ -78,6 +86,7 @@ class MatchPieceView {
       faceUp: json['faceUp'] == true,
       stackIndex: json['stackIndex'] is int ? json['stackIndex'] as int : 0,
       imageUrl: imageUrl.isNotEmpty ? imageUrl : null,
+      lottieUrl: lottieUrl.isNotEmpty ? lottieUrl : null,
       color: color.isNotEmpty ? color : null,
     );
   }
@@ -90,6 +99,7 @@ class MatchPieceView {
         'faceUp': faceUp,
         'stackIndex': stackIndex,
         if (imageUrl != null && imageUrl!.isNotEmpty) 'imageUrl': imageUrl,
+        if (lottieUrl != null && lottieUrl!.isNotEmpty) 'lottieUrl': lottieUrl,
         if (color != null && color!.isNotEmpty) 'color': color,
       };
 }

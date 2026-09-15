@@ -142,6 +142,50 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "MEM-FRX-SER003-0004",
+      "themeCode": "MEM",
+      "designCode": "FRX",
+      "designFamily": "THE_FOREST_REMEMBERS",
+      "design": "The Forest Remembers",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Memory",
+      "subtheme": "Memory",
+      "style": "Neon",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 4.3,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Forest Remembers in neon style with a standard finish and no effect. Use a background that is visually related to The Forest Remembers. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-FRX-SER003-0004.webp",
+      "loreDescription": "A collectible The Forest Remembers Arcori generation I from the Memory Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

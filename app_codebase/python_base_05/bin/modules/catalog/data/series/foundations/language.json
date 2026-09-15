@@ -138,6 +138,52 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "LAN-SSL-SER003-0004",
+      "themeCode": "LAN",
+      "designCode": "SSL",
+      "designFamily": "SIGNS_OF_SHARED_LIGHT",
+      "design": "Signs of Shared Light",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Language",
+      "subtheme": "Language",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 4.1,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Signs of Shared Light in minimalist style with a standard finish and no effect. Use a background that is visually related to Signs of Shared Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAN-SSL-SER003-0004.webp",
+      "loreDescription": "A collectible Signs of Shared Light Arcori generation I from the Language Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

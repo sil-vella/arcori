@@ -136,6 +136,50 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "NAV-CLT-SER003-0004",
+      "themeCode": "NAV",
+      "designCode": "CLT",
+      "designFamily": "CHARTS_OF_THE_LIVING_TIDE",
+      "design": "Charts of the Living Tide",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Navigation",
+      "subtheme": "Navigation",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 6.1,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Charts of the Living Tide in realistic style with a standard finish and no effect. Use a background that is visually related to Charts of the Living Tide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAV-CLT-SER003-0004.webp",
+      "loreDescription": "A collectible Charts of the Living Tide Arcori generation I from the Navigation Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

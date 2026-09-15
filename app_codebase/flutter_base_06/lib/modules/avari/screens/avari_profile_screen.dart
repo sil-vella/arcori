@@ -165,23 +165,31 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
       AppSpacing.gapLg,
       _SectionTitle(text: 'Wallet'),
       Text(
-        '4 Gold Fragments = 1 Gold Arcori',
+        'Every 4 Gold Fragments automatically become 1 Gold Arcori.',
         style: context.appTypography.bodySmall,
       ),
       AppSpacing.gapSm,
       _KeyValue('Gold Arcori', '${profile.economy.goldArcori}'),
-      _KeyValue('Gold Fragments', '${profile.economy.goldFragments}'),
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Rank & XP'),
-      _KeyValue('Level', '${profile.rank.level}'),
-      _KeyValue('XP', '${profile.rank.xp}'),
-      if (profile.rank.label != null && profile.rank.label!.isNotEmpty)
-        _KeyValue('Rank', profile.rank.label!),
+      _KeyValue(
+        'Gold Fragments',
+        '${profile.economy.goldFragments} of 4 toward next Gold Arcori',
+      ),
       AppSpacing.gapMd,
       _SectionTitle(text: 'Titles'),
       Text(
         profile.titles.isEmpty ? 'None yet' : profile.titles.join(' · '),
         style: context.appTypography.body,
+      ),
+      AppSpacing.gapMd,
+      _SectionTitle(text: 'Achievements'),
+      Text(
+        'Catalog unlocks from matches — separate from titles.',
+        style: context.appTypography.bodySmall,
+      ),
+      AppSpacing.gapSm,
+      OutlinedButton(
+        onPressed: () => Nav.push(context, AppPaths.achievements),
+        child: const Text('View Achievements'),
       ),
       AppSpacing.gapMd,
       _SectionTitle(text: 'Kin'),
@@ -283,15 +291,51 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
       AppSpacing.gapMd,
       _SectionTitle(text: 'Stats'),
       _KeyValue('Matches', '${profile.stats.matchesPlayed}'),
-      _KeyValue('Wins', '${profile.stats.wins}'),
       _KeyValue('Flips', '${profile.stats.flips}'),
       AppSpacing.gapMd,
       _SectionTitle(text: 'Mastery Value'),
       AppSpacing.gapSm,
+      _KeyValue('Value', '${profile.mastery.masteryValue}'),
+      _KeyValue('Standing', profile.mastery.masteryValueLabel),
+      AppSpacing.gapMd,
+      _SectionTitle(text: 'Museum'),
       Text(
-        profile.mastery.masteryValueLabel,
-        style: context.appTypography.body,
+        'Preserved Legacy — out of circulation.',
+        style: context.appTypography.bodySmall,
       ),
+      AppSpacing.gapSm,
+      if (profile.trove.isEmpty)
+        Text('None yet', style: context.appTypography.bodyMuted)
+      else
+        Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            for (final item in profile.trove)
+              InventoryFaceChip(
+                item: item.asInventoryItem(),
+                captionOverride: item.caption,
+              ),
+          ],
+        ),
+      AppSpacing.gapMd,
+      _SectionTitle(text: 'Preservation Windows'),
+      Text(
+        'Designs currently in a Legacy window — mastery / mastery cap.',
+        style: context.appTypography.bodySmall,
+      ),
+      AppSpacing.gapSm,
+      if (profile.preservationWindows.isEmpty)
+        Text('None open', style: context.appTypography.bodyMuted)
+      else
+        Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            for (final item in profile.preservationWindows)
+              InventoryFaceChip(item: item),
+          ],
+        ),
       AppSpacing.gapMd,
       _SectionTitle(text: 'Arcori'),
       Text(

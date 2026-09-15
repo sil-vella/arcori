@@ -15,17 +15,22 @@ class InventoryFaceChip extends StatelessWidget {
   const InventoryFaceChip({
     required this.item,
     this.lottieFile,
+    this.captionOverride,
     super.key,
   });
 
   final AvariInventoryItem item;
   final File? lottieFile;
 
+  /// When set, replaces the mastery / mint-reach caption (e.g. Trove gen).
+  final String? captionOverride;
+
   static const double _size = 64;
 
   @override
   Widget build(BuildContext context) {
     final useLottie = item.hasLottieFace || lottieFile != null;
+    final caption = captionOverride ?? item.masteryOverMintReach;
     return SizedBox(
       width: _size + AppSpacing.md,
       child: Column(
@@ -55,7 +60,9 @@ class InventoryFaceChip extends StatelessWidget {
             style: context.appTypography.caption,
           ),
           Text(
-            item.masteryOverMintReach,
+            caption,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
             style: context.appTypography.caption.copyWith(
               color: context.appColorScheme.onSurfaceVariant,

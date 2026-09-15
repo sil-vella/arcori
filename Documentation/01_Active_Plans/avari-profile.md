@@ -34,4 +34,4 @@ One `avatarUrl` on the user profile. Account uploads; Avari screen + drawer head
 
 ## Out of scope
 
-Kin onboarding, mastery persistence, Rank XP grants, title earning, Avari-side avatar upload.
+Kin onboarding, mastery persistence, Mastery Value (replaces Rank/XP), title earning, Avari-side avatar upload.

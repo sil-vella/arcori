@@ -6,6 +6,12 @@ from core.http.service.routes import application_routes
 from core.ws.service.channel_registry import application_ws_sink
 from modules.auth.auth_app import register_auth_routes
 from modules.auth.auth_errors import register_auth_errors
+from modules.achievements.achievements_app import register_achievements_routes
+from modules.achievements.achievements_errors import register_achievements_errors
+from modules.daily_goals.daily_goals_app import register_daily_goals_routes
+from modules.daily_goals.daily_goals_errors import register_daily_goals_errors
+from modules.special_events.special_events_app import register_special_events_routes
+from modules.special_events.special_events_errors import register_special_events_errors
 from modules.avari.avari_app import register_avari_routes
 from modules.avari.avari_errors import register_avari_errors
 from modules.catalog.catalog_app import register_catalog_routes
@@ -21,6 +27,8 @@ from modules.presence.presence_app import register_presence_routes
 from modules.presence.presence_errors import register_presence_errors
 from modules.standings.standings_app import register_standings_routes
 from modules.standings.standings_errors import register_standings_errors
+from modules.legacy.legacy_app import register_legacy_routes
+from modules.legacy.legacy_errors import register_legacy_errors
 from modules.contacts.contacts_app import register_contacts_routes
 from modules.contacts.contacts_errors import register_contacts_errors
 from modules.service.service_app import register_service_routes
@@ -37,6 +45,15 @@ from modules.friend_match_invite.friend_match_invite_notifications import (
     register_friend_match_invite_notification_handlers,
     register_friend_match_invite_notification_subtypes,
 )
+from modules.achievements.achievements_notifications import (
+    register_achievement_notification_subtypes,
+)
+from modules.daily_goals.daily_goals_notifications import (
+    register_daily_goals_notification_subtypes,
+)
+from modules.legacy.legacy_notifications import (
+    register_legacy_notification_subtypes,
+)
 
 
 def register_notification_reply_handlers() -> None:
@@ -51,6 +68,9 @@ def register_notification_reply_handlers() -> None:
     reset_notification_subtypes()
     register_builtin_notification_subtypes()
     register_friend_match_invite_notification_subtypes()
+    register_achievement_notification_subtypes()
+    register_daily_goals_notification_subtypes()
+    register_legacy_notification_subtypes()
     register_example_notification_handlers()
     register_friend_match_invite_notification_handlers()
 
@@ -65,7 +85,11 @@ def register_application_routes() -> None:
     register_catalog_routes(application_routes, http_responses)
     register_players_routes(application_routes, http_responses)
     register_standings_routes(application_routes, http_responses)
+    register_legacy_routes(application_routes, http_responses)
     register_avari_routes(application_routes, http_responses)
+    register_achievements_routes(application_routes, http_responses)
+    register_daily_goals_routes(application_routes, http_responses)
+    register_special_events_routes(application_routes, http_responses)
     register_presence_routes(application_routes, http_responses)
     register_ops_routes(application_routes, http_responses)
     register_auth_routes(application_routes, http_responses)
@@ -81,7 +105,11 @@ def register_application_errors() -> None:
     register_contacts_errors(module_error_registrar)
     register_players_errors(module_error_registrar)
     register_standings_errors(module_error_registrar)
+    register_legacy_errors(module_error_registrar)
     register_avari_errors(module_error_registrar)
+    register_achievements_errors(module_error_registrar)
+    register_daily_goals_errors(module_error_registrar)
+    register_special_events_errors(module_error_registrar)
     register_presence_errors(module_error_registrar)
     register_ops_errors(module_error_registrar)
 

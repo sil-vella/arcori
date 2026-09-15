@@ -1,20 +1,26 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
+import '../../../core/errors/error_policy.dart';
 import '../../../core/screen/module_screen_registrar.dart';
+import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../avari/avari_api.dart';
 import '../../avari/avari_models.dart';
 import '../../avari/avari_notifier.dart';
 import '../../match/widgets/arcori_image_prefetch.dart';
 import '../../match/widgets/practice_match_surface.dart';
 import '../../matchmaking/widgets/matchmaking_lobby_modal.dart';
+import '../../special_events/special_event_picker_modal.dart';
 import '../play_models.dart';
 import '../play_notifier.dart';
-import '../widgets/match_type_select_modal.dart';
 import '../widgets/invite_setup_modal.dart';
+import '../widgets/match_fee_confirm_modal.dart';
+import '../widgets/match_type_select_modal.dart';
 import '../widgets/play_failure_modal.dart';
 import '../widgets/post_match_modal.dart';
 import '../widgets/practice_loadout_modal.dart';
@@ -62,7 +68,7 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
     final type = await showMatchTypeSelectModal(context);
     if (!mounted) return;
     if (type == null) {
-      notifier.cancelSelection();
+      await notifier.cancelSelection();
       return;
     }
 
@@ -71,7 +77,7 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
       loadout = await showPracticeLoadoutModal(context);
       if (!mounted) return;
       if (loadout == null) {
-        notifier.cancelSelection();
+        await notifier.cancelSelection();
         return;
       }
     }
@@ -82,13 +88,72 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
       if (setup == null ||
           setup.inviteId.trim().isEmpty ||
           setup.invitedUserId.trim().isEmpty) {
-        notifier.cancelSelection();
+        await notifier.cancelSelection();
         return;
       }
       await notifier.selectType(
         type,
         inviteId: setup.inviteId,
         invitedUserId: setup.invitedUserId,
+      );
+      return;
+    }
+
+    if (type == MatchType.specialEvent) {
+      final event = await showSpecialEventPickerModal(context: context, ref: ref);
+      if (!mounted) return;
+      if (event == null || event.id.trim().isEmpty) {
+        await notifier.cancelSelection();
+        return;
+      }
+      if (event.feeFragments > 0) {
+        final confirmed = await showMatchFeeConfirmModal(
+          context,
+          feeFragments: event.feeFragments,
+          matchLabel: event.name,
+        );
+        if (!mounted) return;
+        if (!confirmed) {
+          await notifier.cancelSelection();
+          return;
+        }
+        final token = ref.read(authProvider).accessToken ?? '';
+        if (token.isEmpty) {
+          await notifier.cancelSelection();
+          return;
+        }
+        final feeIntentId =
+            'fee_${DateTime.now().toUtc().microsecondsSinceEpoch}_'
+            '${Random().nextInt(1 << 32)}';
+        final pay = await AvariApiClient().payMatchFee(
+          accessToken: token,
+          matchType: 'specialEvent',
+          feeIntentId: feeIntentId,
+          eventId: event.id,
+        );
+        if (!mounted) return;
+        if (!pay.isSuccess) {
+          final err = pay.error;
+          if (err != null) {
+            actionForApiError(err, isWebSocket: false);
+          }
+          await notifier.cancelSelection();
+          return;
+        }
+        final paid = pay.data!;
+        notifier.recordFeePaid(
+          feeIntentId: feeIntentId,
+          feeFragments: paid.feeFragments > 0
+              ? paid.feeFragments
+              : event.feeFragments,
+          matchType: 'specialEvent',
+        );
+        unawaited(ref.read(avariProfileProvider.notifier).load(force: true));
+      }
+      await notifier.selectType(
+        type,
+        eventId: event.id,
+        eventSubtype: event.subtype,
       );
       return;
     }

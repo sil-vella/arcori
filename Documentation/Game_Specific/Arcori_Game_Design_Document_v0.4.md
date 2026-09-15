@@ -26,6 +26,8 @@ A player can become, in order:
 
 These stack as achievements and standing — **Avari** remains identity; the rest are earned titles above it.
 
+**Note:** Match **Achievements** (declarative catalog unlocks — first win, streaks, mastery thresholds) are a separate system from this title hierarchy. See [achievements.md](../01_Active_Plans/achievements.md). Titles are not awarded via that catalog.
+
 ## Legacy and minting
 
 World State: Active/Closed. Legacy State: Legacy Preserved/Legacy Lost. Immediate preservation opportunity then 30-day leader window. Auto closure at mastery cap.
@@ -38,11 +40,11 @@ Catalog series share that loop; they differ in how soon a generation can close:
 |--------|------|-------------------------|------------------|
 | **Genesis** | Main launch catalog | 500 | 1000 |
 | **Pioneers** | Small companion series (ten seed designs) | 100 | 200 |
-| **Foundations** | Civilization / society themes (120 designs) | 250 | 500 |
+| **Foundations** | Civilization / society themes (160 designs) | 250 | 500 |
 
 **Why Pioneers exists:** the lower preservation and closure numbers so those designs can be **minted earlier** than Genesis — first Trove pieces while Genesis generations are still filling. It is not a second art drop for its own sake.
 
-**Foundations** sits between them (250 / 500) with forty society themes (Hearth, Shelter, … Unity), three designs each (`SER003`).
+**Foundations** sits between them (250 / 500) with forty society themes (Hearth, Shelter, … Unity), four designs each (`SER003`).
 
 ## Economy
 
@@ -63,7 +65,7 @@ Starter balanced slammer. Rechargeable variants with Impact, Precision, Control,
 
 | Track | Meaning |
 |-------|---------|
-| Profile XP → Rank | Avari progression |
+| Mastery Value | Avari progression (replaces Rank / XP) |
 | Mastery → Design | Progress on a **circulating** design (not owned); path toward **Master** |
 | Generations → World | Design/world state; closure can mint into Trove (**Legacy Owner** / **Generation Creator**) |
 
@@ -91,7 +93,9 @@ Practice skips mastery. Persist on `player_mastery`; floor at 0 on write. Detail
 
 Each design has one number: **`selectionWeight`** from **0.01** (rarest) to **10.00** (most common). There is **no** `printedRarity` tier. The same field drives match seat pick, Gatherer pick, and Mastery Value.
 
-### Mastery Value (player aggregate → profile label)
+### Mastery Value (player aggregate → profile)
+
+Replaces Rank / XP. Profile shows the numeric **Mastery Value** and the Fair→Priceless **label**.
 
 ```text
 MasteryValue = Σ_i ( masteryPoints_i × (10.0 / selectionWeight_i) )
@@ -116,7 +120,7 @@ Profile shows **label only** (backend computes). Density bands:
 | Exquisite | `10 – < 25` |
 | Priceless | `≥ 25` |
 
-Wire: `mastery.masteryValueLabel`. Events keep design identity; mastery continues on the design’s active generation rules.
+Wire: `mastery.masteryValue` + `mastery.masteryValueLabel`. Rank/XP is not used. Events keep design identity; mastery continues on the design’s active generation rules.
 
 ## Events
 
@@ -136,7 +140,7 @@ Three featured missions, Daily Cache, extra mission rewards and no-miss streak b
 | **Standings** | Live community race (top mastery, generation fill, leader window) |
 | **My Mastery** | Your mastery on this design — not ownership while circulating |
 | **Museum** | World-facing factual history of closed generations (not the personal Trove) |
-| **Profile** | Avari identity, Rank/XP, earned titles (Master / Legacy Owner / Generation Creator); links to Trove for mints |
+| **Profile** | Avari identity, Mastery Value, earned titles (Master / Legacy Owner / Generation Creator); links to Trove for mints |
 
 **Startup (returning):** Splash → Notifications → News → Daily Missions → Home.  
 **Bottom sink:** Trove • PLAY • Market.  

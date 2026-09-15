@@ -18,6 +18,7 @@ Map<String, dynamic> tableFromSeats(
     if (designId.isEmpty) continue;
     final frozen = catalogById?[designId];
     final imageUrl = frozen?['imageUrl']?.toString().trim() ?? '';
+    final lottieUrl = frozen?['lottieUrl']?.toString().trim() ?? '';
     final color = frozen?['color']?.toString().trim() ?? '';
     pieces.add(
       piecePayload(
@@ -28,6 +29,7 @@ Map<String, dynamic> tableFromSeats(
         faceUp: false,
         stackIndex: stackIndex,
         imageUrl: imageUrl.isNotEmpty ? imageUrl : null,
+        lottieUrl: lottieUrl.isNotEmpty ? lottieUrl : null,
         color: color.isNotEmpty ? color : null,
       ),
     );
@@ -44,6 +46,7 @@ Map<String, dynamic> piecePayload({
   required bool faceUp,
   required int stackIndex,
   String? imageUrl,
+  String? lottieUrl,
   String? color,
 }) {
   return {
@@ -54,6 +57,7 @@ Map<String, dynamic> piecePayload({
     'faceUp': faceUp,
     'stackIndex': stackIndex,
     if (imageUrl != null && imageUrl.isNotEmpty) 'imageUrl': imageUrl,
+    if (lottieUrl != null && lottieUrl.isNotEmpty) 'lottieUrl': lottieUrl,
     if (color != null && color.isNotEmpty) 'color': color,
   };
 }

@@ -8,8 +8,10 @@ from modules.avari.gold_economy import (
     FRAGMENTS_PER_GOLD_ARCORI,
     SIGNUP_GOLD_ARCORI,
     apply_fragment_delta,
+    can_afford_fragments,
     match_fee_fragments,
     normalize_wallet,
+    total_fragments,
 )
 
 
@@ -24,6 +26,11 @@ class GoldEconomyTests(unittest.TestCase):
         self.assertEqual(normalize_wallet(0, 4), (1, 0))
         self.assertEqual(normalize_wallet(1, 6), (2, 2))
         self.assertEqual(normalize_wallet(0, 0), (0, 0))
+
+    def test_total_and_afford(self) -> None:
+        self.assertEqual(total_fragments(20, 0), 80)
+        self.assertTrue(can_afford_fragments(0, 2, 2))
+        self.assertFalse(can_afford_fragments(0, 1, 2))
 
     def test_apply_fee_and_flips_max(self) -> None:
         # 20 Gold Arcori, fee 2, 6 flips → net +4 frags → 21 Gold Arcori + 0 frags

@@ -13,7 +13,7 @@ Themes → Subthemes → Design Families → Generations.
 
 **Pioneers** — ten seed designs, one per original theme. Same catalog shape as Genesis. Legacy: `preservationRequirement` 100, `closureMilestone` 200.
 
-**Foundations** — forty civilization / society themes (Hearth through Unity), three designs each (`SER003`, art under `assets/images/arcori/003_foundations/{theme}/`). Legacy: `preservationRequirement` 250, `closureMilestone` 500.
+**Foundations** — forty civilization / society themes (Hearth through Unity), four designs each (`SER003`, art under `assets/images/arcori/003_foundations/{theme}/`). Legacy: `preservationRequirement` 250, `closureMilestone` 500.
 
 Pioneers exists so those generations can **mint earlier** than Genesis. It is not a full second catalog.
 

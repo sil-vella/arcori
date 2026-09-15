@@ -10,6 +10,8 @@ from sqlalchemy.orm import Session
 
 from models.avari_profile import AvariProfile
 from models.player_progress import (
+    MatchFeeLedger,
+    MatchFinalizeLedger,
     PlayerDesignAccess,
     PlayerKin,
     PlayerMastery,
@@ -366,6 +368,93 @@ def list_trove(session: Session, user_id: str) -> list[PlayerTrove]:
     return list(
         session.scalars(select(PlayerTrove).where(PlayerTrove.user_id == uid)).all()
     )
+
+
+def get_match_finalize(
+    session: Session, user_id: str, match_id: str
+) -> MatchFinalizeLedger | None:
+    uid = _as_uuid(user_id)
+    mid = (match_id or "").strip()
+    if uid is None or not mid:
+        return None
+    return session.scalars(
+        select(MatchFinalizeLedger).where(
+            MatchFinalizeLedger.user_id == uid,
+            MatchFinalizeLedger.match_id == mid,
+        )
+    ).first()
+
+
+def insert_match_finalize(
+    session: Session,
+    *,
+    user_id: str,
+    match_id: str,
+    response: dict[str, Any],
+) -> MatchFinalizeLedger:
+    uid = _as_uuid(user_id)
+    mid = (match_id or "").strip()
+    if uid is None:
+        raise ValueError("invalid user_id")
+    if not mid:
+        raise ValueError("match_id required")
+    row = MatchFinalizeLedger(
+        user_id=uid,
+        match_id=mid,
+        response_json=dict(response),
+    )
+    session.add(row)
+    session.flush()
+    return row
+
+
+FEE_KIND_PAY = "pay"
+FEE_KIND_REFUND = "refund"
+
+
+def get_match_fee(
+    session: Session, user_id: str, intent_id: str, kind: str
+) -> MatchFeeLedger | None:
+    uid = _as_uuid(user_id)
+    intent = (intent_id or "").strip()
+    kind_value = (kind or "").strip()
+    if uid is None or not intent or not kind_value:
+        return None
+    return session.scalars(
+        select(MatchFeeLedger).where(
+            MatchFeeLedger.user_id == uid,
+            MatchFeeLedger.intent_id == intent,
+            MatchFeeLedger.kind == kind_value,
+        )
+    ).first()
+
+
+def insert_match_fee(
+    session: Session,
+    *,
+    user_id: str,
+    intent_id: str,
+    kind: str,
+    response: dict[str, Any],
+) -> MatchFeeLedger:
+    uid = _as_uuid(user_id)
+    intent = (intent_id or "").strip()
+    kind_value = (kind or "").strip()
+    if uid is None:
+        raise ValueError("invalid user_id")
+    if not intent:
+        raise ValueError("intent_id required")
+    if not kind_value:
+        raise ValueError("kind required")
+    row = MatchFeeLedger(
+        user_id=uid,
+        intent_id=intent,
+        kind=kind_value,
+        response_json=dict(response),
+    )
+    session.add(row)
+    session.flush()
+    return row
 
 
 def serialize_kin(row: PlayerKin | None) -> dict[str, Any] | None:

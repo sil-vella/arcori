@@ -142,6 +142,52 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "BEL-FBF-SER003-0004",
+      "themeCode": "BEL",
+      "designCode": "FBF",
+      "designFamily": "FAITH_BENEATH_THE_FALLING_ASH",
+      "design": "Faith Beneath the Falling Ash",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Belief",
+      "subtheme": "Belief",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 9.4,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Faith Beneath the Falling Ash in pixel art style with a standard finish and no effect. Use a background that is visually related to Faith Beneath the Falling Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BEL-FBF-SER003-0004.webp",
+      "loreDescription": "A collectible Faith Beneath the Falling Ash Arcori generation I from the Belief Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

@@ -136,6 +136,50 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "DIS-SBM-SER003-0004",
+      "themeCode": "DIS",
+      "designCode": "SBM",
+      "designFamily": "THE_SHORE_BENEATH_THE_MOON",
+      "design": "The Shore Beneath the Moon",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Discovery",
+      "subtheme": "Discovery",
+      "style": "Comic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 3.2,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with The Shore Beneath the Moon in comic style with a standard finish and no effect. Use a background that is visually related to The Shore Beneath the Moon. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIS-SBM-SER003-0004.webp",
+      "loreDescription": "A collectible The Shore Beneath the Moon Arcori generation I from the Discovery Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }

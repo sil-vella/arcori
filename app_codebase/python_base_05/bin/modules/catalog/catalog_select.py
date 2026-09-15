@@ -322,6 +322,7 @@ def select_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
 
         candidates: list[str] = []
         raw_candidates = raw.get("candidateIds")
+        event_id = str(raw.get("eventId") or raw.get("event_id") or "").strip()
         if raw_candidates is not None:
             if not isinstance(raw_candidates, list):
                 raise AppError(INVALID_QUERY, message="candidateIds must be a list")
@@ -332,6 +333,29 @@ def select_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
                     continue
                 seen.add(design_id)
                 candidates.append(design_id)
+        elif event_id:
+            from core.state.session_scope import session_scope
+            from modules.special_events.special_events_loader import event_by_id
+            from modules.special_events.special_events_service import (
+                build_candidate_ids_for_user,
+            )
+
+            ev = event_by_id(event_id)
+            if ev is not None:
+                with session_scope() as session:
+                    built = build_candidate_ids_for_user(
+                        session, user_id=user_id, event=ev
+                    )
+                if built is not None:
+                    candidates = built
+                else:
+                    from modules.avari.avari_service import list_design_access_ids
+
+                    candidates = list_design_access_ids(user_id)
+            else:
+                from modules.avari.avari_service import list_design_access_ids
+
+                candidates = list_design_access_ids(user_id)
         else:
             # Deferred import: avoid catalog → avari repository coupling at module load.
             from modules.avari.avari_service import list_design_access_ids

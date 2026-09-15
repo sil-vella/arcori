@@ -257,7 +257,7 @@ void main() {
       expect(pieces.first['color'], '#C6A15B');
     });
 
-    test('startFromLobby skips select_arena for specialEvent', () async {
+    test('startFromLobby can select_arena for specialEvent seated mode', () async {
       final store = MatchStore();
       final paths = <String>[];
       final fastApi = FastApiServiceClient(
@@ -308,6 +308,21 @@ void main() {
               headers: {'content-type': 'application/json'},
             );
           }
+          if (request.url.path == '/service/catalog/select_arena') {
+            return http.Response(
+              jsonEncode({
+                'ok': true,
+                'data': {
+                  'arenaId': 'ARN-AMB-WLD001-0001',
+                  'regionCode': 'amberwild',
+                  'imageUrl': '/catalog-media/velora/arenas/amberwild/x.webp',
+                  'source': 'majority',
+                },
+              }),
+              200,
+              headers: {'content-type': 'application/json'},
+            );
+          }
           return http.Response('not found', 404);
         }),
         baseUrl: 'http://catalog.test',
@@ -319,7 +334,12 @@ void main() {
         autoStubTurns: false,
       );
       final snapshot = await service.startFromLobby(
-        matchType: {'code': 'specialEvent', 'subtype': 'royal-battle'},
+        matchType: {
+          'code': 'specialEvent',
+          'subtype': 'royal-battle',
+          'eventId': 'evt_stub_v1',
+          'arenaMode': 'seated_regions',
+        },
         humans: [
           LobbyHumanSeat(
             userId: 'usr_a',
@@ -330,9 +350,8 @@ void main() {
         targetSeats: 2,
       );
 
-      expect(paths, isNot(contains('/service/catalog/select_arena')));
-      expect(snapshot.arenaId, stubArenaId);
-      expect(snapshot.arenaImageUrl, isNull);
+      expect(paths, contains('/service/catalog/select_arena'));
+      expect(snapshot.arenaImageUrl, contains('amberwild'));
     });
 
     test('startFromLobby uses verified slammer not the requested unowned id',

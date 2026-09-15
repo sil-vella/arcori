@@ -1,0 +1,37 @@
+"""Closed sets for achievement_type and post_achieve_action.type."""
+
+from __future__ import annotations
+
+ACHIEVEMENT_TYPE_TOTAL_WINS = "total_wins"
+ACHIEVEMENT_TYPE_TOTAL_MATCHES = "total_matches"
+ACHIEVEMENT_TYPE_TOTAL_FLIPS = "total_flips"
+ACHIEVEMENT_TYPE_WIN_STREAK = "win_streak"
+ACHIEVEMENT_TYPE_MATCH_FLAG = "match_flag"
+ACHIEVEMENT_TYPE_MASTERY_POINTS = "mastery_points"
+ACHIEVEMENT_TYPE_EVENT_FLIPS = "event_flips"
+ACHIEVEMENT_TYPE_EVENT_ARCORI_CLEARED = "event_arcori_cleared"
+
+ACHIEVEMENT_TYPES = frozenset(
+    {
+        ACHIEVEMENT_TYPE_TOTAL_WINS,
+        ACHIEVEMENT_TYPE_TOTAL_MATCHES,
+        ACHIEVEMENT_TYPE_TOTAL_FLIPS,
+        ACHIEVEMENT_TYPE_WIN_STREAK,
+        ACHIEVEMENT_TYPE_MATCH_FLAG,
+        ACHIEVEMENT_TYPE_MASTERY_POINTS,
+        ACHIEVEMENT_TYPE_EVENT_FLIPS,
+        ACHIEVEMENT_TYPE_EVENT_ARCORI_CLEARED,
+    }
+)
+
+POST_ACTION_NONE = "none"
+POST_ACTION_MOVE_TO_SCREEN = "move_to_screen"
+POST_ACTION_OPEN_PATH = "open_path"
+
+POST_ACHIEVE_ACTION_TYPES = frozenset(
+    {
+        POST_ACTION_NONE,
+        POST_ACTION_MOVE_TO_SCREEN,
+        POST_ACTION_OPEN_PATH,
+    }
+)

@@ -1,0 +1,220 @@
+{
+  "schema_version": 2,
+  "events": [
+    {
+      "id": "evt_stub_v1",
+      "subtype": "royal-battle",
+      "name": "Royal Battle",
+      "description": "Open 3-seat queue. Finish any 3 matches (win or lose). Circulation Arcori, fixed Amberwild arena.",
+      "active": true,
+      "schedule": {
+        "startsAt": null,
+        "endsAt": null
+      },
+      "matchmaking": {
+        "players": 3,
+        "ai_fill": true,
+        "fill_window_sec": 5,
+        "queue_mode": "open"
+      },
+      "match": {
+        "rounds": 2,
+        "fee_fragments": null
+      },
+      "matches": {
+        "required": 3,
+        "credit": "any_finish",
+        "credit_params": {}
+      },
+      "eligibility": {
+        "min_mastery_value": 0,
+        "max_mastery_value": null,
+        "required_titles": [],
+        "required_slammer": {
+          "mode": "any",
+          "design_ids": [],
+          "types": []
+        }
+      },
+      "arcori": {
+        "per_player": 1,
+        "source": "circulation",
+        "series_ids": [],
+        "generation_numbers": [],
+        "region_codes": [],
+        "design_ids": [
+          "ALL-PTL-SER003-0001",
+          "ALL-BJG-SER003-0002",
+          "ALL-TSP-SER003-0003",
+          "ALL-PGP-SER003-0004"
+        ]
+      },
+      "arena": {
+        "mode": "fixed_region",
+        "region_code": "amberwild",
+        "arena_id": null
+      },
+      "media": {
+        "banner": {
+          "type": "image",
+          "value": "/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp"
+        },
+        "special_arena_background": {
+          "type": "image",
+          "value": "/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp"
+        }
+      },
+      "rewards": {},
+      "achievement_hooks": {
+        "roster_design_ids": [
+          "ALL-PTL-SER003-0001",
+          "ALL-BJG-SER003-0002",
+          "ALL-TSP-SER003-0003",
+          "ALL-PGP-SER003-0004"
+        ]
+      }
+    },
+    {
+      "id": "evt_harvest_duel_v1",
+      "subtype": "harvest-duel",
+      "name": "Harvest Duel",
+      "description": "1v1 (2 seats). Only wins count toward 2/2. Event-roster Arcori only. Seated-region arenas. Entry fee 1 fragment.",
+      "active": true,
+      "schedule": {
+        "startsAt": null,
+        "endsAt": null
+      },
+      "matchmaking": {
+        "players": 2,
+        "ai_fill": true,
+        "fill_window_sec": 8,
+        "queue_mode": "open"
+      },
+      "match": {
+        "rounds": 3,
+        "fee_fragments": 1
+      },
+      "matches": {
+        "required": 2,
+        "credit": "win",
+        "credit_params": {}
+      },
+      "eligibility": {
+        "min_mastery_value": 0,
+        "max_mastery_value": null,
+        "required_titles": [],
+        "required_slammer": {
+          "mode": "any",
+          "design_ids": [],
+          "types": []
+        }
+      },
+      "arcori": {
+        "per_player": 1,
+        "source": "event_roster",
+        "series_ids": [],
+        "generation_numbers": [],
+        "region_codes": [],
+        "design_ids": [
+          "ALL-PTL-SER003-0001",
+          "ALL-BJG-SER003-0002"
+        ]
+      },
+      "arena": {
+        "mode": "seated_regions",
+        "region_code": null,
+        "arena_id": null
+      },
+      "media": {
+        "banner": {
+          "type": "image",
+          "value": "/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp"
+        },
+        "special_arena_background": {
+          "type": "image",
+          "value": "/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp"
+        }
+      },
+      "rewards": {},
+      "achievement_hooks": {
+        "roster_design_ids": [
+          "ALL-PTL-SER003-0001",
+          "ALL-BJG-SER003-0002"
+        ]
+      }
+    },
+    {
+      "id": "evt_titan_gauntlet_v1",
+      "subtype": "titan-gauntlet",
+      "name": "Titan Gauntlet",
+      "description": "3 seats. Credit only if you flip ≥2 in a match (need 3 credited). Must equip Starter slammer. Own-collection ∩ roster. Fixed arena. Fee 2 fragments.",
+      "active": true,
+      "schedule": {
+        "startsAt": null,
+        "endsAt": null
+      },
+      "matchmaking": {
+        "players": 3,
+        "ai_fill": true,
+        "fill_window_sec": 5,
+        "queue_mode": "open"
+      },
+      "match": {
+        "rounds": 2,
+        "fee_fragments": 2
+      },
+      "matches": {
+        "required": 3,
+        "credit": "flips_min",
+        "credit_params": {
+          "min": 2
+        }
+      },
+      "eligibility": {
+        "min_mastery_value": 0,
+        "max_mastery_value": null,
+        "required_titles": [],
+        "required_slammer": {
+          "mode": "design_ids",
+          "design_ids": [
+            "SLM-STR-SER001-0001"
+          ],
+          "types": []
+        }
+      },
+      "arcori": {
+        "per_player": 1,
+        "source": "intersect",
+        "series_ids": [],
+        "generation_numbers": [],
+        "region_codes": [],
+        "design_ids": [
+          "ALL-TSP-SER003-0003",
+          "ALL-PGP-SER003-0004"
+        ]
+      },
+      "arena": {
+        "mode": "fixed_arena",
+        "region_code": null,
+        "arena_id": "ARN-AMB-WLD001-0001"
+      },
+      "media": {
+        "banner": {
+          "type": "image",
+          "value": "/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp"
+        },
+        "special_arena_background": {
+          "type": "image",
+          "value": "/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp"
+        }
+      },
+      "rewards": {},
+      "achievement_hooks": {
+        "roster_design_ids": [
+          "ALL-TSP-SER003-0003",
+          "ALL-PGP-SER003-0004"
+        ]
+      }
+    }
+  ]
+}

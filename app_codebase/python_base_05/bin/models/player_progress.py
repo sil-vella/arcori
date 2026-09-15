@@ -152,3 +152,155 @@ class PlayerTrove(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     creator_attributed: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="false"
     )
+
+
+class PlayerAchievement(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
+    """Lifetime unlocked achievements (lifetime, additive)."""
+
+    __tablename__ = "player_achievements"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id",
+            "achievement_id",
+            name="uq_player_achievements_user_achievement",
+        ),
+    )
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    achievement_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    unlocked_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+
+class PlayerDailyGoalProgress(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
+    """Per-goal daily progress, value/streak, and miss-continue state."""
+
+    __tablename__ = "player_daily_goal_progress"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id",
+            "goal_id",
+            name="uq_player_daily_goal_progress_user_goal",
+        ),
+    )
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    goal_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    value: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
+    day_key: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    progress_today: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    completed_today: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
+    )
+    miss_pending: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
+    )
+    last_completed_day_key: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class PlayerSpecialEventProgress(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
+    """Per-event flip count + unique flipped design ids (multi-attempt)."""
+
+    __tablename__ = "player_special_event_progress"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id",
+            "event_id",
+            name="uq_player_special_event_progress_user_event",
+        ),
+    )
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    event_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    flips: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
+    flipped_design_ids: Mapped[list] = mapped_column(
+        JSONB, nullable=False, server_default=text("'[]'::jsonb")
+    )
+    matches_completed: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    matches_won: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    matches_credited: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    last_match_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class MatchFinalizeLedger(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
+    """Durable per-user match finalize — apply writers once; replay cached payload."""
+
+    __tablename__ = "match_finalize_ledger"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id",
+            "match_id",
+            name="uq_match_finalize_ledger_user_match",
+        ),
+    )
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    match_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    response_json: Mapped[dict] = mapped_column(JSONB, nullable=False)
+
+
+class MatchFeeLedger(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
+    """Durable per-user fee pay/refund — apply wallet once per intent+kind."""
+
+    __tablename__ = "match_fee_ledger"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id",
+            "intent_id",
+            "kind",
+            name="uq_match_fee_ledger_user_intent_kind",
+        ),
+    )
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    intent_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    kind: Mapped[str] = mapped_column(String(16), nullable=False)
+    response_json: Mapped[dict] = mapped_column(JSONB, nullable=False)

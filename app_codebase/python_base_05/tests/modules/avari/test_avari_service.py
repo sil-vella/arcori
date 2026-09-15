@@ -127,7 +127,7 @@ class AvariServiceTests(unittest.TestCase):
         self.assertEqual(payload["mastery"]["designsTracked"], 1)
         # Tiger 3 @ 3.0 + Kin 4 @ 3.0 → value 23; density 23/N → Fair for large N
         self.assertEqual(payload["mastery"]["masteryValueLabel"], "Fair")
-        self.assertNotIn("masteryValue", payload["mastery"])
+        self.assertEqual(payload["mastery"]["masteryValue"], 0)
         self.assertTrue(payload["access"][0].get("displayName"))
         self.assertEqual(payload["slammers"][0]["designId"], "SLM-STR-SER001-0001")
         self.assertTrue(payload["slammers"][0].get("displayName"))

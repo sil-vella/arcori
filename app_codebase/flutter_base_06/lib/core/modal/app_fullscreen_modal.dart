@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_spacing.dart';
 import '../theme/app_theme.dart';
+import 'modal_navigator.dart';
 
 /// Full-screen modal shell. Modules supply [child] and optional footer [actions].
 class AppFullScreenModal extends StatelessWidget {
@@ -98,7 +99,7 @@ class _FullScreenHeader extends StatelessWidget {
             IconButton(
               style: context.appButtons.primary.icon,
               tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => dismissModalRoute(context),
               icon: const Icon(Icons.close),
             ),
         ],

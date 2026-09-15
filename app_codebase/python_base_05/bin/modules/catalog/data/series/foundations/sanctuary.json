@@ -136,6 +136,50 @@
         "preservationRequirement": 250,
         "closureMilestone": 500
       }
+    },
+    {
+      "internalId": "SAN-HAR-SER003-0004",
+      "themeCode": "SAN",
+      "designCode": "HAR",
+      "designFamily": "HAVEN_OF_THE_ANCIENT_ROOTS",
+      "design": "Haven of the Ancient Roots",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Sanctuary",
+      "subtheme": "Sanctuary",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "color": "#C6A15B",
+      "effect": "None",
+      "selectionWeight": 5.9,
+      "series": "Foundations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Haven of the Ancient Roots in prismatic style with a standard finish and no effect. Use a background that is visually related to Haven of the Ancient Roots. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SAN-HAR-SER003-0004.webp",
+      "loreDescription": "A collectible Haven of the Ancient Roots Arcori generation I from the Sanctuary Foundations Series.",
+      "legacy": {
+        "preservationRequirement": 250,
+        "closureMilestone": 500
+      }
     }
   ]
 }
