@@ -1,0 +1,25 @@
+{
+  "uniqueMatchId": true,
+  "matchId": "debug-proximity-chase",
+  "matchType": "quickStart",
+  "practice": false,
+  "comment": "Cheetah in leader_window with AI leader at 500; admin starts at 494. Two flips on CHE → +2 mastery → 496 (gaps 5 then 4) → chase + pressure notifies.",
+  "designIds": [
+    "ANM-CHE-SER001-0005",
+    "ANM-WTI-SER001-0002",
+    "ANM-JAG-SER001-0008"
+  ],
+  "flips": 2,
+  "playedDesignId": "ANM-CHE-SER001-0005",
+  "flipsByDesign": {
+    "ANM-CHE-SER001-0005": 2
+  },
+  "result": {
+    "winnerUserIds": ["__SELF__"],
+    "finalScores": {
+      "__SELF__": 2,
+      "ai-placeholder-1": 1,
+      "ai-placeholder-2": 0
+    }
+  }
+}

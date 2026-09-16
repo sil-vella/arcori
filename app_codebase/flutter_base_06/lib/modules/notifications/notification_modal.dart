@@ -164,6 +164,7 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
     if (config is NavigateResponseConfig) {
       return AppCenteredModal(
         title: message.title,
+        onClose: () => _completeCurrentMessage(runAcknowledged: true),
         child: Text(
           message.body,
           style: context.appTypography.body,
@@ -190,6 +191,7 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
       final api = widget.ref.read(notificationsApiClientProvider);
       return AppCenteredModal(
         title: message.title,
+        onClose: () => _completeCurrentMessage(runAcknowledged: true),
         child: Text(
           message.body,
           style: context.appTypography.body,
@@ -216,6 +218,7 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
 
     return AppCenteredModal(
       title: message.title,
+      onClose: () => _completeCurrentMessage(runAcknowledged: true),
       child: Text(
         message.body,
         style: context.appTypography.body,

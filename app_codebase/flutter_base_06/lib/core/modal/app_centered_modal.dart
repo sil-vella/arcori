@@ -13,6 +13,7 @@ class AppCenteredModal extends StatelessWidget {
     this.title,
     this.actions = const [],
     this.showCloseButton = true,
+    this.onClose,
     this.padding,
     super.key,
   });
@@ -21,6 +22,9 @@ class AppCenteredModal extends StatelessWidget {
   final Widget child;
   final List<Widget> actions;
   final bool showCloseButton;
+
+  /// When set, close button calls this instead of only dismissing the route.
+  final VoidCallback? onClose;
   final EdgeInsets? padding;
 
   @override
@@ -50,6 +54,7 @@ class AppCenteredModal extends StatelessWidget {
               _Header(
                 title: title,
                 showCloseButton: showCloseButton,
+                onClose: onClose,
               ),
             Flexible(
               fit: FlexFit.loose,
@@ -74,10 +79,12 @@ class _Header extends StatelessWidget {
   const _Header({
     required this.title,
     required this.showCloseButton,
+    this.onClose,
   });
 
   final String? title;
   final bool showCloseButton;
+  final VoidCallback? onClose;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +106,7 @@ class _Header extends StatelessWidget {
             IconButton(
               style: context.appButtons.primary.icon,
               tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-              onPressed: () => dismissModalRoute(context),
+              onPressed: onClose ?? () => dismissModalRoute(context),
               icon: const Icon(Icons.close),
             ),
         ],

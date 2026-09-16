@@ -37,3 +37,4 @@ Profile already lists open windows under **Preservation Windows** (`preservation
 
 - Do **not** put Trove / Museum designs into the match pool.
 - Kin / hostility / unique-id rules from existing seat selection still apply unless explicitly changed.
+- **Debug:** Home **Debug match finalize** loads `assets/debug/match_finalize_sample.json` and POSTs the same `avari/match/finalize` as post-match (injects `__SELF__` → auth user id; `uniqueMatchId` timestamps each tap). Use to exercise mastery / legacy without playing a match.
