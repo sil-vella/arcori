@@ -450,3 +450,90 @@ def test_select_arena_includes_gatherer(select_root: Path):
     )
     assert out2["gathererArcoriId"] == "ASH-COMMON-2"
     assert out2["gathererArcoriId"] not in {"ASH-COMMON-1", "EVG-COMMON-1"}
+
+
+def test_preferred_id_honored_when_in_candidates(
+    select_root: Path, monkeypatch: pytest.MonkeyPatch
+):
+    monkeypatch.setattr(
+        "modules.catalog.catalog_select._resolve_design",
+        loader.find_design_by_internal_id,
+    )
+    out = select_for_seats(
+        [
+            {
+                "userId": "u1",
+                "candidateIds": ["ASH-COMMON-1", "EVG-COMMON-1", "MWB-COMMON-1"],
+                "preferredId": "MWB-COMMON-1",
+            }
+        ]
+    )
+    pick = out["selections"][0]
+    assert pick["arcoriId"] == "MWB-COMMON-1"
+    assert pick["source"] == "preferred"
+    assert pick["reason"] == "preferred_id"
+
+
+def test_preferred_id_rejected_when_not_in_candidates(
+    select_root: Path, monkeypatch: pytest.MonkeyPatch
+):
+    monkeypatch.setattr(
+        "modules.catalog.catalog_select._resolve_design",
+        loader.find_design_by_internal_id,
+    )
+
+    def fake_weighted(ids, weights):
+        return ids[0]
+
+    monkeypatch.setattr(
+        "modules.catalog.catalog_select._weighted_pick",
+        fake_weighted,
+    )
+    out = select_for_seats(
+        [
+            {
+                "userId": "u1",
+                "candidateIds": ["ASH-COMMON-1", "EVG-COMMON-1"],
+                "preferredId": "MWB-COMMON-1",
+            }
+        ]
+    )
+    pick = out["selections"][0]
+    assert pick["arcoriId"] == "ASH-COMMON-1"
+    assert pick["source"] != "preferred"
+
+
+def test_preferred_id_rejected_when_already_taken(
+    select_root: Path, monkeypatch: pytest.MonkeyPatch
+):
+    monkeypatch.setattr(
+        "modules.catalog.catalog_select._resolve_design",
+        loader.find_design_by_internal_id,
+    )
+
+    def fake_weighted(ids, weights):
+        return ids[0]
+
+    monkeypatch.setattr(
+        "modules.catalog.catalog_select._weighted_pick",
+        fake_weighted,
+    )
+    out = select_for_seats(
+        [
+            {
+                "userId": "u1",
+                "candidateIds": ["ASH-COMMON-1"],
+                "preferredId": "ASH-COMMON-1",
+            },
+            {
+                "userId": "u2",
+                "candidateIds": ["ASH-COMMON-1", "EVG-COMMON-1"],
+                "preferredId": "ASH-COMMON-1",
+            },
+        ]
+    )
+    picks = out["selections"]
+    assert picks[0]["arcoriId"] == "ASH-COMMON-1"
+    assert picks[0]["source"] == "preferred"
+    assert picks[1]["arcoriId"] == "EVG-COMMON-1"
+    assert picks[1]["source"] != "preferred"

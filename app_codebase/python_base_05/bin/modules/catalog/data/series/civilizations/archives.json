@@ -1,0 +1,240 @@
+{
+  "catalog": "Archives Civilizations Series",
+  "theme": "Archives",
+  "series": "Civilizations",
+  "themeCode": "ARC",
+  "loreDescription": "Places where memory, records, maps, and truths are preserved.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "ARC-PAX-SER004-GEN001-0001",
+      "themeCode": "ARC",
+      "designCode": "PAX",
+      "designFamily": "PILLAR_ARCHIVES",
+      "design": "Pillar Archives",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Archives",
+      "subtheme": "Archives",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Pillar Archives in realistic style with a standard finish and no effect. Use a background that is visually related to Pillar Archives. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ARC-PAX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Pillar Archives Arcori generation I from the Archives Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ARC-ARX-SER004-GEN001-0002",
+      "themeCode": "ARC",
+      "designCode": "ARX",
+      "designFamily": "ASHEN_RECORDS",
+      "design": "Ashen Records",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Archives",
+      "subtheme": "Archives",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ashen Records in realistic style with a standard finish and no effect. Use a background that is visually related to Ashen Records. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ARC-ARX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Ashen Records Arcori generation I from the Archives Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ARC-AAT-SER004-GEN001-0003",
+      "themeCode": "ARC",
+      "designCode": "AAT",
+      "designFamily": "ASHBOUND_ARCHIVE_TOME",
+      "design": "Ashbound Archive Tome",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Archives",
+      "subtheme": "Archives",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ashbound Archive Tome in realistic style with a standard finish and no effect. Use a background that is visually related to Ashbound Archive Tome. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ARC-AAT-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Ashbound Archive Tome Arcori generation I from the Archives Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ARC-OMG-SER004-GEN001-0004",
+      "themeCode": "ARC",
+      "designCode": "OMG",
+      "designFamily": "OBSIDIAN_MEMORY_GEM",
+      "design": "Obsidian Memory Gem",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Archives",
+      "subtheme": "Archives",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.5,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Obsidian Memory Gem in realistic style with a standard finish and no effect. Use a background that is visually related to Obsidian Memory Gem. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ARC-OMG-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Obsidian Memory Gem Arcori generation I from the Archives Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ARC-EAK-SER004-GEN001-0005",
+      "themeCode": "ARC",
+      "designCode": "EAK",
+      "designFamily": "EMERALD_ARCHIVE_KEY",
+      "design": "Emerald Archive Key",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Archives",
+      "subtheme": "Archives",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Emerald Archive Key in realistic style with a standard finish and no effect. Use a background that is visually related to Emerald Archive Key. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ARC-EAK-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Emerald Archive Key Arcori generation I from the Archives Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

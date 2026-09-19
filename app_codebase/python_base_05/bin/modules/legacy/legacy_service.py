@@ -31,6 +31,7 @@ from modules.legacy.legacy_errors import (
     INTENT_NOT_FOUND,
     INVALID_FULFILL,
     INVALID_QUERY,
+    MUSEUM_NOT_FOUND,
     NOT_ELIGIBLE,
     NOT_LEADER,
     OFFER_EXPIRED,
@@ -660,22 +661,36 @@ def _apply_preserve_mint(
     life.preserved_user_id = uuid.UUID(user_id)
     life.closed_at = now
 
+    actor_name = _display_name_for_user(session, user_id)
+    arcori_name = _arcori_display_name(design_id)
+    history = _museum_history_summary(
+        legacy_state=LEGACY_PRESERVED,
+        generation_number=generation_number,
+        actor_display_name=actor_name,
+        arcori_display_name=arcori_name,
+    )
     repo.insert_museum(
         session,
         design_id=design_id,
         generation_number=generation_number,
         legacy_state=LEGACY_PRESERVED,
         preserved_user_id=user_id,
-        meta={"creatorAttributed": True},
+        meta={
+            "creatorAttributed": True,
+            "actorDisplayName": actor_name,
+            "actorUserId": user_id,
+            "actorRole": "legacy_owner",
+            "arcoriDisplayName": arcori_name,
+            "historySummary": history,
+        },
     )
 
-    next_gen = int(generation_number) + 1
-    repo.ensure_lifecycle(
+    echo = _echo_next_generation(
         session,
-        design_id=design_id,
-        generation_number=next_gen,
-        preservation_requirement=int(life.preservation_requirement),
-        closure_milestone=int(life.closure_milestone),
+        closed_design_id=design_id,
+        closed_generation_number=generation_number,
+        life=life,
+        creator_user_id=user_id,
     )
 
     return {
@@ -684,7 +699,8 @@ def _apply_preserve_mint(
         "designId": design_id,
         "serial": design_id,
         "generationNumber": generation_number,
-        "echoGenerationNumber": next_gen,
+        "echoGenerationNumber": echo["echoGenerationNumber"],
+        "echoDesignId": echo["echoDesignId"],
         "legacyState": LEGACY_PRESERVED,
         "titlesGranted": [TITLE_LEGACY_OWNER, TITLE_GENERATION_CREATOR],
         "creatorAttributed": True,
@@ -721,32 +737,228 @@ def _apply_lost_close(
         if avari is not None:
             _ensure_title(avari, TITLE_MASTER)
 
+    master_id = (closer_user_id or "").strip() or None
+    actor_name = _display_name_for_user(session, master_id) if master_id else "Unknown"
+    arcori_name = _arcori_display_name(design_id)
+    history = _museum_history_summary(
+        legacy_state=LEGACY_LOST,
+        generation_number=generation_number,
+        actor_display_name=actor_name,
+        arcori_display_name=arcori_name,
+    )
     repo.insert_museum(
         session,
         design_id=design_id,
         generation_number=generation_number,
         legacy_state=LEGACY_LOST,
         preserved_user_id=None,
-        meta={"masterUserId": closer_user_id},
+        meta={
+            "masterUserId": master_id,
+            "actorDisplayName": actor_name,
+            "actorUserId": master_id,
+            "actorRole": "master",
+            "arcoriDisplayName": arcori_name,
+            "historySummary": history,
+        },
     )
-    next_gen = int(generation_number) + 1
-    repo.ensure_lifecycle(
+    echo = _echo_next_generation(
         session,
-        design_id=design_id,
-        generation_number=next_gen,
-        preservation_requirement=int(life.preservation_requirement),
-        closure_milestone=int(life.closure_milestone),
+        closed_design_id=design_id,
+        closed_generation_number=generation_number,
+        life=life,
+        creator_user_id=None,
     )
     return {
         "applied": True,
         "reason": "lost_closed",
         "designId": design_id,
         "generationNumber": generation_number,
-        "echoGenerationNumber": next_gen,
+        "echoGenerationNumber": echo["echoGenerationNumber"],
+        "echoDesignId": echo["echoDesignId"],
         "legacyState": LEGACY_LOST,
         "creatorAttributed": False,
         "mint": None,
     }
+
+
+def _echo_next_generation(
+    session: Any,
+    *,
+    closed_design_id: str,
+    closed_generation_number: int,
+    life: Any,
+    creator_user_id: str | None,
+) -> dict[str, Any]:
+    """Close catalog row, insert echo design in DB, open lifecycle, copy access."""
+    from modules.catalog import catalog_repository as catalog_repo
+    from modules.catalog.catalog_ids import (
+        apply_generation_to_design_doc,
+        with_generation,
+    )
+
+    next_gen = int(closed_generation_number) + 1
+    try:
+        echo_id = with_generation(closed_design_id, next_gen)
+    except ValueError:
+        # Legacy ids without parseable GEN — fall back to same id + gen column.
+        echo_id = closed_design_id
+
+    closed_row = catalog_repo.mark_closed(session, closed_design_id)
+    series_key = (
+        closed_row.series_key if closed_row is not None else "Unknown"
+    )
+    catalog_version = (
+        closed_row.catalog_version if closed_row is not None else None
+    )
+    base_design: dict[str, Any] | None = None
+    if closed_row is not None and isinstance(closed_row.design_json, dict):
+        base_design = dict(closed_row.design_json)
+    else:
+        try:
+            base_design = get_design(closed_design_id)
+        except Exception:
+            base_design = None
+
+    if base_design is not None:
+        creator = None
+        if creator_user_id:
+            creator = {"type": "player", "playerId": creator_user_id}
+        else:
+            creator = {"type": "system", "playerId": None}
+        echo_design = apply_generation_to_design_doc(
+            base_design,
+            generation_number=next_gen,
+            creator=creator,
+        )
+        # Only catalog field that changes between gens: approved disc accent.
+        from modules.avari.kin_genesis import pick_echo_color
+
+        echo_design["color"] = pick_echo_color(base_design.get("color"))
+        echo_design["worldState"] = "Active"
+        echo_design["internalId"] = echo_id
+        catalog_repo.insert_echo(
+            session,
+            design=echo_design,
+            series_key=series_key,
+            parent_internal_id=closed_design_id,
+            catalog_version=catalog_version,
+        )
+
+    repo.ensure_lifecycle(
+        session,
+        design_id=echo_id,
+        generation_number=next_gen,
+        preservation_requirement=int(life.preservation_requirement),
+        closure_milestone=int(life.closure_milestone),
+    )
+    copied = catalog_repo.copy_design_access(
+        session,
+        from_design_id=closed_design_id,
+        to_design_id=echo_id,
+    )
+    revoked = catalog_repo.revoke_all_access_for_design(
+        session, closed_design_id
+    )
+    seeded = _seed_echo_mastery(
+        session,
+        closed_design_id=closed_design_id,
+        closed_generation_number=int(closed_generation_number),
+        echo_design_id=echo_id,
+        echo_generation_number=next_gen,
+        preservation_requirement=int(life.preservation_requirement),
+        legacy_state=str(getattr(life, "legacy_state", "") or ""),
+        closed_at=getattr(life, "closed_at", None),
+    )
+    if LOGGING_SWITCH:
+        customlog(
+            f"legacy: echo closed={closed_design_id} → {echo_id} "
+            f"gen={next_gen} accessCopied={copied} accessRevoked={revoked} "
+            f"masterySeeded={seeded}"
+        )
+    return {
+        "echoDesignId": echo_id,
+        "echoGenerationNumber": next_gen,
+        "accessCopied": copied,
+        "accessRevoked": revoked,
+        "masterySeeded": seeded,
+    }
+
+
+def _seed_echo_mastery(
+    session: Any,
+    *,
+    closed_design_id: str,
+    closed_generation_number: int,
+    echo_design_id: str,
+    echo_generation_number: int,
+    preservation_requirement: int,
+    legacy_state: str = "",
+    closed_at: Any | None = None,
+) -> int:
+    """Soft-reset seed + mastery-at-closure snapshots for all players on that gen.
+
+    Closed mastery rows are left unchanged. Returns players who received a
+    positive echo seed (snapshots count every player with closed mastery > 0).
+    """
+    from modules.avari import avari_repository as avari_repo
+    from modules.avari.mastery_economy import echo_mastery_seed
+
+    closed_id = (closed_design_id or "").strip()
+    echo_id = (echo_design_id or "").strip()
+    if not closed_id or not echo_id:
+        return 0
+    closed_gen = max(1, int(closed_generation_number))
+    echo_gen = max(1, int(echo_generation_number))
+    state = (legacy_state or "").strip().lower() or "lost"
+    rows = avari_repo.list_mastery_for_design_generation(
+        session,
+        design_id=closed_id,
+        generation_number=closed_gen,
+    )
+    seeded_players = 0
+    for row in rows:
+        closed_pts = int(getattr(row, "points", 0) or 0)
+        if closed_pts <= 0:
+            continue
+        uid = getattr(row, "user_id", None)
+        if uid is None:
+            continue
+        seed = echo_mastery_seed(
+            closed_pts,
+            preservation_requirement=preservation_requirement,
+        )
+        avari_repo.upsert_closed_generation(
+            session,
+            user_id=uid,
+            design_id=closed_id,
+            generation_number=closed_gen,
+            mastery_points=closed_pts,
+            legacy_state=state,
+            echo_design_id=echo_id,
+            echo_mastery_seeded=seed,
+            echo_generation_number=echo_gen,
+            closed_at=closed_at,
+        )
+        if seed <= 0:
+            continue
+        echo_row = avari_repo.ensure_mastery_row(
+            session,
+            user_id=uid,
+            design_id=echo_id,
+            generation_number=echo_gen,
+            initial_points=seed,
+        )
+        if int(echo_row.points) < seed:
+            echo_row.points = seed
+            session.flush()
+        avari_repo.ensure_design_access(
+            session,
+            user_id=str(uid),
+            design_id=echo_id,
+            source="echo",
+        )
+        seeded_players += 1
+    return seeded_players
 
 
 def _proximity_gaps_crossed(*, gap_before: int, gap_after: int) -> list[int]:
@@ -922,3 +1134,247 @@ def tick_expire_offers() -> dict[str, Any]:
                     f"gen={row.generation_number}"
                 )
     return {"expiredOffers": expired}
+
+
+def _display_name_for_user(session: Any, user_id: str | None) -> str:
+    raw = (user_id or "").strip()
+    if not raw:
+        return "Unknown"
+    try:
+        uid = uuid.UUID(raw)
+    except ValueError:
+        return raw[:8]
+    from sqlalchemy import select
+
+    avari = session.scalars(
+        select(AvariProfile).where(AvariProfile.user_id == uid)
+    ).first()
+    name = str(getattr(avari, "display_name", "") or "").strip() if avari else ""
+    if name:
+        return name
+    return raw[:8]
+
+
+def _arcori_display_name(design_id: str) -> str:
+    """Catalog face name (`design`), never the serial/internal id when known."""
+    did = (design_id or "").strip()
+    if not did:
+        return "Unknown"
+    try:
+        design = get_design(did)
+    except Exception:
+        design = None
+    if isinstance(design, dict):
+        name = str(
+            design.get("design") or design.get("displayName") or ""
+        ).strip()
+        if name:
+            return name
+    return did
+
+
+def _museum_history_summary(
+    *,
+    legacy_state: str,
+    generation_number: int,
+    actor_display_name: str,
+    arcori_display_name: str | None = None,
+) -> str:
+    gen = int(generation_number)
+    # Generation Creator title refers to the echo (closed gen + 1).
+    creator_gen = gen + 1
+    actor = (actor_display_name or "Unknown").strip() or "Unknown"
+    piece = (arcori_display_name or "").strip() or "Arcori"
+    if legacy_state == LEGACY_PRESERVED:
+        return (
+            f"{piece} closed Preserved by {actor} "
+            f"— Legacy owner & generation {creator_gen} echoer"
+        )
+    return f"{piece} closed Lost — Master: {actor}"
+
+
+def _encode_museum_cursor(closed_at: Any, row_id: uuid.UUID) -> str:
+    iso = closed_at.isoformat() if hasattr(closed_at, "isoformat") else str(closed_at)
+    return f"{iso}|{row_id}"
+
+
+def _decode_museum_cursor(
+    raw: str | None,
+) -> tuple[Any | None, uuid.UUID | None]:
+    text = (raw or "").strip()
+    if not text or "|" not in text:
+        return None, None
+    iso, id_part = text.rsplit("|", 1)
+    try:
+        row_id = uuid.UUID(id_part.strip())
+    except ValueError:
+        return None, None
+    from datetime import datetime
+
+    try:
+        closed_at = datetime.fromisoformat(iso.strip())
+    except ValueError:
+        return None, None
+    return closed_at, row_id
+
+
+def _serialize_museum_item(session: Any, row: Any) -> dict[str, Any]:
+    design_id = str(row.design_id or "").strip()
+    generation_number = int(row.generation_number)
+    legacy_state = str(row.legacy_state or "").strip().lower()
+    meta = dict(row.meta_json or {}) if isinstance(row.meta_json, dict) else {}
+
+    display_name = str(meta.get("arcoriDisplayName") or "").strip()
+    image_url = None
+    color = None
+    series_key = None
+    theme = None
+    try:
+        design = get_design(design_id)
+    except Exception:
+        design = None
+    if isinstance(design, dict):
+        if not display_name:
+            display_name = str(
+                design.get("design") or design.get("displayName") or ""
+            ).strip()
+        image_url = design.get("imageUrl")
+        color = design.get("color")
+        series_key = design.get("seriesKey")
+        theme = design.get("theme")
+    if not display_name:
+        display_name = design_id
+
+    if legacy_state == LEGACY_PRESERVED:
+        actor_user_id = (
+            str(meta.get("actorUserId") or "").strip()
+            or (str(row.preserved_user_id) if row.preserved_user_id else "")
+            or None
+        )
+        actor_role = "legacy_owner"
+    else:
+        actor_user_id = (
+            str(meta.get("actorUserId") or meta.get("masterUserId") or "").strip()
+            or None
+        )
+        actor_role = "master"
+
+    actor_display_name = str(meta.get("actorDisplayName") or "").strip()
+    if not actor_display_name:
+        actor_display_name = _display_name_for_user(session, actor_user_id)
+
+    # Rebuild caption so list/detail always use Arcori name + gen-numbered title.
+    history = _museum_history_summary(
+        legacy_state=legacy_state,
+        generation_number=generation_number,
+        actor_display_name=actor_display_name,
+        arcori_display_name=display_name,
+    )
+
+    closed_at = row.closed_at
+    closed_iso = (
+        closed_at.isoformat() if hasattr(closed_at, "isoformat") else str(closed_at)
+    )
+
+    return {
+        "designId": design_id,
+        "displayName": display_name,
+        "generationNumber": generation_number,
+        "legacyState": legacy_state,
+        "closedAt": closed_iso,
+        "actorUserId": actor_user_id,
+        "actorDisplayName": actor_display_name,
+        "actorRole": actor_role,
+        "historySummary": history,
+        "imageUrl": image_url if isinstance(image_url, str) else None,
+        "color": color if isinstance(color, str) else None,
+        "seriesKey": series_key if isinstance(series_key, str) else None,
+        "theme": theme if isinstance(theme, str) else None,
+        "id": str(row.id),
+    }
+
+
+def list_museum(
+    *,
+    outcome: str = "all",
+    q: str | None = None,
+    limit: int = 30,
+    cursor: str | None = None,
+) -> dict[str, Any]:
+    """World Museum: closed Preserved + Lost generations, newest first."""
+    outcome_raw = (outcome or "all").strip().lower()
+    if outcome_raw not in ("all", "preserved", "lost"):
+        raise AppError(INVALID_QUERY, message="outcome must be all|preserved|lost")
+    legacy_state = None if outcome_raw == "all" else outcome_raw
+    lim = max(1, min(100, int(limit)))
+    needle = (q or "").strip()
+    cursor_closed_at, cursor_id = _decode_museum_cursor(cursor)
+
+    # When searching by display name, over-fetch then filter in memory.
+    fetch_limit = lim + 1 if not needle else min(100, max(lim + 1, lim * 5))
+
+    with session_scope() as session:
+        rows = repo.list_museum_generations(
+            session,
+            legacy_state=legacy_state,
+            design_id_contains=None,
+            limit=fetch_limit,
+            cursor_closed_at=cursor_closed_at,
+            cursor_id=cursor_id,
+        )
+        items: list[dict[str, Any]] = []
+        for row in rows:
+            item = _serialize_museum_item(session, row)
+            if needle:
+                hay = f"{item.get('displayName', '')} {item.get('designId', '')}".lower()
+                if needle.lower() not in hay:
+                    continue
+            items.append(item)
+            if len(items) > lim:
+                break
+
+        next_cursor = None
+        if len(items) > lim:
+            items = items[:lim]
+            last = items[-1]
+            # Prefer DB row id from serialization.
+            last_row = next(
+                (r for r in rows if str(r.id) == str(last.get("id"))),
+                None,
+            )
+            if last_row is not None:
+                next_cursor = _encode_museum_cursor(last_row.closed_at, last_row.id)
+
+        if LOGGING_SWITCH:
+            customlog(
+                f"legacy: list_museum outcome={outcome_raw} q={needle!r} "
+                f"count={len(items)} next={bool(next_cursor)}"
+            )
+        return {"items": items, "nextCursor": next_cursor}
+
+
+def get_museum_item(*, design_id: str, generation_number: int) -> dict[str, Any]:
+    did = (design_id or "").strip()
+    if not did:
+        raise AppError(INVALID_QUERY, message="designId is required")
+    try:
+        gen = int(generation_number)
+    except (TypeError, ValueError) as exc:
+        raise AppError(INVALID_QUERY, message="generationNumber is required") from exc
+    if gen < 1:
+        raise AppError(INVALID_QUERY, message="generationNumber must be >= 1")
+
+    with session_scope() as session:
+        row = repo.get_museum_generation(
+            session, design_id=did, generation_number=gen
+        )
+        if row is None:
+            raise AppError(MUSEUM_NOT_FOUND)
+        item = _serialize_museum_item(session, row)
+        if LOGGING_SWITCH:
+            customlog(
+                f"legacy: get_museum_item design={did} gen={gen} "
+                f"state={item.get('legacyState')}"
+            )
+        return item
+

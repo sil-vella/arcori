@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "HAR-EVG-SER003-0001",
+      "internalId": "HAR-EVG-SER003-GEN001-0001",
       "themeCode": "HAR",
       "designCode": "EVG",
       "designFamily": "EVERGOLD_GATHERING",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Evergold Gathering in anime style with a standard finish and no effect. Use a background that is visually related to Evergold Gathering. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-EVG-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Evergold Gathering in anime style with a standard finish and no effect. Use a background that is visually related to Evergold Gathering. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-EVG-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Evergold Gathering Arcori generation I from the Harvest Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "HAR-BBP-SER003-0002",
+      "internalId": "HAR-BBP-SER003-GEN001-0002",
       "themeCode": "HAR",
       "designCode": "BBP",
       "designFamily": "BOUNTY_BENEATH_THE_PILLARS",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Bounty Beneath the Pillars in anime style with a standard finish and no effect. Use a background that is visually related to Bounty Beneath the Pillars. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-BBP-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Bounty Beneath the Pillars in anime style with a standard finish and no effect. Use a background that is visually related to Bounty Beneath the Pillars. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-BBP-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Bounty Beneath the Pillars Arcori generation I from the Harvest Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "HAR-GAP-SER003-0003",
+      "internalId": "HAR-GAP-SER003-GEN001-0003",
       "themeCode": "HAR",
       "designCode": "GAP",
       "designFamily": "GATHERING_THE_PILLARFRUIT",
@@ -136,7 +136,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Gathering the Pillarfruit in anime style with a standard finish and no effect. Use a background that is visually related to Gathering the Pillarfruit. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-GAP-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Gathering the Pillarfruit in anime style with a standard finish and no effect. Use a background that is visually related to Gathering the Pillarfruit. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-GAP-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Gathering the Pillarfruit Arcori generation I from the Harvest Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "HAR-HGW-SER003-0004",
+      "internalId": "HAR-HGW-SER003-GEN001-0004",
       "themeCode": "HAR",
       "designCode": "HGW",
       "designFamily": "HARVEST_OF_THE_GOLDEN_WILD",
@@ -180,7 +180,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Harvest of the Golden Wild in anime style with a standard finish and no effect. Use a background that is visually related to Harvest of the Golden Wild. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-HGW-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Harvest of the Golden Wild in anime style with a standard finish and no effect. Use a background that is visually related to Harvest of the Golden Wild. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HAR-HGW-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Harvest of the Golden Wild Arcori generation I from the Harvest Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

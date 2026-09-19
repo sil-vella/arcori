@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SPC-SAT-SER001-0001",
+      "internalId": "SPC-SAT-SER001-GEN001-0001",
       "themeCode": "SPC",
       "designCode": "SAT",
       "designFamily": "SATURN_EXPLORER",
@@ -42,7 +42,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a saturn explorer in minimalist style with a chrome finish and glow effect. Use a background that is visually related to the saturn explorer. No borders, no frames. The saturn explorer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-SAT-SER001-0001.webp",
+      "artworkPrompt": "Give me an image with a saturn explorer in minimalist style with a chrome finish and glow effect. Use a background that is visually related to the saturn explorer. No borders, no frames. The saturn explorer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-SAT-SER001-GEN001-0001.webp",
       "loreDescription": "A collectible Saturn Explorer Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "SPC-MAR-SER001-0002",
+      "internalId": "SPC-MAR-SER001-GEN001-0002",
       "themeCode": "SPC",
       "designCode": "MAR",
       "designFamily": "MARS_PIONEER",
@@ -86,7 +86,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a mars pioneer in realistic style with a matte finish and no effect. Use a background that is visually related to the mars pioneer. No borders, no frames. The mars pioneer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-MAR-SER001-0002.webp",
+      "artworkPrompt": "Give me an image with a mars pioneer in realistic style with a matte finish and no effect. Use a background that is visually related to the mars pioneer. No borders, no frames. The mars pioneer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-MAR-SER001-GEN001-0002.webp",
       "loreDescription": "A collectible Mars Pioneer Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "SPC-NEP-SER001-0003",
+      "internalId": "SPC-NEP-SER001-GEN001-0003",
       "themeCode": "SPC",
       "designCode": "NEP",
       "designFamily": "NEPTUNE_VOYAGER",
@@ -130,7 +130,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a neptune voyager in watercolor style with a gloss finish and pulse effect. Use a background that is visually related to the neptune voyager. No borders, no frames. The neptune voyager should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-NEP-SER001-0003.webp",
+      "artworkPrompt": "Give me an image with a neptune voyager in watercolor style with a gloss finish and pulse effect. Use a background that is visually related to the neptune voyager. No borders, no frames. The neptune voyager should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-NEP-SER001-GEN001-0003.webp",
       "loreDescription": "A collectible Neptune Voyager Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "SPC-LUN-SER001-0004",
+      "internalId": "SPC-LUN-SER001-GEN001-0004",
       "themeCode": "SPC",
       "designCode": "LUN",
       "designFamily": "LUNAR_PIONEER",
@@ -174,7 +174,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a lunar pioneer in comic style with a metallic finish and motion effect. Use a background that is visually related to the lunar pioneer. No borders, no frames. The lunar pioneer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-LUN-SER001-0004.webp",
+      "artworkPrompt": "Give me an image with a lunar pioneer in comic style with a metallic finish and motion effect. Use a background that is visually related to the lunar pioneer. No borders, no frames. The lunar pioneer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-LUN-SER001-GEN001-0004.webp",
       "loreDescription": "A collectible Lunar Pioneer Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -182,7 +182,7 @@
       }
     },
     {
-      "internalId": "SPC-COS-SER001-0005",
+      "internalId": "SPC-COS-SER001-GEN001-0005",
       "themeCode": "SPC",
       "designCode": "COS",
       "designFamily": "COSMIC_WALKER",
@@ -220,7 +220,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a cosmic walker in realistic style with a foil finish and glow effect. Use a background that is visually related to the cosmic walker. No borders, no frames. The cosmic walker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-COS-SER001-0005.webp",
+      "artworkPrompt": "Give me an image with a cosmic walker in realistic style with a foil finish and glow effect. Use a background that is visually related to the cosmic walker. No borders, no frames. The cosmic walker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-COS-SER001-GEN001-0005.webp",
       "loreDescription": "A collectible Cosmic Walker Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "SPC-STA-SER001-0006",
+      "internalId": "SPC-STA-SER001-GEN001-0006",
       "themeCode": "SPC",
       "designCode": "STA",
       "designFamily": "STAR_CAPTAIN",
@@ -266,7 +266,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a star captain in anime style with a prismatic finish and sparkle effect. Use a background that is visually related to the star captain. No borders, no frames. The star captain should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-STA-SER001-0006.webp",
+      "artworkPrompt": "Give me an image with a star captain in anime style with a prismatic finish and sparkle effect. Use a background that is visually related to the star captain. No borders, no frames. The star captain should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-STA-SER001-GEN001-0006.webp",
       "loreDescription": "A collectible Star Captain Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -274,7 +274,7 @@
       }
     },
     {
-      "internalId": "SPC-CRU-SER001-0007",
+      "internalId": "SPC-CRU-SER001-GEN001-0007",
       "themeCode": "SPC",
       "designCode": "CRU",
       "designFamily": "STAR_CRUISER",
@@ -312,7 +312,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a star cruiser in comic style with a chrome finish and motion effect. Use a background that is visually related to the star cruiser. No borders, no frames. The star cruiser should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-CRU-SER001-0007.webp",
+      "artworkPrompt": "Give me an image with a star cruiser in comic style with a chrome finish and motion effect. Use a background that is visually related to the star cruiser. No borders, no frames. The star cruiser should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-CRU-SER001-GEN001-0007.webp",
       "loreDescription": "A collectible Star Cruiser Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -320,7 +320,7 @@
       }
     },
     {
-      "internalId": "SPC-FRG-SER001-0008",
+      "internalId": "SPC-FRG-SER001-GEN001-0008",
       "themeCode": "SPC",
       "designCode": "FRG",
       "designFamily": "BATTLE_FRIGATE",
@@ -358,7 +358,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a battle frigate in realistic style with a metallic finish and no effect. Use a background that is visually related to the battle frigate. No borders, no frames. The battle frigate should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-FRG-SER001-0008.webp",
+      "artworkPrompt": "Give me an image with a battle frigate in realistic style with a metallic finish and no effect. Use a background that is visually related to the battle frigate. No borders, no frames. The battle frigate should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-FRG-SER001-GEN001-0008.webp",
       "loreDescription": "A collectible Battle Frigate Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -366,7 +366,7 @@
       }
     },
     {
-      "internalId": "SPC-EXP-SER001-0009",
+      "internalId": "SPC-EXP-SER001-GEN001-0009",
       "themeCode": "SPC",
       "designCode": "EXP",
       "designFamily": "DEEP_EXPLORER",
@@ -402,7 +402,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a deep explorer in minimalist style with a standard finish and no effect. Use a background that is visually related to the deep explorer. No borders, no frames. The deep explorer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-EXP-SER001-0009.webp",
+      "artworkPrompt": "Give me an image with a deep explorer in minimalist style with a standard finish and no effect. Use a background that is visually related to the deep explorer. No borders, no frames. The deep explorer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-EXP-SER001-GEN001-0009.webp",
       "loreDescription": "A collectible Deep Explorer Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -410,7 +410,7 @@
       }
     },
     {
-      "internalId": "SPC-ALN-SER001-0010",
+      "internalId": "SPC-ALN-SER001-GEN001-0010",
       "themeCode": "SPC",
       "designCode": "ALN",
       "designFamily": "NEBULA_VISITOR",
@@ -448,7 +448,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a nebula visitor in comic style with a gloss finish and glow effect. Use a background that is visually related to the nebula visitor. No borders, no frames. The nebula visitor should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-ALN-SER001-0010.webp",
+      "artworkPrompt": "Give me an image with a nebula visitor in comic style with a gloss finish and glow effect. Use a background that is visually related to the nebula visitor. No borders, no frames. The nebula visitor should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-ALN-SER001-GEN001-0010.webp",
       "loreDescription": "A collectible Nebula Visitor Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -456,7 +456,7 @@
       }
     },
     {
-      "internalId": "SPC-GRY-SER001-0011",
+      "internalId": "SPC-GRY-SER001-GEN001-0011",
       "themeCode": "SPC",
       "designCode": "GRY",
       "designFamily": "GREY_VISITOR",
@@ -494,7 +494,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a grey visitor in realistic style with a matte finish and no effect. Use a background that is visually related to the grey visitor. No borders, no frames. The grey visitor should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-GRY-SER001-0011.webp",
+      "artworkPrompt": "Give me an image with a grey visitor in realistic style with a matte finish and no effect. Use a background that is visually related to the grey visitor. No borders, no frames. The grey visitor should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-GRY-SER001-GEN001-0011.webp",
       "loreDescription": "A collectible Grey Visitor Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -502,7 +502,7 @@
       }
     },
     {
-      "internalId": "SPC-XEN-SER001-0012",
+      "internalId": "SPC-XEN-SER001-GEN001-0012",
       "themeCode": "SPC",
       "designCode": "XEN",
       "designFamily": "XENO_OVERLORD",
@@ -540,7 +540,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a xeno overlord in anime style with a foil finish and fire effect. Use a background that is visually related to the xeno overlord. No borders, no frames. The xeno overlord should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-XEN-SER001-0012.webp",
+      "artworkPrompt": "Give me an image with a xeno overlord in anime style with a foil finish and fire effect. Use a background that is visually related to the xeno overlord. No borders, no frames. The xeno overlord should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-XEN-SER001-GEN001-0012.webp",
       "loreDescription": "A collectible Xeno Overlord Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -548,7 +548,7 @@
       }
     },
     {
-      "internalId": "SPC-BHO-SER001-0013",
+      "internalId": "SPC-BHO-SER001-GEN001-0013",
       "themeCode": "SPC",
       "designCode": "BHO",
       "designFamily": "EVENT_HORIZON",
@@ -586,7 +586,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a event horizon in neon style with a chrome finish and smoke effect. Use a background that is visually related to the event horizon. No borders, no frames. The event horizon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-BHO-SER001-0013.webp",
+      "artworkPrompt": "Give me an image with a event horizon in neon style with a chrome finish and smoke effect. Use a background that is visually related to the event horizon. No borders, no frames. The event horizon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-BHO-SER001-GEN001-0013.webp",
       "loreDescription": "A collectible Event Horizon Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -594,7 +594,7 @@
       }
     },
     {
-      "internalId": "SPC-QSR-SER001-0014",
+      "internalId": "SPC-QSR-SER001-GEN001-0014",
       "themeCode": "SPC",
       "designCode": "QSR",
       "designFamily": "QUASAR_CORE",
@@ -632,7 +632,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a quasar core in minimalist style with a prismatic finish and pulse effect. Use a background that is visually related to the quasar core. No borders, no frames. The quasar core should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-QSR-SER001-0014.webp",
+      "artworkPrompt": "Give me an image with a quasar core in minimalist style with a prismatic finish and pulse effect. Use a background that is visually related to the quasar core. No borders, no frames. The quasar core should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-QSR-SER001-GEN001-0014.webp",
       "loreDescription": "A collectible Quasar Core Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -640,7 +640,7 @@
       }
     },
     {
-      "internalId": "SPC-MIL-SER001-0015",
+      "internalId": "SPC-MIL-SER001-GEN001-0015",
       "themeCode": "SPC",
       "designCode": "MIL",
       "designFamily": "MILKY_SPIRAL",
@@ -678,7 +678,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a milky spiral in watercolor style with a gloss finish and sparkle effect. Use a background that is visually related to the milky spiral. No borders, no frames. The milky spiral should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-MIL-SER001-0015.webp",
+      "artworkPrompt": "Give me an image with a milky spiral in watercolor style with a gloss finish and sparkle effect. Use a background that is visually related to the milky spiral. No borders, no frames. The milky spiral should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-MIL-SER001-GEN001-0015.webp",
       "loreDescription": "A collectible Milky Spiral Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -686,7 +686,7 @@
       }
     },
     {
-      "internalId": "SPC-AND-SER001-0016",
+      "internalId": "SPC-AND-SER001-GEN001-0016",
       "themeCode": "SPC",
       "designCode": "AND",
       "designFamily": "ANDROMEDA",
@@ -724,7 +724,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a andromeda in realistic style with a holographic finish and glow effect. Use a background that is visually related to the andromeda. No borders, no frames. The andromeda should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-AND-SER001-0016.webp",
+      "artworkPrompt": "Give me an image with a andromeda in realistic style with a holographic finish and glow effect. Use a background that is visually related to the andromeda. No borders, no frames. The andromeda should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-AND-SER001-GEN001-0016.webp",
       "loreDescription": "A collectible Andromeda Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -732,7 +732,7 @@
       }
     },
     {
-      "internalId": "SPC-COM-SER001-0017",
+      "internalId": "SPC-COM-SER001-GEN001-0017",
       "themeCode": "SPC",
       "designCode": "COM",
       "designFamily": "COMET_RUNNER",
@@ -768,7 +768,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a comet runner in comic style with a foil finish and motion effect. Use a background that is visually related to the comet runner. No borders, no frames. The comet runner should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-COM-SER001-0017.webp",
+      "artworkPrompt": "Give me an image with a comet runner in comic style with a foil finish and motion effect. Use a background that is visually related to the comet runner. No borders, no frames. The comet runner should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-COM-SER001-GEN001-0017.webp",
       "loreDescription": "A collectible Comet Runner Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -776,7 +776,7 @@
       }
     },
     {
-      "internalId": "SPC-MET-SER001-0018",
+      "internalId": "SPC-MET-SER001-GEN001-0018",
       "themeCode": "SPC",
       "designCode": "MET",
       "designFamily": "METEOR_STORM",
@@ -810,7 +810,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a meteor storm in low poly style with a metallic finish and fire effect. Use a background that is visually related to the meteor storm. No borders, no frames. The meteor storm should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-MET-SER001-0018.webp",
+      "artworkPrompt": "Give me an image with a meteor storm in low poly style with a metallic finish and fire effect. Use a background that is visually related to the meteor storm. No borders, no frames. The meteor storm should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-MET-SER001-GEN001-0018.webp",
       "loreDescription": "A collectible Meteor Storm Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -818,7 +818,7 @@
       }
     },
     {
-      "internalId": "SPC-AST-SER001-0019",
+      "internalId": "SPC-AST-SER001-GEN001-0019",
       "themeCode": "SPC",
       "designCode": "AST",
       "designFamily": "ASTEROID_MINER",
@@ -854,7 +854,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a asteroid miner in pixel art style with a standard finish and no effect. Use a background that is visually related to the asteroid miner. No borders, no frames. The asteroid miner should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-AST-SER001-0019.webp",
+      "artworkPrompt": "Give me an image with a asteroid miner in pixel art style with a standard finish and no effect. Use a background that is visually related to the asteroid miner. No borders, no frames. The asteroid miner should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-AST-SER001-GEN001-0019.webp",
       "loreDescription": "A collectible Asteroid Miner Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -862,7 +862,7 @@
       }
     },
     {
-      "internalId": "SPC-SOL-SER001-0020",
+      "internalId": "SPC-SOL-SER001-GEN001-0020",
       "themeCode": "SPC",
       "designCode": "SOL",
       "designFamily": "SOLAR_FLARE",
@@ -900,7 +900,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a solar flare in anime style with a chrome finish and fire effect. Use a background that is visually related to the solar flare. No borders, no frames. The solar flare should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-SOL-SER001-0020.webp",
+      "artworkPrompt": "Give me an image with a solar flare in anime style with a chrome finish and fire effect. Use a background that is visually related to the solar flare. No borders, no frames. The solar flare should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-SOL-SER001-GEN001-0020.webp",
       "loreDescription": "A collectible Solar Flare Arcori generation I from the Space Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,

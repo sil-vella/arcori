@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LEG-MLH-SER003-0001",
+      "internalId": "LEG-MLH-SER003-GEN001-0001",
       "themeCode": "LEG",
       "designCode": "MLH",
       "designFamily": "MONUMENT_OF_THE_LAST_HAND",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Monument of the Last Hand in retro style with a standard finish and no effect. Use a background that is visually related to Monument of the Last Hand. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-MLH-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Monument of the Last Hand in retro style with a standard finish and no effect. Use a background that is visually related to Monument of the Last Hand. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-MLH-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Monument of the Last Hand Arcori generation I from the Legacy Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "LEG-WTR-SER003-0002",
+      "internalId": "LEG-WTR-SER003-GEN001-0002",
       "themeCode": "LEG",
       "designCode": "WTR",
       "designFamily": "WHAT_THE_TIDE_REMEMBERED",
@@ -88,7 +88,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with What the Tide Remembered in retro style with a standard finish and no effect. Use a background that is visually related to What the Tide Remembered. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-WTR-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with What the Tide Remembered in retro style with a standard finish and no effect. Use a background that is visually related to What the Tide Remembered. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-WTR-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible What the Tide Remembered Arcori generation I from the Legacy Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "LEG-LLT-SER003-0003",
+      "internalId": "LEG-LLT-SER003-GEN001-0003",
       "themeCode": "LEG",
       "designCode": "LLT",
       "designFamily": "LANTERNS_LEFT_FOR_TOMORROW",
@@ -134,7 +134,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Lanterns Left for Tomorrow in retro style with a standard finish and no effect. Use a background that is visually related to Lanterns Left for Tomorrow. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-LLT-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Lanterns Left for Tomorrow in retro style with a standard finish and no effect. Use a background that is visually related to Lanterns Left for Tomorrow. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-LLT-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Lanterns Left for Tomorrow Arcori generation I from the Legacy Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "LEG-WWK-SER003-0004",
+      "internalId": "LEG-WWK-SER003-GEN001-0004",
       "themeCode": "LEG",
       "designCode": "WWK",
       "designFamily": "WHAT_THE_WINTER_KEEPS",
@@ -176,7 +176,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with What the Winter Keeps in retro style with a standard finish and no effect. Use a background that is visually related to What the Winter Keeps. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-WWK-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with What the Winter Keeps in retro style with a standard finish and no effect. Use a background that is visually related to What the Winter Keeps. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LEG-WWK-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible What the Winter Keeps Arcori generation I from the Legacy Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

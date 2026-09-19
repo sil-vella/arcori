@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SAN-HGR-SER003-0001",
+      "internalId": "SAN-HGR-SER003-GEN001-0001",
       "themeCode": "SAN",
       "designCode": "HGR",
       "designFamily": "THE_HIDDEN_GOLDEN_REFUGE",
@@ -42,7 +42,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Hidden Golden Refuge in prismatic style with a standard finish and no effect. Use a background that is visually related to The Hidden Golden Refuge. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SAN-HGR-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with The Hidden Golden Refuge in prismatic style with a standard finish and no effect. Use a background that is visually related to The Hidden Golden Refuge. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SAN-HGR-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible The Hidden Golden Refuge Arcori generation I from the Sanctuary Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "SAN-HBR-SER003-0002",
+      "internalId": "SAN-HBR-SER003-GEN001-0002",
       "themeCode": "SAN",
       "designCode": "HBR",
       "designFamily": "HARBOR_BENEATH_THE_ROOTS",
@@ -86,7 +86,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Harbor Beneath the Roots in prismatic style with a standard finish and no effect. Use a background that is visually related to Harbor Beneath the Roots. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SAN-HBR-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Harbor Beneath the Roots in prismatic style with a standard finish and no effect. Use a background that is visually related to Harbor Beneath the Roots. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SAN-HBR-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Harbor Beneath the Roots Arcori generation I from the Sanctuary Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "SAN-HWS-SER003-0003",
+      "internalId": "SAN-HWS-SER003-GEN001-0003",
       "themeCode": "SAN",
       "designCode": "HWS",
       "designFamily": "THE_HOLLOW_WHERE_STORMS_DIVIDE",
@@ -130,7 +130,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Hollow Where Storms Divide in prismatic style with a standard finish and no effect. Use a background that is visually related to The Hollow Where Storms Divide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SAN-HWS-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Hollow Where Storms Divide in prismatic style with a standard finish and no effect. Use a background that is visually related to The Hollow Where Storms Divide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SAN-HWS-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Hollow Where Storms Divide Arcori generation I from the Sanctuary Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "SAN-HAR-SER003-0004",
+      "internalId": "SAN-HAR-SER003-GEN001-0004",
       "themeCode": "SAN",
       "designCode": "HAR",
       "designFamily": "HAVEN_OF_THE_ANCIENT_ROOTS",
@@ -174,7 +174,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Haven of the Ancient Roots in prismatic style with a standard finish and no effect. Use a background that is visually related to Haven of the Ancient Roots. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SAN-HAR-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Haven of the Ancient Roots in prismatic style with a standard finish and no effect. Use a background that is visually related to Haven of the Ancient Roots. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SAN-HAR-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Haven of the Ancient Roots Arcori generation I from the Sanctuary Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

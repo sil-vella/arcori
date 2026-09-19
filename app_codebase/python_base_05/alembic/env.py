@@ -27,6 +27,7 @@ import models.design_standing  # noqa: E402, F401
 import models.avari_profile  # noqa: E402, F401
 import models.player_progress  # noqa: E402, F401
 import models.legacy_preserve  # noqa: E402, F401
+import models.catalog_design  # noqa: E402, F401
 import models.example_module_record  # noqa: E402, F401
 import models.user_contact  # noqa: E402, F401
 

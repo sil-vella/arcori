@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "STN-ARP-SER003-0001",
+      "internalId": "STN-ARP-SER003-GEN001-0001",
       "themeCode": "STN",
       "designCode": "ARP",
       "designFamily": "ARCH_OF_RETURNING_PATHS",
@@ -42,7 +42,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Arch of Returning Paths in minimalist style with a standard finish and no effect. Use a background that is visually related to Arch of Returning Paths. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-ARP-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Arch of Returning Paths in minimalist style with a standard finish and no effect. Use a background that is visually related to Arch of Returning Paths. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-ARP-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Arch of Returning Paths Arcori generation I from the Stonework Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "STN-GGS-SER003-0002",
+      "internalId": "STN-GGS-SER003-GEN001-0002",
       "themeCode": "STN",
       "designCode": "GGS",
       "designFamily": "GATE_OF_GOLDEN_STONE",
@@ -86,7 +86,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Gate of Golden Stone in minimalist style with a standard finish and no effect. Use a background that is visually related to Gate of Golden Stone. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-GGS-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Gate of Golden Stone in minimalist style with a standard finish and no effect. Use a background that is visually related to Gate of Golden Stone. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-GGS-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Gate of Golden Stone Arcori generation I from the Stonework Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "STN-SFR-SER003-0003",
+      "internalId": "STN-SFR-SER003-GEN001-0003",
       "themeCode": "STN",
       "designCode": "SFR",
       "designFamily": "THE_STAIR_THE_FOREST_REVEALED",
@@ -130,7 +130,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Stair the Forest Revealed in minimalist style with a standard finish and no effect. Use a background that is visually related to The Stair the Forest Revealed. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-SFR-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Stair the Forest Revealed in minimalist style with a standard finish and no effect. Use a background that is visually related to The Stair the Forest Revealed. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-SFR-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Stair the Forest Revealed Arcori generation I from the Stonework Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "STN-RWX-SER003-0004",
+      "internalId": "STN-RWX-SER003-GEN001-0004",
       "themeCode": "STN",
       "designCode": "RWX",
       "designFamily": "THE_RISING_WALLS",
@@ -176,7 +176,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Rising Walls in minimalist style with a standard finish and no effect. Use a background that is visually related to The Rising Walls. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-RWX-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Rising Walls in minimalist style with a standard finish and no effect. Use a background that is visually related to The Rising Walls. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named STN-RWX-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Rising Walls Arcori generation I from the Stonework Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

@@ -223,6 +223,56 @@ def insert_museum(
     return row
 
 
+def get_museum_generation(
+    session: Session,
+    *,
+    design_id: str,
+    generation_number: int,
+) -> MuseumGeneration | None:
+    did = (design_id or "").strip()
+    if not did:
+        return None
+    return session.scalars(
+        select(MuseumGeneration).where(
+            MuseumGeneration.design_id == did,
+            MuseumGeneration.generation_number == int(generation_number),
+        )
+    ).first()
+
+
+def list_museum_generations(
+    session: Session,
+    *,
+    legacy_state: str | None = None,
+    design_id_contains: str | None = None,
+    limit: int = 30,
+    cursor_closed_at: datetime | None = None,
+    cursor_id: uuid.UUID | None = None,
+) -> list[MuseumGeneration]:
+    """Newest closed generations first. Optional outcome + design_id substring."""
+    lim = max(1, min(100, int(limit)))
+    stmt = select(MuseumGeneration)
+    state = (legacy_state or "").strip().lower()
+    if state in ("preserved", "lost"):
+        stmt = stmt.where(MuseumGeneration.legacy_state == state)
+    needle = (design_id_contains or "").strip()
+    if needle:
+        stmt = stmt.where(MuseumGeneration.design_id.ilike(f"%{needle}%"))
+    if cursor_closed_at is not None and cursor_id is not None:
+        stmt = stmt.where(
+            (MuseumGeneration.closed_at < cursor_closed_at)
+            | (
+                (MuseumGeneration.closed_at == cursor_closed_at)
+                & (MuseumGeneration.id < cursor_id)
+            )
+        )
+    stmt = stmt.order_by(
+        MuseumGeneration.closed_at.desc(),
+        MuseumGeneration.id.desc(),
+    ).limit(lim)
+    return list(session.scalars(stmt).all())
+
+
 def list_open_first_offers(session: Session) -> list[DesignGenerationLifecycle]:
     now = datetime.now(timezone.utc)
     return list(

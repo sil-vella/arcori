@@ -12,7 +12,9 @@ from modules.legacy.legacy_errors import INVALID_QUERY
 from modules.legacy.legacy_service import (
     decline_offer,
     fulfill_from_website,
+    get_museum_item,
     get_offer,
+    list_museum,
     preserve_complete,
     preserve_start,
     tick_expire_offers,
@@ -33,6 +35,8 @@ def register_legacy_routes(
     routes.authuser_post(
         "/legacy/preserve/complete", lambda: _handle_preserve_complete(res)
     )
+    routes.authuser_get("/museum", lambda: _handle_museum_list(res))
+    routes.authuser_get("/museum/item", lambda: _handle_museum_item(res))
     routes.service_post("/legacy/fulfill", lambda: _handle_fulfill(res))
     routes.service_post("/legacy/tick", lambda: _handle_tick(res))
 
@@ -121,6 +125,70 @@ def _handle_tick(res: HttpResponseContract):
         out = tick_expire_offers()
         if LOGGING_SWITCH:
             customlog(f"legacy: tick expiredOffers={out.get('expiredOffers')}")
+        return res.json_ok(out)
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_museum_list(res: HttpResponseContract):
+    try:
+        _require_user_id()
+        request = get_current_request()
+        outcome = "all"
+        q = None
+        limit = 30
+        cursor = None
+        if request is not None:
+            outcome = request.query_params.get("outcome") or "all"
+            q = request.query_params.get("q")
+            raw_limit = request.query_params.get("limit")
+            if raw_limit:
+                try:
+                    limit = int(raw_limit)
+                except ValueError:
+                    raise AppError(INVALID_QUERY, message="limit must be an integer")
+            cursor = request.query_params.get("cursor")
+        out = list_museum(outcome=outcome, q=q, limit=limit, cursor=cursor)
+        if LOGGING_SWITCH:
+            customlog(
+                f"legacy: GET museum outcome={outcome} q={q!r} "
+                f"items={len(out.get('items') or [])}"
+            )
+        return res.json_ok(out)
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_museum_item(res: HttpResponseContract):
+    try:
+        _require_user_id()
+        request = get_current_request()
+        design_id = ""
+        generation_number = 0
+        if request is not None:
+            design_id = (
+                request.query_params.get("designId")
+                or request.query_params.get("design_id")
+                or ""
+            )
+            raw_gen = (
+                request.query_params.get("generationNumber")
+                or request.query_params.get("generation_number")
+                or "0"
+            )
+            try:
+                generation_number = int(raw_gen)
+            except ValueError:
+                raise AppError(
+                    INVALID_QUERY, message="generationNumber must be an integer"
+                )
+        out = get_museum_item(
+            design_id=design_id, generation_number=generation_number
+        )
+        if LOGGING_SWITCH:
+            customlog(
+                f"legacy: GET museum/item design={design_id} gen={generation_number}"
+            )
         return res.json_ok(out)
     except AppError as err:
         return err.to_http_response()

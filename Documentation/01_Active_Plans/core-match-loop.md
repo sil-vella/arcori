@@ -73,7 +73,8 @@ Spine is live: end → modal → finalize → rematch/leave. Gold, mastery/acces
 
 ### P0 — next product slice
 
-- [ ] Celebration / mastery anims + daily / mission / cache UI (finalize still `daily: null`, `mint: null`) — [daily-goals.md](daily-goals.md)
+- [x] Daily Missions + Daily Cache claim (+2 Gold Fragments), Tasks Claim UI, post-match Daily polish, soft returning nudge — [daily-goals.md](daily-goals.md)
+- [ ] Celebration / mastery anims (finalize may still stub `mint`) — [daily-goals.md](daily-goals.md)
 - [ ] Achievements env apply — Alembic `016` + smoke; optional catalog hydrate on auth — [achievements.md](achievements.md)
 
 ### P1 — summary / progression correctness

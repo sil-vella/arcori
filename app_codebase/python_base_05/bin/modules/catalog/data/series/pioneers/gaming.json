@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "GAM-PXR-SER002-0003",
+      "internalId": "GAM-PXR-SER002-GEN001-0003",
       "themeCode": "GAM",
       "designCode": "PXR",
       "designFamily": "PIXEL_ROGUE",
@@ -40,7 +40,7 @@
       "series": "Pioneers Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a pixel rogue in pixel art style with a standard finish and no effect. Use a background that is visually related to the pixel rogue. No borders, no frames. The pixel rogue should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-PXR-SER002-0003.webp",
+      "artworkPrompt": "Give me an image with a pixel rogue in pixel art style with a standard finish and no effect. Use a background that is visually related to the pixel rogue. No borders, no frames. The pixel rogue should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-PXR-SER002-GEN001-0003.webp",
       "loreDescription": "A collectible Pixel Rogue Arcori generation I from the Gaming Pioneers Series.",
       "legacy": {
         "preservationRequirement": 100,

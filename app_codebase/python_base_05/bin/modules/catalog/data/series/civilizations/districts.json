@@ -1,0 +1,188 @@
+{
+  "catalog": "Districts Civilizations Series",
+  "theme": "Districts",
+  "series": "Civilizations",
+  "themeCode": "DST",
+  "loreDescription": "Different quarters of society: trade, learning, worship, craft, residence, and governance.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "DST-TDX-SER004-GEN001-0001",
+      "themeCode": "DST",
+      "designCode": "TDX",
+      "designFamily": "TIDESIDE_DISTRICTS",
+      "design": "Tideside Districts",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Districts",
+      "subtheme": "Districts",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.8,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Tideside Districts in realistic style with a standard finish and no effect. Use a background that is visually related to Tideside Districts. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DST-TDX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Tideside Districts Arcori generation I from the Districts Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "DST-CMX-SER004-GEN001-0002",
+      "themeCode": "DST",
+      "designCode": "CMX",
+      "designFamily": "CIVIC_MEDALLIONS",
+      "design": "Civic Medallions",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Districts",
+      "subtheme": "Districts",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.5,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Civic Medallions in realistic style with a standard finish and no effect. Use a background that is visually related to Civic Medallions. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DST-CMX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Civic Medallions Arcori generation I from the Districts Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "DST-SDE-SER004-GEN001-0003",
+      "themeCode": "DST",
+      "designCode": "SDE",
+      "designFamily": "SIXFOLD_DISTRICT_EMBLEM",
+      "design": "Sixfold District Emblem",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Districts",
+      "subtheme": "Districts",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.8,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Sixfold District Emblem in realistic style with a standard finish and no effect. Use a background that is visually related to Sixfold District Emblem. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DST-SDE-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Sixfold District Emblem Arcori generation I from the Districts Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "DST-PSM-SER004-GEN001-0004",
+      "themeCode": "DST",
+      "designCode": "PSM",
+      "designFamily": "PILLAR_SIGIL_MEDALLION",
+      "design": "Pillar Sigil Medallion",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Districts",
+      "subtheme": "Districts",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.1,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Pillar Sigil Medallion in realistic style with a standard finish and no effect. Use a background that is visually related to Pillar Sigil Medallion. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DST-PSM-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Pillar Sigil Medallion Arcori generation I from the Districts Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

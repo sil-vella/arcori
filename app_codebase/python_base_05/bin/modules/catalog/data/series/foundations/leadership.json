@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LED-LAF-SER003-0001",
+      "internalId": "LED-LAF-SER003-GEN001-0001",
       "themeCode": "LED",
       "designCode": "LAF",
       "designFamily": "LANTERN_AT_THE_FRONT",
@@ -40,7 +40,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Lantern at the Front in chibi style with a standard finish and no effect. Use a background that is visually related to Lantern at the Front. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LED-LAF-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Lantern at the Front in chibi style with a standard finish and no effect. Use a background that is visually related to Lantern at the Front. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LED-LAF-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Lantern at the Front Arcori generation I from the Leadership Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -48,7 +48,7 @@
       }
     },
     {
-      "internalId": "LED-FIW-SER003-0002",
+      "internalId": "LED-FIW-SER003-GEN001-0002",
       "themeCode": "LED",
       "designCode": "FIW",
       "designFamily": "FIRST_INTO_THE_WHITE_ASH",
@@ -86,7 +86,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with First Into the White Ash in chibi style with a standard finish and no effect. Use a background that is visually related to First Into the White Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LED-FIW-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with First Into the White Ash in chibi style with a standard finish and no effect. Use a background that is visually related to First Into the White Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LED-FIW-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible First Into the White Ash Arcori generation I from the Leadership Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "LED-CWT-SER003-0003",
+      "internalId": "LED-CWT-SER003-GEN001-0003",
       "themeCode": "LED",
       "designCode": "CWT",
       "designFamily": "THE_CAPTAIN_WHO_TURNED_BACK",
@@ -130,7 +130,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Captain Who Turned Back in chibi style with a standard finish and no effect. Use a background that is visually related to The Captain Who Turned Back. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LED-CWT-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Captain Who Turned Back in chibi style with a standard finish and no effect. Use a background that is visually related to The Captain Who Turned Back. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LED-CWT-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Captain Who Turned Back Arcori generation I from the Leadership Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "LED-FTG-SER003-0004",
+      "internalId": "LED-FTG-SER003-GEN001-0004",
       "themeCode": "LED",
       "designCode": "FTG",
       "designFamily": "THE_FIRST_THROUGH_THE_GREY",
@@ -176,7 +176,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The First Through the Grey in chibi style with a standard finish and no effect. Use a background that is visually related to The First Through the Grey. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LED-FTG-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The First Through the Grey in chibi style with a standard finish and no effect. Use a background that is visually related to The First Through the Grey. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LED-FTG-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The First Through the Grey Arcori generation I from the Leadership Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

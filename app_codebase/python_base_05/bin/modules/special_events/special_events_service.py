@@ -19,6 +19,7 @@ from modules.special_events.special_events_loader import (
     list_events,
 )
 from modules.special_events.special_events_types import (
+    ARCORI_SOURCE_ACTIVE_WINDOWS,
     ARCORI_SOURCE_CIRCULATION,
     ARCORI_SOURCE_EVENT_ROSTER,
     ARCORI_SOURCE_INTERSECT,
@@ -222,15 +223,54 @@ def build_candidate_ids_for_user(
     Return candidateIds for select_for_seats, or None to use default access pool
     (circulation without filters).
     """
-    from modules.avari.avari_service import list_design_access_ids
+    from math import ceil
+
+    from modules.avari.avari_repository import mastery_points_by_design
+    from modules.avari.avari_service import (
+        list_design_access_ids,
+        mint_reach_or_series_default,
+    )
+    from modules.catalog.catalog_select import _resolve_design
+    from modules.players.players_service import is_ai_user
 
     arcori = event.get("arcori") or {}
     source = str(arcori.get("source") or ARCORI_SOURCE_CIRCULATION).strip()
     roster = list(arcori.get("design_ids") or event.get("design_ids") or [])
     access = list_design_access_ids(user_id)
+    ratio_raw = arcori.get("min_mastery_ratio")
+    try:
+        min_ratio = float(ratio_raw) if ratio_raw is not None else None
+    except (TypeError, ValueError):
+        min_ratio = None
+    if min_ratio is not None and min_ratio <= 0:
+        min_ratio = None
 
-    if source == ARCORI_SOURCE_CIRCULATION:
-        if not (arcori.get("series_ids") or arcori.get("generation_numbers") or arcori.get("region_codes")):
+    if source == ARCORI_SOURCE_ACTIVE_WINDOWS:
+        from modules.legacy import legacy_repository as legacy_repo
+
+        open_ids: list[str] = []
+        seen_open: set[str] = set()
+        for life in legacy_repo.list_open_preservation_windows(session):
+            design_id = str(getattr(life, "design_id", "") or "").strip()
+            if not design_id or design_id in seen_open:
+                continue
+            seen_open.add(design_id)
+            open_ids.append(design_id)
+        if is_ai_user(user_id):
+            # Live global open-window roster; empty → default access (starters).
+            if not open_ids:
+                return None
+            base = open_ids
+        else:
+            base = [d for d in access if d in seen_open]
+    elif source == ARCORI_SOURCE_CIRCULATION:
+        has_geo_filters = bool(
+            arcori.get("series_ids")
+            or arcori.get("generation_numbers")
+            or arcori.get("region_codes")
+        )
+        # Bare circulation (no filters, no ratio) → default full access pool.
+        if not has_geo_filters and min_ratio is None:
             return None
         base = access
     elif source == ARCORI_SOURCE_OWN:
@@ -244,6 +284,22 @@ def build_candidate_ids_for_user(
         base = access
 
     filtered = [d for d in base if _design_matches_filters(d, arcori)]
+
+    if min_ratio is not None:
+        mastery_by = mastery_points_by_design(session, user_id)
+        ratio_kept: list[str] = []
+        for did in filtered:
+            design = _resolve_design(did)
+            reach = mint_reach_or_series_default(design)
+            need = int(ceil(min_ratio * reach))
+            pts = int(mastery_by.get(did) or 0)
+            if pts >= need:
+                ratio_kept.append(did)
+        filtered = ratio_kept
+        if not filtered and is_ai_user(user_id):
+            # AI with no high-mastery designs → default access (starters).
+            return None
+
     return filtered
 
 
@@ -267,7 +323,7 @@ def evaluate_eligibility(
         return {**progress, "matchesRequired": required, "eligible": False, "blockedReason": "inactive"}
     if not _schedule_open(event):
         return {**progress, "matchesRequired": required, "eligible": False, "blockedReason": "schedule"}
-    if credited >= required:
+    if credited >= required and not bool(matches.get("allow_replay_after_complete")):
         return {**progress, "matchesRequired": required, "eligible": False, "blockedReason": "complete"}
 
     elig = event.get("eligibility") or {}

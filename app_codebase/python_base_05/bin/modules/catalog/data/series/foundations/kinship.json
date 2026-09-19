@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "KNS-FIK-SER003-0001",
+      "internalId": "KNS-FIK-SER003-GEN001-0001",
       "themeCode": "KNS",
       "designCode": "FIK",
       "designFamily": "FIRESIDE_KIN",
@@ -40,7 +40,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Fireside Kin in pixel art style with a standard finish and no effect. Use a background that is visually related to Fireside Kin. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-FIK-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Fireside Kin in pixel art style with a standard finish and no effect. Use a background that is visually related to Fireside Kin. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-FIK-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Fireside Kin Arcori generation I from the Kinship Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -48,7 +48,7 @@
       }
     },
     {
-      "internalId": "KNS-WIC-SER003-0002",
+      "internalId": "KNS-WIC-SER003-GEN001-0002",
       "themeCode": "KNS",
       "designCode": "WIC",
       "designFamily": "WINTERBLOOD_CIRCLE",
@@ -82,7 +82,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Winterblood Circle in pixel art style with a standard finish and no effect. Use a background that is visually related to Winterblood Circle. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-WIC-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Winterblood Circle in pixel art style with a standard finish and no effect. Use a background that is visually related to Winterblood Circle. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-WIC-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Winterblood Circle Arcori generation I from the Kinship Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -90,7 +90,7 @@
       }
     },
     {
-      "internalId": "KNS-BSL-SER003-0003",
+      "internalId": "KNS-BSL-SER003-GEN001-0003",
       "themeCode": "KNS",
       "designCode": "BSL",
       "designFamily": "BRANCHES_OF_THE_SAME_LIGHT",
@@ -128,7 +128,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Branches of the Same Light in pixel art style with a standard finish and no effect. Use a background that is visually related to Branches of the Same Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-BSL-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Branches of the Same Light in pixel art style with a standard finish and no effect. Use a background that is visually related to Branches of the Same Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-BSL-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Branches of the Same Light Arcori generation I from the Kinship Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -136,7 +136,7 @@
       }
     },
     {
-      "internalId": "KNS-OWM-SER003-0004",
+      "internalId": "KNS-OWM-SER003-GEN001-0004",
       "themeCode": "KNS",
       "designCode": "OWM",
       "designFamily": "ONE_WINTER_MANY_HOMES",
@@ -170,7 +170,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with One Winter, Many Homes in pixel art style with a standard finish and no effect. Use a background that is visually related to One Winter, Many Homes. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-OWM-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with One Winter, Many Homes in pixel art style with a standard finish and no effect. Use a background that is visually related to One Winter, Many Homes. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNS-OWM-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible One Winter, Many Homes Arcori generation I from the Kinship Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

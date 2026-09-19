@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "BEL-UNF-SER003-0001",
+      "internalId": "BEL-UNF-SER003-GEN001-0001",
       "themeCode": "BEL",
       "designCode": "UNF",
       "designFamily": "THE_UNANSWERED_FLAME",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Unanswered Flame in pixel art style with a standard finish and no effect. Use a background that is visually related to The Unanswered Flame. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BEL-UNF-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with The Unanswered Flame in pixel art style with a standard finish and no effect. Use a background that is visually related to The Unanswered Flame. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BEL-UNF-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible The Unanswered Flame Arcori generation I from the Belief Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "BEL-SBA-SER003-0002",
+      "internalId": "BEL-SBA-SER003-GEN001-0002",
       "themeCode": "BEL",
       "designCode": "SBA",
       "designFamily": "THE_SEED_BENEATH_THE_ASH",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Seed Beneath the Ash in pixel art style with a standard finish and no effect. Use a background that is visually related to The Seed Beneath the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BEL-SBA-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with The Seed Beneath the Ash in pixel art style with a standard finish and no effect. Use a background that is visually related to The Seed Beneath the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BEL-SBA-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible The Seed Beneath the Ash Arcori generation I from the Belief Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "BEL-FNO-SER003-0003",
+      "internalId": "BEL-FNO-SER003-GEN001-0003",
       "themeCode": "BEL",
       "designCode": "FNO",
       "designFamily": "THE_FLAME_NO_ONE_FOUND",
@@ -136,7 +136,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Flame No One Found in pixel art style with a standard finish and no effect. Use a background that is visually related to The Flame No One Found. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BEL-FNO-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Flame No One Found in pixel art style with a standard finish and no effect. Use a background that is visually related to The Flame No One Found. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BEL-FNO-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Flame No One Found Arcori generation I from the Belief Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "BEL-FBF-SER003-0004",
+      "internalId": "BEL-FBF-SER003-GEN001-0004",
       "themeCode": "BEL",
       "designCode": "FBF",
       "designFamily": "FAITH_BENEATH_THE_FALLING_ASH",
@@ -182,7 +182,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Faith Beneath the Falling Ash in pixel art style with a standard finish and no effect. Use a background that is visually related to Faith Beneath the Falling Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BEL-FBF-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Faith Beneath the Falling Ash in pixel art style with a standard finish and no effect. Use a background that is visually related to Faith Beneath the Falling Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BEL-FBF-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Faith Beneath the Falling Ash Arcori generation I from the Belief Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

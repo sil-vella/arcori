@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "UNI-WAL-SER003-0001",
+      "internalId": "UNI-WAL-SER003-GEN001-0001",
       "themeCode": "UNI",
       "designCode": "WAL",
       "designFamily": "WHEN_ALL_LIGHTS_BECOME_ONE",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with When All Lights Become One in realistic style with a standard finish and no effect. Use a background that is visually related to When All Lights Become One. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named UNI-WAL-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with When All Lights Become One in realistic style with a standard finish and no effect. Use a background that is visually related to When All Lights Become One. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named UNI-WAL-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible When All Lights Become One Arcori generation I from the Unity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "UNI-WHE-SER003-0002",
+      "internalId": "UNI-WHE-SER003-GEN001-0002",
       "themeCode": "UNI",
       "designCode": "WHE",
       "designFamily": "WHEN_EVERY_COLOR_BECAME_ONE",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with When Every Color Became One in realistic style with a standard finish and no effect. Use a background that is visually related to When Every Color Became One. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named UNI-WHE-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with When Every Color Became One in realistic style with a standard finish and no effect. Use a background that is visually related to When Every Color Became One. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named UNI-WHE-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible When Every Color Became One Arcori generation I from the Unity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "UNI-OLA-SER003-0003",
+      "internalId": "UNI-OLA-SER003-GEN001-0003",
       "themeCode": "UNI",
       "designCode": "OLA",
       "designFamily": "ONE_LIGHT_ABOVE_THE_GROVE",
@@ -136,7 +136,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with One Light Above the Grove in realistic style with a standard finish and no effect. Use a background that is visually related to One Light Above the Grove. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named UNI-OLA-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with One Light Above the Grove in realistic style with a standard finish and no effect. Use a background that is visually related to One Light Above the Grove. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named UNI-OLA-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible One Light Above the Grove Arcori generation I from the Unity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "UNI-WEL-SER003-0004",
+      "internalId": "UNI-WEL-SER003-GEN001-0004",
       "themeCode": "UNI",
       "designCode": "WEL",
       "designFamily": "WHEN_EVERY_LIGHT_BECOMES_ONE",
@@ -182,7 +182,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with When Every Light Becomes One in realistic style with a standard finish and no effect. Use a background that is visually related to When Every Light Becomes One. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named UNI-WEL-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with When Every Light Becomes One in realistic style with a standard finish and no effect. Use a background that is visually related to When Every Light Becomes One. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named UNI-WEL-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible When Every Light Becomes One Arcori generation I from the Unity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

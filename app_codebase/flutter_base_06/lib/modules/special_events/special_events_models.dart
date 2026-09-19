@@ -44,6 +44,9 @@ class SpecialEventEntry {
     this.blockedReason,
     this.feeFragments = 2,
     this.rounds = 2,
+    this.arcoriSource = '',
+    this.minMasteryRatio,
+    this.hardPick = false,
     this.media = const CatalogMediaMap(),
     this.progress = const SpecialEventProgress(),
   });
@@ -52,7 +55,18 @@ class SpecialEventEntry {
     final match = json['match'] is Map
         ? Map<String, dynamic>.from(json['match'] as Map)
         : <String, dynamic>{};
+    final arcori = json['arcori'] is Map
+        ? Map<String, dynamic>.from(json['arcori'] as Map)
+        : <String, dynamic>{};
     final progressRaw = json['progress'];
+    double? ratio;
+    final ratioRaw = arcori['minMasteryRatio'] ?? arcori['min_mastery_ratio'];
+    if (ratioRaw is num) {
+      ratio = ratioRaw.toDouble();
+    } else if (ratioRaw != null) {
+      ratio = double.tryParse(ratioRaw.toString());
+    }
+    if (ratio != null && ratio <= 0) ratio = null;
     return SpecialEventEntry(
       id: json['id']?.toString().trim() ?? '',
       subtype: json['subtype']?.toString().trim() ?? '',
@@ -64,6 +78,9 @@ class SpecialEventEntry {
       blockedReason: json['blockedReason']?.toString(),
       feeFragments: _asInt(match['feeFragments'], fallback: 2),
       rounds: _asInt(match['rounds'], fallback: 2),
+      arcoriSource: arcori['source']?.toString().trim() ?? '',
+      minMasteryRatio: ratio,
+      hardPick: arcori['hardPick'] == true || arcori['hard_pick'] == true,
       media: CatalogMediaMap.fromJson(json['media']),
       progress: SpecialEventProgress.fromJson(
         progressRaw is Map
@@ -81,8 +98,23 @@ class SpecialEventEntry {
   final String? blockedReason;
   final int feeFragments;
   final int rounds;
+
+  /// Catalog `arcori.source` (e.g. `active_windows`, `circulation`).
+  final String arcoriSource;
+
+  /// When set, candidates need mastery ≥ ratio × mintReach.
+  final double? minMasteryRatio;
+
+  /// JSON `arcori.hard_pick` — human must choose before queue.
+  final bool hardPick;
+
   final CatalogMediaMap media;
   final SpecialEventProgress progress;
+
+  bool get requiresActiveWindowPick => arcoriSource == 'active_windows';
+
+  bool get requiresArcoriHardPick =>
+      hardPick || requiresActiveWindowPick;
 
   CatalogMediaRef? get banner =>
       media['banner'] ?? media['special_arena_background'];

@@ -15,6 +15,8 @@ import '../../avari/avari_notifier.dart';
 import '../../match/widgets/arcori_image_prefetch.dart';
 import '../../match/widgets/practice_match_surface.dart';
 import '../../matchmaking/widgets/matchmaking_lobby_modal.dart';
+import '../../special_events/active_window_picker_modal.dart';
+import '../../special_events/high_mastery_picker_modal.dart';
 import '../../special_events/special_event_picker_modal.dart';
 import '../play_models.dart';
 import '../play_notifier.dart';
@@ -106,6 +108,30 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
         await notifier.cancelSelection();
         return;
       }
+
+      List<String> arcoriIds = const [];
+      if (event.requiresArcoriHardPick) {
+        final AvariInventoryItem? picked;
+        if (event.requiresActiveWindowPick) {
+          picked = await showActiveWindowPickerModal(
+            context: context,
+            ref: ref,
+          );
+        } else {
+          picked = await showHighMasteryPickerModal(
+            context: context,
+            ref: ref,
+            minMasteryRatio: event.minMasteryRatio ?? 0.8,
+          );
+        }
+        if (!mounted) return;
+        if (picked == null || picked.designId.trim().isEmpty) {
+          await notifier.cancelSelection();
+          return;
+        }
+        arcoriIds = [picked.designId.trim()];
+      }
+
       if (event.feeFragments > 0) {
         final confirmed = await showMatchFeeConfirmModal(
           context,
@@ -154,6 +180,7 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
         type,
         eventId: event.id,
         eventSubtype: event.subtype,
+        arcoriIds: arcoriIds,
       );
       return;
     }

@@ -141,7 +141,7 @@ def find_theme_document_by_code(theme_code: str) -> dict[str, Any] | None:
     if not code:
         return None
     # Prefer Genesis when multiple series share a themeCode (e.g. Music, Animals).
-    _series_pref = ("Genesis", "Pioneers", "Foundations")
+    _series_pref = ("Genesis", "Pioneers", "Foundations", "Civilizations")
     matches: list[dict[str, Any]] = []
     for doc in list_theme_documents():
         if str(doc.get("themeCode", "")).upper() == code:

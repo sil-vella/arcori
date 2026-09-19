@@ -1,0 +1,190 @@
+{
+  "catalog": "Envoys Civilizations Series",
+  "theme": "Envoys",
+  "series": "Civilizations",
+  "themeCode": "ENV",
+  "loreDescription": "Diplomats, messengers, and representatives connecting one civilization to another.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "ENV-GLG-SER004-GEN001-0001",
+      "themeCode": "ENV",
+      "designCode": "GLG",
+      "designFamily": "GIFT_OF_THE_LIVING_GROVE",
+      "design": "Gift of the Living Grove",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Envoys",
+      "subtheme": "Envoys",
+      "style": "Anime",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 7.1,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Gift of the Living Grove in anime style with a standard finish and no effect. Use a background that is visually related to Gift of the Living Grove. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ENV-GLG-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Gift of the Living Grove Arcori generation I from the Envoys Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ENV-DKX-SER004-GEN001-0002",
+      "themeCode": "ENV",
+      "designCode": "DKX",
+      "designFamily": "DIPLOMATIC_KIT",
+      "design": "Diplomatic Kit",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Envoys",
+      "subtheme": "Envoys",
+      "style": "Cartoon",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Diplomatic Kit in cartoon style with a standard finish and no effect. Use a background that is visually related to Diplomatic Kit. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ENV-DKX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Diplomatic Kit Arcori generation I from the Envoys Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ENV-HES-SER004-GEN001-0003",
+      "themeCode": "ENV",
+      "designCode": "HES",
+      "designFamily": "HARBOR_ENVOY_SCROLLCASE",
+      "design": "Harbor Envoy Scrollcase",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Envoys",
+      "subtheme": "Envoys",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 7.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Harbor Envoy Scrollcase in realistic style with a standard finish and no effect. Use a background that is visually related to Harbor Envoy Scrollcase. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ENV-HES-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Harbor Envoy Scrollcase Arcori generation I from the Envoys Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ENV-DSC-SER004-GEN001-0004",
+      "themeCode": "ENV",
+      "designCode": "DSC",
+      "designFamily": "DUSTBOUND_SCROLL_CASE",
+      "design": "Dustbound Scroll Case",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Envoys",
+      "subtheme": "Envoys",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.7,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Dustbound Scroll Case in realistic style with a standard finish and no effect. Use a background that is visually related to Dustbound Scroll Case. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ENV-DSC-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Dustbound Scroll Case Arcori generation I from the Envoys Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

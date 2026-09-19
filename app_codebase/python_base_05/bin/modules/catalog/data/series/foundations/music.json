@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "MUS-CCS-SER003-0001",
+      "internalId": "MUS-CCS-SER003-GEN001-0001",
       "themeCode": "MUS",
       "designCode": "CCS",
       "designFamily": "CHORUS_OF_CRYSTAL_SKIES",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Chorus of Crystal Skies in prismatic style with a standard finish and no effect. Use a background that is visually related to Chorus of Crystal Skies. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-CCS-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Chorus of Crystal Skies in prismatic style with a standard finish and no effect. Use a background that is visually related to Chorus of Crystal Skies. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-CCS-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Chorus of Crystal Skies Arcori generation I from the Music Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "MUS-TIC-SER003-0002",
+      "internalId": "MUS-TIC-SER003-GEN001-0002",
       "themeCode": "MUS",
       "designCode": "TIC",
       "designFamily": "TIDESONG_CONSTELLATION",
@@ -88,7 +88,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Tidesong Constellation in prismatic style with a standard finish and no effect. Use a background that is visually related to Tidesong Constellation. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TIC-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Tidesong Constellation in prismatic style with a standard finish and no effect. Use a background that is visually related to Tidesong Constellation. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TIC-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Tidesong Constellation Arcori generation I from the Music Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "MUS-SRP-SER003-0003",
+      "internalId": "MUS-SRP-SER003-GEN001-0003",
       "themeCode": "MUS",
       "designCode": "SRP",
       "designFamily": "SONG_OF_THE_RETURNING_PATHS",
@@ -132,7 +132,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Song of the Returning Paths in prismatic style with a standard finish and no effect. Use a background that is visually related to Song of the Returning Paths. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-SRP-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Song of the Returning Paths in prismatic style with a standard finish and no effect. Use a background that is visually related to Song of the Returning Paths. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-SRP-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Song of the Returning Paths Arcori generation I from the Music Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "MUS-TCX-SER003-0004",
+      "internalId": "MUS-TCX-SER003-GEN001-0004",
       "themeCode": "MUS",
       "designCode": "TCX",
       "designFamily": "THE_TIDEKEEPERS_CHORUS",
@@ -176,7 +176,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Tidekeepers' Chorus in prismatic style with a standard finish and no effect. Use a background that is visually related to The Tidekeepers' Chorus. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TCX-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Tidekeepers' Chorus in prismatic style with a standard finish and no effect. Use a background that is visually related to The Tidekeepers' Chorus. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MUS-TCX-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Tidekeepers' Chorus Arcori generation I from the Music Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

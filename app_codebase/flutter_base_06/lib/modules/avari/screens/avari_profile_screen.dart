@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,6 +7,7 @@ import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../../core/http/media_url.dart';
 import '../../../core/navigation/app_navigation.dart';
 import '../../../core/navigation/app_paths.dart';
+import '../../../core/navigation/app_router.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
@@ -27,18 +30,50 @@ class AvariProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<AvariProfileScreen> createState() => _AvariProfileScreenState();
 }
 
-class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
+class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
+    with RouteAware {
   static const double _avatarSize = 120;
+  bool _routeSubscribed = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (ref.read(authProvider).isAuthenticated) {
-        ref.read(avariProfileProvider.notifier).load(force: true);
-      }
-      ref.read(kinActiveSaveProvider.notifier).refresh();
-    });
+    // First paint before RouteAware.didPush — covers cold open.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshProfile());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_routeSubscribed) return;
+    final route = ModalRoute.of(context);
+    if (route is PageRoute) {
+      appRouteObserver.subscribe(this, route);
+      _routeSubscribed = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_routeSubscribed) {
+      appRouteObserver.unsubscribe(this);
+      _routeSubscribed = false;
+    }
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // Returned here after Play / Kin / etc. were popped — reload Arcori stats.
+    _refreshProfile();
+  }
+
+  void _refreshProfile() {
+    if (!mounted) return;
+    if (ref.read(authProvider).isAuthenticated) {
+      unawaited(ref.read(avariProfileProvider.notifier).load(force: true));
+    }
+    unawaited(ref.read(kinActiveSaveProvider.notifier).refresh());
   }
 
   @override
@@ -51,7 +86,7 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
       if (!next.isBootstrapping &&
           next.isAuthenticated &&
           previous?.isAuthenticated != true) {
-        ref.read(avariProfileProvider.notifier).load(force: true);
+        _refreshProfile();
       }
     });
 
@@ -98,9 +133,7 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
                             ),
                             AppSpacing.gapMd,
                             FilledButton(
-                              onPressed: () => ref
-                                  .read(avariProfileProvider.notifier)
-                                  .load(force: true),
+                              onPressed: _refreshProfile,
                               child: const Text('Retry'),
                             ),
                           ],
@@ -298,7 +331,7 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
       _KeyValue('Value', '${profile.mastery.masteryValue}'),
       _KeyValue('Standing', profile.mastery.masteryValueLabel),
       AppSpacing.gapMd,
-      _SectionTitle(text: 'Museum'),
+      _SectionTitle(text: 'Trove'),
       Text(
         'Preserved Legacy — out of circulation.',
         style: context.appTypography.bodySmall,
@@ -312,6 +345,27 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen> {
           runSpacing: AppSpacing.sm,
           children: [
             for (final item in profile.trove)
+              InventoryFaceChip(
+                item: item.asInventoryItem(),
+                captionOverride: item.caption,
+              ),
+          ],
+        ),
+      AppSpacing.gapMd,
+      _SectionTitle(text: 'Closed Generations'),
+      Text(
+        'Gens you raced that closed — mastery at close and how much seeded into the next gen.',
+        style: context.appTypography.bodySmall,
+      ),
+      AppSpacing.gapSm,
+      if (profile.closedGenerations.isEmpty)
+        Text('None yet', style: context.appTypography.bodyMuted)
+      else
+        Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            for (final item in profile.closedGenerations)
               InventoryFaceChip(
                 item: item.asInventoryItem(),
                 captionOverride: item.caption,

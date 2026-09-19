@@ -1,0 +1,240 @@
+{
+  "catalog": "Academies Civilizations Series",
+  "theme": "Academies",
+  "series": "Civilizations",
+  "themeCode": "ACA",
+  "loreDescription": "Centers of learning, skill, discipline, and regional philosophy.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "ACA-PCX-SER004-GEN001-0001",
+      "themeCode": "ACA",
+      "designCode": "PCX",
+      "designFamily": "PRISM_COLLEGIUM",
+      "design": "Prism Collegium",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Academies",
+      "subtheme": "Academies",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Prism Collegium in prismatic style with a standard finish and no effect. Use a background that is visually related to Prism Collegium. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ACA-PCX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Prism Collegium Arcori generation I from the Academies Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ACA-SSL-SER004-GEN001-0002",
+      "themeCode": "ACA",
+      "designCode": "SSL",
+      "designFamily": "SCHOLAR_S_LIGHT",
+      "design": "Scholar's Light",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Academies",
+      "subtheme": "Academies",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Scholar's Light in realistic style with a standard finish and no effect. Use a background that is visually related to Scholar's Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ACA-SSL-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Scholar's Light Arcori generation I from the Academies Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ACA-CAA-SER004-GEN001-0003",
+      "themeCode": "ACA",
+      "designCode": "CAA",
+      "designFamily": "CELESTIAL_ACADEMY_ASTROLABE",
+      "design": "Celestial Academy Astrolabe",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Academies",
+      "subtheme": "Academies",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Celestial Academy Astrolabe in realistic style with a standard finish and no effect. Use a background that is visually related to Celestial Academy Astrolabe. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ACA-CAA-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Celestial Academy Astrolabe Arcori generation I from the Academies Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ACA-CAO-SER004-GEN001-0004",
+      "themeCode": "ACA",
+      "designCode": "CAO",
+      "designFamily": "CRYSTAL_ACADEMY_ORB",
+      "design": "Crystal Academy Orb",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Academies",
+      "subtheme": "Academies",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Crystal Academy Orb in realistic style with a standard finish and no effect. Use a background that is visually related to Crystal Academy Orb. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ACA-CAO-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Crystal Academy Orb Arcori generation I from the Academies Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ACA-COX-SER004-GEN001-0005",
+      "themeCode": "ACA",
+      "designCode": "COX",
+      "designFamily": "CELESTIAL_ORRERY",
+      "design": "Celestial Orrery",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Academies",
+      "subtheme": "Academies",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.0,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Celestial Orrery in realistic style with a standard finish and no effect. Use a background that is visually related to Celestial Orrery. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ACA-COX-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Celestial Orrery Arcori generation I from the Academies Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

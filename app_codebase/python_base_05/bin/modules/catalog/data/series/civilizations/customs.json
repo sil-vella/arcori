@@ -1,0 +1,278 @@
+{
+  "catalog": "Customs Civilizations Series",
+  "theme": "Customs",
+  "series": "Civilizations",
+  "themeCode": "CUS",
+  "loreDescription": "Daily rituals, habits, greetings, and practices that define regional culture.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "CUS-LGW-SER004-GEN001-0001",
+      "themeCode": "CUS",
+      "designCode": "LGW",
+      "designFamily": "LANTERNS_ON_GREY_WATER",
+      "design": "Lanterns on Grey Water",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Customs",
+      "subtheme": "Customs",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 7.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Lanterns on Grey Water in realistic style with a standard finish and no effect. Use a background that is visually related to Lanterns on Grey Water. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CUS-LGW-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Lanterns on Grey Water Arcori generation I from the Customs Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CUS-WRX-SER004-GEN001-0002",
+      "themeCode": "CUS",
+      "designCode": "WRX",
+      "designFamily": "WINTER_RITUALS",
+      "design": "Winter Rituals",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Customs",
+      "subtheme": "Customs",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.9,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Winter Rituals in realistic style with a standard finish and no effect. Use a background that is visually related to Winter Rituals. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CUS-WRX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Winter Rituals Arcori generation I from the Customs Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CUS-WHT-SER004-GEN001-0003",
+      "themeCode": "CUS",
+      "designCode": "WHT",
+      "designFamily": "WINTER_HEARTH_TEAPOT",
+      "design": "Winter Hearth Teapot",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Customs",
+      "subtheme": "Customs",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.0,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Winter Hearth Teapot in realistic style with a standard finish and no effect. Use a background that is visually related to Winter Hearth Teapot. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CUS-WHT-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Winter Hearth Teapot Arcori generation I from the Customs Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CUS-EBX-SER004-GEN001-0004",
+      "themeCode": "CUS",
+      "designCode": "EBX",
+      "designFamily": "EMBERLESS_BRAZIER",
+      "design": "Emberless Brazier",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Customs",
+      "subtheme": "Customs",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.0,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Emberless Brazier in realistic style with a standard finish and no effect. Use a background that is visually related to Emberless Brazier. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CUS-EBX-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Emberless Brazier Arcori generation I from the Customs Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CUS-FMB-SER004-GEN001-0005",
+      "themeCode": "CUS",
+      "designCode": "FMB",
+      "designFamily": "FADED_MOURNING_BANNER",
+      "design": "Faded Mourning Banner",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Customs",
+      "subtheme": "Customs",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 6.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Faded Mourning Banner in realistic style with a standard finish and no effect. Use a background that is visually related to Faded Mourning Banner. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CUS-FMB-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Faded Mourning Banner Arcori generation I from the Customs Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CUS-HSX-SER004-GEN001-0006",
+      "themeCode": "CUS",
+      "designCode": "HSX",
+      "designFamily": "HARMONY_SEAL",
+      "design": "Harmony Seal",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Customs",
+      "subtheme": "Customs",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.2,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Harmony Seal in realistic style with a standard finish and no effect. Use a background that is visually related to Harmony Seal. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CUS-HSX-SER004-GEN001-0006.webp",
+      "loreDescription": "A collectible Harmony Seal Arcori generation I from the Customs Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

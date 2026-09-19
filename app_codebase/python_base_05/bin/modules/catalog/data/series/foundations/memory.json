@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "MEM-ETR-SER003-0001",
+      "internalId": "MEM-ETR-SER003-GEN001-0001",
       "themeCode": "MEM",
       "designCode": "ETR",
       "designFamily": "ECHOES_THAT_REMAIN",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Echoes That Remain in neon style with a standard finish and no effect. Use a background that is visually related to Echoes That Remain. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-ETR-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Echoes That Remain in neon style with a standard finish and no effect. Use a background that is visually related to Echoes That Remain. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-ETR-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Echoes That Remain Arcori generation I from the Memory Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "MEM-FFA-SER003-0002",
+      "internalId": "MEM-FFA-SER003-GEN001-0002",
       "themeCode": "MEM",
       "designCode": "FFA",
       "designFamily": "FACES_IN_FALLING_ASH",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Faces in Falling Ash in neon style with a standard finish and no effect. Use a background that is visually related to Faces in Falling Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-FFA-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Faces in Falling Ash in neon style with a standard finish and no effect. Use a background that is visually related to Faces in Falling Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-FFA-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Faces in Falling Ash Arcori generation I from the Memory Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "MEM-EWT-SER003-0003",
+      "internalId": "MEM-EWT-SER003-GEN001-0003",
       "themeCode": "MEM",
       "designCode": "EWT",
       "designFamily": "ECHOES_WALKING_THROUGH_GREY",
@@ -136,7 +136,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Echoes Walking Through Grey in neon style with a standard finish and no effect. Use a background that is visually related to Echoes Walking Through Grey. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-EWT-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Echoes Walking Through Grey in neon style with a standard finish and no effect. Use a background that is visually related to Echoes Walking Through Grey. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-EWT-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Echoes Walking Through Grey Arcori generation I from the Memory Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "MEM-FRX-SER003-0004",
+      "internalId": "MEM-FRX-SER003-GEN001-0004",
       "themeCode": "MEM",
       "designCode": "FRX",
       "designFamily": "THE_FOREST_REMEMBERS",
@@ -180,7 +180,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Forest Remembers in neon style with a standard finish and no effect. Use a background that is visually related to The Forest Remembers. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-FRX-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Forest Remembers in neon style with a standard finish and no effect. Use a background that is visually related to The Forest Remembers. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MEM-FRX-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Forest Remembers Arcori generation I from the Memory Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

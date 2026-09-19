@@ -76,6 +76,75 @@ class TasksApiClient {
     }
   }
 
+  Future<TasksApiOutcome<TasksProgressSnapshot>> continueGoal({
+    required String accessToken,
+    required String goalId,
+  }) async {
+    return _postGoalAction(
+      accessToken: accessToken,
+      path: '/authuser/daily_goals/continue',
+      goalId: goalId,
+    );
+  }
+
+  Future<TasksApiOutcome<TasksProgressSnapshot>> acceptReset({
+    required String accessToken,
+    required String goalId,
+  }) async {
+    return _postGoalAction(
+      accessToken: accessToken,
+      path: '/authuser/daily_goals/accept_reset',
+      goalId: goalId,
+    );
+  }
+
+  Future<TasksApiOutcome<TasksClaimResult>> claimGoal({
+    required String accessToken,
+    required String goalId,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/authuser/daily_goals/claim');
+    try {
+      final response = await _client.post(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'goalId': goalId.trim()}),
+      );
+      return _parseClaim(response);
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const TasksApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
+  }
+
+  Future<TasksApiOutcome<TasksProgressSnapshot>> _postGoalAction({
+    required String accessToken,
+    required String path,
+    required String goalId,
+  }) async {
+    final uri = Uri.parse('$_baseUrl$path');
+    try {
+      final response = await _client.post(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'goalId': goalId.trim()}),
+      );
+      return _parseProgress(response);
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const TasksApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
+  }
+
   TasksApiOutcome<TasksCatalog> _parseCatalog(http.Response response) {
     final envelope = _decodeEnvelope(response.body);
     if (envelope == null) {
@@ -133,6 +202,44 @@ class TasksApiClient {
     }
     return TasksApiOutcome.success(
       TasksProgressSnapshot.fromJson(Map<String, dynamic>.from(data)),
+    );
+  }
+
+  TasksApiOutcome<TasksClaimResult> _parseClaim(http.Response response) {
+    final envelope = _decodeEnvelope(response.body);
+    if (envelope == null) {
+      return TasksApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    if (envelope['ok'] != true) {
+      return TasksApiOutcome.failure(error: ApiError.fromEnvelope(envelope));
+    }
+    final data = envelope['data'];
+    if (data is! Map) {
+      return TasksApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    final map = Map<String, dynamic>.from(data);
+    final rewardRaw = map['reward'];
+    return TasksApiOutcome.success(
+      TasksClaimResult(
+        progress: TasksProgressSnapshot.fromJson(map),
+        reward: TaskClaimReward.fromJson(
+          rewardRaw is Map
+              ? Map<String, dynamic>.from(rewardRaw)
+              : null,
+        ),
+      ),
     );
   }
 

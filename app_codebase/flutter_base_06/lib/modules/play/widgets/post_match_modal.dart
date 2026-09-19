@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/modal/modal.dart';
+import '../../../core/navigation/app_navigation.dart';
+import '../../../core/navigation/app_paths.dart';
+import '../../../core/navigation/app_router.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../../utils/dev_logger.dart';
@@ -87,6 +90,18 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
     });
   }
 
+  /// Exit like Done, then open Tasks (not used on Rematch).
+  Future<void> _viewDaily() async {
+    if (_exiting) return;
+    await _exit(() {
+      ref.read(matchFlowProvider.notifier).completePostMatchDone();
+    });
+    final rootCtx = appRootNavigatorKey.currentContext;
+    if (rootCtx != null && rootCtx.mounted) {
+      Nav.go(rootCtx, AppPaths.tasks);
+    }
+  }
+
   void _playNew() {
     unawaited(_exit(() {
       ref.read(matchFlowProvider.notifier).completePostMatchPlayNew();
@@ -145,6 +160,13 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
           Text('Daily', style: context.appTypography.label),
           AppSpacing.gapXs,
           _DailyProgressBlock(daily: flow.postMatchFinalize?.daily),
+          AppSpacing.gapSm,
+          OutlinedButton(
+            onPressed: !_exiting && _actionsArmed
+                ? () => unawaited(_viewDaily())
+                : null,
+            child: const Text('View Daily'),
+          ),
           if (flow.postMatchFinalize?.eventProgress != null) ...[
             AppSpacing.gapMd,
             Text('Event', style: context.appTypography.label),
@@ -443,17 +465,9 @@ class _DailyProgressBlock extends StatelessWidget {
       );
     }
 
-    final changedRaw = payload['changedGoalIds'] ?? payload['changed_goal_ids'];
-    final changed = <String>{};
-    if (changedRaw is List) {
-      for (final id in changedRaw) {
-        final s = id.toString().trim();
-        if (s.isNotEmpty) changed.add(s);
-      }
-    }
-
     final goalsRaw = payload['goals'];
     final lines = <String>[];
+    String? cacheLine;
     if (goalsRaw is List) {
       for (final item in goalsRaw) {
         if (item is! Map) continue;
@@ -461,23 +475,32 @@ class _DailyProgressBlock extends StatelessWidget {
         final id = (map['goalId'] ?? map['goal_id'] ?? '').toString().trim();
         final type =
             (map['taskType'] ?? map['task_type'] ?? '').toString().toLowerCase();
-        // Prefer flip task + any newly completed rows.
-        final isFlip = type.contains('flip');
-        final highlight = changed.contains(id) || isFlip || id == 'land_three_flips';
-        if (!highlight) continue;
+        final featured = map['featured'] == true;
         final progress = map['progressToday'] ?? map['progress_today'] ?? 0;
         final target = map['target'] ?? 1;
         final done = map['completedToday'] == true ||
             map['completed_today'] == true;
-        final label = done ? 'Done' : '$progress / $target';
         final name = (map['name']?.toString().trim().isNotEmpty == true)
             ? map['name'].toString().trim()
             : (id.isEmpty ? 'Daily goal' : id.replaceAll('_', ' '));
+
+        if (type == 'claim_gate' || id == 'daily_mystery_box') {
+          final cacheStatus = done
+              ? 'claimed'
+              : _cacheReadyFromPayload(goalsRaw)
+                  ? 'ready'
+                  : 'locked';
+          cacheLine = '$name — $cacheStatus';
+          continue;
+        }
+
+        if (!featured) continue;
+        final label = done ? 'Done' : '$progress / $target';
         lines.add('$name — $label');
       }
     }
 
-    if (lines.isEmpty) {
+    if (lines.isEmpty && cacheLine == null) {
       return Text(
         'Daily goals updated',
         style: context.appTypography.bodySmall,
@@ -492,8 +515,30 @@ class _DailyProgressBlock extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 4),
             child: Text(line, style: context.appTypography.bodySmall),
           ),
+        if (cacheLine != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Text(cacheLine, style: context.appTypography.bodySmall),
+          ),
       ],
     );
+  }
+
+  /// Gate ready when known featured requires are completedToday.
+  static bool _cacheReadyFromPayload(List goalsRaw) {
+    const fallbackRequires = ['play_one_match', 'land_three_flips'];
+    final doneById = <String, bool>{};
+    for (final item in goalsRaw) {
+      if (item is! Map) continue;
+      final m = Map<String, dynamic>.from(item);
+      final id = (m['goalId'] ?? m['goal_id'] ?? '').toString().trim();
+      if (id.isEmpty) continue;
+      doneById[id] = m['completedToday'] == true || m['completed_today'] == true;
+    }
+    for (final id in fallbackRequires) {
+      if (doneById[id] != true) return false;
+    }
+    return true;
   }
 }
 

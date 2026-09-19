@@ -8,7 +8,7 @@ To open a new series for all future minted designs, change only this module
 static designs). Do not scatter series tokens in claim/mint call sites.
 
 Note: `idToken` is the series marker in `internalId` (SER000 Creation,
-SER001 Genesis, SER002 Pioneers, SER003 Foundations). It is not the
+SER001 Genesis, SER002 Pioneers, SER003 Foundations, SER004 Civilizations). It is not the
 generation number — generation stays on `generation.number` / `roman`
 (still I / 1 at launch).
 
@@ -28,6 +28,7 @@ SERIES_MEDIA_FOLDERS: dict[str, str] = {
     "genesis": "001_genesis",
     "pioneers": "002_pioneers",
     "foundations": "003_foundations",
+    "civilizations": "004_civilizations",
 }
 
 # --- bump here when opening the next series for newly minted Arcori/Kin ---

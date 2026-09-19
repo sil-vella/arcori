@@ -1,0 +1,186 @@
+{
+  "catalog": "Festivals Civilizations Series",
+  "theme": "Festivals",
+  "series": "Civilizations",
+  "themeCode": "FES",
+  "loreDescription": "Public celebrations that reveal joy, tradition, memory, and community.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "FES-FRO-SER004-GEN001-0001",
+      "themeCode": "FES",
+      "designCode": "FRO",
+      "designFamily": "FROSTFAIR",
+      "design": "Frostfair",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Festivals",
+      "subtheme": "Festivals",
+      "style": "Cartoon",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.2,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Frostfair in cartoon style with a standard finish and no effect. Use a background that is visually related to Frostfair. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FES-FRO-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Frostfair Arcori generation I from the Festivals Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "FES-PGX-SER004-GEN001-0002",
+      "themeCode": "FES",
+      "designCode": "PGX",
+      "designFamily": "PRISMATIC_GATHERING",
+      "design": "Prismatic Gathering",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Festivals",
+      "subtheme": "Festivals",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Prismatic Gathering in prismatic style with a standard finish and no effect. Use a background that is visually related to Prismatic Gathering. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FES-PGX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Prismatic Gathering Arcori generation I from the Festivals Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "FES-HFL-SER004-GEN001-0003",
+      "themeCode": "FES",
+      "designCode": "HFL",
+      "designFamily": "HARVESTLIGHT_FESTIVAL_LANTERN",
+      "design": "Harvestlight Festival Lantern",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Festivals",
+      "subtheme": "Festivals",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.1,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Harvestlight Festival Lantern in realistic style with a standard finish and no effect. Use a background that is visually related to Harvestlight Festival Lantern. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FES-HFL-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Harvestlight Festival Lantern Arcori generation I from the Festivals Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "FES-UBX-SER004-GEN001-0004",
+      "themeCode": "FES",
+      "designCode": "UBX",
+      "designFamily": "UNITY_BELL",
+      "design": "Unity Bell",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Festivals",
+      "subtheme": "Festivals",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 7.1,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Unity Bell in realistic style with a standard finish and no effect. Use a background that is visually related to Unity Bell. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FES-UBX-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Unity Bell Arcori generation I from the Festivals Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

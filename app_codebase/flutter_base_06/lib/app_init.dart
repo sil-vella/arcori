@@ -32,6 +32,7 @@ import 'modules/legacy/legacy_preserve_flow.dart';
 import 'modules/match/state/slam_motion_capability_provider.dart';
 import 'modules/notifications/notification_host.dart';
 import 'modules/module_registry.dart';
+import 'modules/tasks/daily_missions_nudge.dart';
 import 'utils/dev_logger.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
@@ -253,14 +254,16 @@ class _RootApp extends ConsumerWidget {
 
     return AppLifecycleObserver(
       child: NotificationHost(
-        child: MaterialApp.router(
-          title: 'Arcori',
-          theme: AppTheme.light,
-          darkTheme: AppTheme.dark,
-          routerConfig: router,
-          builder: (context, child) {
-            return _EmailVerifyDeepLinkSnackHost(child: child);
-          },
+        child: DailyMissionsNudgeHost(
+          child: MaterialApp.router(
+            title: 'Arcori',
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            routerConfig: router,
+            builder: (context, child) {
+              return _EmailVerifyDeepLinkSnackHost(child: child);
+            },
+          ),
         ),
       ),
     );

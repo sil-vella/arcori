@@ -1,8 +1,8 @@
 # Mastery (match deltas + access pool)
 
-**Status:** In Progress — finalize writers + access sync live; My Mastery tab still open  
+**Status:** In Progress — writers + echo soft reset + Closed Generations live; My Mastery tab still open  
 **Created:** 2026-09-11  
-**Last Updated:** 2026-09-13
+**Last Updated:** 2026-09-18
 
 Related: [core-match-loop.md](core-match-loop.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [player-profile-schema.md](player-profile-schema.md) · [GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · [Tech Spec](../Game_Specific/Arcori_Technical_Specification_v0.4.md)
 
@@ -20,6 +20,7 @@ Lock post-match **mastery point deltas** per design, durable writers, **mastery-
 - **0 mastery** → revoke access (leave collection / select pool), **except your own Kin**.
 - **Own Kin (creator):** starts at **100** mastery; floor **100** (cannot drop below). Other players treat your Kin like any Arcori (+1/+2 other curve) and can lose it at 0.
 - Starter grants (`source=starter`): **10 designs from Genesis/Pioneers** on profile create (guest/regular), each with **10** initial mastery + permanent starter slammer. Composition: **9** with `selectionWeight` in **[8.0, 10.0]**, **1** with **[3.0, 4.0]**. Foundations / Creation are excluded. Pioneers seeds are all weight **10.0** (common band). Pool still drops designs at mastery **< 1** (except own Kin). Existing starter rows below 10 are bumped to 10 on sync.
+- **Legacy echo soft reset:** closed-gen `player_mastery` rows are **unchanged**. Every player with mastery &gt; 0 on the closed gen gets (1) a **`player_closed_generations`** snapshot (`masteryPoints` at close, `echoMasterySeeded`, Preserved/Lost) for the profile **Closed Generations** section, and (2) an echo-gen mastery seed = `floor(closed × 0.30)` (min 1), capped at `preservationRequirement − 1`, plus access on the echo id.
 
 ## Locked match curves (2026-09-11)
 
@@ -85,16 +86,17 @@ Helpers: `mastery_value_label` / `compute_profile_mastery_value_label`.
 - [x] Access sync: grant on other +mastery; revoke at 0; Kin creator floor 100; starter seed 1
 - [x] Remove `printedRarity`; Mastery Value from `selectionWeight` only
 - [x] Expose Mastery Value on profile (`mastery.masteryValue` + `masteryValueLabel` Fair→Priceless)
+- [x] Legacy echo soft seed (30%) + Closed Generations profile snapshot (`027`/`028`)
 - [ ] Standings apply from real user mastery (replace synthetic ranks when ready)
 - [ ] REST My Mastery + Arcori Detail tab
 
 ## Current Progress
 
-Writers + access-pool sync live. `printedRarity` removed. Profile shows `mastery.masteryValue` and `mastery.masteryValueLabel` (density = Value / circulating N). Rank/XP is not used — Mastery Value replaces it.
+Writers + access-pool sync live. `printedRarity` removed. Profile shows Mastery Value + **Closed Generations** (mastery at close → seeded into next gen). Rank/XP unused — Mastery Value replaces it. **My Mastery** Detail tab still open.
 
 ## Next Steps
 
-My Mastery Detail tab; Standings from real user FKs; profile Mastery Value field.
+My Mastery Detail tab; Standings from real user FKs.
 
 ## Files Modified
 

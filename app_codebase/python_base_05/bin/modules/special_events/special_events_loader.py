@@ -153,6 +153,11 @@ def _normalize_matches(raw: Any) -> dict[str, Any]:
         "required": _clamp_int(src.get("required"), default=1, min_v=1, max_v=99),
         "credit": credit,
         "credit_params": params,
+        "allow_replay_after_complete": bool(
+            src.get("allow_replay_after_complete")
+            if src.get("allow_replay_after_complete") is not None
+            else src.get("allowReplayAfterComplete")
+        ),
     }
 
 
@@ -199,6 +204,19 @@ def _normalize_eligibility(raw: Any) -> dict[str, Any]:
     }
 
 
+def _normalize_min_mastery_ratio(raw: Any) -> float | None:
+    """0..1 inclusive, or None when unset / invalid."""
+    if raw is None:
+        return None
+    try:
+        v = float(raw)
+    except (TypeError, ValueError):
+        return None
+    if v <= 0:
+        return None
+    return min(1.0, max(0.0, v))
+
+
 def _normalize_arcori(raw: Any, legacy_design_ids: list[str]) -> dict[str, Any]:
     src = raw if isinstance(raw, dict) else {}
     source = str(src.get("source") or ARCORI_SOURCE_CIRCULATION).strip().lower()
@@ -207,6 +225,16 @@ def _normalize_arcori(raw: Any, legacy_design_ids: list[str]) -> dict[str, Any]:
     design_ids = _str_list(src.get("design_ids") or src.get("designIds"))
     if not design_ids:
         design_ids = list(legacy_design_ids)
+    ratio = _normalize_min_mastery_ratio(
+        src.get("min_mastery_ratio")
+        if src.get("min_mastery_ratio") is not None
+        else src.get("minMasteryRatio")
+    )
+    hard_pick = bool(
+        src.get("hard_pick")
+        if src.get("hard_pick") is not None
+        else src.get("hardPick")
+    )
     return {
         "per_player": _clamp_int(
             src.get("per_player") if src.get("per_player") is not None else src.get("perPlayer"),
@@ -215,6 +243,8 @@ def _normalize_arcori(raw: Any, legacy_design_ids: list[str]) -> dict[str, Any]:
             max_v=3,
         ),
         "source": source,
+        "min_mastery_ratio": ratio,
+        "hard_pick": hard_pick,
         "series_ids": _str_list(src.get("series_ids") or src.get("seriesIds")),
         "generation_numbers": _int_list(
             src.get("generation_numbers") or src.get("generationNumbers")
@@ -401,6 +431,9 @@ def client_event_row(ev: dict[str, Any]) -> dict[str, Any]:
             "required": int(matches.get("required") or 1),
             "credit": matches.get("credit") or MATCH_CREDIT_ANY_FINISH,
             "creditParams": matches.get("credit_params") or {},
+            "allowReplayAfterComplete": bool(
+                matches.get("allow_replay_after_complete")
+            ),
         },
         "eligibility": {
             "minMasteryValue": float(elig.get("min_mastery_value") or 0),
@@ -415,6 +448,8 @@ def client_event_row(ev: dict[str, Any]) -> dict[str, Any]:
         "arcori": {
             "perPlayer": int(arcori.get("per_player") or 1),
             "source": arcori.get("source") or ARCORI_SOURCE_CIRCULATION,
+            "minMasteryRatio": arcori.get("min_mastery_ratio"),
+            "hardPick": bool(arcori.get("hard_pick")),
             "seriesIds": list(arcori.get("series_ids") or []),
             "generationNumbers": list(arcori.get("generation_numbers") or []),
             "regionCodes": list(arcori.get("region_codes") or []),

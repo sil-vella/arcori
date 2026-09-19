@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "HOR-CWR-SER002-0005",
+      "internalId": "HOR-CWR-SER002-GEN001-0005",
       "themeCode": "HOR",
       "designCode": "CWR",
       "designFamily": "CANDLE_WRAITH",
@@ -44,7 +44,7 @@
       "series": "Pioneers Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a candle wraith in anime style with a gloss finish and glow effect. Use a background that is visually related to the candle wraith. No borders, no frames. The candle wraith should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-CWR-SER002-0005.webp",
+      "artworkPrompt": "Give me an image with a candle wraith in anime style with a gloss finish and glow effect. Use a background that is visually related to the candle wraith. No borders, no frames. The candle wraith should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HOR-CWR-SER002-GEN001-0005.webp",
       "loreDescription": "A collectible Candle Wraith Arcori generation I from the Horror Pioneers Series.",
       "legacy": {
         "preservationRequirement": 100,

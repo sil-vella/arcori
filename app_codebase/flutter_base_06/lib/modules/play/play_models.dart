@@ -54,6 +54,7 @@ class MatchFlowState {
     this.practiceLoadout,
     this.selectedEventId,
     this.selectedEventSubtype,
+    this.selectedArcoriIds = const [],
     this.feeIntentId,
     this.feeFragmentsPaid,
     this.feeMatchType,
@@ -67,6 +68,9 @@ class MatchFlowState {
   final PracticeLoadout? practiceLoadout;
   final String? selectedEventId;
   final String? selectedEventSubtype;
+
+  /// Hard loadout for online find (e.g. Preservation Chase pick).
+  final List<String> selectedArcoriIds;
 
   /// Client UUID for pre-match fee pay/refund idempotency.
   final String? feeIntentId;
@@ -99,6 +103,7 @@ class MatchFlowState {
     PracticeLoadout? practiceLoadout,
     String? selectedEventId,
     String? selectedEventSubtype,
+    List<String>? selectedArcoriIds,
     String? feeIntentId,
     int? feeFragmentsPaid,
     String? feeMatchType,
@@ -108,6 +113,7 @@ class MatchFlowState {
     bool clearSelectedType = false,
     bool clearPracticeLoadout = false,
     bool clearSelectedEvent = false,
+    bool clearSelectedArcoriIds = false,
     bool clearFee = false,
     bool clearError = false,
     bool clearPostMatchSoftError = false,
@@ -127,6 +133,9 @@ class MatchFlowState {
       selectedEventSubtype: clearSelectedEvent
           ? null
           : (selectedEventSubtype ?? this.selectedEventSubtype),
+      selectedArcoriIds: clearSelectedArcoriIds
+          ? const []
+          : (selectedArcoriIds ?? this.selectedArcoriIds),
       feeIntentId: clearFee ? null : (feeIntentId ?? this.feeIntentId),
       feeFragmentsPaid:
           clearFee ? null : (feeFragmentsPaid ?? this.feeFragmentsPaid),

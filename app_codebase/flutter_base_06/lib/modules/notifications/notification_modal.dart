@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/modal/modal.dart';
+import '../../core/navigation/app_navigation.dart';
+import '../../core/navigation/app_router.dart';
 import '../../core/notifications/response/response_config.dart';
 import '../../core/notifications/response/response_executor.dart';
 import '../../core/notifications/subtype/subtype_registry.dart';
 import '../../core/state/auth/auth_providers.dart';
 import '../../core/theme/theme.dart';
+import '../../utils/dev_logger.dart';
 import 'notifications_api.dart';
 import 'notifications_notifier.dart';
 import 'notifications_state.dart';
@@ -18,6 +21,8 @@ import '../legacy/legacy_mint_complete_modal.dart';
 import '../legacy/legacy_preserve_flow.dart';
 import '../tasks/daily_goal_complete_modal.dart';
 import 'register_progress_notifications.dart';
+
+const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 /// Shows one or more notifications in a single modal session.
 ///
@@ -121,14 +126,32 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
     }
     _advancing = true;
     widget.onMessageShown(_message);
-    if (runAcknowledged) {
-      await widget.onAcknowledged?.call(_message);
+
+    Future<void> ackSafe() async {
+      if (!runAcknowledged) return;
+      try {
+        await widget.onAcknowledged?.call(_message);
+      } catch (err) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'notifications: acknowledge failed id=${_message.id} err=$err',
+          );
+        }
+      }
     }
-    if (!mounted) {
+
+    final isLast = _index >= widget.pending.length - 1;
+    if (isLast) {
+      // Dismiss first so X / Play-now always close even if markRead hangs.
+      if (mounted) {
+        AppModal.dismiss(context);
+      }
+      unawaited(ackSafe());
       return;
     }
-    if (_index >= widget.pending.length - 1) {
-      AppModal.dismiss(context);
+
+    await ackSafe();
+    if (!mounted) {
       return;
     }
     final delay = interMessageDelayFor(
@@ -418,16 +441,50 @@ Widget _navigateActionButton({
       : context.appButtons.secondary.text;
   final child = Text(button.label);
   Future<void> onTap() async {
-    await executeNavigate(
-      context: context,
-      message: message,
-      button: button,
-      config: config,
-      markRead: markRead,
-    );
+    // Mark read + close modal before navigate. Pushing while the modal is
+    // open (or when already on the target screen) can orphan the popup so
+    // Play now / X never dismisses.
+    try {
+      if (config.markReadOnAction) {
+        await markRead?.call();
+      }
+    } catch (err) {
+      if (LOGGING_SWITCH) {
+        customlog('notifications: markRead on navigate failed err=$err');
+      }
+    }
     if (context.mounted) {
       await onComplete();
     }
+
+    final path = resolveNavigatePath(button);
+    if (path == null || path.isEmpty) return;
+
+    final spec = resolveSubtypeSpec(
+      source: message.source,
+      category: message.category,
+      subtype: message.subtype,
+    );
+    final screen = button.screen;
+    if (screen != null &&
+        spec.allowedScreens.isNotEmpty &&
+        !spec.allowedScreens.contains(screen)) {
+      return;
+    }
+
+    final rootCtx = appRootNavigatorKey.currentContext;
+    if (rootCtx == null || !rootCtx.mounted) return;
+    final current = _normalizeNavPath(Nav.matchedLocation(rootCtx));
+    final target = _normalizeNavPath(path);
+    if (current == target) {
+      if (LOGGING_SWITCH) {
+        customlog(
+          'notifications: Play now skip nav (already on $target)',
+        );
+      }
+      return;
+    }
+    Nav.go(rootCtx, path);
   }
 
   if (isPrimary) {
@@ -442,6 +499,15 @@ Widget _navigateActionButton({
     onPressed: onTap,
     child: child,
   );
+}
+
+String _normalizeNavPath(String path) {
+  final trimmed = path.trim();
+  if (trimmed.isEmpty) return '/';
+  if (trimmed.length > 1 && trimmed.endsWith('/')) {
+    return trimmed.substring(0, trimmed.length - 1);
+  }
+  return trimmed;
 }
 
 Widget _replyActionButton({

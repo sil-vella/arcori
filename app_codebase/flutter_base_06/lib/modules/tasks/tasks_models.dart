@@ -31,18 +31,115 @@ class TaskContinueConfig {
 }
 
 class TaskRewardConfig {
-  const TaskRewardConfig({this.kind = 'deferred', this.placeholder = false});
+  const TaskRewardConfig({
+    this.kind = 'deferred',
+    this.placeholder = false,
+    this.amount,
+  });
 
   factory TaskRewardConfig.fromJson(Map<String, dynamic>? json) {
     if (json == null) return const TaskRewardConfig();
+    int? asInt(dynamic v) {
+      if (v == null) return null;
+      if (v is int) return v;
+      return int.tryParse('$v');
+    }
+
+    final kind = (json['kind']?.toString() ?? 'deferred').trim().toLowerCase();
+    var amount = asInt(json['amount']);
+    if (amount == null &&
+        (kind == 'gold_fragments' || kind == 'mystery_box')) {
+      amount = 2;
+    }
     return TaskRewardConfig(
-      kind: (json['kind']?.toString() ?? 'deferred').trim().toLowerCase(),
+      kind: kind,
       placeholder: json['placeholder'] == true,
+      amount: amount,
     );
   }
 
   final String kind;
   final bool placeholder;
+  final int? amount;
+}
+
+/// Granted loot from POST /daily_goals/claim.
+class TaskClaimReward {
+  const TaskClaimReward({
+    required this.kind,
+    required this.amount,
+    this.status = 'granted',
+    this.goldArcori = 0,
+    this.goldFragments = 0,
+  });
+
+  factory TaskClaimReward.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return const TaskClaimReward(kind: 'gold_fragments', amount: 0);
+    }
+    int asInt(dynamic v) => v is int ? v : int.tryParse('$v') ?? 0;
+    return TaskClaimReward(
+      kind: (json['kind']?.toString() ?? 'gold_fragments').trim().toLowerCase(),
+      amount: asInt(json['amount']),
+      status: (json['status']?.toString() ?? 'granted').trim().toLowerCase(),
+      goldArcori: asInt(json['goldArcori'] ?? json['gold_arcori']),
+      goldFragments: asInt(json['goldFragments'] ?? json['gold_fragments']),
+    );
+  }
+
+  final String kind;
+  final int amount;
+  final String status;
+  final int goldArcori;
+  final int goldFragments;
+}
+
+class TasksClaimResult {
+  const TasksClaimResult({
+    required this.progress,
+    required this.reward,
+  });
+
+  final TasksProgressSnapshot progress;
+  final TaskClaimReward reward;
+}
+
+/// Daily Cache claim_gate readiness for list / detail / post-match.
+enum DailyCacheUiState { locked, ready, claimed }
+
+DailyCacheUiState dailyCacheUiState({
+  required TaskCatalogEntry? entry,
+  required TasksProgressSnapshot? progress,
+}) {
+  final row = progress?.byGoalId(entry?.id ?? 'daily_mystery_box');
+  if (row?.completedToday == true) return DailyCacheUiState.claimed;
+  final requires = entry?.params['requires_goal_ids'] ??
+      entry?.params['requiresGoalIds'];
+  if (requires is List && progress != null) {
+    for (final raw in requires) {
+      final id = raw.toString().trim();
+      if (id.isEmpty) continue;
+      final req = progress.byGoalId(id);
+      if (req == null || !req.completedToday) {
+        return DailyCacheUiState.locked;
+      }
+    }
+    return DailyCacheUiState.ready;
+  }
+  // No requirements listed — treat incomplete as ready to attempt claim.
+  if (row != null && !row.completedToday) return DailyCacheUiState.ready;
+  return DailyCacheUiState.locked;
+}
+
+String dailyCacheStatusLabel(DailyCacheUiState state) {
+  switch (state) {
+    case DailyCacheUiState.claimed:
+      return 'Claimed';
+    case DailyCacheUiState.ready:
+      return 'Ready';
+    case DailyCacheUiState.locked:
+      return 'Locked';
+  }
 }
 
 class TaskPostCompleteAction {

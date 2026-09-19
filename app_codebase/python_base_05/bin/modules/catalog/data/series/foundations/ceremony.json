@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CER-RFL-SER003-0001",
+      "internalId": "CER-RFL-SER003-GEN001-0001",
       "themeCode": "CER",
       "designCode": "RFL",
       "designFamily": "RITE_OF_THE_FIRST_LIGHT",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Rite of the First Light in graffiti style with a standard finish and no effect. Use a background that is visually related to Rite of the First Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CER-RFL-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Rite of the First Light in graffiti style with a standard finish and no effect. Use a background that is visually related to Rite of the First Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CER-RFL-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Rite of the First Light Arcori generation I from the Ceremony Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "CER-PFF-SER003-0002",
+      "internalId": "CER-PFF-SER003-GEN001-0002",
       "themeCode": "CER",
       "designCode": "PFF",
       "designFamily": "PROCESSION_OF_FIVE_FLAMES",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Procession of Five Flames in graffiti style with a standard finish and no effect. Use a background that is visually related to Procession of Five Flames. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CER-PFF-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Procession of Five Flames in graffiti style with a standard finish and no effect. Use a background that is visually related to Procession of Five Flames. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CER-PFF-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Procession of Five Flames Arcori generation I from the Ceremony Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "CER-VBF-SER003-0003",
+      "internalId": "CER-VBF-SER003-GEN001-0003",
       "themeCode": "CER",
       "designCode": "VBF",
       "designFamily": "THE_VOW_BENEATH_FIVE_PILLARS",
@@ -136,7 +136,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Vow Beneath Five Pillars in graffiti style with a standard finish and no effect. Use a background that is visually related to The Vow Beneath Five Pillars. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CER-VBF-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Vow Beneath Five Pillars in graffiti style with a standard finish and no effect. Use a background that is visually related to The Vow Beneath Five Pillars. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CER-VBF-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Vow Beneath Five Pillars Arcori generation I from the Ceremony Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "CER-JPX-SER003-0004",
+      "internalId": "CER-JPX-SER003-GEN001-0004",
       "themeCode": "CER",
       "designCode": "JPX",
       "designFamily": "THE_JOINING_OF_THE_PILLARS",
@@ -182,7 +182,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Joining of the Pillars in graffiti style with a standard finish and no effect. Use a background that is visually related to The Joining of the Pillars. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CER-JPX-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Joining of the Pillars in graffiti style with a standard finish and no effect. Use a background that is visually related to The Joining of the Pillars. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CER-JPX-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Joining of the Pillars Arcori generation I from the Ceremony Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

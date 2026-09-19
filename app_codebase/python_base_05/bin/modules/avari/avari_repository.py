@@ -12,6 +12,7 @@ from models.avari_profile import AvariProfile
 from models.player_progress import (
     MatchFeeLedger,
     MatchFinalizeLedger,
+    PlayerClosedGeneration,
     PlayerDesignAccess,
     PlayerKin,
     PlayerMastery,
@@ -205,6 +206,27 @@ def mastery_points_by_design(
     return best
 
 
+def list_mastery_for_design_generation(
+    session: Session,
+    *,
+    design_id: str,
+    generation_number: int,
+) -> list[PlayerMastery]:
+    """All player_mastery rows for one design generation (any user)."""
+    did = (design_id or "").strip()
+    if not did:
+        return []
+    gen = max(1, int(generation_number))
+    return list(
+        session.scalars(
+            select(PlayerMastery).where(
+                PlayerMastery.design_id == did,
+                PlayerMastery.generation_number == gen,
+            )
+        ).all()
+    )
+
+
 def ensure_mastery_row(
     session: Session,
     *,
@@ -368,6 +390,91 @@ def list_trove(session: Session, user_id: str) -> list[PlayerTrove]:
     return list(
         session.scalars(select(PlayerTrove).where(PlayerTrove.user_id == uid)).all()
     )
+
+
+def list_closed_generations(
+    session: Session, user_id: str
+) -> list[PlayerClosedGeneration]:
+    """Newest closed gens first (profile Past Generations section)."""
+    uid = _as_uuid(user_id)
+    if uid is None:
+        return []
+    return list(
+        session.scalars(
+            select(PlayerClosedGeneration)
+            .where(PlayerClosedGeneration.user_id == uid)
+            .order_by(
+                PlayerClosedGeneration.closed_at.desc(),
+                PlayerClosedGeneration.created_at.desc(),
+            )
+        ).all()
+    )
+
+
+def upsert_closed_generation(
+    session: Session,
+    *,
+    user_id: str | uuid.UUID,
+    design_id: str,
+    generation_number: int,
+    mastery_points: int,
+    legacy_state: str,
+    echo_design_id: str | None,
+    echo_mastery_seeded: int = 0,
+    echo_generation_number: int | None = None,
+    closed_at: Any | None = None,
+) -> PlayerClosedGeneration:
+    """Idempotent mastery-at-closure snapshot for one player + design gen."""
+    from datetime import datetime, timezone
+
+    uid = _as_uuid(user_id) if not isinstance(user_id, uuid.UUID) else user_id
+    if uid is None:
+        raise ValueError("user_id required")
+    did = (design_id or "").strip()
+    if not did:
+        raise ValueError("design_id required")
+    gen = max(1, int(generation_number))
+    pts = max(0, int(mastery_points))
+    seeded = max(0, int(echo_mastery_seeded))
+    echo_gen = (
+        max(1, int(echo_generation_number))
+        if echo_generation_number is not None
+        else None
+    )
+    state = (legacy_state or "").strip().lower() or "lost"
+    echo = (echo_design_id or "").strip() or None
+    when = closed_at if closed_at is not None else datetime.now(timezone.utc)
+
+    existing = session.scalar(
+        select(PlayerClosedGeneration).where(
+            PlayerClosedGeneration.user_id == uid,
+            PlayerClosedGeneration.design_id == did,
+            PlayerClosedGeneration.generation_number == gen,
+        )
+    )
+    if existing is not None:
+        existing.mastery_points = pts
+        existing.echo_mastery_seeded = seeded
+        existing.echo_generation_number = echo_gen
+        existing.legacy_state = state
+        existing.echo_design_id = echo
+        existing.closed_at = when
+        session.flush()
+        return existing
+    row = PlayerClosedGeneration(
+        user_id=uid,
+        design_id=did,
+        generation_number=gen,
+        mastery_points=pts,
+        echo_mastery_seeded=seeded,
+        echo_generation_number=echo_gen,
+        legacy_state=state,
+        echo_design_id=echo,
+        closed_at=when,
+    )
+    session.add(row)
+    session.flush()
+    return row
 
 
 def get_match_finalize(

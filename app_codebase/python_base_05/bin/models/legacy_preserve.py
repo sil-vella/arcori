@@ -160,7 +160,9 @@ class MuseumGeneration(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
 
     design_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     generation_number: Mapped[int] = mapped_column(Integer, nullable=False)
-    legacy_state: Mapped[str] = mapped_column(String(16), nullable=False)
+    legacy_state: Mapped[str] = mapped_column(
+        String(16), nullable=False, index=True
+    )
     preserved_user_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("users.id", ondelete="SET NULL"),
@@ -170,5 +172,6 @@ class MuseumGeneration(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
+        index=True,
     )
     meta_json: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)

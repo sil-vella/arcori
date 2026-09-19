@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "IGY-TSA-SER003-0001",
+      "internalId": "IGY-TSA-SER003-GEN001-0001",
       "themeCode": "IGY",
       "designCode": "TSA",
       "designFamily": "TIDEWRIGHT_S_ANSWER",
@@ -42,7 +42,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Tidewright's Answer in low poly style with a standard finish and no effect. Use a background that is visually related to Tidewright's Answer. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-TSA-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Tidewright's Answer in low poly style with a standard finish and no effect. Use a background that is visually related to Tidewright's Answer. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-TSA-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Tidewright's Answer Arcori generation I from the Ingenuity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "IGY-BWL-SER003-0002",
+      "internalId": "IGY-BWL-SER003-GEN001-0002",
       "themeCode": "IGY",
       "designCode": "BWL",
       "designFamily": "THE_BRIDGE_WOVEN_FROM_LIGHT",
@@ -88,7 +88,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Bridge Woven from Light in low poly style with a standard finish and no effect. Use a background that is visually related to The Bridge Woven from Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-BWL-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with The Bridge Woven from Light in low poly style with a standard finish and no effect. Use a background that is visually related to The Bridge Woven from Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-BWL-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible The Bridge Woven from Light Arcori generation I from the Ingenuity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "IGY-LLL-SER003-0003",
+      "internalId": "IGY-LLL-SER003-GEN001-0003",
       "themeCode": "IGY",
       "designCode": "LLL",
       "designFamily": "THE_LOOM_OF_LIVING_LIGHT",
@@ -134,7 +134,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Loom of Living Light in low poly style with a standard finish and no effect. Use a background that is visually related to The Loom of Living Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-LLL-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Loom of Living Light in low poly style with a standard finish and no effect. Use a background that is visually related to The Loom of Living Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-LLL-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Loom of Living Light Arcori generation I from the Ingenuity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "IGY-BBT-SER003-0004",
+      "internalId": "IGY-BBT-SER003-GEN001-0004",
       "themeCode": "IGY",
       "designCode": "BBT",
       "designFamily": "BUILT_BETWEEN_THE_TIDES",
@@ -178,7 +178,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Built Between the Tides in low poly style with a standard finish and no effect. Use a background that is visually related to Built Between the Tides. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-BBT-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Built Between the Tides in low poly style with a standard finish and no effect. Use a background that is visually related to Built Between the Tides. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IGY-BBT-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Built Between the Tides Arcori generation I from the Ingenuity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

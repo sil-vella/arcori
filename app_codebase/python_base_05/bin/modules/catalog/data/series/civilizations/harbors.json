@@ -1,0 +1,188 @@
+{
+  "catalog": "Harbors Civilizations Series",
+  "theme": "Harbors",
+  "series": "Civilizations",
+  "themeCode": "HBR",
+  "loreDescription": "Docks, piers, river stations, or bayfront hubs for travel and trade.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "HBR-MHX-SER004-GEN001-0001",
+      "themeCode": "HBR",
+      "designCode": "MHX",
+      "designFamily": "MOONWAKE_HARBOR",
+      "design": "Moonwake Harbor",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Harbors",
+      "subtheme": "Harbors",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Moonwake Harbor in realistic style with a standard finish and no effect. Use a background that is visually related to Moonwake Harbor. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HBR-MHX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Moonwake Harbor Arcori generation I from the Harbors Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "HBR-HLX-SER004-GEN001-0002",
+      "themeCode": "HBR",
+      "designCode": "HLX",
+      "designFamily": "HARBOR_LOGBOOK",
+      "design": "Harbor Logbook",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Harbors",
+      "subtheme": "Harbors",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.9,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Harbor Logbook in realistic style with a standard finish and no effect. Use a background that is visually related to Harbor Logbook. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HBR-HLX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Harbor Logbook Arcori generation I from the Harbors Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "HBR-HGL-SER004-GEN001-0003",
+      "themeCode": "HBR",
+      "designCode": "HGL",
+      "designFamily": "HARBOR_GUIDING_LANTERN",
+      "design": "Harbor Guiding Lantern",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Harbors",
+      "subtheme": "Harbors",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 6.1,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Harbor Guiding Lantern in realistic style with a standard finish and no effect. Use a background that is visually related to Harbor Guiding Lantern. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HBR-HGL-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Harbor Guiding Lantern Arcori generation I from the Harbors Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "HBR-BLX-SER004-GEN001-0004",
+      "themeCode": "HBR",
+      "designCode": "BLX",
+      "designFamily": "BEACON_LANTERN",
+      "design": "Beacon Lantern",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Harbors",
+      "subtheme": "Harbors",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.5,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Beacon Lantern in realistic style with a standard finish and no effect. Use a background that is visually related to Beacon Lantern. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HBR-BLX-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Beacon Lantern Arcori generation I from the Harbors Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

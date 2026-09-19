@@ -159,6 +159,19 @@ void main() {
             'imageUrl': '/catalog-media/001_genesis/animals/ANM-SNL-SER001-0007.webp',
           },
         ],
+        'closedGenerations': [
+          {
+            'designId': 'ANM-TIG-SER001-GEN001-0001',
+            'displayName': 'Tiger',
+            'generationNumber': 1,
+            'masteryPoints': 80,
+            'echoMasterySeeded': 24,
+            'echoGenerationNumber': 2,
+            'legacyState': 'lost',
+            'echoDesignId': 'ANM-TIG-SER001-GEN002-0001',
+            'color': '#C6A15B',
+          },
+        ],
       });
       expect(profile.access, hasLength(1));
       expect(profile.access.first.displayName, 'Tiger');
@@ -170,6 +183,11 @@ void main() {
       expect(profile.slammers.single.permanent, isTrue);
       expect(profile.trove, hasLength(1));
       expect(profile.trove.first.caption, 'Gen 1 · Legacy Owner');
+      expect(profile.closedGenerations, hasLength(1));
+      expect(
+        profile.closedGenerations.first.caption,
+        'Gen 1 · 80 at close → +24 seeded to Gen 2 · Lost',
+      );
       final attrs = profile.slammers.single.gameplayAttributes!;
       expect(attrs.impact, 5);
       expect(attrs.labeledValues, [

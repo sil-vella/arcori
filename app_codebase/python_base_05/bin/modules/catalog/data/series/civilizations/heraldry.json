@@ -1,0 +1,278 @@
+{
+  "catalog": "Heraldry Civilizations Series",
+  "theme": "Heraldry",
+  "series": "Civilizations",
+  "themeCode": "HLD",
+  "loreDescription": "Symbols, banners, emblems, and visual identities of each civilization.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "HLD-OHX-SER004-GEN001-0001",
+      "themeCode": "HLD",
+      "designCode": "OHX",
+      "designFamily": "OAKCREST_HALL",
+      "design": "Oakcrest Hall",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Heraldry",
+      "subtheme": "Heraldry",
+      "style": "Comic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.7,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Oakcrest Hall in comic style with a standard finish and no effect. Use a background that is visually related to Oakcrest Hall. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HLD-OHX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Oakcrest Hall Arcori generation I from the Heraldry Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "HLD-CCX-SER004-GEN001-0002",
+      "themeCode": "HLD",
+      "designCode": "CCX",
+      "designFamily": "CIVILIZATION_CRESTS",
+      "design": "Civilization Crests",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Heraldry",
+      "subtheme": "Heraldry",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.7,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Civilization Crests in realistic style with a standard finish and no effect. Use a background that is visually related to Civilization Crests. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HLD-CCX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Civilization Crests Arcori generation I from the Heraldry Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "HLD-OHS-SER004-GEN001-0003",
+      "themeCode": "HLD",
+      "designCode": "OHS",
+      "designFamily": "OAKCREST_HERALDIC_SHIELD",
+      "design": "Oakcrest Heraldic Shield",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Heraldry",
+      "subtheme": "Heraldry",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 6.1,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Oakcrest Heraldic Shield in realistic style with a standard finish and no effect. Use a background that is visually related to Oakcrest Heraldic Shield. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HLD-OHS-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Oakcrest Heraldic Shield Arcori generation I from the Heraldry Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "HLD-HOM-SER004-GEN001-0004",
+      "themeCode": "HLD",
+      "designCode": "HOM",
+      "designFamily": "HOLLOW_OATH_MEDALLION",
+      "design": "Hollow Oath Medallion",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Heraldry",
+      "subtheme": "Heraldry",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Hollow Oath Medallion in realistic style with a standard finish and no effect. Use a background that is visually related to Hollow Oath Medallion. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HLD-HOM-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Hollow Oath Medallion Arcori generation I from the Heraldry Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "HLD-LBX-SER004-GEN001-0005",
+      "themeCode": "HLD",
+      "designCode": "LBX",
+      "designFamily": "LIGHTWOVEN_BANNER",
+      "design": "Lightwoven Banner",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Heraldry",
+      "subtheme": "Heraldry",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 7.8,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Lightwoven Banner in realistic style with a standard finish and no effect. Use a background that is visually related to Lightwoven Banner. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HLD-LBX-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Lightwoven Banner Arcori generation I from the Heraldry Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "HLD-GHS-SER004-GEN001-0006",
+      "themeCode": "HLD",
+      "designCode": "GHS",
+      "designFamily": "GOLDLEAF_HERALDIC_SHIELD",
+      "design": "Goldleaf Heraldic Shield",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Heraldry",
+      "subtheme": "Heraldry",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.1,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Goldleaf Heraldic Shield in realistic style with a standard finish and no effect. Use a background that is visually related to Goldleaf Heraldic Shield. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HLD-GHS-SER004-GEN001-0006.webp",
+      "loreDescription": "A collectible Goldleaf Heraldic Shield Arcori generation I from the Heraldry Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

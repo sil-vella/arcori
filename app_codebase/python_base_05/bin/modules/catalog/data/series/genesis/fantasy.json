@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "FAN-CDR-SER001-0001",
+      "internalId": "FAN-CDR-SER001-GEN001-0001",
       "themeCode": "FAN",
       "designCode": "CDR",
       "designFamily": "CRIMSON_DRAGON",
@@ -44,7 +44,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a crimson dragon in anime style with a foil finish and fire effect. Use a background that is visually related to the crimson dragon. No borders, no frames. The crimson dragon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-CDR-SER001-0001.webp",
+      "artworkPrompt": "Give me an image with a crimson dragon in anime style with a foil finish and fire effect. Use a background that is visually related to the crimson dragon. No borders, no frames. The crimson dragon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-CDR-SER001-GEN001-0001.webp",
       "loreDescription": "A collectible Crimson Dragon Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "FAN-FDR-SER001-0002",
+      "internalId": "FAN-FDR-SER001-GEN001-0002",
       "themeCode": "FAN",
       "designCode": "FDR",
       "designFamily": "FROST_DRAGON",
@@ -86,7 +86,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a frost dragon in realistic style with a chrome finish and glow effect. Use a background that is visually related to the frost dragon. No borders, no frames. The frost dragon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-FDR-SER001-0002.webp",
+      "artworkPrompt": "Give me an image with a frost dragon in realistic style with a chrome finish and glow effect. Use a background that is visually related to the frost dragon. No borders, no frames. The frost dragon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-FDR-SER001-GEN001-0002.webp",
       "loreDescription": "A collectible Frost Dragon Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "FAN-EDR-SER001-0003",
+      "internalId": "FAN-EDR-SER001-GEN001-0003",
       "themeCode": "FAN",
       "designCode": "EDR",
       "designFamily": "EMERALD_DRAGON",
@@ -132,7 +132,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a emerald dragon in comic style with a metallic finish and pulse effect. Use a background that is visually related to the emerald dragon. No borders, no frames. The emerald dragon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-EDR-SER001-0003.webp",
+      "artworkPrompt": "Give me an image with a emerald dragon in comic style with a metallic finish and pulse effect. Use a background that is visually related to the emerald dragon. No borders, no frames. The emerald dragon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-EDR-SER001-GEN001-0003.webp",
       "loreDescription": "A collectible Emerald Dragon Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "FAN-SDR-SER001-0004",
+      "internalId": "FAN-SDR-SER001-GEN001-0004",
       "themeCode": "FAN",
       "designCode": "SDR",
       "designFamily": "SHADOW_DRAGON",
@@ -178,7 +178,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a shadow dragon in neon style with a matte finish and smoke effect. Use a background that is visually related to the shadow dragon. No borders, no frames. The shadow dragon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-SDR-SER001-0004.webp",
+      "artworkPrompt": "Give me an image with a shadow dragon in neon style with a matte finish and smoke effect. Use a background that is visually related to the shadow dragon. No borders, no frames. The shadow dragon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-SDR-SER001-GEN001-0004.webp",
       "loreDescription": "A collectible Shadow Dragon Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -186,7 +186,7 @@
       }
     },
     {
-      "internalId": "FAN-ARC-SER001-0005",
+      "internalId": "FAN-ARC-SER001-GEN001-0005",
       "themeCode": "FAN",
       "designCode": "ARC",
       "designFamily": "ARCANE_MAGE",
@@ -224,7 +224,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a arcane mage in comic style with a metallic finish and glow effect. Use a background that is visually related to the arcane mage. No borders, no frames. The arcane mage should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-ARC-SER001-0005.webp",
+      "artworkPrompt": "Give me an image with a arcane mage in comic style with a metallic finish and glow effect. Use a background that is visually related to the arcane mage. No borders, no frames. The arcane mage should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-ARC-SER001-GEN001-0005.webp",
       "loreDescription": "A collectible Arcane Mage Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -232,7 +232,7 @@
       }
     },
     {
-      "internalId": "FAN-FMA-SER001-0006",
+      "internalId": "FAN-FMA-SER001-GEN001-0006",
       "themeCode": "FAN",
       "designCode": "FMA",
       "designFamily": "FIRE_MAGE",
@@ -270,7 +270,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a fire mage in anime style with a gloss finish and fire effect. Use a background that is visually related to the fire mage. No borders, no frames. The fire mage should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-FMA-SER001-0006.webp",
+      "artworkPrompt": "Give me an image with a fire mage in anime style with a gloss finish and fire effect. Use a background that is visually related to the fire mage. No borders, no frames. The fire mage should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-FMA-SER001-GEN001-0006.webp",
       "loreDescription": "A collectible Fire Mage Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -278,7 +278,7 @@
       }
     },
     {
-      "internalId": "FAN-IMA-SER001-0007",
+      "internalId": "FAN-IMA-SER001-GEN001-0007",
       "themeCode": "FAN",
       "designCode": "IMA",
       "designFamily": "ICE_MAGE",
@@ -312,7 +312,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a ice mage in realistic style with a foil finish and sparkle effect. Use a background that is visually related to the ice mage. No borders, no frames. The ice mage should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-IMA-SER001-0007.webp",
+      "artworkPrompt": "Give me an image with a ice mage in realistic style with a foil finish and sparkle effect. Use a background that is visually related to the ice mage. No borders, no frames. The ice mage should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-IMA-SER001-GEN001-0007.webp",
       "loreDescription": "A collectible Ice Mage Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -320,7 +320,7 @@
       }
     },
     {
-      "internalId": "FAN-STW-SER001-0008",
+      "internalId": "FAN-STW-SER001-GEN001-0008",
       "themeCode": "FAN",
       "designCode": "STW",
       "designFamily": "STAR_WIZARD",
@@ -358,7 +358,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a star wizard in minimalist style with a prismatic finish and floating particles effect. Use a background that is visually related to the star wizard. No borders, no frames. The star wizard should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-STW-SER001-0008.webp",
+      "artworkPrompt": "Give me an image with a star wizard in minimalist style with a prismatic finish and floating particles effect. Use a background that is visually related to the star wizard. No borders, no frames. The star wizard should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-STW-SER001-GEN001-0008.webp",
       "loreDescription": "A collectible Star Wizard Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -366,7 +366,7 @@
       }
     },
     {
-      "internalId": "FAN-FRR-SER001-0009",
+      "internalId": "FAN-FRR-SER001-GEN001-0009",
       "themeCode": "FAN",
       "designCode": "FRR",
       "designFamily": "FOREST_RANGER",
@@ -402,7 +402,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a forest ranger in watercolor style with a matte finish and no effect. Use a background that is visually related to the forest ranger. No borders, no frames. The forest ranger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-FRR-SER001-0009.webp",
+      "artworkPrompt": "Give me an image with a forest ranger in watercolor style with a matte finish and no effect. Use a background that is visually related to the forest ranger. No borders, no frames. The forest ranger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-FRR-SER001-GEN001-0009.webp",
       "loreDescription": "A collectible Forest Ranger Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -410,7 +410,7 @@
       }
     },
     {
-      "internalId": "FAN-MEL-SER001-0010",
+      "internalId": "FAN-MEL-SER001-GEN001-0010",
       "themeCode": "FAN",
       "designCode": "MEL",
       "designFamily": "MOON_ELF",
@@ -446,7 +446,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a moon elf in anime style with a gloss finish and glow effect. Use a background that is visually related to the moon elf. No borders, no frames. The moon elf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-MEL-SER001-0010.webp",
+      "artworkPrompt": "Give me an image with a moon elf in anime style with a gloss finish and glow effect. Use a background that is visually related to the moon elf. No borders, no frames. The moon elf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-MEL-SER001-GEN001-0010.webp",
       "loreDescription": "A collectible Moon Elf Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -454,7 +454,7 @@
       }
     },
     {
-      "internalId": "FAN-HEL-SER001-0011",
+      "internalId": "FAN-HEL-SER001-GEN001-0011",
       "themeCode": "FAN",
       "designCode": "HEL",
       "designFamily": "HIGH_ELF",
@@ -492,7 +492,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a high elf in realistic style with a standard finish and no effect. Use a background that is visually related to the high elf. No borders, no frames. The high elf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-HEL-SER001-0011.webp",
+      "artworkPrompt": "Give me an image with a high elf in realistic style with a standard finish and no effect. Use a background that is visually related to the high elf. No borders, no frames. The high elf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-HEL-SER001-GEN001-0011.webp",
       "loreDescription": "A collectible High Elf Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -500,7 +500,7 @@
       }
     },
     {
-      "internalId": "FAN-SEL-SER001-0012",
+      "internalId": "FAN-SEL-SER001-GEN001-0012",
       "themeCode": "FAN",
       "designCode": "SEL",
       "designFamily": "SHADOW_ELF",
@@ -538,7 +538,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a shadow elf in comic style with a chrome finish and motion effect. Use a background that is visually related to the shadow elf. No borders, no frames. The shadow elf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-SEL-SER001-0012.webp",
+      "artworkPrompt": "Give me an image with a shadow elf in comic style with a chrome finish and motion effect. Use a background that is visually related to the shadow elf. No borders, no frames. The shadow elf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-SEL-SER001-GEN001-0012.webp",
       "loreDescription": "A collectible Shadow Elf Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -546,7 +546,7 @@
       }
     },
     {
-      "internalId": "FAN-OWL-SER001-0013",
+      "internalId": "FAN-OWL-SER001-GEN001-0013",
       "themeCode": "FAN",
       "designCode": "OWL",
       "designFamily": "ORC_WARLORD",
@@ -582,7 +582,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a orc warlord in comic style with a metallic finish and motion effect. Use a background that is visually related to the orc warlord. No borders, no frames. The orc warlord should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-OWL-SER001-0013.webp",
+      "artworkPrompt": "Give me an image with a orc warlord in comic style with a metallic finish and motion effect. Use a background that is visually related to the orc warlord. No borders, no frames. The orc warlord should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-OWL-SER001-GEN001-0013.webp",
       "loreDescription": "A collectible Orc Warlord Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -590,7 +590,7 @@
       }
     },
     {
-      "internalId": "FAN-OBR-SER001-0014",
+      "internalId": "FAN-OBR-SER001-GEN001-0014",
       "themeCode": "FAN",
       "designCode": "OBR",
       "designFamily": "ORC_BERSERKER",
@@ -626,7 +626,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a orc berserker in realistic style with a standard finish and no effect. Use a background that is visually related to the orc berserker. No borders, no frames. The orc berserker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-OBR-SER001-0014.webp",
+      "artworkPrompt": "Give me an image with a orc berserker in realistic style with a standard finish and no effect. Use a background that is visually related to the orc berserker. No borders, no frames. The orc berserker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-OBR-SER001-GEN001-0014.webp",
       "loreDescription": "A collectible Orc Berserker Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -634,7 +634,7 @@
       }
     },
     {
-      "internalId": "FAN-OSH-SER001-0015",
+      "internalId": "FAN-OSH-SER001-GEN001-0015",
       "themeCode": "FAN",
       "designCode": "OSH",
       "designFamily": "ORC_SHAMAN",
@@ -670,7 +670,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a orc shaman in watercolor style with a foil finish and glow effect. Use a background that is visually related to the orc shaman. No borders, no frames. The orc shaman should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-OSH-SER001-0015.webp",
+      "artworkPrompt": "Give me an image with a orc shaman in watercolor style with a foil finish and glow effect. Use a background that is visually related to the orc shaman. No borders, no frames. The orc shaman should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-OSH-SER001-GEN001-0015.webp",
       "loreDescription": "A collectible Orc Shaman Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -678,7 +678,7 @@
       }
     },
     {
-      "internalId": "FAN-MBL-SER001-0016",
+      "internalId": "FAN-MBL-SER001-GEN001-0016",
       "themeCode": "FAN",
       "designCode": "MBL",
       "designFamily": "MOUNTAIN_BLACKSMITH",
@@ -714,7 +714,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a mountain blacksmith in realistic style with a matte finish and no effect. Use a background that is visually related to the mountain blacksmith. No borders, no frames. The mountain blacksmith should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-MBL-SER001-0016.webp",
+      "artworkPrompt": "Give me an image with a mountain blacksmith in realistic style with a matte finish and no effect. Use a background that is visually related to the mountain blacksmith. No borders, no frames. The mountain blacksmith should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-MBL-SER001-GEN001-0016.webp",
       "loreDescription": "A collectible Mountain Blacksmith Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -722,7 +722,7 @@
       }
     },
     {
-      "internalId": "FAN-DGU-SER001-0017",
+      "internalId": "FAN-DGU-SER001-GEN001-0017",
       "themeCode": "FAN",
       "designCode": "DGU",
       "designFamily": "DWARF_GUARDIAN",
@@ -760,7 +760,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a dwarf guardian in comic style with a metallic finish and pulse effect. Use a background that is visually related to the dwarf guardian. No borders, no frames. The dwarf guardian should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-DGU-SER001-0017.webp",
+      "artworkPrompt": "Give me an image with a dwarf guardian in comic style with a metallic finish and pulse effect. Use a background that is visually related to the dwarf guardian. No borders, no frames. The dwarf guardian should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-DGU-SER001-GEN001-0017.webp",
       "loreDescription": "A collectible Dwarf Guardian Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -768,7 +768,7 @@
       }
     },
     {
-      "internalId": "FAN-RFO-SER001-0018",
+      "internalId": "FAN-RFO-SER001-GEN001-0018",
       "themeCode": "FAN",
       "designCode": "RFO",
       "designFamily": "RUNE_FORGER",
@@ -804,7 +804,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a rune forger in low poly style with a chrome finish and sparkle effect. Use a background that is visually related to the rune forger. No borders, no frames. The rune forger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-RFO-SER001-0018.webp",
+      "artworkPrompt": "Give me an image with a rune forger in low poly style with a chrome finish and sparkle effect. Use a background that is visually related to the rune forger. No borders, no frames. The rune forger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-RFO-SER001-GEN001-0018.webp",
       "loreDescription": "A collectible Rune Forger Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -812,7 +812,7 @@
       }
     },
     {
-      "internalId": "FAN-MFA-SER001-0019",
+      "internalId": "FAN-MFA-SER001-GEN001-0019",
       "themeCode": "FAN",
       "designCode": "MFA",
       "designFamily": "MOON_FAIRY",
@@ -848,7 +848,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a moon fairy in chibi style with a prismatic finish and glow effect. Use a background that is visually related to the moon fairy. No borders, no frames. The moon fairy should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-MFA-SER001-0019.webp",
+      "artworkPrompt": "Give me an image with a moon fairy in chibi style with a prismatic finish and glow effect. Use a background that is visually related to the moon fairy. No borders, no frames. The moon fairy should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-MFA-SER001-GEN001-0019.webp",
       "loreDescription": "A collectible Moon Fairy Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -856,7 +856,7 @@
       }
     },
     {
-      "internalId": "FAN-PTR-SER001-0020",
+      "internalId": "FAN-PTR-SER001-GEN001-0020",
       "themeCode": "FAN",
       "designCode": "PTR",
       "designFamily": "PIXIE_TRICKSTER",
@@ -890,7 +890,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a pixie trickster in cartoon style with a gloss finish and motion effect. Use a background that is visually related to the pixie trickster. No borders, no frames. The pixie trickster should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-PTR-SER001-0020.webp",
+      "artworkPrompt": "Give me an image with a pixie trickster in cartoon style with a gloss finish and motion effect. Use a background that is visually related to the pixie trickster. No borders, no frames. The pixie trickster should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-PTR-SER001-GEN001-0020.webp",
       "loreDescription": "A collectible Pixie Trickster Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -898,7 +898,7 @@
       }
     },
     {
-      "internalId": "FAN-SFA-SER001-0021",
+      "internalId": "FAN-SFA-SER001-GEN001-0021",
       "themeCode": "FAN",
       "designCode": "SFA",
       "designFamily": "SUN_FAIRY",
@@ -936,7 +936,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a sun fairy in watercolor style with a foil finish and sparkle effect. Use a background that is visually related to the sun fairy. No borders, no frames. The sun fairy should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-SFA-SER001-0021.webp",
+      "artworkPrompt": "Give me an image with a sun fairy in watercolor style with a foil finish and sparkle effect. Use a background that is visually related to the sun fairy. No borders, no frames. The sun fairy should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-SFA-SER001-GEN001-0021.webp",
       "loreDescription": "A collectible Sun Fairy Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -944,7 +944,7 @@
       }
     },
     {
-      "internalId": "FAN-GOB-SER001-0022",
+      "internalId": "FAN-GOB-SER001-GEN001-0022",
       "themeCode": "FAN",
       "designCode": "GOB",
       "designFamily": "CAVE_GOBLIN",
@@ -978,7 +978,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a cave goblin in comic style with a standard finish and no effect. Use a background that is visually related to the cave goblin. No borders, no frames. The cave goblin should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-GOB-SER001-0022.webp",
+      "artworkPrompt": "Give me an image with a cave goblin in comic style with a standard finish and no effect. Use a background that is visually related to the cave goblin. No borders, no frames. The cave goblin should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-GOB-SER001-GEN001-0022.webp",
       "loreDescription": "A collectible Cave Goblin Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -986,7 +986,7 @@
       }
     },
     {
-      "internalId": "FAN-GTH-SER001-0023",
+      "internalId": "FAN-GTH-SER001-GEN001-0023",
       "themeCode": "FAN",
       "designCode": "GTH",
       "designFamily": "GOBLIN_THIEF",
@@ -1020,7 +1020,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a goblin thief in cartoon style with a gloss finish and motion effect. Use a background that is visually related to the goblin thief. No borders, no frames. The goblin thief should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-GTH-SER001-0023.webp",
+      "artworkPrompt": "Give me an image with a goblin thief in cartoon style with a gloss finish and motion effect. Use a background that is visually related to the goblin thief. No borders, no frames. The goblin thief should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-GTH-SER001-GEN001-0023.webp",
       "loreDescription": "A collectible Goblin Thief Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -1028,7 +1028,7 @@
       }
     },
     {
-      "internalId": "FAN-GTK-SER001-0024",
+      "internalId": "FAN-GTK-SER001-GEN001-0024",
       "themeCode": "FAN",
       "designCode": "GTK",
       "designFamily": "GOBLIN_TINKERER",
@@ -1062,7 +1062,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a goblin tinkerer in pixel art style with a metallic finish and pulse effect. Use a background that is visually related to the goblin tinkerer. No borders, no frames. The goblin tinkerer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-GTK-SER001-0024.webp",
+      "artworkPrompt": "Give me an image with a goblin tinkerer in pixel art style with a metallic finish and pulse effect. Use a background that is visually related to the goblin tinkerer. No borders, no frames. The goblin tinkerer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-GTK-SER001-GEN001-0024.webp",
       "loreDescription": "A collectible Goblin Tinkerer Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -1070,7 +1070,7 @@
       }
     },
     {
-      "internalId": "FAN-UNI-SER001-0025",
+      "internalId": "FAN-UNI-SER001-GEN001-0025",
       "themeCode": "FAN",
       "designCode": "UNI",
       "designFamily": "SILVER_UNICORN",
@@ -1108,7 +1108,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a silver unicorn in realistic style with a holographic finish and glow effect. Use a background that is visually related to the silver unicorn. No borders, no frames. The silver unicorn should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-UNI-SER001-0025.webp",
+      "artworkPrompt": "Give me an image with a silver unicorn in realistic style with a holographic finish and glow effect. Use a background that is visually related to the silver unicorn. No borders, no frames. The silver unicorn should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-UNI-SER001-GEN001-0025.webp",
       "loreDescription": "A collectible Silver Unicorn Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -1116,7 +1116,7 @@
       }
     },
     {
-      "internalId": "FAN-PHX-SER001-0026",
+      "internalId": "FAN-PHX-SER001-GEN001-0026",
       "themeCode": "FAN",
       "designCode": "PHX",
       "designFamily": "PHOENIX",
@@ -1154,7 +1154,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a phoenix in anime style with a foil finish and fire effect. Use a background that is visually related to the phoenix. No borders, no frames. The phoenix should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-PHX-SER001-0026.webp",
+      "artworkPrompt": "Give me an image with a phoenix in anime style with a foil finish and fire effect. Use a background that is visually related to the phoenix. No borders, no frames. The phoenix should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-PHX-SER001-GEN001-0026.webp",
       "loreDescription": "A collectible Phoenix Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -1162,7 +1162,7 @@
       }
     },
     {
-      "internalId": "FAN-GPH-SER001-0027",
+      "internalId": "FAN-GPH-SER001-GEN001-0027",
       "themeCode": "FAN",
       "designCode": "GPH",
       "designFamily": "GRIFFIN",
@@ -1200,7 +1200,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a griffin in realistic style with a metallic finish and motion effect. Use a background that is visually related to the griffin. No borders, no frames. The griffin should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-GPH-SER001-0027.webp",
+      "artworkPrompt": "Give me an image with a griffin in realistic style with a metallic finish and motion effect. Use a background that is visually related to the griffin. No borders, no frames. The griffin should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-GPH-SER001-GEN001-0027.webp",
       "loreDescription": "A collectible Griffin Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -1208,7 +1208,7 @@
       }
     },
     {
-      "internalId": "FAN-BAS-SER001-0028",
+      "internalId": "FAN-BAS-SER001-GEN001-0028",
       "themeCode": "FAN",
       "designCode": "BAS",
       "designFamily": "BASILISK",
@@ -1244,7 +1244,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a basilisk in comic style with a chrome finish and smoke effect. Use a background that is visually related to the basilisk. No borders, no frames. The basilisk should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-BAS-SER001-0028.webp",
+      "artworkPrompt": "Give me an image with a basilisk in comic style with a chrome finish and smoke effect. Use a background that is visually related to the basilisk. No borders, no frames. The basilisk should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-BAS-SER001-GEN001-0028.webp",
       "loreDescription": "A collectible Basilisk Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -1252,7 +1252,7 @@
       }
     },
     {
-      "internalId": "FAN-MIN-SER001-0029",
+      "internalId": "FAN-MIN-SER001-GEN001-0029",
       "themeCode": "FAN",
       "designCode": "MIN",
       "designFamily": "MINOTAUR",
@@ -1288,7 +1288,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a minotaur in realistic style with a matte finish and no effect. Use a background that is visually related to the minotaur. No borders, no frames. The minotaur should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-MIN-SER001-0029.webp",
+      "artworkPrompt": "Give me an image with a minotaur in realistic style with a matte finish and no effect. Use a background that is visually related to the minotaur. No borders, no frames. The minotaur should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-MIN-SER001-GEN001-0029.webp",
       "loreDescription": "A collectible Minotaur Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -1296,7 +1296,7 @@
       }
     },
     {
-      "internalId": "FAN-SPX-SER001-0030",
+      "internalId": "FAN-SPX-SER001-GEN001-0030",
       "themeCode": "FAN",
       "designCode": "SPX",
       "designFamily": "SPHINX",
@@ -1332,7 +1332,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a sphinx in watercolor style with a foil finish and glow effect. Use a background that is visually related to the sphinx. No borders, no frames. The sphinx should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-SPX-SER001-0030.webp",
+      "artworkPrompt": "Give me an image with a sphinx in watercolor style with a foil finish and glow effect. Use a background that is visually related to the sphinx. No borders, no frames. The sphinx should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named FAN-SPX-SER001-GEN001-0030.webp",
       "loreDescription": "A collectible Sphinx Arcori generation I from the Fantasy Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SPC-DSR-SER002-0008",
+      "internalId": "SPC-DSR-SER002-GEN001-0008",
       "themeCode": "SPC",
       "designCode": "DSR",
       "designFamily": "DUST_ROVER",
@@ -42,7 +42,7 @@
       "series": "Pioneers Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a dust rover in minimalist style with a chrome finish and no effect. Use a background that is visually related to the dust rover. No borders, no frames. The dust rover should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-DSR-SER002-0008.webp",
+      "artworkPrompt": "Give me an image with a dust rover in minimalist style with a chrome finish and no effect. Use a background that is visually related to the dust rover. No borders, no frames. The dust rover should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPC-DSR-SER002-GEN001-0008.webp",
       "loreDescription": "A collectible Dust Rover Arcori generation I from the Space Pioneers Series.",
       "legacy": {
         "preservationRequirement": 100,

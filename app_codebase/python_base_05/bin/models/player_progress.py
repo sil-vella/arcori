@@ -154,6 +154,43 @@ class PlayerTrove(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     )
 
 
+class PlayerClosedGeneration(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
+    """Per-player snapshot of mastery when a design generation closed (Preserved/Lost)."""
+
+    __tablename__ = "player_closed_generations"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id",
+            "design_id",
+            "generation_number",
+            name="uq_player_closed_generations_user_design_gen",
+        ),
+    )
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    design_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    generation_number: Mapped[int] = mapped_column(Integer, nullable=False)
+    mastery_points: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    echo_mastery_seeded: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    echo_generation_number: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    legacy_state: Mapped[str] = mapped_column(String(32), nullable=False)
+    echo_design_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    closed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+
 class PlayerAchievement(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     """Lifetime unlocked achievements (lifetime, additive)."""
 

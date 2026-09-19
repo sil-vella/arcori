@@ -1,0 +1,238 @@
+{
+  "catalog": "Watchers Civilizations Series",
+  "theme": "Watchers",
+  "series": "Civilizations",
+  "themeCode": "WCH",
+  "loreDescription": "Guardians, patrols, sentinels, or spiritual protectors who oversee the land.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "WCH-HWX-SER004-GEN001-0001",
+      "themeCode": "WCH",
+      "designCode": "HWX",
+      "designFamily": "HARBOR_WATCH",
+      "design": "Harbor Watch",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Watchers",
+      "subtheme": "Watchers",
+      "style": "Retro",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Harbor Watch in retro style with a standard finish and no effect. Use a background that is visually related to Harbor Watch. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WCH-HWX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Harbor Watch Arcori generation I from the Watchers Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "WCH-ASX-SER004-GEN001-0002",
+      "themeCode": "WCH",
+      "designCode": "ASX",
+      "designFamily": "ASHEN_SENTINELS",
+      "design": "Ashen Sentinels",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Watchers",
+      "subtheme": "Watchers",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ashen Sentinels in realistic style with a standard finish and no effect. Use a background that is visually related to Ashen Sentinels. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WCH-ASX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Ashen Sentinels Arcori generation I from the Watchers Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "WCH-ASH-SER004-GEN001-0003",
+      "themeCode": "WCH",
+      "designCode": "ASH",
+      "designFamily": "ASHEN_SENTINEL_HELM",
+      "design": "Ashen Sentinel Helm",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Watchers",
+      "subtheme": "Watchers",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 6.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ashen Sentinel Helm in realistic style with a standard finish and no effect. Use a background that is visually related to Ashen Sentinel Helm. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WCH-ASH-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Ashen Sentinel Helm Arcori generation I from the Watchers Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "WCH-RLX-SER004-GEN001-0004",
+      "themeCode": "WCH",
+      "designCode": "RLX",
+      "designFamily": "RUINKEEPER_LANTERN",
+      "design": "Ruinkeeper Lantern",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Watchers",
+      "subtheme": "Watchers",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ruinkeeper Lantern in realistic style with a standard finish and no effect. Use a background that is visually related to Ruinkeeper Lantern. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WCH-RLX-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Ruinkeeper Lantern Arcori generation I from the Watchers Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "WCH-WIT-SER004-GEN001-0005",
+      "themeCode": "WCH",
+      "designCode": "WIT",
+      "designFamily": "WATCHERS_IRON_TOKEN",
+      "design": "Watchers Iron Token",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Watchers",
+      "subtheme": "Watchers",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.1,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Watchers Iron Token in realistic style with a standard finish and no effect. Use a background that is visually related to Watchers Iron Token. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WCH-WIT-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Watchers Iron Token Arcori generation I from the Watchers Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

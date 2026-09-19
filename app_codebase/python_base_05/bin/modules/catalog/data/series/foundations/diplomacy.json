@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "DIP-ABP-SER003-0001",
+      "internalId": "DIP-ABP-SER003-GEN001-0001",
       "themeCode": "DIP",
       "designCode": "ABP",
       "designFamily": "ACCORD_BENEATH_THE_PILLARS",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Accord Beneath the Pillars in watercolor style with a standard finish and no effect. Use a background that is visually related to Accord Beneath the Pillars. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-ABP-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Accord Beneath the Pillars in watercolor style with a standard finish and no effect. Use a background that is visually related to Accord Beneath the Pillars. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-ABP-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Accord Beneath the Pillars Arcori generation I from the Diplomacy Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "DIP-SBO-SER003-0002",
+      "internalId": "DIP-SBO-SER003-GEN001-0002",
       "themeCode": "DIP",
       "designCode": "SBO",
       "designFamily": "THE_SAPLING_AT_THE_BOUNDARY",
@@ -88,7 +88,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Sapling at the Boundary in watercolor style with a standard finish and no effect. Use a background that is visually related to The Sapling at the Boundary. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-SBO-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with The Sapling at the Boundary in watercolor style with a standard finish and no effect. Use a background that is visually related to The Sapling at the Boundary. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-SBO-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible The Sapling at the Boundary Arcori generation I from the Diplomacy Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "DIP-WAA-SER003-0003",
+      "internalId": "DIP-WAA-SER003-GEN001-0003",
       "themeCode": "DIP",
       "designCode": "WAA",
       "designFamily": "WORDS_ACROSS_THE_ASH",
@@ -134,7 +134,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Words Across the Ash in watercolor style with a standard finish and no effect. Use a background that is visually related to Words Across the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-WAA-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Words Across the Ash in watercolor style with a standard finish and no effect. Use a background that is visually related to Words Across the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-WAA-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Words Across the Ash Arcori generation I from the Diplomacy Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "DIP-AWB-SER003-0004",
+      "internalId": "DIP-AWB-SER003-GEN001-0004",
       "themeCode": "DIP",
       "designCode": "AWB",
       "designFamily": "ACCORD_AT_THE_WINTER_BRIDGE",
@@ -176,7 +176,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Accord at the Winter Bridge in watercolor style with a standard finish and no effect. Use a background that is visually related to Accord at the Winter Bridge. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-AWB-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Accord at the Winter Bridge in watercolor style with a standard finish and no effect. Use a background that is visually related to Accord at the Winter Bridge. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIP-AWB-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Accord at the Winter Bridge Arcori generation I from the Diplomacy Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

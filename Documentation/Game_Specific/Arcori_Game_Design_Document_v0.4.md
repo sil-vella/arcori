@@ -41,10 +41,11 @@ Catalog series share that loop; they differ in how soon a generation can close:
 | **Genesis** | Main launch catalog | 500 | 1000 |
 | **Pioneers** | Small companion series (ten seed designs) | 100 | 200 |
 | **Foundations** | Civilization / society themes (160 designs) | 250 | 500 |
+| **Civilizations** | Civic institutions (94 designs) | 300 | 600 |
 
 **Why Pioneers exists:** the lower preservation and closure numbers so those designs can be **minted earlier** than Genesis — first Trove pieces while Genesis generations are still filling. It is not a second art drop for its own sake.
 
-**Foundations** sits between them (250 / 500) with forty society themes (Hearth, Shelter, … Unity), four designs each (`SER003`).
+**Foundations** sits between them (250 / 500) with forty society themes (Hearth, Shelter, … Unity), four designs each (`SER003`). **Civilizations** (`SER004`) is the next civic layer (Capital, Districts, Guilds, … Dynasties), 94 designs across twenty themes, at 300 / 600.
 
 ## Economy
 

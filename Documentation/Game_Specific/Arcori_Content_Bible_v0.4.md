@@ -15,6 +15,31 @@ Themes → Subthemes → Design Families → Generations.
 
 **Foundations** — forty civilization / society themes (Hearth through Unity), four designs each (`SER003`, art under `assets/images/arcori/003_foundations/{theme}/`). Legacy: `preservationRequirement` 250, `closureMilestone` 500.
 
+**Civilizations** — twenty civic-institution themes (Capital through Dynasties), 94 designs (`SER004`, art under `assets/images/arcori/004_civilizations/{theme}/`). Legacy: `preservationRequirement` 300, `closureMilestone` 600. Region is always one of Velora’s five lands — never “Velora” itself.
+
+| Theme | Lore |
+|-------|------|
+| Capital | The main heart of a region's civilization; its largest and most symbolic settlement. |
+| Districts | Different quarters of society: trade, learning, worship, craft, residence, and governance. |
+| Guilds | Organized groups of makers, builders, traders, keepers, healers, or specialists. |
+| Markets | Bustling centers of exchange, barter, rare goods, and regional identity. |
+| Council | The ruling or guiding body that shapes the direction of a civilization. |
+| Archives | Places where memory, records, maps, and truths are preserved. |
+| Monuments | Great structures built to honor victories, origins, myths, or heroes. |
+| Roads | The physical links that connect settlements, regions, and distant peoples. |
+| Harbors | Docks, piers, river stations, or bayfront hubs for travel and trade. |
+| Strongholds | Fortified places that guard a civilization's borders, treasures, or secrets. |
+| Academies | Centers of learning, skill, discipline, and regional philosophy. |
+| Temples | Sacred places devoted to belief, ritual, devotion, and mystery. |
+| Heraldry | Symbols, banners, emblems, and visual identities of each civilization. |
+| Festivals | Public celebrations that reveal joy, tradition, memory, and community. |
+| Customs | Daily rituals, habits, greetings, and practices that define regional culture. |
+| Watchers | Guardians, patrols, sentinels, or spiritual protectors who oversee the land. |
+| Envoys | Diplomats, messengers, and representatives connecting one civilization to another. |
+| Craftsmanship | The signature objects, tools, clothing, ornaments, and artistry of a people. |
+| Borders | The edges where one civilization ends and another begins — often tense or symbolic. |
+| Dynasties | Lines of leadership, inherited roles, or long-standing houses that shaped the civilization. |
+
 Pioneers exists so those generations can **mint earlier** than Genesis. It is not a full second catalog.
 
 ## Art Direction

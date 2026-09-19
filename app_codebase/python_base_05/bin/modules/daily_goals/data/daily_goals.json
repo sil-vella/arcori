@@ -142,8 +142,8 @@
     },
     {
       "id": "daily_mystery_box",
-      "name": "Daily Mystery Box",
-      "description": "Claim today’s mystery box after all featured missions.",
+      "name": "Daily Cache",
+      "description": "Claim today’s Daily Cache after all featured missions.",
       "cadence": "daily",
       "featured": false,
       "task_type": "claim_gate",
@@ -164,8 +164,8 @@
         "cost": 2
       },
       "reward": {
-        "kind": "mystery_box",
-        "table_id": null
+        "kind": "gold_fragments",
+        "amount": 2
       },
       "media": {
         "background": {

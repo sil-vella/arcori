@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "WAY-IMB-SER003-0001",
+      "internalId": "WAY-IMB-SER003-GEN001-0001",
       "themeCode": "WAY",
       "designCode": "IMB",
       "designFamily": "THE_IMPOSSIBLE_BEACON",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Impossible Beacon in neon style with a standard finish and no effect. Use a background that is visually related to The Impossible Beacon. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-IMB-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with The Impossible Beacon in neon style with a standard finish and no effect. Use a background that is visually related to The Impossible Beacon. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-IMB-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible The Impossible Beacon Arcori generation I from the Wayfinding Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "WAY-PFL-SER003-0002",
+      "internalId": "WAY-PFL-SER003-GEN001-0002",
       "themeCode": "WAY",
       "designCode": "PFL",
       "designFamily": "PATH_OF_FIVE_LIGHTS",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Path of Five Lights in neon style with a standard finish and no effect. Use a background that is visually related to Path of Five Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-PFL-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Path of Five Lights in neon style with a standard finish and no effect. Use a background that is visually related to Path of Five Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-PFL-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Path of Five Lights Arcori generation I from the Wayfinding Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "WAY-LAV-SER003-0003",
+      "internalId": "WAY-LAV-SER003-GEN001-0003",
       "themeCode": "WAY",
       "designCode": "LAV",
       "designFamily": "LANTERNS_ACROSS_THE_VANISHED_ROAD",
@@ -134,7 +134,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Lanterns Across the Vanished Road in neon style with a standard finish and no effect. Use a background that is visually related to Lanterns Across the Vanished Road. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-LAV-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Lanterns Across the Vanished Road in neon style with a standard finish and no effect. Use a background that is visually related to Lanterns Across the Vanished Road. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-LAV-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Lanterns Across the Vanished Road Arcori generation I from the Wayfinding Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "WAY-LRX-SER003-0004",
+      "internalId": "WAY-LRX-SER003-GEN001-0004",
       "themeCode": "WAY",
       "designCode": "LRX",
       "designFamily": "THE_LANTERN_ROAD",
@@ -178,7 +178,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Lantern Road in neon style with a standard finish and no effect. Use a background that is visually related to The Lantern Road. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-LRX-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Lantern Road in neon style with a standard finish and no effect. Use a background that is visually related to The Lantern Road. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named WAY-LRX-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Lantern Road Arcori generation I from the Wayfinding Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

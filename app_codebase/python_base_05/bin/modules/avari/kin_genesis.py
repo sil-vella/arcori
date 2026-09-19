@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import random
 import re
 from datetime import datetime, timezone
 from typing import Any
@@ -42,7 +43,7 @@ REGULAR_ARCORI_DESIGN_KEYS: frozenset[str] = frozenset(
     }
 )
 
-# Optional face media — webp (imageUrl) and/or lottie (lottieUrl). Kin uses lottie.
+# Optional face media — webp (imageUrl) and/or lottie (lottieUrl). Any theme.
 OPTIONAL_ARCORI_FACE_KEYS: frozenset[str] = frozenset(
     {
         "faceMedia",  # "webp" | "lottie"
@@ -95,6 +96,19 @@ def normalize_color(raw: str | None) -> str | None:
     return s
 
 
+def pick_echo_color(previous: str | None = None) -> str:
+    """Random approved disc accent for a new generation echo.
+
+    Same palette as Flutter ``kArcoriAccentHexes`` / ``ALLOWED_ARCORI_COLORS``.
+    Prefers a different color than the closed generation when possible — color
+    is the only catalog field that changes between gens (art/Lottie stay shared).
+    """
+    palette = sorted(ALLOWED_ARCORI_COLORS)
+    prev = normalize_color(previous)
+    choices = [c for c in palette if c != prev] if prev and len(palette) > 1 else list(palette)
+    return random.choice(choices)
+
+
 def subtheme_for_type(type_serial: str, type_code: str | None = None) -> str:
     key = (type_serial or "").strip()
     if key in _TYPE_DISPLAY:
@@ -120,11 +134,11 @@ def _player_token(username: str) -> str:
 
 
 def mint_internal_id(*, username: str, seq: int) -> str:
-    """Mint `KIN-…-{idToken}-####` using catalog CURRENT_SERIES (SER001 today)."""
+    """Mint `KIN-…-SERnnn-GEN001-####` using catalog CURRENT_SERIES."""
     token = _player_token(username)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M")
     series_token = current_id_token()
-    return f"KIN-{token}{stamp}-{series_token}-{seq:04d}"
+    return f"KIN-{token}{stamp}-{series_token}-GEN001-{seq:04d}"
 
 
 def region_affinity_hostility(region_code: str) -> tuple[list[str], list[str]]:

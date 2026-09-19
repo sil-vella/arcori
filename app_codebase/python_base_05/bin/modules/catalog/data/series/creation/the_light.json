@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LGT-TLT-SER000-0001",
+      "internalId": "LGT-TLT-SER000-GEN001-0001",
       "themeCode": "LGT",
       "designCode": "TLT",
       "designFamily": "THE_LIGHT",
@@ -44,7 +44,7 @@
       "series": "Creation Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Light in surreal style with a matte finish and no effect. Use a background that is visually related to Ashdrift Hill ash corridors. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LGT-TLT-SER000-0001.webp",
+      "artworkPrompt": "Give me an image with The Light in surreal style with a matte finish and no effect. Use a background that is visually related to Ashdrift Hill ash corridors. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LGT-TLT-SER000-GEN001-0001.webp",
       "loreDescription": "A collectible The Light Arcori generation I from the Creation Series, bound to Ashdrift Hill.",
       "legacy": {
         "preservationRequirement": 50,

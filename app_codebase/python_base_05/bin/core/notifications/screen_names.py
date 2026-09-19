@@ -16,6 +16,7 @@ _BUILTIN_SCREENS = frozenset(
         "tasks",
         "play",
         "velora",
+        "museum",
     }
 )
 

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LAW-CAS-SER003-0001",
+      "internalId": "LAW-CAS-SER003-GEN001-0001",
       "themeCode": "LAW",
       "designCode": "CAS",
       "designFamily": "COVENANT_OF_ASH_AND_STONE",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Covenant of Ash and Stone in graffiti style with a standard finish and no effect. Use a background that is visually related to Covenant of Ash and Stone. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-CAS-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Covenant of Ash and Stone in graffiti style with a standard finish and no effect. Use a background that is visually related to Covenant of Ash and Stone. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-CAS-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Covenant of Ash and Stone Arcori generation I from the Law Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "LAW-CFL-SER003-0002",
+      "internalId": "LAW-CFL-SER003-GEN001-0002",
       "themeCode": "LAW",
       "designCode": "CFL",
       "designFamily": "THE_COVENANT_OF_FIVE_LIGHTS",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Covenant of Five Lights in graffiti style with a standard finish and no effect. Use a background that is visually related to The Covenant of Five Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-CFL-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with The Covenant of Five Lights in graffiti style with a standard finish and no effect. Use a background that is visually related to The Covenant of Five Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-CFL-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible The Covenant of Five Lights Arcori generation I from the Law Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "LAW-MBI-SER003-0003",
+      "internalId": "LAW-MBI-SER003-GEN001-0003",
       "themeCode": "LAW",
       "designCode": "MBI",
       "designFamily": "THE_MEASURE_BENEATH_THE_ICE",
@@ -132,7 +132,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Measure Beneath the Ice in graffiti style with a standard finish and no effect. Use a background that is visually related to The Measure Beneath the Ice. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-MBI-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Measure Beneath the Ice in graffiti style with a standard finish and no effect. Use a background that is visually related to The Measure Beneath the Ice. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-MBI-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Measure Beneath the Ice Arcori generation I from the Law Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "LAW-MMT-SER003-0004",
+      "internalId": "LAW-MMT-SER003-GEN001-0004",
       "themeCode": "LAW",
       "designCode": "MMT",
       "designFamily": "THE_MEASURE_OF_MOON_AND_TIDE",
@@ -176,7 +176,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Measure of Moon and Tide in graffiti style with a standard finish and no effect. Use a background that is visually related to The Measure of Moon and Tide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-MMT-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Measure of Moon and Tide in graffiti style with a standard finish and no effect. Use a background that is visually related to The Measure of Moon and Tide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAW-MMT-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Measure of Moon and Tide Arcori generation I from the Law Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

@@ -12,6 +12,7 @@ from modules.avari.kin_genesis import (
     build_kin_catalog_design,
     mint_internal_id,
     normalize_color,
+    pick_echo_color,
 )
 from modules.catalog import catalog_loader as loader
 from modules.catalog.current_series import CURRENT_SERIES, current_id_token
@@ -26,6 +27,16 @@ class KinGenesisTests(unittest.TestCase):
 
     def test_allowed_palette_size(self) -> None:
         self.assertEqual(len(ALLOWED_ARCORI_COLORS), 10)
+
+    def test_pick_echo_color_from_approved_palette(self) -> None:
+        for _ in range(20):
+            color = pick_echo_color("#C6A15B")
+            self.assertIn(color, ALLOWED_ARCORI_COLORS)
+            self.assertNotEqual(color, "#C6A15B")
+
+    def test_pick_echo_color_without_previous(self) -> None:
+        color = pick_echo_color(None)
+        self.assertIn(color, ALLOWED_ARCORI_COLORS)
 
     def test_current_series_is_genesis_ser001(self) -> None:
         """Launch matches static catalog Arcori (…-SER001-…)."""
@@ -43,7 +54,7 @@ class KinGenesisTests(unittest.TestCase):
         self.assertTrue(iid.startswith("KIN-"))
         self.assertTrue(iid.endswith("-0001"))
         # Same token position as Tiger ANM-TIG-SER001-0001
-        self.assertRegex(iid, r"^KIN-[A-Z0-9]+-SER001-\d{4}$")
+        self.assertRegex(iid, r"^KIN-[A-Z0-9]+-SER001-GEN001-\d{4}$")
 
     def test_design_key_parity_vs_tiger(self) -> None:
         animals = loader.load_json_file(

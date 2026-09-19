@@ -1,0 +1,236 @@
+{
+  "catalog": "Dynasties Civilizations Series",
+  "theme": "Dynasties",
+  "series": "Civilizations",
+  "themeCode": "DYN",
+  "loreDescription": "Lines of leadership, inherited roles, or long-standing houses that shaped the civilization.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "DYN-WTX-SER004-GEN001-0001",
+      "themeCode": "DYN",
+      "designCode": "WTX",
+      "designFamily": "WINTER_THRONE",
+      "design": "Winter Throne",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Dynasties",
+      "subtheme": "Dynasties",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.8,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Winter Throne in pixel art style with a standard finish and no effect. Use a background that is visually related to Winter Throne. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DYN-WTX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Winter Throne Arcori generation I from the Dynasties Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "DYN-HRX-SER004-GEN001-0002",
+      "themeCode": "DYN",
+      "designCode": "HRX",
+      "designFamily": "HEIRLOOM_REGALIA",
+      "design": "Heirloom Regalia",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Dynasties",
+      "subtheme": "Dynasties",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.1,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Heirloom Regalia in realistic style with a standard finish and no effect. Use a background that is visually related to Heirloom Regalia. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DYN-HRX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Heirloom Regalia Arcori generation I from the Dynasties Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "DYN-SDC-SER004-GEN001-0003",
+      "themeCode": "DYN",
+      "designCode": "SDC",
+      "designFamily": "SUNLEAF_DYNASTY_CROWN",
+      "design": "Sunleaf Dynasty Crown",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Dynasties",
+      "subtheme": "Dynasties",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Sunleaf Dynasty Crown in realistic style with a standard finish and no effect. Use a background that is visually related to Sunleaf Dynasty Crown. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DYN-SDC-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Sunleaf Dynasty Crown Arcori generation I from the Dynasties Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "DYN-SSR-SER004-GEN001-0004",
+      "themeCode": "DYN",
+      "designCode": "SSR",
+      "designFamily": "SOOTED_SIGNET_RING",
+      "design": "Sooted Signet Ring",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Dynasties",
+      "subtheme": "Dynasties",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.2,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Sooted Signet Ring in realistic style with a standard finish and no effect. Use a background that is visually related to Sooted Signet Ring. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DYN-SSR-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Sooted Signet Ring Arcori generation I from the Dynasties Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "DYN-STX-SER004-GEN001-0005",
+      "themeCode": "DYN",
+      "designCode": "STX",
+      "designFamily": "SUNLEAF_TIARA",
+      "design": "Sunleaf Tiara",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Dynasties",
+      "subtheme": "Dynasties",
+      "style": "Low Poly",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.2,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Sunleaf Tiara in low poly style with a standard finish and no effect. Use a background that is visually related to Sunleaf Tiara. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DYN-STX-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Sunleaf Tiara Arcori generation I from the Dynasties Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

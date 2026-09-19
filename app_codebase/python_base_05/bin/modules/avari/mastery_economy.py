@@ -10,6 +10,36 @@ KIN_CREATOR_MASTERY_FLOOR = 100
 # Starter pack access rows begin here (pool excludes mastery < 1).
 STARTER_INITIAL_MASTERY = 10
 
+# Soft reset on Legacy echo: seed new-gen mastery from closed gen (not a move).
+ECHO_MASTERY_SEED_RATIO = 0.30
+# Anyone with closed-gen mastery > 0 keeps at least this on the echo (if cap allows).
+ECHO_MASTERY_SEED_MIN = 1
+
+
+def echo_mastery_seed(
+    closed_points: int,
+    *,
+    preservation_requirement: int,
+    ratio: float = ECHO_MASTERY_SEED_RATIO,
+) -> int:
+    """Mastery points to grant on the echo generation (closed row unchanged).
+
+    Soft reset: ``floor(closed × ratio)``, at least [ECHO_MASTERY_SEED_MIN] when
+    the player had any closed mastery, capped at ``preservationRequirement − 1``
+    so the seed alone never triggers a Preserve offer.
+    """
+    pts = max(0, int(closed_points))
+    if pts <= 0:
+        return 0
+    preserve = max(1, int(preservation_requirement))
+    cap = preserve - 1
+    seeded = int(pts * float(ratio))
+    if seeded < ECHO_MASTERY_SEED_MIN:
+        seeded = ECHO_MASTERY_SEED_MIN
+    if seeded > cap:
+        seeded = cap
+    return max(0, int(seeded))
+
 
 def own_played_delta(seat_flips: int) -> int:
     """Mastery Δ on the Arcori you brought this match."""

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "INN-FIT-SER003-0001",
+      "internalId": "INN-FIT-SER003-GEN001-0001",
       "themeCode": "INN",
       "designCode": "FIT",
       "designFamily": "THE_FIRST_TURNING",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The First Turning in cartoon style with a standard finish and no effect. Use a background that is visually related to The First Turning. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INN-FIT-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with The First Turning in cartoon style with a standard finish and no effect. Use a background that is visually related to The First Turning. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INN-FIT-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible The First Turning Arcori generation I from the Innovation Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "INN-LTL-SER003-0002",
+      "internalId": "INN-LTL-SER003-GEN001-0002",
       "themeCode": "INN",
       "designCode": "LTL",
       "designFamily": "THE_LANTERN_THAT_LEARNED_THE_TIDE",
@@ -88,7 +88,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Lantern That Learned the Tide in cartoon style with a standard finish and no effect. Use a background that is visually related to The Lantern That Learned the Tide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INN-LTL-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with The Lantern That Learned the Tide in cartoon style with a standard finish and no effect. Use a background that is visually related to The Lantern That Learned the Tide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INN-LTL-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible The Lantern That Learned the Tide Arcori generation I from the Innovation Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "INN-TIW-SER003-0003",
+      "internalId": "INN-TIW-SER003-GEN001-0003",
       "themeCode": "INN",
       "designCode": "TIW",
       "designFamily": "THE_TIDEWHEEL_WORKSHOP",
@@ -132,7 +132,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Tidewheel Workshop in cartoon style with a standard finish and no effect. Use a background that is visually related to The Tidewheel Workshop. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INN-TIW-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Tidewheel Workshop in cartoon style with a standard finish and no effect. Use a background that is visually related to The Tidewheel Workshop. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INN-TIW-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Tidewheel Workshop Arcori generation I from the Innovation Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "INN-BTC-SER003-0004",
+      "internalId": "INN-BTC-SER003-GEN001-0004",
       "themeCode": "INN",
       "designCode": "BTC",
       "designFamily": "THE_BRIDGE_THAT_CHANGED_THE_GROVE",
@@ -178,7 +178,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Bridge That Changed the Grove in cartoon style with a standard finish and no effect. Use a background that is visually related to The Bridge That Changed the Grove. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INN-BTC-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Bridge That Changed the Grove in cartoon style with a standard finish and no effect. Use a background that is visually related to The Bridge That Changed the Grove. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named INN-BTC-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Bridge That Changed the Grove Arcori generation I from the Innovation Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

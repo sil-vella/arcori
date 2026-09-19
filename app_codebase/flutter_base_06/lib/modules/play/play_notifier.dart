@@ -248,6 +248,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     String? invitedUserId,
     String? eventId,
     String? eventSubtype,
+    List<String>? arcoriIds,
   }) async {
     if (state.phase != MatchFlowPhase.selectingType) return;
 
@@ -273,6 +274,11 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       return;
     }
 
+    final pickedArcori = (arcoriIds ?? const <String>[])
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+
     final runId = ++_runId;
     state = MatchFlowState(
       phase: MatchFlowPhase.typeSetup,
@@ -280,9 +286,13 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       practiceLoadout: practiceLoadout,
       selectedEventId: eventId?.trim(),
       selectedEventSubtype: eventSubtype?.trim(),
+      selectedArcoriIds: pickedArcori,
     );
     if (LOGGING_SWITCH) {
-      customlog('play: selectType=${type.name} → typeSetup');
+      customlog(
+        'play: selectType=${type.name} → typeSetup '
+        'arcoriIds=${pickedArcori.join(",")}',
+      );
     }
 
     await _runTypeSetup(type);
@@ -557,10 +567,11 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
 
     final matchType = _matchTypePayload(type);
     final slammerId = _equippedSlammerId;
+    final arcoriIds = List<String>.from(state.selectedArcoriIds);
     if (LOGGING_SWITCH) {
       customlog(
         'play: onlineMatchmaking find matchType=$matchType '
-        'slammerId=$slammerId',
+        'slammerId=$slammerId arcoriIds=${arcoriIds.join(",")}',
       );
     }
 
@@ -571,6 +582,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       payload: {
         'matchType': matchType,
         'slammerId': slammerId,
+        if (arcoriIds.isNotEmpty) 'arcoriIds': arcoriIds,
       },
     );
 

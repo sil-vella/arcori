@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SPT-FST-SER001-0001",
+      "internalId": "SPT-FST-SER001-GEN001-0001",
       "themeCode": "SPT",
       "designCode": "FST",
       "designFamily": "GOLDEN_STRIKER",
@@ -44,7 +44,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a golden striker in comic style with a gloss finish and motion effect. Use a background that is visually related to the golden striker. No borders, no frames. The golden striker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-FST-SER001-0001.webp",
+      "artworkPrompt": "Give me an image with a golden striker in comic style with a gloss finish and motion effect. Use a background that is visually related to the golden striker. No borders, no frames. The golden striker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-FST-SER001-GEN001-0001.webp",
       "loreDescription": "A collectible Golden Striker Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "SPT-GKP-SER001-0002",
+      "internalId": "SPT-GKP-SER001-GEN001-0002",
       "themeCode": "SPT",
       "designCode": "GKP",
       "designFamily": "IRON_GOALKEEPER",
@@ -90,7 +90,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a iron goalkeeper in realistic style with a standard finish and no effect. Use a background that is visually related to the iron goalkeeper. No borders, no frames. The iron goalkeeper should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-GKP-SER001-0002.webp",
+      "artworkPrompt": "Give me an image with a iron goalkeeper in realistic style with a standard finish and no effect. Use a background that is visually related to the iron goalkeeper. No borders, no frames. The iron goalkeeper should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-GKP-SER001-GEN001-0002.webp",
       "loreDescription": "A collectible Iron Goalkeeper Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "SPT-CAP-SER001-0003",
+      "internalId": "SPT-CAP-SER001-GEN001-0003",
       "themeCode": "SPT",
       "designCode": "CAP",
       "designFamily": "TEAM_CAPTAIN",
@@ -136,7 +136,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a team captain in anime style with a foil finish and glow effect. Use a background that is visually related to the team captain. No borders, no frames. The team captain should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-CAP-SER001-0003.webp",
+      "artworkPrompt": "Give me an image with a team captain in anime style with a foil finish and glow effect. Use a background that is visually related to the team captain. No borders, no frames. The team captain should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-CAP-SER001-GEN001-0003.webp",
       "loreDescription": "A collectible Team Captain Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "SPT-SDK-SER001-0004",
+      "internalId": "SPT-SDK-SER001-GEN001-0004",
       "themeCode": "SPT",
       "designCode": "SDK",
       "designFamily": "SLAM_DUNK",
@@ -178,7 +178,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a slam dunk in comic style with a metallic finish and motion effect. Use a background that is visually related to the slam dunk. No borders, no frames. The slam dunk should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-SDK-SER001-0004.webp",
+      "artworkPrompt": "Give me an image with a slam dunk in comic style with a metallic finish and motion effect. Use a background that is visually related to the slam dunk. No borders, no frames. The slam dunk should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-SDK-SER001-GEN001-0004.webp",
       "loreDescription": "A collectible Slam Dunk Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -186,7 +186,7 @@
       }
     },
     {
-      "internalId": "SPT-CTR-SER001-0005",
+      "internalId": "SPT-CTR-SER001-GEN001-0005",
       "themeCode": "SPT",
       "designCode": "CTR",
       "designFamily": "COURT_KING",
@@ -220,7 +220,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a court king in realistic style with a chrome finish and pulse effect. Use a background that is visually related to the court king. No borders, no frames. The court king should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-CTR-SER001-0005.webp",
+      "artworkPrompt": "Give me an image with a court king in realistic style with a chrome finish and pulse effect. Use a background that is visually related to the court king. No borders, no frames. The court king should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-CTR-SER001-GEN001-0005.webp",
       "loreDescription": "A collectible Court King Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "SPT-THP-SER001-0006",
+      "internalId": "SPT-THP-SER001-GEN001-0006",
       "themeCode": "SPT",
       "designCode": "THP",
       "designFamily": "THREE_POINT_ACE",
@@ -262,7 +262,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a three point ace in minimalist style with a gloss finish and no effect. Use a background that is visually related to the three point ace. No borders, no frames. The three point ace should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-THP-SER001-0006.webp",
+      "artworkPrompt": "Give me an image with a three point ace in minimalist style with a gloss finish and no effect. Use a background that is visually related to the three point ace. No borders, no frames. The three point ace should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-THP-SER001-GEN001-0006.webp",
       "loreDescription": "A collectible Three Point Ace Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -270,7 +270,7 @@
       }
     },
     {
-      "internalId": "SPT-GSA-SER001-0007",
+      "internalId": "SPT-GSA-SER001-GEN001-0007",
       "themeCode": "SPT",
       "designCode": "GSA",
       "designFamily": "GRAND_SLAM_ACE",
@@ -304,7 +304,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a grand slam ace in realistic style with a standard finish and no effect. Use a background that is visually related to the grand slam ace. No borders, no frames. The grand slam ace should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-GSA-SER001-0007.webp",
+      "artworkPrompt": "Give me an image with a grand slam ace in realistic style with a standard finish and no effect. Use a background that is visually related to the grand slam ace. No borders, no frames. The grand slam ace should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-GSA-SER001-GEN001-0007.webp",
       "loreDescription": "A collectible Grand Slam Ace Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -312,7 +312,7 @@
       }
     },
     {
-      "internalId": "SPT-SRV-SER001-0008",
+      "internalId": "SPT-SRV-SER001-GEN001-0008",
       "themeCode": "SPT",
       "designCode": "SRV",
       "designFamily": "POWER_SERVER",
@@ -346,7 +346,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a power server in anime style with a foil finish and sparkle effect. Use a background that is visually related to the power server. No borders, no frames. The power server should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-SRV-SER001-0008.webp",
+      "artworkPrompt": "Give me an image with a power server in anime style with a foil finish and sparkle effect. Use a background that is visually related to the power server. No borders, no frames. The power server should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-SRV-SER001-GEN001-0008.webp",
       "loreDescription": "A collectible Power Server Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -354,7 +354,7 @@
       }
     },
     {
-      "internalId": "SPT-RLY-SER001-0009",
+      "internalId": "SPT-RLY-SER001-GEN001-0009",
       "themeCode": "SPT",
       "designCode": "RLY",
       "designFamily": "RALLY_MASTER",
@@ -388,7 +388,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a rally master in comic style with a chrome finish and glow effect. Use a background that is visually related to the rally master. No borders, no frames. The rally master should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-RLY-SER001-0009.webp",
+      "artworkPrompt": "Give me an image with a rally master in comic style with a chrome finish and glow effect. Use a background that is visually related to the rally master. No borders, no frames. The rally master should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-RLY-SER001-GEN001-0009.webp",
       "loreDescription": "A collectible Rally Master Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -396,7 +396,7 @@
       }
     },
     {
-      "internalId": "SPT-FRM-SER001-0010",
+      "internalId": "SPT-FRM-SER001-GEN001-0010",
       "themeCode": "SPT",
       "designCode": "FRM",
       "designFamily": "FORMULA_RACER",
@@ -434,7 +434,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a formula racer in realistic style with a metallic finish and motion effect. Use a background that is visually related to the formula racer. No borders, no frames. The formula racer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-FRM-SER001-0010.webp",
+      "artworkPrompt": "Give me an image with a formula racer in realistic style with a metallic finish and motion effect. Use a background that is visually related to the formula racer. No borders, no frames. The formula racer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-FRM-SER001-GEN001-0010.webp",
       "loreDescription": "A collectible Formula Racer Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -442,7 +442,7 @@
       }
     },
     {
-      "internalId": "SPT-DRF-SER001-0011",
+      "internalId": "SPT-DRF-SER001-GEN001-0011",
       "themeCode": "SPT",
       "designCode": "DRF",
       "designFamily": "DRIFT_LEGEND",
@@ -476,7 +476,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a drift legend in anime style with a chrome finish and fire effect. Use a background that is visually related to the drift legend. No borders, no frames. The drift legend should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-DRF-SER001-0011.webp",
+      "artworkPrompt": "Give me an image with a drift legend in anime style with a chrome finish and fire effect. Use a background that is visually related to the drift legend. No borders, no frames. The drift legend should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-DRF-SER001-GEN001-0011.webp",
       "loreDescription": "A collectible Drift Legend Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -484,7 +484,7 @@
       }
     },
     {
-      "internalId": "SPT-RAL-SER001-0012",
+      "internalId": "SPT-RAL-SER001-GEN001-0012",
       "themeCode": "SPT",
       "designCode": "RAL",
       "designFamily": "RALLY_DRIVER",
@@ -520,7 +520,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a rally driver in comic style with a standard finish and no effect. Use a background that is visually related to the rally driver. No borders, no frames. The rally driver should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-RAL-SER001-0012.webp",
+      "artworkPrompt": "Give me an image with a rally driver in comic style with a standard finish and no effect. Use a background that is visually related to the rally driver. No borders, no frames. The rally driver should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-RAL-SER001-GEN001-0012.webp",
       "loreDescription": "A collectible Rally Driver Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -528,7 +528,7 @@
       }
     },
     {
-      "internalId": "SPT-DRK-SER001-0013",
+      "internalId": "SPT-DRK-SER001-GEN001-0013",
       "themeCode": "SPT",
       "designCode": "DRK",
       "designFamily": "DRAGON_KICK",
@@ -566,7 +566,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a dragon kick in anime style with a foil finish and fire effect. Use a background that is visually related to the dragon kick. No borders, no frames. The dragon kick should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-DRK-SER001-0013.webp",
+      "artworkPrompt": "Give me an image with a dragon kick in anime style with a foil finish and fire effect. Use a background that is visually related to the dragon kick. No borders, no frames. The dragon kick should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-DRK-SER001-GEN001-0013.webp",
       "loreDescription": "A collectible Dragon Kick Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -574,7 +574,7 @@
       }
     },
     {
-      "internalId": "SPT-BXM-SER001-0014",
+      "internalId": "SPT-BXM-SER001-GEN001-0014",
       "themeCode": "SPT",
       "designCode": "BXM",
       "designFamily": "BOXING_CHAMPION",
@@ -608,7 +608,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a boxing champion in comic style with a gloss finish and motion effect. Use a background that is visually related to the boxing champion. No borders, no frames. The boxing champion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-BXM-SER001-0014.webp",
+      "artworkPrompt": "Give me an image with a boxing champion in comic style with a gloss finish and motion effect. Use a background that is visually related to the boxing champion. No borders, no frames. The boxing champion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-BXM-SER001-GEN001-0014.webp",
       "loreDescription": "A collectible Boxing Champion Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -616,7 +616,7 @@
       }
     },
     {
-      "internalId": "SPT-JDM-SER001-0015",
+      "internalId": "SPT-JDM-SER001-GEN001-0015",
       "themeCode": "SPT",
       "designCode": "JDM",
       "designFamily": "JUDO_MASTER",
@@ -654,7 +654,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a judo master in realistic style with a matte finish and no effect. Use a background that is visually related to the judo master. No borders, no frames. The judo master should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-JDM-SER001-0015.webp",
+      "artworkPrompt": "Give me an image with a judo master in realistic style with a matte finish and no effect. Use a background that is visually related to the judo master. No borders, no frames. The judo master should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-JDM-SER001-GEN001-0015.webp",
       "loreDescription": "A collectible Judo Master Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -662,7 +662,7 @@
       }
     },
     {
-      "internalId": "SPT-MFR-SER001-0016",
+      "internalId": "SPT-MFR-SER001-GEN001-0016",
       "themeCode": "SPT",
       "designCode": "MFR",
       "designFamily": "MOUNTAIN_FREERIDER",
@@ -698,7 +698,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a mountain freerider in comic style with a metallic finish and motion effect. Use a background that is visually related to the mountain freerider. No borders, no frames. The mountain freerider should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-MFR-SER001-0016.webp",
+      "artworkPrompt": "Give me an image with a mountain freerider in comic style with a metallic finish and motion effect. Use a background that is visually related to the mountain freerider. No borders, no frames. The mountain freerider should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-MFR-SER001-GEN001-0016.webp",
       "loreDescription": "A collectible Mountain Freerider Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -706,7 +706,7 @@
       }
     },
     {
-      "internalId": "SPT-SKB-SER001-0017",
+      "internalId": "SPT-SKB-SER001-GEN001-0017",
       "themeCode": "SPT",
       "designCode": "SKB",
       "designFamily": "SKATE_LEGEND",
@@ -740,7 +740,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a skate legend in graffiti style with a gloss finish and pulse effect. Use a background that is visually related to the skate legend. No borders, no frames. The skate legend should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-SKB-SER001-0017.webp",
+      "artworkPrompt": "Give me an image with a skate legend in graffiti style with a gloss finish and pulse effect. Use a background that is visually related to the skate legend. No borders, no frames. The skate legend should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-SKB-SER001-GEN001-0017.webp",
       "loreDescription": "A collectible Skate Legend Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -748,7 +748,7 @@
       }
     },
     {
-      "internalId": "SPT-BMX-SER001-0018",
+      "internalId": "SPT-BMX-SER001-GEN001-0018",
       "themeCode": "SPT",
       "designCode": "BMX",
       "designFamily": "BMX_RIDER",
@@ -782,7 +782,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a bmx rider in cartoon style with a standard finish and no effect. Use a background that is visually related to the bmx rider. No borders, no frames. The bmx rider should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-BMX-SER001-0018.webp",
+      "artworkPrompt": "Give me an image with a bmx rider in cartoon style with a standard finish and no effect. Use a background that is visually related to the bmx rider. No borders, no frames. The bmx rider should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-BMX-SER001-GEN001-0018.webp",
       "loreDescription": "A collectible BMX Rider Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -790,7 +790,7 @@
       }
     },
     {
-      "internalId": "SPT-ARC-SER001-0019",
+      "internalId": "SPT-ARC-SER001-GEN001-0019",
       "themeCode": "SPT",
       "designCode": "ARC",
       "designFamily": "ARCHERY_MASTER",
@@ -828,7 +828,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a archery master in realistic style with a foil finish and glow effect. Use a background that is visually related to the archery master. No borders, no frames. The archery master should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-ARC-SER001-0019.webp",
+      "artworkPrompt": "Give me an image with a archery master in realistic style with a foil finish and glow effect. Use a background that is visually related to the archery master. No borders, no frames. The archery master should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-ARC-SER001-GEN001-0019.webp",
       "loreDescription": "A collectible Archery Master Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -836,7 +836,7 @@
       }
     },
     {
-      "internalId": "SPT-CLM-SER001-0020",
+      "internalId": "SPT-CLM-SER001-GEN001-0020",
       "themeCode": "SPT",
       "designCode": "CLM",
       "designFamily": "SUMMIT_CLIMBER",
@@ -870,7 +870,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a summit climber in watercolor style with a matte finish and sparkle effect. Use a background that is visually related to the summit climber. No borders, no frames. The summit climber should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-CLM-SER001-0020.webp",
+      "artworkPrompt": "Give me an image with a summit climber in watercolor style with a matte finish and sparkle effect. Use a background that is visually related to the summit climber. No borders, no frames. The summit climber should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SPT-CLM-SER001-GEN001-0020.webp",
       "loreDescription": "A collectible Summit Climber Arcori generation I from the Sports Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,

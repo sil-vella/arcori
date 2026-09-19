@@ -50,6 +50,7 @@ from modules.avari.kin_genesis import (
     normalize_color,
     subtheme_for_type,
 )
+from modules.catalog.catalog_ids import art_basename
 from modules.catalog.catalog_errors import NOT_FOUND as CATALOG_NOT_FOUND
 from modules.catalog.catalog_service import get_design
 from modules.catalog.kin_design_store import (
@@ -162,6 +163,47 @@ def sync_player_access_pool(session: Any, user_id: str) -> str | None:
             session, user_id=uid, design_id=did, source="mastery"
         )
         access_ids.add(did)
+
+    # Drop access to Closed catalog designs (preserved / lost generations).
+    # Heals leftover access after GEN id cutover + preserve on a sibling id.
+    from core.errors.app_error import AppError
+    from models.legacy_preserve import PHASE_LOST_CLOSED, PHASE_PRESERVED
+    from modules.catalog import catalog_repository as catalog_repo
+    from modules.catalog.catalog_ids import (
+        design_id_aliases,
+        generation_number_from_id,
+    )
+    from modules.catalog.catalog_service import get_design
+    from modules.legacy import legacy_repository as legacy_repo
+
+    for did in list(access_ids):
+        if own_kin_id and did == own_kin_id:
+            continue
+        gen = generation_number_from_id(did)
+        life_closed = False
+        for alias in design_id_aliases(did):
+            life = legacy_repo.get_lifecycle(session, alias, gen)
+            if life is not None and life.phase in (
+                PHASE_PRESERVED,
+                PHASE_LOST_CLOSED,
+            ):
+                life_closed = True
+                break
+        circulating = True
+        if life_closed:
+            catalog_repo.mark_closed(session, did)
+            circulating = False
+        else:
+            try:
+                design = get_design(did)
+                circulating = _is_circulating(design)
+            except AppError:
+                circulating = True
+            except Exception:
+                circulating = True
+        if not circulating:
+            repo.revoke_design_access(session, user_id=uid, design_id=did)
+            access_ids.discard(did)
 
     session.flush()
     return own_kin_id
@@ -331,14 +373,14 @@ def catalog_card_from_design_doc(
     name = override or str(design.get("design") or "").strip() or iid
     image_url = design.get("imageUrl")
     lottie_url = design.get("lottieUrl")
-    if not (isinstance(lottie_url, str) and lottie_url.strip()):
-        # Kin faces are Lottie; derive public URL when stamped face is missing.
-        theme = str(design.get("theme") or "").strip().lower()
-        theme_code = str(design.get("themeCode") or "").strip().upper()
-        if theme == "kin" or theme_code == "KIN" or iid.upper().startswith("KIN-"):
-            lottie_url = lottie_public_url(iid)
-        else:
-            lottie_url = None
+    theme = str(design.get("theme") or "").strip().lower()
+    theme_code = str(design.get("themeCode") or "").strip().upper()
+    is_kin = theme == "kin" or theme_code == "KIN" or iid.upper().startswith("KIN-")
+    if is_kin:
+        # Always resolve via store so GEN-in-serial ids hit pre-GEN files on disk.
+        lottie_url = lottie_public_url(iid)
+    elif not (isinstance(lottie_url, str) and lottie_url.strip()):
+        lottie_url = None
     else:
         lottie_url = lottie_url.strip()
     face_media = str(design.get("faceMedia") or "").strip().lower() or None
@@ -411,10 +453,15 @@ def generation_number_for_design_id(design_id: str) -> int:
     iid = (design_id or "").strip()
     if not iid:
         return 1
+    from modules.catalog.catalog_ids import generation_number_from_id, parse_design_id
+
+    parsed = parse_design_id(iid)
+    if parsed is not None and parsed.has_gen:
+        return parsed.generation_number
     try:
         return generation_number_for_design(get_design(iid))
     except AppError:
-        return 1
+        return generation_number_from_id(iid, default=1)
 
 
 def _fallback_slammer_id(rows: list[Any]) -> str:
@@ -510,6 +557,7 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         access_rows = repo.list_design_access(session, uid)
         slammer_rows = repo.list_slammers(session, uid)
         trove_rows = repo.list_trove(session, uid)
+        closed_gen_rows = repo.list_closed_generations(session, uid)
 
         if avari is not None:
             display_name = (avari.display_name or display_name).strip() or display_name
@@ -766,6 +814,41 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
                 }
             )
 
+        closed_generations_payload: list[dict[str, Any]] = []
+        for row in closed_gen_rows:
+            design_id = str(row.design_id or "").strip()
+            if not design_id:
+                continue
+            card = catalog_card_for_design(design_id) or {}
+            echo_id = str(row.echo_design_id or "").strip() or None
+            echo_seeded = int(getattr(row, "echo_mastery_seeded", 0) or 0)
+            echo_gen = getattr(row, "echo_generation_number", None)
+            echo_gen_n = (
+                int(echo_gen)
+                if echo_gen is not None
+                else int(row.generation_number) + 1
+            )
+            closed_generations_payload.append(
+                {
+                    "designId": design_id,
+                    "serial": design_id,
+                    "displayName": card.get("displayName") or design_id,
+                    "imageUrl": card.get("imageUrl"),
+                    "lottieUrl": card.get("lottieUrl"),
+                    "faceMedia": card.get("faceMedia"),
+                    "color": card.get("color"),
+                    "generationNumber": int(row.generation_number),
+                    "masteryPoints": int(row.mastery_points),
+                    "echoMasterySeeded": echo_seeded,
+                    "echoGenerationNumber": echo_gen_n,
+                    "legacyState": str(row.legacy_state or "").strip().lower(),
+                    "echoDesignId": echo_id,
+                    "closedAt": (
+                        row.closed_at.isoformat() if row.closed_at else None
+                    ),
+                }
+            )
+
         from modules.legacy import legacy_repository as legacy_repo
 
         preservation_windows_payload: list[dict[str, Any]] = []
@@ -850,6 +933,7 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         "access": access_payload,
         "slammers": slammer_payload,
         "trove": trove_payload,
+        "closedGenerations": closed_generations_payload,
         "preservationWindows": preservation_windows_payload,
         "achievementsUnlockedIds": achievements_unlocked_ids,
     }
@@ -964,14 +1048,15 @@ def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
                 customlog(f"avari: kin design parity fail {exc}")
             raise AppError(KIN_CLAIM_FAILED, message=str(exc)) from exc
 
+        media_stem = art_basename(internal_id) or internal_id
         customization: dict[str, Any] = {
             "kinSerial": kin_serial,
             "typeSerial": type_serial,
             "regionCode": region_code,
             "color": color,
             "applied": applied if isinstance(applied, list) else [],
-            "lottieRelativePath": f"kin/players/{internal_id}.json",
-            "designRelativePath": f"kin/designs/{internal_id}.json",
+            "lottieRelativePath": f"kin/players/{media_stem}.json",
+            "designRelativePath": f"kin/designs/{media_stem}.json",
         }
         if isinstance(background, dict) and background:
             customization["background"] = {

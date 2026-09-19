@@ -1,6 +1,65 @@
 {
   "posts": [
     {
+      "id": "eba35958-5d8b-425d-8acf-b9ec1b39f584",
+      "created_at": "2026-09-18T21:26:22Z",
+      "updated_at": "2026-09-18T21:26:23Z",
+      "title": "test post",
+      "description": "test descc",
+      "platforms": [
+        "tiktok"
+      ],
+      "hashtags": [],
+      "media": {
+        "name": "antler_lace_layered.jpg",
+        "type": "image/jpeg",
+        "size": 171929,
+        "path": "/Users/sil/Documents/Work/reignofplay/arcori/app_dev_fastapi_postgres/automation/dashboard/data/media/eba35958-5d8b-425d-8acf-b9ec1b39f584/antler_lace_layered.jpg"
+      },
+      "facebook": null,
+      "youtube": null,
+      "tiktok": {
+        "privacy_level": "PUBLIC_TO_EVERYONE",
+        "disable_comment": false,
+        "disable_duet": false,
+        "disable_stitch": false,
+        "schedule_at": null
+      },
+      "payload": {
+        "platforms": [
+          "tiktok"
+        ],
+        "title": "test post",
+        "description": "test descc",
+        "hashtags": [],
+        "media": {
+          "name": "antler_lace_layered.jpg",
+          "type": "image/jpeg",
+          "size": 171929
+        },
+        "tiktok": {
+          "privacy_level": "PUBLIC_TO_EVERYONE",
+          "disable_comment": false,
+          "disable_duet": false,
+          "disable_stitch": false,
+          "schedule_at": null
+        }
+      },
+      "publish": {
+        "at": "2026-09-18T21:26:23Z",
+        "ok": false,
+        "results": {
+          "tiktok": {
+            "ok": false,
+            "error": {
+              "code": "tiktok_reauth_required",
+              "message": "TikTok refresh token expired or revoked — run automation/marketing/tiktok_oauth_get_refresh_token.py and write TIKTOK_REFRESH_TOKEN to env."
+            }
+          }
+        }
+      }
+    },
+    {
       "id": "701f6ad0-06a7-491a-9098-96c4212e7cc8",
       "created_at": "2026-08-28T21:08:00Z",
       "updated_at": "2026-08-28T21:08:07Z",

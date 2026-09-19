@@ -1,0 +1,194 @@
+{
+  "catalog": "Borders Civilizations Series",
+  "theme": "Borders",
+  "series": "Civilizations",
+  "themeCode": "BOR",
+  "loreDescription": "The edges where one civilization ends and another begins \u2014 often tense or symbolic.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "BOR-AMX-SER004-GEN001-0001",
+      "themeCode": "BOR",
+      "designCode": "AMX",
+      "designFamily": "ASHLINE_MARKERS",
+      "design": "Ashline Markers",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Borders",
+      "subtheme": "Borders",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 7.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ashline Markers in minimalist style with a standard finish and no effect. Use a background that is visually related to Ashline Markers. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BOR-AMX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Ashline Markers Arcori generation I from the Borders Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "BOR-BMX-SER004-GEN001-0002",
+      "themeCode": "BOR",
+      "designCode": "BMX",
+      "designFamily": "BOUNDARY_MARKERS",
+      "design": "Boundary Markers",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Borders",
+      "subtheme": "Borders",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.2,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Boundary Markers in pixel art style with a standard finish and no effect. Use a background that is visually related to Boundary Markers. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BOR-BMX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Boundary Markers Arcori generation I from the Borders Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "BOR-ABS-SER004-GEN001-0003",
+      "themeCode": "BOR",
+      "designCode": "ABS",
+      "designFamily": "ASHLANDS_BOUNDARY_STONE",
+      "design": "Ashlands Boundary Stone",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Borders",
+      "subtheme": "Borders",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ashlands Boundary Stone in realistic style with a standard finish and no effect. Use a background that is visually related to Ashlands Boundary Stone. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BOR-ABS-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Ashlands Boundary Stone Arcori generation I from the Borders Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "BOR-FST-SER004-GEN001-0004",
+      "themeCode": "BOR",
+      "designCode": "FST",
+      "designFamily": "FRACTURED_SEAL_TABLET",
+      "design": "Fractured Seal Tablet",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Borders",
+      "subtheme": "Borders",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.1,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Fractured Seal Tablet in realistic style with a standard finish and no effect. Use a background that is visually related to Fractured Seal Tablet. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named BOR-FST-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Fractured Seal Tablet Arcori generation I from the Borders Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

@@ -25,6 +25,7 @@ abstract final class AppPaths {
   static const achievements = '/achievements';
   static const tasks = '/tasks';
   static const taskDetail = '/tasks/detail';
+  static const museum = '/museum';
 
   static const _protectedPaths = {wsDemo};
 

@@ -216,17 +216,21 @@ class CatalogThemeEntry {
   const CatalogThemeEntry({
     required this.theme,
     required this.themeCode,
+    this.loreDescription,
   });
 
   factory CatalogThemeEntry.fromJson(Map<String, dynamic> json) {
+    final lore = json['loreDescription']?.toString().trim();
     return CatalogThemeEntry(
       theme: json['theme']?.toString() ?? '',
       themeCode: json['themeCode']?.toString() ?? '',
+      loreDescription: (lore != null && lore.isNotEmpty) ? lore : null,
     );
   }
 
   final String theme;
   final String themeCode;
+  final String? loreDescription;
 
   String get label => theme.isNotEmpty ? theme : themeCode;
 }

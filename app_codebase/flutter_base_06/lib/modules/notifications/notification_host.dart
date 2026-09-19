@@ -22,8 +22,9 @@ const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 /// Lives above [MaterialApp.router], so instant modals use
 /// [appRootNavigatorKey] — this widget's [context] has no [Navigator] / [Theme].
 ///
-/// Achievement unlock / daily-complete / legacy-offer instants only present on
-/// safe surfaces (Home or Play while match flow is idle / selectingType).
+/// Achievement unlock / daily-complete / legacy-offer instants only present when
+/// match flow is idle / selectingType, and the player is on a hub screen
+/// (Home, Play, Tasks, Avari, Achievements — same as subtype allowedScreens).
 /// Other instant subtypes (e.g. friend-match invite) keep existing app-wide behavior.
 class NotificationHost extends ConsumerStatefulWidget {
   const NotificationHost({
@@ -127,7 +128,14 @@ class _NotificationHostState extends ConsumerState<NotificationHost> {
       return false;
     }
     final path = _currentPath();
-    return path == AppPaths.home || path == AppPaths.play;
+    // Match phase already blocks in-match / post-match. Allow hub screens that
+    // progress subtypes list (tasks/avari/achievements) — otherwise Done →
+    // /tasks (Daily nudge / View Daily) defers offer_v1 forever.
+    return path == AppPaths.home ||
+        path == AppPaths.play ||
+        path == AppPaths.tasks ||
+        path == AppPaths.avari ||
+        path == AppPaths.achievements;
   }
 
   bool _isProgressCelebrate(NotificationMessage message) {

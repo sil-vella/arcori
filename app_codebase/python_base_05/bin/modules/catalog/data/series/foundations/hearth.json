@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "HEA-EMB-SER003-0001",
+      "internalId": "HEA-EMB-SER003-GEN001-0001",
       "themeCode": "HEA",
       "designCode": "EMB",
       "designFamily": "EMBERHOME",
@@ -42,7 +42,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Emberhome in realistic style with a standard finish and no effect. Use a background that is visually related to Emberhome. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-EMB-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Emberhome in realistic style with a standard finish and no effect. Use a background that is visually related to Emberhome. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-EMB-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Emberhome Arcori generation I from the Hearth Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "HEA-ROH-SER003-0002",
+      "internalId": "HEA-ROH-SER003-GEN001-0002",
       "themeCode": "HEA",
       "designCode": "ROH",
       "designFamily": "ROOTFIRE_HALL",
@@ -86,7 +86,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Rootfire Hall in realistic style with a standard finish and no effect. Use a background that is visually related to Rootfire Hall. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-ROH-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Rootfire Hall in realistic style with a standard finish and no effect. Use a background that is visually related to Rootfire Hall. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-ROH-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Rootfire Hall Arcori generation I from the Hearth Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "HEA-FTK-SER003-0003",
+      "internalId": "HEA-FTK-SER003-GEN001-0003",
       "themeCode": "HEA",
       "designCode": "FTK",
       "designFamily": "THE_FIRE_THAT_KNEW_EVERY_NAME",
@@ -128,7 +128,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Fire That Knew Every Name in realistic style with a standard finish and no effect. Use a background that is visually related to The Fire That Knew Every Name. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-FTK-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Fire That Knew Every Name in realistic style with a standard finish and no effect. Use a background that is visually related to The Fire That Knew Every Name. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-FTK-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Fire That Knew Every Name Arcori generation I from the Hearth Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -136,7 +136,7 @@
       }
     },
     {
-      "internalId": "HEA-HBA-SER003-0004",
+      "internalId": "HEA-HBA-SER003-GEN001-0004",
       "themeCode": "HEA",
       "designCode": "HBA",
       "designFamily": "THE_HEARTH_BENEATH_THE_ASH",
@@ -174,7 +174,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Hearth Beneath the Ash in realistic style with a standard finish and no effect. Use a background that is visually related to The Hearth Beneath the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-HBA-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Hearth Beneath the Ash in realistic style with a standard finish and no effect. Use a background that is visually related to The Hearth Beneath the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named HEA-HBA-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Hearth Beneath the Ash Arcori generation I from the Hearth Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

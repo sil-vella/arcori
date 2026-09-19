@@ -1,0 +1,232 @@
+{
+  "catalog": "Council Civilizations Series",
+  "theme": "Council",
+  "series": "Civilizations",
+  "themeCode": "CCL",
+  "loreDescription": "The ruling or guiding body that shapes the direction of a civilization.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "CCL-CAX-SER004-GEN001-0001",
+      "themeCode": "CCL",
+      "designCode": "CAX",
+      "designFamily": "COUNCIL_OF_ASH",
+      "design": "Council of Ash",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Council",
+      "subtheme": "Council",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.2,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Council of Ash in realistic style with a standard finish and no effect. Use a background that is visually related to Council of Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CCL-CAX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Council of Ash Arcori generation I from the Council Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CCL-FCX-SER004-GEN001-0002",
+      "themeCode": "CCL",
+      "designCode": "FCX",
+      "designFamily": "FROST_COUNCIL",
+      "design": "Frost Council",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Council",
+      "subtheme": "Council",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 6.9,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Frost Council in realistic style with a standard finish and no effect. Use a background that is visually related to Frost Council. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CCL-FCX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Frost Council Arcori generation I from the Council Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CCL-FGC-SER004-GEN001-0003",
+      "themeCode": "CCL",
+      "designCode": "FGC",
+      "designFamily": "FIVE_GEM_COUNCIL_STAFF",
+      "design": "Five Gem Council Staff",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Council",
+      "subtheme": "Council",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 7.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Five Gem Council Staff in realistic style with a standard finish and no effect. Use a background that is visually related to Five Gem Council Staff. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CCL-FGC-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Five Gem Council Staff Arcori generation I from the Council Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CCL-FCB-SER004-GEN001-0004",
+      "themeCode": "CCL",
+      "designCode": "FCB",
+      "designFamily": "FORGOTTEN_COUNCIL_BELL",
+      "design": "Forgotten Council Bell",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Council",
+      "subtheme": "Council",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.5,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Forgotten Council Bell in realistic style with a standard finish and no effect. Use a background that is visually related to Forgotten Council Bell. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CCL-FCB-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Forgotten Council Bell Arcori generation I from the Council Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CCL-RCS-SER004-GEN001-0005",
+      "themeCode": "CCL",
+      "designCode": "RCS",
+      "designFamily": "RADIANT_COUNCIL_STAFF",
+      "design": "Radiant Council Staff",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Council",
+      "subtheme": "Council",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 7.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Radiant Council Staff in realistic style with a standard finish and no effect. Use a background that is visually related to Radiant Council Staff. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CCL-RCS-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Radiant Council Staff Arcori generation I from the Council Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

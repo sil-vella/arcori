@@ -1,6 +1,8 @@
 /// Series / generation / serial parsed from a catalog [designId].
 ///
-/// Wire shape: `THEME-CODE-GENnnn-ssss` (e.g. `ANM-TIG-SER001-0001`).
+/// Wire shape: `THEME-CODE-SERnnn-GENnnn-####`
+/// e.g. `ANM-TIG-SER001-GEN001-0001` (SER = series, GEN = generation).
+/// Legacy ids without GEN (`ANM-TIG-SER001-0001`) treat generation as I.
 class ArcoriDesignLabels {
   const ArcoriDesignLabels({
     required this.series,
@@ -24,20 +26,32 @@ class ArcoriDesignLabels {
     final parts = id.split('-');
     final serial = parts.isNotEmpty ? parts.last : id;
 
+    var serToken = '';
     var genToken = '';
     for (final p in parts) {
-      if (p.length > 3 && p.startsWith('GEN')) {
-        genToken = p;
-        break;
+      final upper = p.toUpperCase();
+      if (upper.length > 3 && upper.startsWith('SER')) {
+        serToken = upper;
+      } else if (upper.length > 3 && upper.startsWith('GEN')) {
+        genToken = upper;
       }
     }
-    final n = int.tryParse(genToken.replaceFirst('GEN', '')) ?? 0;
-    final generation = n > 0 ? _roman(n) : (genToken.isNotEmpty ? genToken : '—');
-    final series = switch (n) {
+
+    final serN = int.tryParse(serToken.replaceFirst('SER', '')) ?? 0;
+    final genN = int.tryParse(genToken.replaceFirst('GEN', '')) ??
+        (genToken.isEmpty ? 1 : 0);
+
+    final series = switch (serN) {
+      0 => 'Creation',
       1 => 'Genesis',
       2 => 'Pioneers',
-      _ => genToken.isNotEmpty ? genToken : '—',
+      3 => 'Foundations',
+      4 => 'Civilizations',
+      _ => serToken.isNotEmpty ? serToken : '—',
     };
+    final generation =
+        genN > 0 ? _roman(genN) : (genToken.isNotEmpty ? genToken : '—');
+
     return ArcoriDesignLabels(
       series: series,
       generation: generation,

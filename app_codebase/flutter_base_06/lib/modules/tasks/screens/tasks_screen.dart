@@ -165,10 +165,16 @@ class _TaskListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final row = progress;
+    final isClaimGate = entry.taskType == 'claim_gate';
+    final cacheState = isClaimGate
+        ? dailyCacheUiState(entry: entry, progress: TasksStore.progress)
+        : null;
     final done = row?.completedToday ?? false;
     final miss = row?.missPending ?? false;
     final fraction = row?.progressFraction ?? 0.0;
-    final label = row?.progressLabel ?? '0 / ${entry.params['min'] ?? 1}';
+    final label = cacheState != null
+        ? dailyCacheStatusLabel(cacheState)
+        : (row?.progressLabel ?? '0 / ${entry.params['min'] ?? 1}');
 
     return Card(
       child: InkWell(
@@ -182,12 +188,16 @@ class _TaskListTile extends StatelessWidget {
               Row(
                 children: [
                   Icon(
-                    done
+                    done || cacheState == DailyCacheUiState.claimed
                         ? Icons.check_circle
                         : (miss
                             ? Icons.warning_amber_rounded
-                            : Icons.radio_button_unchecked),
-                    color: done
+                            : (cacheState == DailyCacheUiState.ready
+                                ? Icons.card_giftcard_outlined
+                                : Icons.radio_button_unchecked)),
+                    color: done ||
+                            cacheState == DailyCacheUiState.claimed ||
+                            cacheState == DailyCacheUiState.ready
                         ? context.appColorScheme.primary
                         : context.appColorScheme.onSurfaceVariant,
                   ),

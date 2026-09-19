@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SLM-STR-SER001-0001",
+      "internalId": "SLM-STR-SER001-GEN001-0001",
       "themeCode": "SLM",
       "designCode": "STR",
       "designFamily": "STARTER_SLAMMER",
@@ -59,11 +59,11 @@
         "rechargeCostGoldCaps": 0,
         "shopPriceGoldCaps": 0
       },
-      "artworkPrompt": "Give me an image with flat artwork for a starter slammer in minimalist style with a standard finish and no effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the starter slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-STR-SER001-0001.webp",
+      "artworkPrompt": "Give me an image with flat artwork for a starter slammer in minimalist style with a standard finish and no effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the starter slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-STR-SER001-GEN001-0001.webp",
       "loreDescription": "A collectible Starter Slammer Slammer generation I from the Slammers Genesis Series."
     },
     {
-      "internalId": "SLM-TTN-SER001-0002",
+      "internalId": "SLM-TTN-SER001-GEN001-0002",
       "themeCode": "SLM",
       "designCode": "TTN",
       "designFamily": "TITAN_SLAMMER",
@@ -114,11 +114,11 @@
         "rechargeCostGoldCaps": 20,
         "shopPriceGoldCaps": 150
       },
-      "artworkPrompt": "Give me an image with flat artwork for a titan slammer in realistic style with a metallic finish and pulse effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the titan slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-TTN-SER001-0002.webp",
+      "artworkPrompt": "Give me an image with flat artwork for a titan slammer in realistic style with a metallic finish and pulse effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the titan slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-TTN-SER001-GEN001-0002.webp",
       "loreDescription": "A collectible Titan Slammer Slammer generation I from the Slammers Genesis Series."
     },
     {
-      "internalId": "SLM-NDL-SER001-0003",
+      "internalId": "SLM-NDL-SER001-GEN001-0003",
       "themeCode": "SLM",
       "designCode": "NDL",
       "designFamily": "NEEDLE_SLAMMER",
@@ -169,11 +169,11 @@
         "rechargeCostGoldCaps": 20,
         "shopPriceGoldCaps": 150
       },
-      "artworkPrompt": "Give me an image with flat artwork for a needle slammer in minimalist style with a chrome finish and glow effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the needle slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-NDL-SER001-0003.webp",
+      "artworkPrompt": "Give me an image with flat artwork for a needle slammer in minimalist style with a chrome finish and glow effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the needle slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-NDL-SER001-GEN001-0003.webp",
       "loreDescription": "A collectible Needle Slammer Slammer generation I from the Slammers Genesis Series."
     },
     {
-      "internalId": "SLM-CYC-SER001-0004",
+      "internalId": "SLM-CYC-SER001-GEN001-0004",
       "themeCode": "SLM",
       "designCode": "CYC",
       "designFamily": "CYCLONE_SLAMMER",
@@ -224,11 +224,11 @@
         "rechargeCostGoldCaps": 25,
         "shopPriceGoldCaps": 250
       },
-      "artworkPrompt": "Give me an image with flat artwork for a cyclone slammer in neon style with a holographic finish and motion effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the cyclone slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-CYC-SER001-0004.webp",
+      "artworkPrompt": "Give me an image with flat artwork for a cyclone slammer in neon style with a holographic finish and motion effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the cyclone slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-CYC-SER001-GEN001-0004.webp",
       "loreDescription": "A collectible Cyclone Slammer Slammer generation I from the Slammers Genesis Series."
     },
     {
-      "internalId": "SLM-FTH-SER001-0005",
+      "internalId": "SLM-FTH-SER001-GEN001-0005",
       "themeCode": "SLM",
       "designCode": "FTH",
       "designFamily": "FEATHER_SLAMMER",
@@ -281,11 +281,11 @@
         "rechargeCostGoldCaps": 15,
         "shopPriceGoldCaps": 100
       },
-      "artworkPrompt": "Give me an image with flat artwork for a feather slammer in watercolor style with a gloss finish and sparkle effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the feather slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-FTH-SER001-0005.webp",
+      "artworkPrompt": "Give me an image with flat artwork for a feather slammer in watercolor style with a gloss finish and sparkle effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the feather slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-FTH-SER001-GEN001-0005.webp",
       "loreDescription": "A collectible Feather Slammer Slammer generation I from the Slammers Genesis Series."
     },
     {
-      "internalId": "SLM-HAM-SER001-0006",
+      "internalId": "SLM-HAM-SER001-GEN001-0006",
       "themeCode": "SLM",
       "designCode": "HAM",
       "designFamily": "HAMMER_SLAMMER",
@@ -334,11 +334,11 @@
         "rechargeCostGoldCaps": 25,
         "shopPriceGoldCaps": 250
       },
-      "artworkPrompt": "Give me an image with flat artwork for a hammer slammer in comic style with a metallic finish and fire effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the hammer slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-HAM-SER001-0006.webp",
+      "artworkPrompt": "Give me an image with flat artwork for a hammer slammer in comic style with a metallic finish and fire effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the hammer slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-HAM-SER001-GEN001-0006.webp",
       "loreDescription": "A collectible Hammer Slammer Slammer generation I from the Slammers Genesis Series."
     },
     {
-      "internalId": "SLM-ECO-SER001-0007",
+      "internalId": "SLM-ECO-SER001-GEN001-0007",
       "themeCode": "SLM",
       "designCode": "ECO",
       "designFamily": "ECHO_SLAMMER",
@@ -391,11 +391,11 @@
         "rechargeCostGoldCaps": 20,
         "shopPriceGoldCaps": 150
       },
-      "artworkPrompt": "Give me an image with flat artwork for a echo slammer in neon style with a chrome finish and pulse effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the echo slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-ECO-SER001-0007.webp",
+      "artworkPrompt": "Give me an image with flat artwork for a echo slammer in neon style with a chrome finish and pulse effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the echo slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-ECO-SER001-GEN001-0007.webp",
       "loreDescription": "A collectible Echo Slammer Slammer generation I from the Slammers Genesis Series."
     },
     {
-      "internalId": "SLM-GRV-SER001-0008",
+      "internalId": "SLM-GRV-SER001-GEN001-0008",
       "themeCode": "SLM",
       "designCode": "GRV",
       "designFamily": "GRAVITY_SLAMMER",
@@ -448,11 +448,11 @@
         "rechargeCostGoldCaps": 35,
         "shopPriceGoldCaps": 400
       },
-      "artworkPrompt": "Give me an image with flat artwork for a gravity slammer in low poly style with a matte finish and glow effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the gravity slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-GRV-SER001-0008.webp",
+      "artworkPrompt": "Give me an image with flat artwork for a gravity slammer in low poly style with a matte finish and glow effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the gravity slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-GRV-SER001-GEN001-0008.webp",
       "loreDescription": "A collectible Gravity Slammer Slammer generation I from the Slammers Genesis Series."
     },
     {
-      "internalId": "SLM-PRM-SER001-0009",
+      "internalId": "SLM-PRM-SER001-GEN001-0009",
       "themeCode": "SLM",
       "designCode": "PRM",
       "designFamily": "PRISM_SLAMMER",
@@ -505,11 +505,11 @@
         "rechargeCostGoldCaps": 30,
         "shopPriceGoldCaps": 350
       },
-      "artworkPrompt": "Give me an image with flat artwork for a prism slammer in minimalist style with a prismatic finish and rainbow shift effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the prism slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-PRM-SER001-0009.webp",
+      "artworkPrompt": "Give me an image with flat artwork for a prism slammer in minimalist style with a prismatic finish and rainbow shift effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the prism slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-PRM-SER001-GEN001-0009.webp",
       "loreDescription": "A collectible Prism Slammer Slammer generation I from the Slammers Genesis Series."
     },
     {
-      "internalId": "SLM-GLT-SER001-0010",
+      "internalId": "SLM-GLT-SER001-GEN001-0010",
       "themeCode": "SLM",
       "designCode": "GLT",
       "designFamily": "GLITCH_SLAMMER",
@@ -558,7 +558,7 @@
         "rechargeCostGoldCaps": 40,
         "shopPriceGoldCaps": null
       },
-      "artworkPrompt": "Give me an image with flat artwork for a glitch slammer in pixel art style with a holographic finish and pulse effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the glitch slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-GLT-SER001-0010.webp",
+      "artworkPrompt": "Give me an image with flat artwork for a glitch slammer in pixel art style with a holographic finish and pulse effect. This image will be used as the source artwork to cut a circular slammer from — do not show a round slammer disc, pog, or coin shape. Use a background that is visually related to the glitch slammer theme. No borders, no frames. The artwork should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named SLM-GLT-SER001-GEN001-0010.webp",
       "loreDescription": "A collectible Glitch Slammer Slammer generation I from the Slammers Genesis Series."
     }
   ]

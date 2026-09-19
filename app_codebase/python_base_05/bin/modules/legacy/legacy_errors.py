@@ -43,6 +43,11 @@ PROCESSING = ErrorSpec(
     "Mint fulfillment still processing",
     http_status=409,
 )
+MUSEUM_NOT_FOUND = ErrorSpec(
+    "legacy/museum_not_found",
+    "Museum generation not found",
+    http_status=404,
+)
 
 
 def register_legacy_errors(registrar: ModuleErrorRegistrar) -> None:
@@ -57,5 +62,6 @@ def register_legacy_errors(registrar: ModuleErrorRegistrar) -> None:
             INVALID_FULFILL,
             INTENT_NOT_FOUND,
             PROCESSING,
+            MUSEUM_NOT_FOUND,
         ],
     )

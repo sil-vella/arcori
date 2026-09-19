@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "IDN-CHS-SER003-0001",
+      "internalId": "IDN-CHS-SER003-GEN001-0001",
       "themeCode": "IDN",
       "designCode": "CHS",
       "designFamily": "THE_CHOSEN_SELF",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Chosen Self in cartoon style with a standard finish and no effect. Use a background that is visually related to The Chosen Self. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IDN-CHS-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with The Chosen Self in cartoon style with a standard finish and no effect. Use a background that is visually related to The Chosen Self. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IDN-CHS-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible The Chosen Self Arcori generation I from the Identity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "IDN-SWF-SER003-0002",
+      "internalId": "IDN-SWF-SER003-GEN001-0002",
       "themeCode": "IDN",
       "designCode": "SWF",
       "designFamily": "THE_SELF_WOVEN_FREELY",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Self Woven Freely in cartoon style with a standard finish and no effect. Use a background that is visually related to The Self Woven Freely. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IDN-SWF-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with The Self Woven Freely in cartoon style with a standard finish and no effect. Use a background that is visually related to The Self Woven Freely. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IDN-SWF-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible The Self Woven Freely Arcori generation I from the Identity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "IDN-MFH-SER003-0003",
+      "internalId": "IDN-MFH-SER003-GEN001-0003",
       "themeCode": "IDN",
       "designCode": "MFH",
       "designFamily": "MASKS_OF_THE_FIVE_HARBORS",
@@ -134,7 +134,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Masks of the Five Harbors in cartoon style with a standard finish and no effect. Use a background that is visually related to Masks of the Five Harbors. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IDN-MFH-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Masks of the Five Harbors in cartoon style with a standard finish and no effect. Use a background that is visually related to Masks of the Five Harbors. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IDN-MFH-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Masks of the Five Harbors Arcori generation I from the Identity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "IDN-PWL-SER003-0004",
+      "internalId": "IDN-PWL-SER003-GEN001-0004",
       "themeCode": "IDN",
       "designCode": "PWL",
       "designFamily": "THE_PEOPLE_OF_THE_WAITING_LIGHTS",
@@ -178,7 +178,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The People of the Waiting Lights in cartoon style with a standard finish and no effect. Use a background that is visually related to The People of the Waiting Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IDN-PWL-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The People of the Waiting Lights in cartoon style with a standard finish and no effect. Use a background that is visually related to The People of the Waiting Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named IDN-PWL-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The People of the Waiting Lights Arcori generation I from the Identity Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

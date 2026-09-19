@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "KNO-AML-SER003-0001",
+      "internalId": "KNO-AML-SER003-GEN001-0001",
       "themeCode": "KNO",
       "designCode": "AML",
       "designFamily": "ARCHIVE_OF_MANY_LIGHTS",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Archive of Many Lights in prismatic style with a standard finish and no effect. Use a background that is visually related to Archive of Many Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNO-AML-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Archive of Many Lights in prismatic style with a standard finish and no effect. Use a background that is visually related to Archive of Many Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNO-AML-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Archive of Many Lights Arcori generation I from the Knowledge Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "KNO-OLL-SER003-0002",
+      "internalId": "KNO-OLL-SER003-GEN001-0002",
       "themeCode": "KNO",
       "designCode": "OLL",
       "designFamily": "OBSERVATORY_OF_LIVING_LIGHT",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Observatory of Living Light in prismatic style with a standard finish and no effect. Use a background that is visually related to Observatory of Living Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNO-OLL-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Observatory of Living Light in prismatic style with a standard finish and no effect. Use a background that is visually related to Observatory of Living Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNO-OLL-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Observatory of Living Light Arcori generation I from the Knowledge Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "KNO-LFA-SER003-0003",
+      "internalId": "KNO-LFA-SER003-GEN001-0003",
       "themeCode": "KNO",
       "designCode": "LFA",
       "designFamily": "THE_LIBRARY_IN_FALLING_ASH",
@@ -136,7 +136,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Library in Falling Ash in prismatic style with a standard finish and no effect. Use a background that is visually related to The Library in Falling Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNO-LFA-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Library in Falling Ash in prismatic style with a standard finish and no effect. Use a background that is visually related to The Library in Falling Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNO-LFA-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Library in Falling Ash Arcori generation I from the Knowledge Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "KNO-ABA-SER003-0004",
+      "internalId": "KNO-ABA-SER003-GEN001-0004",
       "themeCode": "KNO",
       "designCode": "ABA",
       "designFamily": "THE_ARCHIVE_BENEATH_THE_ASH",
@@ -182,7 +182,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Archive Beneath the Ash in prismatic style with a standard finish and no effect. Use a background that is visually related to The Archive Beneath the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNO-ABA-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Archive Beneath the Ash in prismatic style with a standard finish and no effect. Use a background that is visually related to The Archive Beneath the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named KNO-ABA-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Archive Beneath the Ash Arcori generation I from the Knowledge Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

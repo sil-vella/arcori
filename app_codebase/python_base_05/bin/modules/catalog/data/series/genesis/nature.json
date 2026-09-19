@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "NAT-FOR-SER001-0001",
+      "internalId": "NAT-FOR-SER001-GEN001-0001",
       "themeCode": "NAT",
       "designCode": "FOR",
       "designFamily": "ANCIENT_FOREST",
@@ -42,7 +42,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a ancient forest in watercolor style with a matte finish and sparkle effect. Use a background that is visually related to the ancient forest. No borders, no frames. The ancient forest should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-FOR-SER001-0001.webp",
+      "artworkPrompt": "Give me an image with a ancient forest in watercolor style with a matte finish and sparkle effect. Use a background that is visually related to the ancient forest. No borders, no frames. The ancient forest should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-FOR-SER001-GEN001-0001.webp",
       "loreDescription": "A collectible Ancient Forest Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "NAT-OAK-SER001-0002",
+      "internalId": "NAT-OAK-SER001-GEN001-0002",
       "themeCode": "NAT",
       "designCode": "OAK",
       "designFamily": "GREAT_OAK",
@@ -88,7 +88,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a great oak in realistic style with a standard finish and no effect. Use a background that is visually related to the great oak. No borders, no frames. The great oak should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-OAK-SER001-0002.webp",
+      "artworkPrompt": "Give me an image with a great oak in realistic style with a standard finish and no effect. Use a background that is visually related to the great oak. No borders, no frames. The great oak should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-OAK-SER001-GEN001-0002.webp",
       "loreDescription": "A collectible Great Oak Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "NAT-MTN-SER001-0003",
+      "internalId": "NAT-MTN-SER001-GEN001-0003",
       "themeCode": "NAT",
       "designCode": "MTN",
       "designFamily": "SNOW_PEAK",
@@ -130,7 +130,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a snow peak in realistic style with a chrome finish and glow effect. Use a background that is visually related to the snow peak. No borders, no frames. The snow peak should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-MTN-SER001-0003.webp",
+      "artworkPrompt": "Give me an image with a snow peak in realistic style with a chrome finish and glow effect. Use a background that is visually related to the snow peak. No borders, no frames. The snow peak should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-MTN-SER001-GEN001-0003.webp",
       "loreDescription": "A collectible Snow Peak Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "NAT-VOL-SER001-0004",
+      "internalId": "NAT-VOL-SER001-GEN001-0004",
       "themeCode": "NAT",
       "designCode": "VOL",
       "designFamily": "VOLCANO_CORE",
@@ -176,7 +176,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a volcano core in comic style with a metallic finish and fire effect. Use a background that is visually related to the volcano core. No borders, no frames. The volcano core should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-VOL-SER001-0004.webp",
+      "artworkPrompt": "Give me an image with a volcano core in comic style with a metallic finish and fire effect. Use a background that is visually related to the volcano core. No borders, no frames. The volcano core should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-VOL-SER001-GEN001-0004.webp",
       "loreDescription": "A collectible Volcano Core Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -184,7 +184,7 @@
       }
     },
     {
-      "internalId": "NAT-RIV-SER001-0005",
+      "internalId": "NAT-RIV-SER001-GEN001-0005",
       "themeCode": "NAT",
       "designCode": "RIV",
       "designFamily": "CRYSTAL_RIVER",
@@ -220,7 +220,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a crystal river in minimalist style with a gloss finish and motion effect. Use a background that is visually related to the crystal river. No borders, no frames. The crystal river should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-RIV-SER001-0005.webp",
+      "artworkPrompt": "Give me an image with a crystal river in minimalist style with a gloss finish and motion effect. Use a background that is visually related to the crystal river. No borders, no frames. The crystal river should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-RIV-SER001-GEN001-0005.webp",
       "loreDescription": "A collectible Crystal River Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "NAT-WAT-SER001-0006",
+      "internalId": "NAT-WAT-SER001-GEN001-0006",
       "themeCode": "NAT",
       "designCode": "WAT",
       "designFamily": "WATERFALL",
@@ -264,7 +264,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a waterfall in watercolor style with a foil finish and glow effect. Use a background that is visually related to the waterfall. No borders, no frames. The waterfall should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-WAT-SER001-0006.webp",
+      "artworkPrompt": "Give me an image with a waterfall in watercolor style with a foil finish and glow effect. Use a background that is visually related to the waterfall. No borders, no frames. The waterfall should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-WAT-SER001-GEN001-0006.webp",
       "loreDescription": "A collectible Waterfall Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -272,7 +272,7 @@
       }
     },
     {
-      "internalId": "NAT-ROS-SER001-0007",
+      "internalId": "NAT-ROS-SER001-GEN001-0007",
       "themeCode": "NAT",
       "designCode": "ROS",
       "designFamily": "ROSE_BLOOM",
@@ -310,7 +310,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a rose bloom in watercolor style with a gloss finish and sparkle effect. Use a background that is visually related to the rose bloom. No borders, no frames. The rose bloom should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-ROS-SER001-0007.webp",
+      "artworkPrompt": "Give me an image with a rose bloom in watercolor style with a gloss finish and sparkle effect. Use a background that is visually related to the rose bloom. No borders, no frames. The rose bloom should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-ROS-SER001-GEN001-0007.webp",
       "loreDescription": "A collectible Rose Bloom Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -318,7 +318,7 @@
       }
     },
     {
-      "internalId": "NAT-LOT-SER001-0008",
+      "internalId": "NAT-LOT-SER001-GEN001-0008",
       "themeCode": "NAT",
       "designCode": "LOT",
       "designFamily": "LOTUS",
@@ -354,7 +354,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a lotus in anime style with a prismatic finish and glow effect. Use a background that is visually related to the lotus. No borders, no frames. The lotus should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-LOT-SER001-0008.webp",
+      "artworkPrompt": "Give me an image with a lotus in anime style with a prismatic finish and glow effect. Use a background that is visually related to the lotus. No borders, no frames. The lotus should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-LOT-SER001-GEN001-0008.webp",
       "loreDescription": "A collectible Lotus Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -362,7 +362,7 @@
       }
     },
     {
-      "internalId": "NAT-STM-SER001-0009",
+      "internalId": "NAT-STM-SER001-GEN001-0009",
       "themeCode": "NAT",
       "designCode": "STM",
       "designFamily": "THUNDERSTORM",
@@ -400,7 +400,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a thunderstorm in neon style with a chrome finish and lightning effect. Use a background that is visually related to the thunderstorm. No borders, no frames. The thunderstorm should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-STM-SER001-0009.webp",
+      "artworkPrompt": "Give me an image with a thunderstorm in neon style with a chrome finish and lightning effect. Use a background that is visually related to the thunderstorm. No borders, no frames. The thunderstorm should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-STM-SER001-GEN001-0009.webp",
       "loreDescription": "A collectible Thunderstorm Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -408,7 +408,7 @@
       }
     },
     {
-      "internalId": "NAT-BLZ-SER001-0010",
+      "internalId": "NAT-BLZ-SER001-GEN001-0010",
       "themeCode": "NAT",
       "designCode": "BLZ",
       "designFamily": "BLIZZARD",
@@ -442,7 +442,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a blizzard in realistic style with a matte finish and sparkle effect. Use a background that is visually related to the blizzard. No borders, no frames. The blizzard should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-BLZ-SER001-0010.webp",
+      "artworkPrompt": "Give me an image with a blizzard in realistic style with a matte finish and sparkle effect. Use a background that is visually related to the blizzard. No borders, no frames. The blizzard should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-BLZ-SER001-GEN001-0010.webp",
       "loreDescription": "A collectible Blizzard Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -450,7 +450,7 @@
       }
     },
     {
-      "internalId": "NAT-AUR-SER001-0011",
+      "internalId": "NAT-AUR-SER001-GEN001-0011",
       "themeCode": "NAT",
       "designCode": "AUR",
       "designFamily": "AURORA",
@@ -488,7 +488,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a aurora in minimalist style with a holographic finish and glow effect. Use a background that is visually related to the aurora. No borders, no frames. The aurora should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-AUR-SER001-0011.webp",
+      "artworkPrompt": "Give me an image with a aurora in minimalist style with a holographic finish and glow effect. Use a background that is visually related to the aurora. No borders, no frames. The aurora should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-AUR-SER001-GEN001-0011.webp",
       "loreDescription": "A collectible Aurora Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -496,7 +496,7 @@
       }
     },
     {
-      "internalId": "NAT-DSK-SER001-0012",
+      "internalId": "NAT-DSK-SER001-GEN001-0012",
       "themeCode": "NAT",
       "designCode": "DSK",
       "designFamily": "SUNSET_DUNES",
@@ -532,7 +532,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a sunset dunes in comic style with a standard finish and no effect. Use a background that is visually related to the sunset dunes. No borders, no frames. The sunset dunes should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-DSK-SER001-0012.webp",
+      "artworkPrompt": "Give me an image with a sunset dunes in comic style with a standard finish and no effect. Use a background that is visually related to the sunset dunes. No borders, no frames. The sunset dunes should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named NAT-DSK-SER001-GEN001-0012.webp",
       "loreDescription": "A collectible Sunset Dunes Arcori generation I from the Nature Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,

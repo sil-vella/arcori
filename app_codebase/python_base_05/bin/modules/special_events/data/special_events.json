@@ -215,6 +215,136 @@
           "ALL-PGP-SER003-0004"
         ]
       }
+    },
+    {
+      "id": "evt_active_window_v1",
+      "subtype": "preservation-chase",
+      "name": "Preservation Chase",
+      "description": "Bring one Arcori from your open Legacy windows. Finish 1 match for progress; replay anytime. Rewards = normal mastery from flips. AI fill from the live global open-window roster.",
+      "active": true,
+      "schedule": {
+        "startsAt": null,
+        "endsAt": null
+      },
+      "matchmaking": {
+        "players": 3,
+        "ai_fill": true,
+        "fill_window_sec": 5,
+        "queue_mode": "open"
+      },
+      "match": {
+        "rounds": 2,
+        "fee_fragments": null
+      },
+      "matches": {
+        "required": 1,
+        "credit": "any_finish",
+        "credit_params": {},
+        "allow_replay_after_complete": true
+      },
+      "eligibility": {
+        "min_mastery_value": 0,
+        "max_mastery_value": null,
+        "required_titles": [],
+        "required_slammer": {
+          "mode": "any",
+          "design_ids": [],
+          "types": []
+        }
+      },
+      "arcori": {
+        "per_player": 1,
+        "source": "active_windows",
+        "series_ids": [],
+        "generation_numbers": [],
+        "region_codes": [],
+        "design_ids": []
+      },
+      "arena": {
+        "mode": "seated_regions",
+        "region_code": null,
+        "arena_id": null
+      },
+      "media": {
+        "banner": {
+          "type": "image",
+          "value": "/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp"
+        },
+        "special_arena_background": {
+          "type": "image",
+          "value": "/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp"
+        }
+      },
+      "rewards": {},
+      "achievement_hooks": {
+        "roster_design_ids": []
+      }
+    },
+    {
+      "id": "evt_high_mastery_v1",
+      "subtype": "high-mastery",
+      "name": "High Mastery",
+      "description": "Bring one circulating Arcori at 80%+ of its Preservation reach. Finish 1 match for progress; replay anytime. Rewards = normal mastery from flips.",
+      "active": true,
+      "schedule": {
+        "startsAt": null,
+        "endsAt": null
+      },
+      "matchmaking": {
+        "players": 3,
+        "ai_fill": true,
+        "fill_window_sec": 5,
+        "queue_mode": "open"
+      },
+      "match": {
+        "rounds": 2,
+        "fee_fragments": null
+      },
+      "matches": {
+        "required": 1,
+        "credit": "any_finish",
+        "credit_params": {},
+        "allow_replay_after_complete": true
+      },
+      "eligibility": {
+        "min_mastery_value": 0,
+        "max_mastery_value": null,
+        "required_titles": [],
+        "required_slammer": {
+          "mode": "any",
+          "design_ids": [],
+          "types": []
+        }
+      },
+      "arcori": {
+        "per_player": 1,
+        "source": "circulation",
+        "min_mastery_ratio": 0.8,
+        "hard_pick": true,
+        "series_ids": [],
+        "generation_numbers": [],
+        "region_codes": [],
+        "design_ids": []
+      },
+      "arena": {
+        "mode": "seated_regions",
+        "region_code": null,
+        "arena_id": null
+      },
+      "media": {
+        "banner": {
+          "type": "image",
+          "value": "/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp"
+        },
+        "special_arena_background": {
+          "type": "image",
+          "value": "/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp"
+        }
+      },
+      "rewards": {},
+      "achievement_hooks": {
+        "roster_design_ids": []
+      }
     }
   ]
 }

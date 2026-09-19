@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CEL-FJL-SER003-0001",
+      "internalId": "CEL-FJL-SER003-GEN001-0001",
       "themeCode": "CEL",
       "designCode": "FJL",
       "designFamily": "FESTIVAL_OF_JOINED_LIGHTS",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Festival of Joined Lights in graffiti style with a standard finish and no effect. Use a background that is visually related to Festival of Joined Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CEL-FJL-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Festival of Joined Lights in graffiti style with a standard finish and no effect. Use a background that is visually related to Festival of Joined Lights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CEL-FJL-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Festival of Joined Lights Arcori generation I from the Celebration Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "CEL-NTR-SER003-0002",
+      "internalId": "CEL-NTR-SER003-GEN001-0002",
       "themeCode": "CEL",
       "designCode": "NTR",
       "designFamily": "NIGHT_OF_A_THOUSAND_RIBBONS",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Night of a Thousand Ribbons in graffiti style with a standard finish and no effect. Use a background that is visually related to Night of a Thousand Ribbons. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CEL-NTR-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Night of a Thousand Ribbons in graffiti style with a standard finish and no effect. Use a background that is visually related to Night of a Thousand Ribbons. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CEL-NTR-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Night of a Thousand Ribbons Arcori generation I from the Celebration Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "CEL-FAS-SER003-0003",
+      "internalId": "CEL-FAS-SER003-GEN001-0003",
       "themeCode": "CEL",
       "designCode": "FAS",
       "designFamily": "THE_FESTIVAL_AFTER_THE_STORM",
@@ -132,7 +132,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Festival After the Storm in graffiti style with a standard finish and no effect. Use a background that is visually related to The Festival After the Storm. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CEL-FAS-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Festival After the Storm in graffiti style with a standard finish and no effect. Use a background that is visually related to The Festival After the Storm. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CEL-FAS-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Festival After the Storm Arcori generation I from the Celebration Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "CEL-FRP-SER003-0004",
+      "internalId": "CEL-FRP-SER003-GEN001-0004",
       "themeCode": "CEL",
       "designCode": "FRP",
       "designFamily": "FESTIVAL_OF_THE_RETURNING_PATH",
@@ -176,7 +176,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Festival of the Returning Path in graffiti style with a standard finish and no effect. Use a background that is visually related to Festival of the Returning Path. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CEL-FRP-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Festival of the Returning Path in graffiti style with a standard finish and no effect. Use a background that is visually related to Festival of the Returning Path. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CEL-FRP-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Festival of the Returning Path Arcori generation I from the Celebration Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "DEV-VLL-SER003-0001",
+      "internalId": "DEV-VLL-SER003-GEN001-0001",
       "themeCode": "DEV",
       "designCode": "VLL",
       "designFamily": "VIGIL_OF_THE_LAST_LIGHT",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Vigil of the Last Light in low poly style with a standard finish and no effect. Use a background that is visually related to Vigil of the Last Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DEV-VLL-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Vigil of the Last Light in low poly style with a standard finish and no effect. Use a background that is visually related to Vigil of the Last Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DEV-VLL-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Vigil of the Last Light Arcori generation I from the Devotion Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "DEV-KFP-SER003-0002",
+      "internalId": "DEV-KFP-SER003-GEN001-0002",
       "themeCode": "DEV",
       "designCode": "KFP",
       "designFamily": "KEEPER_OF_THE_FADING_PILLAR",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Keeper of the Fading Pillar in low poly style with a standard finish and no effect. Use a background that is visually related to Keeper of the Fading Pillar. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DEV-KFP-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Keeper of the Fading Pillar in low poly style with a standard finish and no effect. Use a background that is visually related to Keeper of the Fading Pillar. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DEV-KFP-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Keeper of the Fading Pillar Arcori generation I from the Devotion Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "DEV-GWS-SER003-0003",
+      "internalId": "DEV-GWS-SER003-GEN001-0003",
       "themeCode": "DEV",
       "designCode": "GWS",
       "designFamily": "THE_GUARDIAN_WHO_STAYED",
@@ -136,7 +136,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Guardian Who Stayed in low poly style with a standard finish and no effect. Use a background that is visually related to The Guardian Who Stayed. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DEV-GWS-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Guardian Who Stayed in low poly style with a standard finish and no effect. Use a background that is visually related to The Guardian Who Stayed. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DEV-GWS-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Guardian Who Stayed Arcori generation I from the Devotion Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "DEV-GLL-SER003-0004",
+      "internalId": "DEV-GLL-SER003-GEN001-0004",
       "themeCode": "DEV",
       "designCode": "GLL",
       "designFamily": "GUARDIANS_OF_THE_LASTING_LIGHT",
@@ -182,7 +182,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Guardians of the Lasting Light in low poly style with a standard finish and no effect. Use a background that is visually related to Guardians of the Lasting Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DEV-GLL-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Guardians of the Lasting Light in low poly style with a standard finish and no effect. Use a background that is visually related to Guardians of the Lasting Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DEV-GLL-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Guardians of the Lasting Light Arcori generation I from the Devotion Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

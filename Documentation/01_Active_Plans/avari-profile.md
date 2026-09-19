@@ -1,10 +1,10 @@
 # Avari Profile
 
-**Status:** Implemented (read API + Profile screen + drawer avatar header + Wallet); persistence via [player-profile-schema.md](player-profile-schema.md)  
+**Status:** Implemented (read API + Profile screen + drawer avatar header + Wallet + Trove + Closed Generations)  
 **Created:** 2026-07-26  
-**Last Updated:** 2026-09-11
+**Last Updated:** 2026-09-18
 
-Related: [GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · [first-time-player-flow.md](first-time-player-flow.md) · [arcori-standings-surface.md](arcori-standings-surface.md)
+Related: [GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · [first-time-player-flow.md](first-time-player-flow.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [mastery.md](mastery.md) · [legacy-preserve.md](legacy-preserve.md)
 
 ## Objective
 
@@ -19,12 +19,12 @@ One `avatarUrl` on the user profile. Account uploads; Avari screen + drawer head
 | Surface | Path | Role |
 |---------|------|------|
 | Drawer header | — | Center-top circle avatar → `/avari` |
-| Avari Profile | `/avari` | Identity + stub sections |
+| Avari Profile | `/avari` | Identity + inventory sections |
 | Account | `/account` | Sign in / Create / avatar upload |
 
 ## API
 
-`GET /authuser/avari/profile` — identity from user row; `rank` / `titles` / `kin` / `mastery` / `stats` / **`economy`** (`goldArcori`, `goldFragments`); **`access`** = circulating `player_design_access` with catalog face fields + **`masteryPoints`** + **`mintReach`**; **`kin`** includes the same **`masteryPoints` / `mintReach`** for the Genesis Kin design; **`slammers`** = owned `player_slammers`. Profile UI shows mastery on Kin + each Arcori chip (no separate Mastery summary section). Wallet section for Gold Arcori / Fragments.
+`GET /authuser/avari/profile` — identity from user row; `rank` / `titles` / `kin` / `mastery` / `stats` / **`economy`** (`goldArcori`, `goldFragments`); **`access`** = circulating `player_design_access` with catalog face fields + **`masteryPoints`** + **`mintReach`**; **`kin`** includes the same **`masteryPoints` / `mintReach`** for the Genesis Kin design; **`slammers`** = owned `player_slammers`; **`trove`** = Legacy mints; **`closedGenerations`** = closed gens this player had mastery on (`masteryPoints` at close, `echoMasterySeeded`, `echoGenerationNumber`, Preserved/Lost). Profile UI: Wallet, Trove, **Closed Generations**, Preservation Windows, Arcori, Slammers.
 
 ## Module files
 
@@ -34,4 +34,4 @@ One `avatarUrl` on the user profile. Account uploads; Avari screen + drawer head
 
 ## Out of scope
 
-Kin onboarding, mastery persistence, Mastery Value (replaces Rank/XP), title earning, Avari-side avatar upload.
+Kin onboarding polish, My Mastery Detail tab, title earning, Avari-side avatar upload.

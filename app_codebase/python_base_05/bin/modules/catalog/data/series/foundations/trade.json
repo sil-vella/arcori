@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "TRD-SUE-SER003-0001",
+      "internalId": "TRD-SUE-SER003-GEN001-0001",
       "themeCode": "TRD",
       "designCode": "SUE",
       "designFamily": "SUNMARKET_EXCHANGE",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Sunmarket Exchange in cartoon style with a standard finish and no effect. Use a background that is visually related to Sunmarket Exchange. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRD-SUE-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Sunmarket Exchange in cartoon style with a standard finish and no effect. Use a background that is visually related to Sunmarket Exchange. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRD-SUE-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Sunmarket Exchange Arcori generation I from the Trade Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "TRD-GRE-SER003-0002",
+      "internalId": "TRD-GRE-SER003-GEN001-0002",
       "themeCode": "TRD",
       "designCode": "GRE",
       "designFamily": "GROVEBOUND_EXCHANGE",
@@ -90,7 +90,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Grovebound Exchange in cartoon style with a standard finish and no effect. Use a background that is visually related to Grovebound Exchange. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRD-GRE-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Grovebound Exchange in cartoon style with a standard finish and no effect. Use a background that is visually related to Grovebound Exchange. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRD-GRE-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Grovebound Exchange Arcori generation I from the Trade Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "TRD-MBS-SER003-0003",
+      "internalId": "TRD-MBS-SER003-GEN001-0003",
       "themeCode": "TRD",
       "designCode": "MBS",
       "designFamily": "THE_MARKET_BETWEEN_SNOWFALLS",
@@ -132,7 +132,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Market Between Snowfalls in cartoon style with a standard finish and no effect. Use a background that is visually related to The Market Between Snowfalls. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRD-MBS-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The Market Between Snowfalls in cartoon style with a standard finish and no effect. Use a background that is visually related to The Market Between Snowfalls. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRD-MBS-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The Market Between Snowfalls Arcori generation I from the Trade Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "TRD-ETH-SER003-0004",
+      "internalId": "TRD-ETH-SER003-GEN001-0004",
       "themeCode": "TRD",
       "designCode": "ETH",
       "designFamily": "EXCHANGE_OF_THREE_HEIGHTS",
@@ -178,7 +178,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Exchange of Three Heights in cartoon style with a standard finish and no effect. Use a background that is visually related to Exchange of Three Heights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRD-ETH-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Exchange of Three Heights in cartoon style with a standard finish and no effect. Use a background that is visually related to Exchange of Three Heights. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TRD-ETH-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Exchange of Three Heights Arcori generation I from the Trade Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

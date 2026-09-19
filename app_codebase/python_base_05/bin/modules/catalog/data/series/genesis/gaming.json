@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "GAM-DHR-SER001-0001",
+      "internalId": "GAM-DHR-SER001-GEN001-0001",
       "themeCode": "GAM",
       "designCode": "DHR",
       "designFamily": "DUNGEON_HERO",
@@ -44,7 +44,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a dungeon hero in comic style with a metallic finish and glow effect. Use a background that is visually related to the dungeon hero. No borders, no frames. The dungeon hero should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-DHR-SER001-0001.webp",
+      "artworkPrompt": "Give me an image with a dungeon hero in comic style with a metallic finish and glow effect. Use a background that is visually related to the dungeon hero. No borders, no frames. The dungeon hero should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-DHR-SER001-GEN001-0001.webp",
       "loreDescription": "A collectible Dungeon Hero Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "GAM-ELK-SER001-0002",
+      "internalId": "GAM-ELK-SER001-GEN001-0002",
       "themeCode": "GAM",
       "designCode": "ELK",
       "designFamily": "ELF_KNIGHT",
@@ -90,7 +90,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a elf knight in anime style with a foil finish and sparkle effect. Use a background that is visually related to the elf knight. No borders, no frames. The elf knight should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-ELK-SER001-0002.webp",
+      "artworkPrompt": "Give me an image with a elf knight in anime style with a foil finish and sparkle effect. Use a background that is visually related to the elf knight. No borders, no frames. The elf knight should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-ELK-SER001-GEN001-0002.webp",
       "loreDescription": "A collectible Elf Knight Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "GAM-BST-SER001-0003",
+      "internalId": "GAM-BST-SER001-GEN001-0003",
       "themeCode": "GAM",
       "designCode": "BST",
       "designFamily": "BOSS_TITAN",
@@ -136,7 +136,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a boss titan in realistic style with a chrome finish and fire effect. Use a background that is visually related to the boss titan. No borders, no frames. The boss titan should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-BST-SER001-0003.webp",
+      "artworkPrompt": "Give me an image with a boss titan in realistic style with a chrome finish and fire effect. Use a background that is visually related to the boss titan. No borders, no frames. The boss titan should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-BST-SER001-GEN001-0003.webp",
       "loreDescription": "A collectible Boss Titan Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "GAM-PWR-SER001-0004",
+      "internalId": "GAM-PWR-SER001-GEN001-0004",
       "themeCode": "GAM",
       "designCode": "PWR",
       "designFamily": "PIXEL_WARRIOR",
@@ -178,7 +178,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a pixel warrior in pixel art style with a standard finish and no effect. Use a background that is visually related to the pixel warrior. No borders, no frames. The pixel warrior should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-PWR-SER001-0004.webp",
+      "artworkPrompt": "Give me an image with a pixel warrior in pixel art style with a standard finish and no effect. Use a background that is visually related to the pixel warrior. No borders, no frames. The pixel warrior should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-PWR-SER001-GEN001-0004.webp",
       "loreDescription": "A collectible Pixel Warrior Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -186,7 +186,7 @@
       }
     },
     {
-      "internalId": "GAM-8BT-SER001-0005",
+      "internalId": "GAM-8BT-SER001-GEN001-0005",
       "themeCode": "GAM",
       "designCode": "8BT",
       "designFamily": "8_BIT_BLASTER",
@@ -220,7 +220,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a 8-bit blaster in pixel art style with a gloss finish and pulse effect. Use a background that is visually related to the 8-bit blaster. No borders, no frames. The 8-bit blaster should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-8BT-SER001-0005.webp",
+      "artworkPrompt": "Give me an image with a 8-bit blaster in pixel art style with a gloss finish and pulse effect. Use a background that is visually related to the 8-bit blaster. No borders, no frames. The 8-bit blaster should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-8BT-SER001-GEN001-0005.webp",
       "loreDescription": "A collectible 8-Bit Blaster Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "GAM-ARC-SER001-0006",
+      "internalId": "GAM-ARC-SER001-GEN001-0006",
       "themeCode": "GAM",
       "designCode": "ARC",
       "designFamily": "ARCADE_CHAMPION",
@@ -262,7 +262,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a arcade champion in neon style with a chrome finish and glow effect. Use a background that is visually related to the arcade champion. No borders, no frames. The arcade champion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-ARC-SER001-0006.webp",
+      "artworkPrompt": "Give me an image with a arcade champion in neon style with a chrome finish and glow effect. Use a background that is visually related to the arcade champion. No borders, no frames. The arcade champion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-ARC-SER001-GEN001-0006.webp",
       "loreDescription": "A collectible Arcade Champion Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -270,7 +270,7 @@
       }
     },
     {
-      "internalId": "GAM-TDR-SER001-0007",
+      "internalId": "GAM-TDR-SER001-GEN001-0007",
       "themeCode": "GAM",
       "designCode": "TDR",
       "designFamily": "TURBO_DRIVER",
@@ -304,7 +304,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a turbo driver in comic style with a gloss finish and motion effect. Use a background that is visually related to the turbo driver. No borders, no frames. The turbo driver should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-TDR-SER001-0007.webp",
+      "artworkPrompt": "Give me an image with a turbo driver in comic style with a gloss finish and motion effect. Use a background that is visually related to the turbo driver. No borders, no frames. The turbo driver should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-TDR-SER001-GEN001-0007.webp",
       "loreDescription": "A collectible Turbo Driver Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -312,7 +312,7 @@
       }
     },
     {
-      "internalId": "GAM-NDR-SER001-0008",
+      "internalId": "GAM-NDR-SER001-GEN001-0008",
       "themeCode": "GAM",
       "designCode": "NDR",
       "designFamily": "NITRO_RACER",
@@ -346,7 +346,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a nitro racer in anime style with a metallic finish and fire effect. Use a background that is visually related to the nitro racer. No borders, no frames. The nitro racer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-NDR-SER001-0008.webp",
+      "artworkPrompt": "Give me an image with a nitro racer in anime style with a metallic finish and fire effect. Use a background that is visually related to the nitro racer. No borders, no frames. The nitro racer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-NDR-SER001-GEN001-0008.webp",
       "loreDescription": "A collectible Nitro Racer Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -354,7 +354,7 @@
       }
     },
     {
-      "internalId": "GAM-DRF-SER001-0009",
+      "internalId": "GAM-DRF-SER001-GEN001-0009",
       "themeCode": "GAM",
       "designCode": "DRF",
       "designFamily": "DRIFT_KING",
@@ -388,7 +388,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a drift king in realistic style with a foil finish and motion effect. Use a background that is visually related to the drift king. No borders, no frames. The drift king should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-DRF-SER001-0009.webp",
+      "artworkPrompt": "Give me an image with a drift king in realistic style with a foil finish and motion effect. Use a background that is visually related to the drift king. No borders, no frames. The drift king should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-DRF-SER001-GEN001-0009.webp",
       "loreDescription": "A collectible Drift King Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -396,7 +396,7 @@
       }
     },
     {
-      "internalId": "GAM-LSV-SER001-0010",
+      "internalId": "GAM-LSV-SER001-GEN001-0010",
       "themeCode": "GAM",
       "designCode": "LSV",
       "designFamily": "LAST_SURVIVOR",
@@ -434,7 +434,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a last survivor in realistic style with a matte finish and no effect. Use a background that is visually related to the last survivor. No borders, no frames. The last survivor should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-LSV-SER001-0010.webp",
+      "artworkPrompt": "Give me an image with a last survivor in realistic style with a matte finish and no effect. Use a background that is visually related to the last survivor. No borders, no frames. The last survivor should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-LSV-SER001-GEN001-0010.webp",
       "loreDescription": "A collectible Last Survivor Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -442,7 +442,7 @@
       }
     },
     {
-      "internalId": "GAM-WLD-SER001-0011",
+      "internalId": "GAM-WLD-SER001-GEN001-0011",
       "themeCode": "GAM",
       "designCode": "WLD",
       "designFamily": "WILD_TRACKER",
@@ -478,7 +478,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a wild tracker in comic style with a standard finish and smoke effect. Use a background that is visually related to the wild tracker. No borders, no frames. The wild tracker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-WLD-SER001-0011.webp",
+      "artworkPrompt": "Give me an image with a wild tracker in comic style with a standard finish and smoke effect. Use a background that is visually related to the wild tracker. No borders, no frames. The wild tracker should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-WLD-SER001-GEN001-0011.webp",
       "loreDescription": "A collectible Wild Tracker Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -486,7 +486,7 @@
       }
     },
     {
-      "internalId": "GAM-APX-SER001-0012",
+      "internalId": "GAM-APX-SER001-GEN001-0012",
       "themeCode": "GAM",
       "designCode": "APX",
       "designFamily": "APEX_HUNTER",
@@ -522,7 +522,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a apex hunter in anime style with a chrome finish and glow effect. Use a background that is visually related to the apex hunter. No borders, no frames. The apex hunter should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-APX-SER001-0012.webp",
+      "artworkPrompt": "Give me an image with a apex hunter in anime style with a chrome finish and glow effect. Use a background that is visually related to the apex hunter. No borders, no frames. The apex hunter should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-APX-SER001-GEN001-0012.webp",
       "loreDescription": "A collectible Apex Hunter Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -530,7 +530,7 @@
       }
     },
     {
-      "internalId": "GAM-CHC-SER001-0013",
+      "internalId": "GAM-CHC-SER001-GEN001-0013",
       "themeCode": "GAM",
       "designCode": "CHC",
       "designFamily": "CHESS_COMMANDER",
@@ -568,7 +568,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a chess commander in minimalist style with a standard finish and no effect. Use a background that is visually related to the chess commander. No borders, no frames. The chess commander should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-CHC-SER001-0013.webp",
+      "artworkPrompt": "Give me an image with a chess commander in minimalist style with a standard finish and no effect. Use a background that is visually related to the chess commander. No borders, no frames. The chess commander should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-CHC-SER001-GEN001-0013.webp",
       "loreDescription": "A collectible Chess Commander Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -576,7 +576,7 @@
       }
     },
     {
-      "internalId": "GAM-WAR-SER001-0014",
+      "internalId": "GAM-WAR-SER001-GEN001-0014",
       "themeCode": "GAM",
       "designCode": "WAR",
       "designFamily": "WAR_TACTICIAN",
@@ -614,7 +614,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a war tactician in comic style with a metallic finish and pulse effect. Use a background that is visually related to the war tactician. No borders, no frames. The war tactician should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-WAR-SER001-0014.webp",
+      "artworkPrompt": "Give me an image with a war tactician in comic style with a metallic finish and pulse effect. Use a background that is visually related to the war tactician. No borders, no frames. The war tactician should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-WAR-SER001-GEN001-0014.webp",
       "loreDescription": "A collectible War Tactician Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -622,7 +622,7 @@
       }
     },
     {
-      "internalId": "GAM-EMP-SER001-0015",
+      "internalId": "GAM-EMP-SER001-GEN001-0015",
       "themeCode": "GAM",
       "designCode": "EMP",
       "designFamily": "EMPIRE_BUILDER",
@@ -660,7 +660,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a empire builder in low poly style with a gloss finish and sparkle effect. Use a background that is visually related to the empire builder. No borders, no frames. The empire builder should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-EMP-SER001-0015.webp",
+      "artworkPrompt": "Give me an image with a empire builder in low poly style with a gloss finish and sparkle effect. Use a background that is visually related to the empire builder. No borders, no frames. The empire builder should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-EMP-SER001-GEN001-0015.webp",
       "loreDescription": "A collectible Empire Builder Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -668,7 +668,7 @@
       }
     },
     {
-      "internalId": "GAM-BLD-SER001-0016",
+      "internalId": "GAM-BLD-SER001-GEN001-0016",
       "themeCode": "GAM",
       "designCode": "BLD",
       "designFamily": "BLOCK_BUILDER",
@@ -702,7 +702,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a block builder in pixel art style with a standard finish and no effect. Use a background that is visually related to the block builder. No borders, no frames. The block builder should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-BLD-SER001-0016.webp",
+      "artworkPrompt": "Give me an image with a block builder in pixel art style with a standard finish and no effect. Use a background that is visually related to the block builder. No borders, no frames. The block builder should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-BLD-SER001-GEN001-0016.webp",
       "loreDescription": "A collectible Block Builder Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -710,7 +710,7 @@
       }
     },
     {
-      "internalId": "GAM-RED-SER001-0017",
+      "internalId": "GAM-RED-SER001-GEN001-0017",
       "themeCode": "GAM",
       "designCode": "RED",
       "designFamily": "REDSTONE_ENGINEER",
@@ -744,7 +744,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a redstone engineer in pixel art style with a chrome finish and pulse effect. Use a background that is visually related to the redstone engineer. No borders, no frames. The redstone engineer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-RED-SER001-0017.webp",
+      "artworkPrompt": "Give me an image with a redstone engineer in pixel art style with a chrome finish and pulse effect. Use a background that is visually related to the redstone engineer. No borders, no frames. The redstone engineer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-RED-SER001-GEN001-0017.webp",
       "loreDescription": "A collectible Redstone Engineer Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -752,7 +752,7 @@
       }
     },
     {
-      "internalId": "GAM-WRL-SER001-0018",
+      "internalId": "GAM-WRL-SER001-GEN001-0018",
       "themeCode": "GAM",
       "designCode": "WRL",
       "designFamily": "WORLD_CREATOR",
@@ -790,7 +790,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a world creator in minimalist style with a prismatic finish and floating particles effect. Use a background that is visually related to the world creator. No borders, no frames. The world creator should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-WRL-SER001-0018.webp",
+      "artworkPrompt": "Give me an image with a world creator in minimalist style with a prismatic finish and floating particles effect. Use a background that is visually related to the world creator. No borders, no frames. The world creator should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-WRL-SER001-GEN001-0018.webp",
       "loreDescription": "A collectible World Creator Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -798,7 +798,7 @@
       }
     },
     {
-      "internalId": "GAM-ECH-SER001-0019",
+      "internalId": "GAM-ECH-SER001-GEN001-0019",
       "themeCode": "GAM",
       "designCode": "ECH",
       "designFamily": "ESPORTS_CHAMPION",
@@ -836,7 +836,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a esports champion in neon style with a holographic finish and glow effect. Use a background that is visually related to the esports champion. No borders, no frames. The esports champion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-ECH-SER001-0019.webp",
+      "artworkPrompt": "Give me an image with a esports champion in neon style with a holographic finish and glow effect. Use a background that is visually related to the esports champion. No borders, no frames. The esports champion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-ECH-SER001-GEN001-0019.webp",
       "loreDescription": "A collectible Esports Champion Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -844,7 +844,7 @@
       }
     },
     {
-      "internalId": "GAM-PRO-SER001-0020",
+      "internalId": "GAM-PRO-SER001-GEN001-0020",
       "themeCode": "GAM",
       "designCode": "PRO",
       "designFamily": "PRO_GAMER",
@@ -878,7 +878,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a pro gamer in comic style with a gloss finish and motion effect. Use a background that is visually related to the pro gamer. No borders, no frames. The pro gamer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-PRO-SER001-0020.webp",
+      "artworkPrompt": "Give me an image with a pro gamer in comic style with a gloss finish and motion effect. Use a background that is visually related to the pro gamer. No borders, no frames. The pro gamer should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-PRO-SER001-GEN001-0020.webp",
       "loreDescription": "A collectible Pro Gamer Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -886,7 +886,7 @@
       }
     },
     {
-      "internalId": "GAM-LGG-SER001-0021",
+      "internalId": "GAM-LGG-SER001-GEN001-0021",
       "themeCode": "GAM",
       "designCode": "LGG",
       "designFamily": "LEEG",
@@ -920,7 +920,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with LeeG in chibi style with a standard finish and no effect. LeeG is a bandaged mummy mascot with a playful and mischievous personality, purple boots and an expressive tongue. Use a background visually related to card games with an ancient Egyptian graveyard at night. No borders, no frames. LeeG should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-LGG-SER001-0021.webp.",
+      "artworkPrompt": "Give me an image with LeeG in chibi style with a standard finish and no effect. LeeG is a bandaged mummy mascot with a playful and mischievous personality, purple boots and an expressive tongue. Use a background visually related to card games with an ancient Egyptian graveyard at night. No borders, no frames. LeeG should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GAM-LGG-SER001-GEN001-0021.webp.",
       "loreDescription": "A collectible LeeG Arcori generation I from the Gaming Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,

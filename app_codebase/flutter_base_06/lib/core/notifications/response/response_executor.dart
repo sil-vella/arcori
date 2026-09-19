@@ -39,13 +39,28 @@ Future<void> executeNavigate({
       !spec.allowedScreens.contains(screen)) {
     return;
   }
-  final path = resolveNavigatePath(button);
-  if (path != null && context.mounted) {
-    Nav.push(context, path);
-  }
   if (config.markReadOnAction) {
     await markRead?.call();
   }
+  final path = resolveNavigatePath(button);
+  if (path == null || path.isEmpty || !context.mounted) {
+    return;
+  }
+  final current = _normalizePath(Nav.matchedLocation(context));
+  final target = _normalizePath(path);
+  if (current == target) {
+    return;
+  }
+  Nav.go(context, path);
+}
+
+String _normalizePath(String path) {
+  final trimmed = path.trim();
+  if (trimmed.isEmpty) return '/';
+  if (trimmed.length > 1 && trimmed.endsWith('/')) {
+    return trimmed.substring(0, trimmed.length - 1);
+  }
+  return trimmed;
 }
 
 class NotificationReplyResult {

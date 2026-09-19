@@ -508,6 +508,108 @@ class AvariTroveItem {
   }
 }
 
+/// Closed generation the player had mastery on — mastery frozen at close.
+class AvariClosedGenerationItem {
+  const AvariClosedGenerationItem({
+    required this.designId,
+    required this.displayName,
+    required this.generationNumber,
+    required this.masteryPoints,
+    required this.legacyState,
+    this.serial = '',
+    this.imageUrl,
+    this.lottieUrl,
+    this.faceMedia,
+    this.color,
+    this.echoMasterySeeded = 0,
+    this.echoGenerationNumber,
+    this.echoDesignId,
+    this.closedAt,
+  });
+
+  factory AvariClosedGenerationItem.fromJson(Map<String, dynamic> json) {
+    final id = json['designId']?.toString() ?? '';
+    final name = json['displayName']?.toString().trim() ?? '';
+    final serial = json['serial']?.toString().trim().isNotEmpty == true
+        ? json['serial'].toString()
+        : id;
+    final state = json['legacyState']?.toString().trim().toLowerCase() ?? '';
+    final gen = json['generationNumber'] is int
+        ? json['generationNumber'] as int
+        : int.tryParse('${json['generationNumber'] ?? ''}') ?? 1;
+    final echoGenRaw = json['echoGenerationNumber'];
+    final echoGen = echoGenRaw is int
+        ? echoGenRaw
+        : int.tryParse('${echoGenRaw ?? ''}') ?? (gen + 1);
+    return AvariClosedGenerationItem(
+      designId: id,
+      serial: serial,
+      displayName: name.isNotEmpty ? name : id,
+      imageUrl: json['imageUrl']?.toString(),
+      lottieUrl: json['lottieUrl']?.toString(),
+      faceMedia: json['faceMedia']?.toString(),
+      color: json['color']?.toString(),
+      generationNumber: gen,
+      masteryPoints: json['masteryPoints'] is int
+          ? json['masteryPoints'] as int
+          : int.tryParse('${json['masteryPoints'] ?? ''}') ?? 0,
+      echoMasterySeeded: json['echoMasterySeeded'] is int
+          ? json['echoMasterySeeded'] as int
+          : int.tryParse('${json['echoMasterySeeded'] ?? ''}') ?? 0,
+      echoGenerationNumber: echoGen,
+      legacyState: state,
+      echoDesignId: json['echoDesignId']?.toString(),
+      closedAt: json['closedAt']?.toString(),
+    );
+  }
+
+  final String designId;
+  final String serial;
+  final String displayName;
+  final String? imageUrl;
+  final String? lottieUrl;
+  final String? faceMedia;
+  final String? color;
+  final int generationNumber;
+  final int masteryPoints;
+  final int echoMasterySeeded;
+  final int? echoGenerationNumber;
+  final String legacyState;
+  final String? echoDesignId;
+  final String? closedAt;
+
+  String get legacyStateLabel {
+    switch (legacyState) {
+      case 'preserved':
+        return 'Preserved';
+      case 'lost':
+        return 'Lost';
+      default:
+        return legacyState.isNotEmpty ? legacyState : 'Closed';
+    }
+  }
+
+  /// e.g. "Gen 1 · 80 at close → +24 seeded to Gen 2 · Lost"
+  String get caption {
+    final echoGen = echoGenerationNumber ?? (generationNumber + 1);
+    return 'Gen $generationNumber · $masteryPoints at close '
+        '→ +$echoMasterySeeded seeded to Gen $echoGen · $legacyStateLabel';
+  }
+
+  AvariInventoryItem asInventoryItem() {
+    return AvariInventoryItem(
+      designId: designId,
+      displayName: displayName,
+      imageUrl: imageUrl,
+      lottieUrl: lottieUrl,
+      faceMedia: faceMedia,
+      color: color,
+      source: 'closed',
+      masteryPoints: masteryPoints,
+    );
+  }
+}
+
 class AvariProfile {
   const AvariProfile({
     required this.identity,
@@ -520,6 +622,7 @@ class AvariProfile {
     this.access = const [],
     this.slammers = const [],
     this.trove = const [],
+    this.closedGenerations = const [],
     this.preservationWindows = const [],
   });
 
@@ -540,6 +643,19 @@ class AvariProfile {
       return raw
           .whereType<Map>()
           .map((e) => AvariTroveItem.fromJson(Map<String, dynamic>.from(e)))
+          .where((e) => e.designId.isNotEmpty)
+          .toList();
+    }
+
+    List<AvariClosedGenerationItem> parseClosed(Object? raw) {
+      if (raw is! List) return const [];
+      return raw
+          .whereType<Map>()
+          .map(
+            (e) => AvariClosedGenerationItem.fromJson(
+              Map<String, dynamic>.from(e),
+            ),
+          )
           .where((e) => e.designId.isNotEmpty)
           .toList();
     }
@@ -586,6 +702,7 @@ class AvariProfile {
       access: parseItems(json['access']),
       slammers: parseItems(json['slammers']),
       trove: parseTrove(json['trove']),
+      closedGenerations: parseClosed(json['closedGenerations']),
       preservationWindows: parseItems(json['preservationWindows']),
     );
   }
@@ -600,6 +717,9 @@ class AvariProfile {
   final List<AvariInventoryItem> access;
   final List<AvariInventoryItem> slammers;
   final List<AvariTroveItem> trove;
+
+  /// Closed gens this player had mastery on (points frozen at close).
+  final List<AvariClosedGenerationItem> closedGenerations;
 
   /// Designs in first_offer / leader_window for this player (mastery / mastery cap).
   final List<AvariInventoryItem> preservationWindows;

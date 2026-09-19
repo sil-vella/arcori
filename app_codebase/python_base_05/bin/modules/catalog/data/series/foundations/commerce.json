@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CMC-MRT-SER003-0001",
+      "internalId": "CMC-MRT-SER003-GEN001-0001",
       "themeCode": "CMC",
       "designCode": "MRT",
       "designFamily": "MARKET_OF_RETURNING_TIDES",
@@ -42,7 +42,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Market of Returning Tides in anime style with a standard finish and no effect. Use a background that is visually related to Market of Returning Tides. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-MRT-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Market of Returning Tides in anime style with a standard finish and no effect. Use a background that is visually related to Market of Returning Tides. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-MRT-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Market of Returning Tides Arcori generation I from the Commerce Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "CMC-MUF-SER003-0002",
+      "internalId": "CMC-MUF-SER003-GEN001-0002",
       "themeCode": "CMC",
       "designCode": "MUF",
       "designFamily": "MARKET_UPON_THE_FROZEN_CANAL",
@@ -84,7 +84,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Market Upon the Frozen Canal in anime style with a standard finish and no effect. Use a background that is visually related to Market Upon the Frozen Canal. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-MUF-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Market Upon the Frozen Canal in anime style with a standard finish and no effect. Use a background that is visually related to Market Upon the Frozen Canal. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-MUF-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Market Upon the Frozen Canal Arcori generation I from the Commerce Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -92,7 +92,7 @@
       }
     },
     {
-      "internalId": "CMC-CAM-SER003-0003",
+      "internalId": "CMC-CAM-SER003-GEN001-0003",
       "themeCode": "CMC",
       "designCode": "CAM",
       "designFamily": "CARAVANS_AT_MIDWINTER",
@@ -126,7 +126,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Caravans at Midwinter in anime style with a standard finish and no effect. Use a background that is visually related to Caravans at Midwinter. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-CAM-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Caravans at Midwinter in anime style with a standard finish and no effect. Use a background that is visually related to Caravans at Midwinter. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-CAM-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Caravans at Midwinter Arcori generation I from the Commerce Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -134,7 +134,7 @@
       }
     },
     {
-      "internalId": "CMC-MAB-SER003-0004",
+      "internalId": "CMC-MAB-SER003-GEN001-0004",
       "themeCode": "CMC",
       "designCode": "MAB",
       "designFamily": "THE_MARKET_ABOVE_THE_BURIED_ROAD",
@@ -172,7 +172,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Market Above the Buried Road in anime style with a standard finish and no effect. Use a background that is visually related to The Market Above the Buried Road. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-MAB-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Market Above the Buried Road in anime style with a standard finish and no effect. Use a background that is visually related to The Market Above the Buried Road. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CMC-MAB-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Market Above the Buried Road Arcori generation I from the Commerce Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

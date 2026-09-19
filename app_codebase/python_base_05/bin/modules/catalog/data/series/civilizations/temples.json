@@ -1,0 +1,280 @@
+{
+  "catalog": "Temples Civilizations Series",
+  "theme": "Temples",
+  "series": "Civilizations",
+  "themeCode": "TMP",
+  "loreDescription": "Sacred places devoted to belief, ritual, devotion, and mystery.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "TMP-THM-SER004-GEN001-0001",
+      "themeCode": "TMP",
+      "designCode": "THM",
+      "designFamily": "TEMPLE_OF_THE_HIGH_MOON",
+      "design": "Temple of the High Moon",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Temples",
+      "subtheme": "Temples",
+      "style": "Watercolor",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 6.9,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Temple of the High Moon in watercolor style with a standard finish and no effect. Use a background that is visually related to Temple of the High Moon. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TMP-THM-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Temple of the High Moon Arcori generation I from the Temples Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "TMP-MTS-SER004-GEN001-0002",
+      "themeCode": "TMP",
+      "designCode": "MTS",
+      "designFamily": "MOON_TIDE_SHRINE",
+      "design": "Moon Tide Shrine",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Temples",
+      "subtheme": "Temples",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Moon Tide Shrine in realistic style with a standard finish and no effect. Use a background that is visually related to Moon Tide Shrine. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TMP-MTS-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Moon Tide Shrine Arcori generation I from the Temples Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "TMP-MTC-SER004-GEN001-0003",
+      "themeCode": "TMP",
+      "designCode": "MTC",
+      "designFamily": "MOONTIDE_TEMPLE_CENSER",
+      "design": "Moontide Temple Censer",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "ASH"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Temples",
+      "subtheme": "Temples",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Moontide Temple Censer in realistic style with a standard finish and no effect. Use a background that is visually related to Moontide Temple Censer. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TMP-MTC-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Moontide Temple Censer Arcori generation I from the Temples Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "TMP-APM-SER004-GEN001-0004",
+      "themeCode": "TMP",
+      "designCode": "APM",
+      "designFamily": "ASHFALL_PRAYER_MASK",
+      "design": "Ashfall Prayer Mask",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Temples",
+      "subtheme": "Temples",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ashfall Prayer Mask in realistic style with a standard finish and no effect. Use a background that is visually related to Ashfall Prayer Mask. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TMP-APM-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Ashfall Prayer Mask Arcori generation I from the Temples Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "TMP-PRC-SER004-GEN001-0005",
+      "themeCode": "TMP",
+      "designCode": "PRC",
+      "designFamily": "PRISM_CHALICE",
+      "design": "Prism Chalice",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Temples",
+      "subtheme": "Temples",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.0,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Prism Chalice in realistic style with a standard finish and no effect. Use a background that is visually related to Prism Chalice. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TMP-PRC-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Prism Chalice Arcori generation I from the Temples Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "TMP-CRX-SER004-GEN001-0006",
+      "themeCode": "TMP",
+      "designCode": "CRX",
+      "designFamily": "CRYSTAL_RELIQUARY",
+      "design": "Crystal Reliquary",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Temples",
+      "subtheme": "Temples",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Crystal Reliquary in realistic style with a standard finish and no effect. Use a background that is visually related to Crystal Reliquary. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named TMP-CRX-SER004-GEN001-0006.webp",
+      "loreDescription": "A collectible Crystal Reliquary Arcori generation I from the Temples Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

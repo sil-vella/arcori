@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "COU-CMV-SER003-0001",
+      "internalId": "COU-CMV-SER003-GEN001-0001",
       "themeCode": "COU",
       "designCode": "CMV",
       "designFamily": "CIRCLE_OF_MANY_VOICES",
@@ -44,7 +44,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Circle of Many Voices in minimalist style with a standard finish and no effect. Use a background that is visually related to Circle of Many Voices. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-CMV-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Circle of Many Voices in minimalist style with a standard finish and no effect. Use a background that is visually related to Circle of Many Voices. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-CMV-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Circle of Many Voices Arcori generation I from the Council Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "COU-CQV-SER003-0002",
+      "internalId": "COU-CQV-SER003-GEN001-0002",
       "themeCode": "COU",
       "designCode": "CQV",
       "designFamily": "THE_CIRCLE_OF_QUIET_VOICES",
@@ -88,7 +88,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Circle of Quiet Voices in minimalist style with a standard finish and no effect. Use a background that is visually related to The Circle of Quiet Voices. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-CQV-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with The Circle of Quiet Voices in minimalist style with a standard finish and no effect. Use a background that is visually related to The Circle of Quiet Voices. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-CQV-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible The Circle of Quiet Voices Arcori generation I from the Council Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "COU-COR-SER003-0003",
+      "internalId": "COU-COR-SER003-GEN001-0003",
       "themeCode": "COU",
       "designCode": "COR",
       "designFamily": "COUNCIL_OF_THE_OPEN_ROOT",
@@ -132,7 +132,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Council of the Open Root in minimalist style with a standard finish and no effect. Use a background that is visually related to Council of the Open Root. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-COR-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Council of the Open Root in minimalist style with a standard finish and no effect. Use a background that is visually related to Council of the Open Root. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-COR-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Council of the Open Root Arcori generation I from the Council Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "COU-VWA-SER003-0004",
+      "internalId": "COU-VWA-SER003-GEN001-0004",
       "themeCode": "COU",
       "designCode": "VWA",
       "designFamily": "VOICES_WITHIN_THE_ASH",
@@ -178,7 +178,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Voices Within the Ash in minimalist style with a standard finish and no effect. Use a background that is visually related to Voices Within the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-VWA-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Voices Within the Ash in minimalist style with a standard finish and no effect. Use a background that is visually related to Voices Within the Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named COU-VWA-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Voices Within the Ash Arcori generation I from the Council Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

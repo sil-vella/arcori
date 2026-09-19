@@ -8,6 +8,8 @@ import '../../core/navigation/contracts/register_drawer_contract.dart';
 import '../../core/state/auth/auth_providers.dart';
 import '../../core/state/user/user_profile_provider.dart';
 import '../../core/theme/theme.dart';
+import '../kin/kin_notifier.dart';
+import 'avari_notifier.dart';
 
 void registerAvariDrawer(AppDrawerSink drawer) {
   drawer.setHeader(
@@ -39,11 +41,24 @@ class AvariDrawerHeader extends ConsumerWidget {
         AppSpacing.sm,
       ),
       child: InkWell(
-        onTap: () => Nav.pushFromDrawer(
-          context,
-          AppPaths.avari,
-          scaffold: Scaffold.maybeOf(context),
-        ),
+        onTap: () {
+          final scaffold = Scaffold.maybeOf(context);
+          scaffold?.closeDrawer();
+          final current = Nav.matchedLocation(context).split('?').first;
+          if (current == AppPaths.avari) {
+            // Already on profile — force-refresh Arcori stats (push is a no-op).
+            if (auth.isAuthenticated) {
+              ref.read(avariProfileProvider.notifier).load(force: true);
+            }
+            ref.read(kinActiveSaveProvider.notifier).refresh();
+            return;
+          }
+          Nav.pushFromDrawer(
+            context,
+            AppPaths.avari,
+            scaffold: scaffold,
+          );
+        },
         borderRadius: BorderRadius.circular(AppSpacing.sm),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),

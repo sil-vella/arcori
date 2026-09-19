@@ -1,0 +1,236 @@
+{
+  "catalog": "Roads Civilizations Series",
+  "theme": "Roads",
+  "series": "Civilizations",
+  "themeCode": "ROD",
+  "loreDescription": "The physical links that connect settlements, regions, and distant peoples.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "ROD-RBA-SER004-GEN001-0001",
+      "themeCode": "ROD",
+      "designCode": "RBA",
+      "designFamily": "ROADS_BENEATH_ASH",
+      "design": "Roads Beneath Ash",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Roads",
+      "subtheme": "Roads",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.5,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Roads Beneath Ash in realistic style with a standard finish and no effect. Use a background that is visually related to Roads Beneath Ash. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ROD-RBA-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Roads Beneath Ash Arcori generation I from the Roads Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ROD-WKX-SER004-GEN001-0002",
+      "themeCode": "ROD",
+      "designCode": "WKX",
+      "designFamily": "WAYFINDER_KIT",
+      "design": "Wayfinder Kit",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Roads",
+      "subtheme": "Roads",
+      "style": "Pixel Art",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.8,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Wayfinder Kit in pixel art style with a standard finish and no effect. Use a background that is visually related to Wayfinder Kit. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ROD-WKX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Wayfinder Kit Arcori generation I from the Roads Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ROD-FWX-SER004-GEN001-0003",
+      "themeCode": "ROD",
+      "designCode": "FWX",
+      "designFamily": "FOREST_WAYMARKER",
+      "design": "Forest Waymarker",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Roads",
+      "subtheme": "Roads",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Forest Waymarker in realistic style with a standard finish and no effect. Use a background that is visually related to Forest Waymarker. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ROD-FWX-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Forest Waymarker Arcori generation I from the Roads Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ROD-ECX-SER004-GEN001-0004",
+      "themeCode": "ROD",
+      "designCode": "ECX",
+      "designFamily": "ECHO_COMPASS",
+      "design": "Echo Compass",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Roads",
+      "subtheme": "Roads",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Echo Compass in realistic style with a standard finish and no effect. Use a background that is visually related to Echo Compass. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ROD-ECX-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Echo Compass Arcori generation I from the Roads Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "ROD-GCX-SER004-GEN001-0005",
+      "themeCode": "ROD",
+      "designCode": "GCX",
+      "designFamily": "GROVEKEEPER_COMPASS",
+      "design": "Grovekeeper Compass",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Roads",
+      "subtheme": "Roads",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 6.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Grovekeeper Compass in realistic style with a standard finish and no effect. Use a background that is visually related to Grovekeeper Compass. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ROD-GCX-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Grovekeeper Compass Arcori generation I from the Roads Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

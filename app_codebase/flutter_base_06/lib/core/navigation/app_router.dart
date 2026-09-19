@@ -15,11 +15,17 @@ import 'contracts/register_route_contract.dart';
 final GlobalKey<NavigatorState> appRootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'appRoot');
 
+/// Shared [RouteObserver] for screens that refresh when they become visible
+/// again (e.g. Avari profile after popping Play).
+final RouteObserver<ModalRoute<void>> appRouteObserver =
+    RouteObserver<ModalRoute<void>>();
+
 /// Builds a router from the current sink contents, with auth redirect (Option A).
 GoRouter buildAppGoRouter(Ref ref) {
   final routes = List<RouteBase>.of(_AppRouteRegistry._instance._routes);
   final router = GoRouter(
     navigatorKey: appRootNavigatorKey,
+    observers: [appRouteObserver],
     initialLocation: AppPaths.home,
     redirect: (context, state) {
       final uri = state.uri;

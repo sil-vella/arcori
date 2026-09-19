@@ -31,6 +31,7 @@ class _VeloraThemeScreenState extends ConsumerState<VeloraThemeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(veloraProvider.notifier).loadThemes();
       ref
           .read(veloraThemeBrowseProvider(widget.themeCode).notifier)
           .load(force: true);
@@ -53,6 +54,16 @@ class _VeloraThemeScreenState extends ConsumerState<VeloraThemeScreen> {
     final title = (widget.themeName != null && widget.themeName!.isNotEmpty)
         ? widget.themeName!
         : widget.themeCode;
+    String? lore;
+    for (final theme in ref.watch(veloraProvider).themes) {
+      if (theme.themeCode == widget.themeCode) {
+        final text = theme.loreDescription?.trim();
+        if (text != null && text.isNotEmpty) {
+          lore = text;
+        }
+        break;
+      }
+    }
 
     return ModuleScreenRegistrar(
       appBarItems: [
@@ -104,8 +115,23 @@ class _VeloraThemeScreenState extends ConsumerState<VeloraThemeScreen> {
                           .load(force: true),
                       child: ListView.builder(
                         padding: AppSpacing.screenPadding,
-                        itemCount: browse.seriesGroups.length,
+                        itemCount: browse.seriesGroups.length +
+                            (lore != null ? 1 : 0),
                         itemBuilder: (context, index) {
+                          if (lore != null) {
+                            if (index == 0) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: AppSpacing.md,
+                                ),
+                                child: Text(
+                                  lore,
+                                  style: context.appTypography.bodyMuted,
+                                ),
+                              );
+                            }
+                            index -= 1;
+                          }
                           return _SeriesSection(
                             group: browse.seriesGroups[index],
                           );

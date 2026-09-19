@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LAN-SAT-SER003-0001",
+      "internalId": "LAN-SAT-SER003-GEN001-0001",
       "themeCode": "LAN",
       "designCode": "SAT",
       "designFamily": "SIGNS_ACROSS_THE_TIDE",
@@ -42,7 +42,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Signs Across the Tide in minimalist style with a standard finish and no effect. Use a background that is visually related to Signs Across the Tide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAN-SAT-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Signs Across the Tide in minimalist style with a standard finish and no effect. Use a background that is visually related to Signs Across the Tide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAN-SAT-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Signs Across the Tide Arcori generation I from the Language Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "LAN-SHS-SER003-0002",
+      "internalId": "LAN-SHS-SER003-GEN001-0002",
       "themeCode": "LAN",
       "designCode": "SHS",
       "designFamily": "THE_SHARED_SIGNAL",
@@ -86,7 +86,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Shared Signal in minimalist style with a standard finish and no effect. Use a background that is visually related to The Shared Signal. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAN-SHS-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with The Shared Signal in minimalist style with a standard finish and no effect. Use a background that is visually related to The Shared Signal. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAN-SHS-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible The Shared Signal Arcori generation I from the Language Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "LAN-FSS-SER003-0003",
+      "internalId": "LAN-FSS-SER003-GEN001-0003",
       "themeCode": "LAN",
       "designCode": "FSS",
       "designFamily": "THE_FIRST_SHARED_SIGN",
@@ -132,7 +132,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The First Shared Sign in minimalist style with a standard finish and no effect. Use a background that is visually related to The First Shared Sign. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAN-FSS-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with The First Shared Sign in minimalist style with a standard finish and no effect. Use a background that is visually related to The First Shared Sign. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAN-FSS-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible The First Shared Sign Arcori generation I from the Language Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "LAN-SSL-SER003-0004",
+      "internalId": "LAN-SSL-SER003-GEN001-0004",
       "themeCode": "LAN",
       "designCode": "SSL",
       "designFamily": "SIGNS_OF_SHARED_LIGHT",
@@ -178,7 +178,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Signs of Shared Light in minimalist style with a standard finish and no effect. Use a background that is visually related to Signs of Shared Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAN-SSL-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Signs of Shared Light in minimalist style with a standard finish and no effect. Use a background that is visually related to Signs of Shared Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LAN-SSL-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Signs of Shared Light Arcori generation I from the Language Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

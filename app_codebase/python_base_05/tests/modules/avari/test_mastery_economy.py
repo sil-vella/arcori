@@ -8,6 +8,7 @@ from modules.avari.mastery_economy import (
     clamp_points,
     compute_mastery_deltas,
     compute_mastery_value,
+    echo_mastery_seed,
     mastery_value_contribution,
     mastery_value_density,
     mastery_value_factor,
@@ -35,6 +36,15 @@ class MasteryEconomyTests(unittest.TestCase):
         self.assertEqual(clamp_points(4), 4)
         self.assertEqual(clamp_points(50, floor=100), 100)
         self.assertEqual(clamp_points(150, floor=100), 150)
+
+    def test_echo_mastery_seed_ratio_and_cap(self) -> None:
+        # 80 × 0.30 → 24; under preserve-1
+        self.assertEqual(echo_mastery_seed(80, preservation_requirement=100), 24)
+        # Cap below preserve offer line
+        self.assertEqual(echo_mastery_seed(500, preservation_requirement=100), 99)
+        # Low points still stay in pool
+        self.assertEqual(echo_mastery_seed(1, preservation_requirement=100), 1)
+        self.assertEqual(echo_mastery_seed(0, preservation_requirement=100), 0)
 
     def test_compute_own_and_other(self) -> None:
         rows = compute_mastery_deltas(

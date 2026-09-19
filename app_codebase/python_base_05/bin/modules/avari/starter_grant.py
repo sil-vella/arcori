@@ -20,7 +20,7 @@ from modules.catalog import catalog_loader as loader
 LOGGING_SWITCH = True
 
 STARTER_PACK_SIZE = 10
-STARTER_SLAMMER_ID = "SLM-STR-SER001-0001"
+STARTER_SLAMMER_ID = "SLM-STR-SER001-GEN001-0001"
 # Starter unlocks only from launch companion catalogs — not Creation / Foundations+.
 STARTER_SERIES_KEYS = frozenset({"genesis", "pioneers"})
 

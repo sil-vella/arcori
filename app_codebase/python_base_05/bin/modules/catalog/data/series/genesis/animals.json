@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "ANM-TIG-SER001-0001",
+      "internalId": "ANM-TIG-SER001-GEN001-0001",
       "themeCode": "ANM",
       "designCode": "TIG",
       "designFamily": "TIGER",
@@ -42,7 +42,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a tiger in comic style with a standard finish and no effect. Use a background that is visually related to the tiger. No borders, no frames. The tiger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-TIG-SER001-0001.webp",
+      "artworkPrompt": "Give me an image with a tiger in comic style with a standard finish and no effect. Use a background that is visually related to the tiger. No borders, no frames. The tiger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-TIG-SER001-GEN001-0001.webp",
       "loreDescription": "A collectible Tiger Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "ANM-WTI-SER001-0002",
+      "internalId": "ANM-WTI-SER001-GEN001-0002",
       "themeCode": "ANM",
       "designCode": "WTI",
       "designFamily": "WHITE_TIGER",
@@ -86,7 +86,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a white tiger in realistic style with a gloss finish and glow effect. Use a background that is visually related to the white tiger. No borders, no frames. The white tiger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-WTI-SER001-0002.webp",
+      "artworkPrompt": "Give me an image with a white tiger in realistic style with a gloss finish and glow effect. Use a background that is visually related to the white tiger. No borders, no frames. The white tiger should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-WTI-SER001-GEN001-0002.webp",
       "loreDescription": "A collectible White Tiger Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "ANM-LIO-SER001-0003",
+      "internalId": "ANM-LIO-SER001-GEN001-0003",
       "themeCode": "ANM",
       "designCode": "LIO",
       "designFamily": "LION",
@@ -130,7 +130,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a lion in realistic style with a standard finish and no effect. Use a background that is visually related to the lion. No borders, no frames. The lion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-LIO-SER001-0003.webp",
+      "artworkPrompt": "Give me an image with a lion in realistic style with a standard finish and no effect. Use a background that is visually related to the lion. No borders, no frames. The lion should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-LIO-SER001-GEN001-0003.webp",
       "loreDescription": "A collectible Lion Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "ANM-BPA-SER001-0004",
+      "internalId": "ANM-BPA-SER001-GEN001-0004",
       "themeCode": "ANM",
       "designCode": "BPA",
       "designFamily": "BLACK_PANTHER",
@@ -174,7 +174,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a black panther in comic style with a metallic finish and motion effect. Use a background that is visually related to the black panther. No borders, no frames. The black panther should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-BPA-SER001-0004.webp",
+      "artworkPrompt": "Give me an image with a black panther in comic style with a metallic finish and motion effect. Use a background that is visually related to the black panther. No borders, no frames. The black panther should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-BPA-SER001-GEN001-0004.webp",
       "loreDescription": "A collectible Black Panther Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -182,7 +182,7 @@
       }
     },
     {
-      "internalId": "ANM-CHE-SER001-0005",
+      "internalId": "ANM-CHE-SER001-GEN001-0005",
       "themeCode": "ANM",
       "designCode": "CHE",
       "designFamily": "CHEETAH",
@@ -218,7 +218,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a cheetah in anime style with a gloss finish and motion effect. Use a background that is visually related to the cheetah. No borders, no frames. The cheetah should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-CHE-SER001-0005.webp",
+      "artworkPrompt": "Give me an image with a cheetah in anime style with a gloss finish and motion effect. Use a background that is visually related to the cheetah. No borders, no frames. The cheetah should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-CHE-SER001-GEN001-0005.webp",
       "loreDescription": "A collectible Cheetah Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -226,7 +226,7 @@
       }
     },
     {
-      "internalId": "ANM-LEO-SER001-0006",
+      "internalId": "ANM-LEO-SER001-GEN001-0006",
       "themeCode": "ANM",
       "designCode": "LEO",
       "designFamily": "LEOPARD",
@@ -262,7 +262,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a leopard in watercolor style with a matte finish and no effect. Use a background that is visually related to the leopard. No borders, no frames. The leopard should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-LEO-SER001-0006.webp",
+      "artworkPrompt": "Give me an image with a leopard in watercolor style with a matte finish and no effect. Use a background that is visually related to the leopard. No borders, no frames. The leopard should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-LEO-SER001-GEN001-0006.webp",
       "loreDescription": "A collectible Leopard Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -270,7 +270,7 @@
       }
     },
     {
-      "internalId": "ANM-SNL-SER001-0007",
+      "internalId": "ANM-SNL-SER001-GEN001-0007",
       "themeCode": "ANM",
       "designCode": "SNL",
       "designFamily": "SNOW_LEOPARD",
@@ -304,7 +304,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a snow leopard in realistic style with a foil finish and sparkle effect. Use a background that is visually related to the snow leopard. No borders, no frames. The snow leopard should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-SNL-SER001-0007.webp",
+      "artworkPrompt": "Give me an image with a snow leopard in realistic style with a foil finish and sparkle effect. Use a background that is visually related to the snow leopard. No borders, no frames. The snow leopard should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-SNL-SER001-GEN001-0007.webp",
       "loreDescription": "A collectible Snow Leopard Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -312,7 +312,7 @@
       }
     },
     {
-      "internalId": "ANM-JAG-SER001-0008",
+      "internalId": "ANM-JAG-SER001-GEN001-0008",
       "themeCode": "ANM",
       "designCode": "JAG",
       "designFamily": "JAGUAR",
@@ -348,7 +348,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a jaguar in comic style with a chrome finish and pulse effect. Use a background that is visually related to the jaguar. No borders, no frames. The jaguar should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-JAG-SER001-0008.webp",
+      "artworkPrompt": "Give me an image with a jaguar in comic style with a chrome finish and pulse effect. Use a background that is visually related to the jaguar. No borders, no frames. The jaguar should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-JAG-SER001-GEN001-0008.webp",
       "loreDescription": "A collectible Jaguar Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -356,7 +356,7 @@
       }
     },
     {
-      "internalId": "ANM-AWO-SER001-0009",
+      "internalId": "ANM-AWO-SER001-GEN001-0009",
       "themeCode": "ANM",
       "designCode": "AWO",
       "designFamily": "ARCTIC_WOLF",
@@ -390,7 +390,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a arctic wolf in realistic style with a matte finish and no effect. Use a background that is visually related to the arctic wolf. No borders, no frames. The arctic wolf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-AWO-SER001-0009.webp",
+      "artworkPrompt": "Give me an image with a arctic wolf in realistic style with a matte finish and no effect. Use a background that is visually related to the arctic wolf. No borders, no frames. The arctic wolf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-AWO-SER001-GEN001-0009.webp",
       "loreDescription": "A collectible Arctic Wolf Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -398,7 +398,7 @@
       }
     },
     {
-      "internalId": "ANM-GWO-SER001-0010",
+      "internalId": "ANM-GWO-SER001-GEN001-0010",
       "themeCode": "ANM",
       "designCode": "GWO",
       "designFamily": "GREY_WOLF",
@@ -434,7 +434,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a grey wolf in comic style with a standard finish and no effect. Use a background that is visually related to the grey wolf. No borders, no frames. The grey wolf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-GWO-SER001-0010.webp",
+      "artworkPrompt": "Give me an image with a grey wolf in comic style with a standard finish and no effect. Use a background that is visually related to the grey wolf. No borders, no frames. The grey wolf should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-GWO-SER001-GEN001-0010.webp",
       "loreDescription": "A collectible Grey Wolf Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -442,7 +442,7 @@
       }
     },
     {
-      "internalId": "ANM-RFX-SER001-0011",
+      "internalId": "ANM-RFX-SER001-GEN001-0011",
       "themeCode": "ANM",
       "designCode": "RFX",
       "designFamily": "RED_FOX",
@@ -478,7 +478,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a red fox in cartoon style with a gloss finish and motion effect. Use a background that is visually related to the red fox. No borders, no frames. The red fox should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-RFX-SER001-0011.webp",
+      "artworkPrompt": "Give me an image with a red fox in cartoon style with a gloss finish and motion effect. Use a background that is visually related to the red fox. No borders, no frames. The red fox should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-RFX-SER001-GEN001-0011.webp",
       "loreDescription": "A collectible Red Fox Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -486,7 +486,7 @@
       }
     },
     {
-      "internalId": "ANM-GEA-SER001-0012",
+      "internalId": "ANM-GEA-SER001-GEN001-0012",
       "themeCode": "ANM",
       "designCode": "GEA",
       "designFamily": "GOLDEN_EAGLE",
@@ -524,7 +524,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a golden eagle in realistic style with a metallic finish and glow effect. Use a background that is visually related to the golden eagle. No borders, no frames. The golden eagle should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-GEA-SER001-0012.webp",
+      "artworkPrompt": "Give me an image with a golden eagle in realistic style with a metallic finish and glow effect. Use a background that is visually related to the golden eagle. No borders, no frames. The golden eagle should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-GEA-SER001-GEN001-0012.webp",
       "loreDescription": "A collectible Golden Eagle Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -532,7 +532,7 @@
       }
     },
     {
-      "internalId": "ANM-PFA-SER001-0013",
+      "internalId": "ANM-PFA-SER001-GEN001-0013",
       "themeCode": "ANM",
       "designCode": "PFA",
       "designFamily": "PEREGRINE_FALCON",
@@ -570,7 +570,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a peregrine falcon in comic style with a standard finish and no effect. Use a background that is visually related to the peregrine falcon. No borders, no frames. The peregrine falcon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-PFA-SER001-0013.webp",
+      "artworkPrompt": "Give me an image with a peregrine falcon in comic style with a standard finish and no effect. Use a background that is visually related to the peregrine falcon. No borders, no frames. The peregrine falcon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-PFA-SER001-GEN001-0013.webp",
       "loreDescription": "A collectible Peregrine Falcon Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -578,7 +578,7 @@
       }
     },
     {
-      "internalId": "ANM-GWS-SER001-0014",
+      "internalId": "ANM-GWS-SER001-GEN001-0014",
       "themeCode": "ANM",
       "designCode": "GWS",
       "designFamily": "GREAT_WHITE_SHARK",
@@ -614,7 +614,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a great white shark in realistic style with a chrome finish and motion effect. Use a background that is visually related to the great white shark. No borders, no frames. The great white shark should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-GWS-SER001-0014.webp",
+      "artworkPrompt": "Give me an image with a great white shark in realistic style with a chrome finish and motion effect. Use a background that is visually related to the great white shark. No borders, no frames. The great white shark should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-GWS-SER001-GEN001-0014.webp",
       "loreDescription": "A collectible Great White Shark Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -622,7 +622,7 @@
       }
     },
     {
-      "internalId": "ANM-ORC-SER001-0015",
+      "internalId": "ANM-ORC-SER001-GEN001-0015",
       "themeCode": "ANM",
       "designCode": "ORC",
       "designFamily": "ORCA",
@@ -658,7 +658,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a orca in minimalist style with a gloss finish and no effect. Use a background that is visually related to the orca. No borders, no frames. The orca should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-ORC-SER001-0015.webp",
+      "artworkPrompt": "Give me an image with a orca in minimalist style with a gloss finish and no effect. Use a background that is visually related to the orca. No borders, no frames. The orca should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-ORC-SER001-GEN001-0015.webp",
       "loreDescription": "A collectible Orca Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -666,7 +666,7 @@
       }
     },
     {
-      "internalId": "ANM-KCO-SER001-0016",
+      "internalId": "ANM-KCO-SER001-GEN001-0016",
       "themeCode": "ANM",
       "designCode": "KCO",
       "designFamily": "KING_COBRA",
@@ -702,7 +702,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a king cobra in comic style with a foil finish and glow effect. Use a background that is visually related to the king cobra. No borders, no frames. The king cobra should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-KCO-SER001-0016.webp",
+      "artworkPrompt": "Give me an image with a king cobra in comic style with a foil finish and glow effect. Use a background that is visually related to the king cobra. No borders, no frames. The king cobra should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-KCO-SER001-GEN001-0016.webp",
       "loreDescription": "A collectible King Cobra Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -710,7 +710,7 @@
       }
     },
     {
-      "internalId": "ANM-KDR-SER001-0017",
+      "internalId": "ANM-KDR-SER001-GEN001-0017",
       "themeCode": "ANM",
       "designCode": "KDR",
       "designFamily": "KOMODO_DRAGON",
@@ -746,7 +746,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a komodo dragon in realistic style with a matte finish and no effect. Use a background that is visually related to the komodo dragon. No borders, no frames. The komodo dragon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-KDR-SER001-0017.webp",
+      "artworkPrompt": "Give me an image with a komodo dragon in realistic style with a matte finish and no effect. Use a background that is visually related to the komodo dragon. No borders, no frames. The komodo dragon should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-KDR-SER001-GEN001-0017.webp",
       "loreDescription": "A collectible Komodo Dragon Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -754,7 +754,7 @@
       }
     },
     {
-      "internalId": "ANM-SCR-SER001-0018",
+      "internalId": "ANM-SCR-SER001-GEN001-0018",
       "themeCode": "ANM",
       "designCode": "SCR",
       "designFamily": "SALTWATER_CROCODILE",
@@ -790,7 +790,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a saltwater crocodile in realistic style with a standard finish and no effect. Use a background that is visually related to the saltwater crocodile. No borders, no frames. The saltwater crocodile should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-SCR-SER001-0018.webp",
+      "artworkPrompt": "Give me an image with a saltwater crocodile in realistic style with a standard finish and no effect. Use a background that is visually related to the saltwater crocodile. No borders, no frames. The saltwater crocodile should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-SCR-SER001-GEN001-0018.webp",
       "loreDescription": "A collectible Saltwater Crocodile Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -798,7 +798,7 @@
       }
     },
     {
-      "internalId": "ANM-EDR-SER001-0019",
+      "internalId": "ANM-EDR-SER001-GEN001-0019",
       "themeCode": "ANM",
       "designCode": "EDR",
       "designFamily": "EMPEROR_DRAGONFLY",
@@ -836,7 +836,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a emperor dragonfly in anime style with a transparent finish and sparkle effect. Use a background that is visually related to the emperor dragonfly. No borders, no frames. The emperor dragonfly should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-EDR-SER001-0019.webp",
+      "artworkPrompt": "Give me an image with a emperor dragonfly in anime style with a transparent finish and sparkle effect. Use a background that is visually related to the emperor dragonfly. No borders, no frames. The emperor dragonfly should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-EDR-SER001-GEN001-0019.webp",
       "loreDescription": "A collectible Emperor Dragonfly Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,
@@ -844,7 +844,7 @@
       }
     },
     {
-      "internalId": "ANM-MBF-SER001-0020",
+      "internalId": "ANM-MBF-SER001-GEN001-0020",
       "themeCode": "ANM",
       "designCode": "MBF",
       "designFamily": "MONARCH_BUTTERFLY",
@@ -882,7 +882,7 @@
       "series": "Genesis Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with a monarch butterfly in watercolor style with a prismatic finish and rainbow shift effect. Use a background that is visually related to the monarch butterfly. No borders, no frames. The monarch butterfly should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-MBF-SER001-0020.webp",
+      "artworkPrompt": "Give me an image with a monarch butterfly in watercolor style with a prismatic finish and rainbow shift effect. Use a background that is visually related to the monarch butterfly. No borders, no frames. The monarch butterfly should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ANM-MBF-SER001-GEN001-0020.webp",
       "loreDescription": "A collectible Monarch Butterfly Arcori generation I from the Animals Genesis Series.",
       "legacy": {
         "preservationRequirement": 500,

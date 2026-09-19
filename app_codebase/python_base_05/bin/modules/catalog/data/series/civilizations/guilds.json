@@ -1,0 +1,188 @@
+{
+  "catalog": "Guilds Civilizations Series",
+  "theme": "Guilds",
+  "series": "Civilizations",
+  "themeCode": "GLD",
+  "loreDescription": "Organized groups of makers, builders, traders, keepers, healers, or specialists.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "GLD-TGX-SER004-GEN001-0001",
+      "themeCode": "GLD",
+      "designCode": "TGX",
+      "designFamily": "TIMBER_GUILDS",
+      "design": "Timber Guilds",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Guilds",
+      "subtheme": "Guilds",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.8,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Timber Guilds in realistic style with a standard finish and no effect. Use a background that is visually related to Timber Guilds. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GLD-TGX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Timber Guilds Arcori generation I from the Guilds Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "GLD-GTX-SER004-GEN001-0002",
+      "themeCode": "GLD",
+      "designCode": "GTX",
+      "designFamily": "GUILD_TABLE",
+      "design": "Guild Table",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Guilds",
+      "subtheme": "Guilds",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.2,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Guild Table in realistic style with a standard finish and no effect. Use a background that is visually related to Guild Table. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GLD-GTX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Guild Table Arcori generation I from the Guilds Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "GLD-GEX-SER004-GEN001-0003",
+      "themeCode": "GLD",
+      "designCode": "GEX",
+      "designFamily": "GUILDHALL_EMBLEM",
+      "design": "Guildhall Emblem",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Guilds",
+      "subtheme": "Guilds",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 4.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Guildhall Emblem in realistic style with a standard finish and no effect. Use a background that is visually related to Guildhall Emblem. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GLD-GEX-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Guildhall Emblem Arcori generation I from the Guilds Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "GLD-ALX-SER004-GEN001-0004",
+      "themeCode": "GLD",
+      "designCode": "ALX",
+      "designFamily": "ASHMARKED_LEDGER",
+      "design": "Ashmarked Ledger",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Guilds",
+      "subtheme": "Guilds",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ashmarked Ledger in realistic style with a standard finish and no effect. Use a background that is visually related to Ashmarked Ledger. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named GLD-ALX-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Ashmarked Ledger Arcori generation I from the Guilds Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

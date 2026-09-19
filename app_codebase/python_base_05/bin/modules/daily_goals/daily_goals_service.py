@@ -11,7 +11,7 @@ from core.errors.app_error import AppError
 from core.utils.dev_logger import customlog
 from core.utils.media_fields import media_for_client
 from models.avari_profile import AvariProfile
-from modules.avari.gold_economy import normalize_wallet
+from modules.avari.gold_economy import apply_fragment_delta, normalize_wallet
 from modules.daily_goals import daily_goals_repository as repo
 from modules.daily_goals.daily_goals_errors import (
     ALREADY_CLAIMED,
@@ -30,6 +30,7 @@ from modules.daily_goals.daily_goals_loader import (
     list_goals,
     load_daily_goals_document,
 )
+from modules.daily_goals.daily_goals_notifications import notify_daily_completions
 from modules.daily_goals.daily_goals_types import (
     TASK_TYPE_CLAIM_GATE,
     TASK_TYPE_FLIPS_COMPLETED,
@@ -102,6 +103,11 @@ def client_goal_row(entry: dict[str, Any]) -> dict[str, Any]:
             **(
                 {"tableId": reward.get("table_id")}
                 if "table_id" in reward
+                else {}
+            ),
+            **(
+                {"amount": int(reward.get("amount"))}
+                if reward.get("amount") is not None
                 else {}
             ),
         },
@@ -519,15 +525,54 @@ def claim_goal(
 
     _mark_complete(row, goal, today)
     no_miss = _sync_no_miss_streak(session, avari, today)
-    session.flush()
 
     reward = goal.get("reward") if isinstance(goal.get("reward"), dict) else {}
+    kind = str(reward.get("kind") or "gold_fragments").strip().lower()
+    try:
+        amount = int(reward.get("amount") if reward.get("amount") is not None else 2)
+    except (TypeError, ValueError):
+        amount = 2
+    amount = max(0, amount)
+    # mystery_box is an alias for a fixed fragment grant.
+    if kind in ("gold_fragments", "mystery_box") and amount > 0:
+        after_a, after_f, _, _ = apply_fragment_delta(
+            int(avari.gold_arcori),
+            int(avari.gold_fragments),
+            amount,
+        )
+        avari.gold_arcori = after_a
+        avari.gold_fragments = after_f
+    else:
+        after_a, after_f = normalize_wallet(
+            int(avari.gold_arcori), int(avari.gold_fragments)
+        )
+
+    avari.daily_cache_claimed_at = datetime.now(timezone.utc)
+    session.flush()
+
+    goal_row = client_goal_row(goal)
+    try:
+        notify_daily_completions(
+            user_id=user_id,
+            day_key=today,
+            completed_rows=[goal_row],
+        )
+    except Exception as exc:  # noqa: BLE001 — claim must still succeed
+        if LOGGING_SWITCH:
+            customlog(f"daily_goals: claim notify soft-fail goal={gid} err={exc}")
+
     reward_out: dict[str, Any] = {
-        "kind": reward.get("kind") or "mystery_box",
-        "status": "deferred",
+        "kind": "gold_fragments" if kind == "mystery_box" else kind,
+        "amount": amount,
+        "status": "granted",
+        "goldArcori": int(after_a),
+        "goldFragments": int(after_f),
     }
     if LOGGING_SWITCH:
-        customlog(f"daily_goals: claim user={user_id} goal={gid}")
+        customlog(
+            f"daily_goals: claim user={user_id} goal={gid} "
+            f"frags=+{amount} goldArcori={after_a} frags={after_f}"
+        )
     payload = build_progress_payload(
         session,
         user_id=user_id,
@@ -536,7 +581,7 @@ def claim_goal(
         no_miss=no_miss,
     )
     payload["reward"] = reward_out
-    payload["goal"] = client_goal_row(goal)
+    payload["goal"] = goal_row
     return payload
 
 

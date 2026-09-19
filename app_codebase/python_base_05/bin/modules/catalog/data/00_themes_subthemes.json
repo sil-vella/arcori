@@ -3,6 +3,14 @@
   "generatedFrom": "catalog JSON files in data/",
   "themes": [
     {
+      "theme": "Academies",
+      "themeCode": "ACA",
+      "subthemes": [
+        "Academies"
+      ],
+      "loreDescription": "Centers of learning, skill, discipline, and regional philosophy."
+    },
+    {
       "theme": "Alliance",
       "themeCode": "ALL",
       "subthemes": [
@@ -22,6 +30,14 @@
       ]
     },
     {
+      "theme": "Archives",
+      "themeCode": "ARC",
+      "subthemes": [
+        "Archives"
+      ],
+      "loreDescription": "Places where memory, records, maps, and truths are preserved."
+    },
+    {
       "theme": "Artistry",
       "themeCode": "ART",
       "subthemes": [
@@ -34,6 +50,22 @@
       "subthemes": [
         "Belief"
       ]
+    },
+    {
+      "theme": "Borders",
+      "themeCode": "BOR",
+      "subthemes": [
+        "Borders"
+      ],
+      "loreDescription": "The edges where one civilization ends and another begins \u2014 often tense or symbolic."
+    },
+    {
+      "theme": "Capital",
+      "themeCode": "CAP",
+      "subthemes": [
+        "Capital"
+      ],
+      "loreDescription": "The main heart of a region's civilization; its largest and most symbolic settlement."
     },
     {
       "theme": "Celebration",
@@ -78,11 +110,35 @@
       ]
     },
     {
+      "theme": "Council",
+      "themeCode": "CCL",
+      "subthemes": [
+        "Council"
+      ],
+      "loreDescription": "The ruling or guiding body that shapes the direction of a civilization."
+    },
+    {
       "theme": "Craft",
       "themeCode": "CRA",
       "subthemes": [
         "Craft"
       ]
+    },
+    {
+      "theme": "Craftsmanship",
+      "themeCode": "CFM",
+      "subthemes": [
+        "Craftsmanship"
+      ],
+      "loreDescription": "The signature objects, tools, clothing, ornaments, and artistry of a people."
+    },
+    {
+      "theme": "Customs",
+      "themeCode": "CUS",
+      "subthemes": [
+        "Customs"
+      ],
+      "loreDescription": "Daily rituals, habits, greetings, and practices that define regional culture."
     },
     {
       "theme": "Devotion",
@@ -104,6 +160,30 @@
       "subthemes": [
         "Discovery"
       ]
+    },
+    {
+      "theme": "Districts",
+      "themeCode": "DST",
+      "subthemes": [
+        "Districts"
+      ],
+      "loreDescription": "Different quarters of society: trade, learning, worship, craft, residence, and governance."
+    },
+    {
+      "theme": "Dynasties",
+      "themeCode": "DYN",
+      "subthemes": [
+        "Dynasties"
+      ],
+      "loreDescription": "Lines of leadership, inherited roles, or long-standing houses that shaped the civilization."
+    },
+    {
+      "theme": "Envoys",
+      "themeCode": "ENV",
+      "subthemes": [
+        "Envoys"
+      ],
+      "loreDescription": "Diplomats, messengers, and representatives connecting one civilization to another."
     },
     {
       "theme": "Exploration",
@@ -128,6 +208,14 @@
       ]
     },
     {
+      "theme": "Festivals",
+      "themeCode": "FES",
+      "subthemes": [
+        "Festivals"
+      ],
+      "loreDescription": "Public celebrations that reveal joy, tradition, memory, and community."
+    },
+    {
       "theme": "Gaming",
       "themeCode": "GAM",
       "subthemes": [
@@ -142,6 +230,22 @@
       ]
     },
     {
+      "theme": "Guilds",
+      "themeCode": "GLD",
+      "subthemes": [
+        "Guilds"
+      ],
+      "loreDescription": "Organized groups of makers, builders, traders, keepers, healers, or specialists."
+    },
+    {
+      "theme": "Harbors",
+      "themeCode": "HBR",
+      "subthemes": [
+        "Harbors"
+      ],
+      "loreDescription": "Docks, piers, river stations, or bayfront hubs for travel and trade."
+    },
+    {
       "theme": "Harvest",
       "themeCode": "HAR",
       "subthemes": [
@@ -154,6 +258,14 @@
       "subthemes": [
         "Hearth"
       ]
+    },
+    {
+      "theme": "Heraldry",
+      "themeCode": "HLD",
+      "subthemes": [
+        "Heraldry"
+      ],
+      "loreDescription": "Symbols, banners, emblems, and visual identities of each civilization."
     },
     {
       "theme": "History",
@@ -279,11 +391,27 @@
       ]
     },
     {
+      "theme": "Markets",
+      "themeCode": "MKT",
+      "subthemes": [
+        "Markets"
+      ],
+      "loreDescription": "Bustling centers of exchange, barter, rare goods, and regional identity."
+    },
+    {
       "theme": "Memory",
       "themeCode": "MEM",
       "subthemes": [
         "Memory"
       ]
+    },
+    {
+      "theme": "Monuments",
+      "themeCode": "MON",
+      "subthemes": [
+        "Monuments"
+      ],
+      "loreDescription": "Great structures built to honor victories, origins, myths, or heroes."
     },
     {
       "theme": "Music",
@@ -357,6 +485,14 @@
       "subthemes": [
         "Resilience"
       ]
+    },
+    {
+      "theme": "Roads",
+      "themeCode": "ROD",
+      "subthemes": [
+        "Roads"
+      ],
+      "loreDescription": "The physical links that connect settlements, regions, and distant peoples."
     },
     {
       "theme": "Sanctuary",
@@ -446,6 +582,14 @@
       ]
     },
     {
+      "theme": "Strongholds",
+      "themeCode": "SGH",
+      "subthemes": [
+        "Strongholds"
+      ],
+      "loreDescription": "Fortified places that guard a civilization's borders, treasures, or secrets."
+    },
+    {
       "theme": "Technology",
       "themeCode": "TEC",
       "subthemes": [
@@ -469,6 +613,14 @@
         "Imported Series",
         "Mystery"
       ]
+    },
+    {
+      "theme": "Temples",
+      "themeCode": "TMP",
+      "subthemes": [
+        "Temples"
+      ],
+      "loreDescription": "Sacred places devoted to belief, ritual, devotion, and mystery."
     },
     {
       "theme": "The Dark",
@@ -521,6 +673,14 @@
         "Supercars",
         "Trains"
       ]
+    },
+    {
+      "theme": "Watchers",
+      "themeCode": "WCH",
+      "subthemes": [
+        "Watchers"
+      ],
+      "loreDescription": "Guardians, patrols, sentinels, or spiritual protectors who oversee the land."
     },
     {
       "theme": "Wayfinding",

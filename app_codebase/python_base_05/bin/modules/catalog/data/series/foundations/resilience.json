@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "RES-TTR-SER003-0001",
+      "internalId": "RES-TTR-SER003-GEN001-0001",
       "themeCode": "RES",
       "designCode": "TTR",
       "designFamily": "THE_TOWN_THAT_ROSE_AGAIN",
@@ -40,7 +40,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Town That Rose Again in neon style with a standard finish and no effect. Use a background that is visually related to The Town That Rose Again. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named RES-TTR-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with The Town That Rose Again in neon style with a standard finish and no effect. Use a background that is visually related to The Town That Rose Again. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named RES-TTR-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible The Town That Rose Again Arcori generation I from the Resilience Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -48,7 +48,7 @@
       }
     },
     {
-      "internalId": "RES-TOT-SER003-0002",
+      "internalId": "RES-TOT-SER003-GEN001-0002",
       "themeCode": "RES",
       "designCode": "TOT",
       "designFamily": "THE_TOWN_THAT_ROSE_BY_MORNING",
@@ -82,7 +82,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Town That Rose by Morning in neon style with a standard finish and no effect. Use a background that is visually related to The Town That Rose by Morning. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named RES-TOT-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with The Town That Rose by Morning in neon style with a standard finish and no effect. Use a background that is visually related to The Town That Rose by Morning. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named RES-TOT-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible The Town That Rose by Morning Arcori generation I from the Resilience Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -90,7 +90,7 @@
       }
     },
     {
-      "internalId": "RES-LAA-SER003-0003",
+      "internalId": "RES-LAA-SER003-GEN001-0003",
       "themeCode": "RES",
       "designCode": "LAA",
       "designFamily": "LIGHTS_AFTER_THE_AVALANCHE",
@@ -124,7 +124,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Lights After the Avalanche in neon style with a standard finish and no effect. Use a background that is visually related to Lights After the Avalanche. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named RES-LAA-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Lights After the Avalanche in neon style with a standard finish and no effect. Use a background that is visually related to Lights After the Avalanche. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named RES-LAA-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Lights After the Avalanche Arcori generation I from the Resilience Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -132,7 +132,7 @@
       }
     },
     {
-      "internalId": "RES-MOA-SER003-0004",
+      "internalId": "RES-MOA-SER003-GEN001-0004",
       "themeCode": "RES",
       "designCode": "MOA",
       "designFamily": "MORNING_AFTER_THE_BREAKING",
@@ -166,7 +166,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Morning After the Breaking in neon style with a standard finish and no effect. Use a background that is visually related to Morning After the Breaking. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named RES-MOA-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with Morning After the Breaking in neon style with a standard finish and no effect. Use a background that is visually related to Morning After the Breaking. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named RES-MOA-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible Morning After the Breaking Arcori generation I from the Resilience Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

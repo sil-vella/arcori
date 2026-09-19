@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "ART-REC-SER003-0001",
+      "internalId": "ART-REC-SER003-GEN001-0001",
       "themeCode": "ART",
       "designCode": "REC",
       "designFamily": "THE_REMEMBERED_CANVAS",
@@ -42,7 +42,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Remembered Canvas in retro style with a standard finish and no effect. Use a background that is visually related to The Remembered Canvas. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-REC-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with The Remembered Canvas in retro style with a standard finish and no effect. Use a background that is visually related to The Remembered Canvas. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-REC-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible The Remembered Canvas Arcori generation I from the Artistry Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "ART-FFR-SER003-0002",
+      "internalId": "ART-FFR-SER003-GEN001-0002",
       "themeCode": "ART",
       "designCode": "FFR",
       "designFamily": "FORMS_THE_FOREST_REMEMBERED",
@@ -86,7 +86,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Forms the Forest Remembered in retro style with a standard finish and no effect. Use a background that is visually related to Forms the Forest Remembered. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-FFR-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Forms the Forest Remembered in retro style with a standard finish and no effect. Use a background that is visually related to Forms the Forest Remembered. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-FFR-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Forms the Forest Remembered Arcori generation I from the Artistry Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "ART-CGF-SER003-0003",
+      "internalId": "ART-CGF-SER003-GEN001-0003",
       "themeCode": "ART",
       "designCode": "CGF",
       "designFamily": "COLORS_GIVEN_FORM",
@@ -132,7 +132,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Colors Given Form in retro style with a standard finish and no effect. Use a background that is visually related to Colors Given Form. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-CGF-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Colors Given Form in retro style with a standard finish and no effect. Use a background that is visually related to Colors Given Form. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-CGF-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Colors Given Form Arcori generation I from the Artistry Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "ART-CPL-SER003-0004",
+      "internalId": "ART-CPL-SER003-GEN001-0004",
       "themeCode": "ART",
       "designCode": "CPL",
       "designFamily": "THE_CITY_PAINTED_BY_LIGHT",
@@ -178,7 +178,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The City Painted by Light in retro style with a standard finish and no effect. Use a background that is visually related to The City Painted by Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-CPL-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The City Painted by Light in retro style with a standard finish and no effect. Use a background that is visually related to The City Painted by Light. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named ART-CPL-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The City Painted by Light Arcori generation I from the Artistry Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

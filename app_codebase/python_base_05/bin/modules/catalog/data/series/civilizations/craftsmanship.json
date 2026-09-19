@@ -1,0 +1,234 @@
+{
+  "catalog": "Craftsmanship Civilizations Series",
+  "theme": "Craftsmanship",
+  "series": "Civilizations",
+  "themeCode": "CFM",
+  "loreDescription": "The signature objects, tools, clothing, ornaments, and artistry of a people.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "CFM-TIM-SER004-GEN001-0001",
+      "themeCode": "CFM",
+      "designCode": "TIM",
+      "designFamily": "TIMBERCRAFT",
+      "design": "Timbercraft",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Craftsmanship",
+      "subtheme": "Craftsmanship",
+      "style": "Low Poly",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 6.9,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Timbercraft in low poly style with a standard finish and no effect. Use a background that is visually related to Timbercraft. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CFM-TIM-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Timbercraft Arcori generation I from the Craftsmanship Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CFM-ABX-SER004-GEN001-0002",
+      "themeCode": "CFM",
+      "designCode": "ABX",
+      "designFamily": "ARTISAN_BENCH",
+      "design": "Artisan Bench",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Craftsmanship",
+      "subtheme": "Craftsmanship",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.7,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Artisan Bench in realistic style with a standard finish and no effect. Use a background that is visually related to Artisan Bench. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CFM-ABX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Artisan Bench Arcori generation I from the Craftsmanship Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CFM-LCH-SER004-GEN001-0003",
+      "themeCode": "CFM",
+      "designCode": "LCH",
+      "designFamily": "LEAFFORGED_CRAFT_HAMMER",
+      "design": "Leafforged Craft Hammer",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Craftsmanship",
+      "subtheme": "Craftsmanship",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 9.7,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Leafforged Craft Hammer in realistic style with a standard finish and no effect. Use a background that is visually related to Leafforged Craft Hammer. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CFM-LCH-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Leafforged Craft Hammer Arcori generation I from the Craftsmanship Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CFM-RUC-SER004-GEN001-0004",
+      "themeCode": "CFM",
+      "designCode": "RUC",
+      "designFamily": "RUINSMITH_CHISEL",
+      "design": "Ruinsmith Chisel",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Craftsmanship",
+      "subtheme": "Craftsmanship",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.8,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ruinsmith Chisel in realistic style with a standard finish and no effect. Use a background that is visually related to Ruinsmith Chisel. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CFM-RUC-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Ruinsmith Chisel Arcori generation I from the Craftsmanship Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "CFM-LVR-SER004-GEN001-0005",
+      "themeCode": "CFM",
+      "designCode": "LVR",
+      "designFamily": "LIVING_VINE_RING",
+      "design": "Living Vine Ring",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Craftsmanship",
+      "subtheme": "Craftsmanship",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 6.3,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Living Vine Ring in realistic style with a standard finish and no effect. Use a background that is visually related to Living Vine Ring. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named CFM-LVR-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Living Vine Ring Arcori generation I from the Craftsmanship Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}

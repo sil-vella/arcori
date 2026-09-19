@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "DIS-CBW-SER003-0001",
+      "internalId": "DIS-CBW-SER003-GEN001-0001",
       "themeCode": "DIS",
       "designCode": "CBW",
       "designFamily": "CIRCLE_BENEATH_THE_WILD",
@@ -42,7 +42,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Circle Beneath the Wild in comic style with a standard finish and no effect. Use a background that is visually related to Circle Beneath the Wild. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIS-CBW-SER003-0001.webp",
+      "artworkPrompt": "Give me an image with Circle Beneath the Wild in comic style with a standard finish and no effect. Use a background that is visually related to Circle Beneath the Wild. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIS-CBW-SER003-GEN001-0001.webp",
       "loreDescription": "A collectible Circle Beneath the Wild Arcori generation I from the Discovery Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "DIS-DWS-SER003-0002",
+      "internalId": "DIS-DWS-SER003-GEN001-0002",
       "themeCode": "DIS",
       "designCode": "DWS",
       "designFamily": "DOOR_WITHIN_THE_STORMSPLIT_TREE",
@@ -86,7 +86,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Door Within the Stormsplit Tree in comic style with a standard finish and no effect. Use a background that is visually related to Door Within the Stormsplit Tree. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIS-DWS-SER003-0002.webp",
+      "artworkPrompt": "Give me an image with Door Within the Stormsplit Tree in comic style with a standard finish and no effect. Use a background that is visually related to Door Within the Stormsplit Tree. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIS-DWS-SER003-GEN001-0002.webp",
       "loreDescription": "A collectible Door Within the Stormsplit Tree Arcori generation I from the Discovery Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "DIS-SBL-SER003-0003",
+      "internalId": "DIS-SBL-SER003-GEN001-0003",
       "themeCode": "DIS",
       "designCode": "SBL",
       "designFamily": "STEPS_BENEATH_THE_LOWEST_TIDE",
@@ -130,7 +130,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with Steps Beneath the Lowest Tide in comic style with a standard finish and no effect. Use a background that is visually related to Steps Beneath the Lowest Tide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIS-SBL-SER003-0003.webp",
+      "artworkPrompt": "Give me an image with Steps Beneath the Lowest Tide in comic style with a standard finish and no effect. Use a background that is visually related to Steps Beneath the Lowest Tide. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIS-SBL-SER003-GEN001-0003.webp",
       "loreDescription": "A collectible Steps Beneath the Lowest Tide Arcori generation I from the Discovery Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "DIS-SBM-SER003-0004",
+      "internalId": "DIS-SBM-SER003-GEN001-0004",
       "themeCode": "DIS",
       "designCode": "SBM",
       "designFamily": "THE_SHORE_BENEATH_THE_MOON",
@@ -174,7 +174,7 @@
       "series": "Foundations Series",
       "worldState": "Active",
       "seasonState": "Active",
-      "artworkPrompt": "Give me an image with The Shore Beneath the Moon in comic style with a standard finish and no effect. Use a background that is visually related to The Shore Beneath the Moon. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIS-SBM-SER003-0004.webp",
+      "artworkPrompt": "Give me an image with The Shore Beneath the Moon in comic style with a standard finish and no effect. Use a background that is visually related to The Shore Beneath the Moon. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DIS-SBM-SER003-GEN001-0004.webp",
       "loreDescription": "A collectible The Shore Beneath the Moon Arcori generation I from the Discovery Foundations Series.",
       "legacy": {
         "preservationRequirement": 250,

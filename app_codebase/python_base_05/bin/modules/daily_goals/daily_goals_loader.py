@@ -166,6 +166,15 @@ def _normalize_reward(raw: Any) -> dict[str, Any]:
     if "table_id" in raw or "tableId" in raw:
         tid = raw.get("table_id", raw.get("tableId"))
         out["table_id"] = None if tid is None else str(tid)
+    amount_raw = raw.get("amount")
+    if amount_raw is not None:
+        try:
+            out["amount"] = max(0, int(amount_raw))
+        except (TypeError, ValueError):
+            pass
+    # mystery_box alias: default fragment grant when amount omitted.
+    if kind in ("mystery_box", "gold_fragments") and "amount" not in out:
+        out["amount"] = 2
     return out
 
 

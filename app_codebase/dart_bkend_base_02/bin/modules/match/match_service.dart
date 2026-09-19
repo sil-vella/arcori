@@ -227,19 +227,24 @@ class MatchService implements MatchLifecycleContract {
     }
 
     Map<String, String> selected = {};
-    final needsCatalogSelect =
-        requestedSeats.any((s) => s.arcoriIds.isEmpty);
     final eventId = matchType['eventId']?.toString().trim() ?? '';
+    // Prefer seats with lobby arcoriIds still go through select when an event
+    // is set so preferredId is validated against SE candidates (uniqueness too).
+    final needsCatalogSelect = requestedSeats.any((s) => s.arcoriIds.isEmpty) ||
+        (eventId.isNotEmpty &&
+            !rematch &&
+            requestedSeats.any((s) => s.arcoriIds.isNotEmpty));
     if (needsCatalogSelect) {
       try {
         selected = await _catalog.selectArcori(
           seats: [
             for (final s in requestedSeats)
-              if (s.arcoriIds.isEmpty)
-                {
-                  'userId': s.userId,
-                  if (eventId.isNotEmpty) 'eventId': eventId,
-                },
+              {
+                'userId': s.userId,
+                if (eventId.isNotEmpty) 'eventId': eventId,
+                if (!rematch && s.arcoriIds.isNotEmpty)
+                  'preferredId': s.arcoriIds.first,
+              },
           ],
         );
         if (LOGGING_SWITCH) {
@@ -283,14 +288,19 @@ class MatchService implements MatchLifecycleContract {
     final assigned = <MatchSeat>[];
     for (var i = 0; i < seats.length; i++) {
       final s = seats[i];
-      if (s.arcoriIds.isNotEmpty) {
+      // Rematch / no-select path: keep prior loadouts.
+      if (!needsCatalogSelect && s.arcoriIds.isNotEmpty) {
         assigned.add(s);
         continue;
       }
       final picked = selected[s.userId]?.trim() ?? '';
+      // Invalid preferredId falls back to catalog pick; if select failed and
+      // lobby still has a preferred id, keep it only when select never ran.
       final arcoriId = picked.isNotEmpty
           ? picked
-          : (s.kind == 'ai' ? stubAiArcoriId : stubArcoriId);
+          : (s.arcoriIds.isNotEmpty
+              ? s.arcoriIds.first
+              : (s.kind == 'ai' ? stubAiArcoriId : stubArcoriId));
       assigned.add(
         MatchSeat(
           userId: s.userId,

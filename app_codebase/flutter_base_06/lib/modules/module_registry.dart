@@ -9,6 +9,8 @@ import 'achievements/achievements_drawer.dart';
 import 'achievements/achievements_routes.dart';
 import 'tasks/tasks_drawer.dart';
 import 'tasks/tasks_routes.dart';
+import 'museum/museum_drawer.dart';
+import 'museum/museum_routes.dart';
 import 'example_module/example_module_bottom_nav.dart';
 import 'example_module/example_module_routes.dart';
 import 'example_module/register_example_module_state.dart';
@@ -60,6 +62,8 @@ void registerApplicationModules(
   registerAchievementsDrawer(drawer);
   registerTasksRoutes(routes, notificationScreens);
   registerTasksDrawer(drawer);
+  registerMuseumRoutes(routes, notificationScreens);
+  registerMuseumDrawer(drawer);
   registerKinRoutes(routes, notificationScreens);
   registerPlayRoutes(routes, notificationScreens);
   registerPlayNotifications();

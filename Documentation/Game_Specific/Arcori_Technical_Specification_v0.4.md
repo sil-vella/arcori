@@ -27,7 +27,7 @@ Fields: internalId, themeCode, designCode, designFamily, design, inspiration, re
 
 | Layer | Role |
 |-------|------|
-| **Arcori Catalog** | Immutable design definitions (+ media); JSON under `modules/catalog/data/`; served authuser via mtime-cached loader (see [catalog-hot-reload.md](../01_Active_Plans/catalog-hot-reload.md)) |
+| **Arcori Catalog** | Runtime SSOT = Postgres `catalog_designs` (seed / admin import / Legacy echo). Theme JSON under `modules/catalog/data/series/` is **authoring only** — import via wfrun `import_catalog_designs.py`. Art remains under `/catalog-media` (`:ro`). `internalId` shape: `{THEME}-{CODE}-SERnnn-GENnnn-####` (`SER` = series, `GEN` = generation). See [catalog-db-gen-serial.md](../01_Active_Plans/catalog-db-gen-serial.md) |
 | **Region Catalog** | Politics and geography — five launch regions in `01_regions.json` |
 | **Standings** | Live per-design community state for the **active** generation (mastery ranks, generation fill, leader window) |
 | **Museum** | World historical snapshots of **closed** generations (factual archive) |
@@ -67,8 +67,9 @@ Not owned                            Minted legacy piece
 | **Genesis** | `series/genesis/` | `assets/images/arcori/001_genesis/` | `SER001` | 500 | 1000 | Main launch catalog |
 | **Pioneers** | `series/pioneers/` | `assets/images/arcori/002_pioneers/` | `SER002` | 100 | 200 | **Exists so these designs can mint earlier** than Genesis |
 | **Foundations** | `series/foundations/` | `assets/images/arcori/003_foundations/` | `SER003` | 250 | 500 | Civilization / society themes (40 themes × 4 designs); mints between Pioneers and Genesis |
+| **Civilizations** | `series/civilizations/` | `assets/images/arcori/004_civilizations/` | `SER004` | 300 | 600 | Civic institutions (20 themes, 94 designs); mints between Foundations and Genesis |
 
-`SER000` / `SER002` / `SER003` mark series, not generation number (`generation.number` is still 1 / roman I at launch). Series id tokens use the `SER` prefix so they are not confused with generation. Pioneers is the original ten seed designs; it is not a second full catalog. Creation is excluded from the starter unlock pool (Genesis + Pioneers only).
+`SER000` / `SER001` / `SER002` / `SER003` / `SER004` mark **series** in the serial. Generation is a separate `GENnnn` token (and `generation.number` in the design doc / DB). Example: `ANM-TIG-SER001-GEN001-0001`. Art filenames omit GEN (reuse GEN001 webp via `art_basename`). Pioneers is the original ten seed designs; it is not a second full catalog. Creation is excluded from the starter unlock pool (Genesis + Pioneers only).
 
 ## UI surfaces (client)
 

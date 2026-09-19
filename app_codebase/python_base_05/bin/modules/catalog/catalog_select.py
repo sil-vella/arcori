@@ -63,6 +63,7 @@ def _filter_circulating_candidates(candidate_ids: list[str]) -> list[str]:
     """Keep access ids that still resolve to an Active (circulating) design."""
     out: list[str] = []
     seen: set[str] = set()
+    closed_ids: set[str] | None = None
     for design_id in candidate_ids:
         iid = str(design_id or "").strip()
         if not iid or iid in seen:
@@ -70,9 +71,49 @@ def _filter_circulating_candidates(candidate_ids: list[str]) -> list[str]:
         found = _resolve_design(iid)
         if not _is_circulating(found):
             continue
+        if closed_ids is None:
+            closed_ids = _closed_lifecycle_design_ids(candidate_ids)
+        if iid in closed_ids:
+            if LOGGING_SWITCH:
+                customlog(
+                    f"catalog_select: exclude closed-lifecycle id={iid}"
+                )
+            continue
         seen.add(iid)
         out.append(iid)
     return out
+
+
+def _closed_lifecycle_design_ids(candidate_ids: list[str]) -> set[str]:
+    """Ids (and aliases) whose generation lifecycle is Preserved or Lost."""
+    from core.state.session_scope import session_scope
+    from models.legacy_preserve import PHASE_LOST_CLOSED, PHASE_PRESERVED
+    from modules.catalog.catalog_ids import (
+        design_id_aliases,
+        generation_number_from_id,
+    )
+    from modules.legacy import legacy_repository as legacy_repo
+
+    closed: set[str] = set()
+    try:
+        with session_scope() as session:
+            for design_id in candidate_ids:
+                iid = str(design_id or "").strip()
+                if not iid:
+                    continue
+                gen = generation_number_from_id(iid)
+                for alias in design_id_aliases(iid):
+                    life = legacy_repo.get_lifecycle(session, alias, gen)
+                    if life is not None and life.phase in (
+                        PHASE_PRESERVED,
+                        PHASE_LOST_CLOSED,
+                    ):
+                        closed.update(design_id_aliases(iid))
+                        break
+    except Exception as exc:
+        if LOGGING_SWITCH:
+            customlog(f"catalog_select: lifecycle closed check failed err={exc}")
+    return closed
 
 
 def _region_of(design: dict[str, Any] | None) -> str | None:
@@ -366,14 +407,36 @@ def select_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
         if taken_ids:
             candidates = [c for c in candidates if c not in taken_ids]
 
-        pick = _pick_one(
-            user_id=user_id,
-            seat_index=index,
-            candidates=candidates,
-            table=table,
-            table_fail=table_fail,
-            seated_regions=list(seated_regions),
-        )
+        preferred = str(
+            raw.get("preferredId") or raw.get("preferred_id") or ""
+        ).strip()
+        if preferred and preferred in candidates:
+            if LOGGING_SWITCH:
+                customlog(
+                    f"catalog_select: seat={index} user={user_id} "
+                    f"preferredId={preferred} honored candidates={len(candidates)}"
+                )
+            pick = {
+                "userId": user_id,
+                "arcoriId": preferred,
+                "source": "preferred",
+                "reason": "preferred_id",
+            }
+        else:
+            if preferred and LOGGING_SWITCH:
+                customlog(
+                    f"catalog_select: seat={index} user={user_id} "
+                    f"preferredId={preferred} rejected "
+                    f"(not in eligible circulating candidates)"
+                )
+            pick = _pick_one(
+                user_id=user_id,
+                seat_index=index,
+                candidates=candidates,
+                table=table,
+                table_fail=table_fail,
+                seated_regions=list(seated_regions),
+            )
         selections.append(pick)
 
         chosen_id = str(pick.get("arcoriId") or "").strip()
@@ -407,65 +470,53 @@ def _is_playable_match_arcori(design: dict[str, Any]) -> bool:
 
 
 def count_circulating_playable_arcori() -> int:
-    """Global N for Mastery Value density: Active playable static catalog designs."""
+    """Global N for Mastery Value density: Active playable catalog designs (DB)."""
     seen: set[str] = set()
     try:
-        docs = loader.list_theme_documents()
-    except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+        from core.state.session_scope import session_scope
+        from modules.catalog import catalog_repository as catalog_repo
+
+        with session_scope() as session:
+            rows = catalog_repo.list_designs(session, circulating=True)
+            for row in rows:
+                design = dict(row.design_json or {})
+                if not _is_playable_match_arcori(design):
+                    continue
+                iid = str(design.get("internalId") or row.internal_id).strip()
+                if not iid or iid in seen:
+                    continue
+                seen.add(iid)
+    except Exception:
         return 0
-    for doc in docs:
-        if not isinstance(doc, dict):
-            continue
-        doc_theme = str(doc.get("themeCode") or "").strip().upper()
-        if doc_theme in {"SLM", "KIN"}:
-            continue
-        designs = doc.get("designs")
-        if not isinstance(designs, list):
-            continue
-        for design in designs:
-            if not isinstance(design, dict):
-                continue
-            if not _is_playable_match_arcori(design):
-                continue
-            iid = str(design.get("internalId") or "").strip()
-            if not iid or iid in seen:
-                continue
-            seen.add(iid)
     return len(seen)
 
 
 def _circulating_ids_in_region(region_code: str) -> list[str]:
-    """Static catalog ids in region (any series), playable match stock only."""
+    """DB catalog ids in region (any series), playable match stock only."""
     code = (region_code or "").strip().upper()
     if not code:
         return []
     out: list[str] = []
     seen: set[str] = set()
     try:
-        docs = loader.list_theme_documents()
-    except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+        from core.state.session_scope import session_scope
+        from modules.catalog import catalog_repository as catalog_repo
+
+        with session_scope() as session:
+            rows = catalog_repo.list_designs(session, circulating=True)
+            for row in rows:
+                design = dict(row.design_json or {})
+                if not _is_playable_match_arcori(design):
+                    continue
+                if _region_of(design) != code:
+                    continue
+                iid = str(design.get("internalId") or row.internal_id).strip()
+                if not iid or iid in seen:
+                    continue
+                seen.add(iid)
+                out.append(iid)
+    except Exception:
         return []
-    for doc in docs:
-        if not isinstance(doc, dict):
-            continue
-        doc_theme = str(doc.get("themeCode") or "").strip().upper()
-        if doc_theme in {"SLM", "KIN"}:
-            continue
-        designs = doc.get("designs")
-        if not isinstance(designs, list):
-            continue
-        for design in designs:
-            if not isinstance(design, dict):
-                continue
-            if not _is_playable_match_arcori(design):
-                continue
-            if _region_of(design) != code:
-                continue
-            iid = str(design.get("internalId") or "").strip()
-            if not iid or iid in seen:
-                continue
-            seen.add(iid)
-            out.append(iid)
     return out
 
 

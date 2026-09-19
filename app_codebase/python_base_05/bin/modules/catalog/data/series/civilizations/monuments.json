@@ -1,0 +1,238 @@
+{
+  "catalog": "Monuments Civilizations Series",
+  "theme": "Monuments",
+  "series": "Civilizations",
+  "themeCode": "MON",
+  "loreDescription": "Great structures built to honor victories, origins, myths, or heroes.",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "MON-RMX-SER004-GEN001-0001",
+      "themeCode": "MON",
+      "designCode": "RMX",
+      "designFamily": "ROOTSTONE_MONUMENT",
+      "design": "Rootstone Monument",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "EVG"
+      ],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Monuments",
+      "subtheme": "Monuments",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 5.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Rootstone Monument in realistic style with a standard finish and no effect. Use a background that is visually related to Rootstone Monument. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MON-RMX-SER004-GEN001-0001.webp",
+      "loreDescription": "A collectible Rootstone Monument Arcori generation I from the Monuments Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "MON-PHX-SER004-GEN001-0002",
+      "themeCode": "MON",
+      "designCode": "PHX",
+      "designFamily": "PRISMATIC_HONORS",
+      "design": "Prismatic Honors",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Monuments",
+      "subtheme": "Monuments",
+      "style": "Prismatic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.4,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Prismatic Honors in prismatic style with a standard finish and no effect. Use a background that is visually related to Prismatic Honors. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MON-PHX-SER004-GEN001-0002.webp",
+      "loreDescription": "A collectible Prismatic Honors Arcori generation I from the Monuments Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "MON-RMO-SER004-GEN001-0003",
+      "themeCode": "MON",
+      "designCode": "RMO",
+      "designFamily": "RADIANT_MEMORY_OBELISK",
+      "design": "Radiant Memory Obelisk",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Monuments",
+      "subtheme": "Monuments",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 3.8,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Radiant Memory Obelisk in realistic style with a standard finish and no effect. Use a background that is visually related to Radiant Memory Obelisk. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MON-RMO-SER004-GEN001-0003.webp",
+      "loreDescription": "A collectible Radiant Memory Obelisk Arcori generation I from the Monuments Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "MON-MAU-SER004-GEN001-0004",
+      "themeCode": "MON",
+      "designCode": "MAU",
+      "designFamily": "MEMORY_ASH_URN",
+      "design": "Memory Ash Urn",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Monuments",
+      "subtheme": "Monuments",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.0,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Memory Ash Urn in realistic style with a standard finish and no effect. Use a background that is visually related to Memory Ash Urn. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MON-MAU-SER004-GEN001-0004.webp",
+      "loreDescription": "A collectible Memory Ash Urn Arcori generation I from the Monuments Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    },
+    {
+      "internalId": "MON-PTX-SER004-GEN001-0005",
+      "themeCode": "MON",
+      "designCode": "PTX",
+      "designFamily": "PILLARSTONE_TABLET",
+      "design": "Pillarstone Tablet",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "Monuments",
+      "subtheme": "Monuments",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#8B7355",
+      "effect": "None",
+      "selectionWeight": 8.6,
+      "series": "Civilizations Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Pillarstone Tablet in realistic style with a standard finish and no effect. Use a background that is visually related to Pillarstone Tablet. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named MON-PTX-SER004-GEN001-0005.webp",
+      "loreDescription": "A collectible Pillarstone Tablet Arcori generation I from the Monuments Civilizations Series.",
+      "legacy": {
+        "preservationRequirement": 300,
+        "closureMilestone": 600
+      }
+    }
+  ]
+}
