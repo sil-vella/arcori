@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/errors/error_policy.dart';
@@ -9,20 +12,25 @@ final veloraApiClientProvider = Provider<VeloraApiClient>(
   (ref) => VeloraApiClient(),
 );
 
+// ── Velora home: series list ─────────────────────────────────────────────────
+
 class VeloraState {
   const VeloraState({
+    this.series = const [],
     this.themes = const [],
     this.isLoading = false,
     this.errorMessage,
     this.loaded = false,
   });
 
+  final List<CatalogSeriesEntry> series;
   final List<CatalogThemeEntry> themes;
   final bool isLoading;
   final String? errorMessage;
   final bool loaded;
 
   VeloraState copyWith({
+    List<CatalogSeriesEntry>? series,
     List<CatalogThemeEntry>? themes,
     bool? isLoading,
     String? errorMessage,
@@ -30,6 +38,7 @@ class VeloraState {
     bool clearError = false,
   }) {
     return VeloraState(
+      series: series ?? this.series,
       themes: themes ?? this.themes,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
@@ -53,7 +62,7 @@ class VeloraNotifier extends Notifier<VeloraState> {
 
   String? get _accessToken => ref.read(authProvider).accessToken;
 
-  Future<void> loadThemes({bool force = false}) async {
+  Future<void> loadSeries({bool force = false}) async {
     if (!force && state.loaded && state.errorMessage == null) {
       return;
     }
@@ -67,24 +76,32 @@ class VeloraNotifier extends Notifier<VeloraState> {
       return;
     }
     state = state.copyWith(isLoading: true, clearError: true);
-    final outcome = await _api.fetchThemes(accessToken: token);
-    if (!outcome.isSuccess) {
+    final seriesOutcome = await _api.fetchSeries(accessToken: token);
+    if (!seriesOutcome.isSuccess) {
       state = state.copyWith(
         isLoading: false,
-        errorMessage: _messageForOutcome(outcome),
+        errorMessage: _messageForOutcome(seriesOutcome),
         loaded: false,
       );
       return;
     }
-    final themes = List<CatalogThemeEntry>.from(outcome.data!)
-      ..sort((a, b) => a.label.compareTo(b.label));
+    // Meta themes are optional (lore labels on theme screens).
+    final themesOutcome = await _api.fetchThemes(accessToken: token);
+    final themes = themesOutcome.isSuccess
+        ? List<CatalogThemeEntry>.from(themesOutcome.data!)
+        : const <CatalogThemeEntry>[];
+    themes.sort((a, b) => a.label.compareTo(b.label));
     state = state.copyWith(
+      series: List.unmodifiable(seriesOutcome.data!),
       themes: themes,
       isLoading: false,
       loaded: true,
       clearError: true,
     );
   }
+
+  /// @deprecated Prefer [loadSeries]; kept for call sites that still say themes.
+  Future<void> loadThemes({bool force = false}) => loadSeries(force: force);
 
   String? _messageForOutcome(VeloraApiOutcome<dynamic> outcome) {
     if (outcome.isNetworkError) {
@@ -103,28 +120,30 @@ final veloraProvider = NotifierProvider<VeloraNotifier, VeloraState>(
   VeloraNotifier.new,
 );
 
-class VeloraThemeBrowseState {
-  const VeloraThemeBrowseState({
-    this.seriesGroups = const [],
+// ── Series → themes ──────────────────────────────────────────────────────────
+
+class VeloraSeriesBrowseState {
+  const VeloraSeriesBrowseState({
+    this.themes = const [],
     this.isLoading = false,
     this.errorMessage,
     this.loaded = false,
   });
 
-  final List<VeloraSeriesGroup> seriesGroups;
+  final List<VeloraThemeInSeries> themes;
   final bool isLoading;
   final String? errorMessage;
   final bool loaded;
 
-  VeloraThemeBrowseState copyWith({
-    List<VeloraSeriesGroup>? seriesGroups,
+  VeloraSeriesBrowseState copyWith({
+    List<VeloraThemeInSeries>? themes,
     bool? isLoading,
     String? errorMessage,
     bool? loaded,
     bool clearError = false,
   }) {
-    return VeloraThemeBrowseState(
-      seriesGroups: seriesGroups ?? this.seriesGroups,
+    return VeloraSeriesBrowseState(
+      themes: themes ?? this.themes,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       loaded: loaded ?? this.loaded,
@@ -132,11 +151,11 @@ class VeloraThemeBrowseState {
   }
 }
 
-class VeloraThemeBrowseNotifier
-    extends FamilyNotifier<VeloraThemeBrowseState, String> {
+class VeloraSeriesBrowseNotifier
+    extends FamilyNotifier<VeloraSeriesBrowseState, String> {
   @override
-  VeloraThemeBrowseState build(String themeCode) {
-    return const VeloraThemeBrowseState();
+  VeloraSeriesBrowseState build(String seriesKey) {
+    return const VeloraSeriesBrowseState();
   }
 
   VeloraApiClient get _api => ref.read(veloraApiClientProvider);
@@ -159,7 +178,7 @@ class VeloraThemeBrowseNotifier
     state = state.copyWith(isLoading: true, clearError: true);
     final outcome = await _api.fetchIndex(
       accessToken: token,
-      theme: arg,
+      series: arg,
     );
     if (!outcome.isSuccess) {
       state = state.copyWith(
@@ -170,7 +189,164 @@ class VeloraThemeBrowseNotifier
       return;
     }
     state = state.copyWith(
-      seriesGroups: groupBySeries(outcome.data!.items),
+      themes: groupByTheme(outcome.data!.items),
+      isLoading: false,
+      loaded: true,
+      clearError: true,
+    );
+  }
+
+  String? _messageForOutcome(VeloraApiOutcome<dynamic> outcome) {
+    if (outcome.isNetworkError) {
+      return 'Network error — check your connection';
+    }
+    final error = outcome.error;
+    if (error == null) {
+      return null;
+    }
+    actionForApiError(error, isWebSocket: false);
+    return error.message;
+  }
+}
+
+final veloraSeriesBrowseProvider = NotifierProvider.family<
+    VeloraSeriesBrowseNotifier, VeloraSeriesBrowseState, String>(
+  VeloraSeriesBrowseNotifier.new,
+);
+
+/// Group circulating designs by themeCode within one series.
+List<VeloraThemeInSeries> groupByTheme(List<DesignSummary> items) {
+  final byTheme = <String, List<DesignSummary>>{};
+  final labels = <String, String>{};
+  for (final item in items) {
+    final code = (item.themeCode != null && item.themeCode!.isNotEmpty)
+        ? item.themeCode!
+        : (item.theme != null && item.theme!.isNotEmpty)
+            ? item.theme!
+            : 'Unknown';
+    byTheme.putIfAbsent(code, () => []).add(item);
+    final name = item.theme?.trim() ?? '';
+    if (name.isNotEmpty) {
+      labels.putIfAbsent(code, () => name);
+    }
+  }
+  final keys = byTheme.keys.toList()
+    ..sort((a, b) {
+      final la = labels[a] ?? a;
+      final lb = labels[b] ?? b;
+      return la.compareTo(lb);
+    });
+  return [
+    for (final key in keys)
+      VeloraThemeInSeries(
+        theme: labels[key] ?? key,
+        themeCode: key,
+        designs: List.unmodifiable(byTheme[key]!),
+      ),
+  ];
+}
+
+// ── Theme browse (series + theme) + featured ─────────────────────────────────
+
+@immutable
+class VeloraThemeBrowseArgs {
+  const VeloraThemeBrowseArgs({
+    required this.seriesKey,
+    required this.themeCode,
+  });
+
+  final String seriesKey;
+  final String themeCode;
+
+  @override
+  bool operator ==(Object other) =>
+      other is VeloraThemeBrowseArgs &&
+      other.seriesKey == seriesKey &&
+      other.themeCode == themeCode;
+
+  @override
+  int get hashCode => Object.hash(seriesKey, themeCode);
+}
+
+class VeloraThemeBrowseState {
+  const VeloraThemeBrowseState({
+    this.designs = const [],
+    this.featured,
+    this.isLoading = false,
+    this.errorMessage,
+    this.loaded = false,
+  });
+
+  final List<DesignSummary> designs;
+  final DesignSummary? featured;
+  final bool isLoading;
+  final String? errorMessage;
+  final bool loaded;
+
+  VeloraThemeBrowseState copyWith({
+    List<DesignSummary>? designs,
+    DesignSummary? featured,
+    bool? isLoading,
+    String? errorMessage,
+    bool? loaded,
+    bool clearFeatured = false,
+    bool clearError = false,
+  }) {
+    return VeloraThemeBrowseState(
+      designs: designs ?? this.designs,
+      featured: clearFeatured ? null : (featured ?? this.featured),
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      loaded: loaded ?? this.loaded,
+    );
+  }
+}
+
+class VeloraThemeBrowseNotifier
+    extends FamilyNotifier<VeloraThemeBrowseState, VeloraThemeBrowseArgs> {
+  @override
+  VeloraThemeBrowseState build(VeloraThemeBrowseArgs args) {
+    return const VeloraThemeBrowseState();
+  }
+
+  VeloraApiClient get _api => ref.read(veloraApiClientProvider);
+
+  String? get _accessToken => ref.read(authProvider).accessToken;
+
+  Future<void> load({bool force = false}) async {
+    if (!force && state.loaded && state.errorMessage == null) {
+      return;
+    }
+    final token = _accessToken;
+    if (token == null || token.isEmpty) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Sign in to browse Velora',
+        loaded: false,
+        clearFeatured: true,
+      );
+      return;
+    }
+    state = state.copyWith(isLoading: true, clearError: true);
+    final outcome = await _api.fetchIndex(
+      accessToken: token,
+      theme: arg.themeCode,
+      series: arg.seriesKey,
+    );
+    if (!outcome.isSuccess) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: _messageForOutcome(outcome),
+        loaded: false,
+        clearFeatured: true,
+      );
+      return;
+    }
+    final designs = List<DesignSummary>.from(outcome.data!.items)
+      ..sort((a, b) => a.displayName.compareTo(b.displayName));
+    state = state.copyWith(
+      designs: List.unmodifiable(designs),
+      featured: pickFeaturedDesign(designs),
       isLoading: false,
       loaded: true,
       clearError: true,
@@ -191,11 +367,17 @@ class VeloraThemeBrowseNotifier
 }
 
 final veloraThemeBrowseProvider = NotifierProvider.family<
-    VeloraThemeBrowseNotifier, VeloraThemeBrowseState, String>(
+    VeloraThemeBrowseNotifier, VeloraThemeBrowseState, VeloraThemeBrowseArgs>(
   VeloraThemeBrowseNotifier.new,
 );
 
-/// Group circulating designs by seriesKey (single theme already filtered).
+DesignSummary? pickFeaturedDesign(List<DesignSummary> candidates) {
+  if (candidates.isEmpty) return null;
+  if (candidates.length == 1) return candidates.first;
+  return candidates[Random().nextInt(candidates.length)];
+}
+
+/// Group circulating designs by seriesKey (legacy helper).
 List<VeloraSeriesGroup> groupBySeries(List<DesignSummary> items) {
   final bySeries = <String, List<DesignSummary>>{};
   for (final item in items) {
@@ -213,6 +395,8 @@ List<VeloraSeriesGroup> groupBySeries(List<DesignSummary> items) {
       ),
   ];
 }
+
+// ── Arcori detail ────────────────────────────────────────────────────────────
 
 class ArcoriDetailState {
   const ArcoriDetailState({

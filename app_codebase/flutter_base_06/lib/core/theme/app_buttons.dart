@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
+import 'app_radii.dart';
 import 'app_typography.dart';
 
 /// Shared button layout metrics.
 abstract final class AppButtonMetrics {
   AppButtonMetrics._();
 
-  static const double radius = 8;
+  /// Gold ritual CTA — slightly softer than Material 8.
+  static const double radius = AppRadii.md;
   static const double borderWidth = 1;
 
   static const double iconSizeSmall = 16;
@@ -148,19 +150,8 @@ class AppButtonStyles {
       buttonText: typography.button,
       buttonTextSmall: typography.button.copyWith(fontSize: AppFontSizes.bodySmall),
       buttonTextLarge: typography.button.copyWith(fontSize: AppFontSizes.bodyLarge),
+      // Primary CTA = gold (Play / claim). Purple lives on secondary for tonal chrome.
       primary: _tone(
-        textStyle: typography.button,
-        filledBg: AppColors.primary,
-        filledFg: AppColors.onPrimary,
-        tonalBg: AppColors.primaryPastel,
-        tonalFg: AppColors.onPrimaryContainer,
-        outlinedFg: AppColors.primary,
-        outlinedBorder: AppColors.primary,
-        textFg: AppColors.primary,
-        iconFg: AppColors.primary,
-        disabledFg: muted,
-      ),
-      secondary: _tone(
         textStyle: typography.button,
         filledBg: AppColors.secondary,
         filledFg: AppColors.onSecondary,
@@ -170,6 +161,18 @@ class AppButtonStyles {
         outlinedBorder: AppColors.secondary,
         textFg: AppColors.secondary,
         iconFg: AppColors.secondary,
+        disabledFg: muted,
+      ),
+      secondary: _tone(
+        textStyle: typography.button,
+        filledBg: AppColors.primary,
+        filledFg: AppColors.onPrimary,
+        tonalBg: AppColors.primaryPastel,
+        tonalFg: AppColors.onPrimaryContainer,
+        outlinedFg: AppColors.primary,
+        outlinedBorder: AppColors.primary,
+        textFg: AppColors.primary,
+        iconFg: AppColors.primary,
         disabledFg: muted,
       ),
       tertiary: _tone(

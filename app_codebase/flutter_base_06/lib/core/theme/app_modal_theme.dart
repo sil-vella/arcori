@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
+import 'app_radii.dart';
 
 /// Layout and motion tokens for modal overlays.
 abstract final class AppModalMetrics {
   AppModalMetrics._();
 
   static const double centeredMaxWidth = 400;
-  static const double borderRadius = 12;
+  static const double borderRadius = AppRadii.lg;
   static const double elevation = 0;
 
-  static const double scrimOpacityLight = 0.45;
-  static const double scrimOpacityDark = 0.55;
+  static const double scrimOpacityLight = 0.52;
+  static const double scrimOpacityDark = 0.62;
 
   static const Duration transitionDuration = Duration(milliseconds: 250);
   static const Duration reverseTransitionDuration = Duration(milliseconds: 200);
@@ -37,8 +38,9 @@ abstract final class AppModalTheme {
   static Color surface(Brightness brightness) =>
       brightness == Brightness.dark ? AppColors.surfaceDark : AppColors.surface;
 
-  static Color border(Brightness brightness) =>
-      brightness == Brightness.dark ? AppColors.outlineDark : AppColors.outline;
+  static Color border(Brightness brightness) => brightness == Brightness.dark
+      ? AppColors.tertiary.withValues(alpha: 0.55)
+      : AppColors.tertiary.withValues(alpha: 0.65);
 }
 
 /// Modal tokens exposed on [ThemeData.extensions].

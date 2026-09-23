@@ -69,7 +69,7 @@ class MatchStore {
             : stubSlammerId;
 
     final matchId = _newMatchId();
-    final seats = [
+    final rawSeats = [
       MatchSeat(
         userId: callerUserId,
         seatIndex: 0,
@@ -85,6 +85,7 @@ class MatchStore {
         slammerId: aiSlammerId,
       ),
     ];
+    final seats = stampSlammerFaces(rawSeats, catalogById);
     final first = firstSeatIndex ??
         (seats.length <= 1
             ? 0
@@ -217,7 +218,11 @@ class MatchStore {
       firstSeatIndex: first,
       seriesId: seriesId,
       seriesIndex: seriesIndex,
-      table: tableFromSeats(seats, catalogById: catalogById),
+      table: tableFromSeats(
+        seats,
+        catalogById: catalogById,
+        gathererArcoriId: gathererArcoriId,
+      ),
       active: {
         'seatIndex': first,
         'action': 'slam',

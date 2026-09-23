@@ -7,6 +7,7 @@ import '../../../core/navigation/app_paths.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 import '../tasks_bootstrap.dart';
 import '../tasks_models.dart';
 import '../tasks_store.dart';
@@ -60,29 +61,32 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
       appBarItems: const [
         AppBarTitle(text: 'Tasks', icon: Icons.checklist_outlined),
       ],
-      child: _buildBody(context),
+      child: AppChromePage(child: _buildBody(context)),
     );
   }
 
   Widget _buildBody(BuildContext context) {
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppChromeCentered(child: CircularProgressIndicator());
     }
     if (_error != null) {
-      return Center(
-        child: Padding(
-          padding: AppSpacing.screenPadding,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(_error!, style: context.appTypography.body),
-              AppSpacing.gapMd,
-              FilledButton(
-                onPressed: () => Nav.push(context, AppPaths.account),
-                child: const Text('Account'),
+      return AppChromeCentered(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              _error!,
+              style: context.appTypography.body.copyWith(
+                color: AppChrome.onSurface,
               ),
-            ],
-          ),
+              textAlign: TextAlign.center,
+            ),
+            AppSpacing.gapMd,
+            FilledButton(
+              onPressed: () => Nav.push(context, AppPaths.account),
+              child: const Text('Account'),
+            ),
+          ],
         ),
       );
     }
@@ -93,10 +97,24 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
         final daily = TasksStore.dailyGoals;
         final tasks = TasksStore.tasks;
         if (daily.isEmpty && tasks.isEmpty) {
-          return Center(
-            child: Text(
-              'No goals or tasks yet',
-              style: context.appTypography.body,
+          return AppChromeCentered(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.flag_outlined,
+                  size: 40,
+                  color: AppChrome.accentBronze,
+                ),
+                AppSpacing.gapMd,
+                Text(
+                  'No goals or tasks yet',
+                  style: context.appTypography.bodyMuted.copyWith(
+                    color: AppChrome.onSurfaceMuted,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           );
         }
@@ -105,30 +123,51 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
         return RefreshIndicator(
           onRefresh: _load,
           child: ListView(
-            padding: AppSpacing.screenPadding,
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.md,
+              AppChromePage.topClearance(context) + AppSpacing.sm,
+              AppSpacing.md,
+              AppSpacing.xxl,
+            ),
             children: [
               if (progress != null && progress.noMissStreak > 0) ...[
-                Text(
-                  'No-miss streak: ${progress.noMissStreak}',
-                  style: context.appTypography.bodySmall,
+                AppChromeSection(
+                  title: 'Streak',
+                  goldFrame: true,
+                  child: Text(
+                    'No-miss streak: ${progress.noMissStreak}',
+                    style: context.appTypography.body.copyWith(
+                      color: AppChrome.onSurface,
+                    ),
+                  ),
                 ),
                 AppSpacing.gapMd,
               ],
               if (daily.isNotEmpty) ...[
-                Text('Daily Goals', style: context.appTypography.h3),
-                AppSpacing.gapSm,
-                ..._tiles(context, daily),
-                AppSpacing.gapLg,
+                AppChromeSection(
+                  title: 'Daily Goals',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: _tiles(context, daily),
+                  ),
+                ),
+                AppSpacing.gapMd,
               ],
               if (tasks.isNotEmpty) ...[
-                Text('Tasks', style: context.appTypography.h3),
-                AppSpacing.gapSm,
-                ..._tiles(context, tasks),
+                AppChromeSection(
+                  title: 'Tasks',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: _tiles(context, tasks),
+                  ),
+                ),
+                AppSpacing.gapMd,
               ],
-              AppSpacing.gapLg,
               Text(
                 'Completed goals and tasks show under Achievements.',
-                style: context.appTypography.bodySmall,
+                style: context.appTypography.bodySmall.copyWith(
+                  color: AppChrome.onSurfaceMuted,
+                ),
               ),
             ],
           ),
@@ -175,70 +214,88 @@ class _TaskListTile extends StatelessWidget {
     final label = cacheState != null
         ? dailyCacheStatusLabel(cacheState)
         : (row?.progressLabel ?? '0 / ${entry.params['min'] ?? 1}');
+    final active = done ||
+        cacheState == DailyCacheUiState.claimed ||
+        cacheState == DailyCacheUiState.ready;
+    final radius = BorderRadius.circular(AppSurfaces.exhibitRadius);
 
-    return Card(
+    return Material(
+      color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    done || cacheState == DailyCacheUiState.claimed
-                        ? Icons.check_circle
-                        : (miss
-                            ? Icons.warning_amber_rounded
-                            : (cacheState == DailyCacheUiState.ready
-                                ? Icons.card_giftcard_outlined
-                                : Icons.radio_button_unchecked)),
-                    color: done ||
-                            cacheState == DailyCacheUiState.claimed ||
-                            cacheState == DailyCacheUiState.ready
-                        ? context.appColorScheme.primary
-                        : context.appColorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      entry.name,
-                      style: context.appTypography.body,
+        borderRadius: radius,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppChrome.fieldFill.withValues(alpha: 0.55),
+            borderRadius: radius,
+            border: Border.all(color: AppChrome.panelBorder),
+          ),
+          child: Padding(
+            padding: AppSpacing.screenPaddingCompact,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      done || cacheState == DailyCacheUiState.claimed
+                          ? Icons.check_circle
+                          : (miss
+                              ? Icons.warning_amber_rounded
+                              : (cacheState == DailyCacheUiState.ready
+                                  ? Icons.card_giftcard_outlined
+                                  : Icons.radio_button_unchecked)),
+                      color: active
+                          ? AppChrome.accentGold
+                          : AppChrome.onSurfaceMuted,
                     ),
-                  ),
+                    AppSpacing.gapSm,
+                    Expanded(
+                      child: Text(
+                        entry.name,
+                        style: context.appTypography.body.copyWith(
+                          color: AppChrome.onSurface,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      label,
+                      style: context.appTypography.caption.copyWith(
+                        color: AppChrome.onSurfaceMuted,
+                      ),
+                    ),
+                  ],
+                ),
+                if (entry.description.isNotEmpty) ...[
+                  AppSpacing.gapXs,
                   Text(
-                    label,
-                    style: context.appTypography.caption.copyWith(
-                      color: context.appColorScheme.onSurfaceVariant,
+                    entry.description,
+                    style: context.appTypography.bodySmall.copyWith(
+                      color: AppChrome.onSurfaceMuted,
                     ),
                   ),
                 ],
-              ),
-              if (entry.description.isNotEmpty) ...[
-                AppSpacing.gapXs,
-                Text(
-                  entry.description,
-                  style: context.appTypography.bodySmall,
+                AppSpacing.gapSm,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(AppRadii.sm),
+                  child: LinearProgressIndicator(
+                    value: fraction,
+                    minHeight: 6,
+                    backgroundColor: AppChrome.panelBorder.withValues(alpha: 0.35),
+                    color: AppChrome.accentGold,
+                  ),
                 ),
+                if (row != null && row.value > 0) ...[
+                  AppSpacing.gapXs,
+                  Text(
+                    'Streak value: ${row.value}',
+                    style: context.appTypography.caption.copyWith(
+                      color: AppChrome.onSurfaceMuted,
+                    ),
+                  ),
+                ],
               ],
-              AppSpacing.gapSm,
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: fraction,
-                  minHeight: 6,
-                ),
-              ),
-              if (row != null && row.value > 0) ...[
-                AppSpacing.gapXs,
-                Text(
-                  'Streak value: ${row.value}',
-                  style: context.appTypography.caption,
-                ),
-              ],
-            ],
+            ),
           ),
         ),
       ),

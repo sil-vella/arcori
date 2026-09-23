@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 import '../../../utils/dev_logger.dart';
+import '../../../core/theme/theme.dart';
 import '../../play/game_controls_prefs.dart';
 import 'slam_input_models.dart';
 
@@ -238,6 +239,9 @@ class _SlamInputCaptureState extends State<SlamInputCapture> {
     _swipeDy += details.delta.dy;
     final fromDist = (_swipeDy / swipeMaxDragDy).clamp(0.0, 1.0);
     _previewPower(fromDist);
+    if (LOGGING_SWITCH && _swipeDy < details.delta.dy + 0.5) {
+      customlog('slamInput: power swipe dy=${_swipeDy.toStringAsFixed(0)}');
+    }
   }
 
   void onPowerDragEnd(DragEndDetails details) {
@@ -442,22 +446,30 @@ class _SlamAimLockButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hud = context.appHud;
+    final surfaces = context.appSurfaces;
+    final accent = !enabled
+        ? hud.onGlassMuted
+        : (locked ? hud.aimLocked : hud.onGlass);
+    final radius = BorderRadius.circular(AppRadii.md);
+
     return SizedBox(
       width: 64,
       height: 220,
       child: Material(
-        color: Colors.black.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(12),
+        color: surfaces.glassHud,
+        borderRadius: radius,
         child: InkWell(
           onTap: enabled ? onPressed : null,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: radius,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: radius,
               border: Border.all(
                 color: !enabled
-                    ? Colors.white12
-                    : (locked ? Colors.lightGreenAccent : Colors.white38),
+                    ? hud.onGlassMuted.withValues(alpha: 0.35)
+                    : (locked ? hud.aimLocked : hud.glassBorder),
+                width: locked ? 1.5 : 1,
               ),
             ),
             child: Column(
@@ -465,30 +477,21 @@ class _SlamAimLockButton extends StatelessWidget {
               children: [
                 Icon(
                   locked ? Icons.lock : Icons.lock_open,
-                  color: !enabled
-                      ? Colors.white24
-                      : (locked ? Colors.lightGreenAccent : Colors.white70),
+                  color: accent,
                 ),
-                const SizedBox(height: 8),
+                AppSpacing.gapXs,
                 Text(
                   locked ? 'LOCKED' : 'LOCK',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: !enabled
-                            ? Colors.white24
-                            : (locked
-                                ? Colors.lightGreenAccent
-                                : Colors.white70),
-                      ),
+                  style: context.appTypography.label.copyWith(color: accent),
                 ),
                 if (locked) ...[
-                  const SizedBox(height: 4),
+                  AppSpacing.gapXxs,
                   Text(
                     'AIM',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Colors.lightGreenAccent.withValues(alpha: 0.8),
-                          fontSize: 10,
-                        ),
+                    style: context.appTypography.caption.copyWith(
+                      color: hud.aimLocked.withValues(alpha: 0.85),
+                    ),
                   ),
                 ],
               ],
@@ -558,27 +561,39 @@ class _SlamPowerGaugeState extends State<SlamPowerGauge>
       builder: (context, _) {
         final p = _animation.value.clamp(0.0, 1.0);
         final pct = (p * 100).round();
+        final hud = context.appHud;
+        final fill = p < 0.35
+            ? hud.powerLow
+            : (p < 0.7 ? hud.powerMid : hud.powerHigh);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
-                Text(label, style: Theme.of(context).textTheme.labelSmall),
+                Text(
+                  widget.label,
+                  style: context.appTypography.label.copyWith(
+                    color: hud.onGlass,
+                  ),
+                ),
                 const Spacer(),
-                Text('$pct%', style: Theme.of(context).textTheme.labelSmall),
+                Text(
+                  '$pct%',
+                  style: context.appTypography.label.copyWith(
+                    color: hud.onGlass,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 4),
+            AppSpacing.gapXxs,
             ClipRRect(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(AppRadii.sm),
               child: LinearProgressIndicator(
                 value: p,
                 minHeight: 10,
-                backgroundColor: Colors.white12,
-                color: p < 0.35
-                    ? Colors.lightGreenAccent
-                    : (p < 0.7 ? Colors.amberAccent : Colors.orangeAccent),
+                backgroundColor: hud.track,
+                color: fill,
               ),
             ),
           ],

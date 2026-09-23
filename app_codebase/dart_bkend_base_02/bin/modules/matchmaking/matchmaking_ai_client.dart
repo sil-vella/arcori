@@ -8,13 +8,24 @@ import '../../core/errors/app_error.dart';
 import '../../core/http/fastapi_service_client.dart';
 import 'matchmaking_errors.dart';
 
+/// One AI seat fill from `/service/players/ai/sample`.
+class AiSeatFill {
+  const AiSeatFill({
+    required this.userId,
+    this.username,
+  });
+
+  final String userId;
+  final String? username;
+}
+
 class MatchmakingAiClient {
   MatchmakingAiClient({FastApiServiceClient? fastApi})
       : _fastApi = fastApi ?? FastApiServiceClient();
 
   final FastApiServiceClient _fastApi;
 
-  Future<List<String>> sampleAiUserIds({
+  Future<List<AiSeatFill>> sampleAiSeats({
     required int count,
     List<String> excludeUserIds = const [],
   }) async {
@@ -56,19 +67,28 @@ class MatchmakingAiClient {
       if (players is! List) {
         throw AppError(matchmakingAiUnavailable, message: 'AI players missing');
       }
-      final ids = <String>[];
+      final fills = <AiSeatFill>[];
       for (final p in players) {
-        if (p is Map && p['userId'] != null) {
-          ids.add(p['userId'].toString());
-        }
-      }
-      if (ids.length < count) {
-        throw AppError(
-          matchmakingAiUnavailable,
-          message: 'Need $count AI, got ${ids.length}',
+        if (p is! Map || p['userId'] == null) continue;
+        final uid = p['userId'].toString().trim();
+        if (uid.isEmpty) continue;
+        final rawName = p['username']?.toString().trim() ??
+            p['displayName']?.toString().trim() ??
+            '';
+        fills.add(
+          AiSeatFill(
+            userId: uid,
+            username: rawName.isNotEmpty ? rawName : null,
+          ),
         );
       }
-      return ids.take(count).toList();
+      if (fills.length < count) {
+        throw AppError(
+          matchmakingAiUnavailable,
+          message: 'Need $count AI, got ${fills.length}',
+        );
+      }
+      return fills.take(count).toList();
     } on AppError {
       rethrow;
     } catch (e) {
@@ -77,5 +97,17 @@ class MatchmakingAiClient {
         message: 'AI sample request failed: $e',
       );
     }
+  }
+
+  /// Convenience when only ids are needed.
+  Future<List<String>> sampleAiUserIds({
+    required int count,
+    List<String> excludeUserIds = const [],
+  }) async {
+    final seats = await sampleAiSeats(
+      count: count,
+      excludeUserIds: excludeUserIds,
+    );
+    return seats.map((s) => s.userId).toList();
   }
 }

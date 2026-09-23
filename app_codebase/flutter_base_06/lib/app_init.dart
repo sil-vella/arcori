@@ -18,6 +18,7 @@ import 'core/navigation/app_router.dart';
 import 'core/notifications/notification_screen_registry.dart';
 import 'core/notifications/response/reply_listener_registry.dart';
 import 'core/notifications/subtype/subtype_registry.dart';
+import 'core/screen/shell_chrome_controller.dart';
 import 'core/state/app_state_registry.dart';
 import 'core/state/auth/auth_providers.dart';
 import 'core/state/auth/auth_state.dart';
@@ -57,6 +58,7 @@ Future<void> startApp() async {
   registerBuiltinNotificationSubtypes();
   resetAppBarController();
   resetBottomNavController();
+  resetShellChromeController();
   registerApplicationModules(
     appRouteSink,
     appDrawerSink,

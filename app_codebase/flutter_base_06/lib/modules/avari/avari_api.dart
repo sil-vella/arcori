@@ -58,6 +58,27 @@ class AvariApiClient {
     }
   }
 
+  /// GET /authuser/avari/mastery/recent — Home mastery ticker.
+  Future<AvariApiOutcome<List<MasteryRecentChange>>> fetchMasteryRecent({
+    required String accessToken,
+    int limit = 5,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/authuser/avari/mastery/recent')
+        .replace(queryParameters: {'limit': '$limit'});
+    try {
+      final response = await _client.get(
+        uri,
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
+      return _parseMasteryRecent(response);
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const AvariApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
+  }
+
   /// POST /authuser/avari/match/finalize — flip fragments + mastery (fee pre-paid).
   Future<AvariApiOutcome<MatchFinalizeResult>> finalizeMatch({
     required String accessToken,
@@ -198,6 +219,48 @@ class AvariApiClient {
     );
   }
 
+  AvariApiOutcome<List<MasteryRecentChange>> _parseMasteryRecent(
+    http.Response response,
+  ) {
+    final envelope = _decodeEnvelope(response.body);
+    if (envelope == null) {
+      return AvariApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    if (envelope['ok'] != true) {
+      return AvariApiOutcome.failure(
+        error: ApiError.fromEnvelope(envelope),
+      );
+    }
+    final data = envelope['data'];
+    if (data is! Map) {
+      return AvariApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    final raw = data['items'];
+    final items = <MasteryRecentChange>[];
+    if (raw is List) {
+      for (final row in raw) {
+        if (row is Map) {
+          items.add(
+            MasteryRecentChange.fromJson(Map<String, dynamic>.from(row)),
+          );
+        }
+      }
+    }
+    return AvariApiOutcome.success(items);
+  }
+
   AvariApiOutcome<MatchFinalizeResult> _parseFinalize(http.Response response) {
     final envelope = _decodeEnvelope(response.body);
     if (envelope == null) {
@@ -258,6 +321,63 @@ class AvariApiClient {
     return AvariApiOutcome.success(
       MatchFeeResult.fromJson(Map<String, dynamic>.from(data)),
     );
+  }
+
+  /// POST /authuser/avari/spend_slammer_charge — practice slam charge spend.
+  Future<AvariApiOutcome<Map<String, dynamic>>> spendSlammerCharge({
+    required String accessToken,
+    required String designId,
+    String? matchId,
+    String? intentId,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/authuser/avari/spend_slammer_charge');
+    final body = <String, dynamic>{
+      'designId': designId.trim(),
+      if (matchId != null && matchId.trim().isNotEmpty) 'matchId': matchId.trim(),
+      if (intentId != null && intentId.trim().isNotEmpty)
+        'intentId': intentId.trim(),
+    };
+    try {
+      final response = await _client.post(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+      final envelope = _decodeEnvelope(response.body);
+      if (envelope == null) {
+        return AvariApiOutcome.failure(
+          error: ApiError(
+            code: CoreApiErrorCode.internalError,
+            message: 'Invalid server response',
+            rawCode: 'internal_error',
+          ),
+        );
+      }
+      if (envelope['ok'] != true) {
+        return AvariApiOutcome.failure(
+          error: ApiError.fromEnvelope(envelope),
+        );
+      }
+      final data = envelope['data'];
+      if (data is! Map) {
+        return AvariApiOutcome.failure(
+          error: ApiError(
+            code: CoreApiErrorCode.internalError,
+            message: 'Invalid server response',
+            rawCode: 'internal_error',
+          ),
+        );
+      }
+      return AvariApiOutcome.success(Map<String, dynamic>.from(data));
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const AvariApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
   }
 
   Map<String, dynamic>? _decodeEnvelope(String body) {

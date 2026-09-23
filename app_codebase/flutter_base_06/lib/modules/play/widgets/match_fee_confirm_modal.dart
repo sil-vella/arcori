@@ -11,14 +11,19 @@ Future<bool> showMatchFeeConfirmModal(
   required int feeFragments,
   required String matchLabel,
 }) async {
-  final result = await AppModal.showCenteredShell<bool>(
+  final result = await AppModal.showCentered<bool>(
     context,
-    title: 'Match fee',
     barrierDismissible: false,
-    showCloseButton: false,
-    child: _MatchFeeConfirmBody(
-      feeFragments: feeFragments,
-      matchLabel: matchLabel,
+    builder: (ctx) => Theme(
+      data: AppTheme.dark,
+      child: AppCenteredModal(
+        title: 'Match fee',
+        showCloseButton: false,
+        child: _MatchFeeConfirmBody(
+          feeFragments: feeFragments,
+          matchLabel: matchLabel,
+        ),
+      ),
     ),
   );
   return result == true;
@@ -42,15 +47,19 @@ class _MatchFeeConfirmBody extends StatelessWidget {
         Text(
           '$matchLabel costs $feeFragments Gold Fragments.\n'
           'Confirm to pay and find a match.',
-          style: context.appTypography.body,
+          style: context.appTypography.body.copyWith(
+            color: AppColors.onSurfaceDark,
+          ),
         ),
         AppSpacing.gapMd,
         FilledButton(
+          style: context.appButtons.primary.filled,
           onPressed: () => AppModal.dismiss(context, true),
           child: Text('Pay $feeFragments Fragments'),
         ),
         AppSpacing.gapSm,
         OutlinedButton(
+          style: context.appButtons.tertiary.outlined,
           onPressed: () => AppModal.dismiss(context, false),
           child: const Text('Cancel'),
         ),

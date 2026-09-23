@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Iterable
 
 # Creator's own Kin never drops below this; claim starts here.
 KIN_CREATOR_MASTERY_FLOOR = 100
@@ -42,7 +42,12 @@ def echo_mastery_seed(
 
 
 def own_played_delta(seat_flips: int) -> int:
-    """Mastery Δ on the Arcori you brought this match."""
+    """Mastery Δ on a design you already have mastery on (own curve).
+
+    Used for: (1) the Arcori you brought — keyed off seat total flips;
+    (2) any other table design you already have mastery on — keyed off
+    flips of that design (0 flips → −1).
+    """
     n = max(0, int(seat_flips))
     if n <= 0:
         return -1
@@ -52,7 +57,7 @@ def own_played_delta(seat_flips: int) -> int:
 
 
 def other_design_delta(flips_on_design: int) -> int:
-    """Mastery Δ on a non-own design you flipped this match."""
+    """Mastery Δ on a non-owned design you flipped this match."""
     n = max(0, int(flips_on_design))
     if n <= 0:
         return 0
@@ -149,50 +154,81 @@ def mastery_value_label(mastery_value: float, circulating_count: int) -> str:
     return MASTERY_VALUE_LABEL_PRICELESS
 
 
+def _clean_id(value: Any) -> str:
+    return str(value or "").strip()
+
+
+def _flip_count(raw: dict[str, int], design_id: str) -> int:
+    try:
+        return max(0, int(raw.get(design_id, 0)))
+    except (TypeError, ValueError):
+        return 0
+
+
 def compute_mastery_deltas(
     *,
     played_design_id: str | None,
     seat_flips: int,
     flips_by_design: dict[str, int] | None,
+    table_design_ids: Iterable[str] | None = None,
+    owned_design_ids: Iterable[str] | None = None,
 ) -> list[dict[str, Any]]:
     """
     Build non-zero mastery change rows for finalize.
 
     Each row: {designId, delta, flips, kind: "own"|"other"}
-    Own uses seat_flips; other uses flips_by_design (excluding played).
+
+    - **Played** design: own curve from ``seat_flips`` (match total you flipped).
+    - **Owned** table designs (mastery > 0 already, incl. opponents' picks you
+      already progress on): own curve from flips of that design (0 → −1).
+    - **Other** (no prior mastery): other curve from flips of that design.
     """
     out: list[dict[str, Any]] = []
-    played = (played_design_id or "").strip()
-    if played:
-        delta = own_played_delta(seat_flips)
-        if delta != 0:
-            out.append(
-                {
-                    "designId": played,
-                    "delta": delta,
-                    "flips": max(0, int(seat_flips)),
-                    "kind": "own",
-                }
-            )
-
-    raw = flips_by_design or {}
-    for design_id, flips in raw.items():
-        did = str(design_id or "").strip()
-        if not did or (played and did == played):
+    played = _clean_id(played_design_id)
+    raw: dict[str, int] = {}
+    for key, value in (flips_by_design or {}).items():
+        did = _clean_id(key)
+        if not did:
             continue
         try:
-            n = max(0, int(flips))
+            raw[did] = max(0, int(value))
         except (TypeError, ValueError):
             continue
-        delta = other_design_delta(n)
+
+    owned = {_clean_id(x) for x in (owned_design_ids or []) if _clean_id(x)}
+    table: set[str] = set()
+    for x in table_design_ids or []:
+        did = _clean_id(x)
+        if did:
+            table.add(did)
+    # Always evaluate played + anything you flipped.
+    if played:
+        table.add(played)
+    table.update(raw.keys())
+
+    for design_id in sorted(table):
+        flips_on = _flip_count(raw, design_id)
+        if played and design_id == played:
+            delta = own_played_delta(seat_flips)
+            kind = "own"
+            # Display flips-on-this-design (seat total only drives delta).
+            flips_field = flips_on
+        elif design_id in owned:
+            delta = own_played_delta(flips_on)
+            kind = "own"
+            flips_field = flips_on
+        else:
+            delta = other_design_delta(flips_on)
+            kind = "other"
+            flips_field = flips_on
         if delta == 0:
             continue
         out.append(
             {
-                "designId": did,
+                "designId": design_id,
                 "delta": delta,
-                "flips": n,
-                "kind": "other",
+                "flips": flips_field,
+                "kind": kind,
             }
         )
     return out

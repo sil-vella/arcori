@@ -51,14 +51,18 @@ class VeloraApiClient {
   final String _baseUrl;
 
   /// Circulating designs only (`worldState == Active`).
-  /// Optional [theme] filters by theme name or themeCode.
+  /// Optional [theme] / [series] filter by theme code|name and series key|slug.
   Future<VeloraApiOutcome<CatalogIndexResult>> fetchIndex({
     required String accessToken,
     String? theme,
+    String? series,
   }) {
     final params = <String, String>{'circulating': '1'};
     if (theme != null && theme.isNotEmpty) {
       params['theme'] = theme;
+    }
+    if (series != null && series.isNotEmpty) {
+      params['series'] = series;
     }
     final uri = Uri.parse('$_baseUrl/authuser/catalog/index').replace(
       queryParameters: params,
@@ -66,7 +70,15 @@ class VeloraApiClient {
     return _get(uri, accessToken: accessToken, parse: _parseIndex);
   }
 
-  /// Theme list for Velora entry (from catalog meta).
+  /// Series list for Velora home.
+  Future<VeloraApiOutcome<List<CatalogSeriesEntry>>> fetchSeries({
+    required String accessToken,
+  }) {
+    final uri = Uri.parse('$_baseUrl/authuser/catalog/series');
+    return _get(uri, accessToken: accessToken, parse: _parseSeries);
+  }
+
+  /// Theme list from catalog meta (lore / labels).
   Future<VeloraApiOutcome<List<CatalogThemeEntry>>> fetchThemes({
     required String accessToken,
   }) {
@@ -146,6 +158,39 @@ class VeloraApiClient {
     return VeloraApiOutcome.success(
       CatalogIndexResult(items: items, total: total),
     );
+  }
+
+  VeloraApiOutcome<List<CatalogSeriesEntry>> _parseSeries(
+    http.Response response,
+  ) {
+    final envelope = _decodeEnvelope(response.body);
+    if (envelope == null) {
+      return VeloraApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    if (envelope['ok'] != true) {
+      return VeloraApiOutcome.failure(
+        error: ApiError.fromEnvelope(envelope),
+      );
+    }
+    final data = envelope['data'] as Map<String, dynamic>? ?? const {};
+    final raw = data['series'];
+    final series = raw is List
+        ? raw
+            .whereType<Map>()
+            .map(
+              (item) =>
+                  CatalogSeriesEntry.fromJson(Map<String, dynamic>.from(item)),
+            )
+            .where((s) => s.key.isNotEmpty || s.seriesKey.isNotEmpty)
+            .toList()
+        : <CatalogSeriesEntry>[];
+    return VeloraApiOutcome.success(series);
   }
 
   VeloraApiOutcome<List<CatalogThemeEntry>> _parseThemes(

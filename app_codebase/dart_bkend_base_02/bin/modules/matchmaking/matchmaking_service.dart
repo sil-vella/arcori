@@ -497,6 +497,7 @@ class MatchmakingService {
       final needAi = lobby.targetSeats - lobby.members.length;
       final exclude = lobby.members.map((m) => m.userId).toList();
       List<String> aiIds = const [];
+      final aiUsernames = <String, String>{};
 
       final isInvite = lobby.matchType['code']?.toString() == 'invite';
       final rematch = lobby.matchType['rematch'] == true ||
@@ -554,10 +555,17 @@ class MatchmakingService {
             throw AppError(matchmakingInviteNeedsMoreHumans);
           }
           try {
-            aiIds = await _ai.sampleAiUserIds(
+            final fills = await _ai.sampleAiSeats(
               count: needAi,
               excludeUserIds: exclude,
             );
+            aiIds = fills.map((f) => f.userId).toList();
+            for (final f in fills) {
+              final name = f.username?.trim() ?? '';
+              if (name.isNotEmpty) {
+                aiUsernames[f.userId] = name;
+              }
+            }
             if (LOGGING_SWITCH) {
               customlog(
                 'matchmaking: AI sample count=${aiIds.length} ids=$aiIds',
@@ -591,6 +599,7 @@ class MatchmakingService {
           matchType: lobby.matchType,
           humans: humans,
           aiUserIds: aiIds,
+          aiUsernames: aiUsernames,
           targetSeats: lobby.targetSeats,
         );
       } on AppError {

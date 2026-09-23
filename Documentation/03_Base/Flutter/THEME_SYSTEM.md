@@ -10,10 +10,13 @@ Related docs: [NAVIGATION_SYSTEM.md](NAVIGATION_SYSTEM.md) (shell chrome), [MODA
 |-------|----------|------|
 | Barrel export | `lib/core/theme/theme.dart` | One import for all theme tokens |
 | Colors | `lib/core/theme/app_colors.dart` | Arcori brand palette (logo) — brand, semantic, neutrals |
+| Surfaces / HUD | `lib/core/theme/app_surfaces.dart` | Gallery canvas, exhibit frames, glass HUD, aim/power colors |
+| Radii | `lib/core/theme/app_radii.dart` | Corner radius scale (`sm`…`pill`) |
 | Typography | `lib/core/theme/app_typography.dart` | Font sizes, weights, semantic text styles |
 | Spacing | `lib/core/theme/app_spacing.dart` | Layout gaps and screen padding |
 | Buttons | `lib/core/theme/app_buttons.dart` | Brand + semantic button styles |
 | Modals | `lib/core/theme/app_modal_theme.dart` | Scrim, surface, radius, motion |
+| Primitives | `lib/core/widgets/app_visuals.dart` | Exhibit card, section rail, empty state, HUD glass chip |
 | Modal shells | `lib/core/modal/` | `AppModal`, centered + full-screen widgets |
 | Theme builder | `lib/core/theme/app_theme.dart` | `ThemeData`, `ColorScheme`, context extensions |
 | Bootstrap | `lib/app_init.dart` | `MaterialApp.router(theme: AppTheme.light, darkTheme: AppTheme.dark)` |
@@ -26,25 +29,28 @@ app_init.dart
         └── ThemeData
               ├── colorScheme        ← AppColors
               ├── textTheme          ← AppTypography
-              ├── *ButtonTheme       ← AppButtonStyles (primary defaults)
+              ├── *ButtonTheme       ← AppButtonStyles (gold primary CTA)
               ├── appBarTheme        ← typography + colorScheme
               ├── inputDecorationTheme
               └── extensions
-                    ├── AppThemeExtension      (palette shortcuts)
-                    ├── AppTypographyExtension (semantic text)
-                    ├── AppButtonStylesExtension (button tones)
-                    └── AppModalThemeExtension   (modal overlay)
+                    ├── AppThemeExtension         (palette shortcuts)
+                    ├── AppTypographyExtension    (semantic text)
+                    ├── AppButtonStylesExtension  (button tones)
+                    ├── AppModalThemeExtension    (modal overlay)
+                    ├── AppSurfacesExtension      (gallery / glass)
+                    └── AppHudThemeExtension      (match HUD states)
 ```
 
 ## Design principles
 
 1. **One import.** Screens import `package:arcori/core/theme/theme.dart` — not individual token files unless there is a strong reason.
-2. **No hardcoded `Colors.*` in modules.** Use `AppColors`, `context.appColors`, or `Theme.of(context).colorScheme`.
+2. **No hardcoded `Colors.*` in modules.** Use `AppColors`, `context.appColors`, `context.appSurfaces`, `context.appHud`, or `Theme.of(context).colorScheme`.
 3. **Semantic names over raw values.** Prefer `context.appTypography.h2` and `context.appButtons.success.filled` over inline `TextStyle` / `ButtonStyle`.
 4. **Material slots still work.** `textTheme.headlineMedium`, `colorScheme.primary`, etc. are mapped from the same tokens — use whichever reads clearer in context.
 5. **Brand from logo.** Primary purple, gold, bronze, and green are sampled from `assets/images/branding/logo.jpg`. Each brand/status color has a matching `*Pastel` container and `on*` foreground for contrast.
-6. **Platform font by default.** `AppFonts.primary` is `null` (Roboto / SF Pro). Set it when custom fonts are added to `pubspec.yaml`.
-
+6. **Gallery-first reliquary.** Discs stay the hero; chrome uses velvet canvas + gold/bronze hairlines. Browse is calm gallery; match HUD is glass overlay — same tokens, different density.
+7. **Display font for titles.** `AppFonts.display` = Cormorant Garamond (bundled OFL) for `display` / `h1` / `h2`. Body and HUD stay platform sans (`AppFonts.primary = null`).
+8. **Button CTA mapping.** `AppButtonTone.primary` filled = **gold** (Play / claim). `secondary` = purple field. `tertiary` outlined = bronze quiet actions.
 ## Quick start
 
 ```dart
@@ -91,6 +97,8 @@ class MyScreen extends StatelessWidget {
 | `appTypography` | Semantic text styles (`h1`, `menu`, `body`, …) |
 | `appButtons` | Brand + semantic button styles |
 | `appColors` | Pastel palette shortcuts |
+| `appSurfaces` | Gallery canvas, exhibit frames, glass HUD fills |
+| `appHud` | Match HUD state colors (armed, power, miss) |
 
 ## Colors (`AppColors`)
 
@@ -168,6 +176,25 @@ Text('Section', style: context.appTextTheme.headlineMedium) // same token
 Text(log, style: context.appTypography.monospace)
 ```
 
+## Radii (`AppRadii`)
+
+| Token | Value | Typical use |
+|-------|-------|-------------|
+| `sm` | 8 | Inputs, chips |
+| `md` | 12 | Buttons, panels |
+| `lg` | 20 | Cards, modals, exhibit frames |
+| `xl` | 28 | Hero frames |
+| `pill` | 999 | HUD chips |
+
+## Surfaces & HUD (`AppSurfaces` / `AppHudThemeExtension`)
+
+| Accessor | Use |
+|----------|-----|
+| `context.appSurfaces.canvas` | Page background |
+| `context.appSurfaces.exhibit` / `frameGold` / `frameBronze` | Exhibit cards |
+| `context.appSurfaces.glassHud` | Match HUD glass fill |
+| `context.appHud.armed` / `aimLocked` / `powerLow`…`powerHigh` / `missZone` | Slam HUD paints |
+
 ## Spacing (`AppSpacing`)
 
 | Token | Value |
@@ -175,8 +202,10 @@ Text(log, style: context.appTypography.monospace)
 | `xxs` – `xxl` | 4, 8, 12, 16, 24, 32, 48 |
 | `screenPadding` | `EdgeInsets.all(24)` |
 | `screenPaddingCompact` | `EdgeInsets.all(16)` |
-| `gapXxs` – `gapLg` | `SizedBox` shorthands |
-
+| `screenPaddingWide` | horizontal 32 / vertical 24 |
+| `thumbSafeBottom` | Play / claim CTA inset |
+| `modalPadding` / `modalPaddingCompact` | Modal body padding |
+| `gapXxs` – `gapXl` | `SizedBox` shorthands |
 ```dart
 Padding(padding: AppSpacing.screenPadding, child: …)
 Column(children: [a, AppSpacing.gapMd, b])
@@ -306,10 +335,9 @@ Shell chrome (`shell_app_bar.dart`, `app_shell.dart`, `shell_bottom_bar.dart`) s
 
 1. Add font files under `assets/fonts/` (or package dependency).
 2. Register in `pubspec.yaml` under `flutter: fonts:`.
-3. Set `AppFonts.primary` to the family name in `app_typography.dart`.
+3. Set `AppFonts.primary` (UI) and/or `AppFonts.display` (titles) in `app_typography.dart`.
 
-All semantic text styles pick up the family automatically.
-
+**Shipped:** Cormorant Garamond as `AppFonts.display` for `display` / `h1` / `h2` only.
 ## Adding or changing tokens
 
 1. **New color** — add to `app_colors.dart`, wire into `AppTheme._lightColorScheme` / `_darkColorScheme` if it belongs in `ColorScheme`, and expose on `AppThemeExtension` if screens need a shortcut.
@@ -323,8 +351,14 @@ All semantic text styles pick up the family automatically.
 lib/core/theme/
 ├── theme.dart           # Barrel export
 ├── app_colors.dart      # AppColors
+├── app_radii.dart       # AppRadii
+├── app_surfaces.dart    # AppSurfaces, AppSurfacesExtension, AppHudThemeExtension
 ├── app_typography.dart  # AppFonts, AppFontSizes, AppTypography, AppTypographyExtension
 ├── app_spacing.dart     # AppSpacing
 ├── app_buttons.dart     # AppButtonMetrics, AppButtonTone, AppButtonStyles, AppButtonStylesExtension
+├── app_modal_theme.dart # Modal metrics + AppModalThemeExtension
 └── app_theme.dart       # AppTheme, AppThemeExtension, AppThemeContext
+
+lib/core/widgets/
+└── app_visuals.dart     # AppExhibitCard, AppSectionRail, AppEmptyState, AppHudGlassChip
 ```

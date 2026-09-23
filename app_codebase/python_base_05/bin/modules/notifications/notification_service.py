@@ -201,6 +201,121 @@ def create_from_service_request() -> dict[str, Any]:
     return create_from_request_body(parse_json_body())
 
 
+def upsert_global_news(
+    *,
+    global_id: uuid.UUID,
+    title: str,
+    body: str,
+    subtype: str,
+    msg_id: str,
+    data: dict[str, Any] | None = None,
+    notification_type: str = "inbox",
+    source: str = "world",
+    category: str = "news",
+    is_active: bool = True,
+) -> str:
+    """Idempotent global World News campaign (by global_id / msg_id)."""
+    from models.user_notification import NOTIFICATION_TYPE_INBOX, NOTIFICATION_TYPE_INSTANT
+
+    source_value = str(source or "world").strip()
+    category_value = _normalize_category(category)
+    subtype_value = _normalize_subtype(subtype)
+    require_subtype_spec(
+        source=source_value,
+        category=category_value,
+        subtype=subtype_value,
+    )
+    title_value = str(title or "").strip()
+    body_value = str(body or "").strip()
+    if not title_value or not body_value:
+        raise AppError(INVALID_REQUEST, message="title and body are required")
+
+    normalized_type = _normalize_type(notification_type)
+    if normalized_type not in (NOTIFICATION_TYPE_INBOX, NOTIFICATION_TYPE_INSTANT):
+        raise AppError(INVALID_NOTIFICATION_TYPE)
+
+    normalized_data = validate_data_response(
+        data if isinstance(data, dict) else {},
+        source=source_value,
+        category=category_value,
+        subtype=subtype_value,
+    )
+
+    with session_scope() as session:
+        row = repo.upsert_global_notification(
+            session,
+            global_id=global_id,
+            source=source_value,
+            notification_type=normalized_type,
+            title=title_value,
+            body=body_value,
+            category=category_value,
+            subtype=subtype_value,
+            msg_id=str(msg_id or "").strip() or None,
+            data=normalized_data,
+            responses=[],
+            target_audience={"all": True},
+            is_active=is_active,
+        )
+        out_id = str(row.id)
+
+    if LOGGING_SWITCH:
+        customlog(
+            f"notifications: upsert_global_news id={out_id} subtype={subtype_value} "
+            f"msg_id={msg_id}"
+        )
+    return out_id
+
+
+def upsert_global_from_service_request() -> dict[str, Any]:
+    """Service-tier upsert for global campaigns (admin / World News)."""
+    body = parse_json_body()
+    raw_id = str(body.get("id") or "").strip()
+    if not raw_id:
+        raise AppError(INVALID_REQUEST, message="id is required")
+    global_id = _parse_uuid(raw_id, field="id")
+    source = str(body.get("source") or "global_broadcast").strip()
+    category = _normalize_category(str(body.get("category") or ""))
+    subtype = _normalize_subtype(str(body.get("subtype") or ""))
+    require_subtype_spec(source=source, category=category, subtype=subtype)
+    title = str(body.get("title") or "").strip()
+    body_text = str(body.get("body") or "").strip()
+    if not title or not body_text:
+        raise AppError(INVALID_REQUEST, message="title and body are required")
+    notification_type = _normalize_type(str(body.get("type") or "inbox"))
+    data_raw = body.get("data") if isinstance(body.get("data"), dict) else {}
+    normalized_data = validate_data_response(
+        data_raw,
+        source=source,
+        category=category,
+        subtype=subtype,
+    )
+    with session_scope() as session:
+        row = repo.upsert_global_notification(
+            session,
+            global_id=global_id,
+            source=source,
+            notification_type=notification_type,
+            title=title,
+            body=body_text,
+            category=category,
+            subtype=subtype,
+            msg_id=body.get("msg_id"),
+            data=normalized_data,
+            responses=body.get("responses")
+            if isinstance(body.get("responses"), list)
+            else [],
+            target_audience=body.get("target_audience")
+            if isinstance(body.get("target_audience"), dict)
+            else {"all": True},
+            is_active=bool(body.get("is_active", True)),
+        )
+        out_id = str(row.id)
+    if LOGGING_SWITCH:
+        customlog(f"notifications: global-upsert id={out_id} subtype={subtype}")
+    return {"global_id": out_id, "msg_id": body.get("msg_id")}
+
+
 def list_messages_for_user(
     user_id: str,
     *,

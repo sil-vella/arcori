@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_colors.dart';
+
 /// Disc accent palette — shared across all Arcori designs (stable hash pick).
 const List<Color> kArcoriAccentPalette = [
   Color(0xFFC6A15B), // Gold
@@ -53,7 +55,9 @@ Color arcoriAccentForDesignId(String designId) {
 
 /// Dark label on light accents (e.g. warm ivory / silver).
 Color arcoriAccentLabelColor(Color accent) {
-  return accent.computeLuminance() > 0.45 ? const Color(0xFF1A1A1A) : Colors.white;
+  return accent.computeLuminance() > 0.45
+      ? AppColors.onSurface
+      : AppColors.onPrimary;
 }
 
 /// Pivot: HSL lightness below this is a "dark" back face.

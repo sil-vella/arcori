@@ -20,12 +20,17 @@ Future<InviteSetupResult?> showInviteSetupModal({
   required BuildContext context,
   required WidgetRef ref,
 }) {
-  return AppModal.showCenteredShell<InviteSetupResult?>(
+  return AppModal.showCentered<InviteSetupResult?>(
     context,
-    title: 'Create invite',
     barrierDismissible: true,
-    showCloseButton: true,
-    child: _InviteSetupBody(ref: ref),
+    builder: (ctx) => Theme(
+      data: AppTheme.dark,
+      child: AppCenteredModal(
+        title: 'Create invite',
+        showCloseButton: true,
+        child: _InviteSetupBody(ref: ref),
+      ),
+    ),
   );
 }
 
@@ -290,24 +295,54 @@ class _InviteSetupBodyState extends ConsumerState<_InviteSetupBody> {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             'Search Contacts by username',
-            style: context.appTypography.bodySmall,
+            style: context.appTypography.bodySmall.copyWith(
+              color: AppColors.onSurfaceMutedDark,
+            ),
           ),
-          const SizedBox(height: 8),
+          AppSpacing.gapSm,
           TextField(
             controller: _searchController,
-            decoration: const InputDecoration(
+            style: context.appTypography.body.copyWith(
+              color: AppColors.onSurfaceDark,
+            ),
+            decoration: InputDecoration(
               hintText: 'Type 2+ characters',
+              hintStyle: context.appTypography.bodyMuted.copyWith(
+                color: AppColors.onSurfaceMutedDark,
+              ),
+              filled: true,
+              fillColor: AppColors.surfaceDark,
+              isDense: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppRadii.md),
+                borderSide: BorderSide(
+                  color: AppColors.tertiary.withValues(alpha: 0.55),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppRadii.md),
+                borderSide: BorderSide(
+                  color: AppColors.tertiary.withValues(alpha: 0.55),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppRadii.md),
+                borderSide: BorderSide(
+                  color: AppSurfaces.frameGold(Brightness.dark),
+                  width: 1.5,
+                ),
+              ),
             ),
             onChanged: _onSearchChanged,
           ),
-          const SizedBox(height: 8),
+          AppSpacing.gapSm,
           if (_searching) const LinearProgressIndicator(minHeight: 2),
           if (_searchResults.isNotEmpty)
             SizedBox(
@@ -318,24 +353,44 @@ class _InviteSetupBodyState extends ConsumerState<_InviteSetupBody> {
                 itemBuilder: (context, i) {
                   final user = _searchResults[i];
                   return ListTile(
-                    title: Text(user.displayName),
-                    subtitle: Text(user.username),
-                    leading: const Icon(Icons.person_add),
+                    title: Text(
+                      user.displayName,
+                      style: context.appTypography.body.copyWith(
+                        color: AppColors.onSurfaceDark,
+                      ),
+                    ),
+                    subtitle: Text(
+                      user.username,
+                      style: context.appTypography.bodySmall.copyWith(
+                        color: AppColors.onSurfaceMutedDark,
+                      ),
+                    ),
+                    leading: Icon(
+                      Icons.person_add,
+                      color: AppSurfaces.frameGold(Brightness.dark),
+                    ),
                     onTap: () => _selectRecipient(user),
                   );
                 },
               ),
             ),
-          const SizedBox(height: 16),
+          AppSpacing.gapMd,
           Text(
             'Contacts',
-            style: context.appTypography.bodySmall,
+            style: context.appTypography.bodySmall.copyWith(
+              color: AppColors.onSurfaceMutedDark,
+            ),
           ),
-          const SizedBox(height: 8),
+          AppSpacing.gapSm,
           SizedBox(
             height: 200,
             child: _loadingContacts
-                ? const Center(child: CircularProgressIndicator())
+                ? Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppSurfaces.frameGold(Brightness.dark),
+                    ),
+                  )
                 : ListView.builder(
                     shrinkWrap: true,
                     itemCount: _contacts.length,
@@ -344,11 +399,25 @@ class _InviteSetupBodyState extends ConsumerState<_InviteSetupBody> {
                       final isSelected =
                           _selectedRecipient?.userId == c.userId;
                       return ListTile(
-                        title: Text(c.displayName),
-                        subtitle: Text(c.username),
+                        title: Text(
+                          c.displayName,
+                          style: context.appTypography.body.copyWith(
+                            color: AppColors.onSurfaceDark,
+                          ),
+                        ),
+                        subtitle: Text(
+                          c.username,
+                          style: context.appTypography.bodySmall.copyWith(
+                            color: AppColors.onSurfaceMutedDark,
+                          ),
+                        ),
                         selected: isSelected,
+                        selectedTileColor:
+                            AppSurfaces.frameGold(Brightness.dark)
+                                .withValues(alpha: 0.12),
                         trailing: IconButton(
                           icon: const Icon(Icons.close),
+                          color: AppColors.onSurfaceMutedDark,
                           onPressed: () => _removeContact(c),
                         ),
                         onTap: isSelected
@@ -363,16 +432,20 @@ class _InviteSetupBodyState extends ConsumerState<_InviteSetupBody> {
                   ),
           ),
           if (_selectedRecipient != null) ...[
-            const SizedBox(height: 8),
+            AppSpacing.gapSm,
             Text(
               'Inviting: ${_selectedRecipient!.displayName}',
-              style: context.appTypography.bodySmall,
+              style: context.appTypography.bodySmall.copyWith(
+                color: AppSurfaces.frameGold(Brightness.dark),
+              ),
             ),
           ],
-          const SizedBox(height: 16),
+          AppSpacing.gapMd,
           FilledButton(
-            onPressed:
-                _selectedRecipient == null || _submittingInvite ? null : _createInvite,
+            style: context.appButtons.primary.filled,
+            onPressed: _selectedRecipient == null || _submittingInvite
+                ? null
+                : _createInvite,
             child: _submittingInvite
                 ? const SizedBox(
                     height: 18,

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math.dart';
 
+import '../bin/modules/match/match_models.dart';
 import '../bin/modules/match/slam_input.dart';
 import '../bin/modules/match/slam_physics_world.dart';
 import '../bin/modules/match/slam_resolver.dart';
@@ -65,6 +66,8 @@ void main() {
           'control': 8,
           'recovery': 5,
           'spread': 9,
+          'hitTarget': 'center',
+          'powerBracket': {'min': 0.9, 'max': 1.0},
         },
         table: stack(),
       );
@@ -90,6 +93,8 @@ void main() {
           'control': 8,
           'recovery': 5,
           'spread': 9,
+          'hitTarget': 'center',
+          'powerBracket': {'min': 0.85, 'max': 1.0},
         },
         table: stack(),
       );
@@ -97,6 +102,90 @@ void main() {
       expect(r.flippedPieceIds, isNotEmpty);
       expect(r.scoreDeltas.values.fold<int>(0, (a, b) => a + b), greaterThan(0));
       expect(r.impulse['power'], greaterThan(0.5));
+    });
+
+    test('pref match center+mid power beats edge+high power mismatch', () {
+      final attrsMatch = {
+        'impact': 10,
+        'precision': 10,
+        'control': 10,
+        'recovery': 5,
+        'spread': 8,
+        'hitTarget': 'center',
+        'powerBracket': {'min': 0.4, 'max': 0.6},
+      };
+      final attrsMismatch = {
+        ...attrsMatch,
+        'hitTarget': 'center',
+        'powerBracket': {'min': 0.4, 'max': 0.6},
+      };
+
+      // Matching: centered aim, speed chosen so power ≈ 0.5 with impact 10.
+      final matched = resolveSlam(
+        matchId: 'm_pref_match',
+        version: 1,
+        actorSeatIndex: 0,
+        input: {
+          'speed': 0.5,
+          'aim': {'x': 0.0, 'z': 0.0},
+        },
+        gameplayAttributes: attrsMatch,
+        table: stack(),
+      );
+
+      // Mismatch: edge aim + high power vs center/0.5 prefs.
+      final mismatched = resolveSlam(
+        matchId: 'm_pref_miss',
+        version: 1,
+        actorSeatIndex: 0,
+        input: {
+          'speed': 0.95,
+          'aim': {'x': kSlamAimHitRadius * 0.92, 'z': 0.0},
+        },
+        gameplayAttributes: attrsMismatch,
+        table: stack(),
+      );
+
+      expect(
+        (matched.impulse['power'] as num).toDouble(),
+        greaterThan((mismatched.impulse['power'] as num).toDouble()),
+      );
+      expect(matched.flippedPieceIds.length,
+          greaterThanOrEqualTo(mismatched.flippedPieceIds.length));
+    });
+
+    test('preferenceFit peaks when aim and power match prefs', () {
+      final fitCenterMid = preferenceFit(
+        aimX: 0,
+        aimZ: 0,
+        power: 0.5,
+        hitTarget: 'center',
+        powerMin: 0.4,
+        powerMax: 0.6,
+      );
+      final fitCenterHigh = preferenceFit(
+        aimX: 0,
+        aimZ: 0,
+        power: 0.95,
+        hitTarget: 'center',
+        powerMin: 0.4,
+        powerMax: 0.6,
+      );
+      final fitEdgeHigh = preferenceFit(
+        aimX: kSlamAimHitRadius * 0.95,
+        aimZ: 0,
+        power: 0.95,
+        hitTarget: 'center',
+        powerMin: 0.4,
+        powerMax: 0.6,
+      );
+      expect(fitCenterMid, greaterThan(0.9));
+      expect(fitCenterMid, greaterThan(fitCenterHigh));
+      expect(fitCenterHigh, greaterThan(fitEdgeHigh));
+      expect(
+        effectivePowerFromFit(0.5, fitCenterMid),
+        greaterThan(effectivePowerFromFit(0.95, fitEdgeHigh)),
+      );
     });
 
     test('weak slam counts but barely moves and usually does not wipe the stack', () {
@@ -115,6 +204,8 @@ void main() {
           'control': 5,
           'recovery': 5,
           'spread': 5,
+          'hitTarget': 'center',
+          'powerBracket': {'min': 0.05, 'max': 0.2},
         },
         table: stack(),
       );
@@ -196,6 +287,8 @@ void main() {
           'control': 5,
           'recovery': 5,
           'spread': 7,
+          'hitTarget': 'center',
+          'powerBracket': {'min': 0.7, 'max': 0.9},
         },
         table: three,
       );
@@ -310,6 +403,51 @@ void main() {
       expect(pieces.every((p) => p['faceUp'] == false), isTrue);
       expect(pieces[0]['stackIndex'], 0);
       expect(pieces[1]['stackIndex'], 1);
+    });
+
+    test('tableFromSeats adds seatless Gatherer on top', () {
+      final seats = [
+        MatchSeat(
+          userId: 'u0',
+          seatIndex: 0,
+          kind: 'human',
+          arcoriIds: const ['A'],
+          slammerId: 'SLM',
+        ),
+        MatchSeat(
+          userId: 'u1',
+          seatIndex: 1,
+          kind: 'ai',
+          arcoriIds: const ['B'],
+          slammerId: 'SLM',
+        ),
+      ];
+      final table = tableFromSeats(
+        seats,
+        catalogById: {
+          'A': {'imageUrl': '/a.webp', 'color': '#111'},
+          'B': {'imageUrl': '/b.webp', 'color': '#222'},
+          'G': {'imageUrl': '/g.webp', 'color': '#333'},
+        },
+        gathererArcoriId: 'G',
+      );
+      final pieces = piecesFromTable(table);
+      expect(pieces, hasLength(3));
+      expect(pieces[2]['pieceId'], kGathererPieceId);
+      expect(pieces[2]['designId'], 'G');
+      expect(pieces[2].containsKey('seatIndex'), isFalse);
+      expect(pieces[2]['ownerUserId'], '');
+
+      final restacked = restackFaceDown({
+        'pieces': [
+          pieces[2],
+          pieces[1],
+          pieces[0],
+        ],
+      });
+      final ordered = piecesFromTable(restacked);
+      expect(ordered.map((p) => p['pieceId']), ['p0', 'p1', kGathererPieceId]);
+      expect(ordered[2]['stackIndex'], 2);
     });
 
     test('same seed yields identical sim frames', () {

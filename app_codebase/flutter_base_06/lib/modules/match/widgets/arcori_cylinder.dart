@@ -58,7 +58,7 @@ class ArcoriCylinder extends StatelessWidget {
               color: look.accent,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.28),
+                  color: AppColors.onSurface.withValues(alpha: 0.28),
                   blurRadius: 5,
                   offset: const Offset(0, 2),
                 ),
@@ -196,13 +196,17 @@ class _ArcoriBackFace extends StatelessWidget {
     final pad = (size * 0.08).clamp(2.0, 10.0);
     final fontSize = (size * 0.085).clamp(5.0, 14.0);
     final style = TextStyle(
-      color: const Color(0xFFE8E4DC),
+      color: AppColors.onSurfaceDark,
       fontSize: fontSize,
       fontWeight: FontWeight.w600,
       height: 1.15,
       letterSpacing: 0.3,
-      shadows: const [
-        Shadow(color: Color(0xCC000000), blurRadius: 2, offset: Offset(0, 0.5)),
+      shadows: [
+        Shadow(
+          color: AppColors.onSurface.withValues(alpha: 0.8),
+          blurRadius: 2,
+          offset: const Offset(0, 0.5),
+        ),
       ],
     );
 

@@ -21,6 +21,11 @@ String userMessageForAuthFailure({
     if (apiError.rawCode == 'auth/email_already_verified') {
       return 'Your email is already verified.';
     }
+    if (apiError.rawCode == 'rejected_username') {
+      return apiError.message.isNotEmpty
+          ? apiError.message
+          : 'That name isn’t allowed. Please choose another.';
+    }
     if (apiError.code is CoreApiErrorCode &&
         apiError.code.raw == 'rate_limited') {
       return 'Too many attempts. Please wait a moment and try again.';

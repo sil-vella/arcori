@@ -6,6 +6,7 @@ import '../../../core/navigation/app_navigation.dart';
 import '../../../core/navigation/app_paths.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 import '../kin_models.dart';
 import '../kin_notifier.dart';
 
@@ -35,12 +36,11 @@ class _KinTypesScreenState extends ConsumerState<KinTypesScreen> {
       appBarItems: const [
         AppBarTitle(text: 'Kin types', icon: Icons.auto_awesome_outlined),
       ],
-      child: state.isLoading && catalog == null
-          ? const Center(child: CircularProgressIndicator())
-          : state.errorMessage != null && catalog == null
-              ? Center(
-                  child: Padding(
-                    padding: AppSpacing.screenPadding,
+      child: AppChromePage(
+        child: state.isLoading && catalog == null
+            ? const AppChromeCentered(child: CircularProgressIndicator())
+            : state.errorMessage != null && catalog == null
+                ? AppChromeCentered(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -53,30 +53,38 @@ class _KinTypesScreenState extends ConsumerState<KinTypesScreen> {
                         ),
                         AppSpacing.gapMd,
                         FilledButton(
-                          onPressed: () =>
-                              ref.read(kinCatalogProvider.notifier).load(force: true),
+                          onPressed: () => ref
+                              .read(kinCatalogProvider.notifier)
+                              .load(force: true),
                           child: const Text('Retry'),
                         ),
                       ],
                     ),
-                  ),
-                )
-              : catalog == null || catalog.types.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No Kin types yet',
-                        style: context.appTypography.body,
+                  )
+                : catalog == null || catalog.types.isEmpty
+                    ? AppChromeCentered(
+                        child: Text(
+                          'No Kin types yet',
+                          style: context.appTypography.body.copyWith(
+                            color: AppChrome.onSurfaceMuted,
+                          ),
+                        ),
+                      )
+                    : ListView.separated(
+                        padding: EdgeInsets.fromLTRB(
+                          AppSpacing.md,
+                          AppChromePage.topClearance(context) + AppSpacing.sm,
+                          AppSpacing.md,
+                          AppSpacing.xxl,
+                        ),
+                        itemCount: catalog.types.length,
+                        separatorBuilder: (_, __) => AppSpacing.gapSm,
+                        itemBuilder: (context, index) {
+                          final type = catalog.types[index];
+                          return _TypeTile(type: type);
+                        },
                       ),
-                    )
-                  : ListView.separated(
-                      padding: AppSpacing.screenPadding,
-                      itemCount: catalog.types.length,
-                      separatorBuilder: (_, __) => AppSpacing.gapSm,
-                      itemBuilder: (context, index) {
-                        final type = catalog.types[index];
-                        return _TypeTile(type: type);
-                      },
-                    ),
+      ),
     );
   }
 }
@@ -88,12 +96,12 @@ class _TypeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = context.appColorScheme;
+    final radius = BorderRadius.circular(AppSurfaces.exhibitRadius);
     return Material(
-      color: scheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(AppSpacing.sm),
+      color: AppChrome.panelFill,
+      borderRadius: radius,
       child: InkWell(
-        borderRadius: BorderRadius.circular(AppSpacing.sm),
+        borderRadius: radius,
         onTap: () {
           Nav.push(
             context,
@@ -103,20 +111,31 @@ class _TypeTile extends StatelessWidget {
             ).toString(),
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(type.displayName, style: context.appTypography.title),
-              AppSpacing.gapXxs,
-              Text(
-                type.serial,
-                style: context.appTypography.caption.copyWith(
-                  color: scheme.onSurfaceVariant,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            border: Border.all(color: AppChrome.panelBorder),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  type.displayName,
+                  style: context.appTypography.title.copyWith(
+                    color: AppChrome.onSurface,
+                  ),
                 ),
-              ),
-            ],
+                AppSpacing.gapXxs,
+                Text(
+                  type.serial,
+                  style: context.appTypography.caption.copyWith(
+                    color: AppChrome.onSurfaceMuted,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

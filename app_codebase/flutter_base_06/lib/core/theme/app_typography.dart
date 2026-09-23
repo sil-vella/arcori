@@ -9,6 +9,9 @@ abstract final class AppFonts {
   /// Main UI font. `null` uses the platform default (Roboto / SF Pro).
   static const String? primary = null;
 
+  /// Display / gallery titles (Cormorant Garamond — OFL, bundled).
+  static const String display = 'CormorantGaramond';
+
   /// Code, logs, and technical output.
   static const String monospace = 'monospace';
 }
@@ -148,14 +151,31 @@ abstract final class AppTypography {
       Color? color,
       double height = AppLineHeights.normal,
       double? letterSpacing,
+      String? fontFamily,
     }) {
       return TextStyle(
-        fontFamily: AppFonts.primary,
+        fontFamily: fontFamily ?? AppFonts.primary,
         fontSize: size,
         fontWeight: weight,
         color: color ?? onSurface,
         height: height,
         letterSpacing: letterSpacing,
+      );
+    }
+
+    TextStyle displayUi({
+      required double size,
+      FontWeight weight = AppFontWeights.semiBold,
+      Color? color,
+      double height = AppLineHeights.tight,
+    }) {
+      return ui(
+        size: size,
+        weight: weight,
+        color: color,
+        height: height,
+        fontFamily: AppFonts.display,
+        letterSpacing: 0.4,
       );
     }
 
@@ -170,13 +190,12 @@ abstract final class AppTypography {
     }
 
     return AppTypographyStyles(
-      display: ui(
+      display: displayUi(
         size: AppFontSizes.display,
         weight: AppFontWeights.bold,
-        height: AppLineHeights.tight,
       ),
-      h1: ui(size: AppFontSizes.h1, weight: AppFontWeights.bold),
-      h2: ui(size: AppFontSizes.h2, weight: AppFontWeights.semiBold),
+      h1: displayUi(size: AppFontSizes.h1, weight: AppFontWeights.bold),
+      h2: displayUi(size: AppFontSizes.h2, weight: AppFontWeights.semiBold),
       h3: ui(size: AppFontSizes.h3, weight: AppFontWeights.semiBold),
       h4: ui(size: AppFontSizes.h4, weight: AppFontWeights.medium),
       title: ui(size: AppFontSizes.title, weight: AppFontWeights.semiBold),

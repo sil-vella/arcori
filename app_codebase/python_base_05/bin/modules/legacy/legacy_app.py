@@ -12,9 +12,11 @@ from modules.legacy.legacy_errors import INVALID_QUERY
 from modules.legacy.legacy_service import (
     decline_offer,
     fulfill_from_website,
+    get_museum_banner,
     get_museum_item,
     get_offer,
     list_museum,
+    list_museum_series,
     preserve_complete,
     preserve_start,
     tick_expire_offers,
@@ -36,6 +38,8 @@ def register_legacy_routes(
         "/legacy/preserve/complete", lambda: _handle_preserve_complete(res)
     )
     routes.authuser_get("/museum", lambda: _handle_museum_list(res))
+    routes.authuser_get("/museum/series", lambda: _handle_museum_series(res))
+    routes.authuser_get("/museum/banner", lambda: _handle_museum_banner(res))
     routes.authuser_get("/museum/item", lambda: _handle_museum_item(res))
     routes.service_post("/legacy/fulfill", lambda: _handle_fulfill(res))
     routes.service_post("/legacy/tick", lambda: _handle_tick(res))
@@ -136,11 +140,13 @@ def _handle_museum_list(res: HttpResponseContract):
         request = get_current_request()
         outcome = "all"
         q = None
+        series = None
         limit = 30
         cursor = None
         if request is not None:
             outcome = request.query_params.get("outcome") or "all"
             q = request.query_params.get("q")
+            series = request.query_params.get("series")
             raw_limit = request.query_params.get("limit")
             if raw_limit:
                 try:
@@ -148,12 +154,45 @@ def _handle_museum_list(res: HttpResponseContract):
                 except ValueError:
                     raise AppError(INVALID_QUERY, message="limit must be an integer")
             cursor = request.query_params.get("cursor")
-        out = list_museum(outcome=outcome, q=q, limit=limit, cursor=cursor)
+        out = list_museum(
+            outcome=outcome, q=q, series=series, limit=limit, cursor=cursor
+        )
         if LOGGING_SWITCH:
             customlog(
-                f"legacy: GET museum outcome={outcome} q={q!r} "
+                f"legacy: GET museum outcome={outcome} series={series!r} q={q!r} "
                 f"items={len(out.get('items') or [])}"
             )
+        return res.json_ok(out)
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_museum_series(res: HttpResponseContract):
+    try:
+        _require_user_id()
+        request = get_current_request()
+        outcome = "preserved"
+        if request is not None:
+            outcome = request.query_params.get("outcome") or "preserved"
+        out = list_museum_series(outcome=outcome)
+        if LOGGING_SWITCH:
+            customlog(
+                f"legacy: GET museum/series outcome={outcome} "
+                f"count={len(out.get('series') or [])}"
+            )
+        return res.json_ok(out)
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_museum_banner(res: HttpResponseContract):
+    try:
+        _require_user_id()
+        out = get_museum_banner()
+        if LOGGING_SWITCH:
+            items = out.get("items") if isinstance(out, dict) else None
+            count = len(items) if isinstance(items, list) else 0
+            customlog(f"legacy: GET museum/banner items={count}")
         return res.json_ok(out)
     except AppError as err:
         return err.to_http_response()

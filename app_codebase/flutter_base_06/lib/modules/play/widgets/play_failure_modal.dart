@@ -5,12 +5,17 @@ import '../../../core/theme/theme.dart';
 
 /// Centered OK modal when a Play attempt cannot start or fails mid-lobby.
 Future<void> showPlayFailureModal(BuildContext context, String message) {
-  return AppModal.showCenteredShell<void>(
+  return AppModal.showCentered<void>(
     context,
-    title: 'Could not start match',
     barrierDismissible: false,
-    showCloseButton: false,
-    child: _PlayFailureBody(message: message),
+    builder: (ctx) => Theme(
+      data: AppTheme.dark,
+      child: AppCenteredModal(
+        title: 'Could not start match',
+        showCloseButton: false,
+        child: _PlayFailureBody(message: message),
+      ),
+    ),
   );
 }
 
@@ -25,9 +30,15 @@ class _PlayFailureBody extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(message, style: context.appTypography.body),
+        Text(
+          message,
+          style: context.appTypography.body.copyWith(
+            color: AppColors.onSurfaceDark,
+          ),
+        ),
         AppSpacing.gapMd,
         FilledButton(
+          style: context.appButtons.primary.filled,
           onPressed: () => AppModal.dismiss(context),
           child: const Text('OK'),
         ),

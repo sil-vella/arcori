@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../core/screen/module_screen_registrar.dart';
 import '../../core/theme/theme.dart';
+import '../../core/widgets/app_chrome.dart';
 import 'widgets/account_profile_card.dart';
 import 'widgets/email_verify_banner.dart';
 import 'widgets/guest_convert_banner.dart';
@@ -50,43 +51,55 @@ class _AccountScreenState extends State<AccountScreen>
       appBarItems: const [
         AppBarTitle(text: 'Account', icon: Icons.person_outlined),
       ],
-      child: AnimatedBuilder(
-        animation: _tabController,
-        builder: (context, _) {
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: AppChromePage(
+        child: AnimatedBuilder(
+          animation: _tabController,
+          builder: (context, _) {
+            final top = AppChromePage.topClearance(context);
+            return ListView(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                top + AppSpacing.sm,
+                AppSpacing.md,
+                AppSpacing.xxl,
+              ),
               children: [
-                Padding(
-                  padding: AppSpacing.screenPadding.copyWith(bottom: 0),
+                const AccountProfileCard(),
+                const EmailVerifyBanner(),
+                GuestConvertBanner(
+                  onConvertTap: () => _tabController.animateTo(1),
+                ),
+                AppChromeSection(
+                  title: _tabController.index == 0
+                      ? 'Sign in'
+                      : 'Create account',
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const AccountProfileCard(),
-                      const EmailVerifyBanner(),
-                      GuestConvertBanner(
-                        onConvertTap: () => _tabController.animateTo(1),
+                      TabBar(
+                        controller: _tabController,
+                        labelColor: AppChrome.onSurface,
+                        unselectedLabelColor: AppChrome.onSurfaceMuted,
+                        indicatorColor: AppChrome.accentGold,
+                        tabs: const [
+                          Tab(text: 'Sign in'),
+                          Tab(text: 'Create account'),
+                        ],
                       ),
+                      AppSpacing.gapMd,
+                      if (_tabController.index == 0)
+                        const LoginForm()
+                      else
+                        RegisterForm(
+                          onConvertSuccess: () => _tabController.animateTo(0),
+                        ),
                     ],
                   ),
                 ),
-                TabBar(
-                  controller: _tabController,
-                  tabs: const [
-                    Tab(text: 'Sign in'),
-                    Tab(text: 'Create account'),
-                  ],
-                ),
-                if (_tabController.index == 0)
-                  const LoginForm()
-                else
-                  RegisterForm(
-                    onConvertSuccess: () => _tabController.animateTo(0),
-                  ),
               ],
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

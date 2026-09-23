@@ -7,6 +7,7 @@ import '../../../core/errors/error_policy.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 import '../../../utils/dev_logger.dart';
 import '../tasks_api.dart';
 import '../tasks_models.dart';
@@ -148,7 +149,8 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
       builder: (context, _, __) {
         final entry = TasksStore.byId(widget.taskId);
         final progress = TasksStore.progressFor(widget.taskId);
-        final title = entry?.name.isNotEmpty == true ? entry!.name : widget.taskId;
+        final title =
+            entry?.name.isNotEmpty == true ? entry!.name : widget.taskId;
         final isClaimGate = entry?.taskType == 'claim_gate';
         final cacheState = isClaimGate
             ? dailyCacheUiState(
@@ -163,109 +165,133 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
             miss && (progress?.continueEnabled == true) && !_busy;
         final canReset = miss && !_busy;
         final rewardAmount = entry?.reward.amount ?? 2;
+        final muted = context.appTypography.bodySmall.copyWith(
+          color: AppChrome.onSurfaceMuted,
+        );
+        final body = context.appTypography.body.copyWith(
+          color: AppChrome.onSurface,
+        );
 
         return ModuleScreenRegistrar(
           appBarItems: [
             AppBarTitle(text: title, icon: Icons.task_alt_outlined),
           ],
-          child: Padding(
-            padding: AppSpacing.screenPadding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  entry?.description.isNotEmpty == true
-                      ? entry!.description
-                      : 'Task details.',
-                  style: context.appTypography.body,
-                ),
-                AppSpacing.gapMd,
-                if (entry != null) ...[
-                  Text(
-                    'Section: ${entry.isDailyGoal ? 'Daily Goal' : 'Task'}',
-                    style: context.appTypography.bodySmall,
-                  ),
-                  AppSpacing.gapXs,
-                  Text(
-                    'Type: ${entry.taskType}',
-                    style: context.appTypography.bodySmall,
-                  ),
-                ],
-                if (progress != null) ...[
-                  AppSpacing.gapMd,
-                  Text(
-                    'Progress: ${progress.progressLabel}',
-                    style: context.appTypography.body,
-                  ),
-                  AppSpacing.gapXs,
-                  Text(
-                    'Value: ${progress.value}',
-                    style: context.appTypography.bodySmall,
-                  ),
-                ],
-                if (cacheState != null) ...[
-                  AppSpacing.gapMd,
-                  Text(
-                    'Daily Cache: ${dailyCacheStatusLabel(cacheState)}',
-                    style: context.appTypography.body,
-                  ),
-                  if (cacheState == DailyCacheUiState.locked)
-                    Text(
-                      'Complete featured missions first.',
-                      style: context.appTypography.bodySmall,
-                    ),
-                ],
-                if (_actionMessage != null) ...[
-                  AppSpacing.gapMd,
-                  Text(
-                    _actionMessage!,
-                    style: context.appTypography.body.copyWith(
-                      color: context.appColorScheme.primary,
-                    ),
-                  ),
-                ],
-                if (_errorMessage != null) ...[
-                  AppSpacing.gapMd,
-                  Text(
-                    _errorMessage!,
-                    style: context.appTypography.bodySmall.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  ),
-                ],
-                const Spacer(),
-                if (isClaimGate) ...[
-                  FilledButton(
-                    onPressed: canClaim ? () => _claim() : null,
-                    child: Text(
-                      cacheState == DailyCacheUiState.claimed
-                          ? 'Claimed'
-                          : 'Claim (+$rewardAmount Fragments)',
-                    ),
-                  ),
-                  AppSpacing.gapSm,
-                ],
-                if (miss) ...[
-                  FilledButton(
-                    onPressed: continueEnabled ? () => _continueGoal() : null,
-                    child: Text(
-                      progress?.continueCost != null &&
-                              progress!.continueCost > 0
-                          ? 'Continue (${progress.continueCost} Gold Arcori)'
-                          : 'Continue',
+          child: AppChromePage(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppChromePage.topClearance(context) + AppSpacing.sm,
+                AppSpacing.md,
+                AppSpacing.md,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        AppChromeSection(
+                          title: 'Details',
+                          goldFrame: true,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                entry?.description.isNotEmpty == true
+                                    ? entry!.description
+                                    : 'Task details.',
+                                style: body,
+                              ),
+                              if (entry != null) ...[
+                                AppSpacing.gapMd,
+                                Text(
+                                  'Section: ${entry.isDailyGoal ? 'Daily Goal' : 'Task'}',
+                                  style: muted,
+                                ),
+                                AppSpacing.gapXs,
+                                Text('Type: ${entry.taskType}', style: muted),
+                              ],
+                              if (progress != null) ...[
+                                AppSpacing.gapMd,
+                                Text(
+                                  'Progress: ${progress.progressLabel}',
+                                  style: body,
+                                ),
+                                AppSpacing.gapXs,
+                                Text(
+                                  'Value: ${progress.value}',
+                                  style: muted,
+                                ),
+                              ],
+                              if (cacheState != null) ...[
+                                AppSpacing.gapMd,
+                                Text(
+                                  'Daily Cache: ${dailyCacheStatusLabel(cacheState)}',
+                                  style: body,
+                                ),
+                                if (cacheState == DailyCacheUiState.locked)
+                                  Text(
+                                    'Complete featured missions first.',
+                                    style: muted,
+                                  ),
+                              ],
+                              if (_actionMessage != null) ...[
+                                AppSpacing.gapMd,
+                                Text(
+                                  _actionMessage!,
+                                  style: body.copyWith(
+                                    color: AppChrome.accentGold,
+                                  ),
+                                ),
+                              ],
+                              if (_errorMessage != null) ...[
+                                AppSpacing.gapMd,
+                                Text(
+                                  _errorMessage!,
+                                  style: muted.copyWith(
+                                    color: context.appColors.red,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  AppSpacing.gapSm,
-                  OutlinedButton(
-                    onPressed: canReset ? () => _acceptReset() : null,
-                    child: const Text('Accept reset'),
-                  ),
+                  if (isClaimGate) ...[
+                    FilledButton(
+                      onPressed: canClaim ? () => _claim() : null,
+                      child: Text(
+                        cacheState == DailyCacheUiState.claimed
+                            ? 'Claimed'
+                            : 'Claim (+$rewardAmount Fragments)',
+                      ),
+                    ),
+                    AppSpacing.gapSm,
+                  ],
+                  if (miss) ...[
+                    FilledButton(
+                      onPressed: continueEnabled ? () => _continueGoal() : null,
+                      child: Text(
+                        progress?.continueCost != null &&
+                                progress!.continueCost > 0
+                            ? 'Continue (${progress.continueCost} Gold Arcori)'
+                            : 'Continue',
+                      ),
+                    ),
+                    AppSpacing.gapSm,
+                    OutlinedButton(
+                      onPressed: canReset ? () => _acceptReset() : null,
+                      child: const Text('Accept reset'),
+                    ),
+                  ],
+                  if (_busy) ...[
+                    AppSpacing.gapMd,
+                    const Center(child: CircularProgressIndicator()),
+                  ],
                 ],
-                if (_busy) ...[
-                  AppSpacing.gapMd,
-                  const Center(child: CircularProgressIndicator()),
-                ],
-              ],
+              ),
             ),
           ),
         );

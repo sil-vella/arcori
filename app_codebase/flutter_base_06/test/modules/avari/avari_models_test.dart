@@ -208,6 +208,19 @@ void main() {
       expect(high.gameplayAttributes!.impact, 10);
       expect(high.gameplayAttributes!.precision, 1);
 
+      final prefs = AvariInventoryItem.fromJson({
+        'designId': 'SLM-P',
+        'displayName': 'P',
+        'gameplayAttributes': {
+          'impact': 5,
+          'hitTarget': 'edge',
+          'powerBracket': {'min': 0.75, 'max': 0.95},
+        },
+      });
+      expect(prefs.gameplayAttributes!.hitTarget, 'edge');
+      expect(prefs.gameplayAttributes!.powerBracket!.min, 0.75);
+      expect(prefs.gameplayAttributes!.powerBracket!.max, 0.95);
+
       final empty = AvariInventoryItem.fromJson({
         'designId': 'SLM-Y',
         'displayName': 'Y',

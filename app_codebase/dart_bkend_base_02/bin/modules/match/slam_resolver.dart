@@ -12,13 +12,19 @@ import 'turn_pacing.dart';
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 /// Default balanced attrs when freeze is missing a field.
-const Map<String, int> defaultGameplayAttributes = {
+const Map<String, dynamic> defaultGameplayAttributes = {
   'impact': 5,
   'precision': 5,
   'control': 5,
   'recovery': 5,
   'spread': 5,
+  'hitTarget': 'center',
+  'powerBracket': {'min': 0.4, 'max': 0.6},
 };
+
+const double kHitPrefTol = 0.45;
+/// Falloff distance outside the preferred power band (keeps ~90% vs 0.4–0.6 medium-low).
+const double kPowerPrefTol = 0.45;
 
 class SlamResolveResult {
   const SlamResolveResult({
@@ -39,11 +45,107 @@ class SlamResolveResult {
 }
 
 int _attr(Map<String, dynamic>? attrs, String key) {
-  if (attrs == null) return defaultGameplayAttributes[key]!;
+  final fallback = defaultGameplayAttributes[key];
+  final def = fallback is int ? fallback : 5;
+  if (attrs == null) return def;
   final v = attrs[key];
   if (v is int) return v.clamp(1, 10);
   if (v is num) return v.toInt().clamp(1, 10);
-  return defaultGameplayAttributes[key]!;
+  return def;
+}
+
+String _hitTarget(Map<String, dynamic>? attrs) {
+  final raw = attrs?['hitTarget'] ?? defaultGameplayAttributes['hitTarget'];
+  if (raw is String) {
+    final hit = raw.trim().toLowerCase();
+    if (hit == 'center' || hit == 'mid' || hit == 'edge') return hit;
+  }
+  return 'center';
+}
+
+double? _as01(Object? value) {
+  if (value is num) return value.toDouble().clamp(0.0, 1.0);
+  if (value is String) {
+    final parsed = double.tryParse(value.trim());
+    if (parsed != null) return parsed.clamp(0.0, 1.0);
+  }
+  return null;
+}
+
+/// Preferred resolve-power band (0 = none, 1 = full).
+({double min, double max}) _powerBracket(Map<String, dynamic>? attrs) {
+  final raw =
+      attrs?['powerBracket'] ?? defaultGameplayAttributes['powerBracket'];
+  double? lo;
+  double? hi;
+  if (raw is Map) {
+    lo = _as01(raw['min']);
+    hi = _as01(raw['max']);
+  } else if (raw is List && raw.length >= 2) {
+    lo = _as01(raw[0]);
+    hi = _as01(raw[1]);
+  } else {
+    final center = _as01(raw);
+    if (center != null) {
+      lo = (center - 0.1).clamp(0.0, 1.0);
+      hi = (center + 0.1).clamp(0.0, 1.0);
+    }
+  }
+  if (lo == null || hi == null) return (min: 0.4, max: 0.6);
+  if (hi < lo) {
+    final swap = lo;
+    lo = hi;
+    hi = swap;
+  }
+  return (min: lo, max: hi);
+}
+
+double _preferredRadius(String hitTarget) {
+  switch (hitTarget) {
+    case 'edge':
+      return 1.0;
+    case 'mid':
+      return 0.5;
+    case 'center':
+    default:
+      return 0.0;
+  }
+}
+
+/// Normalized aim radius on the stack footprint (0 = center, 1 = rim).
+double aimRadiusNorm(double aimX, double aimZ) {
+  final r = sqrt(aimX * aimX + aimZ * aimZ) / kSlamAimHitRadius;
+  return r.clamp(0.0, 1.0);
+}
+
+/// Distance of [power] outside [min,max] (0 when inside the band).
+double powerBandDistance(double power, double minP, double maxP) {
+  if (power < minP) return minP - power;
+  if (power > maxP) return power - maxP;
+  return 0.0;
+}
+
+/// How well aim + power match the slammer's preferred slam conditions (0..1).
+double preferenceFit({
+  required double aimX,
+  required double aimZ,
+  required double power,
+  required String hitTarget,
+  required double powerMin,
+  required double powerMax,
+}) {
+  final r = aimRadiusNorm(aimX, aimZ);
+  final preferredR = _preferredRadius(hitTarget);
+  final hitMatch = (1.0 - min(1.0, (r - preferredR).abs() / kHitPrefTol))
+      .clamp(0.0, 1.0);
+  final dist = powerBandDistance(power, powerMin, powerMax);
+  final powerMatch =
+      (1.0 - min(1.0, dist / kPowerPrefTol)).clamp(0.0, 1.0);
+  return sqrt(hitMatch * powerMatch).clamp(0.0, 1.0);
+}
+
+double effectivePowerFromFit(double power, double fit) {
+  return (power * (0.55 + 0.70 * fit)).clamp(0.0, 1.0);
 }
 
 int seedFromMatch(String matchId, int version, int seatIndex) {
@@ -82,6 +184,7 @@ SlamResolveResult resolveSlam({
   required Map<String, dynamic>? input,
   required Map<String, dynamic>? gameplayAttributes,
   required Map<String, dynamic> table,
+  String? actorUserId,
 }) {
   final pieces = piecesFromTable(table);
   if (pieces.isEmpty) {
@@ -104,6 +207,8 @@ SlamResolveResult resolveSlam({
   final precision = _attr(gameplayAttributes, 'precision');
   final control = _attr(gameplayAttributes, 'control');
   final spread = _attr(gameplayAttributes, 'spread');
+  final hitTarget = _hitTarget(gameplayAttributes);
+  final powerBracket = _powerBracket(gameplayAttributes);
 
   final rng = Random(seedFromMatch(matchId, version, actorSeatIndex));
 
@@ -123,9 +228,9 @@ SlamResolveResult resolveSlam({
 
   final power = (speed * (impact / 10.0)).clamp(0.0, 1.0);
   final maxAffect = max(1, ((spread / 10.0) * pieces.length).ceil());
-  final impulse = _impulse(dx, dy, speed, power);
 
   if (aimOutsideStackFootprint(aim.x, aim.z)) {
+    final impulse = _impulse(dx, dy, speed, power);
     if (LOGGING_SWITCH) {
       customlog(
         'slamResolve: aimMiss x=${aim.x.toStringAsFixed(4)} '
@@ -143,6 +248,7 @@ SlamResolveResult resolveSlam({
   }
 
   if (power < kSlamMinPower) {
+    final impulse = _impulse(dx, dy, speed, power);
     if (LOGGING_SWITCH) {
       customlog(
         'slamResolve: softMiss power=${power.toStringAsFixed(3)} '
@@ -159,10 +265,25 @@ SlamResolveResult resolveSlam({
     );
   }
 
+  final fit = preferenceFit(
+    aimX: aim.x,
+    aimZ: aim.z,
+    power: power,
+    hitTarget: hitTarget,
+    powerMin: powerBracket.min,
+    powerMax: powerBracket.max,
+  );
+  final effectivePower = effectivePowerFromFit(power, fit);
+  final impulse = _impulse(dx, dy, speed, effectivePower);
+
   if (LOGGING_SWITCH) {
     customlog(
       'slamResolve: physics matchId=$matchId v=$version seat=$actorSeatIndex '
-      'power=${power.toStringAsFixed(3)} maxAffect=$maxAffect '
+      'power=${power.toStringAsFixed(3)} '
+      'effPower=${effectivePower.toStringAsFixed(3)} '
+      'prefFit=${fit.toStringAsFixed(3)} hit=$hitTarget '
+      'bracket=${powerBracket.min.toStringAsFixed(2)}-${powerBracket.max.toStringAsFixed(2)} '
+      'maxAffect=$maxAffect '
       'aim=(${aim.x.toStringAsFixed(4)},${aim.z.toStringAsFixed(4)})',
     );
   }
@@ -172,10 +293,11 @@ SlamResolveResult resolveSlam({
     dx: dx,
     dy: dy,
     speed: speed,
-    power: power,
+    power: effectivePower,
     maxAffect: maxAffect,
     rng: rng,
     spreadAttr: spread,
+    scoringUserId: actorUserId,
   );
 
   final sim = withSlamAnimTiming(

@@ -12,8 +12,14 @@ const Duration aiDelayMaxDefault = Duration(seconds: 4);
 const double aiMissProbabilityDefault = 0.05;
 const Duration turnPollInterval = Duration(milliseconds: 50);
 
-/// Client hold after last sim frame before snap-to-stack (Flutter + server).
-const Duration slamSettleHoldDefault = Duration(milliseconds: 1600);
+/// Pause after last scatter frame before pieces slide back to the stack.
+const Duration slamSettleHoldDefault = Duration(seconds: 2);
+
+/// Face-up equipped slammer strike beat before Arcori scatter.
+const Duration slamStrikeHoldDefault = Duration(milliseconds: 520);
+
+/// Smooth return-home / restack after the settle pause.
+const Duration slamReturnHomeDefault = Duration(milliseconds: 720);
 
 /// Extra pad so the next turn does not start before [onAnimComplete].
 const Duration slamAnimPadDefault = Duration(milliseconds: 300);
@@ -25,16 +31,22 @@ const Duration postSlamAnimHoldDefault = Duration(seconds: 5);
 /// Physics timestep mirrored from [kSlamPhysicsDt] (avoid circular imports).
 const double slamAnimDtDefault = 1.0 / 60.0;
 
-/// Wall-clock hold after a slam: sim replay (steps×dt) + settle hold + pad.
+/// Wall-clock hold after a slam: strike + sim + settle pause + return + pad.
 Duration postSlamHoldForSimSteps(
   int steps, {
   double dt = slamAnimDtDefault,
+  Duration strikeHold = slamStrikeHoldDefault,
   Duration settleHold = slamSettleHoldDefault,
+  Duration returnHome = slamReturnHomeDefault,
   Duration pad = slamAnimPadDefault,
 }) {
   final safeSteps = steps < 0 ? 0 : steps;
   final simMs = (safeSteps * dt * 1000.0).round();
-  return Duration(milliseconds: simMs) + settleHold + pad;
+  return strikeHold +
+      Duration(milliseconds: simMs) +
+      settleHold +
+      returnHome +
+      pad;
 }
 
 /// Stamp authoritative client/server anim timing onto a physics [sim] map.
@@ -47,7 +59,9 @@ Map<String, dynamic> withSlamAnimTiming(Map<String, dynamic> sim) {
   return {
     ...sim,
     'steps': steps,
+    'strikeHoldMs': slamStrikeHoldDefault.inMilliseconds,
     'settleHoldMs': slamSettleHoldDefault.inMilliseconds,
+    'returnHomeMs': slamReturnHomeDefault.inMilliseconds,
     'animHoldMs': hold.inMilliseconds,
   };
 }

@@ -23,7 +23,10 @@ from modules.avari.avari_errors import (
     KIN_ALREADY_CLAIMED,
     KIN_CLAIM_FAILED,
     NOT_FOUND,
+    REJECTED_KIN_NAME,
+    SLAMMER_NO_CHARGES,
 )
+from modules.avari.rejected_words import is_rejected_kin_name
 from modules.avari.gold_economy import (
     apply_fragment_delta,
     can_afford_fragments,
@@ -234,12 +237,12 @@ def _is_circulating(design: dict[str, Any] | None) -> bool:
     return not world or world == "active"
 
 
-def _gameplay_attributes(design: dict[str, Any]) -> dict[str, int] | None:
-    """Catalog slam stats 1–10. Omitted when the design has none."""
+def _gameplay_attributes(design: dict[str, Any]) -> dict[str, Any] | None:
+    """Catalog slam stats + preferred slam conditions. Omitted when none."""
     raw = design.get("gameplayAttributes")
     if not isinstance(raw, dict):
         return None
-    out: dict[str, int] = {}
+    out: dict[str, Any] = {}
     for key in ("impact", "precision", "control", "recovery", "spread"):
         value = raw.get(key)
         if isinstance(value, bool):
@@ -250,7 +253,64 @@ def _gameplay_attributes(design: dict[str, Any]) -> dict[str, int] | None:
             out[key] = max(1, min(10, int(value)))
         elif isinstance(value, str) and value.strip().isdigit():
             out[key] = max(1, min(10, int(value.strip())))
+
+    hit_raw = raw.get("hitTarget")
+    if isinstance(hit_raw, str):
+        hit = hit_raw.strip().lower()
+        if hit in ("center", "mid", "edge"):
+            out["hitTarget"] = hit
+
+    bracket = _power_bracket(raw.get("powerBracket"))
+    if bracket is not None:
+        out["powerBracket"] = bracket
+
     return out or None
+
+
+def _clamp01(value: float) -> float:
+    return max(0.0, min(1.0, value))
+
+
+def _power_bracket(raw: Any) -> dict[str, float] | None:
+    """Preferred resolve-power band {min,max} in 0..1 (0=none, 1=full)."""
+    if isinstance(raw, bool) or raw is None:
+        return None
+
+    def _as_float(value: Any) -> float | None:
+        if isinstance(value, bool):
+            return None
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str):
+            try:
+                return float(value.strip())
+            except ValueError:
+                return None
+        return None
+
+    lo: float | None = None
+    hi: float | None = None
+
+    if isinstance(raw, dict):
+        lo = _as_float(raw.get("min"))
+        hi = _as_float(raw.get("max"))
+    elif isinstance(raw, (list, tuple)) and len(raw) >= 2:
+        lo = _as_float(raw[0])
+        hi = _as_float(raw[1])
+    else:
+        # Legacy single preferred power → narrow band around it.
+        center = _as_float(raw)
+        if center is not None:
+            lo = center - 0.1
+            hi = center + 0.1
+
+    if lo is None or hi is None:
+        return None
+    lo_c = _clamp01(lo)
+    hi_c = _clamp01(hi)
+    if hi_c < lo_c:
+        lo_c, hi_c = hi_c, lo_c
+    return {"min": lo_c, "max": hi_c}
 
 
 def catalog_card_for_design(design_id: str) -> dict[str, Any] | None:
@@ -464,6 +524,19 @@ def generation_number_for_design_id(design_id: str) -> int:
         return generation_number_from_id(iid, default=1)
 
 
+def _slammer_usable(row: Any) -> bool:
+    """Permanent always usable; charged slammers need charges_remaining > 0."""
+    if bool(getattr(row, "permanent", False)):
+        return True
+    remaining = getattr(row, "charges_remaining", None)
+    if remaining is None:
+        return False
+    try:
+        return int(remaining) > 0
+    except (TypeError, ValueError):
+        return False
+
+
 def _fallback_slammer_id(rows: list[Any]) -> str:
     for row in rows:
         if bool(getattr(row, "permanent", False)):
@@ -471,6 +544,8 @@ def _fallback_slammer_id(rows: list[Any]) -> str:
             if design_id:
                 return design_id
     for row in rows:
+        if not _slammer_usable(row):
+            continue
         design_id = str(getattr(row, "design_id", "") or "").strip()
         if design_id:
             return design_id
@@ -494,6 +569,7 @@ def verify_slammers_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
         with session_scope() as session:
             rows = repo.list_slammers(session, user_id)
 
+        usable_by_id: dict[str, Any] = {}
         owned: list[str] = []
         seen: set[str] = set()
         for row in rows:
@@ -502,8 +578,10 @@ def verify_slammers_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
                 continue
             seen.add(design_id)
             owned.append(design_id)
+            if _slammer_usable(row):
+                usable_by_id[design_id] = row
 
-        if requested and requested in seen:
+        if requested and requested in usable_by_id:
             chosen = requested
             source = SOURCE_OWNED
             reason = "owned"
@@ -511,7 +589,12 @@ def verify_slammers_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
             chosen = _fallback_slammer_id(rows)
             if chosen:
                 source = SOURCE_FALLBACK
-                reason = "not_owned" if requested else "missing_request"
+                if requested and requested in seen and requested not in usable_by_id:
+                    reason = "no_charges"
+                elif requested:
+                    reason = "not_owned"
+                else:
+                    reason = "missing_request"
             else:
                 source = SOURCE_EMPTY
                 reason = "empty_player_slammers"
@@ -532,6 +615,136 @@ def verify_slammers_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
         )
 
     return {"assignments": assignments}
+
+
+def spend_slammer_charge(
+    *,
+    user_id: str,
+    design_id: str,
+    match_id: str | None = None,
+    intent_id: str | None = None,
+) -> dict[str, Any]:
+    """
+    Deduct chargeCostPerUse for a non-permanent slammer slam.
+
+    Permanent / missing ownership → no-op success.
+    Zero charges → avari/slammer_no_charges.
+    Optional intent_id reuses match_fee_ledger (kind=slammer_charge) for idempotency.
+    """
+    uid = (user_id or "").strip()
+    did = (design_id or "").strip()
+    if not uid or not did:
+        raise AppError(INVALID_QUERY, message="userId and designId required")
+
+    intent = (intent_id or "").strip()
+    if len(intent) > 64:
+        intent = intent[:64]
+
+    from modules.market.market_skus import parse_slammer_economy
+
+    try:
+        with session_scope() as session:
+            if intent:
+                existing = repo.get_match_fee(
+                    session, uid, intent, repo.FEE_KIND_SLAMMER_CHARGE
+                )
+                if existing is not None:
+                    cached = (
+                        existing.response_json
+                        if isinstance(existing.response_json, dict)
+                        else {}
+                    )
+                    return {
+                        "spent": bool(cached.get("spent", True)),
+                        "noop": bool(cached.get("noop", False)),
+                        "designId": did,
+                        "chargesRemaining": cached.get("chargesRemaining"),
+                        "intentId": intent,
+                    }
+
+            row = None
+            for candidate in repo.list_slammers(session, uid):
+                if str(getattr(candidate, "design_id", "") or "").strip() == did:
+                    row = candidate
+                    break
+
+            if row is None or bool(row.permanent):
+                payload = {
+                    "spent": False,
+                    "noop": True,
+                    "designId": did,
+                    "chargesRemaining": None,
+                    "intentId": intent or None,
+                }
+                if intent:
+                    repo.insert_match_fee(
+                        session,
+                        user_id=uid,
+                        intent_id=intent,
+                        kind=repo.FEE_KIND_SLAMMER_CHARGE,
+                        response=payload,
+                    )
+                    session.flush()
+                return payload
+
+            remaining = int(row.charges_remaining or 0)
+            if remaining <= 0:
+                raise AppError(SLAMMER_NO_CHARGES)
+
+            cost = 1
+            try:
+                design = get_design(did)
+                eco = parse_slammer_economy(design)
+                cost = max(1, int(eco.get("chargeCostPerUse") or 1))
+            except AppError:
+                cost = 1
+
+            if remaining < cost:
+                raise AppError(SLAMMER_NO_CHARGES)
+
+            row.charges_remaining = remaining - cost
+            payload = {
+                "spent": True,
+                "noop": False,
+                "designId": did,
+                "chargesSpent": cost,
+                "chargesRemaining": int(row.charges_remaining),
+                "matchId": (match_id or "").strip() or None,
+                "intentId": intent or None,
+            }
+            if intent:
+                repo.insert_match_fee(
+                    session,
+                    user_id=uid,
+                    intent_id=intent,
+                    kind=repo.FEE_KIND_SLAMMER_CHARGE,
+                    response=payload,
+                )
+            session.flush()
+            if LOGGING_SWITCH:
+                customlog(
+                    f"avari: spend_slammer_charge user={uid} design={did} "
+                    f"cost={cost} remaining={row.charges_remaining} "
+                    f"intent={intent or '-'}"
+                )
+            return payload
+    except IntegrityError:
+        if not intent:
+            raise
+        with session_scope() as session:
+            raced = repo.get_match_fee(
+                session, uid, intent, repo.FEE_KIND_SLAMMER_CHARGE
+            )
+            if raced is not None and isinstance(raced.response_json, dict):
+                cached = raced.response_json
+                return {
+                    "spent": bool(cached.get("spent", True)),
+                    "noop": bool(cached.get("noop", False)),
+                    "designId": did,
+                    "chargesRemaining": cached.get("chargesRemaining"),
+                    "intentId": intent,
+                }
+        raise
 
 
 def get_avari_profile(user_id: str) -> dict[str, Any]:
@@ -791,6 +1004,21 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
             attrs = card.get("gameplayAttributes")
             if isinstance(attrs, dict) and attrs:
                 entry["gameplayAttributes"] = attrs
+            if not bool(row.permanent):
+                try:
+                    from modules.market.market_skus import parse_slammer_economy
+
+                    design = get_design(design_id)
+                    eco = parse_slammer_economy(design)
+                    entry["maxCharges"] = eco.get("maxCharges")
+                    entry["rechargePriceGoldArcori"] = eco.get(
+                        "rechargePriceGoldArcori"
+                    )
+                    entry["rechargeCharges"] = eco.get("rechargeCharges")
+                except AppError:
+                    entry["maxCharges"] = 20
+                    entry["rechargePriceGoldArcori"] = 4
+                    entry["rechargeCharges"] = 100
             slammer_payload.append(entry)
         trove_payload = []
         for row in trove_rows:
@@ -939,6 +1167,30 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
     }
 
 
+def get_mastery_recent(user_id: str, *, limit: int = 5) -> dict[str, Any]:
+    """Last N mastery deltas for the Home ticker."""
+    uid = (user_id or "").strip()
+    if not uid:
+        raise AppError(INVALID_QUERY, message="Unauthorized")
+    safe = max(1, min(int(limit), 20))
+    with session_scope() as session:
+        rows = repo.list_mastery_change_recent(session, uid, limit=safe)
+        items = [
+            {
+                "designId": str(row.design_id),
+                "generationNumber": int(row.generation_number),
+                "delta": int(row.delta_points),
+                "pointsAfter": int(row.total_points),
+                "displayName": row.display_name or str(row.design_id),
+                "imageUrl": row.image_url,
+                "matchId": row.match_id,
+                "createdAt": row.created_at.isoformat() if row.created_at else None,
+            }
+            for row in rows
+        ]
+    return {"items": items}
+
+
 def _valid_region_codes() -> set[str]:
     from modules.catalog import catalog_loader as loader
 
@@ -969,7 +1221,7 @@ def _write_kin_media(
 
 
 def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
-    """Create player_kin + mirrored Genesis catalog_design; write per-Kin files."""
+    """Create player_kin + mirrored Kin-series catalog_design; write per-Kin files."""
     uid = (user_id or "").strip()
     if not uid:
         raise AppError(INVALID_QUERY, message="Unauthorized")
@@ -991,6 +1243,8 @@ def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
         raise AppError(INVALID_QUERY, message="chosenName is required")
     if len(chosen_name) > 64:
         raise AppError(INVALID_QUERY, message="chosenName too long")
+    if is_rejected_kin_name(chosen_name):
+        raise AppError(REJECTED_KIN_NAME)
     if not region_code or region_code == EXCLUDED_KIN_REGION:
         raise AppError(INVALID_KIN_REGION, message="Realm Beyond is not assignable")
     valid_regions = _valid_region_codes()
@@ -1455,12 +1709,11 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
 
     # Fee is charged pre-match (`pay_match_fee`); finalize only awards flip fragments.
     fee = 0
+    # Prefer actor flips-by-design sum when the client sent the map (SSOT for
+    # seat score / mastery). Legacy clients may only send `flips`.
+    if flips_by_design_raw is not None:
+        flips = sum(flips_by_design.values())
     net_fragments = flips
-    planned_mastery = compute_mastery_deltas(
-        played_design_id=played_design_id or None,
-        seat_flips=flips,
-        flips_by_design=flips_by_design,
-    )
 
     won = False
     if isinstance(result, dict):
@@ -1486,6 +1739,20 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
                     else None,
                     match_id,
                 )
+
+            # Own curve applies to played + any table design you already have
+            # mastery on (points > 0). Load before applying deltas.
+            mastery_before = repo.mastery_points_by_design(session, uid)
+            owned_ids = {
+                did for did, pts in mastery_before.items() if int(pts) > 0
+            }
+            planned_mastery = compute_mastery_deltas(
+                played_design_id=played_design_id or None,
+                seat_flips=flips,
+                flips_by_design=flips_by_design,
+                table_design_ids=cleaned_ids,
+                owned_design_ids=owned_ids,
+            )
 
             profile = get_user_profile(uid)
             display_name = (
@@ -1585,6 +1852,18 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
                     "color": card.get("color"),
                 }
                 mastery_changes.append(change)
+                if int(change.get("delta") or 0) != 0:
+                    repo.append_mastery_change_log(
+                        session,
+                        user_id=uid,
+                        design_id=design_id,
+                        generation_number=gen,
+                        delta_points=int(change["delta"]),
+                        total_points=after_pts,
+                        display_name=str(change.get("displayName") or "") or None,
+                        image_url=str(change.get("imageUrl") or "") or None,
+                        match_id=match_id,
+                    )
 
             sync_player_access_pool(session, uid)
             session.flush()
@@ -1825,5 +2104,12 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
             notify_legacy_leader_proximity(
                 events=[r for r in proximity if isinstance(r, dict)],
             )
+        legacy_event = applied_payload.get("legacyEvent")
+        if isinstance(legacy_event, dict) and legacy_event.get("applied"):
+            from modules.notifications.world_news_notifications import (
+                emit_world_news_for_closure_results,
+            )
+
+            emit_world_news_for_closure_results([legacy_event])
 
     return applied_payload

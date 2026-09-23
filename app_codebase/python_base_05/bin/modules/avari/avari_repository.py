@@ -16,6 +16,7 @@ from models.player_progress import (
     PlayerDesignAccess,
     PlayerKin,
     PlayerMastery,
+    PlayerMasteryChangeLog,
     PlayerSlammer,
     PlayerTrove,
 )
@@ -174,6 +175,76 @@ def list_mastery_top(
         .where(PlayerMastery.user_id == uid)
         .order_by(PlayerMastery.points.desc())
         .limit(limit)
+    )
+    return list(session.scalars(stmt).all())
+
+
+_MASTERY_LOG_KEEP = 20
+
+
+def append_mastery_change_log(
+    session: Session,
+    *,
+    user_id: str,
+    design_id: str,
+    generation_number: int,
+    delta_points: int,
+    total_points: int,
+    display_name: str | None = None,
+    image_url: str | None = None,
+    match_id: str | None = None,
+) -> PlayerMasteryChangeLog | None:
+    uid = _as_uuid(user_id)
+    did = (design_id or "").strip()
+    if uid is None or not did:
+        return None
+    row = PlayerMasteryChangeLog(
+        user_id=uid,
+        design_id=did,
+        generation_number=int(generation_number),
+        delta_points=int(delta_points),
+        total_points=int(total_points),
+        display_name=(display_name or "").strip()[:128] or None,
+        image_url=(image_url or "").strip()[:512] or None,
+        match_id=(match_id or "").strip()[:128] or None,
+    )
+    session.add(row)
+    session.flush()
+
+    # Cap retention: keep newest N per user.
+    ids = list(
+        session.scalars(
+            select(PlayerMasteryChangeLog.id)
+            .where(PlayerMasteryChangeLog.user_id == uid)
+            .order_by(PlayerMasteryChangeLog.created_at.desc())
+            .offset(_MASTERY_LOG_KEEP)
+        ).all()
+    )
+    if ids:
+        from sqlalchemy import delete
+
+        session.execute(
+            delete(PlayerMasteryChangeLog).where(PlayerMasteryChangeLog.id.in_(ids))
+        )
+        session.flush()
+    return row
+
+
+def list_mastery_change_recent(
+    session: Session,
+    user_id: str,
+    *,
+    limit: int = 5,
+) -> list[PlayerMasteryChangeLog]:
+    uid = _as_uuid(user_id)
+    if uid is None:
+        return []
+    safe = max(1, min(int(limit), 20))
+    stmt = (
+        select(PlayerMasteryChangeLog)
+        .where(PlayerMasteryChangeLog.user_id == uid)
+        .order_by(PlayerMasteryChangeLog.created_at.desc())
+        .limit(safe)
     )
     return list(session.scalars(stmt).all())
 
@@ -517,6 +588,7 @@ def insert_match_finalize(
 
 FEE_KIND_PAY = "pay"
 FEE_KIND_REFUND = "refund"
+FEE_KIND_SLAMMER_CHARGE = "slammer_charge"
 
 
 def get_match_fee(

@@ -2,9 +2,9 @@
 
 **Status:** Completed  
 **Created:** 2026-08-22  
-**Last Updated:** 2026-08-22
+**Last Updated:** 2026-09-21
 
-Related: [stub-match-turn-stages.md](stub-match-turn-stages.md) · [practice-stub-gameplay.md](practice-stub-gameplay.md) · [match-hot-state.md](match-hot-state.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md)
+Related: [stub-match-turn-stages.md](stub-match-turn-stages.md) · [practice-stub-gameplay.md](practice-stub-gameplay.md) · [match-hot-state.md](match-hot-state.md) · [arcori-slam-impact.md](arcori-slam-impact.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md)
 
 ## Objective
 
@@ -44,4 +44,4 @@ active seat → human: Flutter SlamInputCapture (5s) → match/action input
 
 ## Next
 
-Weighted slam math (`impact` / `precision` / `control` / `recovery` / `spread` from freeze) → score / table state.
+Weighted slam shipped — see [arcori-slam-impact.md](arcori-slam-impact.md) (impact / precision / control / spread + preferred `hitTarget` / `powerBracket` band → flips).

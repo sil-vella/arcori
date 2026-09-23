@@ -33,14 +33,14 @@ class SlamControlModeIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = context.appColorScheme;
+    final surfaces = context.appSurfaces;
     return Semantics(
       label: 'Slam controls: ${mode.label}. ${mode.caption}',
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: scheme.primaryContainer,
-          borderRadius: BorderRadius.circular(AppButtonMetrics.radius),
-          border: Border.all(color: scheme.outline),
+          color: surfaces.panel,
+          borderRadius: BorderRadius.circular(AppRadii.md),
+          border: Border.all(color: surfaces.frameBronze),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -52,7 +52,7 @@ class SlamControlModeIndicator extends StatelessWidget {
               Icon(
                 mode.icon,
                 size: 32,
-                color: scheme.onPrimaryContainer,
+                color: context.appColors.accent,
               ),
               AppSpacing.gapSm,
               Expanded(

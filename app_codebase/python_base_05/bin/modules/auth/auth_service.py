@@ -24,6 +24,10 @@ from core.utils.dev_logger import customlog
 from modules.auth import login_event_repository, user_repository
 from modules.auth.password_utils import hash_password, verify_password
 from modules.avari import avari_repository as avari_repo
+from modules.avari.rejected_words import (
+    REJECTED_NAME_USER_MESSAGE,
+    is_rejected_player_name,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +79,12 @@ def register(
         raise AuthServiceError(
             code="invalid_request",
             message="username or email exceeds maximum length",
+            status=400,
+        )
+    if is_rejected_player_name(username):
+        raise AuthServiceError(
+            code="rejected_username",
+            message=REJECTED_NAME_USER_MESSAGE,
             status=400,
         )
 
@@ -404,6 +414,12 @@ def convert_guest_account(
             message="username or email exceeds maximum length",
             status=400,
         )
+    if is_rejected_player_name(username):
+        raise AuthServiceError(
+            code="rejected_username",
+            message=REJECTED_NAME_USER_MESSAGE,
+            status=400,
+        )
     if email.endswith(GUEST_EMAIL_SUFFIX):
         raise AuthServiceError(
             code="invalid_request",
@@ -456,6 +472,11 @@ def convert_guest_account(
             email=email,
             password_hash=hash_password(password),
         )
+        # Keep Avari display name in sync with the chosen username.
+        avari = avari_repo.find_avari_profile(session, user_id)
+        if avari is not None:
+            avari.display_name = username[:64]
+            session.flush()
 
     if LOGGING_SWITCH:
         customlog(

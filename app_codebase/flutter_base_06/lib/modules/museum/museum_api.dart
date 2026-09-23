@@ -42,7 +42,8 @@ class MuseumApiClient {
 
   Future<MuseumApiOutcome<MuseumListPage>> fetchList({
     required String accessToken,
-    String outcome = 'all',
+    String outcome = 'preserved',
+    String? series,
     String? q,
     int limit = 30,
     String? cursor,
@@ -51,6 +52,8 @@ class MuseumApiClient {
       'outcome': outcome,
       'limit': '$limit',
     };
+    final seriesKey = (series ?? '').trim();
+    if (seriesKey.isNotEmpty) params['series'] = seriesKey;
     final query = (q ?? '').trim();
     if (query.isNotEmpty) params['q'] = query;
     final cur = (cursor ?? '').trim();
@@ -61,7 +64,9 @@ class MuseumApiClient {
     );
     try {
       if (LOGGING_SWITCH) {
-        customlog('MuseumApi: GET museum outcome=$outcome q=$query');
+        customlog(
+          'MuseumApi: GET museum outcome=$outcome series=$seriesKey q=$query',
+        );
       }
       final response = await _client.get(
         uri,
@@ -106,6 +111,53 @@ class MuseumApiClient {
     }
   }
 
+  /// Featured banner from server ``app_ui.json`` → museum (mtime hot-reload).
+  Future<MuseumApiOutcome<MuseumBannerPage>> fetchBanner({
+    required String accessToken,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/authuser/museum/banner');
+    try {
+      if (LOGGING_SWITCH) {
+        customlog('MuseumApi: GET museum/banner');
+      }
+      final response = await _client.get(
+        uri,
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
+      return _parseBanner(response);
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const MuseumApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
+  }
+
+  /// Series that have at least one closed generation for [outcome].
+  Future<MuseumApiOutcome<MuseumSeriesPage>> fetchSeries({
+    required String accessToken,
+    String outcome = 'preserved',
+  }) async {
+    final uri = Uri.parse('$_baseUrl/authuser/museum/series').replace(
+      queryParameters: {'outcome': outcome},
+    );
+    try {
+      if (LOGGING_SWITCH) {
+        customlog('MuseumApi: GET museum/series outcome=$outcome');
+      }
+      final response = await _client.get(
+        uri,
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
+      return _parseSeries(response);
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const MuseumApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
+  }
+
   MuseumApiOutcome<MuseumListPage> _parseList(http.Response response) {
     final envelope = _decodeEnvelope(response.body);
     if (envelope == null) {
@@ -137,6 +189,53 @@ class MuseumApiClient {
     }
     return MuseumApiOutcome.success(
       MuseumItem.fromJson(Map<String, dynamic>.from(data)),
+    );
+  }
+
+  MuseumApiOutcome<MuseumBannerPage> _parseBanner(http.Response response) {
+    final envelope = _decodeEnvelope(response.body);
+    if (envelope == null) {
+      return MuseumApiOutcome.failure(error: _invalidResponse());
+    }
+    if (envelope['ok'] != true) {
+      return MuseumApiOutcome.failure(error: ApiError.fromEnvelope(envelope));
+    }
+    final data = envelope['data'];
+    if (data is! Map) {
+      return MuseumApiOutcome.failure(error: _invalidResponse());
+    }
+    final items = <MuseumItem>[];
+    final itemsRaw = data['items'];
+    if (itemsRaw is List) {
+      for (final row in itemsRaw) {
+        if (row is Map) {
+          items.add(MuseumItem.fromJson(Map<String, dynamic>.from(row)));
+        }
+      }
+    } else {
+      // Back-compat: single `item`
+      final itemRaw = data['item'];
+      if (itemRaw is Map) {
+        items.add(MuseumItem.fromJson(Map<String, dynamic>.from(itemRaw)));
+      }
+    }
+    return MuseumApiOutcome.success(MuseumBannerPage(items: items));
+  }
+
+  MuseumApiOutcome<MuseumSeriesPage> _parseSeries(http.Response response) {
+    final envelope = _decodeEnvelope(response.body);
+    if (envelope == null) {
+      return MuseumApiOutcome.failure(error: _invalidResponse());
+    }
+    if (envelope['ok'] != true) {
+      return MuseumApiOutcome.failure(error: ApiError.fromEnvelope(envelope));
+    }
+    final data = envelope['data'];
+    if (data is! Map) {
+      return MuseumApiOutcome.failure(error: _invalidResponse());
+    }
+    return MuseumApiOutcome.success(
+      MuseumSeriesPage.fromJson(Map<String, dynamic>.from(data)),
     );
   }
 

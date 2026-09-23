@@ -13,6 +13,7 @@ from modules.catalog.catalog_service import (
     get_designs_batch,
     get_index,
     get_meta,
+    get_series,
     get_theme,
 )
 from modules.catalog.catalog_select import select_arena_for_arcori_ids, select_for_seats
@@ -24,6 +25,7 @@ def register_catalog_routes(
 ) -> None:
     # Exact-match router: use query params for theme/design ids (no {path} params).
     routes.authuser_get("/catalog/meta", lambda: _handle_meta(res))
+    routes.authuser_get("/catalog/series", lambda: _handle_series(res))
     routes.authuser_get("/catalog/index", lambda: _handle_index(res))
     routes.authuser_get("/catalog/theme", lambda: _handle_theme(res))
     routes.authuser_get("/catalog/design", lambda: _handle_design(res))
@@ -50,6 +52,14 @@ def _handle_meta(res: HttpResponseContract):
     try:
         _require_user_id()
         return res.json_ok(get_meta())
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_series(res: HttpResponseContract):
+    try:
+        _require_user_id()
+        return res.json_ok(get_series())
     except AppError as err:
         return err.to_http_response()
 

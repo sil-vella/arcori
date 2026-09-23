@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/navigation/app_paths.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 import '../../../utils/dev_logger.dart';
 import '../auth_analytics.dart';
 import 'auth_form_section.dart';
@@ -121,7 +122,11 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               enabled: !isFullAccountSignedIn,
               textInputAction: TextInputAction.next,
               autocorrect: false,
-              decoration: const InputDecoration(
+              style: context.appTypography.body.copyWith(
+                color: AppChrome.onSurface,
+              ),
+              decoration: AppChrome.inputDecoration(
+                context,
                 labelText: 'Username',
                 hintText: 'yourname',
               ),
@@ -139,7 +144,11 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               keyboardType: TextInputType.emailAddress,
               autocorrect: false,
               textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(
+              style: context.appTypography.body.copyWith(
+                color: AppChrome.onSurface,
+              ),
+              decoration: AppChrome.inputDecoration(
+                context,
                 labelText: 'Email',
                 hintText: 'you@example.com',
               ),
@@ -159,16 +168,23 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               enabled: !isFullAccountSignedIn,
               obscureText: _obscurePassword,
               textInputAction: TextInputAction.next,
-              decoration: InputDecoration(
+              style: context.appTypography.body.copyWith(
+                color: AppChrome.onSurface,
+              ),
+              decoration: AppChrome.inputDecoration(
+                context,
                 labelText: 'Password',
                 suffixIcon: IconButton(
                   onPressed: isFullAccountSignedIn
                       ? null
-                      : () => setState(() => _obscurePassword = !_obscurePassword),
+                      : () => setState(
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
                   icon: Icon(
                     _obscurePassword
                         ? Icons.visibility_outlined
                         : Icons.visibility_off_outlined,
+                    color: AppChrome.onSurfaceMuted,
                   ),
                 ),
               ),
@@ -186,16 +202,22 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               obscureText: _obscureConfirm,
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) => _submit(),
-              decoration: InputDecoration(
+              style: context.appTypography.body.copyWith(
+                color: AppChrome.onSurface,
+              ),
+              decoration: AppChrome.inputDecoration(
+                context,
                 labelText: 'Confirm password',
                 suffixIcon: IconButton(
                   onPressed: isFullAccountSignedIn
                       ? null
-                      : () => setState(() => _obscureConfirm = !_obscureConfirm),
+                      : () =>
+                          setState(() => _obscureConfirm = !_obscureConfirm),
                   icon: Icon(
                     _obscureConfirm
                         ? Icons.visibility_outlined
                         : Icons.visibility_off_outlined,
+                    color: AppChrome.onSurfaceMuted,
                   ),
                 ),
               ),

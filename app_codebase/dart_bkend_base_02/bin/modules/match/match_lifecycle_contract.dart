@@ -22,6 +22,7 @@ abstract interface class MatchLifecycleContract {
     required Map<String, dynamic> matchType,
     required List<LobbyHumanSeat> humans,
     required List<String> aiUserIds,
+    Map<String, String> aiUsernames = const {},
     int targetSeats = 3,
     String arenaId = stubArenaId,
     int? firstSeatIndex,

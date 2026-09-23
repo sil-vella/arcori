@@ -12,6 +12,7 @@ import '../../../core/theme/theme.dart';
 import '../../../utils/dev_logger.dart';
 import '../../avari/avari_models.dart';
 import '../../kin/widgets/kin_lottie_preview.dart';
+import '../../match/practice_ai_pool.dart';
 import '../../match/state/match_notifier.dart';
 import '../../match/state/match_snapshot_state.dart';
 import '../../match/widgets/arcori_cylinder.dart';
@@ -23,12 +24,17 @@ const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 /// Single post-match shell: celebration stubs + summary + actions.
 Future<void> showPostMatchModal(BuildContext context, WidgetRef ref) {
-  return AppModal.showCenteredShell<void>(
+  return AppModal.showCentered<void>(
     context,
-    title: 'Match complete',
     barrierDismissible: false,
-    showCloseButton: false,
-    child: const _PostMatchBody(),
+    builder: (ctx) => Theme(
+      data: AppTheme.dark,
+      child: const AppCenteredModal(
+        title: 'Match complete',
+        showCloseButton: false,
+        child: _PostMatchBody(),
+      ),
+    ),
   );
 }
 
@@ -46,6 +52,7 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
 
   /// Freeze at open so late WS / clear races cannot swap in a prior match.
   MatchSnapshotState? _frozenSnap;
+  Map<String, Map<String, int>> _frozenFlipsByActor = const {};
 
   @override
   void initState() {
@@ -53,12 +60,17 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
     Future.microtask(() {
       if (!mounted) return;
       final snap = ref.read(matchSnapshotProvider);
-      setState(() => _frozenSnap = snap);
+      final flips =
+          ref.read(matchFlowProvider.notifier).flipsByActorDesignSnapshot();
+      setState(() {
+        _frozenSnap = snap;
+        _frozenFlipsByActor = flips;
+      });
       if (LOGGING_SWITCH) {
         customlog(
           'postMatchModal: freeze matchId=${snap.matchId} '
           'phase=${snap.phase} seats=${snap.seats.length} '
-          'type=${snap.matchType}',
+          'type=${snap.matchType} flipActors=${flips.length}',
         );
       }
       unawaited(
@@ -145,23 +157,40 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
         children: [
           Text(
             'Celebration & mastery animations — soon',
-            style: context.appTypography.bodySmall,
+            style: context.appTypography.bodySmall.copyWith(
+              color: AppColors.onSurfaceMutedDark,
+            ),
           ),
           AppSpacing.gapSm,
           _RewardRow(
             finalize: flow.postMatchFinalize,
-            snap: snap,
           ),
           AppSpacing.gapMd,
-          Text('Flips', style: context.appTypography.label),
+          Text(
+            'Results',
+            style: context.appTypography.label.copyWith(
+              color: AppColors.onSurfaceDark,
+            ),
+          ),
           AppSpacing.gapXs,
-          _MatchSummaryBlock(snap: snap, localUserId: userId),
+          _CombinedResultsBlock(
+            snap: snap,
+            localUserId: userId,
+            flipsByActorDesign: _frozenFlipsByActor,
+            finalize: flow.postMatchFinalize,
+          ),
           AppSpacing.gapMd,
-          Text('Daily', style: context.appTypography.label),
+          Text(
+            'Daily',
+            style: context.appTypography.label.copyWith(
+              color: AppColors.onSurfaceDark,
+            ),
+          ),
           AppSpacing.gapXs,
           _DailyProgressBlock(daily: flow.postMatchFinalize?.daily),
           AppSpacing.gapSm,
           OutlinedButton(
+            style: context.appButtons.tertiary.outlined,
             onPressed: !_exiting && _actionsArmed
                 ? () => unawaited(_viewDaily())
                 : null,
@@ -169,7 +198,12 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
           ),
           if (flow.postMatchFinalize?.eventProgress != null) ...[
             AppSpacing.gapMd,
-            Text('Event', style: context.appTypography.label),
+            Text(
+              'Event',
+              style: context.appTypography.label.copyWith(
+                color: AppColors.onSurfaceDark,
+              ),
+            ),
             AppSpacing.gapXs,
             _EventProgressBlock(
               progress: flow.postMatchFinalize!.eventProgress!,
@@ -181,12 +215,13 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
             Text(
               flow.postMatchSoftError!,
               style: context.appTypography.bodySmall.copyWith(
-                color: Theme.of(context).colorScheme.error,
+                color: context.appColors.red,
               ),
             ),
           ],
           AppSpacing.gapLg,
           FilledButton(
+            style: context.appButtons.primary.filled,
             onPressed:
                 rematchOk && !_exiting && _actionsArmed ? _rematch : null,
             child: const Text('Rematch'),
@@ -195,16 +230,20 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
             AppSpacing.gapXs,
             Text(
               rematchReason,
-              style: context.appTypography.bodySmall,
+              style: context.appTypography.bodySmall.copyWith(
+                color: AppColors.onSurfaceMutedDark,
+              ),
             ),
           ],
           AppSpacing.gapSm,
           FilledButton(
+            style: context.appButtons.secondary.filled,
             onPressed: !_exiting && _actionsArmed ? _playNew : null,
             child: const Text('Play New'),
           ),
           AppSpacing.gapSm,
           OutlinedButton(
+            style: context.appButtons.tertiary.outlined,
             onPressed: !_exiting && _actionsArmed
                 ? () => unawaited(_done())
                 : null,
@@ -217,10 +256,9 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
 }
 
 class _RewardRow extends StatelessWidget {
-  const _RewardRow({this.finalize, required this.snap});
+  const _RewardRow({this.finalize});
 
   final MatchFinalizeResult? finalize;
-  final MatchSnapshotState snap;
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +266,6 @@ class _RewardRow extends StatelessWidget {
     final net = finalize?.goldFragmentsDelta ?? 0;
     final fee = finalize?.feeFragments ?? 0;
     final flips = finalize?.flipsRewarded ?? 0;
-    final mastery = finalize?.masteryChanges ?? const <MasteryChange>[];
     final fragLabel = applied
         ? '${net >= 0 ? '+' : ''}$net Fragments'
         : (finalize?.reason == 'practice'
@@ -242,49 +279,51 @@ class _RewardRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
           children: [
             Chip(
-              label: Text(fragLabel, style: context.appTypography.bodySmall),
+              label: Text(
+                fragLabel,
+                style: context.appTypography.bodySmall.copyWith(
+                  color: AppColors.onSurfaceDark,
+                ),
+              ),
+              backgroundColor: AppColors.surfaceDark.withValues(alpha: 0.7),
+              side: BorderSide(
+                color: AppSurfaces.frameGold(Brightness.dark)
+                    .withValues(alpha: 0.5),
+              ),
             ),
           ],
         ),
         if (detail != null) ...[
           AppSpacing.gapXs,
-          Text(detail, style: context.appTypography.bodySmall),
+          Text(
+            detail,
+            style: context.appTypography.bodySmall.copyWith(
+              color: AppColors.onSurfaceMutedDark,
+            ),
+          ),
         ],
-        AppSpacing.gapSm,
-        Text('Mastery', style: context.appTypography.label),
-        AppSpacing.gapXs,
-        if (!applied)
-          Text(
-            finalize?.reason == 'practice'
-                ? 'Practice — no mastery'
-                : 'Waiting for rewards…',
-            style: context.appTypography.bodySmall,
-          )
-        else if (mastery.isEmpty)
-          Text(
-            'No mastery change this match',
-            style: context.appTypography.bodySmall,
-          )
-        else
-          for (var i = 0; i < mastery.length; i++) ...[
-            _MasteryChangeRow(change: mastery[i], snap: snap),
-            if (i < mastery.length - 1) AppSpacing.gapSm,
-          ],
         if (applied &&
             (finalize?.achievementsUnlocked.isNotEmpty ?? false)) ...[
           AppSpacing.gapSm,
-          Text('Achievements', style: context.appTypography.label),
+          Text(
+            'Achievements',
+            style: context.appTypography.label.copyWith(
+              color: AppColors.onSurfaceDark,
+            ),
+          ),
           AppSpacing.gapXs,
           for (final ach in finalize!.achievementsUnlocked)
             Padding(
-              padding: const EdgeInsets.only(bottom: 4),
+              padding: const EdgeInsets.only(bottom: AppSpacing.xxs),
               child: Text(
                 '• ${ach.achievementName}',
-                style: context.appTypography.bodySmall,
+                style: context.appTypography.bodySmall.copyWith(
+                  color: AppColors.onSurfaceMutedDark,
+                ),
               ),
             ),
         ],
@@ -293,40 +332,260 @@ class _RewardRow extends StatelessWidget {
   }
 }
 
-class _MasteryChangeRow extends StatelessWidget {
-  const _MasteryChangeRow({required this.change, required this.snap});
+class _CombinedResultsBlock extends StatelessWidget {
+  const _CombinedResultsBlock({
+    required this.snap,
+    required this.localUserId,
+    required this.flipsByActorDesign,
+    this.finalize,
+  });
 
-  final MasteryChange change;
   final MatchSnapshotState snap;
+  final String localUserId;
+  final Map<String, Map<String, int>> flipsByActorDesign;
+  final MatchFinalizeResult? finalize;
 
   @override
   Widget build(BuildContext context) {
-    final piece = _pieceFor(change.designId);
-    final lottieUrl = (change.lottieUrl != null && change.lottieUrl!.isNotEmpty)
-        ? change.lottieUrl
+    final seats = [...snap.seats]
+      ..sort((a, b) => a.seatIndex.compareTo(b.seatIndex));
+    if (seats.isEmpty) {
+      return Text('No seat data', style: context.appTypography.bodySmall);
+    }
+
+    final masteryByDesign = <String, MasteryChange>{
+      for (final m in finalize?.masteryChanges ?? const <MasteryChange>[])
+        if (m.designId.trim().isNotEmpty) m.designId.trim(): m,
+    };
+    final applied = finalize?.applied == true;
+    final practice = finalize?.reason == 'practice';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final seat in seats) ...[
+          Builder(
+            builder: (context) {
+              final byDesign = _flipsForSeat(seat);
+              final total = byDesign.isNotEmpty
+                  ? byDesign.values.fold<int>(0, (a, b) => a + b)
+                  : seat.score;
+              return _PlayerResults(
+                snap: snap,
+                seat: seat,
+                playerLabel: _seatLabel(seat),
+                totalFlips: total,
+                flipsByDesign: byDesign,
+                masteryByDesign:
+                    _isLocalSeat(seat) ? masteryByDesign : const {},
+                showMasteryPending: _isLocalSeat(seat) &&
+                    finalize != null &&
+                    !applied &&
+                    !practice,
+                practiceNoMastery: _isLocalSeat(seat) && practice,
+              );
+            },
+          ),
+          if (seat != seats.last) AppSpacing.gapMd,
+        ],
+      ],
+    );
+  }
+
+  bool _isLocalSeat(MatchSeatView seat) {
+    final uid = seat.userId.trim();
+    if (localUserId.isNotEmpty && uid == localUserId) return true;
+    if (seat.kind == 'human' &&
+        (uid == 'local' || uid.isEmpty || localUserId.isEmpty)) {
+      return seat.seatIndex == 0 || uid == 'local';
+    }
+    return false;
+  }
+
+  Map<String, int> _flipsForSeat(MatchSeatView seat) {
+    final uid = seat.userId.trim();
+    final direct = flipsByActorDesign[uid];
+    if (direct != null && direct.isNotEmpty) {
+      return Map<String, int>.from(direct);
+    }
+    if (_isLocalSeat(seat)) {
+      final local = flipsByActorDesign['local'];
+      if (local != null && local.isNotEmpty) {
+        return Map<String, int>.from(local);
+      }
+      if (localUserId.isNotEmpty) {
+        final mine = flipsByActorDesign[localUserId];
+        if (mine != null && mine.isNotEmpty) {
+          return Map<String, int>.from(mine);
+        }
+      }
+    }
+    return const {};
+  }
+
+  String _seatLabel(MatchSeatView seat) {
+    final isYou = _isLocalSeat(seat);
+    final fromSeat = seat.username?.trim() ?? '';
+    if (fromSeat.isNotEmpty) {
+      return isYou ? '$fromSeat (you)' : fromSeat;
+    }
+    if (seat.kind == 'ai') {
+      return practiceAiUsernameFor(seat.userId);
+    }
+    if (isYou) return 'You';
+    final id = seat.userId.trim();
+    if (id.isEmpty) return 'Player';
+    return id.length <= 8 ? id : id.substring(0, 8);
+  }
+}
+
+class _PlayerResults extends StatelessWidget {
+  const _PlayerResults({
+    required this.snap,
+    required this.seat,
+    required this.playerLabel,
+    required this.totalFlips,
+    required this.flipsByDesign,
+    required this.masteryByDesign,
+    this.showMasteryPending = false,
+    this.practiceNoMastery = false,
+  });
+
+  final MatchSnapshotState snap;
+  final MatchSeatView seat;
+  final String playerLabel;
+  final int totalFlips;
+  final Map<String, int> flipsByDesign;
+  final Map<String, MasteryChange> masteryByDesign;
+  final bool showMasteryPending;
+  final bool practiceNoMastery;
+
+  @override
+  Widget build(BuildContext context) {
+    final designIds = <String>{
+      ...flipsByDesign.keys.where((k) => (flipsByDesign[k] ?? 0) > 0),
+      ...masteryByDesign.keys,
+    }.toList()
+      ..sort((a, b) {
+        final fa = flipsByDesign[a] ?? masteryByDesign[a]?.flips ?? 0;
+        final fb = flipsByDesign[b] ?? masteryByDesign[b]?.flips ?? 0;
+        final cmp = fb.compareTo(fa);
+        if (cmp != 0) return cmp;
+        return a.compareTo(b);
+      });
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            _SeatFace(snap: snap, seat: seat),
+            AppSpacing.gapSm,
+            Expanded(
+              child: Text(
+                playerLabel,
+                style: context.appTypography.body,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Text(
+              '$totalFlips flip${totalFlips == 1 ? '' : 's'}',
+              style: context.appTypography.h3,
+            ),
+          ],
+        ),
+        if (showMasteryPending) ...[
+          AppSpacing.gapXs,
+          Padding(
+            padding: const EdgeInsets.only(left: 48),
+            child: Text(
+              'Waiting for mastery…',
+              style: context.appTypography.bodySmall,
+            ),
+          ),
+        ] else if (practiceNoMastery && designIds.isEmpty) ...[
+          AppSpacing.gapXs,
+          Padding(
+            padding: const EdgeInsets.only(left: 48),
+            child: Text(
+              'Practice — no mastery',
+              style: context.appTypography.bodySmall,
+            ),
+          ),
+        ],
+        if (designIds.isEmpty && !showMasteryPending) ...[
+          AppSpacing.gapXs,
+          Padding(
+            padding: const EdgeInsets.only(left: 48),
+            child: Text(
+              'No Arcori flipped',
+              style: context.appTypography.bodySmall,
+            ),
+          ),
+        ] else ...[
+          AppSpacing.gapXs,
+          for (final designId in designIds)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, bottom: AppSpacing.sm),
+              child: _ArcoriResultRow(
+                snap: snap,
+                designId: designId,
+                flips: flipsByDesign[designId] ??
+                    masteryByDesign[designId]?.flips ??
+                    0,
+                mastery: masteryByDesign[designId],
+              ),
+            ),
+        ],
+      ],
+    );
+  }
+}
+
+class _ArcoriResultRow extends StatelessWidget {
+  const _ArcoriResultRow({
+    required this.snap,
+    required this.designId,
+    required this.flips,
+    this.mastery,
+  });
+
+  final MatchSnapshotState snap;
+  final String designId;
+  final int flips;
+  final MasteryChange? mastery;
+
+  @override
+  Widget build(BuildContext context) {
+    final piece = _pieceFor(designId);
+    final m = mastery;
+    final lottieUrl = (m?.lottieUrl != null && m!.lottieUrl!.isNotEmpty)
+        ? m.lottieUrl
         : piece?.lottieUrl;
     final useLottie = (lottieUrl ?? '').trim().isNotEmpty;
     final imageUrl = useLottie
         ? null
-        : ((change.imageUrl != null && change.imageUrl!.isNotEmpty)
-            ? change.imageUrl
+        : ((m?.imageUrl != null && m!.imageUrl!.isNotEmpty)
+            ? m.imageUrl
             : piece?.imageUrl);
-    final color = (change.color != null && change.color!.isNotEmpty)
-        ? change.color
+    final color = (m?.color != null && m!.color!.isNotEmpty)
+        ? m.color
         : piece?.color;
-    final name = change.displayName ?? change.designId;
-    final kindLabel = change.kind == 'own' ? 'Own' : 'Other';
-    final flipRel = change.delta >= 0
-        ? '+${change.flips} flips → ${change.relativeDeltaLabel}'
-        : '${change.flips} flips → ${change.relativeDeltaLabel}';
+    final name = (m?.displayName != null && m!.displayName!.trim().isNotEmpty)
+        ? m.displayName!.trim()
+        : _shortDesignLabel(designId);
+    final kindLabel = m == null
+        ? null
+        : (m.kind == 'own' ? 'Own' : 'Other');
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ArcoriCylinder(
-          size: 48,
+          size: 40,
           look: ArcoriLook(
-            designId: change.designId,
+            designId: designId,
             imageUrl: imageUrl,
             colorHex: color,
           ),
@@ -351,102 +610,47 @@ class _MasteryChangeRow extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                'Mastery ${change.masteryOverMintReach} · $kindLabel',
+                flips == 1 ? '1 flip' : '$flips flips',
                 style: context.appTypography.bodySmall,
               ),
-              Text(
-                flipRel,
-                style: context.appTypography.caption.copyWith(
-                  color: context.appColorScheme.onSurfaceVariant,
+              if (m != null)
+                Text(
+                  'Mastery ${m.masteryOverMintReach}'
+                  '${kindLabel != null ? ' · $kindLabel' : ''}'
+                  ' · ${m.relativeDeltaLabel}',
+                  style: context.appTypography.caption.copyWith(
+                    color: context.appColorScheme.onSurfaceVariant,
+                  ),
                 ),
-              ),
             ],
           ),
         ),
+        // Always flip count here — mastery delta is labeled under the name.
         Text(
-          change.relativeDeltaLabel,
+          '×$flips',
           style: context.appTypography.h3,
         ),
       ],
     );
   }
 
-  MatchPieceView? _pieceFor(String designId) {
-    final id = designId.trim();
-    if (id.isEmpty) return null;
+  MatchPieceView? _pieceFor(String id) {
+    final want = id.trim();
+    if (want.isEmpty) return null;
     for (final p in snap.pieces) {
-      if (p.designId == id) return p;
+      if (p.designId == want) return p;
     }
     return null;
   }
-}
 
-class _MatchSummaryBlock extends StatelessWidget {
-  const _MatchSummaryBlock({
-    required this.snap,
-    required this.localUserId,
-  });
-
-  final MatchSnapshotState snap;
-  final String localUserId;
-
-  @override
-  Widget build(BuildContext context) {
-    final seats = [...snap.seats]
-      ..sort((a, b) => a.seatIndex.compareTo(b.seatIndex));
-    if (seats.isEmpty) {
-      return Text('No seat data', style: context.appTypography.bodySmall);
+  String _shortDesignLabel(String id) {
+    final raw = id.trim();
+    if (raw.isEmpty) return 'Arcori';
+    final parts = raw.split('-');
+    if (parts.length >= 2 && parts[1].isNotEmpty) {
+      return parts[1];
     }
-
-    return Column(
-      children: [
-        for (final seat in seats) ...[
-          Row(
-            children: [
-              _SeatFace(snap: snap, seat: seat),
-              AppSpacing.gapSm,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _seatLabel(seat),
-                      style: context.appTypography.body,
-                    ),
-                    Text(
-                      _designLabel(seat),
-                      style: context.appTypography.bodySmall,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                '${seat.score} flip${seat.score == 1 ? '' : 's'}',
-                style: context.appTypography.h3,
-              ),
-            ],
-          ),
-          if (seat != seats.last) AppSpacing.gapSm,
-        ],
-      ],
-    );
-  }
-
-  String _seatLabel(MatchSeatView seat) {
-    final isYou =
-        localUserId.isNotEmpty && seat.userId.trim() == localUserId;
-    if (seat.kind == 'ai') {
-      return 'AI · seat ${seat.seatIndex + 1}';
-    }
-    if (isYou) return 'You · seat ${seat.seatIndex + 1}';
-    return 'Seat ${seat.seatIndex + 1}';
-  }
-
-  String _designLabel(MatchSeatView seat) {
-    if (seat.arcoriIds.isEmpty) return '—';
-    return seat.arcoriIds.first;
+    return raw;
   }
 }
 
@@ -512,12 +716,12 @@ class _DailyProgressBlock extends StatelessWidget {
       children: [
         for (final line in lines)
           Padding(
-            padding: const EdgeInsets.only(bottom: 4),
+            padding: const EdgeInsets.only(bottom: AppSpacing.xxs),
             child: Text(line, style: context.appTypography.bodySmall),
           ),
         if (cacheLine != null)
           Padding(
-            padding: const EdgeInsets.only(bottom: 4),
+            padding: const EdgeInsets.only(bottom: AppSpacing.xxs),
             child: Text(cacheLine, style: context.appTypography.bodySmall),
           ),
       ],

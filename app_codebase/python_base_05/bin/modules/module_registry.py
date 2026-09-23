@@ -29,6 +29,8 @@ from modules.standings.standings_app import register_standings_routes
 from modules.standings.standings_errors import register_standings_errors
 from modules.legacy.legacy_app import register_legacy_routes
 from modules.legacy.legacy_errors import register_legacy_errors
+from modules.market.market_app import register_market_routes
+from modules.market.market_errors import register_market_errors
 from modules.contacts.contacts_app import register_contacts_routes
 from modules.contacts.contacts_errors import register_contacts_errors
 from modules.service.service_app import register_service_routes
@@ -54,6 +56,9 @@ from modules.daily_goals.daily_goals_notifications import (
 from modules.legacy.legacy_notifications import (
     register_legacy_notification_subtypes,
 )
+from modules.notifications.world_news_notifications import (
+    register_world_news_notification_subtypes,
+)
 
 
 def register_notification_reply_handlers() -> None:
@@ -71,6 +76,7 @@ def register_notification_reply_handlers() -> None:
     register_achievement_notification_subtypes()
     register_daily_goals_notification_subtypes()
     register_legacy_notification_subtypes()
+    register_world_news_notification_subtypes()
     register_example_notification_handlers()
     register_friend_match_invite_notification_handlers()
 
@@ -87,6 +93,7 @@ def register_application_routes() -> None:
     register_standings_routes(application_routes, http_responses)
     register_legacy_routes(application_routes, http_responses)
     register_avari_routes(application_routes, http_responses)
+    register_market_routes(application_routes, http_responses)
     register_achievements_routes(application_routes, http_responses)
     register_daily_goals_routes(application_routes, http_responses)
     register_special_events_routes(application_routes, http_responses)
@@ -107,6 +114,7 @@ def register_application_errors() -> None:
     register_standings_errors(module_error_registrar)
     register_legacy_errors(module_error_registrar)
     register_avari_errors(module_error_registrar)
+    register_market_errors(module_error_registrar)
     register_achievements_errors(module_error_registrar)
     register_daily_goals_errors(module_error_registrar)
     register_special_events_errors(module_error_registrar)

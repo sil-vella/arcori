@@ -6,10 +6,15 @@ import '../play_models.dart';
 
 /// Centered picker for [MatchType]. Returns the chosen type, or null if cancelled.
 Future<MatchType?> showMatchTypeSelectModal(BuildContext context) {
-  return AppModal.showCenteredShell<MatchType>(
+  return AppModal.showCentered<MatchType>(
     context,
-    title: 'Choose match type',
-    child: const _MatchTypeSelectBody(),
+    builder: (ctx) => Theme(
+      data: AppTheme.dark,
+      child: const AppCenteredModal(
+        title: 'Choose match type',
+        child: _MatchTypeSelectBody(),
+      ),
+    ),
   );
 }
 
@@ -24,6 +29,7 @@ class _MatchTypeSelectBody extends StatelessWidget {
         for (final type in MatchType.values) ...[
           if (type != MatchType.values.first) AppSpacing.gapSm,
           FilledButton(
+            style: context.appButtons.primary.filled,
             onPressed: () => AppModal.dismiss(context, type),
             child: Text(type.label),
           ),

@@ -27,7 +27,7 @@ class AppFullScreenModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final modalTheme = context.appModalTheme;
-    final contentPadding = padding ?? AppSpacing.screenPadding;
+    final contentPadding = padding ?? AppSpacing.modalPadding;
 
     return Material(
       color: modalTheme.surface,
@@ -93,11 +93,16 @@ class _FullScreenHeader extends StatelessWidget {
           Expanded(
             child: title == null
                 ? const SizedBox.shrink()
-                : Text(title!, style: context.appTypography.h4),
+                : Text(
+                    title!,
+                    style: context.appTypography.h4.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
           ),
           if (showCloseButton)
             IconButton(
-              style: context.appButtons.primary.icon,
+              style: context.appButtons.tertiary.icon,
               tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
               onPressed: () => dismissModalRoute(context),
               icon: const Icon(Icons.close),

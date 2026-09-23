@@ -8,6 +8,7 @@ import '../../core/navigation/contracts/register_drawer_contract.dart';
 import '../../core/state/auth/auth_providers.dart';
 import '../../core/state/user/user_profile_provider.dart';
 import '../../core/theme/theme.dart';
+import '../../core/widgets/app_chrome.dart';
 import '../kin/kin_notifier.dart';
 import 'avari_notifier.dart';
 
@@ -27,7 +28,6 @@ class AvariDrawerHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
     final profile = ref.watch(userProfileProvider).profile;
-    final scheme = context.appColorScheme;
     final url = resolveMediaUrl(profile?.avatarUrl);
     final name = (profile?.username != null && profile!.username.isNotEmpty)
         ? profile.username
@@ -59,41 +59,55 @@ class AvariDrawerHeader extends ConsumerWidget {
             scaffold: scaffold,
           );
         },
-        borderRadius: BorderRadius.circular(AppSpacing.sm),
+        borderRadius: BorderRadius.circular(AppRadii.md),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
           child: Column(
             children: [
-              SizedBox(
-                width: _size,
-                height: _size,
-                child: ClipOval(
-                  child: ColoredBox(
-                    color: scheme.surfaceContainerHighest,
-                    child: url.isEmpty
-                        ? Icon(
-                            Icons.person_outline,
-                            size: AppSpacing.xl,
-                            color: scheme.onSurfaceVariant,
-                          )
-                        : Image.network(
-                            url,
-                            fit: BoxFit.cover,
-                            width: _size,
-                            height: _size,
-                            errorBuilder: (_, __, ___) => Icon(
-                              Icons.person_outline,
-                              size: AppSpacing.xl,
-                              color: scheme.onSurfaceVariant,
-                            ),
-                          ),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppChrome.accentGold,
+                    width: 2,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.xxs),
+                  child: SizedBox(
+                    width: _size,
+                    height: _size,
+                    child: ClipOval(
+                      child: ColoredBox(
+                        color: AppChrome.fieldFill,
+                        child: url.isEmpty
+                            ? Icon(
+                                Icons.person_outline,
+                                size: AppSpacing.xl,
+                                color: AppChrome.onSurfaceMuted,
+                              )
+                            : Image.network(
+                                url,
+                                fit: BoxFit.cover,
+                                width: _size,
+                                height: _size,
+                                errorBuilder: (_, __, ___) => Icon(
+                                  Icons.person_outline,
+                                  size: AppSpacing.xl,
+                                  color: AppChrome.onSurfaceMuted,
+                                ),
+                              ),
+                      ),
+                    ),
                   ),
                 ),
               ),
               AppSpacing.gapXs,
               Text(
                 name,
-                style: context.appTypography.title,
+                style: context.appTypography.title.copyWith(
+                  color: AppChrome.onSurface,
+                ),
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -101,7 +115,7 @@ class AvariDrawerHeader extends ConsumerWidget {
               Text(
                 auth.isAuthenticated ? 'Avari profile' : 'Open Avari',
                 style: context.appTypography.caption.copyWith(
-                  color: scheme.onSurfaceVariant,
+                  color: AppChrome.onSurfaceMuted,
                 ),
               ),
             ],

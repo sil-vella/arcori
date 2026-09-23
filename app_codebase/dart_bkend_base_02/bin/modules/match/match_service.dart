@@ -15,6 +15,7 @@ import 'match_lifecycle_contract.dart';
 import 'match_models.dart';
 import 'match_store.dart';
 import 'slam_input.dart';
+import 'table_pieces.dart';
 import 'turn_pacing.dart';
 import 'match_turn_runner.dart';
 
@@ -120,6 +121,7 @@ class MatchService implements MatchLifecycleContract {
     required Map<String, dynamic> matchType,
     required List<LobbyHumanSeat> humans,
     required List<String> aiUserIds,
+    Map<String, String> aiUsernames = const {},
     int targetSeats = 3,
     String arenaId = stubArenaId,
     int? firstSeatIndex,
@@ -199,6 +201,12 @@ class MatchService implements MatchLifecycleContract {
               ? priorArcori
               : const [],
           slammerId: hintSlammer.isNotEmpty ? hintSlammer : stubSlammerId,
+          username: () {
+            final fromMap = aiUsernames[aiUserId]?.trim() ?? '';
+            if (fromMap.isNotEmpty) return fromMap;
+            final hintName = hint?['username']?.toString().trim() ?? '';
+            return hintName.isNotEmpty ? hintName : null;
+          }(),
         ),
       );
     }
@@ -281,6 +289,8 @@ class MatchService implements MatchLifecycleContract {
           slammerId: slammer,
           score: s.score,
           connected: s.connected,
+          username: s.username,
+          avatarUrl: s.avatarUrl,
         ),
       );
     }
@@ -310,6 +320,8 @@ class MatchService implements MatchLifecycleContract {
           slammerId: s.slammerId,
           score: s.score,
           connected: s.connected,
+          username: s.username,
+          avatarUrl: s.avatarUrl,
         ),
       );
     }
@@ -353,12 +365,16 @@ class MatchService implements MatchLifecycleContract {
           arenaImageUrl = (specialBg != null && specialBg.isNotEmpty)
               ? specialBg
               : (arenaImageUrl ?? pick.imageUrl);
-          gathererArcoriId = pick.gathererArcoriId;
+          // SE may reuse select_arena for land/background only — never Gatherer.
+          if (matchTypeIncludesGatherer(matchType)) {
+            gathererArcoriId = pick.gathererArcoriId;
+          }
           if (LOGGING_SWITCH) {
             customlog(
               'match: startFromLobby select_arena ok '
               'arenaId=${pick.arenaId} region=${pick.regionCode} '
-              'source=${pick.source} gatherer=${pick.gathererArcoriId}',
+              'source=${pick.source} gatherer=${gathererArcoriId ?? '-'} '
+              'type=${matchType['code']}',
             );
           }
         }
@@ -403,10 +419,11 @@ class MatchService implements MatchLifecycleContract {
     }
 
     final callerUserId = humans.first.userId;
+    final stampedSeats = stampSlammerFaces(assigned, catalogById);
     var snapshot = _store.createFromLobby(
       callerUserId: callerUserId,
       matchType: matchType,
-      seats: assigned,
+      seats: stampedSeats,
       catalogById: catalogById,
       arenaId: resolvedArenaId,
       arenaImageUrl: arenaImageUrl,
@@ -593,6 +610,37 @@ class MatchService implements MatchLifecycleContract {
     );
     _broadcast(snapshot);
     return snapshot;
+  }
+
+  /// Spend slammer charge (if any) then apply slam action.
+  Future<MatchSnapshot> actionSpendingCharge({
+    required String matchId,
+    required String userId,
+    required Map<String, dynamic> payload,
+  }) async {
+    final current = _store.getSnapshot(matchId);
+    if (current == null) {
+      throw AppError(matchNotFound);
+    }
+    MatchSeat? actor;
+    for (final s in current.seats) {
+      if (s.userId == userId) {
+        actor = s;
+        break;
+      }
+    }
+    final slammerId = actor?.slammerId.trim() ?? '';
+    if (slammerId.isNotEmpty) {
+      final intent =
+          '$matchId:v${current.version}:s${actor!.seatIndex}:$slammerId';
+      await _avari.spendSlammerCharge(
+        userId: userId,
+        designId: slammerId,
+        matchId: matchId,
+        intentId: intent.length > 64 ? intent.substring(0, 64) : intent,
+      );
+    }
+    return action(matchId: matchId, userId: userId, payload: payload);
   }
 
   void _broadcast(MatchSnapshot snapshot) {

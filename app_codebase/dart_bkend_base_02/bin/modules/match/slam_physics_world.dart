@@ -196,6 +196,8 @@ SlamPhysicsResult runSlamPhysics({
   required Random rng,
   int spreadAttr = 5,
   SlamFeelProfile feel = kDefaultSlamFeelProfile,
+  /// Slam actor — score goes to who flipped, not piece owner.
+  String? scoringUserId,
 }) {
   if (LOGGING_SWITCH) {
     customlog(
@@ -531,6 +533,7 @@ SlamPhysicsResult runSlamPhysics({
   final flipped = <String>[];
   final scoreDeltas = <String, int>{};
   final nextPieces = <Map<String, dynamic>>[];
+  final scorer = (scoringUserId ?? '').trim();
 
   for (var i = 0; i < sorted.length; i++) {
     final prev = Map<String, dynamic>.from(sorted[i]);
@@ -539,9 +542,9 @@ SlamPhysicsResult runSlamPhysics({
     final faceUp = isFaceUpOrientation(bodies[i].orientation);
     if (!wasFaceUp[i] && faceUp) {
       flipped.add(id);
-      final owner = prev['ownerUserId']?.toString() ?? '';
-      if (owner.isNotEmpty) {
-        scoreDeltas[owner] = (scoreDeltas[owner] ?? 0) + 1;
+      // GDD: each flip the slamming player scores (+1).
+      if (scorer.isNotEmpty) {
+        scoreDeltas[scorer] = (scoreDeltas[scorer] ?? 0) + 1;
       }
     }
     final finalFace = wasFaceUp[i] || faceUp;

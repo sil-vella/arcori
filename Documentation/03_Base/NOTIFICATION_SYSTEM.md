@@ -191,6 +191,18 @@ X-Service-Key: <SERVICE_KEY>
 Content-Type: application/json
 ```
 
+### Service tier — upsert global notification (World News / campaigns)
+
+```http
+POST /service/notifications/global-upsert
+X-Service-Key: <SERVICE_KEY>
+Content-Type: application/json
+```
+
+Same field shape as `automation/backend/files/global_notifications.json` entries (`id`, `title`, `body`, `type`, `category`, `subtype`, `msg_id`, `data`, `is_active`, …). Upserts by `id` / `msg_id` via `upsert_global_notification`. Used for admin World News and ops tooling; JSON seed sync remains supported.
+
+**World News:** Home filters notifications where `category == news` (`source=world`, subtypes `admin_v1`, `gen_closed_v1`, `legacy_owner_v1`). Routine news uses `type=inbox`; critical uses `type=instant` (modal via `NotificationHost`).
+
 **Body (required fields in bold):**
 
 ```json
@@ -765,6 +777,8 @@ Error codes: `notifications/invalid_type`, `notifications/invalid_request`, `not
 | Same copy for all users | Global row + `global_notification_reads` |
 | Create from Python handler | `create_for_user(...)` — register subtype first |
 | Create from Dart / external | `POST /service/notifications/create` — `category` + `subtype` required |
+| Upsert global / World News | `POST /service/notifications/global-upsert` or `sync_global_notifications.py` |
+| Home World News feed | Filter globals + user messages where `category == news` |
 | Per-subtype rules (screens, delay, priority) | Subtype registry (Python + Flutter) |
 | Custom modal buttons | `data.response` (`navigate` or `reply`) |
 | Client-only navigation | `data.response.type: navigate` + `screen` / `to_path` |
@@ -805,7 +819,7 @@ python3 bin/migrate.py
 
 | Feature | Notes |
 |---------|-------|
-| Admin global create API | Use `wfrun` → `sync_global_notifications.py` + JSON seed (no HTTP admin API yet) |
+| Flutter admin CMS for globals | Service upsert + JSON seed cover ops; no in-app editor |
 | `data.target_version` app-update gate | From legacy Dutch system |
 | Redis pub/sub multi-worker WS delivery | Done when `ARCORI_PRESENCE_ENABLED=true` — see InboxBroadcaster |
 | FCM/APNs OS push | Separate project |

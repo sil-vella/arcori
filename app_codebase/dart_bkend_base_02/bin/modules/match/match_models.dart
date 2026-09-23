@@ -23,6 +23,12 @@ bool matchTypeUsesArcoriRegionArena(Map<String, dynamic> matchType) {
   return false;
 }
 
+/// Region Gatherer table disc — Quick Start / Invite only (never Special Event).
+bool matchTypeIncludesGatherer(Map<String, dynamic> matchType) {
+  final code = matchType['code']?.toString();
+  return code == 'quickStart' || code == 'invite';
+}
+
 class MatchSeat {
   const MatchSeat({
     required this.userId,
@@ -32,6 +38,11 @@ class MatchSeat {
     required this.slammerId,
     this.score = 0,
     this.connected = true,
+    this.username,
+    this.avatarUrl,
+    this.imageUrl,
+    this.lottieUrl,
+    this.color,
   });
 
   final String userId;
@@ -42,9 +53,25 @@ class MatchSeat {
   final List<String> arcoriIds;
   final String slammerId;
 
+  /// Optional display name for match HUD chrome.
+  final String? username;
+
+  /// Optional avatar path/URL for match HUD chrome.
+  final String? avatarUrl;
+
+  /// Equipped slammer face art (stamped from catalog freeze).
+  final String? imageUrl;
+  final String? lottieUrl;
+  final String? color;
+
   MatchSeat copyWith({
     int? score,
     bool? connected,
+    String? username,
+    String? avatarUrl,
+    String? imageUrl,
+    String? lottieUrl,
+    String? color,
   }) {
     return MatchSeat(
       userId: userId,
@@ -54,6 +81,11 @@ class MatchSeat {
       slammerId: slammerId,
       score: score ?? this.score,
       connected: connected ?? this.connected,
+      username: username ?? this.username,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      imageUrl: imageUrl ?? this.imageUrl,
+      lottieUrl: lottieUrl ?? this.lottieUrl,
+      color: color ?? this.color,
     );
   }
 
@@ -66,6 +98,15 @@ class MatchSeat {
       'connected': connected,
       'arcoriIds': List<String>.from(arcoriIds),
       'slammerId': slammerId,
+      if (username != null && username!.trim().isNotEmpty)
+        'username': username!.trim(),
+      if (avatarUrl != null && avatarUrl!.trim().isNotEmpty)
+        'avatarUrl': avatarUrl!.trim(),
+      if (imageUrl != null && imageUrl!.trim().isNotEmpty)
+        'imageUrl': imageUrl!.trim(),
+      if (lottieUrl != null && lottieUrl!.trim().isNotEmpty)
+        'lottieUrl': lottieUrl!.trim(),
+      if (color != null && color!.trim().isNotEmpty) 'color': color!.trim(),
     };
   }
 
@@ -74,6 +115,11 @@ class MatchSeat {
     final arcoriIds = rawIds is List
         ? rawIds.map((e) => e.toString()).toList()
         : <String>[];
+    final rawName = payload['username']?.toString().trim() ?? '';
+    final rawAvatar = payload['avatarUrl']?.toString().trim() ?? '';
+    final rawImage = payload['imageUrl']?.toString().trim() ?? '';
+    final rawLottie = payload['lottieUrl']?.toString().trim() ?? '';
+    final rawColor = payload['color']?.toString().trim() ?? '';
     return MatchSeat(
       userId: payload['userId']?.toString() ?? '',
       seatIndex: payload['seatIndex'] is int ? payload['seatIndex'] as int : 0,
@@ -82,6 +128,11 @@ class MatchSeat {
       connected: payload['connected'] != false,
       arcoriIds: arcoriIds,
       slammerId: payload['slammerId']?.toString() ?? '',
+      username: rawName.isNotEmpty ? rawName : null,
+      avatarUrl: rawAvatar.isNotEmpty ? rawAvatar : null,
+      imageUrl: rawImage.isNotEmpty ? rawImage : null,
+      lottieUrl: rawLottie.isNotEmpty ? rawLottie : null,
+      color: rawColor.isNotEmpty ? rawColor : null,
     );
   }
 }

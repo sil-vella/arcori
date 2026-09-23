@@ -88,4 +88,77 @@ class MatchAvariClient {
       );
     }
   }
+
+  /// Deduct one charge for a slam. Permanent / missing → noop success.
+  /// Throws [matchSlammerNoCharges] when the equipped slammer is empty.
+  Future<void> spendSlammerCharge({
+    required String userId,
+    required String designId,
+    String? matchId,
+    String? intentId,
+  }) async {
+    final uid = userId.trim();
+    final did = designId.trim();
+    if (uid.isEmpty || did.isEmpty) return;
+
+    final uri =
+        Uri.parse('${_fastApi.baseUrl}/service/avari/spend_slammer_charge');
+    try {
+      final response = await _fastApi.client
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Service-Key': serviceKey(),
+            },
+            body: jsonEncode({
+              'userId': uid,
+              'designId': did,
+              if (matchId != null && matchId.trim().isNotEmpty)
+                'matchId': matchId.trim(),
+              if (intentId != null && intentId.trim().isNotEmpty)
+                'intentId': intentId.trim(),
+            }),
+          )
+          .timeout(const Duration(seconds: 8));
+      final body = jsonDecode(response.body);
+      if (body is! Map) {
+        throw AppError(
+          matchInvalidRequest,
+          message: 'Invalid spend_slammer_charge response',
+        );
+      }
+      final map = Map<String, dynamic>.from(body);
+      if (response.statusCode < 200 ||
+          response.statusCode >= 300 ||
+          map['ok'] != true) {
+        final err = map['error'];
+        final code = err is Map ? err['code']?.toString() : null;
+        final message = err is Map
+            ? (err['message']?.toString() ?? matchSlammerNoCharges.message)
+            : matchSlammerNoCharges.message;
+        if (code == 'avari/slammer_no_charges' ||
+            response.statusCode == 402) {
+          throw AppError(matchSlammerNoCharges, message: message);
+        }
+        throw AppError(matchInvalidRequest, message: message);
+      }
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match avari spend_slammer_charge ok user=$uid design=$did',
+        );
+      }
+    } on AppError {
+      rethrow;
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('match avari spend_slammer_charge error: $e');
+      }
+      // Fail closed: do not slam if charge spend cannot be confirmed.
+      throw AppError(
+        matchInvalidRequest,
+        message: 'spend_slammer_charge request failed: $e',
+      );
+    }
+  }
 }

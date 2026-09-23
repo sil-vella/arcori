@@ -12,11 +12,16 @@ import '../play_models.dart';
 
 /// Practice setup: pick owned slammer only (Arcori fixed to practice 001).
 Future<PracticeLoadout?> showPracticeLoadoutModal(BuildContext context) {
-  return AppModal.showCenteredShell<PracticeLoadout>(
+  return AppModal.showCentered<PracticeLoadout>(
     context,
-    title: 'Practice slammer',
     barrierDismissible: true,
-    child: const _PracticeLoadoutBody(),
+    builder: (ctx) => Theme(
+      data: AppTheme.dark,
+      child: const AppCenteredModal(
+        title: 'Practice slammer',
+        child: _PracticeLoadoutBody(),
+      ),
+    ),
   );
 }
 
@@ -119,10 +124,43 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
           Text(_error!, style: context.appTypography.bodySmall),
           AppSpacing.gapSm,
         ],
-        Text('Slammer', style: context.appTypography.label),
+        Text(
+          'Slammer',
+          style: context.appTypography.label.copyWith(
+            color: AppColors.onSurfaceDark,
+          ),
+        ),
         AppSpacing.gapXs,
         DropdownButtonFormField<String>(
           value: _slammerId,
+          dropdownColor: AppColors.surfaceDark,
+          style: context.appTypography.body.copyWith(
+            color: AppColors.onSurfaceDark,
+          ),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: AppColors.surfaceDark,
+            isDense: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadii.md),
+              borderSide: BorderSide(
+                color: AppColors.tertiary.withValues(alpha: 0.55),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadii.md),
+              borderSide: BorderSide(
+                color: AppColors.tertiary.withValues(alpha: 0.55),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadii.md),
+              borderSide: BorderSide(
+                color: AppSurfaces.frameGold(Brightness.dark),
+                width: 1.5,
+              ),
+            ),
+          ),
           items: [
             for (final e in _slammers)
               DropdownMenuItem(value: e.designId, child: Text(e.displayName)),
@@ -133,6 +171,7 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
         ),
         AppSpacing.gapLg,
         FilledButton(
+          style: context.appButtons.primary.filled,
           onPressed: _slammerId != null
               ? () {
                   AppModal.dismiss(

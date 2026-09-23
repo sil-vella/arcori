@@ -9,6 +9,7 @@ from sqlalchemy.exc import IntegrityError
 
 from core.errors.app_error import AppError
 from core.state.session_scope import session_scope
+from core.ui.app_ui_loader import get_screen_ui
 from core.utils.dev_logger import customlog
 from models.avari_profile import AvariProfile
 from models.legacy_preserve import (
@@ -24,6 +25,7 @@ from modules.avari.avari_service import (
     generation_number_for_design_id,
     mint_reach_or_series_default,
 )
+from modules.catalog.catalog_ids import design_id_aliases, generation_number_from_id
 from modules.catalog.catalog_service import get_design
 from modules.legacy import legacy_repository as repo
 from modules.legacy.legacy_errors import (
@@ -281,6 +283,8 @@ def preserve_start(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
     selected_set = set(items)
     decline_items = [x for x in decline_items if x not in selected_set]
 
+    payload: dict[str, Any] = {}
+    pending_news: list[dict[str, Any]] = []
     with session_scope() as session:
         payload_items: list[dict[str, Any]] = []
         lives: list[Any] = []
@@ -408,7 +412,15 @@ def preserve_start(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
                 f"declined={len(declined_out)} intent={intent_id} "
                 f"serials={[d for d, _ in items]}"
             )
-        return payload
+        # session commits on exit; emit news after
+        pending_news = list(minted)
+
+    from modules.notifications.world_news_notifications import (
+        emit_world_news_for_closure_results,
+    )
+
+    emit_world_news_for_closure_results(pending_news)
+    return payload
 
 
 def _enter_leader_window(session: Any, row: Any, seed_leader_user_id: str) -> None:
@@ -506,9 +518,11 @@ def fulfill_from_website(body: dict[str, Any] | None) -> dict[str, Any]:
     user_id = str(body.get("userId") or body.get("user_id") or "").strip()
     if not order_id or not intent_id or not user_id:
         raise AppError(
-            INVALID_FULFILL, message="orderId, intentId, userId required"
+            INVALID_FULFILL, message="orderId, intentId, and userId are required"
         )
 
+    payload: dict[str, Any] = {}
+    pending_news: list[dict[str, Any]] = []
     try:
         with session_scope() as session:
             existing = repo.get_fulfill(session, order_id)
@@ -597,7 +611,7 @@ def fulfill_from_website(body: dict[str, Any] | None) -> dict[str, Any]:
                     f"user={user_id} n={len(items)} "
                     f"designs={[d for d, _ in items]}"
                 )
-            return payload
+            pending_news = list(minted)
     except IntegrityError:
         with session_scope() as session:
             raced = repo.get_fulfill(session, order_id)
@@ -607,6 +621,14 @@ def fulfill_from_website(body: dict[str, Any] | None) -> dict[str, Any]:
                 cached["reason"] = "already_applied"
                 return cached
         raise
+
+    if pending_news:
+        from modules.notifications.world_news_notifications import (
+            emit_world_news_for_closure_results,
+        )
+
+        emit_world_news_for_closure_results(pending_news)
+    return payload
 
 
 def _items_from_intent(intent: Any) -> list[tuple[str, int]]:
@@ -704,6 +726,9 @@ def _apply_preserve_mint(
         "legacyState": LEGACY_PRESERVED,
         "titlesGranted": [TITLE_LEGACY_OWNER, TITLE_GENERATION_CREATOR],
         "creatorAttributed": True,
+        "actorDisplayName": actor_name,
+        "arcoriDisplayName": arcori_name,
+        "preservedUserId": user_id,
         "mint": {
             "designId": design_id,
             "serial": design_id,
@@ -777,6 +802,7 @@ def _apply_lost_close(
         "echoDesignId": echo["echoDesignId"],
         "legacyState": LEGACY_LOST,
         "creatorAttributed": False,
+        "arcoriDisplayName": arcori_name,
         "mint": None,
     }
 
@@ -1298,6 +1324,7 @@ def list_museum(
     *,
     outcome: str = "all",
     q: str | None = None,
+    series: str | None = None,
     limit: int = 30,
     cursor: str | None = None,
 ) -> dict[str, Any]:
@@ -1308,6 +1335,7 @@ def list_museum(
     legacy_state = None if outcome_raw == "all" else outcome_raw
     lim = max(1, min(100, int(limit)))
     needle = (q or "").strip()
+    series_token = _museum_series_id_token(series)
     cursor_closed_at, cursor_id = _decode_museum_cursor(cursor)
 
     # When searching by display name, over-fetch then filter in memory.
@@ -1317,7 +1345,7 @@ def list_museum(
         rows = repo.list_museum_generations(
             session,
             legacy_state=legacy_state,
-            design_id_contains=None,
+            design_id_contains=series_token,
             limit=fetch_limit,
             cursor_closed_at=cursor_closed_at,
             cursor_id=cursor_id,
@@ -1347,10 +1375,66 @@ def list_museum(
 
         if LOGGING_SWITCH:
             customlog(
-                f"legacy: list_museum outcome={outcome_raw} q={needle!r} "
-                f"count={len(items)} next={bool(next_cursor)}"
+                f"legacy: list_museum outcome={outcome_raw} series={series!r} "
+                f"q={needle!r} count={len(items)} next={bool(next_cursor)}"
             )
         return {"items": items, "nextCursor": next_cursor}
+
+
+_MUSEUM_SERIES_ID_TOKENS: dict[str, str] = {
+    "creation": "SER000",
+    "genesis": "SER001",
+    "pioneers": "SER002",
+    "foundations": "SER003",
+    "civilizations": "SER004",
+    "kin": "SER005",
+}
+
+_MUSEUM_SERIES_LABELS: dict[str, str] = {
+    "creation": "Creation",
+    "genesis": "Genesis",
+    "pioneers": "Pioneers",
+    "foundations": "Foundations",
+    "civilizations": "Civilizations",
+    "kin": "Kin",
+}
+
+
+def _museum_series_id_token(series: str | None) -> str | None:
+    raw = (series or "").strip().lower().replace(" ", "_")
+    if not raw:
+        return None
+    if raw.endswith("_series"):
+        raw = raw[: -len("_series")]
+    return _MUSEUM_SERIES_ID_TOKENS.get(raw)
+
+
+def list_museum_series(*, outcome: str = "preserved") -> dict[str, Any]:
+    """Series that have at least one closed museum generation for the outcome."""
+    outcome_raw = (outcome or "preserved").strip().lower()
+    if outcome_raw not in ("all", "preserved", "lost"):
+        raise AppError(INVALID_QUERY, message="outcome must be all|preserved|lost")
+    legacy_state = None if outcome_raw == "all" else outcome_raw
+
+    series: list[dict[str, str]] = []
+    with session_scope() as session:
+        for key, token in _MUSEUM_SERIES_ID_TOKENS.items():
+            if repo.museum_has_series_token(
+                session, series_token=token, legacy_state=legacy_state
+            ):
+                series.append(
+                    {
+                        "key": key,
+                        "label": _MUSEUM_SERIES_LABELS.get(key, key.title()),
+                    }
+                )
+
+    if LOGGING_SWITCH:
+        customlog(
+            f"legacy: list_museum_series outcome={outcome_raw} "
+            f"count={len(series)} keys={[s['key'] for s in series]}"
+        )
+    return {"series": series}
 
 
 def get_museum_item(*, design_id: str, generation_number: int) -> dict[str, Any]:
@@ -1377,4 +1461,108 @@ def get_museum_item(*, design_id: str, generation_number: int) -> dict[str, Any]
                 f"state={item.get('legacyState')}"
             )
         return item
+
+
+def get_museum_banner() -> dict[str, Any]:
+    """Featured Museum candidates from core ``app_ui.json`` (mtime hot-reload).
+
+    Returns ``{"items": [<museum item>, ...]}``. Client picks one at random.
+    Each configured serial prefers a ``museum_generations`` row (id aliases);
+    otherwise catalog-only featured payload. Unresolvable serials are skipped.
+    """
+    cfg = get_screen_ui("museum")
+    entries = cfg.get("featuredSerials")
+    if not isinstance(entries, list) or not entries:
+        if LOGGING_SWITCH:
+            customlog("legacy: get_museum_banner empty featuredSerials")
+        return {"items": []}
+
+    items: list[dict[str, Any]] = []
+    with session_scope() as session:
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            serial = str(entry.get("serial") or "").strip()
+            if not serial:
+                continue
+            gen = entry.get("generationNumber")
+            candidates = design_id_aliases(serial) or [serial]
+            row = None
+            for did in candidates:
+                if gen is not None:
+                    row = repo.get_museum_generation(
+                        session, design_id=did, generation_number=int(gen)
+                    )
+                else:
+                    row = repo.get_latest_museum_generation_for_design(
+                        session, design_id=did
+                    )
+                if row is not None:
+                    break
+            if row is not None:
+                items.append(_serialize_museum_item(session, row))
+                continue
+            catalog_item = _catalog_featured_item(
+                serial=serial,
+                generation_number=None if gen is None else int(gen),
+            )
+            if catalog_item is not None:
+                items.append(catalog_item)
+
+    if LOGGING_SWITCH:
+        customlog(
+            f"legacy: get_museum_banner configured={len(entries)} "
+            f"resolved={len(items)}"
+        )
+    return {"items": items}
+
+
+def _catalog_featured_item(
+    *,
+    serial: str,
+    generation_number: int | None,
+) -> dict[str, Any] | None:
+    try:
+        design = get_design(serial)
+    except AppError:
+        return None
+    if not isinstance(design, dict):
+        return None
+    design_id = str(
+        design.get("internalId") or design.get("designId") or serial
+    ).strip() or serial
+    display_name = str(
+        design.get("design") or design.get("displayName") or ""
+    ).strip() or design_id
+    if generation_number is not None:
+        gen = int(generation_number)
+    else:
+        gen_block = design.get("generation")
+        if isinstance(gen_block, dict) and gen_block.get("number") is not None:
+            try:
+                gen = int(gen_block["number"])
+            except (TypeError, ValueError):
+                gen = generation_number_from_id(design_id, default=1)
+        else:
+            gen = generation_number_from_id(design_id, default=1)
+    return {
+        "designId": design_id,
+        "displayName": display_name,
+        "generationNumber": gen,
+        "legacyState": "",
+        "closedAt": None,
+        "actorUserId": None,
+        "actorDisplayName": None,
+        "actorRole": None,
+        "historySummary": "",
+        "imageUrl": design.get("imageUrl")
+        if isinstance(design.get("imageUrl"), str)
+        else None,
+        "color": design.get("color") if isinstance(design.get("color"), str) else None,
+        "seriesKey": design.get("seriesKey")
+        if isinstance(design.get("seriesKey"), str)
+        else None,
+        "theme": design.get("theme") if isinstance(design.get("theme"), str) else None,
+        "id": None,
+    }
 

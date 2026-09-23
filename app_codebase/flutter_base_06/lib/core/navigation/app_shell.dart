@@ -8,7 +8,10 @@ import '../app_bar/contracts/register_app_bar_contract.dart';
 import '../bottom_nav/bottom_nav_controller.dart';
 import '../bottom_nav/bottom_nav_scope.dart';
 import '../bottom_nav/shell_bottom_bar.dart';
+import '../screen/shell_chrome_controller.dart';
+import '../screen/shell_chrome_scope.dart';
 import '../theme/theme.dart';
+import '../widgets/app_chrome.dart';
 import 'app_drawer_registry.dart';
 import 'app_navigation.dart';
 import 'contracts/register_drawer_contract.dart';
@@ -78,98 +81,176 @@ class _AppShellState extends State<AppShell> {
     final showDrawer =
         header != null || destinations.isNotEmpty || bottomItems.isNotEmpty;
 
-    return BottomNavScope(
-      controller: bottomNavController,
-      child: AppBarScope(
-        controller: appBarController,
-        child: PopScope(
-          canPop: !Nav.canPop(context),
-          onPopInvokedWithResult: (didPop, result) {
-            if (!didPop && Nav.canPop(context)) {
-              Nav.pop(context);
-            }
-          },
-          child: Scaffold(
-            key: _scaffoldKey,
-            appBar: ShellAppBar(
-              controller: appBarController,
-              shellNavControls: ShellNavControls(
-                showBack: Nav.canPop(context),
-                onBack: () => Nav.pop(context),
-                onMenu: () => _scaffoldKey.currentState?.openDrawer(),
-                menuTooltip:
-                    MaterialLocalizations.of(context).openAppDrawerTooltip,
-              ),
-            ),
-            drawer: showDrawer
-                ? Drawer(
-                    child: SafeArea(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (header != null) header.builder(context),
-                          if (header != null &&
-                              (destinations.isNotEmpty ||
-                                  bottomItems.isNotEmpty))
-                            const Divider(indent: 28, endIndent: 28),
-                          Expanded(
-                            child: ListView(
-                              padding: EdgeInsets.zero,
-                              children: [
-                                for (var i = 0; i < destinations.length; i++)
-                                  ListTile(
-                                    leading: Icon(
-                                      selectedIndex == i
-                                          ? destinations[i].selectedIcon
-                                          : destinations[i].icon,
-                                    ),
-                                    title: Text(destinations[i].label),
-                                    selected: selectedIndex == i,
-                                    onTap: () => Nav.pushFromDrawer(
-                                      context,
-                                      destinations[i].path,
-                                      scaffold: _scaffoldKey.currentState,
-                                    ),
+    return ShellChromeScope(
+      controller: shellChromeController,
+      child: BottomNavScope(
+        controller: bottomNavController,
+        child: AppBarScope(
+          controller: appBarController,
+          child: PopScope(
+            canPop: !Nav.canPop(context),
+            onPopInvokedWithResult: (didPop, result) {
+              if (!didPop && Nav.canPop(context)) {
+                Nav.pop(context);
+              }
+            },
+            child: ListenableBuilder(
+              listenable: shellChromeController,
+              builder: (context, _) {
+                return Scaffold(
+                  key: _scaffoldKey,
+                  extendBodyBehindAppBar:
+                      shellChromeController.extendBodyBehindAppBar,
+                  appBar: ShellAppBar(
+                    controller: appBarController,
+                    shellNavControls: ShellNavControls(
+                      showBack: Nav.canPop(context),
+                      onBack: () => Nav.pop(context),
+                      onMenu: () => _scaffoldKey.currentState?.openDrawer(),
+                      menuTooltip: MaterialLocalizations.of(context)
+                          .openAppDrawerTooltip,
+                    ),
+                  ),
+                  drawer: showDrawer
+                      ? Drawer(
+                          backgroundColor: AppChrome.canvasBase,
+                          surfaceTintColor: Colors.transparent,
+                          child: Theme(
+                            data: AppTheme.dark,
+                            child: DefaultTextStyle.merge(
+                              style: TextStyle(color: AppChrome.onSurface),
+                              child: IconTheme.merge(
+                                data: IconThemeData(
+                                  color: AppChrome.onSurfaceMuted,
+                                ),
+                                child: SafeArea(
+                                  child: Builder(
+                                    builder: (drawerContext) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          if (header != null)
+                                            header.builder(drawerContext),
+                                          if (header != null &&
+                                              (destinations.isNotEmpty ||
+                                                  bottomItems.isNotEmpty))
+                                            Divider(
+                                              indent: AppSpacing.lg,
+                                              endIndent: AppSpacing.lg,
+                                              color: AppChrome.panelBorder,
+                                            ),
+                                          Expanded(
+                                            child: ListView(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: AppSpacing.sm,
+                                                vertical: AppSpacing.xs,
+                                              ),
+                                              children: [
+                                                for (var i = 0;
+                                                    i < destinations.length;
+                                                    i++)
+                                                  ListTile(
+                                                    leading: Icon(
+                                                      selectedIndex == i
+                                                          ? destinations[i]
+                                                              .selectedIcon
+                                                          : destinations[i]
+                                                              .icon,
+                                                      color: selectedIndex == i
+                                                          ? AppChrome
+                                                              .accentGold
+                                                          : AppChrome
+                                                              .onSurfaceMuted,
+                                                    ),
+                                                    title: Text(
+                                                      destinations[i].label,
+                                                      style: drawerContext
+                                                          .appTypography.menu
+                                                          .copyWith(
+                                                        color: selectedIndex ==
+                                                                i
+                                                            ? AppChrome
+                                                                .onSurface
+                                                            : AppChrome
+                                                                .onSurfaceMuted,
+                                                      ),
+                                                    ),
+                                                    selected:
+                                                        selectedIndex == i,
+                                                    selectedTileColor: AppChrome
+                                                        .accentGold
+                                                        .withValues(
+                                                            alpha: 0.12),
+                                                    onTap: () =>
+                                                        Nav.pushFromDrawer(
+                                                      drawerContext,
+                                                      destinations[i].path,
+                                                      scaffold: _scaffoldKey
+                                                          .currentState,
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                          ),
+                                          if (bottomItems.isNotEmpty) ...[
+                                            Divider(
+                                              indent: AppSpacing.lg,
+                                              endIndent: AppSpacing.lg,
+                                              color: AppChrome.panelBorder,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                AppSpacing.sm,
+                                                AppSpacing.xs,
+                                                AppSpacing.sm,
+                                                AppSpacing.sm,
+                                              ),
+                                              child: Wrap(
+                                                spacing: AppSpacing.xs,
+                                                runSpacing: AppSpacing.xs,
+                                                alignment:
+                                                    WrapAlignment.start,
+                                                children: [
+                                                  for (final item
+                                                      in bottomItems)
+                                                    IconButton(
+                                                      icon: Icon(
+                                                        item.icon,
+                                                        color: AppChrome
+                                                            .onSurfaceMuted,
+                                                      ),
+                                                      tooltip: item.tooltip,
+                                                      onPressed: () =>
+                                                          Nav.pushFromDrawer(
+                                                        drawerContext,
+                                                        item.path,
+                                                        scaffold: _scaffoldKey
+                                                            .currentState,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ],
+                                      );
+                                    },
                                   ),
-                              ],
+                                ),
+                              ),
                             ),
                           ),
-                          if (bottomItems.isNotEmpty) ...[
-                            const Divider(indent: 28, endIndent: 28),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                AppSpacing.sm,
-                                AppSpacing.xs,
-                                AppSpacing.sm,
-                                AppSpacing.sm,
-                              ),
-                              child: Wrap(
-                                spacing: AppSpacing.xs,
-                                runSpacing: AppSpacing.xs,
-                                alignment: WrapAlignment.start,
-                                children: [
-                                  for (final item in bottomItems)
-                                    IconButton(
-                                      icon: Icon(item.icon),
-                                      tooltip: item.tooltip,
-                                      onPressed: () => Nav.pushFromDrawer(
-                                        context,
-                                        item.path,
-                                        scaffold: _scaffoldKey.currentState,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  )
-                : null,
-            bottomNavigationBar:
-                ShellBottomBar(controller: bottomNavController),
-            body: widget.child,
+                        )
+                      : null,
+                  bottomNavigationBar:
+                      ShellBottomBar(controller: bottomNavController),
+                  body: widget.child,
+                );
+              },
+            ),
           ),
         ),
       ),

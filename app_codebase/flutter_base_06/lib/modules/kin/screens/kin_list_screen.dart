@@ -6,6 +6,7 @@ import '../../../core/navigation/app_navigation.dart';
 import '../../../core/navigation/app_paths.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 import '../kin_models.dart';
 import '../kin_notifier.dart';
 
@@ -42,30 +43,41 @@ class _KinListScreenState extends ConsumerState<KinListScreen> {
           icon: Icons.face_retouching_natural_outlined,
         ),
       ],
-      child: state.isLoading && catalog == null
-          ? const Center(child: CircularProgressIndicator())
-          : widget.typeSerial.isEmpty
-              ? Center(
-                  child: Text(
-                    'Missing Kin type',
-                    style: context.appTypography.body,
-                  ),
-                )
-              : kins.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No Kins in this type yet',
-                        style: context.appTypography.body,
+      child: AppChromePage(
+        child: state.isLoading && catalog == null
+            ? const AppChromeCentered(child: CircularProgressIndicator())
+            : widget.typeSerial.isEmpty
+                ? AppChromeCentered(
+                    child: Text(
+                      'Missing Kin type',
+                      style: context.appTypography.body.copyWith(
+                        color: AppChrome.onSurfaceMuted,
                       ),
-                    )
-                  : ListView.separated(
-                      padding: AppSpacing.screenPadding,
-                      itemCount: kins.length,
-                      separatorBuilder: (_, __) => AppSpacing.gapSm,
-                      itemBuilder: (context, index) {
-                        return _KinTile(kin: kins[index]);
-                      },
                     ),
+                  )
+                : kins.isEmpty
+                    ? AppChromeCentered(
+                        child: Text(
+                          'No Kins in this type yet',
+                          style: context.appTypography.body.copyWith(
+                            color: AppChrome.onSurfaceMuted,
+                          ),
+                        ),
+                      )
+                    : ListView.separated(
+                        padding: EdgeInsets.fromLTRB(
+                          AppSpacing.md,
+                          AppChromePage.topClearance(context) + AppSpacing.sm,
+                          AppSpacing.md,
+                          AppSpacing.xxl,
+                        ),
+                        itemCount: kins.length,
+                        separatorBuilder: (_, __) => AppSpacing.gapSm,
+                        itemBuilder: (context, index) {
+                          return _KinTile(kin: kins[index]);
+                        },
+                      ),
+      ),
     );
   }
 }
@@ -77,12 +89,12 @@ class _KinTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = context.appColorScheme;
+    final radius = BorderRadius.circular(AppSurfaces.exhibitRadius);
     return Material(
-      color: scheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(AppSpacing.sm),
+      color: AppChrome.panelFill,
+      borderRadius: radius,
       child: InkWell(
-        borderRadius: BorderRadius.circular(AppSpacing.sm),
+        borderRadius: radius,
         onTap: () {
           Nav.push(
             context,
@@ -92,20 +104,31 @@ class _KinTile extends StatelessWidget {
             ).toString(),
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(kin.displayName, style: context.appTypography.title),
-              AppSpacing.gapXxs,
-              Text(
-                '${kin.serial} · ${kin.parts.length} parts',
-                style: context.appTypography.caption.copyWith(
-                  color: scheme.onSurfaceVariant,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            border: Border.all(color: AppChrome.panelBorder),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  kin.displayName,
+                  style: context.appTypography.title.copyWith(
+                    color: AppChrome.onSurface,
+                  ),
                 ),
-              ),
-            ],
+                AppSpacing.gapXxs,
+                Text(
+                  '${kin.serial} · ${kin.parts.length} parts',
+                  style: context.appTypography.caption.copyWith(
+                    color: AppChrome.onSurfaceMuted,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

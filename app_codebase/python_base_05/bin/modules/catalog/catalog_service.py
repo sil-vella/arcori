@@ -9,7 +9,13 @@ from core.errors.app_error import AppError
 from modules.catalog import catalog_loader as loader
 from modules.catalog.catalog_ids import art_basename
 from modules.catalog.catalog_errors import INVALID_QUERY, LOAD_FAILED, NOT_FOUND
-from modules.catalog.current_series import current_series_key, media_folder_for_series
+from modules.catalog.current_series import (
+    current_series_key,
+    kin_series_key,
+    list_series_catalog,
+    media_folder_for_series,
+    series_filter_matches,
+)
 from modules.catalog.velora_media import enrich_regions_meta
 
 _CLIENT_OMIT_KEYS = frozenset({"artworkPrompt"})
@@ -131,6 +137,11 @@ def get_meta() -> dict[str, Any]:
     )
 
 
+def get_series() -> dict[str, Any]:
+    """Velora home — ordered series catalog (Creation … Civilizations)."""
+    return {"series": list_series_catalog()}
+
+
 def get_index(
     *,
     series: str | None = None,
@@ -163,6 +174,14 @@ def get_index(
         )
         for row in rows:
             design = dict(row.design_json or {})
+            # Kin templates / theme stubs are claim bases only — never Velora stock.
+            if _is_kin_template_design(
+                design,
+                theme=row.theme,
+                theme_code=row.theme_code,
+                internal_id=row.internal_id,
+            ):
+                continue
             items.append(
                 design_summary(
                     design,
@@ -208,8 +227,27 @@ def _theme_lore(theme_code: str) -> str | None:
     return None
 
 
+def _is_kin_template_design(
+    design: dict[str, Any] | None,
+    *,
+    theme: str | None = None,
+    theme_code: str | None = None,
+    internal_id: str | None = None,
+) -> bool:
+    """Exclude Kin claim templates / static Kin theme rows from Velora index.
+
+    Player-created Kin is listed only via ``_player_kin_index_items`` (design files),
+    never from ``catalog_designs`` template or sample rows.
+    """
+    doc = design if isinstance(design, dict) else {}
+    code = str(theme_code or doc.get("themeCode") or "").strip().upper()
+    theme_l = str(theme or doc.get("theme") or "").strip().lower()
+    iid = str(internal_id or doc.get("internalId") or "").strip().upper()
+    return code == "KIN" or theme_l == "kin" or iid.startswith("KIN-")
+
+
 def _should_include_player_kins(theme_filter: str | None) -> bool:
-    # No theme filter → include alongside other circulating designs.
+    # No theme filter → include player Kin files (under Kin series filter).
     # Explicit Kin / KIN theme → player Kin files only for that theme.
     if theme_filter is None:
         return True
@@ -225,8 +263,15 @@ def _player_kin_index_items(
 ) -> list[dict[str, Any]]:
     from modules.catalog.kin_design_store import list_design_files
 
+    kin_key = kin_series_key()
     items: list[dict[str, Any]] = []
     for design in list_design_files():
+        if not isinstance(design, dict):
+            continue
+        iid = str(design.get("internalId") or "").strip().upper()
+        # Skip claim templates if they ever land in the designs folder.
+        if iid.startswith("KIN-") and "-GEN" not in iid:
+            continue
         if circulating:
             world = str(design.get("worldState", "")).strip().lower()
             if world != "active":
@@ -237,8 +282,8 @@ def _player_kin_index_items(
             if theme_filter not in (d_theme, d_code):
                 continue
         if series_filter:
-            d_series = str(design.get("series") or "").lower()
-            if series_filter not in (d_series, "genesis") and "genesis" not in d_series:
+            d_series = str(design.get("series") or design.get("seriesKey") or kin_key)
+            if not series_filter_matches(d_series, series_filter):
                 continue
         if subtheme_filter:
             d_sub = str(design.get("subtheme", "")).lower()
@@ -247,7 +292,7 @@ def _player_kin_index_items(
         items.append(
             design_summary(
                 design,
-                series_key=current_series_key(),
+                series_key=kin_key,
                 theme=str(design.get("theme") or "Kin"),
             )
         )
@@ -376,7 +421,7 @@ def get_design(internal_id: str) -> dict[str, Any]:
     if player_design is None:
         raise AppError(NOT_FOUND, message=f"Design not found: {design_id}")
     out = strip_for_client(player_design)
-    series_key = current_series_key()
+    series_key = kin_series_key()
     theme_name = str(player_design.get("theme") or "Kin")
     out["seriesKey"] = series_key
     out["catalogVersion"] = 1

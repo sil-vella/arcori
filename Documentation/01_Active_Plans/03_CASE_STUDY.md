@@ -82,7 +82,8 @@ These names are product decisions, not cosmetic labels. They drove schemas, scre
 | **Master** | Competitive title | Earned via mastery / standing |
 | **Legacy Owner** | Preservation title | Earned when a mint enters Trove |
 | **Generation Creator** | Historical title | Named on a preserved generation |
-| **Mastery** | Progress on a circulating design (not ownership) | Own played: 0→−1 / 1→0 / 2→+2; other flipped: 0→0 / 1→+1 / 2→+2 |
+| **Mastery** | Progress on a circulating design (not ownership) | Own curve (played seat flips, or any table design you already master): 0→−1 / 1→0 / 2→+2; other (no prior mastery): 0→0 / 1→+1 / 2→+2. Score → slam actor |
+
 | **Mastery Value** | Density label + number from weighted mastery vs circulating catalog size | `Value=Σ pts×(10/w)`; `density=Value/N`; Fair→…→Priceless; profile `masteryValue` + label |
 | **Trove** | Personal vault of **minted closed** Arcori only | Sink destination; empty until closures |
 | **Museum** | World factual history of closed gens | Not live stats; not personal Trove |
@@ -118,7 +119,7 @@ Practice, Quick Start, Special Event, and Invite all eventually share the **same
 
 ### 4.4 Lean seats, not Player class stubs in hot state
 
-In-match seats carry `userId`, `seatIndex`, `kind`, `score`, `connected`, `arcoriIds[]`, `slammerId`. Rank, titles, and economy stay pre/post. IDs are only `userId` ↔ `connectionId` (core WS) — no third player id.
+In-match seats carry `userId`, `seatIndex`, `kind`, `score`, `connected`, `arcoriIds[]`, `slammerId`, and optional slammer face fields (`imageUrl` / `lottieUrl` / `color`) stamped from catalog freeze. Rank, titles, and economy stay pre/post. IDs are only `userId` ↔ `connectionId` (core WS) — no third player id.
 
 ### 4.5 Full wire snapshots
 
@@ -126,7 +127,7 @@ Intents are small; broadcasts replace the whole `MatchSnapshot` with a `version`
 
 ### 4.6 Optimistic presentation, authoritative rules
 
-Flutter may start slam animations immediately (predictive impulse cleared when authority `outcome.sim` arrives; all clients replay the pose timeline). Acting player sees a non-blocking 3s result modal; turn clock continues. Scores, flips, round advance, and rewards come only from the match authority (Dart online / Flutter practice mirror of the same **3D thin-cylinder** resolver).
+Flutter plays a face-up equipped-slammer fly-in, then the slammer tumbles with the Arcori scatter (may land face up or down). After settle, Arcori animate back into the stack and the slammer returns to the acting player — no hard cut. Local commits delay predictive impulse until strike completes. Acting player sees a non-blocking 3s result modal; turn clock continues. Scores, flips, round advance, and rewards come only from the match authority (Dart online / Flutter practice mirror of the same **3D thin-cylinder** resolver). `animHoldMs` includes strike + sim + settle + pad.
 
 ---
 
@@ -170,13 +171,15 @@ Before coding match screens, we wrote down who the player is in the world, what 
 |------|--------|
 | [first-time-player-flow.md](first-time-player-flow.md) | Splash → Kin/Genesis → starter **access** → guided practice → intros → Home |
 | [returning-player-startup-flow.md](returning-player-startup-flow.md) | Auto login → sync → overnight → notification queue → Home |
-| [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Home composition; sink **Trove • PLAY • Market**; Play Hub modes |
+| [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Home widgets (Mastery Value, Daily Missions, featured events, World News, mastery ticker); sink deferred |
 | [core-match-loop.md](core-match-loop.md) | Play → matchmaking → match → celebration → Match Summary → exits |
 
 **Technical notes:**  
 Starter grant is **10 circulating design access + permanent starter slammer**, not Trove mints. Guided practice is AI-only with no economy. Match Summary must eventually show mastery (Mastery Value, not Rank/XP), Gold Fragments, missions, cache, and possible mint → Trove.
 
-**Status:** Specs remain active; Home sink and onboarding UI are still future work. Play exists as drawer `/play` ahead of the full Home hub.
+**Status:** Home v1 widgets + World News (`category=news` on the notification system) shipped 2026-09-20. Bottom sink and full returning-player startup queue remain future work. Play exists as `/play`.
+
+**Decision — World News storage:** Reuse `global_notifications` / `user_notifications` with `category=news` (no separate news table). Admin via JSON seed + `POST /service/notifications/global-upsert`; auto emit on gen close / Legacy Owner.
 
 ---
 
@@ -511,7 +514,7 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 2. **P1** Real winners, standings-from-mastery, My Mastery REST, mint→Trove, finalize idempotency — [core-match-loop.md](core-match-loop.md) (Rank/XP cancelled → Mastery Value)
 3. **P2** Play Again, summary exits (Home/Velora/Trove), durable series, tournament history, `match_flags`, Special Event fees — [core-match-loop.md](core-match-loop.md)
 4. Docs lag: case study / player-profile-schema stub-finalize wording
-5. Home sink Trove • PLAY • Market; remaining first-time / returning flows
+5. Home sink Trove • PLAY • Market (**done** via `hub_sink`); remaining first-time / returning flows
 6. Special Event arena rules (not the Quick Start / Invite region pick)
 
 ---
@@ -534,6 +537,7 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Civilizations series | Civic institutions after Foundations, before Genesis mint pace | Legacy 300 / 600; 20 themes, 94 designs (`SER004`); art `004_civilizations/{theme}/`. Region is a Velora land, never the world name. Near-dup item art is dropped, not catalogued. |
 | Legacy preserve via external website checkout | Physical mint is store-safe; in-app never collects cards; digital mint stays server-authoritative | App `preserve/start` → system browser → website pays → `POST /service/legacy/fulfill` (idempotent `orderId`) → deep link `legacy-preserve-complete` → `preserve/complete` reads ledger only. Contract: [arcori-website-legacy-checkout.md](../00_System_Wide/arcori-website-legacy-checkout.md) |
 | Museum browse reads `museum_generations`; profile “Museum” was personal Trove mislabel | World archive ≠ personal vault; players must not confuse closed world history with their own mints | `GET /authuser/museum` (+ `/item`) over existing table; `meta_json.historySummary` at close; Flutter `/museum`; profile section renamed **Trove**. Plan: [museum-browse.md](museum-browse.md) |
+| Hub sink Trove • PLAY • Market | GDD bottom destinations use platform bottom-nav action bar, not a new tab shell | Shared `hub_sink` scope + `ModuleScreenRegistrar` on Home/Trove/Play/Market; `/trove` = Legacy mints (+ closed gens / preservation); circulating Arcori stays on Avari profile; `/market` stub. Plan: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) |
 | Leader-window proximity alerts | Race urgency without spam; one alert per gap position | During `leader_window`, when challenger closes gap: notify leader (`pressure_v1`) + challenger (`chase_v1`) for each gap **5→1** crossed this match; `msg_id` includes gap; Play now → `play` |
 | Active-window play as Special Event | “Play now” proximity needs a hard loadout; AI usually lack window mastery | Shipped: `evt_active_window_v1` / `active_windows` — humans pick from open windows; AI fill from live global open-window roster ([active-window-arcori-play-selection.md](active-window-arcori-play-selection.md)) |
 | Creation series | Primordial Light / Dark pair before Genesis numbering | `SER000`; art `000_creation/`; The Light→ASH, The Dark→AMB; `selectionWeight` **0.01**; not in starter pool |
@@ -542,7 +546,7 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Match Arcori pick after seats | Players do not choose loadout online; hostility pairs more often | Pool = that seat’s circulating `player_design_access` (DB), designs resolved via `get_design` (static + player Kin). Weighted pick (`04_selection_weights.json`) else random in-pool; never global catalog. **Unique ids across seats** (exclude already chosen). Trove = ownership only, not match stock. Access requires mastery > 0 (own Kin floored at 100). |
 | Mastery-gated access pool | Collection grows by flipping others; dead progress leaves the pool | Finalize: other +mastery grants `source=mastery` access; 0 mastery revokes (except creator Kin floor 100). Starters seed mastery 1 if still 0. |
 | Match arena from seated regions | The table should feel like the lands that showed up | FastAPI `select_arena` after Arcori ids; 2+ same region → that land’s arenas; else random catalog region. Dart stamps `arenaId`+`arenaImageUrl` only for `quickStart`/`invite`. Special Event later. |
-| Match Gatherer Arcori | Extra non-player echo from the match land; not a seat / not a “host” | Same `select_arena` response: circulating catalog in chosen region (any series), exclude SLM/KIN/slammer + seated ids; weight design `selectionWeight`. Snapshot `gathererArcoriId` + catalog freeze. Practice/SE: none. Rematch re-picks. |
+| Match Gatherer Arcori | Extra non-player echo from the match land; not a seat / not a “host” | Same `select_arena` response: circulating catalog in chosen region (any series), exclude SLM/KIN/slammer + seated ids; weight design `selectionWeight`. Snapshot `gathererArcoriId` + catalog freeze + seatless `table.pieces` entry (`p_gatherer`, no `seatIndex`). **Quick Start / Invite only** — Special Event may call `select_arena` for arena/background but never stamps Gatherer. Practice: none. Rematch re-picks (QS/Invite). |
 | Arena mural locked to stack POV | Pulling the camera back for a wide scatter should pull the place back with it | One Flutter camera: mural laid out oversized (`viewport / kStackPovFitMin`), discs at rest Ø, camera scale 1→min so we never upscale a screen bitmap. Table is opaque and under the stack. HUD stays unzoomed. |
 | Online stub turn stages before end | Prove seat order / round / slam event without physics | Dart `MatchStubLoop` after `startFromLobby`: 2×N stub slams (`lastEvent` includes `slammerId`); Flutter waits for `ended` |
 | Forge2D slam physics (Dart SSOT) | Discs can hit each other mid-air and change path; flip feels physical | Superseded by 3D thin-cylinder sim (kept as history) |
@@ -554,6 +558,8 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Echo gens change color only | New generation must feel distinct without new art | On Legacy close, echo picks a random **approved** accent (`ALLOWED_ARCORI_COLORS` ≡ `kArcoriAccentHexes`), preferring ≠ closed gen; webp/Lottie paths strip GEN |
 | Echo mastery soft reset | Race reopens without erasing lineage loyalty | Closed `player_mastery` stays; echo seeded at **30%** (min 1, cap preserve−1); `player_closed_generations` snapshots mastery-at-closure **and** `echoMasterySeeded` for profile **Closed Generations** |
 | Arcori Packs (Gold) | Expand circulating access without inventing fixed SKUs | Buy with **Gold Arcori**; backend rolls N circulating designs from pack config bands; each grant **+5 mastery** + access (`source=pack`); not Trove. Plan: [arcori-packs.md](arcori-packs.md) |
+| Slammer preferred slam conditions | Flip odds should reward matching a slammer’s sweet spot, not only raw power | Catalog `hitTarget` + `powerBracket` `{min,max}` band; `preferenceFit` scales `effectivePower`. Precision/control still jitter aim; impact/spread still shape power/scatter. Recovery unused. Plan: [arcori-slam-impact.md](arcori-slam-impact.md) |
+| Market Rim + charge spend | Sell charged slammers; −1 charge per slam anytime used | Rim: buy **4 Gold Arcori** → 20 charges; top-up **4 Gold Arcori** → +100. Market Slammers section; Dart/practice spend. Plan: [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md) |
 | Kin as layered Lottie, not a baked PNG | Players customize a living Genesis (colors, parts, motion) without redrawing the character | Transparent PNG body-part layers aligned to the flattened original. **Lottie templates** on backend `/catalog-media/kin/…`. Claim writes **one design JSON + one Lottie per Kin** under `/media/kin/designs/` and `/media/kin/players/` (no shared category file — avoids claim races). Design object uses the **same keys** as regular Genesis Arcori (`animals.json`). Claimed Kin is **circulating match stock** (`worldState` Active, `selectionWeight` 3.0) and grants the creator `player_design_access` (`source=kin`). Velora Kin theme (`themeCode: KIN`) indexes those files. Plan: [kin-creation.md](kin-creation.md) |
 | Random first player | Fair who goes first; seat join order unchanged | Snapshot `firstSeatIndex`; turn order wraps `(first+offset)%n` each round |
 | Post-match holds ended snapshot until leave | Rematch needs prior seats/Arcori context; celebration can read scores without re-fetch | Flutter stays in `postMatch` with `matchSnapshot` intact; `match/leave` + clear on Done / Play New / Rematch exit. Rematch = Friend Match–style invite notify + Dart lobby with `rematch` flags; new `matchId = {seriesId}_{NNN}` (not a fresh random mint). Stub `POST /authuser/avari/match/finalize` (no writers yet). Play New → Quick Start from top |

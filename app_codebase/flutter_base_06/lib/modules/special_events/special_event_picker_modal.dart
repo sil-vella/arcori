@@ -20,10 +20,15 @@ Future<SpecialEventEntry?> showSpecialEventPickerModal({
   required BuildContext context,
   required WidgetRef ref,
 }) {
-  return AppModal.showCenteredShell<SpecialEventEntry>(
+  return AppModal.showCentered<SpecialEventEntry>(
     context,
-    title: 'Special Event',
-    child: const _SpecialEventPickerBody(),
+    builder: (ctx) => Theme(
+      data: AppTheme.dark,
+      child: const AppCenteredModal(
+        title: 'Special Event',
+        child: _SpecialEventPickerBody(),
+      ),
+    ),
   );
 }
 
@@ -84,7 +89,7 @@ class _SpecialEventPickerBodyState
   Widget build(BuildContext context) {
     if (_loading) {
       return const Padding(
-        padding: EdgeInsets.all(24),
+        padding: AppSpacing.modalPadding,
         child: Center(child: CircularProgressIndicator()),
       );
     }
@@ -96,6 +101,7 @@ class _SpecialEventPickerBodyState
           Text(_error!, style: context.appTypography.body),
           AppSpacing.gapMd,
           OutlinedButton(
+            style: context.appButtons.tertiary.outlined,
             onPressed: () => AppModal.dismiss(context),
             child: const Text('Close'),
           ),
@@ -113,6 +119,7 @@ class _SpecialEventPickerBodyState
           ],
           AppSpacing.gapMd,
           OutlinedButton(
+            style: context.appButtons.tertiary.outlined,
             onPressed: () => AppModal.dismiss(context),
             child: const Text('Cancel'),
           ),
@@ -142,32 +149,42 @@ class _EventRow extends StatelessWidget {
         : '${entry.progress.progressLabel} matches · ${entry.feeFragments} frag fee';
 
     return Material(
-      color: context.appColorScheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(12),
+      color: AppColors.surfaceDark.withValues(alpha: 0.55),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        side: BorderSide(
+          color: AppSurfaces.frameBronze(Brightness.dark).withValues(alpha: 0.55),
+        ),
+      ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadii.md),
         onTap: blocked
             ? null
             : () => AppModal.dismiss(context, entry),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: AppSpacing.modalPaddingCompact,
           child: Row(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppRadii.sm),
                 child: SizedBox(
                   width: 56,
                   height: 56,
                   child: url.isEmpty
                       ? ColoredBox(
-                          color: context.appColorScheme.surface,
-                          child: const Icon(Icons.event),
+                          color: AppColors.surfaceDark,
+                          child: Icon(
+                            Icons.event,
+                            color: AppColors.onSurfaceMutedDark,
+                          ),
                         )
                       : Image.network(
                           url,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) =>
-                              const Icon(Icons.event),
+                          errorBuilder: (_, __, ___) => Icon(
+                            Icons.event,
+                            color: AppColors.onSurfaceMutedDark,
+                          ),
                         ),
                 ),
               ),
@@ -176,18 +193,32 @@ class _EventRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(entry.name, style: context.appTypography.label),
+                    Text(
+                      entry.name,
+                      style: context.appTypography.label.copyWith(
+                        color: AppColors.onSurfaceDark,
+                      ),
+                    ),
                     AppSpacing.gapXs,
                     Text(
                       entry.description.isNotEmpty
                           ? entry.description
                           : subtitle,
-                      style: context.appTypography.bodySmall,
+                      style: context.appTypography.bodySmall.copyWith(
+                        color: AppColors.onSurfaceMutedDark,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     AppSpacing.gapXs,
-                    Text(subtitle, style: context.appTypography.bodySmall),
+                    Text(
+                      subtitle,
+                      style: context.appTypography.bodySmall.copyWith(
+                        color: blocked
+                            ? context.appColors.red
+                            : AppSurfaces.frameGold(Brightness.dark),
+                      ),
+                    ),
                   ],
                 ),
               ),

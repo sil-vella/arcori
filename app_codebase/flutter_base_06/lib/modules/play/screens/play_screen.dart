@@ -9,9 +9,11 @@ import '../../../core/errors/error_policy.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 import '../../avari/avari_api.dart';
 import '../../avari/avari_models.dart';
 import '../../avari/avari_notifier.dart';
+import '../../hub/hub_bottom_nav.dart';
 import '../../match/widgets/arcori_image_prefetch.dart';
 import '../../match/widgets/practice_match_surface.dart';
 import '../../matchmaking/widgets/matchmaking_lobby_modal.dart';
@@ -251,40 +253,72 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
       appBarItems: const [
         AppBarTitle(text: 'Play', icon: Icons.sports_esports_outlined),
       ],
-      child: Padding(
-        padding: AppSpacing.screenPadding,
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Play',
-                style: context.appTypography.h2,
-                textAlign: TextAlign.center,
-              ),
-              AppSpacing.gapSm,
-              Text(
-                flow.isIdle
-                    ? 'Press Play to choose a match type.'
-                    : flow.phase.label,
-                style: context.appTypography.body,
-                textAlign: TextAlign.center,
-              ),
-              if (flow.selectedType != null) ...[
-                AppSpacing.gapXs,
-                Text(
-                  flow.selectedType!.label,
-                  style: context.appTypography.bodySmall,
-                  textAlign: TextAlign.center,
+      bottomNavModuleId: hubSinkBottomNavModuleId,
+      bottomNavItems: hubSinkBottomNavItems(context),
+      child: AppChromePage(
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  AppChromePage.topClearance(context) + AppSpacing.md,
+                  AppSpacing.lg,
+                  AppSpacing.md,
                 ),
-              ],
-              AppSpacing.gapLg,
-              FilledButton(
-                onPressed: canPlay ? _onPlayPressed : null,
-                child: const Text('Play'),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Play',
+                        style: context.appTypography.h1.copyWith(
+                          color: AppChrome.onSurface,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      AppSpacing.gapSm,
+                      Text(
+                        flow.isIdle
+                            ? 'Press Play to choose a match type.'
+                            : flow.phase.label,
+                        style: context.appTypography.bodyMuted.copyWith(
+                          color: AppChrome.onSurfaceMuted,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      if (flow.selectedType != null) ...[
+                        AppSpacing.gapXs,
+                        Text(
+                          flow.selectedType!.label,
+                          style: context.appTypography.bodySmall.copyWith(
+                            color: AppChrome.onSurfaceMuted,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
               ),
-            ],
-          ),
+            ),
+            SafeArea(
+              top: false,
+              child: Padding(
+                padding: AppSpacing.thumbSafeBottom,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    style: context.appButtons.large(
+                      context.appButtons.primary.filled,
+                    ),
+                    onPressed: canPlay ? _onPlayPressed : null,
+                    child: const Text('Play'),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

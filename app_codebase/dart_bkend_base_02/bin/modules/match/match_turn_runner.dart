@@ -188,7 +188,7 @@ class MatchTurnRunner {
     final snap = _store.getSnapshot(matchId);
     if (snap == null || snap.phase != 'playing') return;
     if (_activeSeatIndex(snap) == seatIndex) {
-      _applySlam(
+      await _applySlam(
         matchId: matchId,
         actorUserId: actorUserId,
         input: timeoutSlamInput(),
@@ -217,7 +217,7 @@ class MatchTurnRunner {
       final snap = _store.getSnapshot(matchId);
       if (snap == null || snap.phase != 'playing') return;
       if (_activeSeatIndex(snap) == seatIndex) {
-        _applySlam(
+        await _applySlam(
           matchId: matchId,
           actorUserId: actorUserId,
           input: timeoutSlamInput(source: 'ai_timeout'),
@@ -240,7 +240,7 @@ class MatchTurnRunner {
     if (snap == null || snap.phase != 'playing') return;
     if (_activeSeatIndex(snap) != seatIndex) return;
 
-    _applySlam(
+    await _applySlam(
       matchId: matchId,
       actorUserId: actorUserId,
       input: syntheticAiSlamInput(_rng),
@@ -291,14 +291,14 @@ class MatchTurnRunner {
     await Future<void>.delayed(hold);
   }
 
-  void _applySlam({
+  Future<void> _applySlam({
     required String matchId,
     required String actorUserId,
     required Map<String, dynamic> input,
     required String label,
-  }) {
+  }) async {
     try {
-      _service.action(
+      await _service.actionSpendingCharge(
         matchId: matchId,
         userId: actorUserId,
         payload: {

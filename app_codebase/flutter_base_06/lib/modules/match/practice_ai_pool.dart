@@ -12,6 +12,21 @@ const List<String> practiceAiPoolUserIds = [
   '59b69ee3-7815-5a5d-84b1-865e1df05be2', // ai_0115
 ];
 
+/// Display usernames for [practiceAiPoolUserIds] (match HUD chrome).
+const Map<String, String> practiceAiUsernames = {
+  '798a2f60-ebef-5a4e-ae6c-f49037d1d00a': 'ai_0013',
+  '59b69ee3-7815-5a5d-84b1-865e1df05be2': 'ai_0115',
+};
+
+/// Username for a practice AI [userId], or a short fallback.
+String practiceAiUsernameFor(String userId) {
+  final known = practiceAiUsernames[userId];
+  if (known != null && known.isNotEmpty) return known;
+  final id = userId.trim();
+  if (id.isEmpty) return 'AI';
+  return id.length <= 8 ? id : id.substring(0, 8);
+}
+
 /// Picks [count] distinct userIds from [practiceAiPoolUserIds].
 List<String> pickPracticeAiUserIds({
   Random? random,

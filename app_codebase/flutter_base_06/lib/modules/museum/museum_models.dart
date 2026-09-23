@@ -68,7 +68,11 @@ class MuseumItem {
     return legacyState;
   }
 
-  String get genCaption => 'Gen $generationNumber · $outcomeLabel';
+  String get genCaption {
+    final outcome = outcomeLabel.trim();
+    if (outcome.isEmpty) return 'Gen $generationNumber';
+    return 'Gen $generationNumber · $outcome';
+  }
 }
 
 class MuseumListPage {
@@ -96,4 +100,52 @@ class MuseumListPage {
 
   final List<MuseumItem> items;
   final String? nextCursor;
+}
+
+class MuseumBannerPage {
+  const MuseumBannerPage({this.items = const []});
+
+  final List<MuseumItem> items;
+
+  MuseumItem? get item => items.isEmpty ? null : items.first;
+}
+
+class MuseumSeriesOption {
+  const MuseumSeriesOption({
+    required this.key,
+    required this.label,
+  });
+
+  factory MuseumSeriesOption.fromJson(Map<String, dynamic> json) {
+    final key = json['key']?.toString().trim() ?? '';
+    final label = json['label']?.toString().trim() ?? '';
+    return MuseumSeriesOption(
+      key: key,
+      label: label.isNotEmpty ? label : key,
+    );
+  }
+
+  final String key;
+  final String label;
+}
+
+class MuseumSeriesPage {
+  const MuseumSeriesPage({required this.series});
+
+  factory MuseumSeriesPage.fromJson(Map<String, dynamic> json) {
+    final raw = json['series'];
+    final series = <MuseumSeriesOption>[];
+    if (raw is List) {
+      for (final row in raw) {
+        if (row is Map) {
+          series.add(
+            MuseumSeriesOption.fromJson(Map<String, dynamic>.from(row)),
+          );
+        }
+      }
+    }
+    return MuseumSeriesPage(series: series);
+  }
+
+  final List<MuseumSeriesOption> series;
 }

@@ -89,6 +89,27 @@ void registerBuiltinNotificationSubtypes() {
       modalPriority: 10,
     ),
     const NotificationSubtypeSpec(
+      source: 'world',
+      category: 'news',
+      subtype: 'admin_v1',
+      allowedScreens: {'home', 'museum', 'velora', 'notifications', 'avari', 'play'},
+      modalPriority: 80,
+    ),
+    const NotificationSubtypeSpec(
+      source: 'world',
+      category: 'news',
+      subtype: 'gen_closed_v1',
+      allowedScreens: {'home', 'museum', 'velora', 'notifications', 'avari', 'play'},
+      modalPriority: 70,
+    ),
+    const NotificationSubtypeSpec(
+      source: 'world',
+      category: 'news',
+      subtype: 'legacy_owner_v1',
+      allowedScreens: {'home', 'museum', 'velora', 'notifications', 'avari', 'play'},
+      modalPriority: 75,
+    ),
+    const NotificationSubtypeSpec(
       source: 'example_module',
       category: 'demo',
       subtype: 'example_navigate_demo',

@@ -322,6 +322,8 @@ def _normalize_event(raw: dict[str, Any]) -> dict[str, Any] | None:
         "achievement_hooks": {"roster_design_ids": design_ids},
         # Back-compat for event_design_ids() / achievements
         "design_ids": design_ids,
+        "home_featured": raw.get("homeFeatured") is True
+        or raw.get("home_featured") is True,
     }
 
 
@@ -413,6 +415,7 @@ def client_event_row(ev: dict[str, Any]) -> dict[str, Any]:
         "name": ev.get("name"),
         "description": ev.get("description") or "",
         "active": bool(ev.get("active", True)),
+        "homeFeatured": bool(ev.get("home_featured")),
         "schedule": {
             "startsAt": schedule.get("starts_at"),
             "endsAt": schedule.get("ends_at"),

@@ -8,6 +8,11 @@ class MatchSeatView {
     required this.connected,
     required this.arcoriIds,
     required this.slammerId,
+    this.username,
+    this.avatarUrl,
+    this.imageUrl,
+    this.lottieUrl,
+    this.color,
   });
 
   final String userId;
@@ -18,7 +23,30 @@ class MatchSeatView {
   final List<String> arcoriIds;
   final String slammerId;
 
-  MatchSeatView copyWith({int? score}) {
+  /// Optional display name for match HUD chrome.
+  final String? username;
+
+  /// Optional avatar path/URL for match HUD chrome.
+  final String? avatarUrl;
+
+  /// Equipped slammer face art (stamped from catalog / practice defaults).
+  final String? imageUrl;
+  final String? lottieUrl;
+  final String? color;
+
+  bool get hasLottieSlammerFace {
+    final url = lottieUrl?.trim() ?? '';
+    return url.isNotEmpty;
+  }
+
+  MatchSeatView copyWith({
+    int? score,
+    String? username,
+    String? avatarUrl,
+    String? imageUrl,
+    String? lottieUrl,
+    String? color,
+  }) {
     return MatchSeatView(
       userId: userId,
       seatIndex: seatIndex,
@@ -27,11 +55,21 @@ class MatchSeatView {
       connected: connected,
       arcoriIds: arcoriIds,
       slammerId: slammerId,
+      username: username ?? this.username,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      imageUrl: imageUrl ?? this.imageUrl,
+      lottieUrl: lottieUrl ?? this.lottieUrl,
+      color: color ?? this.color,
     );
   }
 
   factory MatchSeatView.fromJson(Map<String, dynamic> json) {
     final rawIds = json['arcoriIds'];
+    final rawName = json['username']?.toString().trim() ?? '';
+    final rawAvatar = json['avatarUrl']?.toString().trim() ?? '';
+    final rawImage = json['imageUrl']?.toString().trim() ?? '';
+    final rawLottie = json['lottieUrl']?.toString().trim() ?? '';
+    final rawColor = json['color']?.toString().trim() ?? '';
     return MatchSeatView(
       userId: json['userId']?.toString() ?? '',
       seatIndex: json['seatIndex'] is int ? json['seatIndex'] as int : 0,
@@ -42,6 +80,11 @@ class MatchSeatView {
           ? rawIds.map((e) => e.toString()).toList()
           : const <String>[],
       slammerId: json['slammerId']?.toString() ?? '',
+      username: rawName.isNotEmpty ? rawName : null,
+      avatarUrl: rawAvatar.isNotEmpty ? rawAvatar : null,
+      imageUrl: rawImage.isNotEmpty ? rawImage : null,
+      lottieUrl: rawLottie.isNotEmpty ? rawLottie : null,
+      color: rawColor.isNotEmpty ? rawColor : null,
     );
   }
 }
@@ -62,12 +105,20 @@ class MatchPieceView {
   final String pieceId;
   final String designId;
   final String ownerUserId;
-  final int seatIndex;
+
+  /// Seat that owns this disc; `null` for the region Gatherer (seatless).
+  final int? seatIndex;
   final bool faceUp;
   final int stackIndex;
   final String? imageUrl;
   final String? lottieUrl;
   final String? color;
+
+  /// Non-player Gatherer disc (`p_gatherer` / no seat).
+  bool get isGatherer {
+    if (pieceId.trim() == 'p_gatherer') return true;
+    return seatIndex == null && pieceId.trim().isNotEmpty;
+  }
 
   bool get hasLottieFace {
     final url = lottieUrl?.trim() ?? '';
@@ -78,11 +129,15 @@ class MatchPieceView {
     final imageUrl = json['imageUrl']?.toString().trim() ?? '';
     final lottieUrl = json['lottieUrl']?.toString().trim() ?? '';
     final color = json['color']?.toString().trim() ?? '';
+    final seatRaw = json['seatIndex'];
+    final int? seatIndex = seatRaw is int
+        ? seatRaw
+        : (seatRaw is num ? seatRaw.toInt() : null);
     return MatchPieceView(
       pieceId: json['pieceId']?.toString() ?? '',
       designId: json['designId']?.toString() ?? '',
       ownerUserId: json['ownerUserId']?.toString() ?? '',
-      seatIndex: json['seatIndex'] is int ? json['seatIndex'] as int : 0,
+      seatIndex: seatIndex,
       faceUp: json['faceUp'] == true,
       stackIndex: json['stackIndex'] is int ? json['stackIndex'] as int : 0,
       imageUrl: imageUrl.isNotEmpty ? imageUrl : null,
@@ -95,7 +150,7 @@ class MatchPieceView {
         'pieceId': pieceId,
         'designId': designId,
         'ownerUserId': ownerUserId,
-        'seatIndex': seatIndex,
+        if (seatIndex != null) 'seatIndex': seatIndex,
         'faceUp': faceUp,
         'stackIndex': stackIndex,
         if (imageUrl != null && imageUrl!.isNotEmpty) 'imageUrl': imageUrl,

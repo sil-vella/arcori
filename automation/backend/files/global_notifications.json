@@ -18,6 +18,25 @@
           ]
         }
       }
+    },
+    {
+      "id": "65f0a1b2-c3d4-e5f6-0718-290200000010",
+      "source": "world",
+      "title": "World News",
+      "body": "Generations close, Legacy Owners rise, and events shape Velora. Watch this feed for world progression.",
+      "type": "inbox",
+      "category": "news",
+      "subtype": "admin_v1",
+      "msg_id": "world_news_admin_welcome_v1",
+      "is_active": true,
+      "data": {
+        "response": {
+          "type": "navigate",
+          "buttons": [
+            { "label": "Home", "screen": "home" }
+          ]
+        }
+      }
     }
   ]
 }

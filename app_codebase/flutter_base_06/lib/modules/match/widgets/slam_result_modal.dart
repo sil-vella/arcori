@@ -25,15 +25,20 @@ void showSlamResultModal(
     );
   }
   unawaited(
-    AppModal.showCenteredShell<void>(
+    AppModal.showCentered<void>(
       context,
-      title: 'Slam',
-      showCloseButton: true,
       barrierDismissible: true,
-      child: _SlamResultBody(
-        lastEvent: lastEvent,
-        actorScoreDelta: actorScoreDelta,
-        autoClose: kSlamResultAutoClose,
+      builder: (ctx) => Theme(
+        data: AppTheme.dark,
+        child: AppCenteredModal(
+          title: 'Slam',
+          showCloseButton: true,
+          child: _SlamResultBody(
+            lastEvent: lastEvent,
+            actorScoreDelta: actorScoreDelta,
+            autoClose: kSlamResultAutoClose,
+          ),
+        ),
       ),
     ),
   );
@@ -98,28 +103,36 @@ class _SlamResultBodyState extends State<_SlamResultBody> {
           style: context.appTypography.label.copyWith(
             fontSize: 28,
             letterSpacing: 2,
-            color: isFlip ? AppColors.primary : context.appTypography.body.color,
+            color: isFlip
+                ? AppSurfaces.frameGold(Brightness.dark)
+                : AppColors.onSurfaceMutedDark,
           ),
         ),
         AppSpacing.gapSm,
         Text(
           isFlip ? '$flipped disc${flipped == 1 ? '' : 's'} flipped' : 'No flips',
           textAlign: TextAlign.center,
-          style: context.appTypography.body,
+          style: context.appTypography.body.copyWith(
+            color: AppColors.onSurfaceDark,
+          ),
         ),
         if (delta != 0) ...[
           AppSpacing.gapXs,
           Text(
             delta > 0 ? '+$delta score' : '$delta score',
             textAlign: TextAlign.center,
-            style: context.appTypography.bodySmall,
+            style: context.appTypography.bodySmall.copyWith(
+              color: AppColors.onSurfaceMutedDark,
+            ),
           ),
         ],
         AppSpacing.gapSm,
         Text(
           'Closes in ${widget.autoClose.inSeconds}s',
           textAlign: TextAlign.center,
-          style: context.appTypography.bodySmall,
+          style: context.appTypography.bodySmall.copyWith(
+            color: AppColors.onSurfaceMutedDark,
+          ),
         ),
       ],
     );

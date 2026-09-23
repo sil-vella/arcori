@@ -10,6 +10,7 @@ import '../../../core/navigation/app_paths.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 import '../../avari/avari_notifier.dart';
 import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
@@ -168,7 +169,9 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
         appBarItems: [
           AppBarTitle(text: 'Customize Kin', icon: Icons.tune),
         ],
-        child: Center(child: CircularProgressIndicator()),
+        child: AppChromePage(
+          child: AppChromeCentered(child: CircularProgressIndicator()),
+        ),
       );
     }
 
@@ -177,10 +180,12 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
         appBarItems: const [
           AppBarTitle(text: 'Customize Kin', icon: Icons.tune),
         ],
-        child: Center(
-          child: Text(
-            'Kin not found',
-            style: context.appTypography.body,
+        child: AppChromePage(
+          child: AppChromeCentered(
+            child: Text(
+              'Kin not found',
+              style: TextStyle(color: AppChrome.onSurfaceMuted),
+            ),
           ),
         ),
       );
@@ -240,51 +245,58 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
       appBarItems: [
         AppBarTitle(text: template.displayName, icon: Icons.tune),
       ],
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: AppSpacing.screenPadding.copyWith(bottom: AppSpacing.sm),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: KinLottiePreview(
-                    key: ValueKey(
-                      '${customize.applied}|${bgScene.toClaimJson()}',
-                    ),
-                    lottieUrl: template.lottieUrl,
-                    delegates: delegates,
-                    scene: bgScene,
-                  ),
-                ),
-                AppSpacing.gapMd,
-                Column(
-                  children: [
-                    Text('Arcori', style: context.appTypography.caption),
-                    AppSpacing.gapXs,
-                    ArcoriCylinder(
-                      look: look,
-                      size: 112,
-                      face: KinSceneStack(
-                        key: ValueKey(
-                          'disc-${customize.applied}|${bgScene.toClaimJson()}|${customize.colorHex}',
-                        ),
-                        lottieUrl: template.lottieUrl,
-                        delegates: delegates,
-                        scene: bgScene,
+      child: AppChromePage(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(height: AppChromePage.topClearance(context)),
+            Padding(
+              padding: AppSpacing.screenPadding.copyWith(bottom: AppSpacing.sm),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: KinLottiePreview(
+                      key: ValueKey(
+                        '${customize.applied}|${bgScene.toClaimJson()}',
                       ),
+                      lottieUrl: template.lottieUrl,
+                      delegates: delegates,
+                      scene: bgScene,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  AppSpacing.gapMd,
+                  Column(
+                    children: [
+                      Text(
+                        'Arcori',
+                        style: context.appTypography.caption.copyWith(
+                          color: AppChrome.onSurfaceMuted,
+                        ),
+                      ),
+                      AppSpacing.gapXs,
+                      ArcoriCylinder(
+                        look: look,
+                        size: 112,
+                        face: KinSceneStack(
+                          key: ValueKey(
+                            'disc-${customize.applied}|${bgScene.toClaimJson()}|${customize.colorHex}',
+                          ),
+                          lottieUrl: template.lottieUrl,
+                          delegates: delegates,
+                          scene: bgScene,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Divider(height: 1),
-          Expanded(
-            child: ListView(
-              padding: AppSpacing.screenPadding,
-              children: [
+            Divider(height: 1, color: AppChrome.panelBorder),
+            Expanded(
+              child: ListView(
+                padding: AppSpacing.screenPadding,
+                children: [
                 Text('Parts', style: context.appTypography.title),
                 AppSpacing.gapSm,
                 Wrap(
@@ -319,7 +331,7 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                         ? 'Layer ${selected.layerName}'
                         : 'Layers ${selected.styleLayerNames.join(', ')}',
                     style: context.appTypography.caption.copyWith(
-                      color: context.appColorScheme.onSurfaceVariant,
+                      color: AppChrome.onSurfaceMuted,
                     ),
                   ),
                   AppSpacing.gapMd,
@@ -349,7 +361,7 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                 Text(
                   'Theme or style for art; solid / gradient with texture',
                   style: context.appTypography.caption.copyWith(
-                    color: context.appColorScheme.onSurfaceVariant,
+                    color: AppChrome.onSurfaceMuted,
                   ),
                 ),
                 AppSpacing.gapSm,
@@ -523,9 +535,8 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                                       ),
                                       border: Border.all(
                                         color: selected
-                                            ? context.appColorScheme.primary
-                                            : context.appColorScheme
-                                                .outlineVariant,
+                                            ? AppChrome.accentGold
+                                            : AppChrome.panelBorder,
                                         width: selected ? 2 : 1,
                                       ),
                                       image: opt.isImage &&
@@ -640,7 +651,7 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                 Text(
                   'Rim and back of the disc',
                   style: context.appTypography.caption.copyWith(
-                    color: context.appColorScheme.onSurfaceVariant,
+                    color: AppChrome.onSurfaceMuted,
                   ),
                 ),
                 AppSpacing.gapSm,
@@ -673,7 +684,7 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                 Text(
                   'Assigned Velora land (Realm Beyond excluded)',
                   style: context.appTypography.caption.copyWith(
-                    color: context.appColorScheme.onSurfaceVariant,
+                    color: AppChrome.onSurfaceMuted,
                   ),
                 ),
                 AppSpacing.gapSm,
@@ -723,9 +734,12 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                 AppSpacing.gapSm,
                 TextField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
+                  style: context.appTypography.body.copyWith(
+                    color: AppChrome.onSurface,
+                  ),
+                  decoration: AppChrome.inputDecoration(
+                    context,
                     hintText: 'Chosen name',
-                    border: OutlineInputBorder(),
                   ),
                   onChanged: (v) {
                     ref
@@ -744,6 +758,7 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
             ),
           ),
         ],
+        ),
       ),
     );
   }

@@ -8,6 +8,7 @@ import '../../../core/http/media_url.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/state/user/user_profile_provider.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 
 const int _avatarMaxUploadBytes = 2 * 1024 * 1024;
 const Set<String> _allowedExtensions = {'.jpg', '.jpeg', '.png', '.webp'};
@@ -24,14 +25,10 @@ class AccountProfileCard extends ConsumerWidget {
     final profileState = ref.watch(userProfileProvider);
     final profile = profileState.profile;
 
-    return Container(
-      margin: AppSpacing.screenPaddingCompact.copyWith(top: AppSpacing.md),
-      padding: AppSpacing.screenPaddingCompact,
-      decoration: BoxDecoration(
-        color: context.appColorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(AppButtonMetrics.radius),
-        border: Border.all(color: context.appColorScheme.outline),
-      ),
+    return AppChromeSection(
+      title: 'Profile',
+      goldFrame: true,
+      margin: const EdgeInsets.only(bottom: AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -185,19 +182,24 @@ class _ProfileBody extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 40,
-                backgroundColor: context.appColorScheme.secondaryContainer,
+                backgroundColor: AppChrome.fieldFill,
                 backgroundImage:
                     resolvedUrl.isNotEmpty ? NetworkImage(resolvedUrl) : null,
                 child: resolvedUrl.isEmpty
-                    ? Text(initials, style: context.appTypography.title)
+                    ? Text(
+                        initials,
+                        style: context.appTypography.title.copyWith(
+                          color: AppChrome.onSurface,
+                        ),
+                      )
                     : null,
               ),
               if (isUploading)
-                Positioned.fill(
+                const Positioned.fill(
                   child: CircleAvatar(
                     radius: 40,
                     backgroundColor: Colors.black38,
-                    child: const CircularProgressIndicator(strokeWidth: 2),
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   ),
                 ),
               Positioned(
@@ -205,11 +207,11 @@ class _ProfileBody extends StatelessWidget {
                 bottom: -2,
                 child: CircleAvatar(
                   radius: 14,
-                  backgroundColor: context.appColorScheme.primary,
+                  backgroundColor: AppChrome.accentGold,
                   child: Icon(
                     Icons.camera_alt_outlined,
                     size: 16,
-                    color: context.appColorScheme.onPrimary,
+                    color: AppChrome.canvasBase,
                   ),
                 ),
               ),
@@ -221,9 +223,19 @@ class _ProfileBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(username, style: context.appTypography.subtitle),
+              Text(
+                username,
+                style: context.appTypography.subtitle.copyWith(
+                  color: AppChrome.onSurface,
+                ),
+              ),
               AppSpacing.gapXxs,
-              Text(email, style: context.appTypography.bodyMuted),
+              Text(
+                email,
+                style: context.appTypography.bodyMuted.copyWith(
+                  color: AppChrome.onSurfaceMuted,
+                ),
+              ),
               AppSpacing.gapSm,
               _AccountTypeChip(label: accountType),
             ],
@@ -248,15 +260,17 @@ class _AccountTypeChip extends StatelessWidget {
         vertical: AppSpacing.xxs,
       ),
       decoration: BoxDecoration(
-        color: isGuest
-            ? context.appColorScheme.secondaryContainer
-            : context.appColorScheme.tertiaryContainer,
-        borderRadius: BorderRadius.circular(AppButtonMetrics.radius),
-        border: Border.all(color: context.appColorScheme.outline),
+        color: AppChrome.fieldFill,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        border: Border.all(
+          color: isGuest ? AppChrome.panelBorder : AppChrome.panelBorderGold,
+        ),
       ),
       child: Text(
         label,
-        style: context.appTypography.bodySmall,
+        style: context.appTypography.bodySmall.copyWith(
+          color: AppChrome.onSurface,
+        ),
       ),
     );
   }

@@ -93,6 +93,7 @@ class CoreActionPack implements MatchActionPack {
       input: slamInput,
       gameplayAttributes: attrs,
       table: current.table,
+      actorUserId: actorUserId,
     );
 
     if (LOGGING_SWITCH) {

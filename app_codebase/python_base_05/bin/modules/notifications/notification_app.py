@@ -18,6 +18,7 @@ from modules.notifications.notification_service import (
     mark_read_for_user,
     parse_global_message_ids_from_body,
     parse_message_ids_from_body,
+    upsert_global_from_service_request,
 )
 
 
@@ -28,6 +29,10 @@ def register_notification_routes(
     routes.service_post(
         "/notifications/create",
         lambda: _handle_service_create(res),
+    )
+    routes.service_post(
+        "/notifications/global-upsert",
+        lambda: _handle_service_global_upsert(res),
     )
     routes.authuser_get(
         "/notifications/messages",
@@ -65,6 +70,14 @@ def _require_user_id() -> str:
 def _handle_service_create(res: HttpResponseContract):
     try:
         payload = create_from_service_request()
+    except AppError as err:
+        return err.to_http_response()
+    return res.json_ok(payload)
+
+
+def _handle_service_global_upsert(res: HttpResponseContract):
+    try:
+        payload = upsert_global_from_service_request()
     except AppError as err:
         return err.to_http_response()
     return res.json_ok(payload)

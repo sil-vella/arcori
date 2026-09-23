@@ -5,6 +5,7 @@ import '../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../core/screen/module_screen_registrar.dart';
 import '../../core/state/auth/auth_providers.dart';
 import '../../core/theme/theme.dart';
+import '../../core/widgets/app_chrome.dart';
 import 'notification_modal.dart';
 import 'notifications_notifier.dart';
 import 'notifications_state.dart';
@@ -35,40 +36,49 @@ class NotificationsScreen extends ConsumerWidget {
           icon: Icons.notifications_outlined,
         ),
       ],
-      child: notifications.isLoading && allMessages.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : allMessages.isEmpty
-              ? Center(
-                  child: Text(
-                    'No notifications yet',
-                    style: context.appTypography.body,
+      child: AppChromePage(
+        child: notifications.isLoading && allMessages.isEmpty
+            ? const AppChromeCentered(child: CircularProgressIndicator())
+            : allMessages.isEmpty
+                ? AppChromeCentered(
+                    child: Text(
+                      'No notifications yet',
+                      style: context.appTypography.body.copyWith(
+                        color: AppChrome.onSurfaceMuted,
+                      ),
+                    ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () => notifier.refreshAll(force: true),
+                    child: ListView.separated(
+                      padding: EdgeInsets.fromLTRB(
+                        AppSpacing.md,
+                        AppChromePage.topClearance(context) + AppSpacing.sm,
+                        AppSpacing.md,
+                        AppSpacing.xxl,
+                      ),
+                      itemCount: allMessages.length,
+                      separatorBuilder: (_, __) =>
+                          SizedBox(height: AppSpacing.sm),
+                      itemBuilder: (context, index) {
+                        final message = allMessages[index];
+                        return _NotificationTile(
+                          message: message,
+                          onTap: () async {
+                            await showNotificationModal(
+                              context,
+                              ref,
+                              message,
+                              onAcknowledged: () => notifier.markRead(message),
+                              markRead: () => notifier.markRead(message),
+                            );
+                          },
+                          onDelete: () => notifier.deleteMessage(message),
+                        );
+                      },
+                    ),
                   ),
-                )
-              : RefreshIndicator(
-                  onRefresh: () => notifier.refreshAll(force: true),
-                  child: ListView.separated(
-                    padding: AppSpacing.screenPadding,
-                    itemCount: allMessages.length,
-                    separatorBuilder: (_, __) =>
-                        SizedBox(height: AppSpacing.sm),
-                    itemBuilder: (context, index) {
-                      final message = allMessages[index];
-                      return _NotificationTile(
-                        message: message,
-                        onTap: () async {
-                          await showNotificationModal(
-                            context,
-                            ref,
-                            message,
-                            onAcknowledged: () => notifier.markRead(message),
-                            markRead: () => notifier.markRead(message),
-                          );
-                        },
-                        onDelete: () => notifier.deleteMessage(message),
-                      );
-                    },
-                  ),
-                ),
+      ),
     );
   }
 }
@@ -86,58 +96,75 @@ class _NotificationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = context.appColorScheme;
+    final radius = BorderRadius.circular(AppSurfaces.exhibitRadius);
+    final unread = message.isUnread;
     return Material(
-      color: message.isUnread ? AppColors.primaryPastel : scheme.surface,
-      borderRadius: BorderRadius.circular(AppSpacing.sm),
+      color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.sm),
-        child: Padding(
-          padding: AppSpacing.screenPaddingCompact,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      message.title,
-                      style: context.appTypography.title.copyWith(
-                        fontWeight: message.isUnread
-                            ? FontWeight.w600
-                            : FontWeight.normal,
+        borderRadius: radius,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: unread
+                ? AppChrome.fieldFill.withValues(alpha: 0.72)
+                : AppChrome.panelFill,
+            borderRadius: radius,
+            border: Border.all(
+              color: unread ? AppChrome.panelBorderGold : AppChrome.panelBorder,
+            ),
+          ),
+          child: Padding(
+            padding: AppSpacing.screenPaddingCompact,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        message.title,
+                        style: context.appTypography.title.copyWith(
+                          color: AppChrome.onSurface,
+                          fontWeight:
+                              unread ? FontWeight.w600 : FontWeight.normal,
+                        ),
                       ),
-                    ),
-                    if (message.subtype != null && message.subtype!.isNotEmpty)
+                      if (message.subtype != null &&
+                          message.subtype!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: AppSpacing.xxs),
+                          child: Text(
+                            message.subtype!,
+                            style: context.appTypography.caption.copyWith(
+                              color: AppChrome.onSurfaceMuted,
+                            ),
+                          ),
+                        ),
                       Padding(
-                        padding: const EdgeInsets.only(top: AppSpacing.xxs),
+                        padding: const EdgeInsets.only(top: AppSpacing.xs),
                         child: Text(
-                          message.subtype!,
-                          style: context.appTypography.caption.copyWith(
-                            color: scheme.onSurfaceVariant,
+                          message.body,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: context.appTypography.body.copyWith(
+                            color: AppChrome.onSurface,
                           ),
                         ),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: AppSpacing.xs),
-                      child: Text(
-                        message.body,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.appTypography.body,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              IconButton(
-                tooltip: 'Delete',
-                onPressed: onDelete,
-                icon: Icon(Icons.delete_outline, color: scheme.onSurfaceVariant),
-              ),
-            ],
+                IconButton(
+                  tooltip: 'Delete',
+                  onPressed: onDelete,
+                  icon: Icon(
+                    Icons.delete_outline,
+                    color: AppChrome.onSurfaceMuted,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

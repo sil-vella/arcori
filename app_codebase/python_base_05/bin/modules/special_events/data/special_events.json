@@ -7,6 +7,7 @@
       "name": "Royal Battle",
       "description": "Open 3-seat queue. Finish any 3 matches (win or lose). Circulation Arcori, fixed Amberwild arena.",
       "active": true,
+      "homeFeatured": true,
       "schedule": {
         "startsAt": null,
         "endsAt": null

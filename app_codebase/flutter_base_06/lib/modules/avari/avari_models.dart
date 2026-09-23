@@ -90,6 +90,47 @@ class AvariMasterySummary {
   final String masteryValueLabel;
 }
 
+/// One row from GET /avari/mastery/recent (Home ticker).
+class MasteryRecentChange {
+  const MasteryRecentChange({
+    required this.designId,
+    required this.displayName,
+    required this.delta,
+    this.pointsAfter = 0,
+    this.generationNumber = 1,
+    this.imageUrl,
+    this.createdAt,
+  });
+
+  factory MasteryRecentChange.fromJson(Map<String, dynamic> json) {
+    int asInt(Object? v) => v is int ? v : int.tryParse('$v') ?? 0;
+    return MasteryRecentChange(
+      designId: json['designId']?.toString() ?? '',
+      displayName: json['displayName']?.toString().trim().isNotEmpty == true
+          ? json['displayName'].toString().trim()
+          : (json['designId']?.toString() ?? ''),
+      delta: asInt(json['delta']),
+      pointsAfter: asInt(json['pointsAfter']),
+      generationNumber: asInt(json['generationNumber'] ?? 1),
+      imageUrl: json['imageUrl']?.toString(),
+      createdAt: json['createdAt']?.toString(),
+    );
+  }
+
+  final String designId;
+  final String displayName;
+  final int delta;
+  final int pointsAfter;
+  final int generationNumber;
+  final String? imageUrl;
+  final String? createdAt;
+
+  String get tickerLabel {
+    final sign = delta > 0 ? '+' : '';
+    return '$displayName $sign$delta';
+  }
+}
+
 class AvariStats {
   const AvariStats({
     this.matchesPlayed = 0,
@@ -133,6 +174,58 @@ class AvariEconomy {
   final int goldFragments;
 }
 
+/// Preferred resolve-power band (0 = no power, 1 = full). Inside the band is a full match.
+class SlammerPowerBracket {
+  const SlammerPowerBracket({required this.min, required this.max});
+
+  final double min;
+  final double max;
+
+  static double? _clamp01(Object? value) {
+    if (value == null || value is bool) return null;
+    double? n;
+    if (value is num) {
+      n = value.toDouble();
+    } else {
+      n = double.tryParse(value.toString().trim());
+    }
+    if (n == null) return null;
+    if (n < 0) return 0;
+    if (n > 1) return 1;
+    return n;
+  }
+
+  static SlammerPowerBracket? tryParse(Object? raw) {
+    if (raw == null || raw is bool) return null;
+
+    double? lo;
+    double? hi;
+
+    if (raw is Map) {
+      lo = _clamp01(raw['min']);
+      hi = _clamp01(raw['max']);
+    } else if (raw is List && raw.length >= 2) {
+      lo = _clamp01(raw[0]);
+      hi = _clamp01(raw[1]);
+    } else {
+      // Legacy single preferred power → narrow band around it.
+      final center = _clamp01(raw);
+      if (center != null) {
+        lo = (center - 0.1).clamp(0.0, 1.0);
+        hi = (center + 0.1).clamp(0.0, 1.0);
+      }
+    }
+
+    if (lo == null || hi == null) return null;
+    if (hi < lo) {
+      final swap = lo;
+      lo = hi;
+      hi = swap;
+    }
+    return SlammerPowerBracket(min: lo, max: hi);
+  }
+}
+
 /// Catalog slam stats (1–10). Recovery is shown on profile even though slam does not use it yet.
 class SlammerGameplayAttributes {
   const SlammerGameplayAttributes({
@@ -141,6 +234,8 @@ class SlammerGameplayAttributes {
     this.control,
     this.recovery,
     this.spread,
+    this.hitTarget,
+    this.powerBracket,
   });
 
   static const List<(String key, String label)> displayOrder = [
@@ -150,6 +245,8 @@ class SlammerGameplayAttributes {
     ('recovery', 'Recovery'),
     ('spread', 'Spread'),
   ];
+
+  static const Set<String> _validHitTargets = {'center', 'mid', 'edge'};
 
   static SlammerGameplayAttributes? tryParse(Object? raw) {
     if (raw is! Map) return null;
@@ -169,14 +266,26 @@ class SlammerGameplayAttributes {
       return n;
     }
 
+    String? parseHit(Object? value) {
+      if (value is! String) return null;
+      final hit = value.trim().toLowerCase();
+      return _validHitTargets.contains(hit) ? hit : null;
+    }
+
     final parsed = SlammerGameplayAttributes(
       impact: parseOne(raw['impact']),
       precision: parseOne(raw['precision']),
       control: parseOne(raw['control']),
       recovery: parseOne(raw['recovery']),
       spread: parseOne(raw['spread']),
+      hitTarget: parseHit(raw['hitTarget']),
+      powerBracket: SlammerPowerBracket.tryParse(raw['powerBracket']),
     );
-    if (parsed.labeledValues.isEmpty) return null;
+    if (parsed.labeledValues.isEmpty &&
+        parsed.hitTarget == null &&
+        parsed.powerBracket == null) {
+      return null;
+    }
     return parsed;
   }
 
@@ -185,6 +294,12 @@ class SlammerGameplayAttributes {
   final int? control;
   final int? recovery;
   final int? spread;
+
+  /// Preferred aim radius: `center` | `mid` | `edge`.
+  final String? hitTarget;
+
+  /// Preferred resolve-power band (0 = none, 1 = full).
+  final SlammerPowerBracket? powerBracket;
 
   /// GDD order: Impact, Precision, Control, Recovery, Spread.
   List<(String label, int value)> get labeledValues {
@@ -215,6 +330,9 @@ class AvariInventoryItem {
     this.source,
     this.permanent,
     this.chargesRemaining,
+    this.maxCharges,
+    this.rechargePriceGoldArcori,
+    this.rechargeCharges,
     this.gameplayAttributes,
     this.masteryPoints = 0,
     this.mintReach,
@@ -254,6 +372,15 @@ class AvariInventoryItem {
       chargesRemaining: json['chargesRemaining'] is int
           ? json['chargesRemaining'] as int
           : int.tryParse('${json['chargesRemaining'] ?? ''}'),
+      maxCharges: json['maxCharges'] is int
+          ? json['maxCharges'] as int
+          : int.tryParse('${json['maxCharges'] ?? ''}'),
+      rechargePriceGoldArcori: json['rechargePriceGoldArcori'] is int
+          ? json['rechargePriceGoldArcori'] as int
+          : int.tryParse('${json['rechargePriceGoldArcori'] ?? ''}'),
+      rechargeCharges: json['rechargeCharges'] is int
+          ? json['rechargeCharges'] as int
+          : int.tryParse('${json['rechargeCharges'] ?? ''}'),
       gameplayAttributes: SlammerGameplayAttributes.tryParse(
         json['gameplayAttributes'],
       ),
@@ -281,6 +408,11 @@ class AvariInventoryItem {
   final String? source;
   final bool? permanent;
   final int? chargesRemaining;
+
+  /// Catalog pack size — used for low-charge (≤5%) recharge CTA.
+  final int? maxCharges;
+  final int? rechargePriceGoldArcori;
+  final int? rechargeCharges;
   final SlammerGameplayAttributes? gameplayAttributes;
   final int masteryPoints;
 

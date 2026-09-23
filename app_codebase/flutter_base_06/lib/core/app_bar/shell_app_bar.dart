@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../screen/shell_chrome_scope.dart';
+import '../theme/theme.dart';
 import 'app_bar_controller.dart';
 import 'contracts/register_app_bar_contract.dart';
 
@@ -30,10 +32,18 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
         final left = items.where((i) => i.slot == AppBarSlot.left).toList();
         final center = items.where((i) => i.slot == AppBarSlot.center).toList();
         final right = items.where((i) => i.slot == AppBarSlot.right).toList();
+        final foreground = ShellChromeScope.read(context).appBarForeground ??
+            context.appColorScheme.onSurface;
 
         return AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          backgroundColor: Colors.transparent,
+          foregroundColor: foreground,
+          iconTheme: IconThemeData(color: foreground),
+          actionsIconTheme: IconThemeData(color: foreground),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          surfaceTintColor: Colors.transparent,
           titleSpacing: 0,
           title: LayoutBuilder(
             builder: (context, constraints) {
@@ -55,21 +65,26 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
                   if (shellNavControls.showBack)
                     SizedBox(
                       width: _kNavSlotWidth,
-                      child: BackButton(onPressed: shellNavControls.onBack),
+                      child: BackButton(
+                        color: foreground,
+                        onPressed: shellNavControls.onBack,
+                      ),
                     ),
                   Expanded(
                     child: Row(
                       children: [
-                        ...layout.left.map((i) => _buildItem(context, i)),
+                        ...layout.left
+                            .map((i) => _buildItem(context, i, foreground)),
                         Expanded(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: layout.center
-                                .map((i) => _buildItem(context, i))
+                                .map((i) => _buildItem(context, i, foreground))
                                 .toList(),
                           ),
                         ),
-                        ...layout.right.map((i) => _buildItem(context, i)),
+                        ...layout.right
+                            .map((i) => _buildItem(context, i, foreground)),
                       ],
                     ),
                   ),
@@ -86,7 +101,7 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
             SizedBox(
               width: _kNavSlotWidth,
               child: IconButton(
-                icon: const Icon(Icons.menu),
+                icon: Icon(Icons.menu, color: foreground),
                 onPressed: shellNavControls.onMenu,
                 tooltip: shellNavControls.menuTooltip,
               ),
@@ -157,7 +172,11 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
     return painter.width + 16;
   }
 
-  Widget _buildItem(BuildContext context, AppBarItem item) {
+  Widget _buildItem(
+    BuildContext context,
+    AppBarItem item,
+    Color foreground,
+  ) {
     return switch (item) {
       AppBarTitle(:final text, :final icon) => Flexible(
           fit: FlexFit.loose,
@@ -165,8 +184,8 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (icon != null) ...[
-                Icon(icon, size: 22),
-                const SizedBox(width: 8),
+                Icon(icon, size: 22, color: foreground),
+                AppSpacing.gapXs,
               ],
               if (text != null)
                 Flexible(
@@ -174,7 +193,8 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
                     text,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: context.appTypography.appBarTitle
+                        .copyWith(color: foreground),
                   ),
                 ),
             ],
@@ -184,11 +204,11 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
         label != null
             ? TextButton.icon(
                 onPressed: onTap,
-                icon: Icon(icon, size: 20),
-                label: Text(label),
+                icon: Icon(icon, size: 20, color: foreground),
+                label: Text(label, style: TextStyle(color: foreground)),
               )
             : IconButton(
-                icon: Icon(icon),
+                icon: Icon(icon, color: foreground),
                 tooltip: tooltip,
                 onPressed: onTap,
               ),

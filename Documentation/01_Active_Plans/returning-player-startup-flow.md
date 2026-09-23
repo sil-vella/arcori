@@ -60,3 +60,5 @@ Map queue item types to notification / catalog / match domain events; align with
 ## Notes
 
 GDD v0.4 Navigation (`Splash→Notifications→News→Daily Missions→Home`) is the short form of this returning path — this plan is the authoritative detail.
+
+**World News feed (2026-09-20):** Home shows notifications with `category=news` (see [home-and-play-hub-flow.md](home-and-play-hub-flow.md)). Instant news still pops via `NotificationHost` without this full startup sequencer. Overnight/queue wiring remains future work.

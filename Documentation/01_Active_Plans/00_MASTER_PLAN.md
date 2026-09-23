@@ -62,6 +62,7 @@ Done:
 
 Open (ordered):
 
+- [ ] **UI visual refactor** (gallery-first reliquary; theme tokens + hubs + match HUD) — [ui-visual-refactor.md](ui-visual-refactor.md)
 - [ ] **Achievements SSOT** (code landed; env apply `016` + smoke + optional auth hydrate) — [achievements.md](achievements.md)
 - [x] **Daily Goals** (JSON catalog, miss-continue, Daily Cache +2 fragments claim, media/`post_task`) — [daily-goals.md](daily-goals.md)
 - [ ] **Shared unlock_type + events** (goals/tasks/achievements; match_end / special_event / leaderboard…) — [unlock-types.md](unlock-types.md)
@@ -80,9 +81,10 @@ Open (ordered):
 - [ ] Docs lag: case study / player-profile-schema (stub finalize wording) — [03_CASE_STUDY.md](03_CASE_STUDY.md)
 - [ ] **Arcori Packs** (Gold Arcori purchase; runtime roll of circulating designs @ +5 mastery) — [arcori-packs.md](arcori-packs.md)
 - [ ] **Kin creation** (wizard + Genesis claim live; production Lottie / idle anims open) — [kin-creation.md](kin-creation.md)
-- [ ] Home sink Trove • PLAY • Market; first-time / returning startup
-- [ ] My Mastery tab (Trove + Closed Generations already on profile)
-- [ ] Slammer recovery slam-stat + charge spend / Gold Arcori recharge *(future)* — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
+- [x] Home sink Trove • PLAY • Market (`hub_sink`); first-time / returning startup still open
+- [ ] My Mastery tab (Trove screen holds mints + closed gens; circulating Arcori on profile)
+- [x] Slammer charge spend + Market Rim (buy 4GA/20; top-up 4GA/+100; −1/slam) — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
+- [ ] Slammer recovery slam-stat *(future)* — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
 
 Standings surface is live with an open tail (My Mastery) covered above.
 
@@ -106,7 +108,7 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | [first-time-player-flow.md](first-time-player-flow.md) | Spec | Splash → Kin/Genesis → starter access → guided practice → intros → Home |
 | [kin-creation.md](kin-creation.md) | In Progress | Customize + POST kin claim; catalog_design mirrors regular Arcori |
 | [returning-player-startup-flow.md](returning-player-startup-flow.md) | Spec | Auto login → sync → overnight → notification queue → Home |
-| [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | Spec | Home layout, Velora entry, sink Trove • PLAY • Market |
+| [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | In Progress | Home widgets (MV, missions, events, World News, ticker); sink deferred |
 | [match-setting-core-flow.md](match-setting-core-flow.md) | Partial | Play hub + types; practice offline; quick/event/invite online |
 | [match-hot-state.md](match-hot-state.md) | Done (online room SSOT) | Dart match module + Flutter mirror; used by matchmaking promote |
 | [practice-offline-routing.md](practice-offline-routing.md) | Completed | Practice = Flutter-only; embedded 10 AI pool |
@@ -116,12 +118,12 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | [stub-match-arcori-selection.md](stub-match-arcori-selection.md) | Completed | After seats: FastAPI pick via `04_selection_weights.json` |
 | [stub-match-turn-stages.md](stub-match-turn-stages.md) | Completed | Online Dart: 2×N stub slams then end; practice lastEvent aligned |
 | [player-slam-input.md](player-slam-input.md) | Completed | 5s turns + swipe/motion → speed/trajectory |
-| [arcori-slam-impact.md](arcori-slam-impact.md) | Completed | Stack flip + spring motion; attrs × input → faceUp/score |
+| [arcori-slam-impact.md](arcori-slam-impact.md) | Completed | Stack flip + spring; attrs + `hitTarget`/`powerBracket` band → `effectivePower` |
 | [2d-slam-physics.md](2d-slam-physics.md) | Completed | Forge2D side-view sim; collisions; `outcome.sim` timeline replay |
 | [3d-slam-physics.md](3d-slam-physics.md) | Completed | Pure-Dart 3D thin-cylinder; `xyzq` poses; Matrix4 replay |
 | [slam-aim-game-controls.md](slam-aim-game-controls.md) | Completed | Game Controls + aim marker; exclusive accel/touch; footprint miss |
 | [inventory-slammer-and-disc-art.md](inventory-slammer-and-disc-art.md) | Completed | Owned slammers; circulating Arcori on Avari; catalog face on discs |
-| [match-arena-from-arcori.md](match-arena-from-arcori.md) | Completed | Quick Start / Invite: region arena + Gatherer; unique seat Arcori ids |
+| [match-arena-from-arcori.md](match-arena-from-arcori.md) | Completed | QS/Invite: region arena + seatless Gatherer on `table.pieces` |
 | [arena-pov-zoom.md](arena-pov-zoom.md) | Completed | Arena mural shares stack camera; rest is 1:1 crop (no upscale); contain on zoom-out; opaque under stack |
 | [random-first-player.md](random-first-player.md) | Completed | Random `firstSeatIndex` at match start; wrap order every round |
 | [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
@@ -141,6 +143,7 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | [pioneers-catalog-expansion.md](pioneers-catalog-expansion.md) | Completed | 75 new Genesis Arcori (Nostalgia / Music / Television); Pioneers stays original 10 |
 | [avari-profile.md](avari-profile.md) | Done | Avari Profile `/avari` + Trove + Closed Generations |
 | [player-profile-schema.md](player-profile-schema.md) | Done | Auth + Avari tables, admin testuser seed |
+| [ui-visual-refactor.md](ui-visual-refactor.md) | In Progress | Gallery-first reliquary: theme tokens, hubs, match HUD chrome |
 
 ## Design references
 

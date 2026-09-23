@@ -11,7 +11,7 @@ import 'package:arcori/modules/play/play_models.dart';
 
 void main() {
   group('MatchSnapshotNotifier', () {
-    test('local practice: pool AIs, table stack, slam rotate, end', () {
+    test('local practice: pool AIs, table stack, slam rotate, end', () async {
       final container = ProviderContainer();
       addTearDown(container.dispose);
       final notifier = container.read(matchSnapshotProvider.notifier);
@@ -47,7 +47,7 @@ void main() {
       expect(snap.pieces[2].imageUrl, contains('practice_arcori_003.webp'));
       expect(snap.pieces.first.color, '#6B5B95');
 
-      notifier.localSlam(
+      await notifier.localSlam(
         actorUserId: 'usr_local',
         input: {
           'speed': 0.9,
@@ -166,7 +166,25 @@ void main() {
               'slammerId': 'SLM-STR-SER001-0001',
             },
           ],
-          'table': {'pieces': []},
+          'table': {
+            'pieces': [
+              {
+                'pieceId': 'p0',
+                'designId': 'ANM-TIG-SER001-0001',
+                'ownerUserId': 'usr_a',
+                'seatIndex': 0,
+                'faceUp': false,
+                'stackIndex': 0,
+              },
+              {
+                'pieceId': 'p_gatherer',
+                'designId': 'ANM-FOX-SER001-0003',
+                'ownerUserId': '',
+                'faceUp': false,
+                'stackIndex': 1,
+              },
+            ],
+          },
           'active': null,
           'lastEvent': null,
           'result': null,
@@ -184,6 +202,11 @@ void main() {
         container.read(matchSnapshotProvider).gathererArcoriId,
         'ANM-FOX-SER001-0003',
       );
+      final pieces = container.read(matchSnapshotProvider).pieces;
+      expect(pieces, hasLength(2));
+      expect(pieces.last.pieceId, 'p_gatherer');
+      expect(pieces.last.isGatherer, isTrue);
+      expect(pieces.last.seatIndex, isNull);
 
       notifier.applyWsFrame({
         'channel': 'match/state',

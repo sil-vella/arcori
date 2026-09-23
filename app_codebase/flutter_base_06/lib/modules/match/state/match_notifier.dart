@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/dev_logger.dart';
+import '../../../core/state/auth/auth_providers.dart';
+import '../../avari/avari_api.dart';
 import '../../play/play_models.dart';
 import '../input/match_grace.dart';
 import '../input/slam_input_models.dart';
@@ -18,6 +20,10 @@ const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 const stubArenaId = 'arena_velora_plaza';
 const stubSlammerId = 'SLM-STR-SER001-0001';
+
+/// Practice backdrop — same amberwild arena used in snapshot parse tests.
+const stubPracticeArenaImageUrl =
+    '/catalog-media/velora/arenas/amberwild/ARN-AMB-WLD001-0001.webp';
 
 class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
   Completer<void>? _humanTurnWait;
@@ -130,6 +136,8 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         'slammer=${loadout.slammerId}',
       );
     }
+    final humanSlammerFace = practiceSlammerFaceFor(loadout.slammerId);
+    final stubFace = practiceSlammerFaceFor(stubSlammerId);
     final seats = [
       MatchSeatView(
         userId: humanUserId,
@@ -139,6 +147,9 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         connected: true,
         arcoriIds: const [practiceHumanArcoriId],
         slammerId: loadout.slammerId,
+        imageUrl: humanSlammerFace['imageUrl'],
+        lottieUrl: humanSlammerFace['lottieUrl'],
+        color: humanSlammerFace['color'],
       ),
       MatchSeatView(
         userId: ais[0],
@@ -148,6 +159,10 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         connected: true,
         arcoriIds: [practiceAiArcoriIds[0]],
         slammerId: stubSlammerId,
+        username: practiceAiUsernameFor(ais[0]),
+        imageUrl: stubFace['imageUrl'],
+        lottieUrl: stubFace['lottieUrl'],
+        color: stubFace['color'],
       ),
       MatchSeatView(
         userId: ais[1],
@@ -157,6 +172,10 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         connected: true,
         arcoriIds: [practiceAiArcoriIds[1]],
         slammerId: stubSlammerId,
+        username: practiceAiUsernameFor(ais[1]),
+        imageUrl: stubFace['imageUrl'],
+        lottieUrl: stubFace['lottieUrl'],
+        color: stubFace['color'],
       ),
     ];
     final rng = random ?? practiceTurnRandom ?? Random();
@@ -177,6 +196,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       round: 1,
       roundsTotal: 2,
       arenaId: stubArenaId,
+      arenaImageUrl: stubPracticeArenaImageUrl,
       callerUserId: humanUserId,
       matchType: const {'code': 'practice'},
       seats: seats,
@@ -312,7 +332,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
   }) async {
     if (practiceTurnTimeout <= Duration.zero) {
       if (_activeSeatIndex(state) == seatIndex) {
-        _applyStubSlam(
+        await _applyStubSlam(
           actorUserId: actorUserId,
           input: timeoutSlamInputMap(),
         );
@@ -335,7 +355,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
 
     if (!_stillRunning(matchId)) return;
     if (_activeSeatIndex(state) == seatIndex) {
-      _applyStubSlam(
+      await _applyStubSlam(
         actorUserId: actorUserId,
         input: timeoutSlamInputMap(),
       );
@@ -360,7 +380,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       );
       if (!_stillRunning(matchId)) return;
       if (_activeSeatIndex(state) == seatIndex) {
-        _applyStubSlam(
+        await _applyStubSlam(
           actorUserId: actorUserId,
           input: timeoutSlamInputMap(source: 'ai_timeout'),
         );
@@ -379,7 +399,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     if (!_stillRunning(matchId)) return;
     if (_activeSeatIndex(state) != seatIndex) return;
 
-    _applyStubSlam(
+    await _applyStubSlam(
       actorUserId: actorUserId,
       input: syntheticAiSlamInput(rng),
     );
@@ -433,26 +453,28 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
   }
 
   /// Slam: resolve flips, rotate active, restack on round advance.
-  void localSlam({
+  /// Returns false when charge spend blocked the slam.
+  Future<bool> localSlam({
     required String actorUserId,
     Map<String, dynamic>? input,
-  }) {
-    _applyStubSlam(actorUserId: actorUserId, input: input);
+  }) async {
+    final ok = await _applyStubSlam(actorUserId: actorUserId, input: input);
     final wait = _humanTurnWait;
     if (wait != null && !wait.isCompleted) {
       wait.complete();
     }
+    return ok;
   }
 
-  void _applyStubSlam({
+  Future<bool> _applyStubSlam({
     required String actorUserId,
     Map<String, dynamic>? input,
-  }) {
+  }) async {
     final current = state;
-    if (!current.phaseIsPlaying || current.matchId == null) return;
+    if (!current.phaseIsPlaying || current.matchId == null) return false;
 
-    if (activeInGracePeriod(current.active)) return;
-    if (activeInputLocked(current.active)) return;
+    if (activeInGracePeriod(current.active)) return false;
+    if (activeInputLocked(current.active)) return false;
 
     MatchSeatView? actor;
     for (final s in current.seats) {
@@ -461,10 +483,32 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         break;
       }
     }
-    if (actor == null) return;
+    if (actor == null) return false;
 
     final activeSeat = current.active?['seatIndex'];
-    if (activeSeat is int && activeSeat != actor.seatIndex) return;
+    if (activeSeat is int && activeSeat != actor.seatIndex) return false;
+
+    final token = ref.read(authProvider).accessToken?.trim() ?? '';
+    final slammerId = actor.slammerId.trim();
+    if (token.isNotEmpty && slammerId.isNotEmpty) {
+      final intent =
+          '${current.matchId}:v${current.version}:s${actor.seatIndex}:$slammerId';
+      final outcome = await AvariApiClient().spendSlammerCharge(
+        accessToken: token,
+        designId: slammerId,
+        matchId: current.matchId,
+        intentId: intent.length > 64 ? intent.substring(0, 64) : intent,
+      );
+      if (!outcome.isSuccess) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'match: practice spend_slammer_charge blocked '
+            'design=$slammerId err=${outcome.error?.rawCode ?? 'network'}',
+          );
+        }
+        return false;
+      }
+    }
 
     final seatCount = current.seats.length;
     final advanced = advanceTurnActive(
@@ -487,6 +531,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       input: slamInput,
       gameplayAttributes: Map<String, dynamic>.from(attrs),
       table: current.table,
+      actorUserId: actorUserId,
     );
 
     if (LOGGING_SWITCH) {
@@ -555,6 +600,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
       table: nextTable,
       lastEvent: lastEvent,
     );
+    return true;
   }
 
   void localEnd() {

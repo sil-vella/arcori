@@ -51,4 +51,5 @@ Ship a world **Museum** screen backed by existing `museum_generations` (no new t
 
 - Apply migration `025_museum_generations_indexes` on API containers before relying on list filters at scale.
 - Pre-existing museum rows without `historySummary` are filled at read time.
+- Featured Arcori: edit `app_codebase/python_base_05/bin/core/ui/data/app_ui.json` → `museum.featuredSerials` (list of serials / `{serial, generationNumber}`). Mtime hot-reload via `core.ui.app_ui_loader` — no API restart. Served as `GET /authuser/museum/banner` `{items:[…]}`; client picks one at random.
 - Out of scope: Chronicle authoring, standings snapshot at close, My Mastery tab, active-window play selection.

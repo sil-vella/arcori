@@ -40,24 +40,49 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
   Completer<PostMatchExitAction>? _postMatchExit;
   bool _finalizeStarted = false;
 
-  /// Actor-side flips of each design this match (for mastery "other" curve).
-  final Map<String, int> _actorFlipsByDesign = {};
-  int? _lastActorFlipEventVersion;
+  /// Per-actor flips of each design this match (post-match stats + mastery).
+  /// Outer key = actorUserId; inner = designId → flip count.
+  final Map<String, Map<String, int>> _flipsByActorDesign = {};
+  int? _lastFlipEventVersion;
 
   @override
   MatchFlowState build() {
     ref.listen(matchSnapshotProvider, (previous, next) {
-      _accumulateActorFlips(previous, next);
+      _accumulateFlips(previous, next);
     });
     return const MatchFlowState();
   }
 
   void _resetMasteryTracking() {
-    _actorFlipsByDesign.clear();
-    _lastActorFlipEventVersion = null;
+    _flipsByActorDesign.clear();
+    _lastFlipEventVersion = null;
   }
 
-  void _accumulateActorFlips(
+  /// Snapshot of flips-by-design for every actor (for post-match UI).
+  Map<String, Map<String, int>> flipsByActorDesignSnapshot() {
+    return {
+      for (final e in _flipsByActorDesign.entries)
+        e.key: Map<String, int>.from(e.value),
+    };
+  }
+
+  /// Local human / practice actor flips-by-design (finalize mastery payload).
+  Map<String, int> _localActorFlipsByDesign(String? authUserId) {
+    final me = (authUserId ?? '').trim();
+    if (me.isNotEmpty) {
+      final mine = _flipsByActorDesign[me];
+      if (mine != null && mine.isNotEmpty) {
+        return Map<String, int>.from(mine);
+      }
+    }
+    final local = _flipsByActorDesign['local'];
+    if (local != null && local.isNotEmpty) {
+      return Map<String, int>.from(local);
+    }
+    return const {};
+  }
+
+  void _accumulateFlips(
     MatchSnapshotState? previous,
     MatchSnapshotState next,
   ) {
@@ -67,13 +92,13 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     final version = event['version'];
     final v = version is int ? version : int.tryParse('$version');
     if (v == null) return;
-    if (_lastActorFlipEventVersion == v) return;
+    if (_lastFlipEventVersion == v) return;
 
-    final me = ref.read(authProvider).userId?.trim() ?? '';
     final actor = event['actorUserId']?.toString().trim() ?? '';
-    if (actor.isEmpty) return;
-    // Online: actorUserId == auth user. Practice: actor is 'local'.
-    if (actor != me && actor != 'local') return;
+    if (actor.isEmpty) {
+      _lastFlipEventVersion = v;
+      return;
+    }
 
     final outcome = event['outcome'];
     final flippedIds = outcome is Map && outcome['flippedPieceIds'] is List
@@ -83,7 +108,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
             .toList()
         : const <String>[];
     if (flippedIds.isEmpty) {
-      _lastActorFlipEventVersion = v;
+      _lastFlipEventVersion = v;
       return;
     }
 
@@ -92,13 +117,16 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
         ? previous!.pieces
         : next.pieces;
     final byPiece = {for (final p in pieces) p.pieceId: p.designId};
+    final bucket = _flipsByActorDesign.putIfAbsent(
+      actor,
+      () => <String, int>{},
+    );
     for (final pieceId in flippedIds) {
       final designId = (byPiece[pieceId] ?? '').trim();
       if (designId.isEmpty) continue;
-      _actorFlipsByDesign[designId] =
-          (_actorFlipsByDesign[designId] ?? 0) + 1;
+      bucket[designId] = (bucket[designId] ?? 0) + 1;
     }
-    _lastActorFlipEventVersion = v;
+    _lastFlipEventVersion = v;
   }
 
   void startPlay() {
@@ -1088,12 +1116,16 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
     }.where((id) => id.trim().isNotEmpty).toList();
 
     final me = ref.read(authProvider).userId?.trim() ?? '';
-    var flips = 0;
+    final flipsByDesign = _localActorFlipsByDesign(me);
+    // Actor flip sum — not seat.score (score used to credit piece owners).
+    var flips = flipsByDesign.values.fold<int>(0, (a, b) => a + b);
     String? playedDesignId;
     for (final seat in snap.seats) {
       if (seat.kind == 'human' &&
           (me.isEmpty || seat.userId == me || seat.userId == 'local')) {
-        flips = seat.score;
+        if (flipsByDesign.isEmpty) {
+          flips = seat.score;
+        }
         if (seat.arcoriIds.isNotEmpty) {
           playedDesignId = seat.arcoriIds.first.trim();
         }
@@ -1132,7 +1164,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       flips: flips,
       playedDesignId: playedDesignId,
       eventId: eventId,
-      flipsByDesign: Map<String, int>.from(_actorFlipsByDesign),
+      flipsByDesign: flipsByDesign,
       result: snap.result,
     );
 

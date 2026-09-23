@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 import 'auth_form_section.dart';
 import 'delete_account_modal.dart';
 
@@ -77,7 +78,11 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               keyboardType: TextInputType.emailAddress,
               autocorrect: false,
               textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(
+              style: context.appTypography.body.copyWith(
+                color: AppChrome.onSurface,
+              ),
+              decoration: AppChrome.inputDecoration(
+                context,
                 labelText: 'Email',
                 hintText: 'you@example.com',
               ),
@@ -94,7 +99,11 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               obscureText: _obscurePassword,
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) => _submit(),
-              decoration: InputDecoration(
+              style: context.appTypography.body.copyWith(
+                color: AppChrome.onSurface,
+              ),
+              decoration: AppChrome.inputDecoration(
+                context,
                 labelText: 'Password',
                 suffixIcon: IconButton(
                   onPressed: () =>
@@ -103,6 +112,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                     _obscurePassword
                         ? Icons.visibility_outlined
                         : Icons.visibility_off_outlined,
+                    color: AppChrome.onSurfaceMuted,
                   ),
                 ),
               ),

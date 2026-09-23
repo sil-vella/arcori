@@ -51,20 +51,59 @@ class MasteryEconomyTests(unittest.TestCase):
             played_design_id="OWN",
             seat_flips=0,
             flips_by_design={"OWN": 0, "FOX": 1, "WOLF": 2},
+            table_design_ids=["OWN", "FOX", "WOLF"],
+            owned_design_ids={"OWN"},
         )
         by_id = {r["designId"]: r for r in rows}
         self.assertEqual(by_id["OWN"]["delta"], -1)
         self.assertEqual(by_id["OWN"]["kind"], "own")
+        self.assertEqual(by_id["OWN"]["flips"], 0)
         self.assertEqual(by_id["FOX"]["delta"], 1)
         self.assertEqual(by_id["FOX"]["kind"], "other")
         self.assertEqual(by_id["WOLF"]["delta"], 2)
         self.assertNotIn("OWN", {r["designId"] for r in rows if r["kind"] == "other"})
+
+    def test_owned_table_design_uses_own_curve(self) -> None:
+        """Opponent brought a design you already master — 0 flips → −1."""
+        rows = compute_mastery_deltas(
+            played_design_id="OWN",
+            seat_flips=1,
+            flips_by_design={"CHE": 1},
+            table_design_ids=["OWN", "CHE", "WTI"],
+            owned_design_ids={"OWN", "WTI"},
+        )
+        by_id = {r["designId"]: r for r in rows}
+        # Played: seat_flips=1 → break-even (omitted)
+        self.assertNotIn("OWN", by_id)
+        # New design flipped once → other +1
+        self.assertEqual(by_id["CHE"]["delta"], 1)
+        self.assertEqual(by_id["CHE"]["kind"], "other")
+        # Already-owned on table, 0 flips → own −1
+        self.assertEqual(by_id["WTI"]["delta"], -1)
+        self.assertEqual(by_id["WTI"]["kind"], "own")
+        self.assertEqual(by_id["WTI"]["flips"], 0)
+
+    def test_owned_with_two_flips_gets_plus_two(self) -> None:
+        rows = compute_mastery_deltas(
+            played_design_id="OWN",
+            seat_flips=2,
+            flips_by_design={"OWN": 0, "WTI": 2},
+            table_design_ids=["OWN", "WTI"],
+            owned_design_ids={"OWN", "WTI"},
+        )
+        by_id = {r["designId"]: r for r in rows}
+        self.assertEqual(by_id["OWN"]["delta"], 2)  # seat_flips=2
+        self.assertEqual(by_id["OWN"]["flips"], 0)  # never flipped own disc
+        self.assertEqual(by_id["WTI"]["delta"], 2)
+        self.assertEqual(by_id["WTI"]["kind"], "own")
 
     def test_compute_skips_zero_other_and_break_even_own(self) -> None:
         rows = compute_mastery_deltas(
             played_design_id="OWN",
             seat_flips=1,
             flips_by_design={"FOX": 0},
+            table_design_ids=["OWN", "FOX"],
+            owned_design_ids={"OWN"},
         )
         self.assertEqual(rows, [])
 

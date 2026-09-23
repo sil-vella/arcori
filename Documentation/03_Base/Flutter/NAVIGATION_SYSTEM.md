@@ -286,7 +286,7 @@ This produces a **cross-section back stack** (e.g. Home → Sample → WS Demo, 
 1. Create `lib/modules/<name>/`:
    - `<name>_routes.dart` — `register<Name>Routes(AppRouteSink, NotificationScreenSink)` (register navigable slug beside [GoRoute])
    - `<name>_drawer.dart` — `register<Name>Drawer(AppDrawerSink)` — usually `addDestinations`; optionally `addBottomItems`; at most one module in the app may `setHeader`
-   - `<name>_screen.dart` — body widget; use `ModuleScreenRegistrar` or `AppBarRegistrar` (see AppBar / bottom nav docs)
+   - `<name>_screen.dart` — body widget; use `ModuleScreenRegistrar` or `AppBarRegistrar` (see AppBar / bottom nav docs). Optional layout shells: [SCREEN_TEMPLATES.md](SCREEN_TEMPLATES.md) (e.g. template **001** top banner).
    - `<name>_bottom_nav.dart` — optional `register<Name>BottomNavScope` + item factory (shell bottom bar, not drawer bottom icons)
 2. Add path to `AppPaths`.
 3. Wire calls in `module_registry.dart` (routes, drawer, optional bottom nav scope).
@@ -304,6 +304,7 @@ resetBottomNavRegistry();
 resetNotificationScreenRegistry();
 resetAppBarController();
 resetBottomNavController();
+resetShellChromeController();
 registerApplicationModules(
   appRouteSink,
   appDrawerSink,
@@ -335,6 +336,7 @@ Coverage includes: root chrome (menu, no back), push/pop, drawer stack unwind, a
 | `lib/core/bottom_nav/bottom_nav_registry.dart` | Bottom nav scope sink |
 | `lib/core/bottom_nav/shell_bottom_bar.dart` | Shell bottom action bar |
 | `lib/core/screen/module_screen_registrar.dart` | AppBar + bottom nav screen wrapper |
+| `lib/core/screen/templates/` | Layout templates (001 top banner) — [SCREEN_TEMPLATES.md](SCREEN_TEMPLATES.md) |
 | `lib/modules/module_registry.dart` | Central module wiring |
 
 ## Future evolution

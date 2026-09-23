@@ -240,6 +240,26 @@ def get_museum_generation(
     ).first()
 
 
+def get_latest_museum_generation_for_design(
+    session: Session,
+    *,
+    design_id: str,
+) -> MuseumGeneration | None:
+    """Newest closed museum row for an exact design_id (serial)."""
+    did = (design_id or "").strip()
+    if not did:
+        return None
+    return session.scalars(
+        select(MuseumGeneration)
+        .where(MuseumGeneration.design_id == did)
+        .order_by(
+            MuseumGeneration.closed_at.desc(),
+            MuseumGeneration.id.desc(),
+        )
+        .limit(1)
+    ).first()
+
+
 def list_museum_generations(
     session: Session,
     *,
@@ -271,6 +291,25 @@ def list_museum_generations(
         MuseumGeneration.id.desc(),
     ).limit(lim)
     return list(session.scalars(stmt).all())
+
+
+def museum_has_series_token(
+    session: Session,
+    *,
+    series_token: str,
+    legacy_state: str | None = None,
+) -> bool:
+    """True if any closed museum row matches the series id token (e.g. SER001)."""
+    token = (series_token or "").strip()
+    if not token:
+        return False
+    stmt = select(MuseumGeneration.id).where(
+        MuseumGeneration.design_id.ilike(f"%{token}%")
+    )
+    state = (legacy_state or "").strip().lower()
+    if state in ("preserved", "lost"):
+        stmt = stmt.where(MuseumGeneration.legacy_state == state)
+    return session.scalars(stmt.limit(1)).first() is not None
 
 
 def list_open_first_offers(session: Session) -> list[DesignGenerationLifecycle]:

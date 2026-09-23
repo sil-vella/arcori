@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_colors.dart';
 import 'arcori_palette.dart';
 
 /// Slightly thick rim — same on the match stack, Avari chips, and Velora.
@@ -31,7 +32,7 @@ class ArcoriLook {
   Color get backColor => accent;
 
   /// Cylinder edge — same hue, slightly darker so thickness reads in 3D.
-  Color get edgeColor => Color.lerp(accent, const Color(0xFF000000), 0.22)!;
+  Color get edgeColor => Color.lerp(accent, AppColors.onSurface, 0.22)!;
 
   /// Back-face hairline: same hue as the fill, auto light/dark + saturation.
   Color get innerLineColor => arcoriBackInnerLineColor(backColor);

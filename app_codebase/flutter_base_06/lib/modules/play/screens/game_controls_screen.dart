@@ -7,6 +7,7 @@ import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 import '../../../utils/dev_logger.dart';
 import '../../avari/avari_notifier.dart';
 import '../../match/input/slam_motion_capability.dart';
@@ -108,94 +109,114 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
           : slammerOptions.first.$1;
     }
 
+    final muted = context.appTypography.bodySmall.copyWith(
+      color: AppChrome.onSurfaceMuted,
+    );
+
     return ModuleScreenRegistrar(
       appBarItems: const [
         AppBarTitle(text: 'Game Controls', icon: Icons.sports_mma_outlined),
       ],
-      child: Padding(
-        padding: AppSpacing.screenPadding,
+      child: AppChromePage(
         child: ListView(
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.md,
+            AppChromePage.topClearance(context) + AppSpacing.sm,
+            AppSpacing.md,
+            AppSpacing.xxl,
+          ),
           children: [
-            Text('Equipped slammer', style: context.appTypography.label),
-            AppSpacing.gapXs,
-            Text(
-              'From your collection. Used for online matches and practice defaults.',
-              style: context.appTypography.bodySmall,
-            ),
-            AppSpacing.gapSm,
-            if (_loadingInventory)
-              const Center(child: CircularProgressIndicator())
-            else if (slammerOptions.isEmpty)
-              Text(
-                _inventoryError ?? 'No slammers in your collection yet.',
-                style: context.appTypography.bodySmall,
-              )
-            else ...[
-              DropdownButtonFormField<String>(
-                value: dropdownValue,
-                items: [
-                  for (final s in slammerOptions)
-                    DropdownMenuItem(value: s.$1, child: Text(s.$2)),
+            AppChromeSection(
+              title: 'Equipped slammer',
+              goldFrame: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'From your collection. Used for online matches and practice defaults.',
+                    style: muted,
+                  ),
+                  AppSpacing.gapSm,
+                  if (_loadingInventory)
+                    const Center(child: CircularProgressIndicator())
+                  else if (slammerOptions.isEmpty)
+                    Text(
+                      _inventoryError ?? 'No slammers in your collection yet.',
+                      style: muted,
+                    )
+                  else ...[
+                    DropdownButtonFormField<String>(
+                      value: dropdownValue,
+                      dropdownColor: AppChrome.fieldFill,
+                      style: context.appTypography.body.copyWith(
+                        color: AppChrome.onSurface,
+                      ),
+                      items: [
+                        for (final s in slammerOptions)
+                          DropdownMenuItem(value: s.$1, child: Text(s.$2)),
+                      ],
+                      onChanged: (id) {
+                        if (id == null) return;
+                        unawaited(
+                          ref
+                              .read(gameControlsProvider.notifier)
+                              .setEquippedSlammerId(id),
+                        );
+                      },
+                      decoration: AppChrome.inputDecoration(context),
+                    ),
+                    if (_inventoryError != null) ...[
+                      AppSpacing.gapXs,
+                      Text(_inventoryError!, style: muted),
+                    ],
+                  ],
                 ],
-                onChanged: (id) {
-                  if (id == null) return;
-                  unawaited(
-                    ref
-                        .read(gameControlsProvider.notifier)
-                        .setEquippedSlammerId(id),
-                  );
-                },
-                decoration: const InputDecoration(border: OutlineInputBorder()),
               ),
-              if (_inventoryError != null) ...[
-                AppSpacing.gapXs,
-                Text(_inventoryError!, style: context.appTypography.bodySmall),
-              ],
-            ],
-            AppSpacing.gapLg,
-            Text('Slam controls', style: context.appTypography.label),
-            AppSpacing.gapXs,
-            Text(
-              'One mode at a time during matches.',
-              style: context.appTypography.bodySmall,
             ),
-            AppSpacing.gapSm,
-            SegmentedButton<SlamControlMode>(
-              segments: [
-                ButtonSegment(
-                  value: SlamControlMode.accel,
-                  label: Text(SlamControlMode.accel.label),
-                  icon: Icon(SlamControlMode.accel.icon),
-                  enabled: motionOk,
-                ),
-                ButtonSegment(
-                  value: SlamControlMode.touch,
-                  label: Text(SlamControlMode.touch.label),
-                  icon: Icon(SlamControlMode.touch.icon),
-                ),
-              ],
-              selected: {mode},
-              onSelectionChanged: (set) {
-                final next = set.first;
-                unawaited(
-                  ref
-                      .read(gameControlsProvider.notifier)
-                      .setSlamControlMode(next),
-                );
-              },
-            ),
-            AppSpacing.gapSm,
-            Text(
-              mode.caption,
-              style: context.appTypography.bodySmall,
-            ),
-            if (!motionOk) ...[
-              AppSpacing.gapXs,
-              Text(
-                'Motion sensors unavailable — touch mode only.',
-                style: context.appTypography.bodySmall,
+            AppSpacing.gapMd,
+            AppChromeSection(
+              title: 'Slam controls',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('One mode at a time during matches.', style: muted),
+                  AppSpacing.gapSm,
+                  SegmentedButton<SlamControlMode>(
+                    segments: [
+                      ButtonSegment(
+                        value: SlamControlMode.accel,
+                        label: Text(SlamControlMode.accel.label),
+                        icon: Icon(SlamControlMode.accel.icon),
+                        enabled: motionOk,
+                      ),
+                      ButtonSegment(
+                        value: SlamControlMode.touch,
+                        label: Text(SlamControlMode.touch.label),
+                        icon: Icon(SlamControlMode.touch.icon),
+                      ),
+                    ],
+                    selected: {mode},
+                    onSelectionChanged: (set) {
+                      final next = set.first;
+                      unawaited(
+                        ref
+                            .read(gameControlsProvider.notifier)
+                            .setSlamControlMode(next),
+                      );
+                    },
+                  ),
+                  AppSpacing.gapSm,
+                  Text(mode.caption, style: muted),
+                  if (!motionOk) ...[
+                    AppSpacing.gapXs,
+                    Text(
+                      'Motion sensors unavailable — touch mode only.',
+                      style: muted,
+                    ),
+                  ],
+                ],
               ),
-            ],
+            ),
           ],
         ),
       ),

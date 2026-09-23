@@ -12,6 +12,7 @@ import 'package:arcori/core/http/contracts/auth_api_contract.dart';
 import 'package:arcori/core/navigation/app_drawer_registry.dart';
 import 'package:arcori/core/navigation/app_router.dart';
 import 'package:arcori/core/notifications/notification_screen_registry.dart';
+import 'package:arcori/core/screen/shell_chrome_controller.dart';
 import 'package:arcori/core/state/app_state_registry.dart';
 import 'package:arcori/core/state/auth/auth_providers.dart';
 import 'package:arcori/core/state/auth/auth_state.dart';
@@ -191,6 +192,7 @@ Future<GoRouter> bootTestApp(
   resetNotificationScreenRegistry();
   resetAppBarController();
   resetBottomNavController();
+  resetShellChromeController();
   registerApplicationModules(
     appRouteSink,
     appDrawerSink,
@@ -220,4 +222,5 @@ void resetAllRegistries() {
   resetAppStateRegistry();
   resetAppBarController();
   resetBottomNavController();
+  resetShellChromeController();
 }

@@ -30,7 +30,7 @@ class AppCenteredModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final modalTheme = context.appModalTheme;
-    final contentPadding = padding ?? AppSpacing.screenPaddingCompact;
+    final contentPadding = padding ?? AppSpacing.modalPadding;
     final maxHeight = MediaQuery.sizeOf(context).height * 0.85;
 
     return Material(
@@ -100,11 +100,16 @@ class _Header extends StatelessWidget {
           Expanded(
             child: title == null
                 ? const SizedBox.shrink()
-                : Text(title!, style: context.appTypography.title),
+                : Text(
+                    title!,
+                    style: context.appTypography.title.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
           ),
           if (showCloseButton)
             IconButton(
-              style: context.appButtons.primary.icon,
+              style: context.appButtons.tertiary.icon,
               tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
               onPressed: onClose ?? () => dismissModalRoute(context),
               icon: const Icon(Icons.close),

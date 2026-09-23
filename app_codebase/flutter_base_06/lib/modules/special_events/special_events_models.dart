@@ -47,6 +47,7 @@ class SpecialEventEntry {
     this.arcoriSource = '',
     this.minMasteryRatio,
     this.hardPick = false,
+    this.homeFeatured = false,
     this.media = const CatalogMediaMap(),
     this.progress = const SpecialEventProgress(),
   });
@@ -81,6 +82,7 @@ class SpecialEventEntry {
       arcoriSource: arcori['source']?.toString().trim() ?? '',
       minMasteryRatio: ratio,
       hardPick: arcori['hardPick'] == true || arcori['hard_pick'] == true,
+      homeFeatured: json['homeFeatured'] == true || json['home_featured'] == true,
       media: CatalogMediaMap.fromJson(json['media']),
       progress: SpecialEventProgress.fromJson(
         progressRaw is Map
@@ -107,6 +109,9 @@ class SpecialEventEntry {
 
   /// JSON `arcori.hard_pick` — human must choose before queue.
   final bool hardPick;
+
+  /// Pin on Home featured-events card when true.
+  final bool homeFeatured;
 
   final CatalogMediaMap media;
   final SpecialEventProgress progress;

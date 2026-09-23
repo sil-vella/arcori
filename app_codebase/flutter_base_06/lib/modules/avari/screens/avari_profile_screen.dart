@@ -11,6 +11,7 @@ import '../../../core/navigation/app_router.dart';
 import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 import '../../kin/kin_backgrounds.dart';
 import '../../kin/kin_models.dart';
 import '../../kin/kin_notifier.dart';
@@ -94,16 +95,17 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
       appBarItems: const [
         AppBarTitle(text: 'Avari', icon: Icons.person_outline),
       ],
-      child: !auth.isAuthenticated && !auth.isBootstrapping
-          ? Center(
-              child: Padding(
-                padding: AppSpacing.screenPadding,
+      child: AppChromePage(
+        child: !auth.isAuthenticated && !auth.isBootstrapping
+            ? AppChromeCentered(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'Sign in to view your Avari profile',
-                      style: context.appTypography.body,
+                      style: context.appTypography.body.copyWith(
+                        color: AppChrome.onSurface,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     AppSpacing.gapMd,
@@ -113,14 +115,13 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
                     ),
                   ],
                 ),
-              ),
-            )
-          : state.isLoading && state.profile == null
-              ? const Center(child: CircularProgressIndicator())
-              : state.errorMessage != null && state.profile == null
-                  ? Center(
-                      child: Padding(
-                        padding: AppSpacing.screenPadding,
+              )
+            : state.isLoading && state.profile == null
+                ? const AppChromeCentered(
+                    child: CircularProgressIndicator(),
+                  )
+                : state.errorMessage != null && state.profile == null
+                    ? AppChromeCentered(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -138,27 +139,35 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
                             ),
                           ],
                         ),
+                      )
+                    : RefreshIndicator(
+                        onRefresh: () async {
+                          await ref
+                              .read(avariProfileProvider.notifier)
+                              .load(force: true);
+                          await ref
+                              .read(kinActiveSaveProvider.notifier)
+                              .refresh();
+                        },
+                        child: ListView(
+                          padding: EdgeInsets.fromLTRB(
+                            AppSpacing.md,
+                            AppChromePage.topClearance(context) +
+                                AppSpacing.sm,
+                            AppSpacing.md,
+                            AppSpacing.xxl,
+                          ),
+                          children: [
+                            if (state.profile != null)
+                              ..._profileBody(
+                                context,
+                                state.profile!,
+                                localKin,
+                              ),
+                          ],
+                        ),
                       ),
-                    )
-                  : RefreshIndicator(
-                      onRefresh: () async {
-                        await ref
-                            .read(avariProfileProvider.notifier)
-                            .load(force: true);
-                        await ref.read(kinActiveSaveProvider.notifier).refresh();
-                      },
-                      child: ListView(
-                        padding: AppSpacing.screenPadding,
-                        children: [
-                          if (state.profile != null)
-                            ..._profileBody(
-                              context,
-                              state.profile!,
-                              localKin,
-                            ),
-                        ],
-                      ),
-                    ),
+      ),
     );
   }
 
@@ -168,276 +177,290 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
     KinActiveSaveState localKin,
   ) {
     final identity = profile.identity;
-    final scheme = context.appColorScheme;
     final localDraft = localKin.draft;
+    final muted = context.appTypography.caption.copyWith(
+      color: AppChrome.onSurfaceMuted,
+    );
+    final body = context.appTypography.body.copyWith(
+      color: AppChrome.onSurface,
+    );
+    final bodySmall = context.appTypography.bodySmall.copyWith(
+      color: AppChrome.onSurfaceMuted,
+    );
+
+    Widget gapSection(Widget section) => Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.md),
+          child: section,
+        );
+
     return [
-      Center(
-        child: Column(
-          children: [
-            SizedBox(
-              width: _avatarSize,
-              height: _avatarSize,
-              child: _IdentityAvatar(avatarUrl: identity.avatarUrl),
-            ),
-            AppSpacing.gapSm,
-            Text(
-              identity.displayName,
-              style: context.appTypography.h3,
-              textAlign: TextAlign.center,
-            ),
-            AppSpacing.gapXxs,
-            Text(
-              identity.title,
-              style: context.appTypography.caption.copyWith(
-                color: scheme.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
-      ),
-      AppSpacing.gapLg,
-      _SectionTitle(text: 'Wallet'),
-      Text(
-        'Every 4 Gold Fragments automatically become 1 Gold Arcori.',
-        style: context.appTypography.bodySmall,
-      ),
-      AppSpacing.gapSm,
-      _KeyValue('Gold Arcori', '${profile.economy.goldArcori}'),
-      _KeyValue(
-        'Gold Fragments',
-        '${profile.economy.goldFragments} of 4 toward next Gold Arcori',
-      ),
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Titles'),
-      Text(
-        profile.titles.isEmpty ? 'None yet' : profile.titles.join(' · '),
-        style: context.appTypography.body,
-      ),
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Achievements'),
-      Text(
-        'Catalog unlocks from matches — separate from titles.',
-        style: context.appTypography.bodySmall,
-      ),
-      AppSpacing.gapSm,
-      OutlinedButton(
-        onPressed: () => Nav.push(context, AppPaths.achievements),
-        child: const Text('View Achievements'),
-      ),
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Kin'),
-      if (profile.kin != null) ...[
-        Center(
-          child: ArcoriCylinder(
-            look: ArcoriLook(
-              designId: profile.kin!.genesisDesignId,
-              colorHex: profile.kin!.color,
-            ),
-            size: 200,
-            face: KinSceneStack(
-              lottieUrl: profile.kin!.lottieUrl,
-              file: (profile.kin!.lottieUrl == null ||
-                      profile.kin!.lottieUrl!.isEmpty)
-                  ? localKin.lottieFile
-                  : null,
-              scene: KinBackgroundScene.fromClaimJson(profile.kin!.background),
-            ),
-          ),
-        ),
-        AppSpacing.gapSm,
-        Text(
-          profile.kin!.chosenName,
-          style: context.appTypography.body,
-          textAlign: TextAlign.center,
-        ),
-        AppSpacing.gapXxs,
-        Text(
-          profile.kin!.masteryOverMintReach,
-          textAlign: TextAlign.center,
-          style: context.appTypography.caption.copyWith(
-            color: scheme.onSurfaceVariant,
-          ),
-        ),
-        AppSpacing.gapXxs,
-        Text(
-          [
-            profile.kin!.subtheme,
-            if (profile.kin!.regionCode != null) profile.kin!.regionCode!,
-            if (profile.kin!.series != null) profile.kin!.series!,
-            if (profile.kin!.generationRoman != null)
-              'Gen ${profile.kin!.generationRoman}',
-          ].join(' · '),
-          textAlign: TextAlign.center,
-          style: context.appTypography.caption.copyWith(
-            color: scheme.onSurfaceVariant,
-          ),
-        ),
-        AppSpacing.gapXxs,
-        Text(
-          profile.kin!.genesisDesignId,
-          textAlign: TextAlign.center,
-          style: context.appTypography.caption.copyWith(
-            color: scheme.onSurfaceVariant,
-          ),
-        ),
-      ] else if (localDraft != null) ...[
-        _LocalKinDisc(localKin: localKin),
-        AppSpacing.gapSm,
-        Text(
-          localDraft.displayName,
-          style: context.appTypography.body,
-          textAlign: TextAlign.center,
-        ),
-        AppSpacing.gapXxs,
-        Text(
-          '0/500',
-          textAlign: TextAlign.center,
-          style: context.appTypography.caption.copyWith(
-            color: scheme.onSurfaceVariant,
-          ),
-        ),
-        AppSpacing.gapXxs,
-        Text(
-          'Local draft ${localDraft.serial} · base ${localDraft.kinSerial}',
-          textAlign: TextAlign.center,
-          style: context.appTypography.caption.copyWith(
-            color: scheme.onSurfaceVariant,
-          ),
-        ),
-      ] else
-        Text(
-          'Not claimed yet',
-          style: context.appTypography.bodyMuted,
-        ),
-      if (profile.kin == null) ...[
-        AppSpacing.gapSm,
-        Align(
-          alignment: Alignment.centerLeft,
-          child: FilledButton(
-            onPressed: () => Nav.push(context, AppPaths.kinTypes),
-            child: Text(
-              localDraft == null ? 'Create Kin' : 'Continue Kin draft',
-            ),
-          ),
-        ),
-      ],
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Stats'),
-      _KeyValue('Matches', '${profile.stats.matchesPlayed}'),
-      _KeyValue('Flips', '${profile.stats.flips}'),
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Mastery Value'),
-      AppSpacing.gapSm,
-      _KeyValue('Value', '${profile.mastery.masteryValue}'),
-      _KeyValue('Standing', profile.mastery.masteryValueLabel),
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Trove'),
-      Text(
-        'Preserved Legacy — out of circulation.',
-        style: context.appTypography.bodySmall,
-      ),
-      AppSpacing.gapSm,
-      if (profile.trove.isEmpty)
-        Text('None yet', style: context.appTypography.bodyMuted)
-      else
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.sm,
-          children: [
-            for (final item in profile.trove)
-              InventoryFaceChip(
-                item: item.asInventoryItem(),
-                captionOverride: item.caption,
-              ),
-          ],
-        ),
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Closed Generations'),
-      Text(
-        'Gens you raced that closed — mastery at close and how much seeded into the next gen.',
-        style: context.appTypography.bodySmall,
-      ),
-      AppSpacing.gapSm,
-      if (profile.closedGenerations.isEmpty)
-        Text('None yet', style: context.appTypography.bodyMuted)
-      else
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.sm,
-          children: [
-            for (final item in profile.closedGenerations)
-              InventoryFaceChip(
-                item: item.asInventoryItem(),
-                captionOverride: item.caption,
-              ),
-          ],
-        ),
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Preservation Windows'),
-      Text(
-        'Designs currently in a Legacy window — mastery / mastery cap.',
-        style: context.appTypography.bodySmall,
-      ),
-      AppSpacing.gapSm,
-      if (profile.preservationWindows.isEmpty)
-        Text('None open', style: context.appTypography.bodyMuted)
-      else
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.sm,
-          children: [
-            for (final item in profile.preservationWindows)
-              InventoryFaceChip(item: item),
-          ],
-        ),
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Arcori'),
-      Text(
-        'Circulating designs you can play — mastery / mint reach per design.',
-        style: context.appTypography.bodySmall,
-      ),
-      AppSpacing.gapSm,
-      Builder(
-        builder: (context) {
-          final items = _arcoriAccessWithKinFirst(
-            profile,
-            localDraft: localDraft,
-          );
-          if (items.isEmpty) {
-            return Text('None yet', style: context.appTypography.bodyMuted);
-          }
-          final draftId = localDraft?.serial.trim() ?? '';
-          return Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.sm,
+      gapSection(
+        AppChromeSection(
+          title: 'Avari',
+          goldFrame: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (final item in items)
-                InventoryFaceChip(
-                  item: item,
-                  lottieFile: (profile.kin == null &&
-                          draftId.isNotEmpty &&
-                          item.designId == draftId)
-                      ? localKin.lottieFile
-                      : null,
+              Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: _avatarSize,
+                      height: _avatarSize,
+                      child: _IdentityAvatar(avatarUrl: identity.avatarUrl),
+                    ),
+                    AppSpacing.gapSm,
+                    Text(
+                      identity.displayName,
+                      style: context.appTypography.h3.copyWith(
+                        color: AppChrome.onSurface,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    AppSpacing.gapXxs,
+                    Text(identity.title, style: muted),
+                  ],
                 ),
+              ),
+              AppSpacing.gapMd,
+              _KeyValue('Gold Arcori', '${profile.economy.goldArcori}'),
+              _KeyValue(
+                'Gold Fragments',
+                '${profile.economy.goldFragments} of 4 toward next Gold Arcori',
+              ),
             ],
-          );
-        },
+          ),
+        ),
       ),
-      AppSpacing.gapMd,
-      _SectionTitle(text: 'Slammers'),
-      Text(
-        'Slammers you own — Game Controls equips from this list.',
-        style: context.appTypography.bodySmall,
+      gapSection(
+        AppChromeSection(
+          title: 'Titles',
+          child: Text(
+            profile.titles.isEmpty ? 'None yet' : profile.titles.join(' · '),
+            style: body,
+          ),
+        ),
       ),
-      AppSpacing.gapSm,
-      if (profile.slammers.isEmpty)
-        Text('None yet', style: context.appTypography.bodyMuted)
-      else
-        for (final item in profile.slammers) ...[
-          SlammerInventoryTile(item: item),
-          AppSpacing.gapSm,
-        ],
+      gapSection(
+        AppChromeSection(
+          title: 'Achievements',
+          actionLabel: 'View',
+          onAction: () => Nav.push(context, AppPaths.achievements),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Catalog unlocks from matches — separate from titles.',
+                style: bodySmall,
+              ),
+              AppSpacing.gapSm,
+              OutlinedButton(
+                onPressed: () => Nav.push(context, AppPaths.achievements),
+                child: const Text('View Achievements'),
+              ),
+            ],
+          ),
+        ),
+      ),
+      gapSection(
+        AppChromeSection(
+          title: 'Kin',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (profile.kin != null) ...[
+                Center(
+                  child: ArcoriCylinder(
+                    look: ArcoriLook(
+                      designId: profile.kin!.genesisDesignId,
+                      colorHex: profile.kin!.color,
+                    ),
+                    size: 200,
+                    face: KinSceneStack(
+                      lottieUrl: profile.kin!.lottieUrl,
+                      file: (profile.kin!.lottieUrl == null ||
+                              profile.kin!.lottieUrl!.isEmpty)
+                          ? localKin.lottieFile
+                          : null,
+                      scene: KinBackgroundScene.fromClaimJson(
+                        profile.kin!.background,
+                      ),
+                    ),
+                  ),
+                ),
+                AppSpacing.gapSm,
+                Text(
+                  profile.kin!.chosenName,
+                  style: body,
+                  textAlign: TextAlign.center,
+                ),
+                AppSpacing.gapXxs,
+                Text(
+                  profile.kin!.masteryOverMintReach,
+                  textAlign: TextAlign.center,
+                  style: muted,
+                ),
+                AppSpacing.gapXxs,
+                Text(
+                  [
+                    profile.kin!.subtheme,
+                    if (profile.kin!.regionCode != null)
+                      profile.kin!.regionCode!,
+                    if (profile.kin!.series != null) profile.kin!.series!,
+                    if (profile.kin!.generationRoman != null)
+                      'Gen ${profile.kin!.generationRoman}',
+                  ].join(' · '),
+                  textAlign: TextAlign.center,
+                  style: muted,
+                ),
+                AppSpacing.gapXxs,
+                Text(
+                  profile.kin!.genesisDesignId,
+                  textAlign: TextAlign.center,
+                  style: muted,
+                ),
+              ] else if (localDraft != null) ...[
+                _LocalKinDisc(localKin: localKin),
+                AppSpacing.gapSm,
+                Text(
+                  localDraft.displayName,
+                  style: body,
+                  textAlign: TextAlign.center,
+                ),
+                AppSpacing.gapXxs,
+                Text('0/500', textAlign: TextAlign.center, style: muted),
+                AppSpacing.gapXxs,
+                Text(
+                  'Local draft ${localDraft.serial} · base ${localDraft.kinSerial}',
+                  textAlign: TextAlign.center,
+                  style: muted,
+                ),
+              ] else
+                Text('Not claimed yet', style: bodySmall),
+              if (profile.kin == null) ...[
+                AppSpacing.gapSm,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: FilledButton(
+                    onPressed: () => Nav.push(context, AppPaths.kinTypes),
+                    child: Text(
+                      localDraft == null ? 'Create Kin' : 'Continue Kin draft',
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+      gapSection(
+        AppChromeSection(
+          title: 'Stats',
+          child: Column(
+            children: [
+              _KeyValue('Matches', '${profile.stats.matchesPlayed}'),
+              _KeyValue('Flips', '${profile.stats.flips}'),
+            ],
+          ),
+        ),
+      ),
+      gapSection(
+        AppChromeSection(
+          title: 'Mastery Value',
+          goldFrame: true,
+          child: Column(
+            children: [
+              _KeyValue('Value', '${profile.mastery.masteryValue}'),
+              _KeyValue('Standing', profile.mastery.masteryValueLabel),
+            ],
+          ),
+        ),
+      ),
+      gapSection(
+        AppChromeSection(
+          title: 'Trove',
+          actionLabel: 'Open',
+          onAction: () => Nav.push(context, AppPaths.trove),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Minted Legacy pieces live in your Trove — not circulating play stock.',
+                style: bodySmall,
+              ),
+              AppSpacing.gapSm,
+              OutlinedButton(
+                onPressed: () => Nav.push(context, AppPaths.trove),
+                child: const Text('Open Trove'),
+              ),
+            ],
+          ),
+        ),
+      ),
+      gapSection(
+        AppChromeSection(
+          title: 'Arcori',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Circulating designs you can play — mastery / mint reach per design.',
+                style: bodySmall,
+              ),
+              AppSpacing.gapSm,
+              Builder(
+                builder: (context) {
+                  final items = _arcoriAccessWithKinFirst(
+                    profile,
+                    localDraft: localDraft,
+                  );
+                  if (items.isEmpty) {
+                    return Text('None yet', style: bodySmall);
+                  }
+                  final draftId = localDraft?.serial.trim() ?? '';
+                  return Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      for (final item in items)
+                        InventoryFaceChip(
+                          item: item,
+                          lottieFile: (profile.kin == null &&
+                                  draftId.isNotEmpty &&
+                                  item.designId == draftId)
+                              ? localKin.lottieFile
+                              : null,
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+      gapSection(
+        AppChromeSection(
+          title: 'Slammers',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Slammers you own — Game Controls equips from this list.',
+                style: bodySmall,
+              ),
+              AppSpacing.gapSm,
+              if (profile.slammers.isEmpty)
+                Text('None yet', style: bodySmall)
+              else
+                for (final item in profile.slammers) ...[
+                  SlammerInventoryTile(item: item),
+                  AppSpacing.gapSm,
+                ],
+            ],
+          ),
+        ),
+      ),
     ];
   }
 }
@@ -564,15 +587,14 @@ class _IdentityAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final url = resolveMediaUrl(avatarUrl);
-    final scheme = context.appColorScheme;
     return ClipOval(
       child: ColoredBox(
-        color: scheme.surfaceContainerHighest,
+        color: AppChrome.fieldFill,
         child: url.isEmpty
             ? Icon(
                 Icons.person_outline,
                 size: AppSpacing.xxl,
-                color: scheme.onSurfaceVariant,
+                color: AppChrome.onSurfaceMuted,
               )
             : Image.network(
                 url,
@@ -582,24 +604,10 @@ class _IdentityAvatar extends StatelessWidget {
                 errorBuilder: (_, __, ___) => Icon(
                   Icons.person_outline,
                   size: AppSpacing.xxl,
-                  color: scheme.onSurfaceVariant,
+                  color: AppChrome.onSurfaceMuted,
                 ),
               ),
       ),
-    );
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-      child: Text(text, style: context.appTypography.title),
     );
   }
 }
@@ -620,11 +628,16 @@ class _KeyValue extends StatelessWidget {
             child: Text(
               label,
               style: context.appTypography.caption.copyWith(
-                color: context.appColorScheme.onSurfaceVariant,
+                color: AppChrome.onSurfaceMuted,
               ),
             ),
           ),
-          Text(value, style: context.appTypography.body),
+          Text(
+            value,
+            style: context.appTypography.body.copyWith(
+              color: AppChrome.onSurface,
+            ),
+          ),
         ],
       ),
     );

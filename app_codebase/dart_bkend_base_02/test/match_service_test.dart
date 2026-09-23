@@ -253,8 +253,15 @@ void main() {
       expect(snapshot.seats[1].arcoriIds, [stubAiArcoriId]);
       expect(snapshot.seats[1].kind, 'ai');
       final pieces = snapshot.table['pieces'] as List;
+      expect(pieces, hasLength(3));
       expect(pieces.first['imageUrl'], contains('ANM-TIG-SER001-0001.webp'));
       expect(pieces.first['color'], '#C6A15B');
+      final gatherer = pieces.cast<Map>().firstWhere(
+            (p) => p['pieceId'] == 'p_gatherer',
+          );
+      expect(gatherer['designId'], stubGathererArcoriId);
+      expect(gatherer.containsKey('seatIndex'), isFalse);
+      expect(gatherer['ownerUserId'], '');
     });
 
     test('startFromLobby can select_arena for specialEvent seated mode', () async {
@@ -317,6 +324,8 @@ void main() {
                   'regionCode': 'amberwild',
                   'imageUrl': '/catalog-media/velora/arenas/amberwild/x.webp',
                   'source': 'majority',
+                  // Catalog may return a Gatherer; SE must ignore it.
+                  'gathererArcoriId': stubGathererArcoriId,
                 },
               }),
               200,
@@ -352,6 +361,13 @@ void main() {
 
       expect(paths, contains('/service/catalog/select_arena'));
       expect(snapshot.arenaImageUrl, contains('amberwild'));
+      expect(snapshot.gathererArcoriId, isNull);
+      final pieces = snapshot.table['pieces'] as List;
+      expect(
+        pieces.where((p) => (p as Map)['pieceId'] == 'p_gatherer'),
+        isEmpty,
+      );
+      expect(pieces, hasLength(2));
     });
 
     test('startFromLobby uses verified slammer not the requested unowned id',

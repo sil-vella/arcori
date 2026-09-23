@@ -16,10 +16,15 @@ Future<AvariInventoryItem?> showHighMasteryPickerModal({
   required WidgetRef ref,
   double minMasteryRatio = 0.8,
 }) {
-  return AppModal.showCenteredShell<AvariInventoryItem>(
+  return AppModal.showCentered<AvariInventoryItem>(
     context,
-    title: 'Choose High Mastery',
-    child: _HighMasteryPickerBody(minMasteryRatio: minMasteryRatio),
+    builder: (ctx) => Theme(
+      data: AppTheme.dark,
+      child: AppCenteredModal(
+        title: 'Choose High Mastery',
+        child: _HighMasteryPickerBody(minMasteryRatio: minMasteryRatio),
+      ),
+    ),
   );
 }
 
@@ -79,7 +84,7 @@ class _HighMasteryPickerBodyState
   Widget build(BuildContext context) {
     if (_loading) {
       return const Padding(
-        padding: EdgeInsets.all(24),
+        padding: AppSpacing.modalPadding,
         child: Center(child: CircularProgressIndicator()),
       );
     }
@@ -91,6 +96,7 @@ class _HighMasteryPickerBodyState
           Text(_error!, style: context.appTypography.body),
           AppSpacing.gapMd,
           OutlinedButton(
+            style: context.appButtons.tertiary.outlined,
             onPressed: () => AppModal.dismiss(context),
             child: const Text('Close'),
           ),
@@ -117,6 +123,7 @@ class _HighMasteryPickerBodyState
           ],
           AppSpacing.gapMd,
           OutlinedButton(
+            style: context.appButtons.tertiary.outlined,
             onPressed: () => AppModal.dismiss(context),
             child: const Text('Cancel'),
           ),
@@ -145,30 +152,40 @@ class _HighMasteryRow extends StatelessWidget {
     final need = reach > 0 ? (minMasteryRatio * reach).ceil() : 0;
 
     return Material(
-      color: context.appColorScheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(12),
+      color: AppColors.surfaceDark.withValues(alpha: 0.55),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        side: BorderSide(
+          color: AppSurfaces.frameBronze(Brightness.dark).withValues(alpha: 0.55),
+        ),
+      ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadii.md),
         onTap: () => AppModal.dismiss(context, item),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: AppSpacing.modalPaddingCompact,
           child: Row(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppRadii.sm),
                 child: SizedBox(
                   width: 56,
                   height: 56,
                   child: url.isEmpty
                       ? ColoredBox(
-                          color: context.appColorScheme.surface,
-                          child: const Icon(Icons.pets),
+                          color: AppColors.surfaceDark,
+                          child: Icon(
+                            Icons.pets,
+                            color: AppColors.onSurfaceMutedDark,
+                          ),
                         )
                       : Image.network(
                           url,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) =>
-                              const Icon(Icons.pets),
+                          errorBuilder: (_, __, ___) => Icon(
+                            Icons.pets,
+                            color: AppColors.onSurfaceMutedDark,
+                          ),
                         ),
                 ),
               ),
@@ -177,12 +194,19 @@ class _HighMasteryRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.displayName, style: context.appTypography.label),
+                    Text(
+                      item.displayName,
+                      style: context.appTypography.label.copyWith(
+                        color: AppColors.onSurfaceDark,
+                      ),
+                    ),
                     if (mastery.isNotEmpty) ...[
                       AppSpacing.gapXs,
                       Text(
                         need > 0 ? '$mastery (≥$need)' : mastery,
-                        style: context.appTypography.bodySmall,
+                        style: context.appTypography.bodySmall.copyWith(
+                          color: AppSurfaces.frameGold(Brightness.dark),
+                        ),
                       ),
                     ],
                   ],

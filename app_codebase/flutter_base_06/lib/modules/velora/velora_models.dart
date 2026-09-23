@@ -200,6 +200,21 @@ class VeloraSeriesGroup {
   final List<DesignSummary> designs;
 }
 
+/// Themes found under one series (Velora series → theme browse).
+class VeloraThemeInSeries {
+  const VeloraThemeInSeries({
+    required this.theme,
+    required this.themeCode,
+    required this.designs,
+  });
+
+  final String theme;
+  final String themeCode;
+  final List<DesignSummary> designs;
+
+  String get label => theme.isNotEmpty ? theme : themeCode;
+}
+
 /// Theme category with nested series groups (theme → series).
 class VeloraThemeGroup {
   const VeloraThemeGroup({
@@ -211,7 +226,31 @@ class VeloraThemeGroup {
   final List<VeloraSeriesGroup> series;
 }
 
-/// Catalog theme from meta (Velora entry buttons).
+/// Catalog series from GET /catalog/series (Velora home).
+class CatalogSeriesEntry {
+  const CatalogSeriesEntry({
+    required this.key,
+    required this.label,
+    required this.seriesKey,
+  });
+
+  factory CatalogSeriesEntry.fromJson(Map<String, dynamic> json) {
+    final key = json['key']?.toString().trim() ?? '';
+    final label = json['label']?.toString().trim() ?? '';
+    final seriesKey = json['seriesKey']?.toString().trim() ?? '';
+    return CatalogSeriesEntry(
+      key: key,
+      label: label.isNotEmpty ? label : (seriesKey.isNotEmpty ? seriesKey : key),
+      seriesKey: seriesKey.isNotEmpty ? seriesKey : label,
+    );
+  }
+
+  final String key;
+  final String label;
+  final String seriesKey;
+}
+
+/// Catalog theme from meta (lore lookup).
 class CatalogThemeEntry {
   const CatalogThemeEntry({
     required this.theme,

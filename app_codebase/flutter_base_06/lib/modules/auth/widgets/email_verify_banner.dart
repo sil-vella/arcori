@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/state/user/user_profile_provider.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 
 /// Prompts full accounts that have not verified email yet.
 class EmailVerifyBanner extends ConsumerStatefulWidget {
@@ -30,32 +31,26 @@ class _EmailVerifyBannerState extends ConsumerState<EmailVerifyBanner> {
       return const SizedBox.shrink();
     }
 
-    return Container(
-      margin: AppSpacing.screenPaddingCompact.copyWith(top: AppSpacing.md),
-      padding: AppSpacing.screenPaddingCompact,
-      decoration: BoxDecoration(
-        color: context.appColorScheme.tertiaryContainer,
-        borderRadius: BorderRadius.circular(AppButtonMetrics.radius),
-        border: Border.all(color: context.appColorScheme.outline),
-      ),
+    return AppChromeSection(
+      title: 'Verify your email',
+      margin: const EdgeInsets.only(bottom: AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Verify your email',
-            style: context.appTypography.subtitle,
-          ),
-          AppSpacing.gapSm,
-          Text(
             'We sent a verification link to ${profile.email}. '
             'Verify to confirm account ownership.',
-            style: context.appTypography.bodySmall,
+            style: context.appTypography.bodySmall.copyWith(
+              color: AppChrome.onSurfaceMuted,
+            ),
           ),
           if (_statusMessage != null) ...[
             AppSpacing.gapSm,
             Text(
               _statusMessage!,
-              style: context.appTypography.bodySmall,
+              style: context.appTypography.bodySmall.copyWith(
+                color: AppChrome.onSurface,
+              ),
             ),
           ],
           AppSpacing.gapMd,

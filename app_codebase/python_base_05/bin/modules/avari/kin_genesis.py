@@ -1,4 +1,4 @@
-"""Kin catalog design builder — series from catalog CURRENT_SERIES (SER001 launch)."""
+"""Kin catalog design builder — player Kin uses KIN_SERIES (Kin / SER005)."""
 
 from __future__ import annotations
 
@@ -8,9 +8,9 @@ from datetime import datetime, timezone
 from typing import Any
 
 from modules.catalog.current_series import (
-    CURRENT_SERIES,
-    current_id_token,
-    current_series,
+    KIN_SERIES,
+    kin_id_token,
+    kin_series,
 )
 
 # Keys on a regular Genesis design (e.g. Tiger in animals.json) — parity lock.
@@ -52,8 +52,8 @@ OPTIONAL_ARCORI_FACE_KEYS: frozenset[str] = frozenset(
     }
 )
 
-# Back-compat alias — prefer CURRENT_SERIES / current_series().
-CURRENT_KIN_SERIES: dict[str, Any] = CURRENT_SERIES
+# Back-compat alias — player Kin series (not Genesis CURRENT_SERIES).
+CURRENT_KIN_SERIES: dict[str, Any] = KIN_SERIES
 
 # Same accents as Flutter arcori_palette.dart / kArcoriAccentHexes.
 ALLOWED_ARCORI_COLORS: frozenset[str] = frozenset(
@@ -134,10 +134,10 @@ def _player_token(username: str) -> str:
 
 
 def mint_internal_id(*, username: str, seq: int) -> str:
-    """Mint `KIN-…-SERnnn-GEN001-####` using catalog CURRENT_SERIES."""
+    """Mint `KIN-…-SER005-GEN001-####` using KIN_SERIES."""
     token = _player_token(username)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M")
-    series_token = current_id_token()
+    series_token = kin_id_token()
     return f"KIN-{token}{stamp}-{series_token}-GEN001-{seq:04d}"
 
 
@@ -183,12 +183,12 @@ def build_kin_catalog_design(
     finish: str = "Standard",
     effect: str = "None",
 ) -> dict[str, Any]:
-    """Build a design object with the same keys as a regular Genesis Arcori."""
+    """Build a design object with the same keys as a regular catalog Arcori."""
     name = (chosen_name or "").strip() or "Kin"
     design_code = _slug_design_code(name)
     family = re.sub(r"[^A-Za-z0-9]+", "_", name.upper()).strip("_") or "KIN"
     affinity, hostility = region_affinity_hostility(region_code)
-    series_cfg = current_series()
+    series_cfg = kin_series()
     gen = dict(series_cfg["generation"])
     gen["creator"] = {"type": "player", "playerId": player_id}
     legacy = dict(series_cfg["legacy"])
@@ -227,13 +227,13 @@ def build_kin_catalog_design(
             f"Give me an image with a Kin Arcori from the {subtheme} lineage "
             f"named {name} in {style.lower()} style with a {finish.lower()} finish "
             f"and {effect.lower()} effect. Use a background visually related to the "
-            f"Genesis origins of Velora. No borders, no frames. The subject should be "
+            f"Kin origins of Velora. No borders, no frames. The subject should be "
             f"horizontally and vertically centered. The subject should fill around 2/4 "
             f"of the total image size. The image must use a 1:1 aspect ratio in webp "
             f"format and named {internal_id}.webp"
         ),
         "loreDescription": (
-            f"The first generation of the {name} lineage. This Genesis Arcori belongs "
+            f"The first generation of the {name} lineage. This Kin Arcori belongs "
             f"to the {subtheme} Kin and marks the beginning of a unique family within Velora."
         ),
         "legacy": legacy,

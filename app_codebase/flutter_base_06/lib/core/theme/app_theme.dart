@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'app_buttons.dart';
 import 'app_colors.dart';
 import 'app_modal_theme.dart';
+import 'app_radii.dart';
+import 'app_surfaces.dart';
 import 'app_typography.dart';
 
 /// Builds [ThemeData] and exposes theme helpers for the app.
@@ -30,28 +32,32 @@ abstract final class AppTheme {
           isDark ? AppColors.backgroundDark : AppColors.background,
       dividerColor: isDark ? AppColors.dividerDark : AppColors.divider,
       appBarTheme: AppBarTheme(
-        backgroundColor: scheme.primaryContainer,
-        foregroundColor: scheme.onPrimaryContainer,
+        backgroundColor: Colors.transparent,
+        foregroundColor: scheme.onSurface,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         centerTitle: false,
         titleTextStyle: AppTypography.forBrightness(brightness).appBarTitle
-            .copyWith(color: scheme.onPrimaryContainer),
+            .copyWith(color: scheme.onSurface),
       ),
       cardTheme: CardThemeData(
         color: isDark ? AppColors.surfaceDark : AppColors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadii.lg),
           side: BorderSide(
-            color: isDark ? AppColors.outlineDark : AppColors.outline,
+            color: isDark
+                ? AppColors.tertiary.withValues(alpha: 0.45)
+                : AppColors.tertiary.withValues(alpha: 0.55),
           ),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(style: buttons.primary.filled),
       outlinedButtonTheme:
-          OutlinedButtonThemeData(style: buttons.primary.outlined),
-      textButtonTheme: TextButtonThemeData(style: buttons.primary.text),
-      iconButtonTheme: IconButtonThemeData(style: buttons.primary.icon),
+          OutlinedButtonThemeData(style: buttons.tertiary.outlined),
+      textButtonTheme: TextButtonThemeData(style: buttons.secondary.text),
+      iconButtonTheme: IconButtonThemeData(style: buttons.secondary.icon),
       elevatedButtonTheme: ElevatedButtonThemeData(style: buttons.primary.filled),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: AppTypography.forBrightness(brightness).label,
@@ -60,20 +66,36 @@ abstract final class AppTheme {
               color: scheme.error,
             ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppRadii.sm),
           borderSide: BorderSide(color: scheme.outline),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppRadii.sm),
           borderSide: BorderSide(color: scheme.outline),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppRadii.sm),
           borderSide: BorderSide(color: scheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppRadii.sm),
           borderSide: BorderSide(color: scheme.error),
+        ),
+      ),
+      drawerTheme: DrawerThemeData(
+        backgroundColor:
+            isDark ? AppColors.surfaceDark : AppColors.surface,
+        surfaceTintColor: Colors.transparent,
+      ),
+      listTileTheme: ListTileThemeData(
+        iconColor: isDark ? AppColors.tertiary : AppColors.primary,
+        textColor: isDark ? AppColors.onSurfaceDark : AppColors.onSurface,
+        selectedColor: AppColors.secondary,
+        selectedTileColor: isDark
+            ? AppColors.secondary.withValues(alpha: 0.12)
+            : AppColors.secondaryPastel.withValues(alpha: 0.55),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadii.sm),
         ),
       ),
       extensions: [
@@ -81,6 +103,8 @@ abstract final class AppTheme {
         if (isDark) AppTypographyExtension.dark else AppTypographyExtension.light,
         if (isDark) AppButtonStylesExtension.dark else AppButtonStylesExtension.light,
         if (isDark) AppModalThemeExtension.dark else AppModalThemeExtension.light,
+        if (isDark) AppSurfacesExtension.dark else AppSurfacesExtension.light,
+        const AppHudThemeExtension(),
       ],
     );
   }
@@ -209,4 +233,14 @@ extension AppThemeContext on BuildContext {
   AppThemeExtension get appColors =>
       Theme.of(this).extension<AppThemeExtension>() ??
       const AppThemeExtension();
+
+  /// Gallery / glass surface tokens.
+  AppSurfacesExtension get appSurfaces =>
+      Theme.of(this).extension<AppSurfacesExtension>() ??
+      AppSurfacesExtension.light;
+
+  /// Match HUD state colors (armed, power, miss).
+  AppHudThemeExtension get appHud =>
+      Theme.of(this).extension<AppHudThemeExtension>() ??
+      const AppHudThemeExtension();
 }

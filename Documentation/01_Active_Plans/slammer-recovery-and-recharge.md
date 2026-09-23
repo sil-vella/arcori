@@ -1,40 +1,38 @@
 # Slammer Recovery + Charge Spend / Recharge
 
-**Status:** Future  
+**Status:** Charge spend + Market Rim shipped; Recovery still deferred  
 **Created:** 2026-09-05  
-**Last Updated:** 2026-09-05
+**Last Updated:** 2026-09-21
 
-Related: [arcori-slam-impact.md](arcori-slam-impact.md) · [player-slam-input.md](player-slam-input.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md)
+Related: [arcori-slam-impact.md](arcori-slam-impact.md) · [player-slam-input.md](player-slam-input.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md) · [home-and-play-hub-flow.md](home-and-play-hub-flow.md)
 
 ## Objective
 
-Implement the two deferred slammer systems that are catalogued but unused in live slam:
+1. **Recovery** — `gameplayAttributes.recovery` (1–10). Still unused in `resolveSlam`.
+2. **Charge spend / Market recharge** — **shipped** for Rim Slammer.
 
-1. **Recovery** — `gameplayAttributes.recovery` (1–10). Combat/feel stat. Freeze already copies it; `resolveSlam` does not read it.
-2. **Charge spend / recharge** — `economy.maxCharges`, `chargeCostPerUse`, `rechargeCostGoldCaps`. Gold Caps to refill non-permanent slammers. Not wired to slam or Market yet.
+## Live today
 
-These are **not the same field**. Recovery does not change recharge cost.
+### Market (Rim)
 
-## Live today (do not regress)
+| Action | Cost | Result |
+|--------|------|--------|
+| First buy | **4 Gold Arcori** | Own Rim + **20** charges |
+| Top-up | **4 Gold Arcori** | **+100** charges |
+| Per slam | **1 charge** | Online, events, and practice (permanent starter free) |
 
-Slam uses frozen **impact**, **precision**, **control**, and **spread** only. Starter slammer is permanent (`maxCharges` null, recharge 0).
+Endpoints: `GET/POST /authuser/market/slammers…`. Flutter Market **Slammers** section.
 
-## Implementation Steps
+### Charge spend
 
-- [ ] Define Recovery in slam (or document a different layer if it is not a kick stat)
-- [ ] Deduct charges on paid-match slam for non-permanent slammers
-- [ ] Gold Cap recharge flow (Market / inventory)
-- [ ] Tests + tech spec / case study
+- `POST /service/avari/spend_slammer_charge` (Dart match) + authuser twin (practice)
+- Lobby `verify_slammers` falls back when requested design has 0 charges
+- Permanent starter never deducted
 
-## Notes
+### Deferred
 
-- Do not block celebration / Match Summary on this.
-- Practice should stay free (no charge spend).
+Recovery combat/feel stat. Selling other Genesis slammers. Arcori Packs.
 
 ## Case study
 
-`03_CASE_STUDY.md` — recovery + spend/recharge deferred; slam live attrs are impact / precision / control / spread.
-
-## Task Manager
-
-App Dev (`32`) open checklist: slammer recovery + charge spend / Gold Cap recharge.
+Charge −1 per slam anytime used; Rim buy 4 / top-up 4 Gold Arcori (+100).

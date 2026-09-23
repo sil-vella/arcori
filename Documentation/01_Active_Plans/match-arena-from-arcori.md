@@ -1,16 +1,16 @@
 # Match arena from seated Arcori
 
-**Status**: Completed  
+**Status**: Completed (Gatherer on table)  
 **Created**: 2026-09-06  
-**Last Updated**: 2026-09-13
+**Last Updated**: 2026-09-23
 
 Related: [match-hot-state.md](match-hot-state.md) · [catalog-hot-reload.md](catalog-hot-reload.md) · [stub-match-arcori-selection.md](stub-match-arcori-selection.md)
 
 ## Objective
 
-After seated Arcori are known on **Quick Start** and **Invite**, pick a Velora arena from `01_regions.json` and paint that image as the match background. In the same pick, stamp a non-player **Gatherer** Arcori from that region.
+After seated Arcori are known on **Quick Start** and **Invite**, pick a Velora arena from `01_regions.json` and paint that image as the match background. In the same pick, stamp a non-player **Gatherer** Arcori from that region **onto `table.pieces`** as a seatless disc.
 
-**Not this pass:** Special Event (separate arena rules later). Practice stays on the stub `arenaId` (no catalog pick, no Gatherer). UI display of the Gatherer can follow later; snapshot + catalog freeze are required.
+**Not this pass:** Special Event (separate arena rules later). Practice stays on the stub `arenaId` (no catalog pick, no Gatherer).
 
 ## Rule
 
@@ -26,6 +26,7 @@ Count `location.regionCode` on the seated designs:
 2. Exclude SLM / KIN / `type=slammer` and all seated player `arcoriIds`.
 3. Weighted pick by each design’s `selectionWeight` (0.01–10.00; region standing is constant within one region).
 4. Fail closed: omit `gathererArcoriId` if the pool is empty.
+5. **Table piece:** `pieceId=p_gatherer`, empty `ownerUserId`, **no `seatIndex`** (not a `MatchSeat`). Restack orders seat discs by `seatIndex`, then Gatherer on top. Flips score to the slamming player like any other disc.
 
 **Seat uniqueness** (upstream `select_arcori` / `select_for_seats`): no duplicate Arcori ids across seats; Gatherer also excludes those ids.
 
@@ -34,8 +35,8 @@ Count `location.regionCode` on the seated designs:
 | Layer | Owns |
 |-------|------|
 | FastAPI catalog | `select_arena_for_arcori_ids` — region counts + RNG arena + Gatherer; `select_for_seats` unique ids |
-| Dart match room | After `select_arcori`, **only** if `matchType.code` is `quickStart` or `invite`: `POST /service/catalog/select_arena`; stamp `arenaId` + `arenaImageUrl` + optional `gathererArcoriId`; freeze Gatherer with seat discs |
-| Flutter | Paints `arenaImageUrl` when the snapshot has it; parses/carries `gathererArcoriId` (display deferred). No practice HTTP pick. |
+| Dart match room | After `select_arcori`, if `matchTypeUsesArcoriRegionArena`: `POST /service/catalog/select_arena` for arena image. **Gatherer stamped only when `matchTypeIncludesGatherer`** (`quickStart` / `invite`) — Special Event never gets `gathererArcoriId` / `p_gatherer` even if catalog returns one. |
+| Flutter | Paints arena + stack (Gatherer included when present); `MatchPieceView.seatIndex` nullable / `isGatherer` |
 | `/catalog-media` | discs from `assets/images/arcori`; arenas from sibling `assets/images/velora/arenas/…` served at `/catalog-media/velora/arenas/…` |
 
 Do **not** parse `01_regions.json` in Dart or Flutter. Special Event keeps the stub arena until its own rules exist. Gatherer is **not** a `MatchSeat`.
@@ -49,14 +50,15 @@ Do **not** parse `01_regions.json` in Dart or Flutter. Special Event keeps the s
 - [x] Docker velora mount + docs + TM
 - [x] Unique seat Arcori ids in `select_for_seats`
 - [x] Gatherer pick + `gathererArcoriId` on snapshot / freeze / Flutter parse
+- [x] Gatherer as seatless `table.pieces` entry (`p_gatherer`) + restack + tests
 
 ## Current Progress
 
-Shipped: FastAPI arena + Gatherer, unique seat picks, Dart Quick Start / Invite stamp + freeze, Flutter carries `gathererArcoriId`, nested velora media mount.
+Shipped: FastAPI arena + Gatherer pick; Dart Quick Start / Invite stamp + freeze + **seatless table piece**; Flutter parses nullable `seatIndex` / `isGatherer`.
 
 ## Next Steps
 
-Special Event arena rules (separate). Optional Gatherer UI on the match surface.
+Special Event arena rules (separate). Optional Gatherer chrome label on the match surface (visual only).
 
 ## Files Modified
 
@@ -67,17 +69,17 @@ Special Event arena rules (separate). Optional Gatherer UI on the match surface.
 - `app_codebase/dart_bkend_base_02/bin/modules/match/match_catalog_client.dart`
 - `app_codebase/dart_bkend_base_02/bin/modules/match/match_service.dart`
 - `app_codebase/dart_bkend_base_02/bin/modules/match/match_store.dart`
+- `app_codebase/dart_bkend_base_02/bin/modules/match/table_pieces.dart`
 - `app_codebase/dart_bkend_base_02/test/match_service_test.dart`
 - `app_codebase/dart_bkend_base_02/test/matchmaking_service_test.dart`
+- `app_codebase/dart_bkend_base_02/test/slam_resolver_test.dart`
 - `app_codebase/flutter_base_06/lib/modules/match/state/match_snapshot_state.dart`
-- `app_codebase/flutter_base_06/lib/modules/match/widgets/practice_match_surface.dart`
-- `app_codebase/flutter_base_06/lib/core/modal/app_fullscreen_modal.dart`
-- `docker/docker-compose.yml`
-- `docker/docker-compose.debug.yml`
+- `app_codebase/flutter_base_06/lib/modules/match/input/slam_resolver.dart`
+- `app_codebase/flutter_base_06/test/modules/match/match_notifier_test.dart`
 
 ## Notes
 
-- Fail closed: catalog/network errors keep stub `arena_velora_plaza` and no background image; empty Gatherer pool omits the field.
+- Fail closed: catalog/network errors keep stub `arena_velora_plaza` and no background image; empty Gatherer pool omits the field (and no table piece).
 - Invite (2 seats): 2 same → that region; 2 different → random region + arena (rule 2).
 - Authuser `select_arena` is available for later clients; Flutter practice does not call it.
 - Rematch re-runs arena + Gatherer with new seated picks (same as arena today).
@@ -85,8 +87,8 @@ Special Event arena rules (separate). Optional Gatherer UI on the match surface.
 
 ## Case study
 
-Arena + Gatherer live in FastAPI catalog; match snapshot carries `arenaId` + `arenaImageUrl` + optional `gathererArcoriId`. Seat Arcori ids are unique across the table and vs Gatherer.
+Arena + Gatherer live in FastAPI catalog; match snapshot carries `arenaId` + `arenaImageUrl` + optional `gathererArcoriId`. When present, Gatherer is also a seatless `table.pieces` disc (`p_gatherer`). Seat Arcori ids are unique across the table and vs Gatherer.
 
 ## Task Manager
 
-App Dev (`32`) checklist `275` (done) + note `276`.
+App Dev checklist: Gatherer table piece — synced with this plan update.

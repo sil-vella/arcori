@@ -28,6 +28,12 @@ const matchCatalogFreezeFailed = ErrorSpec(
   502,
 );
 
+const matchSlammerNoCharges = ErrorSpec(
+  'match/slammer_no_charges',
+  'Slammer has no charges left',
+  402,
+);
+
 const matchForbidden = ErrorSpec(
   'match/forbidden',
   'Not allowed for this match',
@@ -52,6 +58,7 @@ void registerMatchErrors(ModuleErrorRegistrar registrar) {
     matchInvalidRequest,
     matchNotFound,
     matchCatalogFreezeFailed,
+    matchSlammerNoCharges,
     matchForbidden,
     matchInvalidAction,
     matchNotYourTurn,

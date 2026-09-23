@@ -123,10 +123,10 @@ Map<String, dynamic>? handleMatchEnd(
   };
 }
 
-Map<String, dynamic>? handleMatchAction(
+FutureOr<Map<String, dynamic>?> handleMatchAction(
   WsConnectionContext ctx,
   WsClientMessage msg,
-) {
+) async {
   if (msg.msgType != 'event') {
     return null;
   }
@@ -138,7 +138,7 @@ Map<String, dynamic>? handleMatchAction(
   if (matchId.isEmpty) {
     throw AppError(matchInvalidRequest, message: 'matchId required');
   }
-  final snapshot = matchService.action(
+  final snapshot = await matchService.actionSpendingCharge(
     matchId: matchId,
     userId: userId,
     payload: Map<String, dynamic>.from(msg.payload),

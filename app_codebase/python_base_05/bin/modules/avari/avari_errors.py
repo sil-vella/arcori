@@ -28,6 +28,11 @@ INVALID_KIN_COLOR = ErrorSpec(
     "Invalid Kin Arcori color",
     http_status=400,
 )
+REJECTED_KIN_NAME = ErrorSpec(
+    "avari/rejected_kin_name",
+    "That Kin name isn’t allowed. Please choose another.",
+    http_status=400,
+)
 KIN_CLAIM_FAILED = ErrorSpec(
     "avari/kin_claim_failed",
     "Could not claim Kin",
@@ -48,6 +53,11 @@ INVALID_MATCH_FEE = ErrorSpec(
     "Invalid match fee request",
     http_status=400,
 )
+SLAMMER_NO_CHARGES = ErrorSpec(
+    "avari/slammer_no_charges",
+    "This slammer has no charges left. Top up in the Market.",
+    http_status=402,
+)
 
 
 def register_avari_errors(registrar: ModuleErrorRegistrar) -> None:
@@ -59,9 +69,11 @@ def register_avari_errors(registrar: ModuleErrorRegistrar) -> None:
             KIN_ALREADY_CLAIMED,
             INVALID_KIN_REGION,
             INVALID_KIN_COLOR,
+            REJECTED_KIN_NAME,
             KIN_CLAIM_FAILED,
             INVALID_MATCH_FINALIZE,
             INSUFFICIENT_GOLD,
             INVALID_MATCH_FEE,
+            SLAMMER_NO_CHARGES,
         ],
     )

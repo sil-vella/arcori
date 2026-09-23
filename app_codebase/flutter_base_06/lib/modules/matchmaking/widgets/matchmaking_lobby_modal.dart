@@ -18,12 +18,17 @@ Future<void> showMatchmakingLobbyModal(BuildContext context, WidgetRef ref) {
   if (LOGGING_SWITCH) {
     customlog('MatchmakingLobbyModal: show');
   }
-  return AppModal.showCenteredShell<void>(
+  return AppModal.showCentered<void>(
     context,
-    title: 'Finding players…',
     barrierDismissible: false,
-    showCloseButton: false,
-    child: const _LobbyBody(),
+    builder: (ctx) => Theme(
+      data: AppTheme.dark,
+      child: const AppCenteredModal(
+        title: 'Finding players…',
+        showCloseButton: false,
+        child: _LobbyBody(),
+      ),
+    ),
   );
 }
 
@@ -143,24 +148,32 @@ class _LobbyBodyState extends ConsumerState<_LobbyBody> {
       children: [
         Text(
           'Lobby ${lobby.lobbyId ?? '—'}',
-          style: context.appTypography.bodySmall,
+          style: context.appTypography.bodySmall.copyWith(
+            color: AppColors.onSurfaceMutedDark,
+          ),
         ),
         AppSpacing.gapXs,
         Text(
           'Players ${lobby.members.length}/${lobby.targetSeats}'
           '${remaining != null ? ' · ~${remaining.clamp(0, 99)}s' : ''}',
-          style: context.appTypography.body,
+          style: context.appTypography.body.copyWith(
+            color: AppColors.onSurfaceDark,
+          ),
         ),
         AppSpacing.gapSm,
         for (final m in lobby.members)
           Text(
             '• ${m['userId'] ?? '—'}',
-            style: context.appTypography.bodySmall,
+            style: context.appTypography.bodySmall.copyWith(
+              color: AppColors.onSurfaceMutedDark,
+            ),
           ),
         AppSpacing.gapMd,
         Text(
           starting ? 'Match starting…' : 'Waiting for players or timer…',
-          style: context.appTypography.bodySmall,
+          style: context.appTypography.bodySmall.copyWith(
+            color: AppSurfaces.frameGold(Brightness.dark),
+          ),
           textAlign: TextAlign.center,
         ),
       ],

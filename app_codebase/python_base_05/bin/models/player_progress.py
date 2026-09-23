@@ -97,6 +97,26 @@ class PlayerMastery(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     )
 
 
+class PlayerMasteryChangeLog(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
+    """Append-only mastery deltas for Home ticker (last N per user)."""
+
+    __tablename__ = "player_mastery_change_log"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    design_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    generation_number: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    delta_points: Mapped[int] = mapped_column(Integer, nullable=False)
+    total_points: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    display_name: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    image_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    match_id: Mapped[str | None] = mapped_column(String(128), nullable=True, index=True)
+
+
 class PlayerSlammer(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     __tablename__ = "player_slammers"
     __table_args__ = (

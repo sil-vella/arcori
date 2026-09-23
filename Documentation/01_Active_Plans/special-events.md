@@ -21,7 +21,7 @@ Author each Special Event **entirely in JSON** (`special_events.json`): lobby si
 | `matches` | `required`, `credit` (`any_finish` \| `win` \| `flips_min`) |
 | `eligibility` | mastery Value band, titles, slammer mode |
 | `arcori` | `source` own/circulation/event_roster/intersect/`active_windows` + filters; optional `min_mastery_ratio` + `hard_pick` |
-| `arena` | `fixed_arena` \| `fixed_region` \| `seated_regions` |
+| `arena` | `fixed_arena` \| `fixed_region` \| `seated_regions` — **never** stamps region Gatherer (`p_gatherer`); QS/Invite only |
 | `media` | `banner`, `special_arena_background`, audio slots (`CatalogMediaMap`) |
 
 ## Runtime
