@@ -19,6 +19,7 @@ from modules.avari.avari_service import (
     verify_slammers_for_seats,
 )
 from modules.avari.kin_backgrounds import list_kin_backgrounds
+from modules.avari.kin_embeds import list_kin_embeds
 
 
 def register_avari_routes(
@@ -33,6 +34,10 @@ def register_avari_routes(
     routes.authuser_get(
         "/avari/kin/backgrounds",
         lambda: _handle_kin_backgrounds(res),
+    )
+    routes.authuser_get(
+        "/avari/kin/embeds",
+        lambda: _handle_kin_embeds(res),
     )
     routes.authuser_post("/avari/kin", lambda: _handle_claim_kin(res))
     routes.authuser_post(
@@ -94,6 +99,14 @@ def _handle_kin_backgrounds(res: HttpResponseContract):
     try:
         _require_user_id()
         return res.json_ok(list_kin_backgrounds())
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_kin_embeds(res: HttpResponseContract):
+    try:
+        _require_user_id()
+        return res.json_ok(list_kin_embeds())
     except AppError as err:
         return err.to_http_response()
 

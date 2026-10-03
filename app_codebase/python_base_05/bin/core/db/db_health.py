@@ -9,7 +9,7 @@ import psycopg
 from alembic.config import Config
 from alembic.script import ScriptDirectory
 
-from core.db.db_config import database_url
+from core.db.db_config import database_url, migration_database_url
 
 # Fallback when alembic.ini is unavailable (tests / odd cwd).
 ALEMBIC_HEAD_REVISION = "008_ops_runtime"
@@ -51,7 +51,7 @@ def ping_database() -> bool:
         return False
 
 
-def _schema_is_migrated(conn: psycopg.Connection) -> bool:
+def _sentinel_table_exists(conn: psycopg.Connection) -> bool:
     row = conn.execute(
         """
         SELECT EXISTS (
@@ -63,25 +63,37 @@ def _schema_is_migrated(conn: psycopg.Connection) -> bool:
         """,
         (SENTINEL_TABLE,),
     ).fetchone()
-    if row is None or not row[0]:
-        return False
+    return row is not None and bool(row[0])
 
-    version_row = conn.execute(
-        """
-        SELECT EXISTS (
-            SELECT 1
-            FROM information_schema.tables
-            WHERE table_schema = 'public'
-              AND table_name = 'alembic_version'
-        )
-        """
-    ).fetchone()
-    if version_row is None or not version_row[0]:
-        return False
 
-    head = conn.execute(
-        "SELECT version_num FROM alembic_version LIMIT 1"
-    ).fetchone()
+def _alembic_head_matches() -> bool:
+    """Compare alembic_version to script head via owner URL.
+
+    App role explicitly has no SELECT on alembic_version (ensure_roles); health
+    must use MIGRATION_DATABASE_URL when PG_RBAC_ENABLED=1.
+    """
+    url = migration_database_url()
+    if not url:
+        return False
+    try:
+        with psycopg.connect(url, connect_timeout=3) as conn:
+            version_row = conn.execute(
+                """
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM information_schema.tables
+                    WHERE table_schema = 'public'
+                      AND table_name = 'alembic_version'
+                )
+                """
+            ).fetchone()
+            if version_row is None or not version_row[0]:
+                return False
+            head = conn.execute(
+                "SELECT version_num FROM alembic_version LIMIT 1"
+            ).fetchone()
+    except Exception:
+        return False
     expected = _expected_alembic_head()
     return head is not None and head[0] == expected
 
@@ -94,8 +106,10 @@ def check_database_health() -> DatabaseHealth:
     try:
         with psycopg.connect(url, connect_timeout=3) as conn:
             conn.execute("SELECT 1")
-            if _schema_is_migrated(conn):
-                return DatabaseHealth(db="ok", schema="ok")
-            return DatabaseHealth(db="ok", schema="unavailable")
+            if not _sentinel_table_exists(conn):
+                return DatabaseHealth(db="ok", schema="unavailable")
+        if _alembic_head_matches():
+            return DatabaseHealth(db="ok", schema="ok")
+        return DatabaseHealth(db="ok", schema="unavailable")
     except Exception:
         return DatabaseHealth(db="unavailable", schema="unavailable")

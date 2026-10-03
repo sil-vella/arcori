@@ -128,12 +128,14 @@ class AppScreenTemplate001 extends StatelessWidget {
       ],
     );
 
-    if (!extendBodyBehindAppBar) return body;
+    if (!extendBodyBehindAppBar) {
+      return Theme(data: AppTheme.dark, child: body);
+    }
 
     return ShellChromeRegistrar(
       extendBodyBehindAppBar: true,
-      appBarForeground: appBarForeground,
-      child: body,
+      appBarForeground: appBarForeground ?? AppColors.onSurfaceDark,
+      child: Theme(data: AppTheme.dark, child: body),
     );
   }
 }

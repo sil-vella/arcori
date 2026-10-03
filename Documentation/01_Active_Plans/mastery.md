@@ -2,7 +2,7 @@
 
 **Status:** In Progress — writers + echo soft reset + Closed Generations live; My Mastery tab still open  
 **Created:** 2026-09-11  
-**Last Updated:** 2026-09-23
+**Last Updated:** 2026-10-03
 
 Related: [core-match-loop.md](core-match-loop.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [player-profile-schema.md](player-profile-schema.md) · [GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · [Tech Spec](../Game_Specific/Arcori_Technical_Specification_v0.4.md)
 
@@ -22,30 +22,37 @@ Lock post-match **mastery point deltas** per design, durable writers, **mastery-
 - Starter grants (`source=starter`): **10 designs from Genesis/Pioneers** on profile create (guest/regular), each with **10** initial mastery + permanent starter slammer. Composition: **9** with `selectionWeight` in **[8.0, 10.0]**, **1** with **[3.0, 4.0]**. Foundations / Creation are excluded. Pioneers seeds are all weight **10.0** (common band). Pool still drops designs at mastery **< 1** (except own Kin). Existing starter rows below 10 are bumped to 10 on sync.
 - **Legacy echo soft reset:** closed-gen `player_mastery` rows are **unchanged**. Every player with mastery &gt; 0 on the closed gen gets (1) a **`player_closed_generations`** snapshot (`masteryPoints` at close, `echoMasterySeeded`, Preserved/Lost) for the profile **Closed Generations** section, and (2) an echo-gen mastery seed = `floor(closed × 0.30)` (min 1), capped at `preservationRequirement − 1`, plus access on the echo id.
 
-## Locked match curves (2026-09-11; owned-on-table clarified 2026-09-23)
+## Locked match curves (2026-09-11; owned-on-table clarified 2026-09-23; played flips-on-design 2026-10-03; −1 own-played only 2026-10-03)
 
-### Own curve (designs you already have mastery on)
+### Own-played curve (the Arcori **you** brought)
 
-Applies to:
+Δ from **your flips of that design** (slam-actor attribution). Opponent flips of your piece do **not** count on your finalize (they count on theirs). **Only this curve applies −1** when you flip it 0 times.
 
-1. **The Arcori you brought** — Δ from **seat flips** (how many discs you flipped this match).
-2. **Any other table design you already have mastery &gt; 0 on** (e.g. opponent brought one from your pool) — Δ from **flips of that design** (0 flips → **−1**).
-
-| Flips (seat for played / on-design for other owned) | Mastery Δ |
-|-----------------------------------------------------|-----------|
+| Your flips of that design | Mastery Δ |
+|---------------------------|-----------|
 | 0 | **−1** |
+| 1 | **0** |
+| 2+ | **+2** |
+
+### Already mastered, not your seat pick
+
+Table design you already have mastery &gt; 0 on, but someone else brought it:
+
+| Your flips of that design | Mastery Δ |
+|---------------------------|-----------|
+| 0 | **0** (no deduction) |
 | 1 | **0** |
 | 2+ | **+2** |
 
 ### Other curve (no prior mastery on that design)
 
-| Flips on that design | Mastery Δ |
-|----------------------|-----------|
+| Your flips of that design | Mastery Δ |
+|---------------------------|-----------|
 | 0 | **0** |
 | 1 | **+1** |
 | 2+ | **+2** |
 
-Seat **score** / gold fragments credit the **slam actor** (who flipped), not the piece owner.
+Seat **score** / gold fragments credit the **slam actor** (who flipped), not the piece owner. Mastery maps use the same actor attribution (`flipsByDesign` on finalize).
 
 ## selectionWeight (sole how-often / value signal)
 

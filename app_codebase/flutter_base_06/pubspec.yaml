@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts of the
 # product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.8+9
 
 environment:
   sdk: ^3.8.1
@@ -44,15 +44,22 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   web_socket_channel: ^3.0.2
   lottie: ^3.3.1
+  video_player: ^2.10.1
   image: ^4.5.4
   path_provider: ^2.1.5
   sensors_plus: ^6.1.1
   url_launcher: ^6.3.1
+  just_audio: ^0.9.46
+
+  # Kept as a runtime dependency so the Android release build can compile
+  # GeneratedPluginRegistrant (dev-only plugins are omitted from release).
+  flutter_native_splash: ^2.4.6
 
   # Firebase GA4 — pinned for Xcode 15.2 / Firebase iOS SDK 10.x compatibility.
   firebase_core: 3.3.0
   firebase_analytics: 11.0.0
   vector_math: ^2.1.4
+  vibration: ^3.1.8
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +72,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.3
-  flutter_native_splash: ^2.4.6
+  video_player_platform_interface: ^6.6.0
 
 flutter_launcher_icons:
   android: true
@@ -108,7 +115,17 @@ flutter:
     - assets/images/velora/museum/
     - assets/images/velora/maps/
     - assets/lottie/
+    - assets/videos/
     - assets/kin/
+    - assets/kin/embeds/
+    - assets/kin/embeds/ser001/guardians/BRZ/
+    - assets/kin/embeds/ser001/guardians/GLD/
+    - assets/kin/embeds/ser001/guardians/IVY/
+    - assets/kin/embeds/ser001/guardians/SLV/
+    - assets/kin/embeds/ser001/entelairs/ALC/
+    - assets/kin/embeds/ser001/entelairs/ASP/
+    - assets/kin/embeds/ser001/entelairs/HGD/
+    - assets/kin/embeds/ser001/entelairs/HMG/
     - assets/debug/
 
   # An image asset can refer to one or more resolution-specific "variants", see

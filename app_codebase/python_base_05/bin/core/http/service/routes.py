@@ -14,6 +14,7 @@ app starts.
 
 from typing import Callable
 
+import json
 import os
 
 from fastapi import FastAPI
@@ -52,16 +53,25 @@ def build_application_handler() -> FastAPI:
         try:
             if request.method in ("POST", "PUT", "PATCH"):
                 content_type = request.headers.get("content-type", "")
+                encoding = request.headers.get("content-encoding", "").lower()
                 if "application/json" in content_type.lower():
                     try:
-                        data = await request.json()
+                        if "gzip" in encoding:
+                            import gzip
+
+                            raw = await request.body()
+                            data = json.loads(gzip.decompress(raw))
+                        else:
+                            data = await request.json()
                         request.state.json_body = data if isinstance(data, dict) else {}
                     except Exception:
                         request.state.json_body = {}
                 elif "multipart/form-data" in content_type.lower():
                     request.state.json_body = {}
+                    request.state.upload = None
                     try:
                         form = await request.form()
+                        # Avatar upload (existing).
                         upload = form.get("avatar")
                         if upload is not None and hasattr(upload, "read"):
                             raw = await upload.read()
@@ -69,13 +79,34 @@ def build_application_handler() -> FastAPI:
                                 request.state.upload = {
                                     "field_name": "avatar",
                                     "filename": getattr(upload, "filename", None) or "",
-                                    "content_type": getattr(upload, "content_type", None) or "",
+                                    "content_type": getattr(upload, "content_type", None)
+                                    or "",
                                     "data": raw,
                                 }
+                        # Kin claim: JSON fields in "payload" + optional gzipped Lottie.
+                        payload_field = form.get("payload")
+                        if payload_field is not None:
+                            if hasattr(payload_field, "read"):
+                                payload_raw = await payload_field.read()
+                                payload_text = (
+                                    payload_raw.decode("utf-8")
+                                    if isinstance(payload_raw, (bytes, bytearray))
+                                    else str(payload_raw)
+                                )
                             else:
-                                request.state.upload = None
-                        else:
-                            request.state.upload = None
+                                payload_text = str(payload_field)
+                            try:
+                                parsed = json.loads(payload_text)
+                                if isinstance(parsed, dict):
+                                    request.state.json_body = parsed
+                            except Exception:
+                                request.state.json_body = {}
+                        lottie_field = form.get("lottie") or form.get("lottie.gz")
+                        if lottie_field is not None and hasattr(lottie_field, "read"):
+                            lottie_raw = await lottie_field.read()
+                            if lottie_raw and isinstance(request.state.json_body, dict):
+                                request.state.json_body = dict(request.state.json_body)
+                                request.state.json_body["lottieBytes"] = bytes(lottie_raw)
                     except Exception as exc:
                         request.state.upload = None
                         request.state.upload_error = str(exc)

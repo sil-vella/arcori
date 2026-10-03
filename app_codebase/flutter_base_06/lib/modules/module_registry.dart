@@ -7,6 +7,7 @@ import '../core/state/contracts/app_state_sink.dart';
 import '../core/state/register_core_state.dart';
 import 'achievements/achievements_drawer.dart';
 import 'achievements/achievements_routes.dart';
+import 'audio/register_audio.dart';
 import 'tasks/tasks_drawer.dart';
 import 'tasks/tasks_routes.dart';
 import 'museum/museum_drawer.dart';
@@ -54,6 +55,7 @@ void registerApplicationModules(
   registerMatchState(state);
   registerMatchmakingState(state);
   registerNotificationsState(state);
+  registerAudioModule();
 
   registerHubSinkBottomNavScope(bottomNav);
   registerHomeRoutes(routes, notificationScreens);

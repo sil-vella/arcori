@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/theme.dart';
-import '../../kin/kin_backgrounds.dart';
 import '../../kin/widgets/kin_lottie_preview.dart';
 import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
@@ -16,6 +15,7 @@ class InventoryFaceChip extends StatelessWidget {
     required this.item,
     this.lottieFile,
     this.captionOverride,
+    this.onTap,
     super.key,
   });
 
@@ -24,15 +24,21 @@ class InventoryFaceChip extends StatelessWidget {
 
   /// When set, replaces the mastery / mint-reach caption (e.g. Trove gen).
   final String? captionOverride;
+  final VoidCallback? onTap;
 
-  static const double _size = 64;
+  static const double size = 64;
+  static const double chipWidth = size + AppSpacing.md;
+
+  /// Approx height: disc + two caption lines + gaps (3-row scroll layout).
+  static const double chipHeight = size + 52;
 
   @override
   Widget build(BuildContext context) {
     final useLottie = item.hasLottieFace || lottieFile != null;
     final caption = captionOverride ?? item.masteryOverMintReach;
-    return SizedBox(
-      width: _size + AppSpacing.md,
+    final column = SizedBox(
+      width: chipWidth,
+      height: chipHeight,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -42,12 +48,12 @@ class InventoryFaceChip extends StatelessWidget {
               imageUrl: useLottie ? null : item.imageUrl,
               colorHex: item.color,
             ),
-            size: _size,
+            size: size,
             face: useLottie
                 ? KinSceneStack(
                     lottieUrl: item.lottieUrl,
                     file: lottieFile,
-                    scene: KinBackgroundScene.fromClaimJson(item.background),
+                    fit: BoxFit.cover,
                   )
                 : null,
           ),
@@ -70,6 +76,12 @@ class InventoryFaceChip extends StatelessWidget {
           ),
         ],
       ),
+    );
+    if (onTap == null) return column;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: column,
     );
   }
 }

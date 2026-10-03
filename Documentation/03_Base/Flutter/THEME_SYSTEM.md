@@ -19,12 +19,12 @@ Related docs: [NAVIGATION_SYSTEM.md](NAVIGATION_SYSTEM.md) (shell chrome), [MODA
 | Primitives | `lib/core/widgets/app_visuals.dart` | Exhibit card, section rail, empty state, HUD glass chip |
 | Modal shells | `lib/core/modal/` | `AppModal`, centered + full-screen widgets |
 | Theme builder | `lib/core/theme/app_theme.dart` | `ThemeData`, `ColorScheme`, context extensions |
-| Bootstrap | `lib/app_init.dart` | `MaterialApp.router(theme: AppTheme.light, darkTheme: AppTheme.dark)` |
+| Bootstrap | `lib/app_init.dart` | `MaterialApp.router(theme: AppTheme.dark, darkTheme: AppTheme.dark)` |
 
 ```text
 app_init.dart
   └── MaterialApp.router
-        ├── theme: AppTheme.light
+        ├── theme: AppTheme.dark
         ├── darkTheme: AppTheme.dark
         └── ThemeData
               ├── colorScheme        ← AppColors

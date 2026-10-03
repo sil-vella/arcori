@@ -34,7 +34,11 @@ void registerKinRoutes(
       name: 'kin-customize',
       builder: (context, state) {
         final kinSerial = state.uri.queryParameters['kin'] ?? '';
-        return KinCustomizeScreen(kinSerial: kinSerial);
+        final resume = state.uri.queryParameters['resume'] == '1';
+        return KinCustomizeScreen(
+          kinSerial: kinSerial,
+          resumeDraft: resume,
+        );
       },
     ),
   ]);

@@ -6,6 +6,10 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 import '../../core/http/media_url.dart';
+import 'kin_backgrounds.dart';
+import 'kin_embed_selection.dart';
+import 'kin_lottie_background.dart';
+import 'kin_lottie_embed.dart';
 import 'kin_lottie_style.dart';
 import 'kin_models.dart';
 
@@ -101,12 +105,32 @@ class KinSaveStore {
       if (!part.allowsCustom(a.customSerial)) continue;
       final custom = catalog.customBySerial(a.customSerial);
       if (custom == null) continue;
-      if (custom.customType == KinCustomType.embedImage ||
-          custom.customType == KinCustomType.swapPart) {
+      if (custom.customType == KinCustomType.embedImage) {
+        final selected = parseEmbedSelection(a.value);
+        final cleaned = <String, KinEmbedTint>{};
+        for (final e in selected.entries) {
+          if (!part.allowsEmbed(e.key)) continue;
+          if (part.placementFor(e.key) == null) continue;
+          cleaned[e.key] = e.value;
+        }
+        if (cleaned.isEmpty) continue;
+        out.add(
+          KinAppliedCustom(
+            partSerial: a.partSerial,
+            customSerial: a.customSerial,
+            value: encodeEmbedSelection(cleaned),
+          ),
+        );
+        continue;
+      } else if (custom.customType == KinCustomType.swapPart) {
         final embedSerial = a.value?.toString() ?? '';
         if (embedSerial.isNotEmpty && !part.allowsEmbed(embedSerial)) {
           continue;
         }
+      } else if (custom.customType == KinCustomType.embedHue ||
+          custom.customType == KinCustomType.embedLightDark) {
+        // Deprecated part-level companions; tints live in embedImage map.
+        continue;
       }
       out.add(a);
     }
@@ -138,21 +162,27 @@ class KinSaveStore {
     String? colorHex,
     String? chosenName,
     String? backgroundId,
+    KinBackgroundScene? backgroundScene,
+    KinBackgroundFilterMode? backgroundFilterMode,
   }) async {
     final allowed = filterAllowed(template, catalog, applied);
-    final n = await _nextCounter();
-    final serial = formatSaveSerial(n);
+    // One active draft: overwrite sidecar/lottie instead of minting KSAVE-NNNN.
+    final existingSerial = await readActiveSerial();
+    final serial = (existingSerial != null && existingSerial.isNotEmpty)
+        ? existingSerial
+        : formatSaveSerial(await _nextCounter());
     final dir = await _savesDir();
     final lottieName = '$serial.lottie.json';
     final outLottie = lottieFile(dir, serial);
 
-    final bodyRaw = await _loadTemplateLottieBody(template, serial);
-    final styles = resolveLayerStyles(
+    final body = await buildBakedLottieJson(
       template: template,
       catalog: catalog,
       applied: allowed,
+      backgroundScene: backgroundScene,
+      // Pad tall comps to square so disc BoxFit.cover keeps full character.
+      expandBackgroundToSquare: true,
     );
-    final body = bakeKinLottieJson(bodyRaw, styles);
     await outLottie.writeAsString(body);
 
     final name = (chosenName != null && chosenName.trim().isNotEmpty)
@@ -160,6 +190,7 @@ class KinSaveStore {
         : ((displayName == null || displayName.trim().isEmpty)
             ? template.displayName
             : displayName.trim());
+    final filterMode = backgroundFilterMode ?? KinBackgroundFilterMode.theme;
     final draft = KinSaveDraft(
       serial: serial,
       kinSerial: template.serial,
@@ -171,13 +202,59 @@ class KinSaveStore {
       regionCode: regionCode,
       colorHex: colorHex,
       chosenName: name,
-      backgroundId: backgroundId,
+      backgroundId: backgroundId ?? backgroundScene?.id,
+      background: backgroundScene?.toClaimJson(),
+      backgroundFilterMode: filterMode.name,
     );
     await sidecarFile(dir, serial).writeAsString(
       const JsonEncoder.withIndent('  ').convert(draft.toJson()),
     );
     await writeActiveSerial(serial);
     return draft;
+  }
+
+  /// Full pixel bake for claim / draft: embeds + styles, then BG.
+  ///
+  /// Square-pad runs inside the BG bake and must run *after* embeds so pad
+  /// shifts character + embed layers together. Baking BG/expand first left
+  /// catalog embed `p` on the unpadded axis (wings/shield shifted left on HGD).
+  ///
+  /// Server still re-bakes BG from disk on claim (tall ASP gray fallback).
+  Future<String> buildBakedLottieJson({
+    required KinTemplate template,
+    required KinCreationCatalog catalog,
+    required List<KinAppliedCustom> applied,
+    KinBackgroundScene? backgroundScene,
+    bool expandBackgroundToSquare = true,
+    String placeholderSerial = 'CLAIM',
+  }) async {
+    final allowed = filterAllowed(template, catalog, applied);
+    final bodyRaw = await _loadTemplateLottieBody(template, placeholderSerial);
+    final styles = resolveLayerStyles(
+      template: template,
+      catalog: catalog,
+      applied: allowed,
+    );
+    var body = bodyRaw;
+    final embedJobs = resolveEmbedJobs(
+      template: template,
+      catalog: catalog,
+      applied: allowed,
+    );
+    if (embedJobs.isNotEmpty) {
+      body = await bakeKinEmbedsIntoLottie(body, embedJobs);
+    }
+    body = bakeKinLottieJson(body, styles);
+    final scene = backgroundScene;
+    if (scene != null) {
+      body = await bakeKinBackgroundIntoLottie(
+        body,
+        scene,
+        httpClient: _http,
+        expandToSquare: expandBackgroundToSquare,
+      );
+    }
+    return body;
   }
 
   String _placeholderLottieJson(String name, String serial) {

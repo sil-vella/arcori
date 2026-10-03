@@ -9,6 +9,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_visuals.dart';
 import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
+import '../../kin/widgets/kin_lottie_preview.dart';
 import '../velora_assets.dart';
 import '../velora_chrome.dart';
 import '../velora_models.dart';
@@ -57,6 +58,17 @@ class _VeloraThemeScreenState extends ConsumerState<VeloraThemeScreen> {
     }
   }
 
+  bool _onScroll(ScrollNotification n) {
+    final browse = ref.read(veloraThemeBrowseProvider(_args));
+    if (n.metrics.pixels >= n.metrics.maxScrollExtent - 120 &&
+        browse.hasMore &&
+        !browse.isLoadingMore &&
+        !browse.isLoading) {
+      ref.read(veloraThemeBrowseProvider(_args).notifier).loadMore();
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final browse = ref.watch(veloraThemeBrowseProvider(_args));
@@ -91,13 +103,16 @@ class _VeloraThemeScreenState extends ConsumerState<VeloraThemeScreen> {
       appBarItems: [
         AppBarTitle(text: title, icon: Icons.category_outlined),
       ],
-      child: RefreshIndicator(
-        onRefresh: () =>
-            ref.read(veloraThemeBrowseProvider(_args).notifier).load(force: true),
-        child: AppScreenTemplate001(
+      child: NotificationListener<ScrollNotification>(
+        onNotification: _onScroll,
+        child: RefreshIndicator(
+          onRefresh: () => ref
+              .read(veloraThemeBrowseProvider(_args).notifier)
+              .load(force: true),
+          child: AppScreenTemplate001(
           backgroundAsset: kVeloraWorldBackgroundAsset,
           scrimOpacity: 0,
-          appBarForeground: Colors.white,
+          appBarForeground: AppColors.onSurfaceDark,
           banner: Stack(
             fit: StackFit.expand,
             children: [
@@ -209,12 +224,32 @@ class _VeloraThemeScreenState extends ConsumerState<VeloraThemeScreen> {
                   ),
                 ),
               ),
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: ColoredBox(color: bg),
-              ),
+              if (browse.isLoadingMore)
+                SliverToBoxAdapter(
+                  child: ColoredBox(
+                    color: bg,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
+                      child: Center(
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              else
+                SliverToBoxAdapter(
+                  child: ColoredBox(
+                    color: bg,
+                    child: const SizedBox(height: AppSpacing.lg),
+                  ),
+                ),
             ],
           ],
+        ),
         ),
       ),
     );
@@ -267,10 +302,17 @@ class _DesignTile extends StatelessWidget {
                           child: ArcoriCylinder(
                             look: ArcoriLook(
                               designId: design.internalId,
-                              imageUrl: design.imageUrl,
+                              imageUrl:
+                                  design.hasLottieFace ? null : design.imageUrl,
                               colorHex: design.color,
                             ),
                             size: size,
+                            face: design.hasLottieFace
+                                ? KinSceneStack(
+                                    lottieUrl: design.lottieUrl,
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
                           ),
                         );
                       },

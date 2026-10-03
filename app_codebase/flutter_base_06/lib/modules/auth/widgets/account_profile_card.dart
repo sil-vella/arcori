@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../core/http/media_url.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/state/user/user_profile_provider.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_chrome.dart';
+import '../../avari/widgets/profile_face_avatar.dart';
 
 const int _avatarMaxUploadBytes = 2 * 1024 * 1024;
 const Set<String> _allowedExtensions = {'.jpg', '.jpeg', '.png', '.webp'};
@@ -169,7 +169,6 @@ class _ProfileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final resolvedUrl = resolveMediaUrl(avatarUrl);
     final initials = username.isNotEmpty ? username[0].toUpperCase() : '?';
 
     return Row(
@@ -180,26 +179,18 @@ class _ProfileBody extends StatelessWidget {
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundColor: AppChrome.fieldFill,
-                backgroundImage:
-                    resolvedUrl.isNotEmpty ? NetworkImage(resolvedUrl) : null,
-                child: resolvedUrl.isEmpty
-                    ? Text(
-                        initials,
-                        style: context.appTypography.title.copyWith(
-                          color: AppChrome.onSurface,
-                        ),
-                      )
-                    : null,
+              ProfileFaceAvatar(
+                avatarUrl: avatarUrl,
+                size: 80,
+                fallbackLabel: initials,
               ),
               if (isUploading)
-                const Positioned.fill(
+                Positioned.fill(
                   child: CircleAvatar(
                     radius: 40,
-                    backgroundColor: Colors.black38,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    backgroundColor:
+                        AppColors.backgroundDark.withValues(alpha: 0.55),
+                    child: const CircularProgressIndicator(strokeWidth: 2),
                   ),
                 ),
               Positioned(

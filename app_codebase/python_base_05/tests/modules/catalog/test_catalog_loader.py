@@ -22,6 +22,34 @@ def catalog_root(tmp_path: Path):
     )
     (root / "01_regions.json").write_text(json.dumps({"regions": []}), encoding="utf-8")
     (root / "02_kin.json").write_text(json.dumps({"kin": []}), encoding="utf-8")
+    (root / "03_series.json").write_text(
+        json.dumps(
+            {
+                "version": 1,
+                "series": [
+                    {
+                        "key": "genesis",
+                        "label": "Genesis",
+                        "seriesKey": "Genesis",
+                        "active": True,
+                    },
+                    {
+                        "key": "pioneers",
+                        "label": "Pioneers",
+                        "seriesKey": "Pioneers",
+                        "active": True,
+                    },
+                    {
+                        "key": "kin",
+                        "label": "Kin",
+                        "seriesKey": "Kin",
+                        "active": False,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
     (root / "04_selection_weights.json").write_text(
         json.dumps({"version": 1}),
         encoding="utf-8",
@@ -59,6 +87,9 @@ def test_load_meta(catalog_root: Path):
     assert data["version"] == 1
     weights = loader.load_meta("selection_weights")
     assert weights["version"] == 1
+    series = loader.load_meta("series")
+    assert series["version"] == 1
+    assert any(r.get("key") == "genesis" for r in series["series"])
 
 
 def test_file_edit_visible_without_clear(catalog_root: Path):

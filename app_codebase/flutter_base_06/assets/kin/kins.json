@@ -11,12 +11,55 @@
       "parts": [
         {
           "serial": "KPART-0025",
-          "layerName": "left_eye",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "eyes"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0027",
+          "layerName": "body",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "body"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0028",
+          "layerName": "arms",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_arm",
+            "left_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0208",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
@@ -24,76 +67,25 @@
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0027",
-          "layerName": "head_mouth_hair_antlers",
-          "displayName": "Head",
-          "anatomical": null,
-          "affectsLayers": [
-            "head_mouth_hair_antlers"
+            "KEMB-0015",
+            "KEMB-0016",
+            "KEMB-0017",
+            "KEMB-0018"
           ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0028",
-          "layerName": "body_with_lower_tail",
-          "displayName": "Body",
-          "anatomical": null,
-          "affectsLayers": [
-            "body_with_lower_tail"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0029",
-          "layerName": "left_arm",
-          "displayName": "Arms",
-          "anatomical": null,
-          "affectsLayers": [
-            "left_arm",
-            "right_arm"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0208",
-          "layerName": "background",
-          "displayName": "Background",
-          "anatomical": null,
-          "affectsLayers": [
-            "background"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0008",
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPlacements": {
+            "KEMB-0015": {
+              "inFrontOf": "head"
+            },
+            "KEMB-0016": {
+              "inFrontOf": "metallic_plate"
+            },
+            "KEMB-0017": {
+              "inFrontOf": "head"
+            },
+            "KEMB-0018": {
+              "inFrontOf": "metallic_plate"
+            }
+          }
         }
       ]
     },
@@ -107,12 +99,55 @@
       "parts": [
         {
           "serial": "KPART-0032",
-          "layerName": "left_eye",
+          "layerName": "arms",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_arm",
+            "left_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0034",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "eyes"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0031",
+          "layerName": "body",
+          "displayName": "Body",
+          "anatomical": null,
+          "affectsLayers": [
+            "body"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0210",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
@@ -120,76 +155,21 @@
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0035",
-          "layerName": "head_mouth_hair_antlers",
-          "displayName": "Head",
-          "anatomical": null,
-          "affectsLayers": [
-            "head_mouth_hair_antlers"
+            "KEMB-0019",
+            "KEMB-0020",
+            "KEMB-0021"
           ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0034",
-          "layerName": "body_with_lower_tail",
-          "displayName": "Body",
-          "anatomical": null,
-          "affectsLayers": [
-            "body_with_lower_tail"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0031",
-          "layerName": "hand_at_face",
-          "displayName": "Arms",
-          "anatomical": null,
-          "affectsLayers": [
-            "hand_at_face",
-            "raised_arm"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0210",
-          "layerName": "background",
-          "displayName": "Background",
-          "anatomical": null,
-          "affectsLayers": [
-            "background"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0008",
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPlacements": {
+            "KEMB-0019": {
+              "inFrontOf": "metallic_plate"
+            },
+            "KEMB-0020": {
+              "inFrontOf": "head"
+            },
+            "KEMB-0021": {
+              "inFrontOf": "head"
+            }
+          }
         }
       ]
     },
@@ -203,76 +183,77 @@
       "parts": [
         {
           "serial": "KPART-0001",
-          "layerName": "Left eye | character left / viewer right",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "Left eye | character left / viewer right",
-            "Right eye | character right / viewer left"
+            "eyes"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
-            "CUS-0004",
             "CUS-0008",
             "CUS-0006"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
           "serial": "KPART-0003",
-          "layerName": "Head | neck pivot",
+          "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
           "affectsLayers": [
-            "Head | neck pivot"
+            "head"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
+            "CUS-0003",
             "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0003",
+            "KEMB-0004",
+            "KEMB-0005"
+          ],
+          "embedPlacements": {
+            "KEMB-0003": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0004": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0005": {
+              "inFrontOf": "eyes"
+            }
+          }
         },
         {
           "serial": "KPART-0004",
-          "layerName": "Left arm | shoulder pivot / viewer right",
-          "displayName": "Arms",
-          "anatomical": null,
-          "affectsLayers": [
-            "Left arm | shoulder pivot / viewer right",
-            "Right arm | shoulder pivot / viewer left"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0008",
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0006",
-          "layerName": "Body | torso and complete lower tail",
+          "layerName": "body",
           "displayName": "Body",
           "anatomical": null,
           "affectsLayers": [
-            "Body | torso and complete lower tail"
+            "body"
           ],
           "allowedCustomSerials": [
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0006",
+          "layerName": "arms",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_arm",
+            "left_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -286,62 +267,104 @@
       "parts": [
         {
           "serial": "KPART-0049",
-          "layerName": "left_eye",
+          "layerName": "right_eye",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "right_eye",
+            "left_eye"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
-            "CUS-0004",
-            "CUS-0006"
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
-          "serial": "KPART-0055",
+          "serial": "KPART-1006",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
           "affectsLayers": [
-            "head"
+            "head",
+            "right_cheek",
+            "left_cheek",
+            "right_eyebrow",
+            "left_eyebrow"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
+            "CUS-0003",
+            "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0028",
+            "KEMB-0029",
+            "KEMB-0030",
+            "KEMB-0031",
+            "KEMB-0032"
+          ],
+          "embedPlacements": {
+            "KEMB-0028": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0029": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0030": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0031": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0032": {
+              "inFrontOf": "right_eyebrow"
+            }
+          }
         },
         {
-          "serial": "KPART-0058",
-          "layerName": "torso",
-          "displayName": "Body",
+          "serial": "KPART-1008",
+          "layerName": "arms",
+          "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "torso",
-            "left_arm",
             "right_arm",
-            "left_leg",
-            "right_leg"
+            "left_arm"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1010",
+          "layerName": "legs",
+          "displayName": "Legs",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_leg",
+            "left_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1007",
+          "layerName": "torso",
+          "displayName": "Torso",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -355,43 +378,98 @@
       "parts": [
         {
           "serial": "KPART-0073",
+          "layerName": "eyes",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "eyes"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1004",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
           "affectsLayers": [
-            "head"
+            "head",
+            "cheeks",
+            "left_eyebrow",
+            "right_eyebrow"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
+            "CUS-0003",
+            "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0033",
+            "KEMB-0034",
+            "KEMB-0035",
+            "KEMB-0036"
+          ],
+          "embedPlacements": {
+            "KEMB-0033": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0034": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0035": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0036": {
+              "inFrontOf": "eyes"
+            }
+          }
         },
         {
-          "serial": "KPART-0076",
-          "layerName": "torso",
-          "displayName": "Body",
+          "serial": "KPART-1006",
+          "layerName": "arms",
+          "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "torso",
-            "left_arm",
             "right_arm",
-            "left_leg",
-            "right_leg"
+            "left_arm"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1008",
+          "layerName": "legs",
+          "displayName": "Legs",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_leg",
+            "left_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1005",
+          "layerName": "torso",
+          "displayName": "Torso",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -405,62 +483,104 @@
       "parts": [
         {
           "serial": "KPART-0085",
-          "layerName": "left_eye",
+          "layerName": "right_eye",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "right_eye",
+            "left_eye"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
-            "CUS-0004",
-            "CUS-0006"
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
-          "serial": "KPART-0091",
+          "serial": "KPART-1006",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
           "affectsLayers": [
-            "head"
+            "head",
+            "right_cheek",
+            "left_cheek",
+            "right_eyebrow",
+            "left_eyebrow"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
+            "CUS-0003",
+            "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0037",
+            "KEMB-0038",
+            "KEMB-0039",
+            "KEMB-0040",
+            "KEMB-0041"
+          ],
+          "embedPlacements": {
+            "KEMB-0037": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0038": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0039": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0040": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0041": {
+              "inFrontOf": "right_eyebrow"
+            }
+          }
         },
         {
-          "serial": "KPART-0092",
-          "layerName": "torso",
-          "displayName": "Body",
+          "serial": "KPART-1010",
+          "layerName": "arms",
+          "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "torso",
-            "left_arm",
             "right_arm",
-            "left_leg",
-            "right_leg"
+            "left_arm"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1008",
+          "layerName": "legs",
+          "displayName": "Legs",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_leg",
+            "left_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1007",
+          "layerName": "torso",
+          "displayName": "Torso",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -474,43 +594,98 @@
       "parts": [
         {
           "serial": "KPART-0109",
+          "layerName": "eyes",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "eyes"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1004",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
           "affectsLayers": [
-            "head"
+            "head",
+            "cheeks",
+            "left_eyebrow",
+            "right_eyebrow"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
+            "CUS-0003",
+            "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0042",
+            "KEMB-0043",
+            "KEMB-0044",
+            "KEMB-0045"
+          ],
+          "embedPlacements": {
+            "KEMB-0042": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0043": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0044": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0045": {
+              "inFrontOf": "eyes"
+            }
+          }
         },
         {
-          "serial": "KPART-0112",
-          "layerName": "torso",
-          "displayName": "Body",
+          "serial": "KPART-1008",
+          "layerName": "arms",
+          "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "torso",
-            "left_arm",
             "right_arm",
-            "left_leg",
-            "right_leg"
+            "left_arm"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1006",
+          "layerName": "legs",
+          "displayName": "Legs",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_leg",
+            "left_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1005",
+          "layerName": "torso",
+          "displayName": "Torso",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -524,23 +699,18 @@
       "parts": [
         {
           "serial": "KPART-0007",
-          "layerName": "left_eye",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "eyes"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
-            "CUS-0004",
             "CUS-0008",
             "CUS-0006"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
           "serial": "KPART-0009",
@@ -551,33 +721,41 @@
             "head"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
+            "CUS-0003",
             "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0006",
+            "KEMB-0007",
+            "KEMB-0008"
+          ],
+          "embedPlacements": {
+            "KEMB-0006": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0007": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0008": {
+              "behindLayer": "body"
+            }
+          }
         },
         {
           "serial": "KPART-0010",
-          "layerName": "left_arm",
+          "layerName": "arms",
           "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "left_arm",
-            "right_arm"
+            "right_arm",
+            "left_arm"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0008",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
           "serial": "KPART-0012",
@@ -588,12 +766,10 @@
             "body"
           ],
           "allowedCustomSerials": [
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         }
       ]
     },
@@ -607,12 +783,41 @@
       "parts": [
         {
           "serial": "KPART-0037",
-          "layerName": "left_eye",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "eyes"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0039",
+          "layerName": "arms",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_arm",
+            "left_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0041",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
@@ -620,76 +825,35 @@
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0039",
-          "layerName": "head_mouth_hair_horns",
-          "displayName": "Head",
-          "anatomical": null,
-          "affectsLayers": [
-            "head_mouth_hair_horns"
+            "KEMB-0022",
+            "KEMB-0023",
+            "KEMB-0024"
           ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0040",
-          "layerName": "body_with_lower_tail",
-          "displayName": "Body",
-          "anatomical": null,
-          "affectsLayers": [
-            "body_with_lower_tail"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0041",
-          "layerName": "left_arm",
-          "displayName": "Arms",
-          "anatomical": null,
-          "affectsLayers": [
-            "left_arm",
-            "right_arm"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPlacements": {
+            "KEMB-0022": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0023": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0024": {
+              "inFrontOf": "metallic_plate"
+            }
+          }
         },
         {
           "serial": "KPART-0212",
-          "layerName": "background",
-          "displayName": "Background",
+          "layerName": "body",
+          "displayName": "Body",
           "anatomical": null,
           "affectsLayers": [
-            "background"
+            "body"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0008",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         }
       ]
     },
@@ -703,12 +867,41 @@
       "parts": [
         {
           "serial": "KPART-0043",
-          "layerName": "left_eye",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "eyes"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0045",
+          "layerName": "arms",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_arm",
+            "left_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0047",
+          "layerName": "head",
+          "displayName": "Head",
+          "anatomical": null,
+          "affectsLayers": [
+            "head"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
@@ -716,76 +909,35 @@
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0045",
-          "layerName": "head_mouth_hair_horns",
-          "displayName": "Head",
-          "anatomical": null,
-          "affectsLayers": [
-            "head_mouth_hair_horns"
+            "KEMB-0025",
+            "KEMB-0026",
+            "KEMB-0027"
           ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0046",
-          "layerName": "body_with_lower_tail",
-          "displayName": "Body",
-          "anatomical": null,
-          "affectsLayers": [
-            "body_with_lower_tail"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0047",
-          "layerName": "left_arm",
-          "displayName": "Arms",
-          "anatomical": null,
-          "affectsLayers": [
-            "left_arm",
-            "right_arm"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPlacements": {
+            "KEMB-0025": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0026": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0027": {
+              "inFrontOf": "metallic_plate"
+            }
+          }
         },
         {
           "serial": "KPART-0214",
-          "layerName": "background",
-          "displayName": "Background",
+          "layerName": "body",
+          "displayName": "Body",
           "anatomical": null,
           "affectsLayers": [
-            "background"
+            "body"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0008",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         }
       ]
     },
@@ -799,23 +951,18 @@
       "parts": [
         {
           "serial": "KPART-0013",
-          "layerName": "left_eye",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "eyes"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
-            "CUS-0004",
             "CUS-0008",
             "CUS-0006"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
           "serial": "KPART-0015",
@@ -826,36 +973,44 @@
             "head"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
+            "CUS-0003",
             "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0009",
+            "KEMB-0010",
+            "KEMB-0011"
+          ],
+          "embedPlacements": {
+            "KEMB-0009": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0010": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0011": {
+              "behindLayer": "body"
+            }
+          }
         },
         {
           "serial": "KPART-0016",
-          "layerName": "left_arm",
+          "layerName": "arms",
           "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "left_arm",
-            "right_arm"
+            "right_arm",
+            "left_arm"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0008",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
-          "serial": "KPART-0018",
+          "serial": "KPART-1004",
           "layerName": "body",
           "displayName": "Body",
           "anatomical": null,
@@ -863,12 +1018,10 @@
             "body"
           ],
           "allowedCustomSerials": [
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         }
       ]
     },
@@ -882,43 +1035,102 @@
       "parts": [
         {
           "serial": "KPART-0121",
+          "layerName": "eyes",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "eyes"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1004",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
           "affectsLayers": [
-            "head"
+            "head",
+            "cheeks",
+            "left_eyebrow",
+            "right_eyebrow"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
+            "CUS-0003",
+            "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0046",
+            "KEMB-0047",
+            "KEMB-0048",
+            "KEMB-0049",
+            "KEMB-0050"
+          ],
+          "embedPlacements": {
+            "KEMB-0046": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0047": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0048": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0049": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0050": {
+              "inFrontOf": "eyes"
+            }
+          }
         },
         {
-          "serial": "KPART-0124",
-          "layerName": "torso",
-          "displayName": "Body",
+          "serial": "KPART-1006",
+          "layerName": "arms",
+          "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "torso",
-            "left_arm",
             "right_arm",
-            "left_leg",
-            "right_leg"
+            "left_arm"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1007",
+          "layerName": "legs",
+          "displayName": "Legs",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_leg",
+            "left_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1005",
+          "layerName": "torso",
+          "displayName": "Torso",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -932,62 +1144,102 @@
       "parts": [
         {
           "serial": "KPART-0215",
-          "layerName": "left_eye",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "eyes"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
-            "CUS-0004",
-            "CUS-0006"
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
-          "serial": "KPART-0216",
+          "serial": "KPART-1004",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
           "affectsLayers": [
-            "head"
+            "head",
+            "cheeks",
+            "left_eyebrow",
+            "right_eyebrow"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
+            "CUS-0003",
+            "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0070",
+            "KEMB-0071",
+            "KEMB-0072",
+            "KEMB-0073",
+            "KEMB-0074"
+          ],
+          "embedPlacements": {
+            "KEMB-0070": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0071": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0072": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0073": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0074": {
+              "inFrontOf": "eyes"
+            }
+          }
         },
         {
-          "serial": "KPART-0217",
-          "layerName": "torso",
-          "displayName": "Body",
+          "serial": "KPART-1008",
+          "layerName": "arms",
+          "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "torso",
-            "left_arm",
             "right_arm",
+            "left_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1006",
+          "layerName": "legs",
+          "displayName": "Legs",
+          "anatomical": null,
+          "affectsLayers": [
             "left_leg",
             "right_leg"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1005",
+          "layerName": "torso",
+          "displayName": "Torso",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -1001,25 +1253,21 @@
       "parts": [
         {
           "serial": "KPART-0133",
-          "layerName": "left_eye",
+          "layerName": "right_eye",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "right_eye",
+            "left_eye"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
-            "CUS-0004",
-            "CUS-0006"
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
-          "serial": "KPART-0135",
+          "serial": "KPART-0138",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
@@ -1027,36 +1275,78 @@
             "head"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
+            "CUS-0003",
+            "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0051",
+            "KEMB-0052",
+            "KEMB-0053",
+            "KEMB-0054",
+            "KEMB-0055"
+          ],
+          "embedPlacements": {
+            "KEMB-0051": {
+              "inFrontOf": "right_eye"
+            },
+            "KEMB-0052": {
+              "inFrontOf": "right_eye"
+            },
+            "KEMB-0053": {
+              "inFrontOf": "right_eye"
+            },
+            "KEMB-0054": {
+              "inFrontOf": "right_eye"
+            },
+            "KEMB-0055": {
+              "inFrontOf": "right_eye"
+            }
+          }
         },
         {
-          "serial": "KPART-0138",
-          "layerName": "torso",
-          "displayName": "Body",
+          "serial": "KPART-1004",
+          "layerName": "arms",
+          "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "torso",
-            "left_arm",
             "right_arm",
+            "left_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1005",
+          "layerName": "legs",
+          "displayName": "Legs",
+          "anatomical": null,
+          "affectsLayers": [
             "left_leg",
             "right_leg"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1003",
+          "layerName": "torso",
+          "displayName": "Torso",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -1070,26 +1360,6 @@
       "parts": [
         {
           "serial": "KPART-0019",
-          "layerName": "left_eye",
-          "displayName": "Eyes",
-          "anatomical": null,
-          "affectsLayers": [
-            "left_eye",
-            "right_eye"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0003",
-            "CUS-0004",
-            "CUS-0008",
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0021",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
@@ -1097,36 +1367,44 @@
             "head"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
+            "CUS-0003",
             "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0012",
+            "KEMB-0013",
+            "KEMB-0014"
+          ],
+          "embedPlacements": {
+            "KEMB-0012": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0013": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0014": {
+              "inFrontOf": "eyes"
+            }
+          }
+        },
+        {
+          "serial": "KPART-0021",
+          "layerName": "eyes",
+          "displayName": "Eyes",
+          "anatomical": null,
+          "affectsLayers": [
+            "eyes"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008",
+            "CUS-0006"
+          ],
+          "embedPoolSerials": []
         },
         {
           "serial": "KPART-0022",
-          "layerName": "left_arm",
-          "displayName": "Arms",
-          "anatomical": null,
-          "affectsLayers": [
-            "left_arm",
-            "right_arm"
-          ],
-          "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0008",
-            "CUS-0006"
-          ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
-        },
-        {
-          "serial": "KPART-0024",
           "layerName": "body",
           "displayName": "Body",
           "anatomical": null,
@@ -1134,12 +1412,25 @@
             "body"
           ],
           "allowedCustomSerials": [
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-0024",
+          "layerName": "arms",
+          "displayName": "Arms",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_arm",
+            "left_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -1153,62 +1444,98 @@
       "parts": [
         {
           "serial": "KPART-0149",
-          "layerName": "left_eye",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "eyes"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
-            "CUS-0004",
-            "CUS-0006"
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
-          "serial": "KPART-0155",
+          "serial": "KPART-1004",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
           "affectsLayers": [
-            "head"
+            "head",
+            "cheeks",
+            "right_eyebrow",
+            "left_eyebrow"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
+            "CUS-0003",
+            "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0056",
+            "KEMB-0057",
+            "KEMB-0058",
+            "KEMB-0059"
+          ],
+          "embedPlacements": {
+            "KEMB-0056": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0057": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0058": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0059": {
+              "inFrontOf": "eyes"
+            }
+          }
         },
         {
-          "serial": "KPART-0158",
-          "layerName": "torso",
-          "displayName": "Body",
+          "serial": "KPART-1006",
+          "layerName": "arms",
+          "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "torso",
             "left_arm",
-            "right_arm",
+            "right_arm"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1008",
+          "layerName": "legs",
+          "displayName": "Legs",
+          "anatomical": null,
+          "affectsLayers": [
             "left_leg",
             "right_leg"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1005",
+          "layerName": "torso",
+          "displayName": "Torso",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -1222,62 +1549,102 @@
       "parts": [
         {
           "serial": "KPART-0173",
-          "layerName": "left_eye",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "eyes"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
-            "CUS-0004",
-            "CUS-0006"
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
-          "serial": "KPART-0180",
+          "serial": "KPART-1005",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
           "affectsLayers": [
-            "head"
+            "head",
+            "cheeks",
+            "left_eyebrow",
+            "right_eyebrow"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
+            "CUS-0003",
+            "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0060",
+            "KEMB-0061",
+            "KEMB-0062",
+            "KEMB-0063",
+            "KEMB-0064"
+          ],
+          "embedPlacements": {
+            "KEMB-0060": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0061": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0062": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0063": {
+              "inFrontOf": "eyes"
+            },
+            "KEMB-0064": {
+              "inFrontOf": "eyes"
+            }
+          }
         },
         {
-          "serial": "KPART-0179",
-          "layerName": "torso",
-          "displayName": "Body",
+          "serial": "KPART-1007",
+          "layerName": "arms",
+          "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "torso",
-            "left_arm",
             "right_arm",
-            "left_leg",
-            "right_leg"
+            "left_arm"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1006",
+          "layerName": "legs",
+          "displayName": "Legs",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_leg",
+            "left_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1004",
+          "layerName": "torso",
+          "displayName": "Torso",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     },
@@ -1291,62 +1658,102 @@
       "parts": [
         {
           "serial": "KPART-0197",
-          "layerName": "left_eye",
+          "layerName": "eyes",
           "displayName": "Eyes",
           "anatomical": null,
           "affectsLayers": [
-            "left_eye",
-            "right_eye"
+            "eyes"
           ],
           "allowedCustomSerials": [
             "CUS-0003",
-            "CUS-0004",
-            "CUS-0006"
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
         },
         {
-          "serial": "KPART-0203",
+          "serial": "KPART-1006",
           "layerName": "head",
           "displayName": "Head",
           "anatomical": null,
           "affectsLayers": [
-            "head"
+            "head",
+            "cheeks",
+            "right_eyebrow",
+            "left_eyebrow"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
+            "CUS-0003",
+            "CUS-0008",
             "CUS-0006"
           ],
           "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+            "KEMB-0065",
+            "KEMB-0066",
+            "KEMB-0067",
+            "KEMB-0068",
+            "KEMB-0069"
+          ],
+          "embedPlacements": {
+            "KEMB-0065": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0066": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0067": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0068": {
+              "inFrontOf": "right_eyebrow"
+            },
+            "KEMB-0069": {
+              "inFrontOf": "right_eyebrow"
+            }
+          }
         },
         {
-          "serial": "KPART-0206",
-          "layerName": "torso",
-          "displayName": "Body",
+          "serial": "KPART-1004",
+          "layerName": "arms",
+          "displayName": "Arms",
           "anatomical": null,
           "affectsLayers": [
-            "torso",
-            "left_arm",
             "right_arm",
-            "left_leg",
-            "right_leg"
+            "left_arm"
           ],
           "allowedCustomSerials": [
-            "CUS-0001",
-            "CUS-0002",
-            "CUS-0006"
+            "CUS-0003",
+            "CUS-0008"
           ],
-          "embedPoolSerials": [
-            "KEMB-0001",
-            "KEMB-0002"
-          ]
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1008",
+          "layerName": "legs",
+          "displayName": "Legs",
+          "anatomical": null,
+          "affectsLayers": [
+            "right_leg",
+            "left_leg"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
+        },
+        {
+          "serial": "KPART-1007",
+          "layerName": "torso",
+          "displayName": "Torso",
+          "anatomical": null,
+          "affectsLayers": [
+            "torso"
+          ],
+          "allowedCustomSerials": [
+            "CUS-0003",
+            "CUS-0008"
+          ],
+          "embedPoolSerials": []
         }
       ]
     }

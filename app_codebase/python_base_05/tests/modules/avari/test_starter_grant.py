@@ -82,9 +82,22 @@ class StarterGrantTests(unittest.TestCase):
         self.assertEqual(sum(1 for w in weights if 3.0 <= w <= 4.0), 1)
 
     def test_creation_is_point_zero_one(self) -> None:
-        for iid in ("LGT-TLT-SER000-0001", "DRK-TDK-SER000-0001"):
-            design = get_design(iid)
+        from modules.catalog import catalog_loader as loader
+
+        creation: list[dict] = []
+        for doc in loader.list_theme_documents():
+            if str(doc.get("series") or "").strip() != "Creation":
+                continue
+            for design in doc.get("designs") or []:
+                if isinstance(design, dict):
+                    creation.append(design)
+        self.assertEqual(len(creation), 4)
+        ids = {str(d.get("internalId") or "") for d in creation}
+        self.assertTrue(any("LGT-IGW-SER000" in iid for iid in ids))
+        self.assertTrue(any("DRK-EVW-SER000" in iid for iid in ids))
+        for design in creation:
             self.assertEqual(float(design["selectionWeight"]), 0.01)
+            self.assertIn("-SER000-", str(design.get("internalId") or ""))
 
     @patch("modules.avari.avari_repository.ensure_slammer")
     @patch("modules.avari.avari_repository.ensure_mastery_row")

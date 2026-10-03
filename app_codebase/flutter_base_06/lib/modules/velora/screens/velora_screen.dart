@@ -53,7 +53,7 @@ class _VeloraScreenState extends ConsumerState<VeloraScreen> {
         child: AppScreenTemplate001(
           backgroundAsset: kVeloraWorldBackgroundAsset,
           scrimOpacity: 0,
-          appBarForeground: Colors.white,
+          appBarForeground: AppColors.onSurfaceDark,
           banner: Stack(
             fit: StackFit.expand,
             children: [veloraBannerFade()],

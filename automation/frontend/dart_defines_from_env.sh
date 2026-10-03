@@ -41,7 +41,7 @@ _parse_env_key_from_line() {
   printf '%s\n' "${BASH_REMATCH[1]}"
 }
 
-# Keys from dotenv file; values from the current shell (wfrun-exported env).
+# Keys from WFRUN_DART_DEFINES_FILE; values from the shell wfrun/dashboard exported.
 build_dart_defines_from_wfrun_env() {
   local keys_file="${1:-${WFRUN_DART_DEFINES_FILE:-}}"
   [[ -n "$keys_file" && -f "$keys_file" ]] || return 0

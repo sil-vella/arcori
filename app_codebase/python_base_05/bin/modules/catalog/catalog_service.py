@@ -11,6 +11,7 @@ from modules.catalog.catalog_ids import art_basename
 from modules.catalog.catalog_errors import INVALID_QUERY, LOAD_FAILED, NOT_FOUND
 from modules.catalog.current_series import (
     current_series_key,
+    design_series_is_active,
     kin_series_key,
     list_series_catalog,
     media_folder_for_series,
@@ -138,8 +139,8 @@ def get_meta() -> dict[str, Any]:
 
 
 def get_series() -> dict[str, Any]:
-    """Velora home — ordered series catalog (Creation … Civilizations)."""
-    return {"series": list_series_catalog()}
+    """Velora home — ordered series with master switch active (03_series.json)."""
+    return {"series": list_series_catalog(active_only=True)}
 
 
 def get_index(
@@ -182,6 +183,12 @@ def get_index(
                 internal_id=row.internal_id,
             ):
                 continue
+            if circulating and not design_series_is_active(
+                design,
+                series_key=row.series_key,
+                internal_id=row.internal_id,
+            ):
+                continue
             items.append(
                 design_summary(
                     design,
@@ -191,7 +198,7 @@ def get_index(
             )
 
     # Player Kin: one JSON file per design (no shared category file).
-    if _should_include_player_kins(theme_filter):
+    if _should_include_player_kins(theme_filter, series_filter):
         items.extend(_player_kin_index_items(
             circulating=circulating,
             theme_filter=theme_filter,
@@ -200,6 +207,11 @@ def get_index(
         ))
 
     total = len(items)
+    items.sort(
+        key=lambda d: str(
+            d.get("design") or d.get("displayName") or d.get("name") or ""
+        ).lower()
+    )
     if offset:
         items = items[offset:]
     if limit is not None:
@@ -246,12 +258,77 @@ def _is_kin_template_design(
     return code == "KIN" or theme_l == "kin" or iid.startswith("KIN-")
 
 
-def _should_include_player_kins(theme_filter: str | None) -> bool:
-    # No theme filter → include player Kin files (under Kin series filter).
-    # Explicit Kin / KIN theme → player Kin files only for that theme.
-    if theme_filter is None:
-        return True
-    return theme_filter == "kin"
+def _should_include_player_kins(
+    theme_filter: str | None,
+    series_filter: str | None,
+) -> bool:
+    # Explicit non-Kin theme → never merge player Kin files.
+    if theme_filter is not None and theme_filter != "kin":
+        return False
+    # Explicit series that is not Kin → keep Kin out of Genesis/etc. browse.
+    if series_filter is not None and not series_filter_matches(
+        kin_series_key(), series_filter
+    ):
+        return False
+    return True
+
+
+def _live_player_kin_id_keys() -> set[str]:
+    """Uppercase genesis ids + art basenames for claimed player Kin only."""
+    from core.state.session_scope import session_scope
+    from modules.catalog.catalog_ids import art_basename
+    from sqlalchemy import text
+
+    keys: set[str] = set()
+    with session_scope() as session:
+        rows = session.execute(
+            text("SELECT genesis_design_id FROM player_kin")
+        ).fetchall()
+    for row in rows:
+        iid = str(row[0] or "").strip()
+        if not iid:
+            continue
+        keys.add(iid.upper())
+        base = art_basename(iid)
+        if base:
+            keys.add(base.upper())
+    return keys
+
+
+def _player_kin_backgrounds() -> dict[str, dict]:
+    """genesis_design_id (upper) → claim background from player_kin.customization."""
+    from core.state.session_scope import session_scope
+    from modules.avari import avari_repository as avari_repo
+
+    try:
+        with session_scope() as session:
+            return avari_repo.list_player_kin_backgrounds_by_design(session)
+    except Exception:
+        return {}
+
+
+def _attach_player_kin_background(
+    summary: dict[str, Any],
+    *,
+    design_id: str,
+    backgrounds: dict[str, dict] | None = None,
+) -> dict[str, Any]:
+    """Overlay claim background onto a catalog summary/detail for Velora discs."""
+    bg_map = backgrounds if backgrounds is not None else _player_kin_backgrounds()
+    key = (design_id or "").strip().upper()
+    bg = bg_map.get(key)
+    if bg is None:
+        try:
+            from modules.catalog.catalog_ids import art_basename
+
+            alt = (art_basename(design_id) or "").strip().upper()
+            if alt:
+                bg = bg_map.get(alt)
+        except Exception:
+            bg = None
+    if isinstance(bg, dict) and bg:
+        summary["background"] = bg
+    return summary
 
 
 def _player_kin_index_items(
@@ -261,9 +338,12 @@ def _player_kin_index_items(
     series_filter: str | None,
     subtheme_filter: str | None,
 ) -> list[dict[str, Any]]:
+    from modules.catalog.catalog_ids import art_basename
     from modules.catalog.kin_design_store import list_design_files
 
     kin_key = kin_series_key()
+    live = _live_player_kin_id_keys()
+    backgrounds = _player_kin_backgrounds()
     items: list[dict[str, Any]] = []
     for design in list_design_files():
         if not isinstance(design, dict):
@@ -272,9 +352,20 @@ def _player_kin_index_items(
         # Skip claim templates if they ever land in the designs folder.
         if iid.startswith("KIN-") and "-GEN" not in iid:
             continue
+        # Orphan upload files (cleared AI users, leftover stamps) stay off Velora.
+        stem = (art_basename(iid) or iid).upper()
+        if live and iid not in live and stem not in live:
+            continue
         if circulating:
             world = str(design.get("worldState", "")).strip().lower()
             if world != "active":
+                continue
+            # Kin series master switch (03_series.json) — claims stay on disk.
+            if not design_series_is_active(
+                design,
+                series_key=kin_key,
+                internal_id=iid,
+            ):
                 continue
         if theme_filter:
             d_theme = str(design.get("theme") or "").lower()
@@ -282,18 +373,24 @@ def _player_kin_index_items(
             if theme_filter not in (d_theme, d_code):
                 continue
         if series_filter:
-            d_series = str(design.get("series") or design.get("seriesKey") or kin_key)
-            if not series_filter_matches(d_series, series_filter):
+            # Player Kin always lives under KIN_SERIES — ignore legacy design
+            # JSON that still says "Genesis Series" (admin claim stamp).
+            if not series_filter_matches(kin_key, series_filter):
                 continue
         if subtheme_filter:
             d_sub = str(design.get("subtheme", "")).lower()
             if d_sub != subtheme_filter:
                 continue
+        summary = design_summary(
+            design,
+            series_key=kin_key,
+            theme=str(design.get("theme") or "Kin"),
+        )
         items.append(
-            design_summary(
-                design,
-                series_key=kin_key,
-                theme=str(design.get("theme") or "Kin"),
+            _attach_player_kin_background(
+                summary,
+                design_id=iid,
+                backgrounds=backgrounds,
             )
         )
     return items
@@ -431,6 +528,7 @@ def get_design(internal_id: str) -> dict[str, Any]:
         internal_id=design_id,
     )
     _attach_face_media(out, design_id)
+    _attach_player_kin_background(out, design_id=design_id)
     return out
 
 

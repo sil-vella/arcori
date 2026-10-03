@@ -16,13 +16,13 @@
     {
       "serial": "CUS-0003",
       "customType": "hue",
-      "displayName": "Eye hue",
+      "displayName": "Hue",
       "params": { "min": -180, "max": 180, "step": 1, "default": 0 }
     },
     {
       "serial": "CUS-0004",
       "customType": "saturation",
-      "displayName": "Eye saturation",
+      "displayName": "Saturation",
       "params": { "min": 0, "max": 2, "step": 0.01, "default": 1 }
     },
     {
@@ -50,6 +50,18 @@
       "serial": "CUS-0008",
       "customType": "lightDark",
       "displayName": "Light / dark",
+      "params": { "min": -1, "max": 1, "step": 0.01, "default": 0 }
+    },
+    {
+      "serial": "CUS-0009",
+      "customType": "embedHue",
+      "displayName": "Addition hue",
+      "params": { "min": -180, "max": 180, "step": 1, "default": 0 }
+    },
+    {
+      "serial": "CUS-0010",
+      "customType": "embedLightDark",
+      "displayName": "Addition light / dark",
       "params": { "min": -1, "max": 1, "step": 0.01, "default": 0 }
     }
   ]

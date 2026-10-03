@@ -50,6 +50,52 @@
         "preservationRequirement": 50,
         "closureMilestone": 100
       }
+    },
+    {
+      "internalId": "LGT-IGW-SER000-GEN001-0002",
+      "themeCode": "LGT",
+      "designCode": "IGW",
+      "designFamily": "IVORY_GATEWALKER",
+      "design": "Ivory Gatewalker",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "AMB"
+      ],
+      "hostility": [
+        "ASH"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "The Light",
+      "subtheme": "The Light",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#E6DCC8",
+      "effect": "None",
+      "selectionWeight": 0.01,
+      "series": "Creation Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Ivory Gatewalker in realistic style with a standard finish and no effect. Use a background that is visually related to Ivory Gatewalker. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named LGT-IGW-SER000-GEN001-0002.webp",
+      "loreDescription": "A collectible Ivory Gatewalker Arcori generation I from the Creation Series, bound to Everlight Grove.",
+      "legacy": {
+        "preservationRequirement": 50,
+        "closureMilestone": 100
+      }
     }
   ]
 }

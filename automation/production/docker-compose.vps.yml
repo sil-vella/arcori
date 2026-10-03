@@ -1,0 +1,109 @@
+# VPS pull-only stack — Hub images, no build:, no host Caddy.
+# Edge TLS/routing is host nginx on api.arcori.app. See nginx-api.arcori.app.conf.
+#
+# Host ports (127.0.0.1 only — free of Dutch :5001 / :8080):
+#   API  → 8000
+#   Dart → 8085 (container still listens on 8080)
+name: arcori_fastapi_dart_flutter
+
+x-env-file: &env_file
+  - ../.env
+
+services:
+  Arcori_postgres:
+    image: postgres:16
+    container_name: Arcori_postgres
+    env_file: *env_file
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - ${APP_ROOT:-/opt/apps/arcori}/data/postgres/pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  Arcori_redis:
+    image: redis:7-alpine
+    container_name: Arcori_redis
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  Arcori_api:
+    image: ${DOCKER_USERNAME:-silvella}/arcori_api:${API_IMAGE_TAG}
+    container_name: Arcori_api
+    env_file: *env_file
+    environment:
+      # Passwords must be URL-encoded (deploy_vps writes *_URLENC). Raw %/@/: break the URI.
+      DATABASE_URL: postgresql://${POSTGRES_APP_USER:-arcori_app}:${POSTGRES_APP_PASSWORD_URLENC}@Arcori_postgres:5432/${POSTGRES_DB:-arcori}
+      MIGRATION_DATABASE_URL: postgresql://${POSTGRES_USER:-arcori}:${POSTGRES_PASSWORD_URLENC}@Arcori_postgres:5432/${POSTGRES_DB:-arcori}
+      DART_SERVICE_URL: http://Arcori_dart:8080
+      REDIS_HOST: Arcori_redis
+      CATALOG_MEDIA_ROOT: /data/catalog-media
+      CATALOG_VELORA_MEDIA_ROOT: /data/catalog-velora
+      CATALOG_KIN_MEDIA_ROOT: /data/catalog-kin
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      Arcori_postgres:
+        condition: service_healthy
+      Arcori_redis:
+        condition: service_healthy
+    volumes:
+      - ${APP_ROOT:-/opt/apps/arcori}/data/uploads:/data/uploads
+      - ${APP_ROOT:-/opt/apps/arcori}/data/catalog-arcori:/data/catalog-media:ro
+      - ${APP_ROOT:-/opt/apps/arcori}/data/catalog-velora:/data/catalog-velora:ro
+      - ${APP_ROOT:-/opt/apps/arcori}/data/catalog-kin:/data/catalog-kin:ro
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  Arcori_dart:
+    image: ${DOCKER_USERNAME:-silvella}/arcori_dart:${DART_IMAGE_TAG}
+    container_name: Arcori_dart
+    env_file: *env_file
+    environment:
+      PORT: "8080"
+      FASTAPI_SERVICE_URL: http://Arcori_api:8000
+    ports:
+      - "127.0.0.1:8085:8080"
+    depends_on:
+      Arcori_api:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+networks:
+  app-network:
+    driver: bridge

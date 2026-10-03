@@ -138,6 +138,34 @@ docker compose --env-file ../.env.local -f docker-compose.debug.yml up --build -
 
 Services: Postgres `:5433`, FastAPI `:8000`, Dart `:8080`, Adminer `:8081`. All load `../.env.local` via `env_file`. See [`wfsecrets.md`](wfsecrets.md).
 
+## Production image push + VPS pull
+
+Hub publish and remote deploy runners **require `WFRUN_MODE=prod`** (choose **prod** in wfrun/dashboard so `.env.prod` is loaded). Selecting **local** exits immediately.
+
+| Order | Script | Role |
+|-------|--------|------|
+| 1 | `automation/backend/build_and_push_api_docker.py` | Build `silvella/arcori_api`, push Hub, upsert `API_IMAGE_TAG` |
+| 2 | `automation/backend/build_and_push_dart_docker.py` | Build `silvella/arcori_dart` (`--target prod`), push Hub, upsert `DART_IMAGE_TAG` |
+| 3 | `automation/production/deploy_vps.py` | SSH: copy `.env` + pull-only compose + catalogs → `pull` + `up -d` + nginx **api.arcori.app** vhost |
+| — | `automation/production/sync_ai_players_vps.py` | Replace **AI players only** on VPS DB + their Kin Lottie/design files (from local feed) |
+
+```bash
+wfrun   # mode: prod → automation/backend/build_and_push_api_docker.py
+wfrun   # mode: prod → automation/backend/build_and_push_dart_docker.py
+wfrun   # mode: prod → automation/production/deploy_vps.py
+wfrun   # mode: prod → automation/production/sync_ai_players_vps.py
+```
+
+- Tag default: `{APP_VERSION}-{git short sha}` (override with `IMAGE_TAG`). Platform default: `linux/amd64` (`DOCKER_PLATFORM`).
+- Before each image build, `LOGGING_SWITCH` is forced off under that build context and restored afterward.
+- Deploy needs `VPS_SSH_HOST`, `VPS_SSH_USER`, `VPS_SSH_KEY`, `API_IMAGE_TAG`, `DART_IMAGE_TAG` in `.env.prod`. `APP_ROOT` defaults to `/opt/apps/arcori`.
+- **AI sync:** after local `feed_ai_players`, run prod `sync_ai_players_vps.py`. Deletes/replaces only users with `*@arcoriaiplayer.app` or `avari_profiles.notes=ai_seed:v1`, plus their Kin media under `data/uploads/kin/{players,designs}`. Source DB: `AI_SYNC_SOURCE_DATABASE_URL` or `.env.local` `MIGRATION_DATABASE_URL`. Use `--dry-run` to validate export without VPS writes.
+- **VPS edge:** host **nginx** on `api.arcori.app` (dedicated vhost). Compose publishes API `127.0.0.1:8000` and Dart `127.0.0.1:8085` only — **no Caddy on 80/443**. Site template: [`nginx-api.arcori.app.conf`](../../automation/production/nginx-api.arcori.app.conf). Marketing `arcori.app` stays PHP-only (deploy strips any leftover backend snippet).
+- Flutter prod URLs: `https://api.arcori.app`, `wss://api.arcori.app/ws/authuser`, `wss://api.arcori.app/game/ws/authuser` (see `.env.dart.defines.prod.sample`).
+- **Prerequisite on VPS:** Docker Engine + Compose plugin; SSH user can run docker; DNS `api.arcori.app` → VPS (Certbot runs on first deploy if cert missing). Does not install Docker or touch Dutch/other vhosts.
+
+See [`.env.prod.sample`](../../.env.prod.sample) for placeholder keys.
+
 ## Flutter env injection (`dart-define`)
 
 Flutter URLs, web port, and other client keys live in **`.env.dart.defines.local`** / **`.env.dart.defines.prod`** (not in `.env.local`).

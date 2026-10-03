@@ -316,7 +316,7 @@ class _MuseumScreenState extends ConsumerState<MuseumScreen> {
         child: AppScreenTemplate001(
           backgroundAsset: kMuseumHallBackgroundAsset,
           scrimOpacity: 0,
-          appBarForeground: Colors.white,
+          appBarForeground: AppColors.onSurfaceDark,
           banner: Stack(
             fit: StackFit.expand,
             children: [
@@ -783,7 +783,9 @@ class _FeaturedBannerState extends State<_FeaturedBanner>
         AppSpacing.gapSm,
         Text(
           featured.displayName,
-          style: context.appTypography.h3.copyWith(color: Colors.white),
+          style: context.appTypography.h3.copyWith(
+            color: AppColors.onSurfaceDark,
+          ),
           textAlign: TextAlign.center,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,

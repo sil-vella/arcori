@@ -32,7 +32,7 @@ Future<void> showLegacyMintCompleteModal(LegacyMintComplete mint) async {
           AppSpacing.gapMd,
           for (final item in items)
             Padding(
-              padding: const EdgeInsets.only(bottom: 6),
+              padding: const EdgeInsets.only(bottom: AppSpacing.xs),
               child: Text(
                 '• ${item.serial} (gen ${item.generationNumber}'
                 '${item.echoGenerationNumber != null ? ' → echo ${item.echoGenerationNumber}' : ''})',

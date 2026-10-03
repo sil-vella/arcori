@@ -10,6 +10,366 @@
       "serial": "KEMB-0002",
       "displayName": "Brand mark",
       "assetPath": "assets/images/branding/icon.png"
+    },
+    {
+      "serial": "KEMB-0003",
+      "displayName": "Bronze halo",
+      "assetPath": "assets/kin/embeds/ser001/guardians/BRZ/KIN-BRZ-SER001-0001_0000_halo.png"
+    },
+    {
+      "serial": "KEMB-0004",
+      "displayName": "Bronze lightning",
+      "assetPath": "assets/kin/embeds/ser001/guardians/BRZ/KIN-BRZ-SER001-0001_0001_lightning.png"
+    },
+    {
+      "serial": "KEMB-0005",
+      "displayName": "Bronze ball",
+      "assetPath": "assets/kin/embeds/ser001/guardians/BRZ/KIN-BRZ-SER001-0001_0002_ball.png"
+    },
+    {
+      "serial": "KEMB-0006",
+      "displayName": "Gold halo",
+      "assetPath": "assets/kin/embeds/ser001/guardians/GLD/KIN-GLD-SER001-0002_0000_halo.png"
+    },
+    {
+      "serial": "KEMB-0007",
+      "displayName": "Gold lightning eyes",
+      "assetPath": "assets/kin/embeds/ser001/guardians/GLD/KIN-GLD-SER001-0002_0001_lightning-eyes.png"
+    },
+    {
+      "serial": "KEMB-0008",
+      "displayName": "Gold spear",
+      "assetPath": "assets/kin/embeds/ser001/guardians/GLD/KIN-GLD-SER001-0002_0003_spear.png"
+    },
+    {
+      "serial": "KEMB-0009",
+      "displayName": "Ivory halo",
+      "assetPath": "assets/kin/embeds/ser001/guardians/IVY/KIN-IVY-SER001-0003_0000_halo.png"
+    },
+    {
+      "serial": "KEMB-0010",
+      "displayName": "Ivory lightning eyes",
+      "assetPath": "assets/kin/embeds/ser001/guardians/IVY/KIN-IVY-SER001-0003_0001_lightning-eyes.png"
+    },
+    {
+      "serial": "KEMB-0011",
+      "displayName": "Ivory spear",
+      "assetPath": "assets/kin/embeds/ser001/guardians/IVY/KIN-IVY-SER001-0003_0003_spear.png"
+    },
+    {
+      "serial": "KEMB-0012",
+      "displayName": "Silver halo",
+      "assetPath": "assets/kin/embeds/ser001/guardians/SLV/KIN-SLV-SER001-0004_0000_halo.png"
+    },
+    {
+      "serial": "KEMB-0013",
+      "displayName": "Silver lightning",
+      "assetPath": "assets/kin/embeds/ser001/guardians/SLV/KIN-SLV-SER001-0004_0001_lightning.png"
+    },
+    {
+      "serial": "KEMB-0014",
+      "displayName": "Silver ball",
+      "assetPath": "assets/kin/embeds/ser001/guardians/SLV/KIN-SLV-SER001-0004_0002_ball.png"
+    },
+    {
+      "serial": "KEMB-0015",
+      "displayName": "Antler Lace rose",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/ALC/KIN-ALC-SER001-0005_0000_rose.png"
+    },
+    {
+      "serial": "KEMB-0016",
+      "displayName": "Antler Lace wings",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/ALC/KIN-ALC-SER001-0005_0000_wings.png"
+    },
+    {
+      "serial": "KEMB-0017",
+      "displayName": "Antler Lace tiara",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/ALC/KIN-ALC-SER001-0005_0001_tiara.png"
+    },
+    {
+      "serial": "KEMB-0018",
+      "displayName": "Antler Lace necklace",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/ALC/KIN-ALC-SER001-0005_0002_necklace.png"
+    },
+    {
+      "serial": "KEMB-0019",
+      "displayName": "Antler Spirit wings",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/ASP/KIN-ASP-SER001-0006_0000_wings.png"
+    },
+    {
+      "serial": "KEMB-0020",
+      "displayName": "Antler Spirit rose",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/ASP/KIN-ASP-SER001-0006_0001_rose.png"
+    },
+    {
+      "serial": "KEMB-0021",
+      "displayName": "Antler Spirit tiara",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/ASP/KIN-ASP-SER001-0006_0002_tiara.png"
+    },
+    {
+      "serial": "KEMB-0022",
+      "displayName": "Horned Guardian helmet",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/HGD/KIN-HGD-SER001-0007_0000_helmet.png"
+    },
+    {
+      "serial": "KEMB-0023",
+      "displayName": "Horned Guardian shield",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/HGD/KIN-HGD-SER001-0007_0001_shield.png"
+    },
+    {
+      "serial": "KEMB-0024",
+      "displayName": "Horned Guardian wings",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/HGD/KIN-HGD-SER001-0007_0002_wings.png"
+    },
+    {
+      "serial": "KEMB-0025",
+      "displayName": "Horned Mage hatchet",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/HMG/KIN-HMG-SER001-0008_0000_hatchet.png"
+    },
+    {
+      "serial": "KEMB-0026",
+      "displayName": "Horned Mage shield",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/HMG/KIN-HMG-SER001-0008_0001_shield.png"
+    },
+    {
+      "serial": "KEMB-0027",
+      "displayName": "Horned Mage wings",
+      "assetPath": "assets/kin/embeds/ser001/entelairs/HMG/KIN-HMG-SER001-0008_0002_wings.png"
+    },
+    {
+      "serial": "KEMB-0028",
+      "displayName": "Cloud Character Cap",
+      "assetPath": "assets/kin/embeds/ser001/walkies/CLD/KIN-CLD-SER001-0009_cap.png"
+    },
+    {
+      "serial": "KEMB-0029",
+      "displayName": "Cloud Character Glasses",
+      "assetPath": "assets/kin/embeds/ser001/walkies/CLD/KIN-CLD-SER001-0009_glasses.png"
+    },
+    {
+      "serial": "KEMB-0030",
+      "displayName": "Cloud Character Cup",
+      "assetPath": "assets/kin/embeds/ser001/walkies/CLD/KIN-CLD-SER001-0009_cup.png"
+    },
+    {
+      "serial": "KEMB-0031",
+      "displayName": "Cloud Character Controller",
+      "assetPath": "assets/kin/embeds/ser001/walkies/CLD/KIN-CLD-SER001-0009_controller.png"
+    },
+    {
+      "serial": "KEMB-0032",
+      "displayName": "Cloud Character Tongue",
+      "assetPath": "assets/kin/embeds/ser001/walkies/CLD/KIN-CLD-SER001-0009_tongue.png"
+    },
+    {
+      "serial": "KEMB-0033",
+      "displayName": "Crystal Character Glasses",
+      "assetPath": "assets/kin/embeds/ser001/walkies/CRY/KIN-CRY-SER001-0010_glasses.png"
+    },
+    {
+      "serial": "KEMB-0034",
+      "displayName": "Crystal Character Cup",
+      "assetPath": "assets/kin/embeds/ser001/walkies/CRY/KIN-CRY-SER001-0010_cup.png"
+    },
+    {
+      "serial": "KEMB-0035",
+      "displayName": "Crystal Character Controller",
+      "assetPath": "assets/kin/embeds/ser001/walkies/CRY/KIN-CRY-SER001-0010_controller.png"
+    },
+    {
+      "serial": "KEMB-0036",
+      "displayName": "Crystal Character Tongue",
+      "assetPath": "assets/kin/embeds/ser001/walkies/CRY/KIN-CRY-SER001-0010_tongue.png"
+    },
+    {
+      "serial": "KEMB-0037",
+      "displayName": "Droplet Character Cap",
+      "assetPath": "assets/kin/embeds/ser001/walkies/DRP/KIN-DRP-SER001-0011_cap.png"
+    },
+    {
+      "serial": "KEMB-0038",
+      "displayName": "Droplet Character Glasses",
+      "assetPath": "assets/kin/embeds/ser001/walkies/DRP/KIN-DRP-SER001-0011_glasses.png"
+    },
+    {
+      "serial": "KEMB-0039",
+      "displayName": "Droplet Character Cup",
+      "assetPath": "assets/kin/embeds/ser001/walkies/DRP/KIN-DRP-SER001-0011_cup.png"
+    },
+    {
+      "serial": "KEMB-0040",
+      "displayName": "Droplet Character Controller",
+      "assetPath": "assets/kin/embeds/ser001/walkies/DRP/KIN-DRP-SER001-0011_controller.png"
+    },
+    {
+      "serial": "KEMB-0041",
+      "displayName": "Droplet Character Tongue",
+      "assetPath": "assets/kin/embeds/ser001/walkies/DRP/KIN-DRP-SER001-0011_tongue.png"
+    },
+    {
+      "serial": "KEMB-0042",
+      "displayName": "Fire Character Glasses",
+      "assetPath": "assets/kin/embeds/ser001/walkies/FIR/KIN-FIR-SER001-0012_glasses.png"
+    },
+    {
+      "serial": "KEMB-0043",
+      "displayName": "Fire Character Cup",
+      "assetPath": "assets/kin/embeds/ser001/walkies/FIR/KIN-FIR-SER001-0012_cup.png"
+    },
+    {
+      "serial": "KEMB-0044",
+      "displayName": "Fire Character Controller",
+      "assetPath": "assets/kin/embeds/ser001/walkies/FIR/KIN-FIR-SER001-0012_controller.png"
+    },
+    {
+      "serial": "KEMB-0045",
+      "displayName": "Fire Character Tongue",
+      "assetPath": "assets/kin/embeds/ser001/walkies/FIR/KIN-FIR-SER001-0012_tongue.png"
+    },
+    {
+      "serial": "KEMB-0046",
+      "displayName": "Moon Character Cap",
+      "assetPath": "assets/kin/embeds/ser001/walkies/MON/KIN-MON-SER001-0013_cap.png"
+    },
+    {
+      "serial": "KEMB-0047",
+      "displayName": "Moon Character Glasses",
+      "assetPath": "assets/kin/embeds/ser001/walkies/MON/KIN-MON-SER001-0013_glasses.png"
+    },
+    {
+      "serial": "KEMB-0048",
+      "displayName": "Moon Character Cup",
+      "assetPath": "assets/kin/embeds/ser001/walkies/MON/KIN-MON-SER001-0013_cup.png"
+    },
+    {
+      "serial": "KEMB-0049",
+      "displayName": "Moon Character Controller",
+      "assetPath": "assets/kin/embeds/ser001/walkies/MON/KIN-MON-SER001-0013_controller.png"
+    },
+    {
+      "serial": "KEMB-0050",
+      "displayName": "Moon Character Tongue",
+      "assetPath": "assets/kin/embeds/ser001/walkies/MON/KIN-MON-SER001-0013_tongue.png"
+    },
+    {
+      "serial": "KEMB-0051",
+      "displayName": "Robot Character Cap",
+      "assetPath": "assets/kin/embeds/ser001/walkies/RBT/KIN-RBT-SER001-0014_cap.png"
+    },
+    {
+      "serial": "KEMB-0052",
+      "displayName": "Robot Character Glasses",
+      "assetPath": "assets/kin/embeds/ser001/walkies/RBT/KIN-RBT-SER001-0014_glasses.png"
+    },
+    {
+      "serial": "KEMB-0053",
+      "displayName": "Robot Character Cup",
+      "assetPath": "assets/kin/embeds/ser001/walkies/RBT/KIN-RBT-SER001-0014_cup.png"
+    },
+    {
+      "serial": "KEMB-0054",
+      "displayName": "Robot Character Controller",
+      "assetPath": "assets/kin/embeds/ser001/walkies/RBT/KIN-RBT-SER001-0014_controller.png"
+    },
+    {
+      "serial": "KEMB-0055",
+      "displayName": "Robot Character Tongue",
+      "assetPath": "assets/kin/embeds/ser001/walkies/RBT/KIN-RBT-SER001-0014_tongue.png"
+    },
+    {
+      "serial": "KEMB-0056",
+      "displayName": "Sprout Character Glasses",
+      "assetPath": "assets/kin/embeds/ser001/walkies/SPR/KIN-SPR-SER001-0015_glasses.png"
+    },
+    {
+      "serial": "KEMB-0057",
+      "displayName": "Sprout Character Cup",
+      "assetPath": "assets/kin/embeds/ser001/walkies/SPR/KIN-SPR-SER001-0015_cup.png"
+    },
+    {
+      "serial": "KEMB-0058",
+      "displayName": "Sprout Character Controller",
+      "assetPath": "assets/kin/embeds/ser001/walkies/SPR/KIN-SPR-SER001-0015_controller.png"
+    },
+    {
+      "serial": "KEMB-0059",
+      "displayName": "Sprout Character Tongue",
+      "assetPath": "assets/kin/embeds/ser001/walkies/SPR/KIN-SPR-SER001-0015_tongue.png"
+    },
+    {
+      "serial": "KEMB-0060",
+      "displayName": "Star Character Cap",
+      "assetPath": "assets/kin/embeds/ser001/walkies/STR/KIN-STR-SER001-0016_cap.png"
+    },
+    {
+      "serial": "KEMB-0061",
+      "displayName": "Star Character Glasses",
+      "assetPath": "assets/kin/embeds/ser001/walkies/STR/KIN-STR-SER001-0016_glasses.png"
+    },
+    {
+      "serial": "KEMB-0062",
+      "displayName": "Star Character Cup",
+      "assetPath": "assets/kin/embeds/ser001/walkies/STR/KIN-STR-SER001-0016_cup.png"
+    },
+    {
+      "serial": "KEMB-0063",
+      "displayName": "Star Character Controller",
+      "assetPath": "assets/kin/embeds/ser001/walkies/STR/KIN-STR-SER001-0016_controller.png"
+    },
+    {
+      "serial": "KEMB-0064",
+      "displayName": "Star Character Tongue",
+      "assetPath": "assets/kin/embeds/ser001/walkies/STR/KIN-STR-SER001-0016_tongue.png"
+    },
+    {
+      "serial": "KEMB-0065",
+      "displayName": "Water Character Cap",
+      "assetPath": "assets/kin/embeds/ser001/walkies/WTR/KIN-WTR-SER001-0017_cap.png"
+    },
+    {
+      "serial": "KEMB-0066",
+      "displayName": "Water Character Glasses",
+      "assetPath": "assets/kin/embeds/ser001/walkies/WTR/KIN-WTR-SER001-0017_glasses.png"
+    },
+    {
+      "serial": "KEMB-0067",
+      "displayName": "Water Character Cup",
+      "assetPath": "assets/kin/embeds/ser001/walkies/WTR/KIN-WTR-SER001-0017_cup.png"
+    },
+    {
+      "serial": "KEMB-0068",
+      "displayName": "Water Character Controller",
+      "assetPath": "assets/kin/embeds/ser001/walkies/WTR/KIN-WTR-SER001-0017_controller.png"
+    },
+    {
+      "serial": "KEMB-0069",
+      "displayName": "Water Character Tongue",
+      "assetPath": "assets/kin/embeds/ser001/walkies/WTR/KIN-WTR-SER001-0017_tongue.png"
+    },
+    {
+      "serial": "KEMB-0070",
+      "displayName": "Planet Character Cap",
+      "assetPath": "assets/kin/embeds/ser001/walkies/PLN/KIN-PLN-SER001-0018_cap.png"
+    },
+    {
+      "serial": "KEMB-0071",
+      "displayName": "Planet Character Glasses",
+      "assetPath": "assets/kin/embeds/ser001/walkies/PLN/KIN-PLN-SER001-0018_glasses.png"
+    },
+    {
+      "serial": "KEMB-0072",
+      "displayName": "Planet Character Cup",
+      "assetPath": "assets/kin/embeds/ser001/walkies/PLN/KIN-PLN-SER001-0018_cup.png"
+    },
+    {
+      "serial": "KEMB-0073",
+      "displayName": "Planet Character Controller",
+      "assetPath": "assets/kin/embeds/ser001/walkies/PLN/KIN-PLN-SER001-0018_controller.png"
+    },
+    {
+      "serial": "KEMB-0074",
+      "displayName": "Planet Character Tongue",
+      "assetPath": "assets/kin/embeds/ser001/walkies/PLN/KIN-PLN-SER001-0018_tongue.png"
     }
   ]
 }

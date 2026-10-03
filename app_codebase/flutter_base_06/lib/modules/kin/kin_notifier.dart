@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/state/auth/auth_providers.dart';
 import '../../utils/dev_logger.dart';
 import '../match/widgets/arcori_palette.dart';
 import 'kin_backgrounds.dart';
 import 'kin_catalog_loader.dart';
+import 'kin_embed_catalog.dart';
+import 'kin_embed_selection.dart';
 import 'kin_models.dart';
 import 'kin_save_store.dart';
 
@@ -45,22 +48,32 @@ class KinCatalogState {
 }
 
 class KinCatalogNotifier extends StateNotifier<KinCatalogState> {
-  KinCatalogNotifier(this._loader) : super(const KinCatalogState());
+  KinCatalogNotifier(this._loader, this._ref) : super(const KinCatalogState());
 
   final KinCatalogLoader _loader;
+  final Ref _ref;
   bool _loadedOnce = false;
 
+  /// Bundled assets only — remote embeds always merge onto this snapshot.
+  KinCreationCatalog? _bundled;
+
   Future<void> load({bool force = false}) async {
-    if (_loadedOnce && !force && state.catalog != null) return;
+    if (_loadedOnce && !force && state.catalog != null) {
+      // Still refresh hot embeds so new additions appear without app rebuild.
+      await refreshRemoteEmbeds();
+      return;
+    }
     state = state.copyWith(isLoading: true, clearError: true);
     try {
-      final catalog = await _loader.load();
+      _bundled = await _loader.load();
+      final catalog = await _mergeRemote(_bundled!);
       _loadedOnce = true;
       state = KinCatalogState(catalog: catalog);
       if (LOGGING_SWITCH) {
         customlog(
           'KinCatalog: loaded types=${catalog.types.length} '
-          'kins=${catalog.kins.length} customs=${catalog.customs.length}',
+          'kins=${catalog.kins.length} customs=${catalog.customs.length} '
+          'embeds=${catalog.embeds.length}',
         );
       }
     } catch (e) {
@@ -73,11 +86,33 @@ class KinCatalogNotifier extends StateNotifier<KinCatalogState> {
       );
     }
   }
+
+  /// Re-fetch `/avari/kin/embeds` and merge onto the bundled catalog.
+  Future<void> refreshRemoteEmbeds() async {
+    if (_bundled == null) {
+      await load(force: true);
+      return;
+    }
+    try {
+      final merged = await _mergeRemote(_bundled!);
+      state = KinCatalogState(catalog: merged);
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('KinCatalog: refresh embeds failed $e');
+      }
+    }
+  }
+
+  Future<KinCreationCatalog> _mergeRemote(KinCreationCatalog base) async {
+    final token = _ref.read(authProvider).accessToken;
+    final remote = await fetchKinRemoteEmbeds(accessToken: token);
+    return mergeKinRemoteEmbeds(base, remote);
+  }
 }
 
 final kinCatalogProvider =
     StateNotifierProvider<KinCatalogNotifier, KinCatalogState>((ref) {
-  return KinCatalogNotifier(ref.watch(kinCatalogLoaderProvider));
+  return KinCatalogNotifier(ref.watch(kinCatalogLoaderProvider), ref);
 });
 
 class KinActiveSaveState {
@@ -135,6 +170,8 @@ class KinActiveSaveNotifier extends StateNotifier<KinActiveSaveState> {
     String? colorHex,
     String? chosenName,
     String? backgroundId,
+    KinBackgroundScene? backgroundScene,
+    KinBackgroundFilterMode? backgroundFilterMode,
   }) async {
     state = KinActiveSaveState(
       draft: state.draft,
@@ -151,6 +188,8 @@ class KinActiveSaveNotifier extends StateNotifier<KinActiveSaveState> {
         colorHex: colorHex,
         chosenName: chosenName,
         backgroundId: backgroundId,
+        backgroundScene: backgroundScene,
+        backgroundFilterMode: backgroundFilterMode,
       );
       final file = await _store.lottieFileFor(draft);
       state = KinActiveSaveState(draft: draft, lottieFile: file);
@@ -354,10 +393,16 @@ class KinCustomizeState {
 class KinCustomizeNotifier extends StateNotifier<KinCustomizeState> {
   KinCustomizeNotifier({
     required String kinSerial,
-    required this.catalog,
-  }) : super(KinCustomizeState(kinSerial: kinSerial));
+    required KinCreationCatalog catalog,
+  })  : catalog = catalog,
+        super(KinCustomizeState(kinSerial: kinSerial));
 
-  final KinCreationCatalog catalog;
+  KinCreationCatalog catalog;
+
+  /// Hot-merge embeds without resetting customize session state.
+  void updateCatalog(KinCreationCatalog next) {
+    catalog = next;
+  }
 
   KinTemplate? get template => catalog.kinBySerial(state.kinSerial);
 
@@ -495,6 +540,96 @@ class KinCustomizeNotifier extends StateNotifier<KinCustomizeState> {
     state = state.copyWith(chosenName: name);
   }
 
+  /// Hydrate customize session from a local [KinSaveDraft] (Continue draft).
+  void restoreFromDraft(KinSaveDraft draft) {
+    if (draft.kinSerial != state.kinSerial) return;
+
+    final applied = <String, Object?>{};
+    for (final a in draft.applied) {
+      applied[KinCustomizeState.keyFor(a.partSerial, a.customSerial)] =
+          a.value;
+    }
+
+    final name = (draft.chosenName ?? draft.displayName).trim();
+    var next = KinCustomizeState(
+      kinSerial: state.kinSerial,
+      applied: applied,
+      regionCode: draft.regionCode,
+      colorHex: draft.colorHex,
+      chosenName: name,
+      backgroundId: draft.backgroundId,
+    );
+
+    final filterRaw = (draft.backgroundFilterMode ?? '').trim().toLowerCase();
+    if (filterRaw == KinBackgroundFilterMode.style.name) {
+      next = next.copyWith(
+        backgroundFilterMode: KinBackgroundFilterMode.style,
+      );
+    }
+
+    final bgJson = draft.background;
+    if (bgJson != null && bgJson.isNotEmpty) {
+      final scene = KinBackgroundScene.fromClaimJson(bgJson);
+      final theme = scene.theme.toUpperCase();
+      if (scene.isImage) {
+        next = next.copyWith(
+          backgroundId: scene.id,
+          backgroundTheme: theme.isEmpty ? kKinBgThemeAbstract : theme,
+          backgroundStyle: scene.style,
+          clearBackgroundStyle: scene.style == null || scene.style!.isEmpty,
+        );
+      } else if (scene.isGradient) {
+        next = next.copyWith(
+          backgroundId: scene.id,
+          backgroundTheme: kKinBgThemeGradient,
+          backgroundColorHex: scene.colorHex ?? kKinDefaultBackgroundColorHex,
+          backgroundColorHexB: scene.colorHexB ?? kArcoriAccentHexes.first,
+          backgroundAngleDegrees:
+              scene.angleDegrees ?? kKinBgAngleDefault,
+          backgroundSaturation: scene.saturation,
+          backgroundLightDark: scene.lightDark,
+          backgroundTextureId: scene.textureId,
+          backgroundTextureIntensity: scene.textureIntensity,
+          clearBackgroundStyle: true,
+        );
+      } else if (scene.isSolid) {
+        next = next.copyWith(
+          backgroundId: scene.id,
+          backgroundTheme: kKinBgThemeSolid,
+          backgroundColorHex: scene.colorHex ?? kKinDefaultBackgroundColorHex,
+          backgroundSaturation: scene.saturation,
+          backgroundLightDark: scene.lightDark,
+          backgroundTextureId: scene.textureId,
+          backgroundTextureIntensity: scene.textureIntensity,
+          clearBackgroundStyle: true,
+          clearBackgroundColorB: true,
+        );
+      }
+    } else if (draft.backgroundId != null &&
+        draft.backgroundId!.trim().isNotEmpty) {
+      next = next.copyWith(backgroundId: draft.backgroundId);
+    }
+
+    final firstAppliedPart =
+        draft.applied.isNotEmpty ? draft.applied.first.partSerial : null;
+    final template = this.template;
+    final selected = firstAppliedPart ??
+        (template != null && template.parts.isNotEmpty
+            ? template.parts.first.serial
+            : null);
+    if (selected != null) {
+      next = next.copyWith(selectedPartSerial: selected);
+    }
+
+    state = next;
+    if (LOGGING_SWITCH) {
+      customlog(
+        'KinCustomize: restored draft=${draft.serial} '
+        'applied=${applied.length} region=${draft.regionCode}',
+      );
+    }
+  }
+
   /// Applies a custom only if the part allows it. Returns false if ignored.
   bool applyCustom({
     required String partSerial,
@@ -515,8 +650,38 @@ class KinCustomizeNotifier extends StateNotifier<KinCustomizeState> {
     }
     final custom = catalog.customBySerial(customSerial);
     if (custom == null) return false;
-    if (custom.customType == KinCustomType.embedImage ||
-        custom.customType == KinCustomType.swapPart) {
+    if (custom.customType == KinCustomType.embedImage) {
+      final selected = parseEmbedSelection(value);
+      if (selected.isEmpty) {
+        // Empty selection = clear.
+        clearCustom(partSerial: partSerial, customSerial: customSerial);
+        return true;
+      }
+      for (final embedSerial in selected.keys) {
+        if (!part.allowsEmbed(embedSerial)) {
+          if (LOGGING_SWITCH) {
+            customlog(
+              'KinCustomize: reject embed=$embedSerial on part=$partSerial',
+            );
+          }
+          return false;
+        }
+        if (part.placementFor(embedSerial) == null) {
+          if (LOGGING_SWITCH) {
+            customlog(
+              'KinCustomize: reject embed=$embedSerial — no embedPlacements '
+              'on part=$partSerial',
+            );
+          }
+          return false;
+        }
+      }
+      final next = Map<String, Object?>.from(state.applied);
+      next[KinCustomizeState.keyFor(partSerial, customSerial)] =
+          encodeEmbedSelection(selected);
+      state = state.copyWith(applied: next);
+      return true;
+    } else if (custom.customType == KinCustomType.swapPart) {
       final embedSerial = value?.toString() ?? '';
       if (embedSerial.isNotEmpty && !part.allowsEmbed(embedSerial)) {
         if (LOGGING_SWITCH) {
@@ -539,22 +704,89 @@ class KinCustomizeNotifier extends StateNotifier<KinCustomizeState> {
   }) {
     final next = Map<String, Object?>.from(state.applied);
     next.remove(KinCustomizeState.keyFor(partSerial, customSerial));
+    if (customSerial == kKinEmbedImageSerial) {
+      next.remove(KinCustomizeState.keyFor(partSerial, kKinEmbedHueSerial));
+      next.remove(
+        KinCustomizeState.keyFor(partSerial, kKinEmbedLightDarkSerial),
+      );
+    }
     state = state.copyWith(applied: next);
+  }
+
+  /// Toggle one addition on/off for the part that owns it (multi-select).
+  bool toggleEmbed({
+    required String partSerial,
+    required String embedSerial,
+    required bool selected,
+  }) {
+    final template = this.template;
+    if (template == null) return false;
+    final part = template.partBySerial(partSerial);
+    if (part == null || !part.allowsCustom(kKinEmbedImageSerial)) return false;
+    if (!part.allowsEmbed(embedSerial) ||
+        part.placementFor(embedSerial) == null) {
+      return false;
+    }
+    final key = KinCustomizeState.keyFor(partSerial, kKinEmbedImageSerial);
+    final current = parseEmbedSelection(state.applied[key]);
+    final nextMap = Map<String, KinEmbedTint>.from(current);
+    if (selected) {
+      nextMap.putIfAbsent(embedSerial, () => const KinEmbedTint());
+    } else {
+      nextMap.remove(embedSerial);
+    }
+    return applyCustom(
+      partSerial: partSerial,
+      customSerial: kKinEmbedImageSerial,
+      value: encodeEmbedSelection(nextMap),
+    );
+  }
+
+  /// Update hue / lightDark for one selected addition.
+  bool setEmbedTint({
+    required String partSerial,
+    required String embedSerial,
+    double? hue,
+    double? lightDark,
+  }) {
+    final key = KinCustomizeState.keyFor(partSerial, kKinEmbedImageSerial);
+    final current = parseEmbedSelection(state.applied[key]);
+    final existing = current[embedSerial];
+    if (existing == null) return false;
+    final nextMap = Map<String, KinEmbedTint>.from(current);
+    nextMap[embedSerial] = existing.copyWith(hue: hue, lightDark: lightDark);
+    return applyCustom(
+      partSerial: partSerial,
+      customSerial: kKinEmbedImageSerial,
+      value: encodeEmbedSelection(nextMap),
+    );
   }
 }
 
 final kinCustomizeProvider = StateNotifierProvider.autoDispose
     .family<KinCustomizeNotifier, KinCustomizeState, String>((ref, kinSerial) {
-  final catalog = ref.watch(kinCatalogProvider).catalog;
-  return KinCustomizeNotifier(
-    kinSerial: kinSerial,
-    catalog: catalog ??
-        const KinCreationCatalog(
-          customTypes: [],
-          customs: [],
-          embeds: [],
-          types: [],
-          kins: [],
-        ),
+  // Rebuild only when catalog first becomes available — not on every hot merge.
+  final catalogReady =
+      ref.watch(kinCatalogProvider.select((s) => s.catalog != null));
+  const empty = KinCreationCatalog(
+    customTypes: [],
+    customs: [],
+    embeds: [],
+    types: [],
+    kins: [],
   );
+  final catalog = catalogReady
+      ? (ref.read(kinCatalogProvider).catalog ?? empty)
+      : empty;
+  final notifier = KinCustomizeNotifier(
+    kinSerial: kinSerial,
+    catalog: catalog,
+  );
+  ref.listen<KinCatalogState>(kinCatalogProvider, (_, next) {
+    final c = next.catalog;
+    if (c != null) {
+      notifier.updateCatalog(c);
+    }
+  });
+  return notifier;
 });

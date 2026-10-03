@@ -2,6 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Internet permission required for Google Sign-In and API calls -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Slam stack-hit motor pulse (`vibration` package). Normal install grant. -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <!--
       Profile photo: use system photo picker (image_picker + image_picker_android backport via Play services).
       Do not declare READ_MEDIA_* — Play Photo/Video Permissions policy for infrequent access.
@@ -15,7 +17,14 @@
         android:label="arcori"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        
+        <!--
+          Android 16 ignores portrait locks on large screens (sw >= 600dp).
+          Keep the portrait lock until the table layout is ready for free resizing.
+        -->
+        <property
+            android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY"
+            android:value="true" />
+
         <!-- AdMob App ID - Required for Google Mobile Ads SDK -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -24,6 +33,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

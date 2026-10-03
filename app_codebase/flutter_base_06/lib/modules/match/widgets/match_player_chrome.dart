@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/http/media_url.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_visuals.dart';
+import '../../avari/widgets/profile_face_avatar.dart';
 import '../../kin/widgets/kin_lottie_preview.dart';
 import 'arcori_cylinder.dart';
 import 'arcori_look.dart';
@@ -73,7 +73,6 @@ class MatchPlayerChrome extends StatelessWidget {
     final surfaces = context.appSurfaces;
     final name = username.trim().isEmpty ? '?' : username.trim();
     final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
-    final resolved = resolveMediaUrl(avatarUrl);
     final ring = isActive ? hud.armed : surfaces.frameGold;
 
     final chip = AppHudGlassChip(
@@ -94,13 +93,11 @@ class MatchPlayerChrome extends StatelessWidget {
               border: Border.all(color: ring, width: isActive ? 2.5 : 1.5),
             ),
             clipBehavior: Clip.antiAlias,
-            child: resolved.isNotEmpty
-                ? Image.network(
-                    resolved,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => _Initials(initial: initial),
-                  )
-                : _Initials(initial: initial),
+            child: ProfileFaceAvatar(
+              avatarUrl: avatarUrl,
+              size: avatarSize,
+              fallbackLabel: initial,
+            ),
           ),
           AppSpacing.gapXs,
           ConstrainedBox(
@@ -181,26 +178,6 @@ class MatchPlayerChrome extends StatelessWidget {
       child: KeyedSubtree(
         key: slammerKey,
         child: disc,
-      ),
-    );
-  }
-}
-
-class _Initials extends StatelessWidget {
-  const _Initials({required this.initial});
-
-  final String initial;
-
-  @override
-  Widget build(BuildContext context) {
-    final hud = context.appHud;
-    return ColoredBox(
-      color: context.appSurfaces.glassHud,
-      child: Center(
-        child: Text(
-          initial,
-          style: context.appTypography.h3.copyWith(color: hud.onGlass),
-        ),
       ),
     );
   }

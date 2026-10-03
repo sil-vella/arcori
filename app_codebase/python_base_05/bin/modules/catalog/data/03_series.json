@@ -1,0 +1,55 @@
+{
+  "catalog": "Series Circulation Switch",
+  "version": 1,
+  "description": "Master on/off for each catalog series. A design circulates only when its series is active here AND its own worldState is Active. Missing series keys are inactive. Player access rows are kept when a series is off and become playable again when turned on.",
+  "series": [
+    {
+      "key": "creation",
+      "label": "Creation",
+      "seriesKey": "Creation",
+      "idToken": "SER000",
+      "mediaFolder": "000_creation",
+      "active": false
+    },
+    {
+      "key": "genesis",
+      "label": "Genesis",
+      "seriesKey": "Genesis",
+      "idToken": "SER001",
+      "mediaFolder": "001_genesis",
+      "active": true
+    },
+    {
+      "key": "pioneers",
+      "label": "Pioneers",
+      "seriesKey": "Pioneers",
+      "idToken": "SER002",
+      "mediaFolder": "002_pioneers",
+      "active": true
+    },
+    {
+      "key": "foundations",
+      "label": "Foundations",
+      "seriesKey": "Foundations",
+      "idToken": "SER003",
+      "mediaFolder": "003_foundations",
+      "active": false
+    },
+    {
+      "key": "civilizations",
+      "label": "Civilizations",
+      "seriesKey": "Civilizations",
+      "idToken": "SER004",
+      "mediaFolder": "004_civilizations",
+      "active": false
+    },
+    {
+      "key": "kin",
+      "label": "Kin",
+      "seriesKey": "Kin",
+      "idToken": "SER005",
+      "mediaFolder": "005_kin",
+      "active": false
+    }
+  ]
+}

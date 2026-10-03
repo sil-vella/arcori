@@ -1,7 +1,8 @@
-import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../../core/http/media_url.dart';
@@ -15,19 +16,35 @@ import '../../avari/avari_notifier.dart';
 import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
 import '../../match/widgets/arcori_palette.dart';
+import '../../../utils/dev_logger.dart';
 import '../kin_api.dart';
 import '../kin_backgrounds.dart';
+import '../kin_embed_selection.dart';
+import '../kin_lottie_embed.dart';
 import '../kin_lottie_style.dart';
 import '../kin_models.dart';
 import '../kin_notifier.dart';
 import '../kin_regions.dart';
 import '../widgets/kin_lottie_preview.dart';
 
+const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
+
+/// Min gap between live tint notifier writes while dragging a slider.
+/// Preview tints via [LottieDelegates]; this only limits Riverpod rebuild spam.
+const Duration _kTintSliderThrottle = Duration(milliseconds: 40);
+
 /// Third wizard step: customize, region, disc color, claim Genesis Kin.
 class KinCustomizeScreen extends ConsumerStatefulWidget {
-  const KinCustomizeScreen({required this.kinSerial, super.key});
+  const KinCustomizeScreen({
+    required this.kinSerial,
+    this.resumeDraft = false,
+    super.key,
+  });
 
   final String kinSerial;
+
+  /// When true, hydrate customize state from the active local draft.
+  final bool resumeDraft;
 
   @override
   ConsumerState<KinCustomizeScreen> createState() => _KinCustomizeScreenState();
@@ -35,26 +52,189 @@ class KinCustomizeScreen extends ConsumerStatefulWidget {
 
 class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
   bool _saving = false;
+  bool _savingDraft = false;
+  /// Active draft serial already applied for this visit (`resume=1`).
+  String? _resumedDraftSerial;
+  /// Seed template display name once; do not refill after the user clears it.
+  bool _didSeedDefaultName = false;
   late final TextEditingController _nameController;
   final _kinApi = KinApiClient();
+  final _http = http.Client();
+  String? _templateLottieCache;
+  String? _templateLottieCacheUrl;
+
+  /// Embed PNG bytes keyed by [KinEmbed.bakeSource] (skip re-fetch on compose).
+  final Map<String, Uint8List> _embedPngCache = {};
+
+  /// Compose identity = embed serials + placement (side/target/p/s); not tint.
+  String? _composeSignature;
+  Future<String?>? _composeFuture;
+  String? _lastComposedJson;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Refresh hot embeds each visit so new host catalog rows appear.
       ref.read(kinCatalogProvider.notifier).load();
+      if (widget.resumeDraft) {
+        ref.read(kinActiveSaveProvider.notifier).refresh();
+      }
     });
   }
 
   @override
   void dispose() {
     _nameController.dispose();
+    _http.close();
     super.dispose();
   }
 
-  Future<void> _save(KinTemplate template, KinCreationCatalog catalog) async {
-    if (_saving) return;
+  Future<String?> _loadTemplateLottie(KinTemplate template) async {
+    final url = resolveMediaUrl(template.lottieUrl);
+    if (url.isEmpty) return null;
+    if (_templateLottieCache != null && _templateLottieCacheUrl == url) {
+      return _templateLottieCache;
+    }
+    try {
+      final res = await _http.get(Uri.parse(url));
+      if (res.statusCode >= 200 &&
+          res.statusCode < 300 &&
+          res.body.isNotEmpty) {
+        _templateLottieCache = res.body;
+        _templateLottieCacheUrl = url;
+        return res.body;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  /// Embed-insert only for live preview; hue/sat/lightDark via [LottieDelegates].
+  Future<String?> _composePreviewLottie({
+    required KinTemplate template,
+    required KinCreationCatalog catalog,
+    required List<KinAppliedCustom> applied,
+  }) async {
+    final jobs = resolveEmbedJobs(
+      template: template,
+      catalog: catalog,
+      applied: applied,
+    );
+    if (jobs.isEmpty) return null;
+    final raw = await _loadTemplateLottie(template);
+    if (raw == null || raw.isEmpty) {
+      if (LOGGING_SWITCH) {
+        customlog('KinCustomize: compose skip — template lottie missing');
+      }
+      return null;
+    }
+
+    final hydrated = <KinEmbedBakeJob>[];
+    for (final job in jobs) {
+      var bytes = _embedPngCache[job.assetPath];
+      if (bytes == null || bytes.isEmpty) {
+        bytes = await loadKinEmbedBytes(job.assetPath, httpClient: _http);
+        if (bytes != null && bytes.isNotEmpty) {
+          _embedPngCache[job.assetPath] = bytes;
+        }
+      }
+      hydrated.add(
+        KinEmbedBakeJob(
+          embedSerial: job.embedSerial,
+          targetLayer: job.targetLayer,
+          side: job.side,
+          assetPath: job.assetPath,
+          p: job.p,
+          s: job.s,
+          pngBytes: bytes,
+        ),
+      );
+    }
+
+    final body = await bakeKinEmbedsIntoLottie(raw, hydrated, pretty: false);
+    if (LOGGING_SWITCH) {
+      customlog(
+        'KinCustomize: compose ok embeds=${hydrated.length} '
+        'bytes=${body.length}',
+      );
+    }
+    return body;
+  }
+
+  /// Start compose when selected embeds or their placements change.
+  Future<String?> _ensureComposeFuture({
+    required KinTemplate template,
+    required KinCreationCatalog catalog,
+    required List<KinAppliedCustom> applied,
+  }) {
+    final signature = kinPreviewEmbedSignature(
+      template: template,
+      catalog: catalog,
+      applied: applied,
+    );
+    if (_composeSignature == signature && _composeFuture != null) {
+      return _composeFuture!;
+    }
+    _composeSignature = signature;
+    if (signature.isEmpty) {
+      _lastComposedJson = null;
+      _composeFuture = Future<String?>.value(null);
+      return _composeFuture!;
+    }
+    final future = _composePreviewLottie(
+      template: template,
+      catalog: catalog,
+      applied: applied,
+    );
+    _composeFuture = future;
+    future.then((json) {
+      if (!mounted || _composeSignature != signature) return;
+      setState(() {
+        _lastComposedJson = json;
+      });
+    });
+    return future;
+  }
+
+  Future<void> _saveDraft(KinTemplate template, KinCreationCatalog catalog) async {
+    if (_saving || _savingDraft) return;
+
+    final customize = ref.read(kinCustomizeProvider(widget.kinSerial));
+    final bgCatalog =
+        ref.read(kinBackgroundCatalogProvider).asData?.value ??
+            KinBackgroundCatalog.empty;
+    final bgScene = customize.resolveBackgroundScene(bgCatalog);
+
+    setState(() => _savingDraft = true);
+    final name = customize.chosenName.trim();
+    final draft = await ref.read(kinActiveSaveProvider.notifier).save(
+          template: template,
+          catalog: catalog,
+          applied: customize.toAppliedList(),
+          displayName: name.isEmpty ? template.displayName : name,
+          regionCode: customize.regionCode,
+          colorHex: customize.colorHex,
+          chosenName: name.isEmpty ? null : name,
+          backgroundId: customize.backgroundId,
+          backgroundScene: bgScene,
+          backgroundFilterMode: customize.backgroundFilterMode,
+        );
+    if (!mounted) return;
+    setState(() => _savingDraft = false);
+    if (draft == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not save draft')),
+      );
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Draft saved (${draft.serial})')),
+    );
+  }
+
+  Future<void> _claimKin(KinTemplate template, KinCreationCatalog catalog) async {
+    if (_saving || _savingDraft) return;
     final customize = ref.read(kinCustomizeProvider(widget.kinSerial));
     if (!customize.canClaim) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -74,6 +254,11 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
       return;
     }
 
+    final bgCatalog =
+        ref.read(kinBackgroundCatalogProvider).asData?.value ??
+            KinBackgroundCatalog.empty;
+    final bgScene = customize.resolveBackgroundScene(bgCatalog);
+
     setState(() => _saving = true);
     final name = customize.chosenName.trim();
     final draft = await ref.read(kinActiveSaveProvider.notifier).save(
@@ -85,6 +270,8 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
           colorHex: customize.colorHex,
           chosenName: name,
           backgroundId: customize.backgroundId,
+          backgroundScene: bgScene,
+          backgroundFilterMode: customize.backgroundFilterMode,
         );
     if (!mounted) return;
     if (draft == null) {
@@ -95,23 +282,25 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
       return;
     }
 
-    Map<String, dynamic>? lottieJson;
-    final lottieFile = ref.read(kinActiveSaveProvider).lottieFile;
-    if (lottieFile != null) {
-      try {
-        final decoded = jsonDecode(await lottieFile.readAsString());
-        if (decoded is Map) {
-          lottieJson = Map<String, dynamic>.from(decoded);
-        }
-      } catch (_) {
-        lottieJson = null;
-      }
+    final String claimLottie;
+    try {
+      claimLottie = await ref.read(kinSaveStoreProvider).buildBakedLottieJson(
+            template: template,
+            catalog: catalog,
+            applied: customize.toAppliedList(),
+            backgroundScene: bgScene,
+            // Server BG rebake square-pads once (shifts embeds + character together).
+            // Client-side expand before upload desynced catalog embed `p` on HGD.
+            expandBackgroundToSquare: false,
+          );
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not bake Kin face for claim')),
+      );
+      return;
     }
-
-    final bgCatalog =
-        ref.read(kinBackgroundCatalogProvider).asData?.value ??
-            KinBackgroundCatalog.empty;
-    final bgScene = customize.resolveBackgroundScene(bgCatalog);
 
     final outcome = await _kinApi.claimKin(
       accessToken: token,
@@ -121,8 +310,8 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
       regionCode: customize.regionCode!,
       color: customize.colorHex!,
       applied: customize.toAppliedList().map((e) => e.toJson()).toList(),
-      lottie: lottieJson,
       background: bgScene.toClaimJson(),
+      lottieJson: claimLottie,
     );
 
     if (!mounted) return;
@@ -184,19 +373,53 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
           child: AppChromeCentered(
             child: Text(
               'Kin not found',
-              style: TextStyle(color: AppChrome.onSurfaceMuted),
+              style: context.appTypography.caption.copyWith(
+                color: AppChrome.onSurfaceMuted,
+              ),
             ),
           ),
         ),
       );
     }
 
-    if (_nameController.text.isEmpty && customize.chosenName.isEmpty) {
+    final activeSave = ref.watch(kinActiveSaveProvider);
+    if (widget.resumeDraft) {
+      final draft = activeSave.draft;
+      if (!activeSave.isLoading &&
+          draft != null &&
+          draft.kinSerial == widget.kinSerial &&
+          _resumedDraftSerial != draft.serial) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          if (_resumedDraftSerial == draft.serial) return;
+          ref
+              .read(kinCustomizeProvider(widget.kinSerial).notifier)
+              .restoreFromDraft(draft);
+          final restored =
+              ref.read(kinCustomizeProvider(widget.kinSerial)).chosenName;
+          _nameController.text = restored;
+          _didSeedDefaultName = true;
+          setState(() => _resumedDraftSerial = draft.serial);
+        });
+      }
+    }
+
+    final resumePending = widget.resumeDraft &&
+        _resumedDraftSerial == null &&
+        (activeSave.isLoading ||
+            (activeSave.draft?.kinSerial == widget.kinSerial));
+
+    if (!resumePending &&
+        !_didSeedDefaultName &&
+        _nameController.text.isEmpty &&
+        customize.chosenName.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || _didSeedDefaultName) return;
         final notifier =
             ref.read(kinCustomizeProvider(widget.kinSerial).notifier);
         notifier.setChosenName(template.displayName);
         _nameController.text = template.displayName;
+        _didSeedDefaultName = true;
       });
     }
 
@@ -240,6 +463,17 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
       colorHex: discColor,
       imageUrl: null,
     );
+    final appliedList = customize.toAppliedList();
+    final composeSignature = kinPreviewEmbedSignature(
+      template: template,
+      catalog: catalog,
+      applied: appliedList,
+    );
+    final composeFuture = _ensureComposeFuture(
+      template: template,
+      catalog: catalog,
+      applied: appliedList,
+    );
 
     return ModuleScreenRegistrar(
       appBarItems: [
@@ -256,13 +490,27 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: KinLottiePreview(
-                      key: ValueKey(
-                        '${customize.applied}|${bgScene.toClaimJson()}',
-                      ),
-                      lottieUrl: template.lottieUrl,
-                      delegates: delegates,
-                      scene: bgScene,
+                    child: FutureBuilder<String?>(
+                      future: composeFuture,
+                      builder: (context, snap) {
+                        final composed = snap.data ??
+                            (snap.connectionState == ConnectionState.waiting
+                                ? _lastComposedJson
+                                : snap.data);
+                        // Key = template + embed set only (not tint). Stable key
+                        // keeps [KinSceneStack] byte cache across level drags.
+                        return KinLottiePreview(
+                          key: ValueKey(
+                            'preview-${template.lottieUrl}|$composeSignature',
+                          ),
+                          lottieUrl: template.lottieUrl,
+                          composedLottieJson: composed,
+                          delegates: delegates,
+                          scene: bgScene,
+                          // Create screen: static frame only (no Lottie tick cost).
+                          animate: false,
+                        );
+                      },
                     ),
                   ),
                   AppSpacing.gapMd,
@@ -278,13 +526,26 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                       ArcoriCylinder(
                         look: look,
                         size: 112,
-                        face: KinSceneStack(
-                          key: ValueKey(
-                            'disc-${customize.applied}|${bgScene.toClaimJson()}|${customize.colorHex}',
-                          ),
-                          lottieUrl: template.lottieUrl,
-                          delegates: delegates,
-                          scene: bgScene,
+                        face: FutureBuilder<String?>(
+                          future: composeFuture,
+                          builder: (context, snap) {
+                            final composed = snap.data ??
+                                (snap.connectionState ==
+                                        ConnectionState.waiting
+                                    ? _lastComposedJson
+                                    : snap.data);
+                            return KinSceneStack(
+                              key: ValueKey(
+                                'disc-${template.lottieUrl}|$composeSignature|'
+                                '${customize.colorHex}',
+                              ),
+                              lottieUrl: template.lottieUrl,
+                              composedLottieJson: composed,
+                              delegates: delegates,
+                              scene: bgScene,
+                              animate: false,
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -297,6 +558,13 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
               child: ListView(
                 padding: AppSpacing.screenPadding,
                 children: [
+                _AdditionsSection(
+                  kinSerial: widget.kinSerial,
+                  template: template,
+                  catalog: catalog,
+                  applied: customize.applied,
+                ),
+                AppSpacing.gapMd,
                 Text('Parts', style: context.appTypography.title),
                 AppSpacing.gapSm,
                 Wrap(
@@ -552,10 +820,11 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                                     child: Container(
                                       width: double.infinity,
                                       padding: const EdgeInsets.symmetric(
-                                        horizontal: 4,
+                                        horizontal: AppSpacing.xxs,
                                         vertical: 2,
                                       ),
-                                      color: Colors.black54,
+                                      color: AppColors.backgroundDark
+                                          .withValues(alpha: 0.72),
                                       child: Text(
                                         filterMode ==
                                                 KinBackgroundFilterMode.theme
@@ -566,8 +835,7 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                                         textAlign: TextAlign.center,
                                         style: context.appTypography.caption
                                             .copyWith(
-                                          color: Colors.white,
-                                          fontSize: 10,
+                                          color: AppColors.onSurfaceDark,
                                         ),
                                       ),
                                     ),
@@ -748,11 +1016,18 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                   },
                 ),
                 AppSpacing.gapLg,
-                FilledButton(
-                  onPressed: (_saving || !customize.canClaim)
+                OutlinedButton(
+                  onPressed: (_saving || _savingDraft)
                       ? null
-                      : () => _save(template, catalog),
-                  child: Text(_saving ? 'Claiming…' : 'Save & claim Kin'),
+                      : () => _saveDraft(template, catalog),
+                  child: Text(_savingDraft ? 'Saving draft…' : 'Save draft'),
+                ),
+                AppSpacing.gapSm,
+                FilledButton(
+                  onPressed: (_saving || _savingDraft || !customize.canClaim)
+                      ? null
+                      : () => _claimKin(template, catalog),
+                  child: Text(_saving ? 'Claiming…' : 'Claim Kin'),
                 ),
               ],
             ),
@@ -772,7 +1047,302 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
       ];
 }
 
-class _CustomControl extends ConsumerWidget {
+/// Multi-select additions: 3-col image grid; tint sliders for the focused pick.
+class _AdditionsSection extends ConsumerStatefulWidget {
+  const _AdditionsSection({
+    required this.kinSerial,
+    required this.template,
+    required this.catalog,
+    required this.applied,
+  });
+
+  final String kinSerial;
+  final KinTemplate template;
+  final KinCreationCatalog catalog;
+  final Map<String, Object?> applied;
+
+  @override
+  ConsumerState<_AdditionsSection> createState() => _AdditionsSectionState();
+}
+
+class _AdditionsSectionState extends ConsumerState<_AdditionsSection> {
+  /// Last tapped selected addition — owns the hue / light-dark sliders.
+  String? _focusedEmbedSerial;
+  double? _dragHue;
+  double? _dragLightDark;
+  DateTime _lastTintNotify = DateTime.fromMillisecondsSinceEpoch(0);
+
+  void _pushEmbedTint({
+    required String partSerial,
+    required String embedSerial,
+    double? hue,
+    double? lightDark,
+    required bool force,
+  }) {
+    final now = DateTime.now();
+    if (!force && now.difference(_lastTintNotify) < _kTintSliderThrottle) {
+      return;
+    }
+    _lastTintNotify = now;
+    ref.read(kinCustomizeProvider(widget.kinSerial).notifier).setEmbedTint(
+          partSerial: partSerial,
+          embedSerial: embedSerial,
+          hue: hue,
+          lightDark: lightDark,
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final items = allSelectableEmbeds(
+      template: widget.template,
+      catalog: widget.catalog,
+    );
+    if (items.isEmpty) return const SizedBox.shrink();
+
+    final notifier =
+        ref.read(kinCustomizeProvider(widget.kinSerial).notifier);
+
+    // Merge selections across parts (character-wide).
+    final selected = <String, KinEmbedTint>{};
+    for (final item in items) {
+      final k = KinCustomizeState.keyFor(
+        item.part.serial,
+        kKinEmbedImageSerial,
+      );
+      selected.addAll(parseEmbedSelection(widget.applied[k]));
+    }
+
+    // Keep focus on a still-selected embed; otherwise clear.
+    final focus = _focusedEmbedSerial;
+    final focusValid =
+        focus != null && selected.containsKey(focus) ? focus : null;
+    if (focus != null && focusValid == null && _focusedEmbedSerial != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _focusedEmbedSerial = null);
+      });
+    }
+    final focusedSerial = focusValid;
+    ({KinPart part, KinEmbed embed})? focusedItem;
+    if (focusedSerial != null) {
+      for (final item in items) {
+        if (item.embed.serial == focusedSerial) {
+          focusedItem = item;
+          break;
+        }
+      }
+    }
+    final focusedTint = focusedSerial != null
+        ? (selected[focusedSerial] ?? const KinEmbedTint())
+        : null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text('Additions', style: context.appTypography.title),
+        AppSpacing.gapXxs,
+        Text(
+          'Tap to toggle. Selected addition shows hue and light/dark below.',
+          style: context.appTypography.caption.copyWith(
+            color: AppChrome.onSurfaceMuted,
+          ),
+        ),
+        AppSpacing.gapSm,
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: items.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: AppSpacing.sm,
+            crossAxisSpacing: AppSpacing.sm,
+            childAspectRatio: 1,
+          ),
+          itemBuilder: (context, index) {
+            final item = items[index];
+            final serial = item.embed.serial;
+            return _AdditionThumb(
+              embed: item.embed,
+              selected: selected.containsKey(serial),
+              focused: serial == focusedSerial,
+              onTap: () {
+                final wasOn = selected.containsKey(serial);
+                if (wasOn) {
+                  if (_focusedEmbedSerial == serial) {
+                    notifier.toggleEmbed(
+                      partSerial: item.part.serial,
+                      embedSerial: serial,
+                      selected: false,
+                    );
+                    setState(() => _focusedEmbedSerial = null);
+                  } else {
+                    setState(() => _focusedEmbedSerial = serial);
+                  }
+                } else {
+                  notifier.toggleEmbed(
+                    partSerial: item.part.serial,
+                    embedSerial: serial,
+                    selected: true,
+                  );
+                  setState(() => _focusedEmbedSerial = serial);
+                }
+              },
+            );
+          },
+        ),
+        if (focusedItem != null && focusedTint != null) ...[
+          AppSpacing.gapMd,
+          Text(
+            focusedItem.embed.displayName,
+            style: context.appTypography.body,
+          ),
+          AppSpacing.gapXs,
+          Text('Hue', style: context.appTypography.caption),
+          Slider(
+            value: (_dragHue ?? focusedTint.hue).clamp(-180, 180),
+            min: -180,
+            max: 180,
+            onChanged: (v) {
+              setState(() => _dragHue = v);
+              _pushEmbedTint(
+                partSerial: focusedItem!.part.serial,
+                embedSerial: focusedItem.embed.serial,
+                hue: v,
+                force: false,
+              );
+            },
+            onChangeEnd: (v) {
+              setState(() => _dragHue = null);
+              _pushEmbedTint(
+                partSerial: focusedItem!.part.serial,
+                embedSerial: focusedItem.embed.serial,
+                hue: v,
+                force: true,
+              );
+            },
+          ),
+          Text(
+            (_dragHue ?? focusedTint.hue).toStringAsFixed(0),
+            style: context.appTypography.caption,
+          ),
+          Text('Light / dark', style: context.appTypography.caption),
+          Slider(
+            value: (_dragLightDark ?? focusedTint.lightDark).clamp(-1, 1),
+            min: -1,
+            max: 1,
+            onChanged: (v) {
+              setState(() => _dragLightDark = v);
+              _pushEmbedTint(
+                partSerial: focusedItem!.part.serial,
+                embedSerial: focusedItem.embed.serial,
+                lightDark: v,
+                force: false,
+              );
+            },
+            onChangeEnd: (v) {
+              setState(() => _dragLightDark = null);
+              _pushEmbedTint(
+                partSerial: focusedItem!.part.serial,
+                embedSerial: focusedItem.embed.serial,
+                lightDark: v,
+                force: true,
+              );
+            },
+          ),
+          Text(
+            (_dragLightDark ?? focusedTint.lightDark).toStringAsFixed(2),
+            style: context.appTypography.caption,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _AdditionThumb extends StatelessWidget {
+  const _AdditionThumb({
+    required this.embed,
+    required this.selected,
+    required this.focused,
+    required this.onTap,
+  });
+
+  final KinEmbed embed;
+  final bool selected;
+  final bool focused;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final borderColor = focused
+        ? AppChrome.accentGold
+        : selected
+            ? AppChrome.onSurface
+            : AppChrome.panelBorder;
+    final borderWidth = focused || selected ? 2.0 : 1.0;
+    return Material(
+      color: AppChrome.panelFill,
+      borderRadius: BorderRadius.circular(AppRadii.sm),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadii.sm),
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppRadii.sm),
+            border: Border.all(color: borderColor, width: borderWidth),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.xs),
+            child: _embedImage(context, embed),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _embedImage(BuildContext context, KinEmbed embed) {
+    final src = embed.bakeSource;
+    if (src.isEmpty) {
+      return Center(
+        child: Text(
+          embed.displayName,
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: context.appTypography.caption,
+        ),
+      );
+    }
+    final isNetwork = src.startsWith('http://') ||
+        src.startsWith('https://') ||
+        src.startsWith('/catalog-media/') ||
+        src.startsWith('/media/');
+    if (isNetwork) {
+      final url = resolveMediaUrl(src);
+      if (url.isEmpty) {
+        return ColoredBox(
+          color: AppColors.backgroundDark.withValues(alpha: 0.13),
+        );
+      }
+      return Image.network(
+        url,
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => ColoredBox(
+          color: AppColors.backgroundDark.withValues(alpha: 0.13),
+        ),
+      );
+    }
+    return Image.asset(
+      src,
+      fit: BoxFit.contain,
+      errorBuilder: (_, __, ___) => ColoredBox(
+        color: AppColors.backgroundDark.withValues(alpha: 0.13),
+      ),
+    );
+  }
+}
+
+class _CustomControl extends ConsumerStatefulWidget {
   const _CustomControl({
     required this.kinSerial,
     required this.part,
@@ -788,35 +1358,63 @@ class _CustomControl extends ConsumerWidget {
   final Object? value;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(kinCustomizeProvider(kinSerial).notifier);
+  ConsumerState<_CustomControl> createState() => _CustomControlState();
+}
+
+class _CustomControlState extends ConsumerState<_CustomControl> {
+  double? _dragValue;
+  DateTime _lastNotify = DateTime.fromMillisecondsSinceEpoch(0);
+
+  void _pushTint(double v, {required bool force}) {
+    final now = DateTime.now();
+    if (!force && now.difference(_lastNotify) < _kTintSliderThrottle) {
+      return;
+    }
+    _lastNotify = now;
+    ref.read(kinCustomizeProvider(widget.kinSerial).notifier).applyCustom(
+          partSerial: widget.part.serial,
+          customSerial: widget.custom.serial,
+          value: v,
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final notifier = ref.read(kinCustomizeProvider(widget.kinSerial).notifier);
+    final custom = widget.custom;
+    final part = widget.part;
+    final catalog = widget.catalog;
+    final value = widget.value;
     switch (custom.customType) {
       case KinCustomType.hue:
       case KinCustomType.saturation:
       case KinCustomType.lightDark:
-        final current = value is num
-            ? (value as num).toDouble()
-            : custom.defaultNumber;
+      case KinCustomType.embedHue:
+      case KinCustomType.embedLightDark:
+        final committed =
+            value is num ? value.toDouble() : custom.defaultNumber;
+        final current = (_dragValue ?? committed).clamp(custom.min, custom.max);
+        final isHue = custom.customType == KinCustomType.hue ||
+            custom.customType == KinCustomType.embedHue;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(custom.displayName, style: context.appTypography.body),
             Slider(
-              value: current.clamp(custom.min, custom.max),
+              value: current,
               min: custom.min,
               max: custom.max,
               onChanged: (v) {
-                notifier.applyCustom(
-                  partSerial: part.serial,
-                  customSerial: custom.serial,
-                  value: v,
-                );
+                setState(() => _dragValue = v);
+                _pushTint(v, force: false);
+              },
+              onChangeEnd: (v) {
+                setState(() => _dragValue = null);
+                _pushTint(v, force: true);
               },
             ),
             Text(
-              current.toStringAsFixed(
-                custom.customType == KinCustomType.hue ? 0 : 2,
-              ),
+              current.toStringAsFixed(isHue ? 0 : 2),
               style: context.appTypography.caption,
             ),
           ],
@@ -849,6 +1447,8 @@ class _CustomControl extends ConsumerWidget {
           ],
         );
       case KinCustomType.embedImage:
+        // Owned by [_AdditionsSection]; not shown under Parts.
+        return const SizedBox.shrink();
       case KinCustomType.swapPart:
         final embeds = catalog.embedsFor(part);
         final selected = value?.toString();
@@ -929,7 +1529,7 @@ class _SolidSwatchRow extends StatelessWidget {
           ChoiceChip(
             avatar: CircleAvatar(
               backgroundColor:
-                  parseCatalogColor(opt.colorHex) ?? Colors.grey,
+                  parseCatalogColor(opt.colorHex) ?? AppColors.onSurfaceMuted,
               radius: 8,
             ),
             label: Text(opt.displayName),

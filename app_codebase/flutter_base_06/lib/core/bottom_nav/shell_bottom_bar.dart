@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../navigation/app_navigation.dart';
+import '../theme/theme.dart';
 import 'bottom_nav_controller.dart';
 import 'contracts/register_bottom_nav_contract.dart';
 
@@ -28,25 +29,34 @@ class ShellBottomBar extends StatelessWidget {
             ? items.sublist(_kMaxVisible)
             : const <BottomNavItem>[];
 
-        return Material(
-          elevation: 3,
-          child: SafeArea(
-            top: false,
-            child: SizedBox(
-              height: _kBarHeight,
-              child: Row(
-                children: [
-                  for (final item in visible)
-                    Expanded(child: _buildItem(context, item)),
-                  if (overflow.isNotEmpty)
-                    SizedBox(
-                      width: 48,
-                      child: _OverflowMenu(
-                        items: overflow,
-                        controller: controller,
+        return Theme(
+          data: AppTheme.dark,
+          child: Material(
+            color: AppColors.surfaceDark,
+            elevation: 0,
+            shape: Border(
+              top: BorderSide(
+                color: AppColors.tertiary.withValues(alpha: 0.45),
+              ),
+            ),
+            child: SafeArea(
+              top: false,
+              child: SizedBox(
+                height: _kBarHeight,
+                child: Row(
+                  children: [
+                    for (final item in visible)
+                      Expanded(child: _buildItem(context, item)),
+                    if (overflow.isNotEmpty)
+                      SizedBox(
+                        width: 48,
+                        child: _OverflowMenu(
+                          items: overflow,
+                          controller: controller,
+                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

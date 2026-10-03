@@ -1,12 +1,23 @@
 /// Client-side Kin creation catalogs and save drafts.
 library;
 
+/// Catalog serial for [KinCustomType.embedImage].
+const String kKinEmbedImageSerial = 'CUS-0006';
+
+/// Catalog serial for [KinCustomType.embedHue] (tints selected addition).
+const String kKinEmbedHueSerial = 'CUS-0009';
+
+/// Catalog serial for [KinCustomType.embedLightDark] (tints selected addition).
+const String kKinEmbedLightDarkSerial = 'CUS-0010';
+
 enum KinCustomType {
   hue,
   saturation,
   lightDark,
   color,
   embedImage,
+  embedHue,
+  embedLightDark,
   swapPart;
 
   static KinCustomType? tryParse(String? raw) {
@@ -84,7 +95,10 @@ class KinCustom {
     final v = params['min'];
     if (v is num) return v.toDouble();
     if (customType == KinCustomType.saturation) return 0.0;
-    if (customType == KinCustomType.lightDark) return -1.0;
+    if (customType == KinCustomType.lightDark ||
+        customType == KinCustomType.embedLightDark) {
+      return -1.0;
+    }
     return -180.0;
   }
 
@@ -92,7 +106,10 @@ class KinCustom {
     final v = params['max'];
     if (v is num) return v.toDouble();
     if (customType == KinCustomType.saturation) return 2.0;
-    if (customType == KinCustomType.lightDark) return 1.0;
+    if (customType == KinCustomType.lightDark ||
+        customType == KinCustomType.embedLightDark) {
+      return 1.0;
+    }
     return 180.0;
   }
 
@@ -113,20 +130,111 @@ class KinEmbed {
   const KinEmbed({
     required this.serial,
     required this.displayName,
-    required this.assetPath,
+    this.assetPath = '',
+    this.imageUrl,
   });
 
   factory KinEmbed.fromJson(Map<String, dynamic> json) {
+    final imageUrl = json['imageUrl']?.toString();
     return KinEmbed(
       serial: json['serial']?.toString() ?? '',
       displayName: json['displayName']?.toString() ?? '',
       assetPath: json['assetPath']?.toString() ?? '',
+      imageUrl: (imageUrl == null || imageUrl.isEmpty) ? null : imageUrl,
     );
   }
 
   final String serial;
   final String displayName;
+
+  /// Bundled Flutter asset (offline / legacy fallback).
   final String assetPath;
+
+  /// Hot catalog path from API (`/catalog-media/kin/...`); preferred when set.
+  final String? imageUrl;
+
+  /// Source used for bake / preview load (network URL path or asset path).
+  String get bakeSource {
+    final url = imageUrl;
+    if (url != null && url.isNotEmpty) return url;
+    return assetPath;
+  }
+
+  bool get hasArt => bakeSource.isNotEmpty;
+
+  KinEmbed copyWith({
+    String? serial,
+    String? displayName,
+    String? assetPath,
+    String? imageUrl,
+    bool clearImageUrl = false,
+  }) {
+    return KinEmbed(
+      serial: serial ?? this.serial,
+      displayName: displayName ?? this.displayName,
+      assetPath: assetPath ?? this.assetPath,
+      imageUrl: clearImageUrl ? null : (imageUrl ?? this.imageUrl),
+    );
+  }
+}
+
+/// Whether an embed sits above or below its target Lottie layer (list order).
+enum KinEmbedSide {
+  /// Lower list index than target → drawn in front.
+  inFront,
+
+  /// Higher list index than target → drawn behind.
+  behind,
+}
+
+/// Per-part placement for an embed addition relative to a Lottie layer `nm`.
+class KinEmbedPlacement {
+  const KinEmbedPlacement({
+    required this.targetLayer,
+    required this.side,
+    this.p,
+    this.s,
+  });
+
+  factory KinEmbedPlacement.fromJson(Map<String, dynamic> json) {
+    final inFrontRaw = json['inFrontOf']?.toString();
+    final behindRaw = json['behindLayer']?.toString();
+    final hasInFront = inFrontRaw != null && inFrontRaw.isNotEmpty;
+    final hasBehind = behindRaw != null && behindRaw.isNotEmpty;
+    // Exactly one of inFrontOf / behindLayer.
+    if (hasInFront == hasBehind) {
+      return const KinEmbedPlacement(
+        targetLayer: '',
+        side: KinEmbedSide.inFront,
+      );
+    }
+    return KinEmbedPlacement(
+      targetLayer: hasInFront ? inFrontRaw : behindRaw!,
+      side: hasInFront ? KinEmbedSide.inFront : KinEmbedSide.behind,
+      p: _numList3(json['p'], padThird: 0),
+      s: _numList3(json['s'], padThird: 100),
+    );
+  }
+
+  /// Lottie layer `nm` the embed is placed relative to.
+  final String targetLayer;
+
+  final KinEmbedSide side;
+
+  /// Optional position `[x, y, z]`; bake defaults to composition center.
+  final List<double>? p;
+
+  /// Optional scale percent `[sx, sy, sz]`; bake defaults to `[100, 100, 100]`.
+  final List<double>? s;
+
+  bool get isValid => targetLayer.isNotEmpty;
+
+  Map<String, dynamic> toJson() => {
+        if (side == KinEmbedSide.inFront) 'inFrontOf': targetLayer,
+        if (side == KinEmbedSide.behind) 'behindLayer': targetLayer,
+        if (p != null) 'p': p,
+        if (s != null) 's': s,
+      };
 }
 
 class KinType {
@@ -158,6 +266,7 @@ class KinPart {
     this.affectsLayers = const [],
     this.allowedCustomSerials = const [],
     this.embedPoolSerials = const [],
+    this.embedPlacements = const {},
   });
 
   factory KinPart.fromJson(Map<String, dynamic> json) {
@@ -170,6 +279,7 @@ class KinPart {
       affectsLayers: _stringList(json['affectsLayers']),
       allowedCustomSerials: _stringList(json['allowedCustomSerials']),
       embedPoolSerials: _stringList(json['embedPoolSerials']),
+      embedPlacements: _embedPlacements(json['embedPlacements']),
     );
   }
 
@@ -184,6 +294,9 @@ class KinPart {
   final List<String> allowedCustomSerials;
   final List<String> embedPoolSerials;
 
+  /// Per-embed insert placement (`inFrontOf` or `behindLayer`, optional `p` / `s`).
+  final Map<String, KinEmbedPlacement> embedPlacements;
+
   /// Lottie layer names this part styles.
   List<String> get styleLayerNames {
     if (affectsLayers.isNotEmpty) return affectsLayers;
@@ -191,11 +304,48 @@ class KinPart {
     return [layerName];
   }
 
-  bool allowsCustom(String customSerial) =>
-      allowedCustomSerials.contains(customSerial);
+  bool allowsCustom(String customSerial) {
+    if (allowedCustomSerials.contains(customSerial)) return true;
+    // Addition tint companions auto-allowed wherever embedImage is allowed.
+    if ((customSerial == kKinEmbedHueSerial ||
+            customSerial == kKinEmbedLightDarkSerial) &&
+        allowedCustomSerials.contains(kKinEmbedImageSerial)) {
+      return true;
+    }
+    return false;
+  }
 
   bool allowsEmbed(String embedSerial) =>
       embedPoolSerials.contains(embedSerial);
+
+  KinEmbedPlacement? placementFor(String embedSerial) {
+    final p = embedPlacements[embedSerial];
+    if (p == null || !p.isValid) return null;
+    return p;
+  }
+
+  KinPart copyWith({
+    String? serial,
+    String? layerName,
+    String? displayName,
+    String? anatomical,
+    List<String>? affectsLayers,
+    List<String>? allowedCustomSerials,
+    List<String>? embedPoolSerials,
+    Map<String, KinEmbedPlacement>? embedPlacements,
+  }) {
+    return KinPart(
+      serial: serial ?? this.serial,
+      layerName: layerName ?? this.layerName,
+      displayName: displayName ?? this.displayName,
+      anatomical: anatomical ?? this.anatomical,
+      affectsLayers: affectsLayers ?? this.affectsLayers,
+      allowedCustomSerials:
+          allowedCustomSerials ?? this.allowedCustomSerials,
+      embedPoolSerials: embedPoolSerials ?? this.embedPoolSerials,
+      embedPlacements: embedPlacements ?? this.embedPlacements,
+    );
+  }
 }
 
 class KinTemplate {
@@ -245,6 +395,24 @@ class KinTemplate {
     }
     return null;
   }
+
+  KinTemplate copyWith({
+    String? serial,
+    String? typeSerial,
+    String? displayName,
+    String? lottieUrl,
+    String? thumbnailUrl,
+    List<KinPart>? parts,
+  }) {
+    return KinTemplate(
+      serial: serial ?? this.serial,
+      typeSerial: typeSerial ?? this.typeSerial,
+      displayName: displayName ?? this.displayName,
+      lottieUrl: lottieUrl ?? this.lottieUrl,
+      thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
+      parts: parts ?? this.parts,
+    );
+  }
 }
 
 class KinCreationCatalog {
@@ -261,6 +429,22 @@ class KinCreationCatalog {
   final List<KinEmbed> embeds;
   final List<KinType> types;
   final List<KinTemplate> kins;
+
+  KinCreationCatalog copyWith({
+    List<KinCustomTypeDef>? customTypes,
+    List<KinCustom>? customs,
+    List<KinEmbed>? embeds,
+    List<KinType>? types,
+    List<KinTemplate>? kins,
+  }) {
+    return KinCreationCatalog(
+      customTypes: customTypes ?? this.customTypes,
+      customs: customs ?? this.customs,
+      embeds: embeds ?? this.embeds,
+      types: types ?? this.types,
+      kins: kins ?? this.kins,
+    );
+  }
 
   KinCustom? customBySerial(String serial) {
     for (final c in customs) {
@@ -294,11 +478,22 @@ class KinCreationCatalog {
       kins.where((k) => k.typeSerial == typeSerial).toList();
 
   /// Returns allowed customs for [part], skipping unknown serials.
+  ///
+  /// Addition hue / light-dark are not listed here — they live on each
+  /// selected embed inside the embedImage value map (see Additions UI).
   List<KinCustom> allowedCustomsFor(KinPart part) {
     final out = <KinCustom>[];
+    final seen = <String>{};
     for (final serial in part.allowedCustomSerials) {
+      // Hide embedImage from per-part list; dedicated Additions section owns it.
+      if (serial == kKinEmbedImageSerial) continue;
+      if (serial == kKinEmbedHueSerial || serial == kKinEmbedLightDarkSerial) {
+        continue;
+      }
       final c = customBySerial(serial);
-      if (c != null) out.add(c);
+      if (c == null) continue;
+      if (!seen.add(c.serial)) continue;
+      out.add(c);
     }
     return out;
   }
@@ -306,6 +501,7 @@ class KinCreationCatalog {
   List<KinEmbed> embedsFor(KinPart part) {
     final out = <KinEmbed>[];
     for (final serial in part.embedPoolSerials) {
+      if (part.placementFor(serial) == null) continue;
       final e = embedBySerial(serial);
       if (e != null) out.add(e);
     }
@@ -354,10 +550,13 @@ class KinSaveDraft {
     this.colorHex,
     this.chosenName,
     this.backgroundId,
+    this.background,
+    this.backgroundFilterMode,
   });
 
   factory KinSaveDraft.fromJson(Map<String, dynamic> json) {
     final rawApplied = json['applied'];
+    final rawBg = json['background'];
     return KinSaveDraft(
       serial: json['serial']?.toString() ?? '',
       kinSerial: json['kinSerial']?.toString() ?? '',
@@ -375,6 +574,10 @@ class KinSaveDraft {
       colorHex: _nullableString(json['colorHex']),
       chosenName: _nullableString(json['chosenName']),
       backgroundId: _nullableString(json['backgroundId']),
+      background: rawBg is Map
+          ? Map<String, dynamic>.from(rawBg)
+          : null,
+      backgroundFilterMode: _nullableString(json['backgroundFilterMode']),
     );
   }
 
@@ -390,6 +593,12 @@ class KinSaveDraft {
   final String? chosenName;
   final String? backgroundId;
 
+  /// Claim-shaped background snapshot for restore (solid / gradient / image).
+  final Map<String, dynamic>? background;
+
+  /// Customize UI filter mode: `theme` or `style`.
+  final String? backgroundFilterMode;
+
   Map<String, dynamic> toJson() => {
         'serial': serial,
         'kinSerial': kinSerial,
@@ -402,6 +611,9 @@ class KinSaveDraft {
         if (colorHex != null) 'colorHex': colorHex,
         if (chosenName != null) 'chosenName': chosenName,
         if (backgroundId != null) 'backgroundId': backgroundId,
+        if (background != null) 'background': background,
+        if (backgroundFilterMode != null)
+          'backgroundFilterMode': backgroundFilterMode,
       };
 }
 
@@ -414,4 +626,34 @@ String? _nullableString(Object? raw) {
   final s = raw?.toString();
   if (s == null || s.isEmpty || s == 'null') return null;
   return s;
+}
+
+List<double>? _numList3(Object? raw, {required double padThird}) {
+  if (raw is! List || raw.length < 2) return null;
+  final out = <double>[];
+  for (var i = 0; i < raw.length && i < 3; i++) {
+    final v = raw[i];
+    if (v is! num) return null;
+    out.add(v.toDouble());
+  }
+  while (out.length < 3) {
+    out.add(out.length == 2 ? padThird : 0.0);
+  }
+  return out;
+}
+
+Map<String, KinEmbedPlacement> _embedPlacements(Object? raw) {
+  if (raw is! Map) return const {};
+  final out = <String, KinEmbedPlacement>{};
+  for (final entry in raw.entries) {
+    final key = entry.key.toString();
+    if (key.isEmpty) continue;
+    final value = entry.value;
+    if (value is! Map) continue;
+    final placement =
+        KinEmbedPlacement.fromJson(Map<String, dynamic>.from(value));
+    if (!placement.isValid) continue;
+    out[key] = placement;
+  }
+  return out;
 }

@@ -120,12 +120,22 @@ class ClaimKinTests(unittest.TestCase):
                 "genesisDesignId": "KIN-X",
                 "color": "#C6A15B",
             },
-        ):
+        ), patch(
+            "modules.user.avatar_service.link_avatar_to_kin_lottie",
+            return_value="/media/kin/players/KIN-X.json",
+        ) as link_avatar:
             result = claim_kin(self.user_id, self.body)
 
         self.assertIn("kin", result)
         self.assertTrue(avari.onboarding_kin_chosen)
         self.assertTrue(avari.onboarding_genesis_created)
+        link_avatar.assert_called_once()
+        self.assertEqual(link_avatar.call_args.kwargs["user_id"], self.user_id)
+        self.assertTrue(
+            str(link_avatar.call_args.kwargs["genesis_design_id"]).startswith(
+                "KIN-"
+            )
+        )
         session.add.assert_called_once()
         write_media.assert_called_once()
         grant_access.assert_called_once()

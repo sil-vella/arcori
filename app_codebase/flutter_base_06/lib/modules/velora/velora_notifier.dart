@@ -272,21 +272,29 @@ class VeloraThemeBrowseState {
   const VeloraThemeBrowseState({
     this.designs = const [],
     this.featured,
+    this.total = 0,
     this.isLoading = false,
+    this.isLoadingMore = false,
     this.errorMessage,
     this.loaded = false,
   });
 
   final List<DesignSummary> designs;
   final DesignSummary? featured;
+  final int total;
   final bool isLoading;
+  final bool isLoadingMore;
   final String? errorMessage;
   final bool loaded;
+
+  bool get hasMore => designs.length < total;
 
   VeloraThemeBrowseState copyWith({
     List<DesignSummary>? designs,
     DesignSummary? featured,
+    int? total,
     bool? isLoading,
+    bool? isLoadingMore,
     String? errorMessage,
     bool? loaded,
     bool clearFeatured = false,
@@ -295,7 +303,9 @@ class VeloraThemeBrowseState {
     return VeloraThemeBrowseState(
       designs: designs ?? this.designs,
       featured: clearFeatured ? null : (featured ?? this.featured),
+      total: total ?? this.total,
       isLoading: isLoading ?? this.isLoading,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       loaded: loaded ?? this.loaded,
     );
@@ -304,6 +314,8 @@ class VeloraThemeBrowseState {
 
 class VeloraThemeBrowseNotifier
     extends FamilyNotifier<VeloraThemeBrowseState, VeloraThemeBrowseArgs> {
+  static const int pageSize = 24;
+
   @override
   VeloraThemeBrowseState build(VeloraThemeBrowseArgs args) {
     return const VeloraThemeBrowseState();
@@ -321,17 +333,24 @@ class VeloraThemeBrowseNotifier
     if (token == null || token.isEmpty) {
       state = state.copyWith(
         isLoading: false,
+        isLoadingMore: false,
         errorMessage: 'Sign in to browse Velora',
         loaded: false,
         clearFeatured: true,
       );
       return;
     }
-    state = state.copyWith(isLoading: true, clearError: true);
+    state = state.copyWith(
+      isLoading: true,
+      isLoadingMore: false,
+      clearError: true,
+    );
     final outcome = await _api.fetchIndex(
       accessToken: token,
       theme: arg.themeCode,
       series: arg.seriesKey,
+      limit: pageSize,
+      offset: 0,
     );
     if (!outcome.isSuccess) {
       state = state.copyWith(
@@ -342,13 +361,49 @@ class VeloraThemeBrowseNotifier
       );
       return;
     }
-    final designs = List<DesignSummary>.from(outcome.data!.items)
-      ..sort((a, b) => a.displayName.compareTo(b.displayName));
+    final page = List<DesignSummary>.from(outcome.data!.items);
     state = state.copyWith(
-      designs: List.unmodifiable(designs),
-      featured: pickFeaturedDesign(designs),
+      designs: List.unmodifiable(page),
+      featured: pickFeaturedDesign(page),
+      total: outcome.data!.total,
       isLoading: false,
       loaded: true,
+      clearError: true,
+    );
+  }
+
+  Future<void> loadMore() async {
+    if (state.isLoading || state.isLoadingMore || !state.hasMore) {
+      return;
+    }
+    final token = _accessToken;
+    if (token == null || token.isEmpty) {
+      return;
+    }
+    state = state.copyWith(isLoadingMore: true, clearError: true);
+    final outcome = await _api.fetchIndex(
+      accessToken: token,
+      theme: arg.themeCode,
+      series: arg.seriesKey,
+      limit: pageSize,
+      offset: state.designs.length,
+    );
+    if (!outcome.isSuccess) {
+      state = state.copyWith(
+        isLoadingMore: false,
+        errorMessage: _messageForOutcome(outcome),
+      );
+      return;
+    }
+    final seen = {for (final d in state.designs) d.internalId};
+    final more = outcome.data!.items
+        .where((d) => d.internalId.isNotEmpty && !seen.contains(d.internalId))
+        .toList();
+    final merged = [...state.designs, ...more];
+    state = state.copyWith(
+      designs: List.unmodifiable(merged),
+      total: outcome.data!.total,
+      isLoadingMore: false,
       clearError: true,
     );
   }

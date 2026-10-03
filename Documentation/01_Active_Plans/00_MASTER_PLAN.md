@@ -2,7 +2,7 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-09-19
+**Last Updated:** 2026-10-03
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
@@ -39,6 +39,7 @@ Done:
 - [x] Catalog expansion (75 nostalgia / music / TV Arcori in Genesis) — [pioneers-catalog-expansion.md](pioneers-catalog-expansion.md)
 - [x] Foundations series (40 themes × 4 designs, `SER003`) — [foundations-catalog-import.md](foundations-catalog-import.md)
 - [x] Civilizations series (20 themes, 94 designs, `SER004`) — [civilizations-catalog-import.md](civilizations-catalog-import.md)
+- [x] Creation series seq 0002 (Ivory Gatewalker / Eclipse Veilwalker, `SER000` total 4) — [creation-catalog-import.md](creation-catalog-import.md)
 - [x] Player slam input (5s turns, swipe + motion → speed/trajectory) — [player-slam-input.md](player-slam-input.md)
 - [x] Arcori slam impact (stack flip + spring motion) — [arcori-slam-impact.md](arcori-slam-impact.md)
 - [x] 2D slam physics (Forge2D collisions + `outcome.sim` replay) — [2d-slam-physics.md](2d-slam-physics.md)
@@ -59,6 +60,10 @@ Done:
 - [x] **Legacy echo soft reset** (30% mastery seed + random approved color) — [legacy-preserve.md](legacy-preserve.md) · [mastery.md](mastery.md)
 - [x] **Closed Generations** on Avari (mastery at close + seeded amount on next gen) — [mastery.md](mastery.md) · [avari-profile.md](avari-profile.md)
 - [x] **Face media: Lottie for any theme** (not Kin-only; Kin resolves via art_basename) — [catalog-db-gen-serial.md](catalog-db-gen-serial.md)
+- [x] **Play target API 36 + Billing 9.1.0 Gradle alignment** (minSdk 23; portrait lock; plugin patch staged, IAP not in the app yet) — [play-target-sdk-billing.md](play-target-sdk-billing.md)
+- [x] **Flutter intro video** (`assets/videos/intro.mp4` after native splash; `SHOW_INTRO_LOTTIE` unchanged) — [flutter-intro-video.md](flutter-intro-video.md)
+- [x] **Series circulation switch** (`03_series.json`; Genesis+Pioneers on; dual gate with design `worldState`) — [series-circulation-switch.md](series-circulation-switch.md)
+- [x] **Slam strike wind-up + hit** (two-phase fly-in, haptic, client audio module / `slam_hit` stub) — [slam-strike-motion.md](slam-strike-motion.md)
 
 Open (ordered):
 
@@ -94,6 +99,8 @@ Standings surface is live with an open tail (My Mastery) covered above.
 
 | Plan | Status | Focus |
 |------|--------|--------|
+| [production-image-push-vps-pull.md](production-image-push-vps-pull.md) | In Progress | Hub build/push + VPS pull/up via wfrun prod |
+| [sync-ai-players-vps.md](sync-ai-players-vps.md) | Completed | Prod wfrun: sync local AI players + Kin Lotties to VPS (AI-only) |
 | [rop01-cron-social-auto-post.md](rop01-cron-social-auto-post.md) | In Progress | Hostinger queue + cron poster FB/YT/TT |
 | [dashboard-revenue-tab.md](dashboard-revenue-tab.md) | Mostly done | wfrun Revenue tab (Play / ASC / AdMob) |
 | [dashboard-parallel-script-runs.md](dashboard-parallel-script-runs.md) | Completed | Same script in multiple PTY tabs (do not kill sibling) |
@@ -106,7 +113,7 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | Plan | Status | Focus |
 |------|--------|--------|
 | [first-time-player-flow.md](first-time-player-flow.md) | Spec | Splash → Kin/Genesis → starter access → guided practice → intros → Home |
-| [kin-creation.md](kin-creation.md) | In Progress | Customize + POST kin claim; catalog_design mirrors regular Arcori |
+| [kin-creation.md](kin-creation.md) | In Progress | Claim slim bake + nginx 20m; idle anims open |
 | [returning-player-startup-flow.md](returning-player-startup-flow.md) | Spec | Auto login → sync → overnight → notification queue → Home |
 | [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | In Progress | Home widgets (MV, missions, events, World News, ticker); sink deferred |
 | [match-setting-core-flow.md](match-setting-core-flow.md) | Partial | Play hub + types; practice offline; quick/event/invite online |
@@ -122,6 +129,7 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | [2d-slam-physics.md](2d-slam-physics.md) | Completed | Forge2D side-view sim; collisions; `outcome.sim` timeline replay |
 | [3d-slam-physics.md](3d-slam-physics.md) | Completed | Pure-Dart 3D thin-cylinder; `xyzq` poses; Matrix4 replay |
 | [slam-aim-game-controls.md](slam-aim-game-controls.md) | Completed | Game Controls + aim marker; exclusive accel/touch; footprint miss |
+| [slam-strike-motion.md](slam-strike-motion.md) | Completed | Two-phase fly-in + haptic; client audio module (`slam_hit` no clip yet) |
 | [inventory-slammer-and-disc-art.md](inventory-slammer-and-disc-art.md) | Completed | Owned slammers; circulating Arcori on Avari; catalog face on discs |
 | [match-arena-from-arcori.md](match-arena-from-arcori.md) | Completed | QS/Invite: region arena + seatless Gatherer on `table.pieces` |
 | [arena-pov-zoom.md](arena-pov-zoom.md) | Completed | Arena mural shares stack camera; rest is 1:1 crop (no upscale); contain on zoom-out; opaque under stack |
@@ -140,10 +148,14 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | [mastery.md](mastery.md) | Writers + echo seed live | Own/other finalize; Mastery Value; Closed Generations; My Mastery tab open |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Partial | Standings + Detail tab; My Mastery still open |
 | [catalog-hot-reload.md](catalog-hot-reload.md) | Done | Catalog JSON mtime cache, authuser APIs, Flutter Velora |
+| [series-circulation-switch.md](series-circulation-switch.md) | Completed | `03_series.json` master switch; Genesis+Pioneers active; dual gate with `worldState` |
+| [creation-catalog-import.md](creation-catalog-import.md) | Completed | SER000 seq 0002: Ivory Gatewalker (EVG) + Eclipse Veilwalker (ASH) |
 | [pioneers-catalog-expansion.md](pioneers-catalog-expansion.md) | Completed | 75 new Genesis Arcori (Nostalgia / Music / Television); Pioneers stays original 10 |
 | [avari-profile.md](avari-profile.md) | Done | Avari Profile `/avari` + Trove + Closed Generations |
 | [player-profile-schema.md](player-profile-schema.md) | Done | Auth + Avari tables, admin testuser seed |
 | [ui-visual-refactor.md](ui-visual-refactor.md) | In Progress | Gallery-first reliquary: theme tokens, hubs, match HUD chrome |
+| [play-target-sdk-billing.md](play-target-sdk-billing.md) | Completed | Play API 36, minSdk 23, Billing 9.1.0 force + staged 0.4.0+5 patch |
+| [flutter-intro-video.md](flutter-intro-video.md) | Completed | Startup intro plays `assets/videos/intro.mp4`; lottie package kept |
 
 ## Design references
 

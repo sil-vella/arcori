@@ -38,6 +38,7 @@ Catalog series share that loop; they differ in how soon a generation can close:
 
 | Series | Role | preservationRequirement | closureMilestone |
 |--------|------|-------------------------|------------------|
+| **Creation** | Primordial Light / Dark (4 designs) | 50 | 100 |
 | **Genesis** | Main launch catalog | 500 | 1000 |
 | **Pioneers** | Small companion series (ten seed designs) | 100 | 200 |
 | **Foundations** | Civilization / society themes (160 designs) | 250 | 500 |
@@ -72,21 +73,29 @@ Starter balanced slammer. Rechargeable variants with Impact, Precision, Control,
 
 ### Mastery deltas (per online match)
 
-**Own played Arcori** (the design you brought):
+**Own played Arcori** (the design you brought) — **your** flips of that design; only this track applies −1:
 
-| Seat flips | Mastery Δ |
-|------------|-----------|
+| Your flips of that design | Mastery Δ |
+|---------------------------|-----------|
 | 0 | −1 |
 | 1 | 0 |
-| 2 | +2 |
+| 2+ | +2 |
 
-**Other Arcori** (designs whose discs **you** flipped, not your own played piece) — per that design’s flip count:
+**Already mastered, not your seat pick** (opponent brought a design you already progress on):
 
-| Flips on that design | Mastery Δ |
-|----------------------|-----------|
+| Your flips of that design | Mastery Δ |
+|---------------------------|-----------|
+| 0 | 0 (no deduction) |
+| 1 | 0 |
+| 2+ | +2 |
+
+**Other Arcori** (no prior mastery; designs **you** flipped) — per that design’s flip count:
+
+| Your flips of that design | Mastery Δ |
+|---------------------------|-----------|
 | 0 | 0 |
 | 1 | +1 |
-| 2 | +2 |
+| 2+ | +2 |
 
 Practice skips mastery. Persist on `player_mastery`; floor at 0 on write. Detail: [mastery.md](../01_Active_Plans/mastery.md).
 

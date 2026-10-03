@@ -17,7 +17,7 @@ from modules.players.players_errors import AI_UNAVAILABLE, INVALID_REQUEST
 LOGGING_SWITCH = True
 
 AI_SEED_MARKER = "ai_seed:v1"
-AI_EMAIL_DOMAIN = "@ai.arcori.local"
+AI_EMAIL_DOMAIN = "@arcoriaiplayer.app"
 
 
 def is_ai_user(user_id: str) -> bool:

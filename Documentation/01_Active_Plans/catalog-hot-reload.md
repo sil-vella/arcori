@@ -21,6 +21,8 @@ Serve Arcori catalog JSON from `bin/modules/catalog/data/` over existing **authu
 - Region arena art: `assets/images/velora/arenas/{region-slug}/{arenaId}.webp` → `/data/catalog-velora` (`CATALOG_VELORA_MEDIA_ROOT`, sibling bind at the same host level as `arcori`). Public URL `/catalog-media/velora/arenas/…`. Region/location art under `assets/images/velora/regions/{region-slug}/`; world maps under `assets/images/velora/maps/`. Via a dedicated StaticFiles mount (do not nest a bind under the `:ro` Arcori tree).
 - **Derived client fields (same posture as design `imageUrl`):** `GET /authuser/catalog/meta` enriches regions with `imageUrl` (`…/regions/{slug}/region.png`), each arena with `imageUrl` (honors `imageFile`), `locations[]` from a mtime-cached scan of `locations/*.png`, and top-level `maps[]` from `maps/*.png`. Helpers live in `velora_media.py`; match `select_arena` uses the same arena URL helper.
 - Kin template Lotties: `assets/lottie/kin/ser001/{type}/` → `/data/catalog-kin` (`CATALOG_KIN_MEDIA_ROOT`). Public URL `/catalog-media/kin/…` via a dedicated StaticFiles mount (same sibling pattern as Velora).
+- Kin claim backgrounds: `ser001/00backgrounds/` filename scan → `GET /authuser/avari/kin/backgrounds`
+- Kin additions (embeds): `ser001/00embeds/embeds.json` + PNGs → `GET /authuser/avari/kin/embeds` (attachments carry placement; client merges pools; no process restart)
 - Path convention: catalog JSON `series/{series_slug}/{theme_slug}.json` (e.g. `genesis/animals.json`); art under numbered dirs `assets/images/arcori/{NNN_series_slug}/{theme_slug}/{internalId}.webp` (e.g. `001_genesis/animals/…`)
 
 ## Media (public)
@@ -37,7 +39,7 @@ Router is exact-match (no path params) — ids via query:
 | Method | Path | Query | Purpose |
 |--------|------|-------|---------|
 | GET | `/authuser/catalog/meta` | — | Themes, regions, kin, rarities |
-| GET | `/authuser/catalog/index` | `series`, `theme`, `subtheme`, `circulating`, `limit`, `offset` | Velora list (`circulating=1` → `worldState == Active`) |
+| GET | `/authuser/catalog/index` | `series`, `theme`, `subtheme`, `circulating`, `limit`, `offset` | Velora list (`circulating=1` → series `active` in `03_series.json` **and** `worldState == Active`) |
 | GET | `/authuser/catalog/theme` | `code` or `theme_code` | Full theme document |
 | GET | `/authuser/catalog/design` | `id` or `internal_id` | Single design |
 | POST | `/authuser/catalog/select_arena` | body `{ "arcoriIds": ["…"] }` | Arena + optional Gatherer (same as service; practice does not call it) |

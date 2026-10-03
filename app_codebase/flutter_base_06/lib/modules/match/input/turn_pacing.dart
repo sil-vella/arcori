@@ -16,7 +16,7 @@ const Duration turnPollInterval = Duration(milliseconds: 50);
 const Duration slamSettleHoldDefault = Duration(seconds: 2);
 
 /// Face-up equipped slammer strike beat before Arcori scatter.
-const Duration slamStrikeHoldDefault = Duration(milliseconds: 520);
+const Duration slamStrikeHoldDefault = Duration(milliseconds: 800);
 
 /// Smooth return-home / restack after the settle pause.
 const Duration slamReturnHomeDefault = Duration(milliseconds: 720);

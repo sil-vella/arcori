@@ -52,10 +52,13 @@ class VeloraApiClient {
 
   /// Circulating designs only (`worldState == Active`).
   /// Optional [theme] / [series] filter by theme code|name and series key|slug.
+  /// Pass [limit]/[offset] for scroll paging (server returns [CatalogIndexResult.total]).
   Future<VeloraApiOutcome<CatalogIndexResult>> fetchIndex({
     required String accessToken,
     String? theme,
     String? series,
+    int? limit,
+    int offset = 0,
   }) {
     final params = <String, String>{'circulating': '1'};
     if (theme != null && theme.isNotEmpty) {
@@ -63,6 +66,10 @@ class VeloraApiClient {
     }
     if (series != null && series.isNotEmpty) {
       params['series'] = series;
+    }
+    if (limit != null) {
+      params['limit'] = '$limit';
+      params['offset'] = '$offset';
     }
     final uri = Uri.parse('$_baseUrl/authuser/catalog/index').replace(
       queryParameters: params,

@@ -21,9 +21,11 @@ class _FakeUser:
         *,
         user_id: uuid.UUID | None = None,
         avatar_url: str | None = None,
+        is_guest: bool = False,
     ) -> None:
         self.id = user_id or uuid.uuid4()
         self.avatar_url = avatar_url
+        self.is_guest = is_guest
 
 
 def _png_bytes(width: int = 64, height: int = 64) -> bytes:
@@ -49,6 +51,7 @@ class AvatarServiceTests(unittest.TestCase):
         self._env_patch.start()
         self.addCleanup(self._env_patch.stop)
 
+    @patch("modules.avari.avari_repository.find_player_kin", return_value=None)
     @patch("modules.auth.auth_service.get_user_profile")
     @patch("modules.user.avatar_service.session_scope")
     @patch("modules.user.avatar_service.user_repository")
@@ -57,6 +60,7 @@ class AvatarServiceTests(unittest.TestCase):
         repo: MagicMock,
         scope: MagicMock,
         get_profile: MagicMock,
+        _find_kin: MagicMock,
     ) -> None:
         session = MagicMock()
         scope.return_value.__enter__.return_value = session
@@ -103,6 +107,7 @@ class AvatarServiceTests(unittest.TestCase):
             upload_avatar(user_id=str(uuid.uuid4()), raw_bytes=b"not-an-image")
         self.assertEqual(ctx.exception.code, "invalid_request")
 
+    @patch("modules.avari.avari_repository.find_player_kin", return_value=None)
     @patch("modules.auth.auth_service.get_user_profile")
     @patch("modules.user.avatar_service.session_scope")
     @patch("modules.user.avatar_service.user_repository")
@@ -111,6 +116,7 @@ class AvatarServiceTests(unittest.TestCase):
         repo: MagicMock,
         scope: MagicMock,
         get_profile: MagicMock,
+        _find_kin: MagicMock,
     ) -> None:
         session = MagicMock()
         scope.return_value.__enter__.return_value = session
@@ -128,6 +134,7 @@ class AvatarServiceTests(unittest.TestCase):
         )
         self.assertGreaterEqual(second_mtime, first_mtime)
 
+    @patch("modules.avari.avari_repository.find_player_kin", return_value=None)
     @patch("modules.auth.auth_service.get_user_profile")
     @patch("modules.user.avatar_service.session_scope")
     @patch("modules.user.avatar_service.user_repository")
@@ -136,6 +143,7 @@ class AvatarServiceTests(unittest.TestCase):
         repo: MagicMock,
         scope: MagicMock,
         get_profile: MagicMock,
+        _find_kin: MagicMock,
     ) -> None:
         session = MagicMock()
         scope.return_value.__enter__.return_value = session

@@ -26,6 +26,7 @@ from core.utils.dev_logger import customlog
 from modules.catalog import catalog_loader as loader
 from modules.catalog.catalog_errors import INVALID_QUERY, NOT_FOUND
 from modules.catalog.catalog_service import get_design
+from modules.catalog.current_series import design_series_is_active
 from modules.catalog.velora_media import arena_image_url
 
 LOGGING_SWITCH = True
@@ -39,10 +40,13 @@ SELECTION_WEIGHT_DEFAULT = 3.0
 
 
 def _is_circulating(design: dict[str, Any] | None) -> bool:
+    """Both gates: series master switch AND design worldState Active."""
     if not isinstance(design, dict):
         return False
     world = str(design.get("worldState") or "").strip().lower()
-    return not world or world == "active"
+    if world and world != "active":
+        return False
+    return design_series_is_active(design)
 
 
 def _resolve_design(design_id: str) -> dict[str, Any] | None:
@@ -480,6 +484,12 @@ def count_circulating_playable_arcori() -> int:
             rows = catalog_repo.list_designs(session, circulating=True)
             for row in rows:
                 design = dict(row.design_json or {})
+                if not design_series_is_active(
+                    design,
+                    series_key=row.series_key,
+                    internal_id=row.internal_id,
+                ):
+                    continue
                 if not _is_playable_match_arcori(design):
                     continue
                 iid = str(design.get("internalId") or row.internal_id).strip()
@@ -506,6 +516,12 @@ def _circulating_ids_in_region(region_code: str) -> list[str]:
             rows = catalog_repo.list_designs(session, circulating=True)
             for row in rows:
                 design = dict(row.design_json or {})
+                if not design_series_is_active(
+                    design,
+                    series_key=row.series_key,
+                    internal_id=row.internal_id,
+                ):
+                    continue
                 if not _is_playable_match_arcori(design):
                     continue
                 if _region_of(design) != code:

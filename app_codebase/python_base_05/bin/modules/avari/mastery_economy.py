@@ -41,14 +41,15 @@ def echo_mastery_seed(
     return max(0, int(seeded))
 
 
-def own_played_delta(seat_flips: int) -> int:
-    """Mastery Δ on a design you already have mastery on (own curve).
+def own_played_delta(flips_on_design: int) -> int:
+    """Mastery Δ on the Arcori you brought (own-played curve).
 
-    Used for: (1) the Arcori you brought — keyed off seat total flips;
-    (2) any other table design you already have mastery on — keyed off
-    flips of that design (0 flips → −1).
+    Keyed off **your** flips of that design this match (slam-actor attribution).
+    Opponent flips of your piece count only on their finalize, never yours.
+    The −1 at 0 flips applies only here — not to already-mastered designs
+    someone else brought.
     """
-    n = max(0, int(seat_flips))
+    n = max(0, int(flips_on_design))
     if n <= 0:
         return -1
     if n == 1:
@@ -168,7 +169,6 @@ def _flip_count(raw: dict[str, int], design_id: str) -> int:
 def compute_mastery_deltas(
     *,
     played_design_id: str | None,
-    seat_flips: int,
     flips_by_design: dict[str, int] | None,
     table_design_ids: Iterable[str] | None = None,
     owned_design_ids: Iterable[str] | None = None,
@@ -178,9 +178,13 @@ def compute_mastery_deltas(
 
     Each row: {designId, delta, flips, kind: "own"|"other"}
 
-    - **Played** design: own curve from ``seat_flips`` (match total you flipped).
-    - **Owned** table designs (mastery > 0 already, incl. opponents' picks you
-      already progress on): own curve from flips of that design (0 → −1).
+    ``flips_by_design`` is **this actor's** flips only (who slammed). Opponent
+    flips of your piece never appear in your map.
+
+    - **Played** design: own-played curve from flips of that design (0 → −1).
+    - **Owned** table designs (mastery > 0, not your played pick): no −1 when
+      you flip them 0 times; 1+ flips use the own-played positive band
+      (1 → 0, 2+ → +2).
     - **Other** (no prior mastery): other curve from flips of that design.
     """
     out: list[dict[str, Any]] = []
@@ -209,25 +213,24 @@ def compute_mastery_deltas(
     for design_id in sorted(table):
         flips_on = _flip_count(raw, design_id)
         if played and design_id == played:
-            delta = own_played_delta(seat_flips)
-            kind = "own"
-            # Display flips-on-this-design (seat total only drives delta).
-            flips_field = flips_on
-        elif design_id in owned:
             delta = own_played_delta(flips_on)
             kind = "own"
-            flips_field = flips_on
+        elif design_id in owned:
+            # Already master, not your seat pick: never deduct for a blank.
+            if flips_on <= 0:
+                continue
+            delta = own_played_delta(flips_on)
+            kind = "own"
         else:
             delta = other_design_delta(flips_on)
             kind = "other"
-            flips_field = flips_on
         if delta == 0:
             continue
         out.append(
             {
                 "designId": design_id,
                 "delta": delta,
-                "flips": flips_field,
+                "flips": flips_on,
                 "kind": kind,
             }
         )

@@ -205,7 +205,12 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
             ? TextButton.icon(
                 onPressed: onTap,
                 icon: Icon(icon, size: 20, color: foreground),
-                label: Text(label, style: TextStyle(color: foreground)),
+                label: Text(
+                  label,
+                  style: context.appTypography.button.copyWith(
+                    color: foreground,
+                  ),
+                ),
               )
             : IconButton(
                 icon: Icon(icon, color: foreground),

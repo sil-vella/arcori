@@ -16,6 +16,7 @@ from core.utils.dev_logger import customlog
 from models.avari_profile import AvariProfile
 from modules.avari.mastery_economy import STARTER_INITIAL_MASTERY
 from modules.catalog import catalog_loader as loader
+from modules.catalog.current_series import series_is_active
 
 LOGGING_SWITCH = True
 
@@ -50,6 +51,8 @@ def circulating_playable_designs() -> list[tuple[str, float]]:
     for doc in loader.list_theme_documents():
         series_key = str(doc.get("series") or "").strip().lower()
         if series_key not in STARTER_SERIES_KEYS:
+            continue
+        if not series_is_active(series_key):
             continue
         theme_code = str(doc.get("themeCode") or "").strip().upper()
         if theme_code in {"SLM", "KIN"}:

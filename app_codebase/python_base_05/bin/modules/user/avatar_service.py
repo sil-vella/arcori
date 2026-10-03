@@ -1,4 +1,8 @@
-"""Avatar upload: validate, convert to WebP, persist on disk, update user row."""
+"""Avatar upload: validate, convert to WebP, persist on disk, update user row.
+
+Claimed Kin face: ``users.avatar_url`` may point at ``/media/kin/players/*.json``
+(Lottie). Uploaded photos stay under ``/media/avatars/``.
+"""
 
 from __future__ import annotations
 
@@ -7,6 +11,7 @@ import os
 from typing import Any
 
 from PIL import Image, UnidentifiedImageError
+from sqlalchemy.orm import Session
 
 from core.state.session_scope import session_scope
 from modules.auth.auth_service import AuthServiceError
@@ -21,6 +26,38 @@ from modules.user.upload_config import (
 )
 
 ALLOWED_FORMATS = frozenset({"JPEG", "PNG", "WEBP"})
+
+_KIN_LOTTIE_PREFIX = "/media/kin/players/"
+
+
+def is_kin_lottie_avatar_url(url: str | None) -> bool:
+    raw = (url or "").strip()
+    return raw.startswith(_KIN_LOTTIE_PREFIX) and raw.endswith(".json")
+
+
+def link_avatar_to_kin_lottie(
+    session: Session,
+    *,
+    user_id: str,
+    genesis_design_id: str,
+) -> str:
+    """Point ``users.avatar_url`` at the claimed Kin Lottie public path.
+
+    Removes a previous uploaded WebP under ``/media/avatars/`` when replacing.
+    Never deletes Kin player Lottie files.
+    """
+    from modules.catalog.kin_design_store import lottie_public_url
+
+    public = lottie_public_url(genesis_design_id)
+    user = user_repository.find_by_id(session, user_id)
+    if user is None:
+        return public
+    previous = (user.avatar_url or "").strip() or None
+    user.avatar_url = public
+    session.flush()
+    if previous and previous != public and not is_kin_lottie_avatar_url(previous):
+        _delete_file_if_exists(_disk_path_from_public_url(previous))
+    return public
 
 
 def upload_avatar(*, user_id: str, raw_bytes: bytes) -> dict[str, Any]:
@@ -65,6 +102,15 @@ def upload_avatar(*, user_id: str, raw_bytes: bytes) -> dict[str, Any]:
                 message="Guest accounts cannot upload a profile picture",
                 status=403,
             )
+        # Kin face is the profile pic after claim — do not replace with a photo.
+        from modules.avari import avari_repository as avari_repo
+
+        if avari_repo.find_player_kin(session, user_id) is not None:
+            raise AuthServiceError(
+                code="forbidden",
+                message="Profile picture is your Kin face after claim",
+                status=403,
+            )
         previous_url = user.avatar_url
         try:
             _write_avatar_file(disk_path, processed)
@@ -77,7 +123,8 @@ def upload_avatar(*, user_id: str, raw_bytes: bytes) -> dict[str, Any]:
         user.avatar_url = public_path
         session.flush()
         if previous_url and previous_url != public_path:
-            _delete_file_if_exists(_disk_path_from_public_url(previous_url))
+            if not is_kin_lottie_avatar_url(previous_url):
+                _delete_file_if_exists(_disk_path_from_public_url(previous_url))
 
     from modules.auth.auth_service import get_user_profile
 
@@ -103,11 +150,26 @@ def delete_avatar(*, user_id: str) -> dict[str, Any]:
                 message="Guest accounts cannot upload a profile picture",
                 status=403,
             )
+        from modules.avari import avari_repository as avari_repo
+
+        kin = avari_repo.find_player_kin(session, user_id)
+        if kin is not None:
+            # Keep / restore Kin Lottie link — cannot clear while Kin exists.
+            public = link_avatar_to_kin_lottie(
+                session,
+                user_id=user_id,
+                genesis_design_id=str(kin.genesis_design_id),
+            )
+            from modules.auth.auth_service import get_user_profile
+
+            profile = get_user_profile(user_id)
+            return {"profile": profile, "avatar_url": public}
+
         previous_url = user.avatar_url
         user.avatar_url = None
         session.flush()
 
-    if previous_url:
+    if previous_url and not is_kin_lottie_avatar_url(previous_url):
         _delete_file_if_exists(_disk_path_from_public_url(previous_url))
 
     from modules.auth.auth_service import get_user_profile
@@ -118,6 +180,9 @@ def delete_avatar(*, user_id: str) -> dict[str, Any]:
 
 def delete_avatar_file_for_user(user_id: str, avatar_url: str | None) -> None:
     if not avatar_url:
+        return
+    # Never delete claimed Kin Lottie media when clearing account / avatar.
+    if is_kin_lottie_avatar_url(avatar_url):
         return
     expected = avatar_public_path(user_id)
     if avatar_url != expected:

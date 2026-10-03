@@ -89,11 +89,38 @@ while IFS= read -r line; do
 done < <(build_dart_defines_from_wfrun_env)
 
 if [[ ${#DART_DEFINE_ARGS[@]} -eq 0 ]]; then
-  echo "No dart-defines from ${WFRUN_DART_DEFINES_FILE:-.env.dart.defines.prod}" >&2
+  echo "No dart-defines in the wfrun/dashboard environment (${WFRUN_DART_DEFINES_FILE:-unset})" >&2
   exit 1
 fi
 
-echo "Dart-defines: ${#DART_DEFINE_ARGS[@]} key(s) from ${WFRUN_DART_DEFINES_FILE:-}"
+_assert_prod_url_define() {
+  local key="$1"
+  local prefix="$2"
+  local found="" arg
+  for arg in "${DART_DEFINE_ARGS[@]}"; do
+    case "$arg" in
+      "--dart-define=${key}=${prefix}"*)
+        found="${arg#--dart-define=${key}=}"
+        ;;
+    esac
+  done
+  if [[ -z "$found" ]]; then
+    echo "❌ $key from the wfrun/dashboard environment must start with ${prefix}" >&2
+    exit 1
+  fi
+  case "$found" in
+    *127.0.0.1*|*localhost*|*192.168.*)
+      echo "❌ $key from the wfrun/dashboard environment is a local address: $found" >&2
+      exit 1
+      ;;
+  esac
+  echo "  $key=$found"
+}
+
+echo "Dart-defines: ${#DART_DEFINE_ARGS[@]} key(s) from the wfrun/dashboard environment"
+_assert_prod_url_define ARCORI_API_REST_URL "https://"
+_assert_prod_url_define ARCORI_API_WS_URL "wss://"
+_assert_prod_url_define ARCORI_DART_WS_URL "wss://"
 
 cd "$FLUTTER_DIR"
 flutter build appbundle \
@@ -102,8 +129,18 @@ flutter build appbundle \
   --build-number="$BUILD_NUMBER" \
   "${DART_DEFINE_ARGS[@]}"
 
+# Repo-relative path as an OSC 8 link. The dashboard terminal reveals it in Finder.
+log_finder_path() {
+  local abs="$1"
+  local rel uri
+  rel="${abs#"$REPO_ROOT"/}"
+  uri="file://${abs}"
+  printf '\033]8;;%s\033\\%s\033]8;;\033\\\n' "$uri" "$rel"
+}
+
 if [[ -f "$OUTPUT_AAB" ]]; then
   echo "App Bundle build completed: $OUTPUT_AAB"
+  log_finder_path "$OUTPUT_AAB"
   ls -lh "$OUTPUT_AAB"
   echo "Upload to Play Console: Release → Create new release → Upload this AAB"
 else

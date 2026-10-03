@@ -69,9 +69,19 @@ def _write_stem(internal_id: str) -> str:
     return art_basename(internal_id) or (internal_id or "").strip()
 
 
-def _atomic_write_json(disk_path: str, payload: dict[str, Any]) -> None:
+def _atomic_write_json(
+    disk_path: str,
+    payload: dict[str, Any],
+    *,
+    compact: bool = False,
+) -> None:
     os.makedirs(os.path.dirname(disk_path), exist_ok=True)
-    data = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
+    if compact:
+        data = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode(
+            "utf-8"
+        )
+    else:
+        data = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
     temp_path = f"{disk_path}.tmp"
     with open(temp_path, "wb") as handle:
         handle.write(data)
@@ -90,7 +100,7 @@ def write_lottie_file(internal_id: str, lottie: dict[str, Any]) -> str:
     """Write one Lottie JSON file. Returns public path."""
     stem = _write_stem(internal_id)
     path = os.path.join(upload_root(), LOTTIE_SUBDIR, f"{stem}.json")
-    _atomic_write_json(path, lottie)
+    _atomic_write_json(path, lottie, compact=True)
     return f"/media/{LOTTIE_SUBDIR}/{stem}.json"
 
 

@@ -17,14 +17,50 @@ import '../../match/state/match_notifier.dart';
 import '../../match/state/match_snapshot_state.dart';
 import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
+import '../../match/widgets/slam_result_modal.dart';
 import '../play_models.dart';
 import '../play_notifier.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 /// Single post-match shell: celebration stubs + summary + actions.
-Future<void> showPostMatchModal(BuildContext context, WidgetRef ref) {
-  return AppModal.showCentered<void>(
+///
+/// If the last turn's flip/miss card is up, this route is installed under it.
+/// Close or the card's timer reveals the summary already behind it.
+Future<void> showPostMatchModal(BuildContext context, WidgetRef ref) async {
+  final front = await SlamResultFront.frontRoute();
+  if (!context.mounted) return;
+  final nav = Navigator.of(context, rootNavigator: true);
+  final route = _postMatchRoute(context);
+  if (installRouteBehindFront(
+    nav,
+    route,
+    keepInFront: front,
+    shellUnder: SlamResultFront.shellRoute,
+  )) {
+    if (LOGGING_SWITCH) {
+      customlog('postMatchModal: inserted behind slam result');
+    }
+    return route.popped;
+  }
+  if (front != null && front.isActive && front.isCurrent) {
+    if (LOGGING_SWITCH) {
+      customlog('postMatchModal: waiting for slam result to close');
+    }
+    await front.popped;
+    if (!context.mounted) return;
+    return nav.push<void>(_postMatchRoute(context));
+  }
+  if (LOGGING_SWITCH) {
+    customlog('postMatchModal: show');
+  }
+  final shown = nav.push<void>(route);
+  SlamResultFront.onReleased?.call();
+  return shown;
+}
+
+Route<void> _postMatchRoute(BuildContext context) {
+  return AppModal.centeredRoute<void>(
     context,
     barrierDismissible: false,
     builder: (ctx) => Theme(

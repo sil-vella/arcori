@@ -94,6 +94,33 @@ def count_player_kin(session: Session) -> int:
     return int(session.scalar(select(func.count()).select_from(PlayerKin)) or 0)
 
 
+def list_player_kin_backgrounds_by_design(session: Session) -> dict[str, dict]:
+    """Map genesis_design_id → claim background object from customization."""
+    out: dict[str, dict] = {}
+    for row in session.scalars(select(PlayerKin)).all():
+        design_id = str(getattr(row, "genesis_design_id", "") or "").strip()
+        if not design_id:
+            continue
+        custom = getattr(row, "customization", None)
+        if not isinstance(custom, dict):
+            continue
+        bg = custom.get("background")
+        if isinstance(bg, dict) and bg:
+            out[design_id.upper()] = dict(bg)
+            stem = design_id.upper()
+            # Also index art basename without GEN segment when present.
+            if "-GEN" in stem:
+                try:
+                    from modules.catalog.catalog_ids import art_basename
+
+                    alt = (art_basename(design_id) or "").strip().upper()
+                    if alt:
+                        out[alt] = dict(bg)
+                except Exception:
+                    pass
+    return out
+
+
 def list_design_access(session: Session, user_id: str) -> list[PlayerDesignAccess]:
     uid = _as_uuid(user_id)
     if uid is None:

@@ -4,10 +4,10 @@ class AppConfig {
 
   static const _showIntroLottieRaw = String.fromEnvironment('SHOW_INTRO_LOTTIE');
 
-  /// Full-screen intro Lottie after native splash; off unless SHOW_INTRO_LOTTIE is truthy.
+  /// Full-screen intro video after native splash; off unless SHOW_INTRO_LOTTIE is truthy.
   static bool get showIntroLottie => isEnvTruthy(_showIntroLottieRaw);
 
-  static const introLottieAsset = 'assets/lottie/intro.json';
+  static const introVideoAsset = 'assets/videos/intro.mp4';
 }
 
 const _envTruthy = {'1', 'true', 'yes'};

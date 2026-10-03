@@ -323,6 +323,18 @@ def get_user_profile(user_id: str) -> dict[str, Any] | None:
         user = user_repository.find_by_id(session, user_id)
         if user is None:
             return None
+        avatar_url = user.avatar_url
+        # After Kin claim, profile pic is the Kin Lottie face (sync DB if stale).
+        from modules.avari import avari_repository as avari_repo
+        from modules.user.avatar_service import link_avatar_to_kin_lottie
+
+        kin = avari_repo.find_player_kin(session, user_id)
+        if kin is not None and str(kin.genesis_design_id or "").strip():
+            avatar_url = link_avatar_to_kin_lottie(
+                session,
+                user_id=user_id,
+                genesis_design_id=str(kin.genesis_design_id),
+            )
         return {
             "user_id": str(user.id),
             "username": user.username,
@@ -330,7 +342,7 @@ def get_user_profile(user_id: str) -> dict[str, Any] | None:
             "is_guest": user.is_guest,
             "email_verified": user.email_verified_at is not None,
             "account_type": "Guest" if user.is_guest else "Regular",
-            "avatar_url": user.avatar_url,
+            "avatar_url": avatar_url,
             "created_at": user.created_at.isoformat(),
         }
 

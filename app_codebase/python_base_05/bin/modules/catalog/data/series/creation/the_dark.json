@@ -48,6 +48,52 @@
         "preservationRequirement": 50,
         "closureMilestone": 100
       }
+    },
+    {
+      "internalId": "DRK-EVW-SER000-GEN001-0002",
+      "themeCode": "DRK",
+      "designCode": "EVW",
+      "designFamily": "ECLIPSE_VEILWALKER",
+      "design": "Eclipse Veilwalker",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [
+        "MWB"
+      ],
+      "hostility": [
+        "EVG"
+      ],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "arcori",
+      "theme": "The Dark",
+      "subtheme": "The Dark",
+      "style": "Realistic",
+      "finish": "Standard",
+      "color": "#1A1A1C",
+      "effect": "None",
+      "selectionWeight": 0.01,
+      "series": "Creation Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "artworkPrompt": "Give me an image with Eclipse Veilwalker in realistic style with a standard finish and no effect. Use a background that is visually related to Eclipse Veilwalker. No borders, no frames. The subject should be horizontally and vertically centered. The subject should fill around 2/4 of the total image size. The image must use a 1:1 aspect ratio in webp format and named DRK-EVW-SER000-GEN001-0002.webp",
+      "loreDescription": "A collectible Eclipse Veilwalker Arcori generation I from the Creation Series, bound to Ashdrift Hill.",
+      "legacy": {
+        "preservationRequirement": 50,
+        "closureMilestone": 100
+      }
     }
   ]
 }

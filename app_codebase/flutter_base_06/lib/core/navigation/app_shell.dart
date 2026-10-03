@@ -117,16 +117,17 @@ class _AppShellState extends State<AppShell> {
                           surfaceTintColor: Colors.transparent,
                           child: Theme(
                             data: AppTheme.dark,
-                            child: DefaultTextStyle.merge(
-                              style: TextStyle(color: AppChrome.onSurface),
-                              child: IconTheme.merge(
-                                data: IconThemeData(
-                                  color: AppChrome.onSurfaceMuted,
-                                ),
-                                child: SafeArea(
-                                  child: Builder(
-                                    builder: (drawerContext) {
-                                      return Column(
+                            child: Builder(
+                              builder: (drawerContext) {
+                                return DefaultTextStyle.merge(
+                                  style: drawerContext.appTypography.body
+                                      .copyWith(color: AppChrome.onSurface),
+                                  child: IconTheme.merge(
+                                    data: IconThemeData(
+                                      color: AppChrome.onSurfaceMuted,
+                                    ),
+                                    child: SafeArea(
+                                      child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.stretch,
                                         children: [
@@ -236,11 +237,11 @@ class _AppShellState extends State<AppShell> {
                                             ),
                                           ],
                                         ],
-                                      );
-                                    },
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
                           ),
                         )

@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
-import '../../../core/http/media_url.dart';
 import '../../../core/navigation/app_navigation.dart';
 import '../../../core/navigation/app_paths.dart';
 import '../../../core/navigation/app_router.dart';
@@ -12,16 +12,12 @@ import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_chrome.dart';
-import '../../kin/kin_backgrounds.dart';
 import '../../kin/kin_models.dart';
 import '../../kin/kin_notifier.dart';
-import '../../kin/widgets/kin_lottie_preview.dart';
-import '../../match/widgets/arcori_cylinder.dart';
-import '../../match/widgets/arcori_look.dart';
-import '../../match/widgets/arcori_palette.dart';
 import '../avari_models.dart';
 import '../avari_notifier.dart';
 import '../widgets/inventory_face_chip.dart';
+import '../widgets/profile_face_avatar.dart';
 import '../widgets/slammer_inventory_tile.dart';
 
 class AvariProfileScreen extends ConsumerStatefulWidget {
@@ -181,9 +177,6 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
     final muted = context.appTypography.caption.copyWith(
       color: AppChrome.onSurfaceMuted,
     );
-    final body = context.appTypography.body.copyWith(
-      color: AppChrome.onSurface,
-    );
     final bodySmall = context.appTypography.bodySmall.copyWith(
       color: AppChrome.onSurfaceMuted,
     );
@@ -192,6 +185,10 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
           padding: const EdgeInsets.only(bottom: AppSpacing.md),
           child: section,
         );
+
+    final titlesLine = profile.titles.isEmpty
+        ? 'None yet'
+        : profile.titles.join(' · ');
 
     return [
       gapSection(
@@ -207,7 +204,10 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
                     SizedBox(
                       width: _avatarSize,
                       height: _avatarSize,
-                      child: _IdentityAvatar(avatarUrl: identity.avatarUrl),
+                      child: ProfileFaceAvatar(
+                        avatarUrl: identity.avatarUrl,
+                        size: _avatarSize,
+                      ),
                     ),
                     AppSpacing.gapSm,
                     Text(
@@ -218,7 +218,11 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
                       textAlign: TextAlign.center,
                     ),
                     AppSpacing.gapXxs,
-                    Text(identity.title, style: muted),
+                    Text(
+                      titlesLine,
+                      style: muted,
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               ),
@@ -228,170 +232,27 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
                 'Gold Fragments',
                 '${profile.economy.goldFragments} of 4 toward next Gold Arcori',
               ),
-            ],
-          ),
-        ),
-      ),
-      gapSection(
-        AppChromeSection(
-          title: 'Titles',
-          child: Text(
-            profile.titles.isEmpty ? 'None yet' : profile.titles.join(' · '),
-            style: body,
-          ),
-        ),
-      ),
-      gapSection(
-        AppChromeSection(
-          title: 'Achievements',
-          actionLabel: 'View',
-          onAction: () => Nav.push(context, AppPaths.achievements),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Catalog unlocks from matches — separate from titles.',
-                style: bodySmall,
-              ),
               AppSpacing.gapSm,
-              OutlinedButton(
-                onPressed: () => Nav.push(context, AppPaths.achievements),
-                child: const Text('View Achievements'),
-              ),
-            ],
-          ),
-        ),
-      ),
-      gapSection(
-        AppChromeSection(
-          title: 'Kin',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (profile.kin != null) ...[
-                Center(
-                  child: ArcoriCylinder(
-                    look: ArcoriLook(
-                      designId: profile.kin!.genesisDesignId,
-                      colorHex: profile.kin!.color,
-                    ),
-                    size: 200,
-                    face: KinSceneStack(
-                      lottieUrl: profile.kin!.lottieUrl,
-                      file: (profile.kin!.lottieUrl == null ||
-                              profile.kin!.lottieUrl!.isEmpty)
-                          ? localKin.lottieFile
-                          : null,
-                      scene: KinBackgroundScene.fromClaimJson(
-                        profile.kin!.background,
-                      ),
-                    ),
-                  ),
-                ),
-                AppSpacing.gapSm,
-                Text(
-                  profile.kin!.chosenName,
-                  style: body,
-                  textAlign: TextAlign.center,
-                ),
-                AppSpacing.gapXxs,
-                Text(
-                  profile.kin!.masteryOverMintReach,
-                  textAlign: TextAlign.center,
-                  style: muted,
-                ),
-                AppSpacing.gapXxs,
-                Text(
-                  [
-                    profile.kin!.subtheme,
-                    if (profile.kin!.regionCode != null)
-                      profile.kin!.regionCode!,
-                    if (profile.kin!.series != null) profile.kin!.series!,
-                    if (profile.kin!.generationRoman != null)
-                      'Gen ${profile.kin!.generationRoman}',
-                  ].join(' · '),
-                  textAlign: TextAlign.center,
-                  style: muted,
-                ),
-                AppSpacing.gapXxs,
-                Text(
-                  profile.kin!.genesisDesignId,
-                  textAlign: TextAlign.center,
-                  style: muted,
-                ),
-              ] else if (localDraft != null) ...[
-                _LocalKinDisc(localKin: localKin),
-                AppSpacing.gapSm,
-                Text(
-                  localDraft.displayName,
-                  style: body,
-                  textAlign: TextAlign.center,
-                ),
-                AppSpacing.gapXxs,
-                Text('0/500', textAlign: TextAlign.center, style: muted),
-                AppSpacing.gapXxs,
-                Text(
-                  'Local draft ${localDraft.serial} · base ${localDraft.kinSerial}',
-                  textAlign: TextAlign.center,
-                  style: muted,
-                ),
-              ] else
-                Text('Not claimed yet', style: bodySmall),
-              if (profile.kin == null) ...[
-                AppSpacing.gapSm,
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: FilledButton(
-                    onPressed: () => Nav.push(context, AppPaths.kinTypes),
-                    child: Text(
-                      localDraft == null ? 'Create Kin' : 'Continue Kin draft',
-                    ),
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
-      gapSection(
-        AppChromeSection(
-          title: 'Stats',
-          child: Column(
-            children: [
               _KeyValue('Matches', '${profile.stats.matchesPlayed}'),
               _KeyValue('Flips', '${profile.stats.flips}'),
-            ],
-          ),
-        ),
-      ),
-      gapSection(
-        AppChromeSection(
-          title: 'Mastery Value',
-          goldFrame: true,
-          child: Column(
-            children: [
-              _KeyValue('Value', '${profile.mastery.masteryValue}'),
-              _KeyValue('Standing', profile.mastery.masteryValueLabel),
-            ],
-          ),
-        ),
-      ),
-      gapSection(
-        AppChromeSection(
-          title: 'Trove',
-          actionLabel: 'Open',
-          onAction: () => Nav.push(context, AppPaths.trove),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Minted Legacy pieces live in your Trove — not circulating play stock.',
-                style: bodySmall,
-              ),
-              AppSpacing.gapSm,
-              OutlinedButton(
-                onPressed: () => Nav.push(context, AppPaths.trove),
-                child: const Text('Open Trove'),
+              AppSpacing.gapMd,
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () =>
+                          Nav.push(context, AppPaths.achievements),
+                      child: const Text('Achievements'),
+                    ),
+                  ),
+                  AppSpacing.gapSm,
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Nav.push(context, AppPaths.trove),
+                      child: const Text('Trove'),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -400,11 +261,15 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
       gapSection(
         AppChromeSection(
           title: 'Arcori',
+          goldFrame: true,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              _KeyValue('Mastery Value', '${profile.mastery.masteryValue}'),
+              _KeyValue('Standing', profile.mastery.masteryValueLabel),
+              AppSpacing.gapSm,
               Text(
-                'Circulating designs you can play — mastery / mint reach per design.',
+                'Circulating designs you can play — Kin first, then by mastery.',
                 style: bodySmall,
               ),
               AppSpacing.gapSm,
@@ -418,23 +283,75 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
                     return Text('None yet', style: bodySmall);
                   }
                   final draftId = localDraft?.serial.trim() ?? '';
-                  return Wrap(
-                    spacing: AppSpacing.sm,
-                    runSpacing: AppSpacing.sm,
-                    children: [
-                      for (final item in items)
-                        InventoryFaceChip(
-                          item: item,
-                          lottieFile: (profile.kin == null &&
-                                  draftId.isNotEmpty &&
-                                  item.designId == draftId)
-                              ? localKin.lottieFile
-                              : null,
-                        ),
-                    ],
+                  return _ArcoriThreeRowScroll(
+                    items: items,
+                    lottieFileFor: (item) {
+                      if (profile.kin == null &&
+                          draftId.isNotEmpty &&
+                          item.designId == draftId) {
+                        return localKin.lottieFile;
+                      }
+                      return null;
+                    },
+                    onOpen: (item) {
+                      final id = item.designId.trim();
+                      if (id.isEmpty) return;
+                      // Draft Kin is not a catalog design yet.
+                      if (item.source == 'kin-draft') {
+                        final kinSerial =
+                            localDraft?.kinSerial.trim() ?? '';
+                        if (kinSerial.isEmpty) {
+                          Nav.push(context, AppPaths.kinTypes);
+                          return;
+                        }
+                        Nav.push(
+                          context,
+                          Uri(
+                            path: AppPaths.kinCustomize,
+                            queryParameters: {
+                              'kin': kinSerial,
+                              'resume': '1',
+                            },
+                          ).toString(),
+                        );
+                        return;
+                      }
+                      Nav.push(
+                        context,
+                        '${AppPaths.arcoriDetail}?id=${Uri.encodeQueryComponent(id)}',
+                      );
+                    },
                   );
                 },
               ),
+              if (profile.kin == null) ...[
+                AppSpacing.gapMd,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: FilledButton(
+                    onPressed: () {
+                      if (localDraft != null &&
+                          localDraft.kinSerial.trim().isNotEmpty) {
+                        Nav.push(
+                          context,
+                          Uri(
+                            path: AppPaths.kinCustomize,
+                            queryParameters: {
+                              'kin': localDraft.kinSerial.trim(),
+                              'resume': '1',
+                            },
+                          ).toString(),
+                        );
+                      } else {
+                        Nav.push(context, AppPaths.kinTypes);
+                      }
+                    },
+                    child: Text(
+                      localDraft == null ? 'Create Kin' : 'Continue Kin draft',
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -465,7 +382,15 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
   }
 }
 
-/// Kin first in Arcori wrap; uses claimed Kin, else local draft chip.
+void _sortByMasteryDesc(List<AvariInventoryItem> items) {
+  items.sort((a, b) {
+    final byMastery = b.masteryPoints.compareTo(a.masteryPoints);
+    if (byMastery != 0) return byMastery;
+    return a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase());
+  });
+}
+
+/// Kin first; remaining circulating access sorted mastery high → low.
 List<AvariInventoryItem> _arcoriAccessWithKinFirst(
   AvariProfile profile, {
   KinSaveDraft? localDraft,
@@ -482,6 +407,7 @@ List<AvariInventoryItem> _arcoriAccessWithKinFirst(
         rest.add(item);
       }
     }
+    _sortByMasteryDesc(rest);
     final kinItem = fromAccess ??
         AvariInventoryItem(
           designId: kinId,
@@ -526,6 +452,7 @@ List<AvariInventoryItem> _arcoriAccessWithKinFirst(
       final rest = profile.access
           .where((i) => i.designId != draftId)
           .toList();
+      _sortByMasteryDesc(rest);
       return [
         AvariInventoryItem(
           designId: draftId,
@@ -543,70 +470,64 @@ List<AvariInventoryItem> _arcoriAccessWithKinFirst(
     }
   }
 
-  return List<AvariInventoryItem>.from(profile.access);
+  final all = List<AvariInventoryItem>.from(profile.access);
+  _sortByMasteryDesc(all);
+  return all;
 }
 
-class _LocalKinDisc extends ConsumerWidget {
-  const _LocalKinDisc({required this.localKin});
+/// Three-row catalog: order reads left→right per row, then next row; scroll sideways.
+class _ArcoriThreeRowScroll extends StatelessWidget {
+  const _ArcoriThreeRowScroll({
+    required this.items,
+    required this.lottieFileFor,
+    required this.onOpen,
+  });
 
-  final KinActiveSaveState localKin;
+  static const int _rows = 3;
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final draft = localKin.draft;
-    if (draft == null) return const SizedBox.shrink();
-    final bgCatalog =
-        ref.watch(kinBackgroundCatalogProvider).asData?.value ??
-            KinBackgroundCatalog.empty;
-    final bg = bgCatalog.byId(draft.backgroundId);
-    return Center(
-      child: ArcoriCylinder(
-        look: ArcoriLook(
-          designId: draft.kinSerial,
-          colorHex: draft.colorHex,
-        ),
-        size: 200,
-        face: KinSceneStack(
-          file: localKin.lottieFile,
-          backgroundColor: bg?.isColor == true
-              ? parseCatalogColor(bg!.colorHex)
-              : null,
-          backgroundImageUrl:
-              bg?.isImage == true ? bg!.imageUrl : null,
-        ),
-      ),
-    );
-  }
-}
-
-class _IdentityAvatar extends StatelessWidget {
-  const _IdentityAvatar({required this.avatarUrl});
-
-  final String? avatarUrl;
+  final List<AvariInventoryItem> items;
+  final File? Function(AvariInventoryItem item) lottieFileFor;
+  final ValueChanged<AvariInventoryItem> onOpen;
 
   @override
   Widget build(BuildContext context) {
-    final url = resolveMediaUrl(avatarUrl);
-    return ClipOval(
-      child: ColoredBox(
-        color: AppChrome.fieldFill,
-        child: url.isEmpty
-            ? Icon(
-                Icons.person_outline,
-                size: AppSpacing.xxl,
-                color: AppChrome.onSurfaceMuted,
-              )
-            : Image.network(
-                url,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-                errorBuilder: (_, __, ___) => Icon(
-                  Icons.person_outline,
-                  size: AppSpacing.xxl,
-                  color: AppChrome.onSurfaceMuted,
+    final columnCount = (items.length / _rows).ceil().clamp(1, 9999);
+    final height = InventoryFaceChip.chipHeight * _rows +
+        AppSpacing.sm * (_rows - 1);
+    return SizedBox(
+      height: height,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: columnCount,
+        separatorBuilder: (_, __) => AppSpacing.gapSm,
+        itemBuilder: (context, col) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var row = 0; row < _rows; row++) ...[
+                if (row > 0) AppSpacing.gapSm,
+                Builder(
+                  builder: (context) {
+                    // Row-major: fill across each row left→right, then next row.
+                    final index = row * columnCount + col;
+                    if (index >= items.length) {
+                      return SizedBox(
+                        width: InventoryFaceChip.chipWidth,
+                        height: InventoryFaceChip.chipHeight,
+                      );
+                    }
+                    final item = items[index];
+                    return InventoryFaceChip(
+                      item: item,
+                      lottieFile: lottieFileFor(item),
+                      onTap: () => onOpen(item),
+                    );
+                  },
                 ),
-              ),
+              ],
+            ],
+          );
+        },
       ),
     );
   }

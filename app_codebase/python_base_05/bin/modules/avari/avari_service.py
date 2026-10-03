@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import gzip
+import json
 import uuid
 from typing import Any
 
@@ -199,7 +201,8 @@ def sync_player_access_pool(session: Any, user_id: str) -> str | None:
         else:
             try:
                 design = get_design(did)
-                circulating = _is_circulating(design)
+                # Revoke only for Closed generations — series-off keeps access.
+                circulating = not _world_state_closed(design)
             except AppError:
                 circulating = True
             except Exception:
@@ -231,10 +234,23 @@ def list_slammer_design_ids(user_id: str) -> list[str]:
 
 
 def _is_circulating(design: dict[str, Any] | None) -> bool:
+    """Both gates: series master switch AND design worldState Active."""
     if not isinstance(design, dict):
         return False
     world = str(design.get("worldState") or "").strip().lower()
-    return not world or world == "active"
+    if world and world != "active":
+        return False
+    from modules.catalog.current_series import design_series_is_active
+
+    return design_series_is_active(design)
+
+
+def _world_state_closed(design: dict[str, Any] | None) -> bool:
+    """True when design worldState is Closed (generation left circulation)."""
+    if not isinstance(design, dict):
+        return False
+    world = str(design.get("worldState") or "").strip().lower()
+    return world == "closed"
 
 
 def _gameplay_attributes(design: dict[str, Any]) -> dict[str, Any] | None:
@@ -1135,12 +1151,19 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
                 "winStreakBest": int(getattr(avari, "win_streak_best", 0) or 0),
             }
 
+    # Profile pic = claimed Kin Lottie (no Arcori cylinder); fall back to stored avatar.
+    avatar_url = profile.get("avatar_url")
+    if isinstance(kin_payload, dict):
+        kin_lottie = str(kin_payload.get("lottieUrl") or "").strip()
+        if kin_lottie:
+            avatar_url = kin_lottie
+
     return {
         "identity": {
             "userId": str(profile.get("user_id") or uid),
             "displayName": display_name,
             "email": profile.get("email"),
-            "avatarUrl": profile.get("avatar_url"),
+            "avatarUrl": avatar_url,
             "accountType": account_type,
             "title": primary_title,
         },
@@ -1220,6 +1243,23 @@ def _write_kin_media(
         write_lottie_file(internal_id, lottie)
 
 
+def _decode_optional_lottie_bytes(raw: bytes) -> dict[str, Any] | None:
+    """Decode optional multipart Lottie (plain JSON or gzip)."""
+    if not raw:
+        return None
+    payload = raw
+    if len(raw) >= 2 and raw[0] == 0x1F and raw[1] == 0x8B:
+        try:
+            payload = gzip.decompress(raw)
+        except OSError:
+            return None
+    try:
+        data = json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
 def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
     """Create player_kin + mirrored Kin-series catalog_design; write per-Kin files."""
     uid = (user_id or "").strip()
@@ -1258,6 +1298,10 @@ def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
         raise AppError(INVALID_QUERY, message="lottie must be an object")
     if background is not None and not isinstance(background, dict):
         raise AppError(INVALID_QUERY, message="background must be an object")
+    # Optional gzipped Lottie bytes from multipart (tools / legacy).
+    lottie_bytes = body.get("lottieBytes")
+    if lottie_bytes is not None and not isinstance(lottie_bytes, (bytes, bytearray)):
+        raise AppError(INVALID_QUERY, message="lottieBytes must be binary")
 
     profile = get_user_profile(uid)
     if profile is None:
@@ -1312,8 +1356,9 @@ def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
             "lottieRelativePath": f"kin/players/{media_stem}.json",
             "designRelativePath": f"kin/designs/{media_stem}.json",
         }
+        bg_for_bake: dict[str, Any] | None = None
         if isinstance(background, dict) and background:
-            customization["background"] = {
+            bg_for_bake = {
                 "id": str(background.get("id") or "").strip() or None,
                 "colorHex": str(background.get("colorHex") or "").strip() or None,
                 "colorHexB": str(background.get("colorHexB") or "").strip() or None,
@@ -1327,12 +1372,33 @@ def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
                 "textureId": str(background.get("textureId") or "").strip() or None,
                 "textureIntensity": background.get("textureIntensity"),
             }
+            customization["background"] = bg_for_bake
+
+        lottie_override = lottie if isinstance(lottie, dict) else None
+        if lottie_override is None and isinstance(lottie_bytes, (bytes, bytearray)):
+            lottie_override = _decode_optional_lottie_bytes(bytes(lottie_bytes))
+
+        try:
+            from modules.avari.kin_lottie_claim_bake import build_claim_lottie
+
+            lottie_out = build_claim_lottie(
+                kin_serial=kin_serial,
+                applied=applied if isinstance(applied, list) else [],
+                background=bg_for_bake,
+                lottie_override=lottie_override,
+            )
+        except (OSError, FileNotFoundError, ValueError, json.JSONDecodeError) as exc:
+            if LOGGING_SWITCH:
+                customlog(f"avari: kin claim bake fail {exc}")
+            raise AppError(
+                KIN_CLAIM_FAILED, message="Could not build Kin Lottie"
+            ) from exc
 
         try:
             _write_kin_media(
                 internal_id,
                 catalog_design=catalog_design,
-                lottie=lottie if isinstance(lottie, dict) else None,
+                lottie=lottie_out,
             )
         except OSError as exc:
             if LOGGING_SWITCH:
@@ -1368,12 +1434,19 @@ def claim_kin(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
         )
         avari.onboarding_kin_chosen = True
         avari.onboarding_genesis_created = True
+        from modules.user.avatar_service import link_avatar_to_kin_lottie
+
+        avatar_url = link_avatar_to_kin_lottie(
+            session,
+            user_id=uid,
+            genesis_design_id=internal_id,
+        )
         session.flush()
         if LOGGING_SWITCH:
             customlog(
                 f"avari: kin claimed user={uid} design={internal_id} "
                 f"region={region_code} color={color} url={lottie_public_url(internal_id)} "
-                f"access=granted mastery={KIN_CREATOR_MASTERY_FLOOR}"
+                f"avatar={avatar_url} access=granted mastery={KIN_CREATOR_MASTERY_FLOOR}"
             )
         return {"kin": repo.serialize_kin(row)}
 
@@ -1740,15 +1813,15 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
                     match_id,
                 )
 
-            # Own curve applies to played + any table design you already have
-            # mastery on (points > 0). Load before applying deltas.
+            # Own-played −1 applies only to the design you brought. Already-
+            # mastered table designs (points > 0) skip −1 when flips are 0.
+            # Load owned set before applying deltas.
             mastery_before = repo.mastery_points_by_design(session, uid)
             owned_ids = {
                 did for did, pts in mastery_before.items() if int(pts) > 0
             }
             planned_mastery = compute_mastery_deltas(
                 played_design_id=played_design_id or None,
-                seat_flips=flips,
                 flips_by_design=flips_by_design,
                 table_design_ids=cleaned_ids,
                 owned_design_ids=owned_ids,

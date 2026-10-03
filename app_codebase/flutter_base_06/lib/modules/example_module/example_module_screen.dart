@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../core/screen/module_screen_registrar.dart';
 import '../../core/state/auth/auth_providers.dart';
+import '../../core/theme/theme.dart';
+import '../../core/widgets/app_chrome.dart';
 import 'example_module_api.dart';
 import 'example_module_bottom_nav.dart';
 import 'state/example_module_notifier.dart';
@@ -66,38 +68,44 @@ class ExampleModuleScreen extends ConsumerWidget {
       ],
       bottomNavModuleId: exampleModuleBottomNavModuleId,
       bottomNavItems: exampleModuleBottomNavItems(context),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'example_module',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Same module name on Flutter, Dart, and FastAPI. '
-              'Dart hot state on example/state WS; Python durable record via service tier.',
-            ),
-            const SizedBox(height: 16),
-            FilledButton(
-              onPressed: () =>
-                  ref.read(exampleModuleProvider.notifier).bumpLocal(),
-              child: const Text('Bump local state'),
-            ),
-            const SizedBox(height: 12),
-            OutlinedButton(
-              onPressed: () => _sendDemoNotifications(context, ref),
-              child: const Text('Send demo notifications'),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              'Revision: ${slice.$1}',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Text('Message: ${slice.$2}'),
-          ],
+      child: AppChromePage(
+        child: Padding(
+          padding: AppSpacing.screenPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'example_module',
+                style: context.appTypography.h3,
+              ),
+              AppSpacing.gapXs,
+              Text(
+                'Same module name on Flutter, Dart, and FastAPI. '
+                'Dart hot state on example/state WS; Python durable record via service tier.',
+                style: context.appTypography.bodyMuted,
+              ),
+              AppSpacing.gapMd,
+              FilledButton(
+                onPressed: () =>
+                    ref.read(exampleModuleProvider.notifier).bumpLocal(),
+                child: const Text('Bump local state'),
+              ),
+              AppSpacing.gapSm,
+              OutlinedButton(
+                onPressed: () => _sendDemoNotifications(context, ref),
+                child: const Text('Send demo notifications'),
+              ),
+              AppSpacing.gapLg,
+              Text(
+                'Revision: ${slice.$1}',
+                style: context.appTypography.title,
+              ),
+              Text(
+                'Message: ${slice.$2}',
+                style: context.appTypography.body,
+              ),
+            ],
+          ),
         ),
       ),
     );

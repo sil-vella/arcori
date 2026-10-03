@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,7 +13,7 @@ import 'core/bottom_nav/bottom_nav_controller.dart';
 import 'core/bottom_nav/bottom_nav_registry.dart';
 import 'core/config/app_config.dart';
 import 'core/theme/app_theme.dart';
-import 'core/intro/intro_lottie_screen.dart';
+import 'core/intro/intro_video_screen.dart';
 import 'core/navigation/app_drawer_registry.dart';
 import 'core/navigation/app_route_registry.dart';
 import 'core/navigation/app_router.dart';
@@ -40,9 +42,24 @@ const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 bool _bootstrapAnalyticsSent = false;
 
+/// Locks the app to upright portrait on native targets (not web).
+Future<void> _lockPortraitOrientation() async {
+  if (kIsWeb) return;
+  try {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+  } catch (e) {
+    if (LOGGING_SWITCH) {
+      customlog('portrait lock failed: $e');
+    }
+  }
+}
+
 /// Builds the router, theme, and starts the Flutter app (mirrors `startApp` in dart_bkend).
 Future<void> startApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await _lockPortraitOrientation();
   if (LOGGING_SWITCH) {
     customlog('Flutter app bootstrap');
   }
@@ -185,10 +202,11 @@ class _AppBootstrapState extends ConsumerState<AppBootstrap> {
 
     if (!_introFinished) {
       if (LOGGING_SWITCH) {
-        customlog('AppBootstrap: building IntroLottieScreen');
+        customlog('AppBootstrap: building IntroVideoScreen');
       }
       return MaterialApp(
-        home: IntroLottieScreen(onFinished: _onIntroFinished),
+        theme: AppTheme.dark,
+        home: IntroVideoScreen(onFinished: _onIntroFinished),
       );
     }
 
@@ -200,11 +218,10 @@ class _AppBootstrapState extends ConsumerState<AppBootstrap> {
         );
       }
       return MaterialApp(
-        home: Scaffold(
+        theme: AppTheme.dark,
+        home: const Scaffold(
           body: Center(
-            child: CircularProgressIndicator(
-              color: AppTheme.light.colorScheme.primary,
-            ),
+            child: CircularProgressIndicator(),
           ),
         ),
       );
@@ -259,7 +276,7 @@ class _RootApp extends ConsumerWidget {
         child: DailyMissionsNudgeHost(
           child: MaterialApp.router(
             title: 'Arcori',
-            theme: AppTheme.light,
+            theme: AppTheme.dark,
             darkTheme: AppTheme.dark,
             routerConfig: router,
             builder: (context, child) {

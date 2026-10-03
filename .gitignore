@@ -76,6 +76,7 @@ global.log
 *.out
 *.err
 recordings/
+automation/frontend/launch_android_assets/
 
 # --- OS / IDE ---
 .DS_Store
@@ -102,6 +103,7 @@ migrate_working_dir/
 *.pfx
 *.jks
 *.keystore
+keystore.properties
 *.truststore
 values.json
 **/values.json

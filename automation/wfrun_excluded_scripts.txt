@@ -11,6 +11,11 @@ dashboard/data/marketing_posts.json
 frontend/dart_defines_from_env.sh
 frontend/global_log_filter.sh
 backend/docker_up_common.sh
+backend/image_tag_env.py
+
+# production — compose/nginx assets (not ansible playbooks)
+production/docker-compose.vps.yml
+production/nginx-api.arcori.app.conf
 
 # Shared marketing OAuth/upload runners appear in dashup Scripts tab
 # from wf_dashboard/marketing (not this tree).

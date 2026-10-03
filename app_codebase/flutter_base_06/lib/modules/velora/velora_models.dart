@@ -71,12 +71,15 @@ class DesignSummary {
     this.type,
     this.imageUrl,
     this.lottieUrl,
+    this.faceMedia,
     this.color,
     this.generation,
+    this.background,
   });
 
   factory DesignSummary.fromJson(Map<String, dynamic> json) {
     final gen = json['generation'];
+    final bg = json['background'];
     return DesignSummary(
       internalId: json['internalId']?.toString() ?? '',
       design: json['design']?.toString(),
@@ -91,10 +94,12 @@ class DesignSummary {
       type: json['type']?.toString(),
       imageUrl: json['imageUrl']?.toString(),
       lottieUrl: json['lottieUrl']?.toString(),
+      faceMedia: json['faceMedia']?.toString(),
       color: json['color']?.toString(),
       generation: gen is Map
           ? DesignGeneration.fromJson(Map<String, dynamic>.from(gen))
           : null,
+      background: bg is Map ? Map<String, dynamic>.from(bg) : null,
     );
   }
 
@@ -111,11 +116,22 @@ class DesignSummary {
   final String? type;
   final String? imageUrl;
   final String? lottieUrl;
+  final String? faceMedia;
   final String? color;
   final DesignGeneration? generation;
 
+  /// Kin claim scene background (image / solid / gradient) when present.
+  final Map<String, dynamic>? background;
+
   String get displayName =>
       (design != null && design!.isNotEmpty) ? design! : internalId;
+
+  bool get hasLottieFace {
+    final media = faceMedia?.trim().toLowerCase();
+    if (media == 'lottie') return true;
+    final url = lottieUrl?.trim() ?? '';
+    return url.isNotEmpty;
+  }
 }
 
 class DesignDetail {
@@ -133,15 +149,18 @@ class DesignDetail {
     this.type,
     this.imageUrl,
     this.lottieUrl,
+    this.faceMedia,
     this.color,
     this.loreDescription,
     this.generation,
     this.legacy,
+    this.background,
   });
 
   factory DesignDetail.fromJson(Map<String, dynamic> json) {
     final gen = json['generation'];
     final legacyRaw = json['legacy'];
+    final bg = json['background'];
     return DesignDetail(
       internalId: json['internalId']?.toString() ?? '',
       design: json['design']?.toString(),
@@ -156,6 +175,7 @@ class DesignDetail {
       type: json['type']?.toString(),
       imageUrl: json['imageUrl']?.toString(),
       lottieUrl: json['lottieUrl']?.toString(),
+      faceMedia: json['faceMedia']?.toString(),
       color: json['color']?.toString(),
       loreDescription: json['loreDescription']?.toString(),
       generation: gen is Map
@@ -164,6 +184,7 @@ class DesignDetail {
       legacy: legacyRaw is Map
           ? DesignLegacy.fromJson(Map<String, dynamic>.from(legacyRaw))
           : null,
+      background: bg is Map ? Map<String, dynamic>.from(bg) : null,
     );
   }
 
@@ -180,13 +201,22 @@ class DesignDetail {
   final String? type;
   final String? imageUrl;
   final String? lottieUrl;
+  final String? faceMedia;
   final String? color;
   final String? loreDescription;
   final DesignGeneration? generation;
   final DesignLegacy? legacy;
+  final Map<String, dynamic>? background;
 
   String get displayName =>
       (design != null && design!.isNotEmpty) ? design! : internalId;
+
+  bool get hasLottieFace {
+    final media = faceMedia?.trim().toLowerCase();
+    if (media == 'lottie') return true;
+    final url = lottieUrl?.trim() ?? '';
+    return url.isNotEmpty;
+  }
 }
 
 /// Designs under one series within a theme category.

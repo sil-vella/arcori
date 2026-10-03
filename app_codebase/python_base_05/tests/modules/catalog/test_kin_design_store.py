@@ -52,22 +52,100 @@ class KinDesignStoreTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             with patch.object(store, "upload_root", return_value=tmp):
                 design = build_kin_catalog_design(
-                    internal_id="KIN-VELORA-SER001-0001",
+                    internal_id="KIN-VELORA-SER005-GEN001-0001",
                     chosen_name="VeloraKin",
                     region_code="MWB",
                     color="#4E7A78",
                     subtheme="Entelairs",
                     player_id="u3",
                 )
-                store.write_design_file("KIN-VELORA-SER001-0001", design)
-                result = get_index(theme="KIN", circulating=True)
+                store.write_design_file("KIN-VELORA-SER005-GEN001-0001", design)
+                with patch(
+                    "modules.catalog.catalog_service._live_player_kin_id_keys",
+                    return_value={
+                        "KIN-VELORA-SER005-GEN001-0001",
+                        "KIN-VELORA-SER005-0001",
+                    },
+                ):
+                    result = get_index(theme="KIN", circulating=True)
                 ids = {item["internalId"] for item in result["items"]}
-                self.assertIn("KIN-VELORA-SER001-0001", ids)
+                self.assertIn("KIN-VELORA-SER005-GEN001-0001", ids)
                 kin_item = next(
-                    i for i in result["items"] if i["internalId"] == "KIN-VELORA-SER001-0001"
+                    i
+                    for i in result["items"]
+                    if i["internalId"] == "KIN-VELORA-SER005-GEN001-0001"
                 )
                 self.assertEqual(kin_item["themeCode"], "KIN")
                 self.assertTrue(str(kin_item.get("lottieUrl") or "").endswith(".json"))
+
+    def test_genesis_index_excludes_legacy_genesis_stamped_kin(self) -> None:
+        """Old admin Kin files said series=Genesis Series — must not appear under Genesis."""
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(store, "upload_root", return_value=tmp):
+                design = build_kin_catalog_design(
+                    internal_id="KIN-ADMINLEGACY-SER001-GEN001-0501",
+                    chosen_name="LegacyStamp",
+                    region_code="ASH",
+                    color="#C6A15B",
+                    subtheme="Guardians",
+                    player_id="u4",
+                )
+                design["series"] = "Genesis Series"
+                store.write_design_file(
+                    "KIN-ADMINLEGACY-SER001-GEN001-0501", design
+                )
+                live = {
+                    "KIN-ADMINLEGACY-SER001-GEN001-0501",
+                    "KIN-ADMINLEGACY-SER001-0501",
+                }
+                with patch(
+                    "modules.catalog.catalog_service._live_player_kin_id_keys",
+                    return_value=live,
+                ):
+                    genesis = get_index(series="Genesis", circulating=True)
+                themes = {
+                    (item.get("theme") or "").lower()
+                    for item in genesis["items"]
+                }
+                self.assertNotIn("kin", themes)
+                kin_ids = {
+                    item["internalId"]
+                    for item in genesis["items"]
+                    if str(item.get("internalId") or "").upper().startswith("KIN-")
+                }
+                self.assertEqual(kin_ids, set())
+
+                with patch(
+                    "modules.catalog.catalog_service._live_player_kin_id_keys",
+                    return_value=live,
+                ):
+                    kin_browse = get_index(series="Kin", circulating=True)
+                kin_browse_ids = {
+                    item["internalId"] for item in kin_browse["items"]
+                }
+                self.assertIn(
+                    "KIN-ADMINLEGACY-SER001-GEN001-0501", kin_browse_ids
+                )
+
+                # Orphan file (not in player_kin) must not appear.
+                orphan = build_kin_catalog_design(
+                    internal_id="KIN-ORPHAN-SER005-GEN001-9999",
+                    chosen_name="Orphan",
+                    region_code="EVG",
+                    color="#A8B0B8",
+                    subtheme="Walkies",
+                    player_id="u5",
+                )
+                store.write_design_file("KIN-ORPHAN-SER005-GEN001-9999", orphan)
+                with patch(
+                    "modules.catalog.catalog_service._live_player_kin_id_keys",
+                    return_value=live,
+                ):
+                    kin_browse2 = get_index(series="Kin", circulating=True)
+                self.assertNotIn(
+                    "KIN-ORPHAN-SER005-GEN001-9999",
+                    {item["internalId"] for item in kin_browse2["items"]},
+                )
 
 
 if __name__ == "__main__":

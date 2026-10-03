@@ -10,6 +10,14 @@ void main() {
     expect(labels.serial, '0001');
   });
 
+  test('parses creation series', () {
+    final labels =
+        ArcoriDesignLabels.fromDesignId('LGT-IGW-SER000-GEN001-0002');
+    expect(labels.series, 'Creation');
+    expect(labels.generation, 'I');
+    expect(labels.serial, '0002');
+  });
+
   test('parses civilizations series', () {
     final labels =
         ArcoriDesignLabels.fromDesignId('CAP-RCX-SER004-GEN001-0001');

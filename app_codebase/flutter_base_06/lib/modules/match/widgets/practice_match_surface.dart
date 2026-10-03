@@ -29,6 +29,7 @@ import 'arcori_look.dart';
 import 'arcori_stack_surface.dart';
 import 'arena_pov_backdrop.dart';
 import 'match_player_chrome.dart';
+import 'slam_hit_feedback.dart';
 import 'slam_result_modal.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
@@ -62,7 +63,8 @@ class _PracticeMatchBody extends ConsumerStatefulWidget {
   ConsumerState<_PracticeMatchBody> createState() => _PracticeMatchBodyState();
 }
 
-class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
+class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
+    with SingleTickerProviderStateMixin {
   Timer? _graceTicker;
   Map<String, dynamic>? _predictiveImpulse;
   Map<String, dynamic>? _pendingPredictiveImpulse;
@@ -79,6 +81,10 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   final _oppAvatarKeys = <GlobalKey>[GlobalKey(), GlobalKey()];
   final _oppSlammerKeys = <GlobalKey>[GlobalKey(), GlobalKey()];
   final _arenaPovScale = ValueNotifier<double>(1.0);
+  late final AnimationController _hitShake;
+  int _hitShakeSeed = 0;
+  /// Dedupe vibrate/shake across predictive → authority remounts.
+  DateTime? _lastLocalHitAt;
 
   /// Local pre-authority strike token (negative) so remount can skipStrike.
   int _localStrikeSeq = 0;
@@ -98,37 +104,110 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   /// Authority slam version already armed — ignore later snapshot echoes.
   int? _lastSlamStrikeArmedVersion;
 
+  Route<dynamic>? _shellRoute;
+
+  @override
+  void initState() {
+    super.initState();
+    _hitShake = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 360),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null) {
+      _shellRoute = route;
+      SlamResultFront.shellRoute = route;
+    }
+    SlamResultFront.onReleased = _onSlamResultReleased;
+  }
+
   @override
   void dispose() {
     _graceTicker?.cancel();
+    _hitShake.dispose();
     _arenaPovScale.dispose();
-    _pendingSlamResultEvent = null;
+    if (SlamResultFront.onReleased == _onSlamResultReleased) {
+      SlamResultFront.onReleased = null;
+    }
+    if (_shellRoute != null && SlamResultFront.shellRoute == _shellRoute) {
+      SlamResultFront.shellRoute = null;
+    }
+    if (_pendingSlamResultEvent != null) {
+      _pendingSlamResultEvent = null;
+      SlamResultFront.cancelPending();
+    }
     super.dispose();
   }
 
-  bool _matchStillLive() {
-    final snap = ref.read(matchSnapshotProvider);
-    if (snap.isEnded) return false;
+  /// Vibration + screen shake — local player's stack hit only.
+  void _playLocalHitFeedback() {
+    final now = DateTime.now();
+    final last = _lastLocalHitAt;
+    if (last != null && now.difference(last) < const Duration(milliseconds: 500)) {
+      return;
+    }
+    _lastLocalHitAt = now;
+    _hitShakeSeed = (_hitShakeSeed + 1) & 0x7fffffff;
+    unawaited(slamHitVibrate());
+    _hitShake.forward(from: 0);
+    if (LOGGING_SWITCH) {
+      customlog(
+        'matchSurface: local hit feedback shake+vibrate '
+        'token=$_activeStrikeToken',
+      );
+    }
+  }
+
+  Widget _withHitShake(Widget child) {
+    return AnimatedBuilder(
+      animation: _hitShake,
+      builder: (context, child) {
+        final offset = slamHitShakeOffset(_hitShake.value, seed: _hitShakeSeed);
+        return Transform.translate(offset: offset, child: child);
+      },
+      child: child,
+    );
+  }
+
+  /// Match ended or left in-match, and the flip/miss card is gone.
+  void _onSlamResultReleased() {
+    if (!mounted) return;
+    if (SlamResultFront.isHolding || _pendingSlamResultEvent != null) return;
+    final ended = ref.read(matchSnapshotProvider).isEnded;
     final phase = ref.read(matchFlowProvider).phase;
-    return phase == MatchFlowPhase.inMatch;
+    if (!ended && phase == MatchFlowPhase.inMatch) return;
+    if (LOGGING_SWITCH) {
+      customlog('matchSurface: slam result released, close shell');
+    }
+    _scheduleMatchShellDismiss();
   }
 
   void _flushPendingSlamResultModal() {
     final event = _pendingSlamResultEvent;
-    if (event == null || !mounted) return;
-    if (!_matchStillLive()) {
-      _pendingSlamResultEvent = null;
-      if (LOGGING_SWITCH) {
-        customlog('slamResultModal: drop pending (match not live)');
+    if (event == null || !mounted) {
+      if (!mounted && _pendingSlamResultEvent != null) {
+        _pendingSlamResultEvent = null;
+        SlamResultFront.cancelPending();
       }
       return;
     }
     _pendingSlamResultEvent = null;
     final delta = _pendingSlamResultDelta;
+    final eventCopy = Map<String, dynamic>.from(event);
+    final flips = slamFlipFaces(
+      pieces: ref.read(matchSnapshotProvider).pieces,
+      lastEvent: eventCopy,
+    );
     showSlamResultModal(
       context,
-      lastEvent: Map<String, dynamic>.from(event),
+      lastEvent: eventCopy,
       actorScoreDelta: delta,
+      flips: flips,
     );
   }
 
@@ -141,7 +220,16 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   }
 
   /// Close this shell even when another modal is on top (post-match / lobby).
+  ///
+  /// A queued or visible flip/miss card keeps the shell so that card can stay
+  /// the front route until it closes.
   void _forceCloseShell({required String reason}) {
+    if (_pendingSlamResultEvent != null || SlamResultFront.isHolding) {
+      if (LOGGING_SWITCH) {
+        customlog('matchSurface: forceClose skipped reason=$reason');
+      }
+      return;
+    }
     _pendingSlamResultEvent = null;
     if (!mounted) return;
     final route = ModalRoute.of(context);
@@ -158,6 +246,9 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
   void _scheduleMatchShellDismiss({int attempts = 0}) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
+      if (_pendingSlamResultEvent != null || SlamResultFront.isHolding) {
+        return;
+      }
       final route = ModalRoute.of(context);
       if (route != null && route.isCurrent) {
         dismissModalRoute(context);
@@ -169,6 +260,9 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
       }
       Future<void>.delayed(const Duration(milliseconds: 200), () {
         if (!mounted) return;
+        if (_pendingSlamResultEvent != null || SlamResultFront.isHolding) {
+          return;
+        }
         final phase = ref.read(matchFlowProvider).phase;
         if (phase != MatchFlowPhase.inMatch) {
           _forceCloseShell(reason: 'phase=${phase.name}');
@@ -701,8 +795,18 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
 
     ref.listen(matchSnapshotProvider, (prev, next) {
       if (next.isEnded && prev?.isEnded != true && context.mounted) {
-        _pendingSlamResultEvent = null;
-        _scheduleMatchShellDismiss();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          if (_pendingSlamResultEvent != null || SlamResultFront.isHolding) {
+            if (LOGGING_SWITCH) {
+              customlog(
+                'matchSurface: keep shell, slam result still in front',
+              );
+            }
+            return;
+          }
+          _scheduleMatchShellDismiss();
+        });
       }
 
       final prevSeat = prev?.active?['seatIndex'];
@@ -876,6 +980,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
           prev == null ? 0 : _scoreFor(next, me) - _scoreFor(prev, me);
       _pendingSlamResultEvent = Map<String, dynamic>.from(event);
       _pendingSlamResultDelta = delta;
+      SlamResultFront.markPending();
       if (LOGGING_SWITCH) {
         customlog(
           'slamResultModal: pending after anim version=$version '
@@ -887,6 +992,15 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
     ref.listen(matchFlowProvider, (prev, next) {
       if (prev?.phase != MatchFlowPhase.inMatch) return;
       if (next.phase == MatchFlowPhase.inMatch) return;
+      if (_pendingSlamResultEvent != null || SlamResultFront.isHolding) {
+        if (LOGGING_SWITCH) {
+          customlog(
+            'matchSurface: keep shell for slam result '
+            'flow=${next.phase.name}',
+          );
+        }
+        return;
+      }
       _forceCloseShell(reason: 'flow=${next.phase.name}');
     });
 
@@ -974,6 +1088,22 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
             // After chrome rest was released, don't paint a second arena disc
             // on authority remount (avoids double + stuck-hide races).
             suppressArenaSlammer: _strikeAnimUserId == null,
+            // Fly-in disc calls this at stack contact (survives remount races
+            // that clear onStrikeComplete). Local actor only.
+            onLocalHitFeedback: () {
+              if (!mounted) return;
+              final me = _humanActorUserId(ref.read(matchSnapshotProvider));
+              final actor = _strikeAnimUserId;
+              if (me == null || me.isEmpty || actor == null || actor != me) {
+                if (LOGGING_SWITCH) {
+                  customlog(
+                    'matchSurface: skip hit feedback me=$me actor=$actor',
+                  );
+                }
+                return;
+              }
+              _playLocalHitFeedback();
+            },
             onStrikeComplete: () {
               if (!mounted) return;
               final pending = _pendingPredictiveImpulse;
@@ -1127,31 +1257,33 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody> {
             ),
         ];
 
-        return ScrollConfiguration(
-          behavior: const _MatchNoScrollBehavior(),
-          child: AppScreenTemplate002(
-            stackAreaKey: _stackAreaKey,
-            arenaLayer: hasArena
-                ? ArenaPovBackdrop(
-                    imageUrl: arenaUrl,
-                    povScale: _arenaPovScale,
-                    stackAreaKey: _stackAreaKey,
-                    stackLayer: stack,
-                  )
-                : null,
-            backgroundNetworkUrl:
-                (!hasArena && arenaUrl.isNotEmpty) ? arenaUrl : null,
-            self: selfChrome,
-            opponents: oppChrome,
-            center: playfield,
-            overlay: _turnOverlay(
-              snap: snap,
-              local: local,
-              inGrace: inGrace,
-              inputLocked: inputLocked,
-              armed: armed,
-              graceLeft: graceLeft,
-              controlMode: controlMode,
+        return _withHitShake(
+          ScrollConfiguration(
+            behavior: const _MatchNoScrollBehavior(),
+            child: AppScreenTemplate002(
+              stackAreaKey: _stackAreaKey,
+              arenaLayer: hasArena
+                  ? ArenaPovBackdrop(
+                      imageUrl: arenaUrl,
+                      povScale: _arenaPovScale,
+                      stackAreaKey: _stackAreaKey,
+                      stackLayer: stack,
+                    )
+                  : null,
+              backgroundNetworkUrl:
+                  (!hasArena && arenaUrl.isNotEmpty) ? arenaUrl : null,
+              self: selfChrome,
+              opponents: oppChrome,
+              center: playfield,
+              overlay: _turnOverlay(
+                snap: snap,
+                local: local,
+                inGrace: inGrace,
+                inputLocked: inputLocked,
+                armed: armed,
+                graceLeft: graceLeft,
+                controlMode: controlMode,
+              ),
             ),
           ),
         );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../core/theme/theme.dart';
+import '../kin/widgets/kin_lottie_preview.dart';
 import '../match/widgets/arcori_cylinder.dart';
 import '../match/widgets/arcori_look.dart';
 import 'velora_assets.dart';
@@ -98,11 +99,15 @@ class VeloraFeaturedStage extends StatefulWidget {
     required this.design,
     this.onTap,
     this.subtitle,
+    this.discSize = 140,
   });
 
   final DesignSummary? design;
   final VoidCallback? onTap;
   final String? subtitle;
+
+  /// Disc diameter. Arcori Detail uses 280 (2× default).
+  final double discSize;
 
   @override
   State<VeloraFeaturedStage> createState() => _VeloraFeaturedStageState();
@@ -110,10 +115,11 @@ class VeloraFeaturedStage extends StatefulWidget {
 
 class _VeloraFeaturedStageState extends State<VeloraFeaturedStage>
     with SingleTickerProviderStateMixin {
-  static const double _discSize = 140;
   static const Duration _cycle = Duration(milliseconds: 4800);
   static const double _bouncePx = 7;
   static const double _swivelRad = 0.32;
+
+  double get _discSize => widget.discSize;
 
   late final AnimationController _idle;
 
@@ -170,10 +176,17 @@ class _VeloraFeaturedStageState extends State<VeloraFeaturedStage>
             ArcoriCylinder(
               look: ArcoriLook(
                 designId: featured.internalId,
-                imageUrl: featured.imageUrl,
+                imageUrl:
+                    featured.hasLottieFace ? null : featured.imageUrl,
                 colorHex: featured.color,
               ),
               size: _discSize,
+              face: featured.hasLottieFace
+                  ? KinSceneStack(
+                      lottieUrl: featured.lottieUrl,
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
           ],
         ),
@@ -223,7 +236,9 @@ class _VeloraFeaturedStageState extends State<VeloraFeaturedStage>
         AppSpacing.gapSm,
         Text(
           featured.displayName,
-          style: context.appTypography.h3.copyWith(color: Colors.white),
+          style: context.appTypography.h3.copyWith(
+            color: AppColors.onSurfaceDark,
+          ),
           textAlign: TextAlign.center,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,

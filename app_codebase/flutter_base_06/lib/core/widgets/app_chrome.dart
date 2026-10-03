@@ -101,18 +101,24 @@ class AppChromePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ShellChromeRegistrar(
       extendBodyBehindAppBar: extendBodyBehindAppBar,
-      appBarForeground: Colors.white,
+      appBarForeground: AppColors.onSurfaceDark,
       child: Theme(
         data: AppTheme.dark,
-        child: DefaultTextStyle.merge(
-          style: TextStyle(color: AppChrome.onSurface),
-          child: IconTheme.merge(
-            data: IconThemeData(color: AppChrome.onSurfaceMuted),
-            child: ColoredBox(
-              color: AppChrome.canvas,
-              child: child,
-            ),
-          ),
+        child: Builder(
+          builder: (context) {
+            return DefaultTextStyle.merge(
+              style: context.appTypography.body.copyWith(
+                color: AppChrome.onSurface,
+              ),
+              child: IconTheme.merge(
+                data: IconThemeData(color: AppChrome.onSurfaceMuted),
+                child: ColoredBox(
+                  color: AppChrome.canvas,
+                  child: child,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -178,10 +184,7 @@ class AppChromeSection extends StatelessWidget {
                 if (actionLabel != null && onAction != null)
                   TextButton(
                     onPressed: onAction,
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppChrome.accentGold,
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                    ),
+                    style: context.appButtons.primary.text,
                     child: Text(actionLabel!),
                   ),
               ],

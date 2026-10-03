@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/modal/modal.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_chrome.dart';
 
 /// Centered confirmation modal — type DELETE + password to delete account.
 Future<bool> showDeleteAccountModal(BuildContext context) {
@@ -64,6 +65,19 @@ class _DeleteAccountModalState extends ConsumerState<_DeleteAccountModal> {
 
     return AppCenteredModal(
       title: 'Delete account?',
+      actions: [
+        TextButton(
+          onPressed: auth.isLoading
+              ? null
+              : () => AppModal.dismiss(context, false),
+          child: const Text('Cancel'),
+        ),
+        FilledButton(
+          style: context.appButtons.error.filled,
+          onPressed: _canSubmit ? _submit : null,
+          child: Text(auth.isLoading ? 'Deleting…' : 'Delete account'),
+        ),
+      ],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -76,7 +90,11 @@ class _DeleteAccountModalState extends ConsumerState<_DeleteAccountModal> {
             controller: _confirmationController,
             autocorrect: false,
             textCapitalization: TextCapitalization.characters,
-            decoration: const InputDecoration(
+            style: context.appTypography.body.copyWith(
+              color: AppChrome.onSurface,
+            ),
+            decoration: AppChrome.inputDecoration(
+              context,
               labelText: 'Type DELETE to confirm',
               hintText: 'DELETE',
             ),
@@ -89,7 +107,11 @@ class _DeleteAccountModalState extends ConsumerState<_DeleteAccountModal> {
             textInputAction: TextInputAction.done,
             onChanged: (_) => setState(() {}),
             onFieldSubmitted: (_) => _submit(),
-            decoration: InputDecoration(
+            style: context.appTypography.body.copyWith(
+              color: AppChrome.onSurface,
+            ),
+            decoration: AppChrome.inputDecoration(
+              context,
               labelText: 'Password',
               suffixIcon: IconButton(
                 onPressed: () =>
@@ -113,19 +135,6 @@ class _DeleteAccountModalState extends ConsumerState<_DeleteAccountModal> {
           ],
         ],
       ),
-      actions: [
-        TextButton(
-          onPressed: auth.isLoading
-              ? null
-              : () => AppModal.dismiss(context, false),
-          child: const Text('Cancel'),
-        ),
-        FilledButton(
-          style: context.appButtons.error.filled,
-          onPressed: _canSubmit ? _submit : null,
-          child: Text(auth.isLoading ? 'Deleting…' : 'Delete account'),
-        ),
-      ],
     );
   }
 }

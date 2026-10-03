@@ -11,7 +11,8 @@ plugins {
 
 android {
     namespace = "com.reignofplay.arcori"
-    compileSdk = flutter.compileSdkVersion
+    // Play requires target API 36 (Android 16). Flutter 3.32 still defaults to 35.
+    compileSdk = maxOf(flutter.compileSdkVersion, 36)
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -28,8 +29,9 @@ android {
         applicationId = "com.reignofplay.arcori"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        // Play Billing 9.1.0 requires API 23. Flutter 3.32 still defaults to 21.
+        minSdk = maxOf(flutter.minSdkVersion, 23)
+        targetSdk = maxOf(flutter.targetSdkVersion, 36)
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -54,7 +56,9 @@ android {
                     storeFile = keystoreFile
                     storePassword = keystoreProperties["storePassword"] as String
                 } else {
-                    println("WARNING: Keystore file not found: ${keystoreFile.absolutePath}")
+                    throw GradleException(
+                        "Release keystore not found: ${keystoreFile.absolutePath}"
+                    )
                 }
             }
         }
@@ -70,12 +74,13 @@ android {
             // If keystore.properties doesn't exist, fall back to default debug signing
         }
         release {
-            // Use release keystore for production APKs
             if (keystorePropertiesFile.exists()) {
                 signingConfig = signingConfigs.getByName("release")
             } else {
-                // Fallback to debug if keystore.properties not found
-                signingConfig = signingConfigs.getByName("debug")
+                throw GradleException(
+                    "Release builds require flutter_base_06/keystore.properties and upload-key.jks. " +
+                        "Refusing to sign with the Android debug key."
+                )
             }
         }
     }

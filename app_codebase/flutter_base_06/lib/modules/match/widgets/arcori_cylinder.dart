@@ -109,7 +109,7 @@ class ArcoriCylinder extends StatelessWidget {
                     child: Text(
                       look.fallbackLabel,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: context.appTypography.caption.copyWith(
                         color: look.labelColor,
                         fontSize: size * 0.14,
                         fontWeight: FontWeight.w600,
@@ -152,7 +152,7 @@ class _ArcoriMediaImage extends StatelessWidget {
         child: Text(
           fallback.fallbackLabel,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: context.appTypography.caption.copyWith(
             color: fallback.labelColor,
             fontSize: size * 0.14,
             fontWeight: FontWeight.w600,
@@ -195,7 +195,7 @@ class _ArcoriBackFace extends StatelessWidget {
     final labels = ArcoriDesignLabels.fromDesignId(look.designId);
     final pad = (size * 0.08).clamp(2.0, 10.0);
     final fontSize = (size * 0.085).clamp(5.0, 14.0);
-    final style = TextStyle(
+    final style = context.appTypography.caption.copyWith(
       color: AppColors.onSurfaceDark,
       fontSize: fontSize,
       fontWeight: FontWeight.w600,

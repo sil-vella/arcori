@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../core/app_bar/app_bar_registrar.dart';
 import '../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../core/bottom_nav/bottom_nav_registrar.dart';
 import 'ws_demo_bottom_nav.dart';
 import '../../core/state/auth/auth_providers.dart';
+import '../../core/theme/theme.dart';
+import '../../core/widgets/app_chrome.dart';
 import '../../core/ws/ws_config.dart';
 import '../../core/ws/ws_connection_manager.dart';
 import 'state/ws_demo_log_notifier.dart';
@@ -32,23 +33,30 @@ class WsDemoScreen extends ConsumerWidget {
       items: const [
         AppBarTitle(text: 'WebSocket Demo'),
       ],
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Text(
-            'WebSocket demo',
-            style: Theme.of(context).textTheme.titleLarge,
+      child: AppChromePage(
+        child: ListView(
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.md,
+            AppChromePage.topClearance(context) + AppSpacing.sm,
+            AppSpacing.md,
+            AppSpacing.md,
           ),
-          const SizedBox(height: 8),
-          Text(
-            auth.isAuthenticated
-                ? 'Signed in as ${auth.userId}. Connects to Dart and FastAPI /ws/authuser.'
-                : 'Sign in required — open Account from the drawer.',
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
+          children: [
+            Text(
+              'WebSocket demo',
+              style: context.appTypography.h3,
+            ),
+            AppSpacing.gapXs,
+            Text(
+              auth.isAuthenticated
+                  ? 'Signed in as ${auth.userId}. Connects to Dart and FastAPI /ws/authuser.'
+                  : 'Sign in required — open Account from the drawer.',
+              style: context.appTypography.bodyMuted,
+            ),
+            AppSpacing.gapMd,
+            Wrap(
+              spacing: AppSpacing.xs,
+              runSpacing: AppSpacing.xs,
             children: [
               FilledButton(
                 onPressed: !auth.isAuthenticated
@@ -146,33 +154,40 @@ class WsDemoScreen extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Text('Connection log', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 8),
-          ...ws.log.take(10).map(
+            AppSpacing.gapMd,
+            Text(
+              'Connection log',
+              style: context.appTypography.title,
+            ),
+            AppSpacing.gapXs,
+            ...ws.log.take(10).map(
+                  (line) => Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.xxs),
+                    child: Text(
+                      line,
+                      style: context.appTypography.monospace,
+                    ),
+                  ),
+                ),
+            if (demoLog.isNotEmpty) ...[
+              AppSpacing.gapMd,
+              Text(
+                'Demo channel',
+                style: context.appTypography.title,
+              ),
+              AppSpacing.gapXs,
+              ...demoLog.map(
                 (line) => Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
+                  padding: const EdgeInsets.only(bottom: AppSpacing.xxs),
                   child: Text(
                     line,
-                    style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                    style: context.appTypography.monospace,
                   ),
                 ),
               ),
-          if (demoLog.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            Text('Demo channel', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            ...demoLog.map(
-              (line) => Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                  line,
-                  style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
-                ),
-              ),
-            ),
+            ],
           ],
-        ],
+        ),
       ),
     ),
     );

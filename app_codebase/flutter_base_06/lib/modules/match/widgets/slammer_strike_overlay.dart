@@ -1,13 +1,18 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vector_math/vector_math_64.dart' show Quaternion, Vector3;
 
+import '../../audio/audio_catalog.dart';
+import '../../audio/audio_playback.dart';
 import '../../kin/widgets/kin_lottie_preview.dart';
 import '../input/turn_pacing.dart';
 import 'arcori_cylinder.dart';
 import 'arcori_disc.dart' show faceUpFromQuat, matrixFromQuat;
 import 'arcori_look.dart';
+import 'slam_strike_motion.dart';
 
 /// Equipped slammer is slightly larger than an Arcori disc on the table.
 const double kSlammerToArcoriScale = 1.22;
@@ -33,7 +38,7 @@ enum SlammerArenaPhase {
 /// local; [onFlyInComplete] fires once when the strike reaches the stack.
 ///
 /// [home] is a pixel offset from stack center (beside the acting avatar).
-class SlammerArenaDisc extends StatefulWidget {
+class SlammerArenaDisc extends ConsumerStatefulWidget {
   const SlammerArenaDisc({
     super.key,
     required this.look,
@@ -52,6 +57,7 @@ class SlammerArenaDisc extends StatefulWidget {
     this.flyInDuration = slamStrikeHoldDefault,
     this.size = 56,
     this.onFlyInComplete,
+    this.onLocalHitFeedback,
   });
 
   final ArcoriLook look;
@@ -75,14 +81,16 @@ class SlammerArenaDisc extends StatefulWidget {
   final double size;
   final VoidCallback? onFlyInComplete;
 
+  /// Local player only — vibrate/shake. Fired even when [onFlyInComplete] is null.
+  final VoidCallback? onLocalHitFeedback;
+
   @override
-  State<SlammerArenaDisc> createState() => _SlammerArenaDiscState();
+  ConsumerState<SlammerArenaDisc> createState() => _SlammerArenaDiscState();
 }
 
-class _SlammerArenaDiscState extends State<SlammerArenaDisc>
+class _SlammerArenaDiscState extends ConsumerState<SlammerArenaDisc>
     with SingleTickerProviderStateMixin {
   late final AnimationController _flyIn;
-  late Animation<double> _flyT;
   int? _playedToken;
   bool _flyNotified = false;
 
@@ -102,7 +110,6 @@ class _SlammerArenaDiscState extends State<SlammerArenaDisc>
   void initState() {
     super.initState();
     _flyIn = AnimationController(vsync: this, duration: widget.flyInDuration);
-    _flyT = CurvedAnimation(parent: _flyIn, curve: Curves.easeInCubic);
     _flyIn.addStatusListener(_onFlyStatus);
     _syncFlyIn(force: true);
   }
@@ -122,6 +129,9 @@ class _SlammerArenaDiscState extends State<SlammerArenaDisc>
     if (status != AnimationStatus.completed) return;
     if (_flyNotified) return;
     _flyNotified = true;
+    // Hit feedback first — local remounts can clear [onFlyInComplete].
+    widget.onLocalHitFeedback?.call();
+    unawaited(ref.read(audioPlaybackProvider).play(kAudioCueSlamHit));
     widget.onFlyInComplete?.call();
   }
 
@@ -186,14 +196,12 @@ class _SlammerArenaDiscState extends State<SlammerArenaDisc>
             final arena = Size(constraints.maxWidth, constraints.maxHeight);
             final impact = _impactOffset(arena);
             return AnimatedBuilder(
-              animation: _flyT,
+              animation: _flyIn,
               builder: (context, child) {
-                final u = _flyT.value;
-                final fly = (u / 0.88).clamp(0.0, 1.0);
-                final squash =
-                    u > 0.88 ? ((u - 0.88) / 0.12).clamp(0.0, 1.0) : 0.0;
+                final t = _flyIn.value;
+                final fly = slamStrikeTravel(t);
+                final scale = slamStrikeScale(t);
                 final pos = Offset.lerp(widget.home, impact, fly)!;
-                final scale = 1.0 + 0.12 * (1.0 - fly) - 0.08 * squash;
                 return Align(
                   alignment: Alignment.center,
                   child: Transform.translate(

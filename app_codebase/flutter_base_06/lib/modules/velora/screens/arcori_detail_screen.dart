@@ -81,8 +81,10 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen> {
             type: design.type,
             imageUrl: design.imageUrl,
             lottieUrl: design.lottieUrl,
+            faceMedia: design.faceMedia,
             color: design.color,
             generation: design.generation,
+            background: design.background,
           );
 
     final gen = design?.generation?.display;
@@ -102,7 +104,9 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen> {
       child: AppScreenTemplate001(
         backgroundAsset: kVeloraWorldBackgroundAsset,
         scrimOpacity: 0,
-        appBarForeground: Colors.white,
+        appBarForeground: AppColors.onSurfaceDark,
+        // Taller banner so the 2× featured disc fits.
+        contentStartFraction: 0.55,
         banner: Stack(
           fit: StackFit.expand,
           children: [
@@ -113,6 +117,7 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen> {
               VeloraFeaturedStage(
                 design: summary,
                 subtitle: subtitle.isEmpty ? null : subtitle,
+                discSize: 280,
               )
             else
               Center(

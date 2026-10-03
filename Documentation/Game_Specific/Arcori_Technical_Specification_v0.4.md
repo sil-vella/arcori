@@ -1,13 +1,15 @@
 # Arcori Technical Specification
 
 Working Draft v0.4  
-**Last aligned:** 2026-09-13 (Mastery Value Fair→Priceless label)
+**Last aligned:** 2026-09-30 (series circulation switch `03_series.json`)
 
 ## Arcori Model
 
 Fields: internalId, themeCode, designCode, designFamily, design, inspiration, regionCode, affinity[], hostility[], generation{roman,number,creator}, type, theme, subtheme, style, finish, effect, selectionWeight (0.01 rarest … 10.00 most common), series, worldState, seasonState, artworkPrompt, loreDescription, legacy{preservationRequirement, closureMilestone}. No printedRarity.
 
 **Natural selection (catalog / circulation):** each design’s **`selectionWeight`** (0.01–10.00) is the sole how-often signal. Higher = more common / more often selected. There is no printed-rarity table (`03_printed_rarity.json` removed).
+
+**Series circulation switch:** `03_series.json` is the **master** on/off per series (hot-reloaded like other catalog meta). A design is circulating only when **both** its series is `active: true` **and** its own `worldState` is `Active`. Launch: Genesis + Pioneers on; Creation, Foundations, Civilizations, Kin off. Player `player_design_access` is kept when a series is off and becomes playable again when the series is turned on (unlike Closed generations, which revoke access). Velora home lists only active series. Kin claims resolve as series Kin (not a legacy Genesis stamp on the design JSON).
 
 **Match Arcori pairing SSOT:** after players are seated, `04_selection_weights.json` supplies **region standing** multipliers only. Seat pick score = design `selectionWeight` × region multiplier (hostility boosts match chance). Service: `POST /service/catalog/select_arcori`. Candidates = that player's DB `player_design_access` ids that resolve circulating via `get_design` (static catalog + player Kin) **and** have mastery > 0 (own Kin floored at 100). **Unique ids across seats:** when assigning seat N, exclude Arcori already chosen by seats 0..N−1 (fallback random only among remaining candidates). Weight/parse failures → random among **those** candidates only — never the global circulating catalog. Empty player access → empty pick (client/Dart stub may fill Tiger). Trove mints are ownership-only and are not match stock.
 
@@ -33,7 +35,7 @@ Fields: internalId, themeCode, designCode, designFamily, design, inspiration, re
 | **Museum** | World historical snapshots of **closed** generations (factual archive) |
 | **Chronicle** | Mythology |
 | **Trove (Avari / player)** | Durable record of **minted** closed Arcori belonging to a player — out of circulation |
-| **Mastery (player×design)** | Circulating progress; **not ownership**. Online match deltas: **own played** design 0/−1, 1/0, 2/+2 seat flips; **other** flipped designs 0/0, 1/+1, 2/+2. Practice skips. See [mastery.md](../01_Active_Plans/mastery.md) |
+| **Mastery (player×design)** | Circulating progress; **not ownership**. Online match deltas (your flips of that design): **own played** 0/−1, 1/0, 2/+2; **already-mastered not-played** 0/0 (no −1), 1/0, 2/+2; **other** 0/0, 1/+1, 2/+2. Practice skips. See [mastery.md](../01_Active_Plans/mastery.md) |
 | **Mastery Value (player aggregate)** | `MasteryValue = Σ points×(10/selectionWeight)`; `density = Value / N` (`N` = circulating playable catalog count). Label: Fair / Notable / Sought / Coveted / Exquisite / Priceless. Profile wire `mastery.masteryValue` + `mastery.masteryValueLabel`. Replaces Rank/XP. [mastery.md](../01_Active_Plans/mastery.md) |
 
 ## Avari (player) titles
@@ -63,7 +65,7 @@ Not owned                            Minted legacy piece
 
 | Series | JSON folder | Art folder | `internalId` token | preservationRequirement | closureMilestone | Why |
 |--------|-------------|------------|--------------------|-------------------------|------------------|-----|
-| **Creation** | `series/creation/` | `assets/images/arcori/000_creation/` | `SER000` | 50 | 100 | Primordial pair (The Light / The Dark); `selectionWeight` 0.1 |
+| **Creation** | `series/creation/` | `assets/images/arcori/000_creation/` | `SER000` | 50 | 100 | Primordial Light / Dark (2 themes × 2 designs); `selectionWeight` 0.01 |
 | **Genesis** | `series/genesis/` | `assets/images/arcori/001_genesis/` | `SER001` | 500 | 1000 | Main launch catalog |
 | **Pioneers** | `series/pioneers/` | `assets/images/arcori/002_pioneers/` | `SER002` | 100 | 200 | **Exists so these designs can mint earlier** than Genesis |
 | **Foundations** | `series/foundations/` | `assets/images/arcori/003_foundations/` | `SER003` | 250 | 500 | Civilization / society themes (40 themes × 4 designs); mints between Pioneers and Genesis |

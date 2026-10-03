@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_modal_theme.dart';
+import '../theme/app_theme.dart';
 import 'app_centered_modal.dart';
 import 'app_fullscreen_modal.dart';
 import 'modal_navigator.dart';
@@ -24,20 +25,36 @@ abstract final class AppModal {
     bool barrierDismissible = true,
     bool useRootNavigator = true,
   }) {
-    final modalTheme = Theme.of(context).extension<AppModalThemeExtension>() ??
-        AppModalThemeExtension.light;
+    return Navigator.of(context, rootNavigator: useRootNavigator).push<T>(
+      centeredRoute<T>(
+        context,
+        builder: builder,
+        barrierDismissible: barrierDismissible,
+      ),
+    );
+  }
 
-    return showGeneralDialog<T>(
-      context: context,
-      useRootNavigator: useRootNavigator,
+  /// Centered dialog route using the same scrim and motion as [showCentered].
+  ///
+  /// Not pushed. Callers that must keep an existing route in front install
+  /// this with [NavigatorState.replaceRouteBelow].
+  static Route<T> centeredRoute<T>(
+    BuildContext context, {
+    required WidgetBuilder builder,
+    bool barrierDismissible = true,
+  }) {
+    return RawDialogRoute<T>(
       barrierDismissible: barrierDismissible,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: modalTheme.scrim,
+      barrierColor: AppModalThemeExtension.dark.scrim,
       transitionDuration: AppModalMetrics.transitionDuration,
       pageBuilder: (dialogContext, animation, secondaryAnimation) {
-        return PopScope(
-          canPop: barrierDismissible,
-          child: builder(dialogContext),
+        return Theme(
+          data: AppTheme.dark,
+          child: PopScope(
+            canPop: barrierDismissible,
+            child: Builder(builder: builder),
+          ),
         );
       },
       transitionBuilder: (context, animation, secondaryAnimation, child) {
@@ -72,20 +89,20 @@ abstract final class AppModal {
     bool barrierDismissible = false,
     bool useRootNavigator = true,
   }) {
-    final modalTheme = Theme.of(context).extension<AppModalThemeExtension>() ??
-        AppModalThemeExtension.light;
-
     return showGeneralDialog<T>(
       context: context,
       useRootNavigator: useRootNavigator,
       barrierDismissible: barrierDismissible,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: modalTheme.scrim,
+      barrierColor: AppModalThemeExtension.dark.scrim,
       transitionDuration: AppModalMetrics.transitionDuration,
       pageBuilder: (dialogContext, animation, secondaryAnimation) {
-        return PopScope(
-          canPop: barrierDismissible,
-          child: builder(dialogContext),
+        return Theme(
+          data: AppTheme.dark,
+          child: PopScope(
+            canPop: barrierDismissible,
+            child: Builder(builder: builder),
+          ),
         );
       },
       transitionBuilder: (context, animation, secondaryAnimation, child) {

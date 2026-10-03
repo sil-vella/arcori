@@ -43,6 +43,7 @@ class ArcoriStackSurface extends StatefulWidget {
     this.skipStrike = false,
     this.suppressArenaSlammer = false,
     this.onStrikeComplete,
+    this.onLocalHitFeedback,
     this.onSlammerAnimEnded,
   });
 
@@ -85,6 +86,9 @@ class ArcoriStackSurface extends StatefulWidget {
   /// When true, never paint the arena slammer (chrome rest owns the disc).
   final bool suppressArenaSlammer;
   final VoidCallback? onStrikeComplete;
+
+  /// Local player vibrate/shake at stack contact (wired through the fly-in disc).
+  final VoidCallback? onLocalHitFeedback;
 
   /// Fired when the arena slammer finishes return-home, or is aborted (dispose).
   final VoidCallback? onSlammerAnimEnded;
@@ -966,6 +970,7 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
                               : true,
                           onFlyInComplete:
                               _awaitingStrike ? _onStrikeComplete : null,
+                          onLocalHitFeedback: widget.onLocalHitFeedback,
                         ),
                       ),
                     ),

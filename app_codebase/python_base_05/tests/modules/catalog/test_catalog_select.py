@@ -61,6 +61,34 @@ def select_root(tmp_path: Path):
     )
     (root / "01_regions.json").write_text(json.dumps({"regions": []}), encoding="utf-8")
     (root / "02_kin.json").write_text(json.dumps({"kin": []}), encoding="utf-8")
+    (root / "03_series.json").write_text(
+        json.dumps(
+            {
+                "version": 1,
+                "series": [
+                    {
+                        "key": "genesis",
+                        "label": "Genesis",
+                        "seriesKey": "Genesis",
+                        "active": True,
+                    },
+                    {
+                        "key": "pioneers",
+                        "label": "Pioneers",
+                        "seriesKey": "Pioneers",
+                        "active": True,
+                    },
+                    {
+                        "key": "kin",
+                        "label": "Kin",
+                        "seriesKey": "Kin",
+                        "active": True,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
     (root / "04_selection_weights.json").write_text(
         json.dumps(_weights_doc()),
         encoding="utf-8",
@@ -69,12 +97,14 @@ def select_root(tmp_path: Path):
         "catalog": "Animals Test",
         "theme": "Animals",
         "themeCode": "ANM",
+        "series": "Genesis",
         "version": 1,
         "designs": [
             {
                 "internalId": "ASH-COMMON-1",
                 "design": "Ash Common",
                 "selectionWeight": 3.0,
+                "series": "Genesis Series",
                 "worldState": "Active",
                 "location": {"regionCode": "ASH"},
             },
@@ -82,6 +112,7 @@ def select_root(tmp_path: Path):
                 "internalId": "EVG-COMMON-1",
                 "design": "Everlight Common",
                 "selectionWeight": 3.0,
+                "series": "Genesis Series",
                 "worldState": "Active",
                 "location": {"regionCode": "EVG"},
             },
@@ -89,6 +120,7 @@ def select_root(tmp_path: Path):
                 "internalId": "MWB-COMMON-1",
                 "design": "Moonwake Common",
                 "selectionWeight": 3.0,
+                "series": "Genesis Series",
                 "worldState": "Active",
                 "location": {"regionCode": "MWB"},
             },
@@ -96,6 +128,7 @@ def select_root(tmp_path: Path):
                 "internalId": "UNIQUE-1",
                 "design": "Unique Piece",
                 "selectionWeight": 0.01,
+                "series": "Genesis Series",
                 "worldState": "Active",
                 "location": {"regionCode": "RBY"},
             },

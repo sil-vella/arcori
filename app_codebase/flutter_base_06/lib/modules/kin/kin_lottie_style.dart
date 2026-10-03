@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:lottie/lottie.dart';
 
+import 'kin_embed_selection.dart';
+import 'kin_lottie_embed.dart';
 import 'kin_models.dart';
 
 /// Per-layer style resolved from applied customs (for live preview + bake).
@@ -14,7 +16,6 @@ class KinLayerStyle {
     this.saturation = 1,
     this.lightDark = 0,
     this.replaceColor,
-    this.embedSerial,
   });
 
   final double hueDegrees;
@@ -22,14 +23,12 @@ class KinLayerStyle {
   /// Offset on HSV value (−1…1); positive = lighter.
   final double lightDark;
   final Color? replaceColor;
-  final String? embedSerial;
 
   bool get hasColorEffect =>
       replaceColor != null ||
       hueDegrees.abs() > 0.01 ||
       (saturation - 1).abs() > 0.01 ||
-      lightDark.abs() > 0.01 ||
-      (embedSerial != null && embedSerial!.isNotEmpty);
+      lightDark.abs() > 0.01;
 
   Color transform(Color base) {
     // Must match [toColorFilter] so baked Lottie == live preview.
@@ -56,10 +55,8 @@ class KinLayerStyle {
 
   List<double> _effectMatrix() {
     return _hueSatValueMatrix(
-      hueDegrees: hueDegrees +
-          (embedSerial != null && embedSerial!.isNotEmpty ? 40.0 : 0.0),
-      saturation: saturation *
-          (embedSerial != null && embedSerial!.isNotEmpty ? 1.15 : 1.0),
+      hueDegrees: hueDegrees,
+      saturation: saturation,
       valueOffset: lightDark,
     );
   }
@@ -85,7 +82,7 @@ Map<String, KinLayerStyle> resolveLayerStyles({
     var sat = 1.0;
     var lightDark = 0.0;
     Color? replace;
-    String? embed;
+    var embedSelection = <String, KinEmbedTint>{};
 
     for (final entry in values.entries) {
       if (!part.allowsCustom(entry.key)) continue;
@@ -108,11 +105,14 @@ Map<String, KinLayerStyle> resolveLayerStyles({
           }
           break;
         case KinCustomType.embedImage:
+          embedSelection = parseEmbedSelection(entry.value);
+          break;
+        case KinCustomType.embedHue:
+        case KinCustomType.embedLightDark:
+          // Per-addition tint lives inside the embedImage value map.
+          break;
         case KinCustomType.swapPart:
-          final s = entry.value?.toString();
-          if (s != null && s.isNotEmpty && part.allowsEmbed(s)) {
-            embed = s;
-          }
+          // Swap is a separate bake path; not tinted here.
           break;
       }
     }
@@ -122,11 +122,24 @@ Map<String, KinLayerStyle> resolveLayerStyles({
       saturation: sat,
       lightDark: lightDark,
       replaceColor: replace,
-      embedSerial: embed,
     );
-    if (!style.hasColorEffect) continue;
-    for (final layer in part.styleLayerNames) {
-      out[layer] = style;
+    if (style.hasColorEffect) {
+      for (final layer in part.styleLayerNames) {
+        out[layer] = style;
+      }
+    }
+
+    for (final e in embedSelection.entries) {
+      if (!part.allowsEmbed(e.key) || part.placementFor(e.key) == null) {
+        continue;
+      }
+      final embedStyle = KinLayerStyle(
+        hueDegrees: e.value.hue,
+        lightDark: e.value.lightDark,
+      );
+      if (embedStyle.hasColorEffect) {
+        out[kinEmbedLayerName(e.key)] = embedStyle;
+      }
     }
   }
   return out;
@@ -204,7 +217,7 @@ String bakeKinLottieJson(
   for (final entry in assetStyles.entries) {
     final asset = assetsById[entry.key];
     if (asset == null) continue;
-    final baked = _bakeEmbeddedPng(asset['p']?.toString(), entry.value);
+    final baked = _bakeEmbeddedImage(asset['p']?.toString(), entry.value);
     if (baked != null) {
       asset['p'] = baked;
       asset['e'] = 1;
@@ -261,13 +274,24 @@ void _collectAssetStyles(
   }
 }
 
-String? _bakeEmbeddedPng(String? dataUrl, KinLayerStyle style) {
+/// Tint embedded raster assets so claim matches live [ColorFilter] preview.
+///
+/// Templates store parts as `data:image/webp;base64,…` after shrink; addition
+/// embeds are still PNG. Older bake only accepted PNG, so part hue/lightDark
+/// looked correct in preview (delegates) but were dropped on claim.
+String? _bakeEmbeddedImage(String? dataUrl, KinLayerStyle style) {
   if (dataUrl == null || dataUrl.isEmpty) return null;
-  const prefix = 'data:image/png;base64,';
-  if (!dataUrl.startsWith(prefix)) return null;
+  final match = RegExp(
+    r'^data:image/(png|webp|jpeg|jpg);base64,',
+    caseSensitive: false,
+  ).firstMatch(dataUrl);
+  if (match == null) return null;
+  final mime = match.group(1)!.toLowerCase();
+  final b64 = dataUrl.substring(match.end);
   try {
-    final bytes = base64Decode(dataUrl.substring(prefix.length));
-    final decoded = img.decodeImage(bytes);
+    final bytes = base64Decode(b64);
+    final decoded = img.decodeImage(bytes) ??
+        (mime == 'webp' ? img.decodeWebP(bytes) : null);
     if (decoded == null) return null;
     final out = img.Image.from(decoded);
     for (final p in out) {
@@ -285,8 +309,10 @@ String? _bakeEmbeddedPng(String? dataUrl, KinLayerStyle style) {
         ..b = (tinted.b * 255.0).round().clamp(0, 255)
         ..a = (tinted.a * 255.0).round().clamp(0, 255);
     }
+    // Always PNG out — package:image has decodeWebP but no encoder; server
+    // optimize rewrites claim assets to WebP.
     final encoded = img.encodePng(out);
-    return '$prefix${base64Encode(encoded)}';
+    return 'data:image/png;base64,${base64Encode(encoded)}';
   } catch (_) {
     return null;
   }
