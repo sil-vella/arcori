@@ -347,15 +347,15 @@ import json
 import sys
 
 data = json.load(open(sys.argv[1], encoding="utf-8"))
-api = (data.get("API_URL") or "").strip().lower()
+api = (data.get("ARCORI_API_REST_URL") or "").strip().lower()
 if not api:
-    print("❌ API_URL is missing from dart-defines", file=sys.stderr)
+    print("❌ ARCORI_API_REST_URL is missing from dart-defines", file=sys.stderr)
     sys.exit(1)
 for token in ("10.0.2.2", "localhost", "127.0.0.1"):
     if token in api:
-        print(f"❌ API_URL={data.get('API_URL')!r} is not production (contains {token})", file=sys.stderr)
+        print(f"❌ ARCORI_API_REST_URL={data.get('ARCORI_API_REST_URL')!r} is not production (contains {token})", file=sys.stderr)
         sys.exit(1)
-print(f"✅ API_URL validated: {data.get('API_URL')}")
+print(f"✅ ARCORI_API_REST_URL validated: {data.get('ARCORI_API_REST_URL')}")
 PY
 }
 
@@ -385,12 +385,12 @@ for part in m.group(1).split(","):
         decoded = base64.b64decode(part).decode("utf-8")
     except Exception:
         continue
-    if decoded.startswith("API_URL="):
+    if decoded.startswith("ARCORI_API_REST_URL="):
         found_api = True
         print(f"✅ Generated.xcconfig includes {decoded.split('=', 1)[0]}")
         break
 if not found_api:
-    print("❌ Generated.xcconfig DART_DEFINES does not include API_URL", file=sys.stderr)
+    print("❌ Generated.xcconfig DART_DEFINES does not include ARCORI_API_REST_URL", file=sys.stderr)
     sys.exit(1)
 PY
 }
