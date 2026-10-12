@@ -40,7 +40,7 @@ Trove — PLAY — Market
 
 Uses the platform **screen-scoped bottom action bar** ([BOTTOM_NAV_REGISTRATION.md](../03_Base/Flutter/BOTTOM_NAV_REGISTRATION.md)): shared `hub_sink` scope + `ModuleScreenRegistrar` on Home, Trove, Play, Market.
 
-- **Trove** (`/trove`) — minted closed Arcori (Legacy) + closed gens / preservation windows. Circulating play stock stays on Avari profile.
+- **Trove** (`/trove`) — **shipped:** minted closed Arcori + closed gens / preservation windows. **Target:** My Legacy Slammers ([slammer-legacy.md](slammer-legacy.md)). Circulating Arcori stay on the Avari profile.
 - **PLAY** (`/play`) — Play Hub (circulating mastery-accessible designs).
 - **Market** (`/market`) — **Slammers** section (Rim buy / recharge); packs later — [arcori-packs.md](arcori-packs.md).
 - **Velora** — first-class from Home (and related), not under Trove.

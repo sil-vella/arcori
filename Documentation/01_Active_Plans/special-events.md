@@ -4,7 +4,7 @@
 **Created:** 2026-09-14  
 **Last Updated:** 2026-09-19
 
-Related: [special-event-achievements.md](special-event-achievements.md) · [core-match-loop.md](core-match-loop.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [achievements.md](achievements.md) · [active-window-arcori-play-selection.md](active-window-arcori-play-selection.md)
+Related: [special-event-achievements.md](special-event-achievements.md) · [core-match-loop.md](core-match-loop.md) · [ws-matchmaking-modes.md](ws-matchmaking-modes.md) · [achievements.md](achievements.md) · [active-window-arcori-play-selection.md](active-window-arcori-play-selection.md) · [special-match-arcori-select.md](special-match-arcori-select.md)
 
 ## Objective
 

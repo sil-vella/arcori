@@ -4,7 +4,7 @@
 **Created:** 2026-09-11  
 **Last Updated:** 2026-10-03
 
-Related: [core-match-loop.md](core-match-loop.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [player-profile-schema.md](player-profile-schema.md) · [GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · [Tech Spec](../Game_Specific/Arcori_Technical_Specification_v0.4.md)
+Related: [core-match-loop.md](core-match-loop.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [player-profile-schema.md](player-profile-schema.md) · [mastery-medallion-visuals.md](mastery-medallion-visuals.md) · [GDD](../Game_Specific/Arcori_Game_Design_Document_v0.4.md) · [Tech Spec](../Game_Specific/Arcori_Technical_Specification_v0.4.md)
 
 ## Objective
 
@@ -20,7 +20,7 @@ Lock post-match **mastery point deltas** per design, durable writers, **mastery-
 - **0 mastery** → revoke access (leave collection / select pool), **except your own Kin**.
 - **Own Kin (creator):** starts at **100** mastery; floor **100** (cannot drop below). Other players treat your Kin like any Arcori (+1/+2 other curve) and can lose it at 0.
 - Starter grants (`source=starter`): **10 designs from Genesis/Pioneers** on profile create (guest/regular), each with **10** initial mastery + permanent starter slammer. Composition: **9** with `selectionWeight` in **[8.0, 10.0]**, **1** with **[3.0, 4.0]**. Foundations / Creation are excluded. Pioneers seeds are all weight **10.0** (common band). Pool still drops designs at mastery **< 1** (except own Kin). Existing starter rows below 10 are bumped to 10 on sync.
-- **Legacy echo soft reset:** closed-gen `player_mastery` rows are **unchanged**. Every player with mastery &gt; 0 on the closed gen gets (1) a **`player_closed_generations`** snapshot (`masteryPoints` at close, `echoMasterySeeded`, Preserved/Lost) for the profile **Closed Generations** section, and (2) an echo-gen mastery seed = `floor(closed × 0.30)` (min 1), capped at `preservationRequirement − 1`, plus access on the echo id.
+- **Legacy echo soft reset:** closed-gen `player_mastery` rows are **unchanged**. Every player with mastery &gt; 0 on the closed gen gets (1) a **`player_closed_generations`** snapshot (`masteryPoints` at close, `echoMasterySeeded`, Preserved/Lost) for the profile **Closed Generations** section, and (2) an echo-gen mastery seed = `floor(closed × 0.30)` (min 1), capped at `preservationRequirement − 1`, plus access on the echo id. **Slammer generations reuse this same seed** when a slammer generation closes (not built) — [slammer-legacy.md](slammer-legacy.md).
 
 ## Locked match curves (2026-09-11; owned-on-table clarified 2026-09-23; played flips-on-design 2026-10-03; −1 own-played only 2026-10-03)
 

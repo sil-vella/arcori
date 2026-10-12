@@ -1,8 +1,10 @@
 # Legacy preserve (in-app + website checkout)
 
-**Status:** In Progress  
+**Status:** In Progress — shipped Arcori closure; personal physical mint superseded  
 **Created:** 2026-09-15  
-**Last Updated:** 2026-09-18
+**Last Updated:** 2026-10-09
+
+**Direction (2026-10-09):** Arcori keep Mastery, generations, Museum, Master, and Generation Creator. The **personal** physical mint moves to slammers and does not retire the digital slammer. Do not add new Arcori-mint product work. See [slammer-legacy.md](slammer-legacy.md). This file remains the record of the live preserve/checkout loop until that offer is removed.
 
 Related: [core-match-loop.md](core-match-loop.md) · [arcori-standings-surface.md](arcori-standings-surface.md) · [website checkout contract](../00_System_Wide/arcori-website-legacy-checkout.md) · [DEEP_LINKS.md](../03_Base/Flutter/DEEP_LINKS.md)
 

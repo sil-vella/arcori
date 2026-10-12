@@ -46,7 +46,7 @@ Play Hub
 - Mastery changes (circulating — not ownership)
 - Daily Mission progress
 - Daily Cache unlock
-- Generation and Legacy updates (including mint → Trove when earned)
+- Generation and Museum updates (Arcori world history). Personal physical mint is a slammer Legacy, not an Arcori Trove drop — [slammer-legacy.md](slammer-legacy.md)
 
 ## Exit actions
 

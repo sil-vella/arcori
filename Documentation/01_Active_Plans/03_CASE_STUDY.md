@@ -37,7 +37,7 @@ Design SSOT remains under [`Documentation/Game_Specific/`](../Game_Specific/). L
 ## 1. What Arcori is
 
 **In plain terms:**  
-Arcori is a multiplayer slam / flip collectible game set in **Velora**. Players are **Avari** — people who walk beside circular Arcori pieces. Matches are short (2–4 seats, two rounds). Progress comes from **Mastery** on circulating designs and, eventually, **minting** closed generations into a personal **Trove**. Practice is free and AI-only; online matches cost **2 Gold Fragments** (special events may differ); each flip earns **+1 fragment**; **4 fragments = 1 Gold Arcori** (wallet currency only).
+Arcori is a multiplayer slam / flip collectible game set in **Velora**. Players are **Avari** — people who walk beside circular Arcori pieces. Matches are short (2–4 seats, two rounds). **Arcori** progress is **Mastery**, generations, and the **Museum**. **Slammers** are the personal Legacy: learn one, master it, and optionally mint that exact tool without losing it. Practice is free and AI-only; online matches cost **2 Gold Fragments** (special events may differ); each flip earns **+1 fragment**; **4 fragments = 1 Gold Arcori** (wallet currency only).
 
 **Technically (game slice):**  
 A product monorepo where game features live as modules on three runtimes:
@@ -80,22 +80,24 @@ These names are product decisions, not cosmetic labels. They drove schemas, scre
 | **Arcori** | Circular designs / pieces | Catalog entities; circulating vs closed |
 | **Avari** | Player identity | Profile voice; titles stack *above* identity |
 | **Master** | Competitive title | Earned via mastery / standing |
-| **Legacy Owner** | Preservation title | Earned when a mint enters Trove |
-| **Generation Creator** | Historical title | Named on a preserved generation |
+| **Generation Creator** | Historical title | Named on a closed Arcori generation |
+| **Legacy** | Slammer preservation (target) | Physical mint seals that slammer’s record; the digital slammer stays usable. Shipped **Legacy Owner** is still the Arcori Trove mint |
 | **Mastery** | Progress on a circulating design (not ownership) | Own-played only: 0→−1 / 1→0 / 2→+2. Already-mastered but not your pick: 0→0 (no −1) / 1→0 / 2→+2. Other (no prior mastery): 0→0 / 1→+1 / 2→+2. Opponent flips of your piece count only on their finalize. Score → slam actor |
 
 | **Mastery Value** | Density label + number from weighted mastery vs circulating catalog size | `Value=Σ pts×(10/w)`; `density=Value/N`; Fair→…→Priceless; profile `masteryValue` + label |
-| **Trove** | Personal vault of **minted closed** Arcori only | Sink destination; empty until closures |
-| **Museum** | World factual history of closed gens | Not live stats; not personal Trove |
+| **Trove** | **Target:** the player’s Legacy Slammers. **Shipped:** minted closed Arcori | Sink destination |
+| **Museum** | World factual history of closed Arcori gens | Not live stats; not the personal slammer Legacy |
 | **Chronicle** | Mythology | What cannot be proven |
-| **Slammer** | Tool used to slam / flip | Starter permanent; rechargeable variants later |
+| **Slammer** | The player’s tool and personal history | Acquire → Attune → Slammer Mastery → Legacy → optional physical mint |
 | **Gold Fragments / Gold Arcori** | Economy | 4 Fragments = 1 Gold Arcori; fee 2 frags; +1 frag/flip; signup 20 Gold Arcori |
 | **Caller** | Match initiator (`callerUserId`) | Arena / lobby authority (not “host/steward”) |
 | **Arena** | Match place (`arenaId`) | Backgrounds / FX for the whole match |
 | **Launch regions** | ASH / EVG / LFR / MWB / AMB (+ **RBY** Realm Beyond, no standing) | Politics + lore in Region Catalog; standing −2…+2, not a collect lock |
 
 **Mastery vs ownership (the hinge decision):**  
-Early drafts talked about “Collection” as owned cards. Product clarified: circulating designs grant **play/mastery access** only. **Trove** is reserved for mints that left circulation. That single clarification split tables (`player_design_access` vs `player_trove`), UI (Velora vs Trove), and Match Summary wording (“mastery changes,” not “you own Tiger”).
+Early drafts talked about “Collection” as owned cards. Product clarified: circulating designs grant **play/mastery access** only. **Trove** was reserved for mints that left circulation. That split tables (`player_design_access` vs `player_trove`), UI (Velora vs Trove), and Match Summary wording (“mastery changes,” not “you own Tiger”).
+
+**2026-10-09 — personal Legacy moves to the slammer.** Arcori stay world history (Mastery → Generation → Closure → Museum). The physical mint is the player’s mastered slammer; minting seals a snapshot and the digital slammer stays playable. Shipped Arcori preserve/checkout remains until a follow-on removes that offer. Plan: [slammer-legacy.md](slammer-legacy.md).
 
 ---
 
@@ -511,11 +513,12 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 ### Next (ordered by master plan)
 
 1. **P0** Celebration / mastery anims + Achievements env `016` (Daily Missions + Daily Cache claim shipped) — [core-match-loop.md](core-match-loop.md) · [daily-goals.md](daily-goals.md) · [achievements.md](achievements.md)
-2. **P1** Real winners, standings-from-mastery, My Mastery REST, mint→Trove, finalize idempotency — [core-match-loop.md](core-match-loop.md) (Rank/XP cancelled → Mastery Value)
-3. **P2** Play Again, summary exits (Home/Velora/Trove), durable series, tournament history, `match_flags`, Special Event fees — [core-match-loop.md](core-match-loop.md)
-4. Docs lag: case study / player-profile-schema stub-finalize wording
-5. Home sink Trove • PLAY • Market (**done** via `hub_sink`); remaining first-time / returning flows
-6. Special Event arena rules (not the Quick Start / Invite region pick)
+2. **Direction** Slammer Legacy (personal mint; Arcori stay Museum history) — [slammer-legacy.md](slammer-legacy.md)
+3. **P1** Standings-from-mastery, My Mastery REST, finalize idempotency — [core-match-loop.md](core-match-loop.md) (Rank/XP cancelled → Mastery Value; Arcori physical mint is no longer the next trophy)
+4. **P2** Play Again, summary exits (Home/Velora/Trove), durable series, tournament history, `match_flags`, Special Event fees — [core-match-loop.md](core-match-loop.md)
+5. Docs lag: case study / player-profile-schema stub-finalize wording
+6. Home sink Trove • PLAY • Market (**done** via `hub_sink`); remaining first-time / returning flows
+7. Special Event arena rules (not the Quick Start / Invite region pick)
 
 ---
 
@@ -536,7 +539,8 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Pioneers series exists | First Trove mints should be reachable before Genesis generations fill | Legacy 100 / 200 vs Genesis 500 / 1000; ten seed designs only (`SER002`) |
 | Foundations series | Civilization / society catalog between Pioneers and Genesis | Legacy 250 / 500; 40 themes × 4 designs (`SER003`); art `003_foundations/{theme}/` |
 | Civilizations series | Civic institutions after Foundations, before Genesis mint pace | Legacy 300 / 600; 20 themes, 94 designs (`SER004`); art `004_civilizations/{theme}/`. Region is a Velora land, never the world name. Near-dup item art is dropped, not catalogued. |
-| Legacy preserve via external website checkout | Physical mint is store-safe; in-app never collects cards; digital mint stays server-authoritative | App `preserve/start` → system browser → website pays → `POST /service/legacy/fulfill` (idempotent `orderId`) → deep link `legacy-preserve-complete` → `preserve/complete` reads ledger only. Contract: [arcori-website-legacy-checkout.md](../00_System_Wide/arcori-website-legacy-checkout.md) |
+| Legacy preserve via external website checkout | Physical mint is store-safe; in-app never collects cards; digital mint stays server-authoritative | App `preserve/start` → system browser → website pays → `POST /service/legacy/fulfill` (idempotent `orderId`) → deep link `legacy-preserve-complete` → `preserve/complete` reads ledger only. Contract: [arcori-website-legacy-checkout.md](../00_System_Wide/arcori-website-legacy-checkout.md). **2026-10-09:** this Arcori purchase is no longer the target trophy |
+| Personal Legacy is the slammer | A slammer the player learned is a better physical object than an Arcori many people are mastering; minting must not take the tool away | Arcori: Mastery → Generation → Closure → Museum (no new physical-mint work). Slammer: Attunement → Slammer Mastery → Legacy Eligible (mastered **plus** usage) → optional mint seals a snapshot; digital slammer stays usable; later play is Post-Legacy. On slammer generation close, next-gen mastery uses the live Arcori echo seed (`floor(closed × 0.30)`, min 1, cap preserve−1); closed mastery stays. Trove target = My Legacy Slammers. Plan: [slammer-legacy.md](slammer-legacy.md) |
 | Museum browse reads `museum_generations`; profile “Museum” was personal Trove mislabel | World archive ≠ personal vault; players must not confuse closed world history with their own mints | `GET /authuser/museum` (+ `/item`) over existing table; `meta_json.historySummary` at close; Flutter `/museum`; profile section renamed **Trove**. Plan: [museum-browse.md](museum-browse.md) |
 | Hub sink Trove • PLAY • Market | GDD bottom destinations use platform bottom-nav action bar, not a new tab shell | Shared `hub_sink` scope + `ModuleScreenRegistrar` on Home/Trove/Play/Market; `/trove` = Legacy mints (+ closed gens / preservation); circulating Arcori stays on Avari profile; `/market` stub. Plan: [home-and-play-hub-flow.md](home-and-play-hub-flow.md) |
 | Leader-window proximity alerts | Race urgency without spam; one alert per gap position | During `leader_window`, when challenger closes gap: notify leader (`pressure_v1`) + challenger (`chase_v1`) for each gap **5→1** crossed this match; `msg_id` includes gap; Play now → `play` |

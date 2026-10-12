@@ -33,6 +33,8 @@ Endpoints: `GET/POST /authuser/market/slammers…`. Flutter Market **Slammers** 
 
 Recovery combat/feel stat. Selling other Genesis slammers. Arcori Packs.
 
+**Personal Legacy** (attunement, slammer mastery, physical mint that keeps the digital slammer) is a separate plan: [slammer-legacy.md](slammer-legacy.md). It is not the `recovery` stat and not Arcori `player_mastery`.
+
 ## Case study
 
 Charge −1 per slam anytime used; Rim buy 4 / top-up 4 Gold Arcori (+100).

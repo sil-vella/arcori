@@ -1,0 +1,31 @@
+The Deadcats — 20 Character Pack
+All images converted to WebP.
+
+Regions used:
+- Moonwake Bay: 4
+- Everlight Grove: 4
+- Ashdrift Hill: 4
+- Little Frost: 4
+- Amberwild: 4
+
+Characters:
+01. Captain Rotfang — Pirate Deadcat — Moonwake Bay — 01_captain_rotfang.webp
+02. Orbit Stitch — Astronaut Deadcat — Everlight Grove — 02_orbit_stitch.webp
+03. Gravewobble — Zombie Deadcat — Ashdrift Hill — 03_gravewobble.webp
+04. Wisp Whisker — Ghost Deadcat — Ashdrift Hill — 04_wisp_whisker.webp
+05. Count Fangrick — Vampire Deadcat — Moonwake Bay — 05_count_fangrick.webp
+06. Boltbyte — Robot Deadcat — Little Frost — 06_boltbyte.webp
+07. Razor Riff — Punk Deadcat — Amberwild — 07_razor_riff.webp
+08. Hexpurr — Wizard Deadcat — Everlight Grove — 08_hexpurr.webp
+09. Shadeclaw — Ninja Deadcat — Little Frost — 09_shadeclaw.webp
+10. Jinx Jester — Clown Deadcat — Moonwake Bay — 10_jinx_jester.webp
+11. Tombwink — Mummy Deadcat — Ashdrift Hill — 11_tombwink.webp
+12. Sludgebite — Toxic Deadcat — Amberwild — 12_sludgebite.webp
+13. Frostnip — Ice Deadcat — Little Frost — 13_frostnip.webp
+14. Cinderclaw — Fire Deadcat — Amberwild — 14_cinderclaw.webp
+15. Sporeblink — Mushroom Deadcat — Amberwild — 15_sporeblink.webp
+16. Bonegrin — Skeleton Deadcat — Ashdrift Hill — 16_bonegrin.webp
+17. Nebulisk — Alien Deadcat — Everlight Grove — 17_nebulisk.webp
+18. Brineglow — Deep-Sea Deadcat — Moonwake Bay — 18_brineglow.webp
+19. Static Hex — Glitch Deadcat — Little Frost — 19_static_hex.webp
+20. Crownscar — Royal Deadcat — Everlight Grove — 20_crownscar.webp

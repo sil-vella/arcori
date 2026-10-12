@@ -1,7 +1,7 @@
 # Arcori Content Bible
 
 Working Draft v0.4  
-**Last aligned:** 2026-09-13 (Mastery Value)
+**Last aligned:** 2026-10-09 (`preservationRequirement` / `closureMilestone` close a generation into the Museum. Physical mint is a slammer Legacy — [slammer-legacy.md](../01_Active_Plans/slammer-legacy.md).)
 
 ## Content Structure
 

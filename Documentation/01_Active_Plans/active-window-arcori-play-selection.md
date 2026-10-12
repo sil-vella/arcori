@@ -33,6 +33,7 @@ Let humans **hard-pick** one circulating Arcori from their open Legacy **preserv
 - QS/invite pins, persisted favorites, practice mode
 - Changing Legacy window phases / proximity notifs
 - Disabling AI for this event
+- Generalizing hard-pick to all special matches — [special-match-arcori-select.md](special-match-arcori-select.md)
 
 ## Files
 

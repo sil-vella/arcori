@@ -20,7 +20,20 @@ extension MatchTypeLabel on MatchType {
         MatchType.specialEvent => 'Special Event',
         MatchType.invite => 'Invite',
       };
+
+  String get shortBlurb => switch (this) {
+        MatchType.practice => 'Train locally against AI',
+        MatchType.quickStart => 'Jump into a random match',
+        MatchType.specialEvent => 'Limited rules and rewards',
+        MatchType.invite => 'Challenge a friend',
+      };
 }
+
+/// Featured match-type slots on the Play hub (may overlap the full list).
+const List<MatchType> kPlayFeaturedTypes = [
+  MatchType.quickStart,
+  MatchType.specialEvent,
+];
 
 enum MatchFlowPhase {
   idle,

@@ -1,7 +1,7 @@
 # Arcori Technical Specification
 
 Working Draft v0.4  
-**Last aligned:** 2026-09-30 (series circulation switch `03_series.json`)
+**Last aligned:** 2026-10-09 (personal Legacy target is the slammer — [slammer-legacy.md](../01_Active_Plans/slammer-legacy.md); sections below still describe the shipped Arcori preserve loop)
 
 ## Arcori Model
 
@@ -34,7 +34,7 @@ Fields: internalId, themeCode, designCode, designFamily, design, inspiration, re
 | **Standings** | Live per-design community state for the **active** generation (mastery ranks, generation fill, leader window) |
 | **Museum** | World historical snapshots of **closed** generations (factual archive) |
 | **Chronicle** | Mythology |
-| **Trove (Avari / player)** | Durable record of **minted** closed Arcori belonging to a player — out of circulation |
+| **Trove (Avari / player)** | **Target:** Legacy Slammers (sealed personal mint; digital slammer stays usable). **Shipped:** minted closed Arcori from preserve/fulfill — do not extend that mint |
 | **Mastery (player×design)** | Circulating progress; **not ownership**. Online match deltas (your flips of that design): **own played** 0/−1, 1/0, 2/+2; **already-mastered not-played** 0/0 (no −1), 1/0, 2/+2; **other** 0/0, 1/+1, 2/+2. Practice skips. See [mastery.md](../01_Active_Plans/mastery.md) |
 | **Mastery Value (player aggregate)** | `MasteryValue = Σ points×(10/selectionWeight)`; `density = Value / N` (`N` = circulating playable catalog count). Label: Fair / Notable / Sought / Coveted / Exquisite / Priceless. Profile wire `mastery.masteryValue` + `mastery.masteryValueLabel`. Replaces Rank/XP. [mastery.md](../01_Active_Plans/mastery.md) |
 
@@ -46,18 +46,20 @@ Product voice: players are **Avari**. Auth / API / account models may still say 
 |-------|------|------------------------|
 | **Avari** | Identity | Every authenticated player account in product copy |
 | **Master** | Competitive title | Mastery Value / Standings (aggregate uses selectionWeight-scaled Mastery Value — see Progression / mastery.md) |
-| **Legacy Owner** | Preservation achievement | Minted closed Arcori in Trove |
+| **Legacy** | Slammer preservation (target) | Physical mint seals a slammer snapshot; slammer stays playable. Shipped title **Legacy Owner** is still the Arcori Trove mint |
 | **Generation Creator** | Historical title | `generation.creator` attributed to a player (not System) |
 
 ## Player ↔ design semantics
 
 ```text
-Circulating (Velora)                 Closed / out of circulation
-────────────────────────────────     ────────────────────────────
-Play + Mastery                       Mint → Avari's Trove (Legacy Owner)
-Live Standings                       Standings inactive; Museum snapshot
-Not owned                            Minted legacy piece
+Arcori (world)                       Slammer (player) — target, not shipped
+──────────────────────────────       ─────────────────────────────────────
+Circulating: play + Mastery          Acquire → Attune → Slammer Mastery
+Closure → Museum + echo gen          Legacy Eligible = Mastered + usage
+Not a physical trophy                Mint seals record; slammer stays usable
 ```
+
+Shipped Arcori preserve still writes a Trove mint and Legacy Owner. That path is frozen as product direction; new mint work is [slammer-legacy.md](../01_Active_Plans/slammer-legacy.md).
 
 - Starter unlocks / pack grants = **play/mastery access**, not Trove mints.
 - `generation.creator`: System for launch content; Player (**Generation Creator**) when a preserved/minted generation attributes a creator.
@@ -67,9 +69,9 @@ Not owned                            Minted legacy piece
 |--------|-------------|------------|--------------------|-------------------------|------------------|-----|
 | **Creation** | `series/creation/` | `assets/images/arcori/000_creation/` | `SER000` | 50 | 100 | Primordial Light / Dark (2 themes × 2 designs); `selectionWeight` 0.01 |
 | **Genesis** | `series/genesis/` | `assets/images/arcori/001_genesis/` | `SER001` | 500 | 1000 | Main launch catalog |
-| **Pioneers** | `series/pioneers/` | `assets/images/arcori/002_pioneers/` | `SER002` | 100 | 200 | **Exists so these designs can mint earlier** than Genesis |
-| **Foundations** | `series/foundations/` | `assets/images/arcori/003_foundations/` | `SER003` | 250 | 500 | Civilization / society themes (40 themes × 4 designs); mints between Pioneers and Genesis |
-| **Civilizations** | `series/civilizations/` | `assets/images/arcori/004_civilizations/` | `SER004` | 300 | 600 | Civic institutions (20 themes, 94 designs); mints between Foundations and Genesis |
+| **Pioneers** | `series/pioneers/` | `assets/images/arcori/002_pioneers/` | `SER002` | 100 | 200 | **Exists so these generations close into the Museum earlier** than Genesis |
+| **Foundations** | `series/foundations/` | `assets/images/arcori/003_foundations/` | `SER003` | 250 | 500 | Civilization / society themes (40 themes × 4 designs); closes between Pioneers and Genesis |
+| **Civilizations** | `series/civilizations/` | `assets/images/arcori/004_civilizations/` | `SER004` | 300 | 600 | Civic institutions (20 themes, 94 designs); closes between Foundations and Genesis |
 
 `SER000` / `SER001` / `SER002` / `SER003` / `SER004` mark **series** in the serial. Generation is a separate `GENnnn` token (and `generation.number` in the design doc / DB). Example: `ANM-TIG-SER001-GEN001-0001`. Art filenames omit GEN (reuse GEN001 webp via `art_basename`). Pioneers is the original ten seed designs; it is not a second full catalog. Creation is excluded from the starter unlock pool (Genesis + Pioneers only).
 
@@ -79,7 +81,7 @@ Not owned                            Minted legacy piece
 |---------|---------|
 | **Velora** | Catalog (+ future world entities); opens **Arcori Detail** |
 | **Arcori Detail** | SSOT; submenu **Standings** + **My Mastery** |
-| **Trove** | Player mint list only |
+| **Trove** | **Target:** Legacy Slammers. **Shipped:** player Arcori mint list |
 | **Museum** | Closed-generation history (world), distinct from Trove |
 
 Transport for Standings / My Mastery: HTTP on screen enter; optional authuser WS invalidation (`standings_changed` / mint events) while Detail is open — not per-flip counter streaming.
