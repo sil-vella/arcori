@@ -8,7 +8,7 @@
 set -euo pipefail
 
 _IOS_RELEASE_PREBUILD_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-XCODE_CLOUD_BUILD_NUMBER_FILE="flutter_base_05/ios/xcode_cloud_build_number.txt"
+XCODE_CLOUD_BUILD_NUMBER_FILE="ios/xcode_cloud_build_number.txt"
 
 # --- Materialize .env from Xcode Cloud secrets --------------------------------
 
@@ -79,8 +79,7 @@ version_string_from_build_number() {
 }
 
 read_ios_runner_build_number() {
-  local root="${REPO_ROOT:-}"
-  local pbxproj="$root/flutter_base_05/ios/Runner.xcodeproj/project.pbxproj"
+  local pbxproj="${FLUTTER_APP_DIR:-}/ios/Runner.xcodeproj/project.pbxproj"
   if [ ! -f "$pbxproj" ]; then
     echo 0
     return 0
@@ -107,9 +106,9 @@ PY
 }
 
 read_xcode_cloud_build_floor() {
-  local root="${REPO_ROOT:-}"
+  local app="${FLUTTER_APP_DIR:-}"
   local floor=0
-  local floor_file="$root/${XCODE_CLOUD_BUILD_NUMBER_FILE}"
+  local floor_file="$app/${XCODE_CLOUD_BUILD_NUMBER_FILE}"
   if [ -f "$floor_file" ]; then
     floor=$(tr -d '[:space:]' < "$floor_file")
     if ! [[ "$floor" =~ ^[0-9]+$ ]]; then
@@ -126,11 +125,11 @@ read_xcode_cloud_build_floor() {
 
 write_xcode_cloud_build_floor() {
   local build_number="$1"
-  local root="${REPO_ROOT:-}"
-  if [ -z "$root" ] || ! [[ "$build_number" =~ ^[0-9]+$ ]]; then
+  local app="${FLUTTER_APP_DIR:-}"
+  if [ -z "$app" ] || ! [[ "$build_number" =~ ^[0-9]+$ ]]; then
     return 1
   fi
-  local floor_file="$root/${XCODE_CLOUD_BUILD_NUMBER_FILE}"
+  local floor_file="$app/${XCODE_CLOUD_BUILD_NUMBER_FILE}"
   mkdir -p "$(dirname "$floor_file")"
   printf '%s\n' "$build_number" > "$floor_file"
 }
@@ -192,14 +191,13 @@ write_app_version_to_env_files() {
 sync_ios_xcode_version() {
   local app_version="${1:-${APP_VERSION:-}}"
   local build_number="${2:-${BUILD_NUMBER:-}}"
-  local root="${REPO_ROOT:-}"
 
   if [ -z "$app_version" ] || [ -z "$build_number" ]; then
     echo "sync_ios_xcode_version: APP_VERSION and BUILD_NUMBER required" >&2
     return 1
   fi
 
-  local pbxproj="$root/flutter_base_05/ios/Runner.xcodeproj/project.pbxproj"
+  local pbxproj="${FLUTTER_APP_DIR:-}/ios/Runner.xcodeproj/project.pbxproj"
   if [ ! -f "$pbxproj" ]; then
     echo "sync_ios_xcode_version: missing $pbxproj" >&2
     return 1
@@ -243,14 +241,13 @@ PY
 sync_pubspec_version() {
   local app_version="${1:-${APP_VERSION:-}}"
   local build_number="${2:-${BUILD_NUMBER:-}}"
-  local root="${REPO_ROOT:-}"
 
-  if [ -z "$app_version" ] || [ -z "$root" ]; then
-    echo "sync_pubspec_version: APP_VERSION / REPO_ROOT required" >&2
+  if [ -z "$app_version" ] || [ -z "${FLUTTER_APP_DIR:-}" ]; then
+    echo "sync_pubspec_version: APP_VERSION / FLUTTER_APP_DIR required" >&2
     return 1
   fi
 
-  local pubspec="$root/flutter_base_05/pubspec.yaml"
+  local pubspec="${FLUTTER_APP_DIR:-}/pubspec.yaml"
   if [ ! -f "$pubspec" ]; then
     echo "sync_pubspec_version: missing $pubspec" >&2
     return 1
@@ -277,8 +274,7 @@ sync_pubspec_version() {
 }
 
 read_pubspec_app_version() {
-  local root="${REPO_ROOT:-}"
-  local pubspec="$root/flutter_base_05/pubspec.yaml"
+  local pubspec="${FLUTTER_APP_DIR:-}/pubspec.yaml"
   if [ ! -f "$pubspec" ]; then
     echo "read_pubspec_app_version: pubspec not found: $pubspec" >&2
     return 1
