@@ -144,6 +144,9 @@ Documentation/02_FlowCharts/charts/**/*.pdf
 *.tiff
 *.tif
 
+# iOS App Store assets. Xcode Cloud only builds what is in git.
+!app_codebase/flutter_base_06/ios/Runner/Assets.xcassets/**/*.png
+
 # --- Kin Lottie media (large; local / Docker CATALOG_KIN_MEDIA_ROOT) ---
 assets/lottie/
 
