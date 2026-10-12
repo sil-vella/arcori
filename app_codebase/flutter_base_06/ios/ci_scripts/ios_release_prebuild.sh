@@ -24,11 +24,14 @@ xcode_cloud_materialize_env() {
 
   if [ -f "$dart_env" ]; then
     echo "📝 Using existing $dart_env"
+  elif [ -n "${ARCORI_DART_DEFINES_PROD_B64:-}" ]; then
+    echo "📝 Decoding ARCORI_DART_DEFINES_PROD_B64 → $dart_env"
+    printf '%s' "$ARCORI_DART_DEFINES_PROD_B64" | base64 -d >"$dart_env"
   elif [ -n "${DUTCH_DART_DEFINES_PROD_B64:-}" ]; then
     echo "📝 Decoding DUTCH_DART_DEFINES_PROD_B64 → $dart_env"
     printf '%s' "$DUTCH_DART_DEFINES_PROD_B64" | base64 -d >"$dart_env"
   else
-    echo "❌ Missing $dart_env and DUTCH_DART_DEFINES_PROD_B64 workflow secret." >&2
+    echo "❌ Missing $dart_env and ARCORI_DART_DEFINES_PROD_B64 workflow secret." >&2
     echo "   App Store Connect → Xcode Cloud → Workflow → Environment" >&2
     echo "   Generate: base64 -i .env.dart.defines.prod | pbcopy" >&2
     return 1
