@@ -61,5 +61,9 @@
 		<false/>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Choose a photo for your profile picture.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Take a photo for your profile picture.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>The photo picker includes microphone access. Arcori uses still photos for your profile picture.</string>
 	</dict>
 </plist>
