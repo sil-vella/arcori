@@ -3,11 +3,11 @@
   "theme": "Borders",
   "series": "Civilizations",
   "themeCode": "BOR",
-  "loreDescription": "The edges where one civilization ends and another begins \u2014 often tense or symbolic.",
+  "loreDescription": "The edges where one civilization ends and another begins — often tense or symbolic.",
   "version": 1,
   "designs": [
     {
-      "internalId": "BOR-AMX-SER004-GEN001-0001",
+      "internalId": "ARC-BOR-AMX-SER004-GEN001-0001",
       "themeCode": "BOR",
       "designCode": "AMX",
       "designFamily": "ASHLINE_MARKERS",
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "BOR-BMX-SER004-GEN001-0002",
+      "internalId": "ARC-BOR-BMX-SER004-GEN001-0002",
       "themeCode": "BOR",
       "designCode": "BMX",
       "designFamily": "BOUNDARY_MARKERS",
@@ -99,7 +99,7 @@
       }
     },
     {
-      "internalId": "BOR-ABS-SER004-GEN001-0003",
+      "internalId": "ARC-BOR-ABS-SER004-GEN001-0003",
       "themeCode": "BOR",
       "designCode": "ABS",
       "designFamily": "ASHLANDS_BOUNDARY_STONE",
@@ -145,7 +145,7 @@
       }
     },
     {
-      "internalId": "BOR-FST-SER004-GEN001-0004",
+      "internalId": "ARC-BOR-FST-SER004-GEN001-0004",
       "themeCode": "BOR",
       "designCode": "FST",
       "designFamily": "FRACTURED_SEAL_TABLET",

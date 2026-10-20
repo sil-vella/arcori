@@ -4,6 +4,7 @@ library;
 import 'dart:async';
 import 'dart:math';
 
+import '../../core/errors/app_error.dart';
 import '../../utils/dev_logger.dart';
 import 'match_models.dart';
 import 'match_service.dart';
@@ -188,7 +189,7 @@ class MatchTurnRunner {
     final snap = _store.getSnapshot(matchId);
     if (snap == null || snap.phase != 'playing') return;
     if (_activeSeatIndex(snap) == seatIndex) {
-      await _applySlam(
+      await _applyTimeoutMiss(
         matchId: matchId,
         actorUserId: actorUserId,
         input: timeoutSlamInput(),
@@ -217,7 +218,7 @@ class MatchTurnRunner {
       final snap = _store.getSnapshot(matchId);
       if (snap == null || snap.phase != 'playing') return;
       if (_activeSeatIndex(snap) == seatIndex) {
-        await _applySlam(
+        await _applyTimeoutMiss(
           matchId: matchId,
           actorUserId: actorUserId,
           input: timeoutSlamInput(source: 'ai_timeout'),
@@ -275,10 +276,26 @@ class MatchTurnRunner {
   }
 
   /// Hold after slam so clients finish sim replay + settle (from outcome.sim).
+  ///
+  /// Only holds when [seatIndex] actually produced the latest slam event —
+  /// otherwise a failed timeout reuses the previous seat's ~5.7s hold and
+  /// freezes the match while later seats also skip slamming.
   Future<void> _holdForAnim(String matchId, int seatIndex) async {
     if (postSlamAnimHold <= Duration.zero) return;
     final snap = _store.getSnapshot(matchId);
-    final fromSim = animHoldFromLastEvent(snap?.lastEvent);
+    final last = snap?.lastEvent;
+    if (last == null ||
+        last['type'] != 'slam' ||
+        last['seatIndex'] != seatIndex) {
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match: turnRunner postSlamAnimHold skip matchId=$matchId '
+          'afterSeat=$seatIndex reason=noSlamForSeat',
+        );
+      }
+      return;
+    }
+    final fromSim = animHoldFromLastEvent(last);
     final hold = fromSim ?? postSlamAnimHold;
     if (hold <= Duration.zero) return;
     if (LOGGING_SWITCH) {
@@ -291,7 +308,52 @@ class MatchTurnRunner {
     await Future<void>.delayed(hold);
   }
 
-  Future<void> _applySlam({
+  /// Timeout / AI-miss must always advance the seat. If charge spend fails
+  /// (empty slammer, FastAPI blip), force a no-charge miss so the runner
+  /// does not stall on the same seat for the rest of the match.
+  Future<bool> _applyTimeoutMiss({
+    required String matchId,
+    required String actorUserId,
+    required Map<String, dynamic> input,
+    required String label,
+  }) async {
+    if (await _applySlam(
+      matchId: matchId,
+      actorUserId: actorUserId,
+      input: input,
+      label: label,
+    )) {
+      return true;
+    }
+    try {
+      _service.clearTurnAnimLock(matchId);
+      await _service.action(
+        matchId: matchId,
+        userId: actorUserId,
+        payload: {
+          'action': 'slam',
+          'input': input,
+        },
+      );
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match: turnRunner slam ${label}_forceMiss matchId=$matchId '
+          'actor=$actorUserId',
+        );
+      }
+      return true;
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog(
+          'match: turnRunner slam ${label}_forceMiss failed matchId=$matchId '
+          'err=${_errDetail(e)}',
+        );
+      }
+      return false;
+    }
+  }
+
+  Future<bool> _applySlam({
     required String matchId,
     required String actorUserId,
     required Map<String, dynamic> input,
@@ -312,13 +374,20 @@ class MatchTurnRunner {
           'actor=$actorUserId speed=${input['speed']}',
         );
       }
+      return true;
     } catch (e) {
       if (LOGGING_SWITCH) {
         customlog(
           'match: turnRunner slam failed matchId=$matchId '
-          'label=$label err=$e',
+          'label=$label err=${_errDetail(e)}',
         );
       }
+      return false;
     }
+  }
+
+  String _errDetail(Object e) {
+    if (e is AppError) return '${e.code}: ${e.message}';
+    return '$e';
   }
 }

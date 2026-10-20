@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "MON-RMX-SER004-GEN001-0001",
+      "internalId": "ARC-MON-RMX-SER004-GEN001-0001",
       "themeCode": "MON",
       "designCode": "RMX",
       "designFamily": "ROOTSTONE_MONUMENT",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "internalId": "MON-PHX-SER004-GEN001-0002",
+      "internalId": "ARC-MON-PHX-SER004-GEN001-0002",
       "themeCode": "MON",
       "designCode": "PHX",
       "designFamily": "PRISMATIC_HONORS",
@@ -97,7 +97,7 @@
       }
     },
     {
-      "internalId": "MON-RMO-SER004-GEN001-0003",
+      "internalId": "ARC-MON-RMO-SER004-GEN001-0003",
       "themeCode": "MON",
       "designCode": "RMO",
       "designFamily": "RADIANT_MEMORY_OBELISK",
@@ -143,7 +143,7 @@
       }
     },
     {
-      "internalId": "MON-MAU-SER004-GEN001-0004",
+      "internalId": "ARC-MON-MAU-SER004-GEN001-0004",
       "themeCode": "MON",
       "designCode": "MAU",
       "designFamily": "MEMORY_ASH_URN",
@@ -189,7 +189,7 @@
       }
     },
     {
-      "internalId": "MON-PTX-SER004-GEN001-0005",
+      "internalId": "ARC-MON-PTX-SER004-GEN001-0005",
       "themeCode": "MON",
       "designCode": "PTX",
       "designFamily": "PILLARSTONE_TABLET",

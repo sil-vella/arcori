@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "MUS-CCS-SER003-GEN001-0001",
+      "internalId": "ARC-MUS-CCS-SER003-GEN001-0001",
       "themeCode": "MUS",
       "designCode": "CCS",
       "designFamily": "CHORUS_OF_CRYSTAL_SKIES",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "MUS-TIC-SER003-GEN001-0002",
+      "internalId": "ARC-MUS-TIC-SER003-GEN001-0002",
       "themeCode": "MUS",
       "designCode": "TIC",
       "designFamily": "TIDESONG_CONSTELLATION",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "MUS-SRP-SER003-GEN001-0003",
+      "internalId": "ARC-MUS-SRP-SER003-GEN001-0003",
       "themeCode": "MUS",
       "designCode": "SRP",
       "designFamily": "SONG_OF_THE_RETURNING_PATHS",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "MUS-TCX-SER003-GEN001-0004",
+      "internalId": "ARC-MUS-TCX-SER003-GEN001-0004",
       "themeCode": "MUS",
       "designCode": "TCX",
       "designFamily": "THE_TIDEKEEPERS_CHORUS",

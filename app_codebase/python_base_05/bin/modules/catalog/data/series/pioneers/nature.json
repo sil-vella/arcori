@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "NAT-CDR-SER002-GEN001-0006",
+      "internalId": "ARC-NAT-CDR-SER002-GEN001-0006",
       "themeCode": "NAT",
       "designCode": "CDR",
       "designFamily": "CEDAR_RIDGE",

@@ -10,30 +10,23 @@ import 'turn_pacing.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
+/// Public feel stats only — sweet spot (hitTarget / powerBracket) is server-only.
 const Map<String, dynamic> defaultGameplayAttributes = {
   'impact': 5,
   'precision': 5,
   'control': 5,
   'recovery': 5,
   'spread': 5,
-  'hitTarget': 'center',
-  'powerBracket': {'min': 0.4, 'max': 0.6},
 };
 
-const double kHitPrefTol = 0.45;
-/// Falloff distance outside the preferred power band (keeps ~90% vs 0.4–0.6 medium-low).
-const double kPowerPrefTol = 0.45;
-
-/// Starter-balanced attrs used for practice until client hydrates freeze.
+/// Starter-balanced public attrs for practice (no preference fit bonus offline).
 const Map<String, Map<String, dynamic>> practiceSlammerAttrs = {
-  'SLM-STR-SER001-0001': {
+  'SLM-SLM-STR-SER001-GEN001-0001': {
     'impact': 5,
     'precision': 3,
     'control': 3,
     'recovery': 5,
     'spread': 5,
-    'hitTarget': 'center',
-    'powerBracket': {'min': 0.55, 'max': 0.85},
   },
 };
 
@@ -63,16 +56,46 @@ const Map<String, Map<String, String>> practiceFaceDefaults = {
 
 /// Practice / stub slammer face art (strike overlay).
 const Map<String, Map<String, String>> practiceSlammerFaceDefaults = {
-  'SLM-STR-SER001-0001': {
+  'SLM-SLM-STR-SER001-GEN001-0001': {
     'imageUrl': 'assets/images/arcori/practice_arcori_002.webp',
     'color': '#C6A15B',
   },
 };
 
+/// Canonicalize to TYPE-THEME-CODE-SERnnn-GENnnn-#### (Kin left as KIN-…).
+String ensureGen001DesignId(String designId) {
+  final raw = designId.trim();
+  if (raw.isEmpty) return raw;
+  final upper = raw.toUpperCase();
+  if (upper.startsWith('KIN-')) return upper;
+
+  // Already typed: ARC-… / SLM-SLM-…
+  if (RegExp(r'^(ARC|SLM)-[A-Z0-9]+-[A-Z0-9]+-SER\d{3}-GEN\d{3}-\d+$')
+      .hasMatch(upper)) {
+    return upper;
+  }
+
+  // Legacy THEME-CODE-SER-GEN-SEQ or THEME-CODE-SER-SEQ
+  final withGen = RegExp(
+    r'^([A-Z0-9]+)-([A-Z0-9]+)-(SER\d{3})(?:-(GEN\d{3}))?-(\d+)$',
+  ).firstMatch(upper);
+  if (withGen == null) return raw;
+  final theme = withGen.group(1)!;
+  final code = withGen.group(2)!;
+  final ser = withGen.group(3)!;
+  final gen = withGen.group(4) ?? 'GEN001';
+  final seq = withGen.group(5)!;
+  final type = theme == 'SLM' ? 'SLM' : 'ARC';
+  if (type == 'SLM') {
+    return 'SLM-SLM-$code-$ser-$gen-$seq';
+  }
+  return 'ARC-$theme-$code-$ser-$gen-$seq';
+}
+
 Map<String, String?> practiceSlammerFaceFor(String? slammerId) {
-  final id = (slammerId ?? '').trim();
+  final id = ensureGen001DesignId(slammerId ?? '');
   final face = practiceSlammerFaceDefaults[id] ??
-      practiceSlammerFaceDefaults['SLM-STR-SER001-0001'];
+      practiceSlammerFaceDefaults['SLM-SLM-STR-SER001-GEN001-0001'];
   if (face == null) {
     return const {'imageUrl': null, 'lottieUrl': null, 'color': '#C6A15B'};
   }
@@ -189,96 +212,6 @@ int _attr(Map<String, dynamic>? attrs, String key) {
   return def;
 }
 
-String _hitTarget(Map<String, dynamic>? attrs) {
-  final raw = attrs?['hitTarget'] ?? defaultGameplayAttributes['hitTarget'];
-  if (raw is String) {
-    final hit = raw.trim().toLowerCase();
-    if (hit == 'center' || hit == 'mid' || hit == 'edge') return hit;
-  }
-  return 'center';
-}
-
-double? _as01(Object? value) {
-  if (value is num) return value.toDouble().clamp(0.0, 1.0);
-  if (value is String) {
-    final parsed = double.tryParse(value.trim());
-    if (parsed != null) return parsed.clamp(0.0, 1.0);
-  }
-  return null;
-}
-
-({double min, double max}) _powerBracket(Map<String, dynamic>? attrs) {
-  final raw =
-      attrs?['powerBracket'] ?? defaultGameplayAttributes['powerBracket'];
-  double? lo;
-  double? hi;
-  if (raw is Map) {
-    lo = _as01(raw['min']);
-    hi = _as01(raw['max']);
-  } else if (raw is List && raw.length >= 2) {
-    lo = _as01(raw[0]);
-    hi = _as01(raw[1]);
-  } else {
-    final center = _as01(raw);
-    if (center != null) {
-      lo = (center - 0.1).clamp(0.0, 1.0);
-      hi = (center + 0.1).clamp(0.0, 1.0);
-    }
-  }
-  if (lo == null || hi == null) return (min: 0.4, max: 0.6);
-  if (hi < lo) {
-    final swap = lo;
-    lo = hi;
-    hi = swap;
-  }
-  return (min: lo, max: hi);
-}
-
-double _preferredRadius(String hitTarget) {
-  switch (hitTarget) {
-    case 'edge':
-      return 1.0;
-    case 'mid':
-      return 0.5;
-    case 'center':
-    default:
-      return 0.0;
-  }
-}
-
-double aimRadiusNorm(double aimX, double aimZ) {
-  final r = sqrt(aimX * aimX + aimZ * aimZ) / kSlamAimHitRadius;
-  return r.clamp(0.0, 1.0);
-}
-
-double powerBandDistance(double power, double minP, double maxP) {
-  if (power < minP) return minP - power;
-  if (power > maxP) return power - maxP;
-  return 0.0;
-}
-
-double preferenceFit({
-  required double aimX,
-  required double aimZ,
-  required double power,
-  required String hitTarget,
-  required double powerMin,
-  required double powerMax,
-}) {
-  final r = aimRadiusNorm(aimX, aimZ);
-  final preferredR = _preferredRadius(hitTarget);
-  final hitMatch = (1.0 - min(1.0, (r - preferredR).abs() / kHitPrefTol))
-      .clamp(0.0, 1.0);
-  final dist = powerBandDistance(power, powerMin, powerMax);
-  final powerMatch =
-      (1.0 - min(1.0, dist / kPowerPrefTol)).clamp(0.0, 1.0);
-  return sqrt(hitMatch * powerMatch).clamp(0.0, 1.0);
-}
-
-double effectivePowerFromFit(double power, double fit) {
-  return (power * (0.55 + 0.70 * fit)).clamp(0.0, 1.0);
-}
-
 int _seedFrom(String matchId, int version, int seatIndex) {
   var h = 0;
   for (final c in matchId.codeUnits) {
@@ -342,8 +275,7 @@ SlamResolveResult resolveSlam({
   final precision = _attr(gameplayAttributes, 'precision');
   final control = _attr(gameplayAttributes, 'control');
   final spread = _attr(gameplayAttributes, 'spread');
-  final hitTarget = _hitTarget(gameplayAttributes);
-  final powerBracket = _powerBracket(gameplayAttributes);
+  // Practice never applies preferenceFit — sweet spot is online Dart only.
 
   final rng = Random(_seedFrom(matchId, version, actorSeatIndex));
   final jitterScale = (11 - precision) / 10.0 * (1.0 - control / 20.0);
@@ -403,15 +335,8 @@ SlamResolveResult resolveSlam({
     );
   }
 
-  final fit = preferenceFit(
-    aimX: aimX,
-    aimZ: aimZ,
-    power: power,
-    hitTarget: hitTarget,
-    powerMin: powerBracket.min,
-    powerMax: powerBracket.max,
-  );
-  final effectivePower = effectivePowerFromFit(power, fit);
+  // No preferenceFit offline — use raw resolve power.
+  final effectivePower = power;
   final impulse = _impulse(dx, dy, speed, effectivePower);
 
   if (LOGGING_SWITCH) {
@@ -419,8 +344,7 @@ SlamResolveResult resolveSlam({
       'slamResolve: physics matchId=$matchId v=$version seat=$actorSeatIndex '
       'power=${power.toStringAsFixed(3)} '
       'effPower=${effectivePower.toStringAsFixed(3)} '
-      'prefFit=${fit.toStringAsFixed(3)} hit=$hitTarget '
-      'bracket=${powerBracket.min.toStringAsFixed(2)}-${powerBracket.max.toStringAsFixed(2)} '
+      'practiceNoPrefFit=true '
       'maxAffect=$maxAffect '
       'aim=(${aimX.toStringAsFixed(4)},${aimZ.toStringAsFixed(4)})',
     );

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LEG-MLH-SER003-GEN001-0001",
+      "internalId": "ARC-LEG-MLH-SER003-GEN001-0001",
       "themeCode": "LEG",
       "designCode": "MLH",
       "designFamily": "MONUMENT_OF_THE_LAST_HAND",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "LEG-WTR-SER003-GEN001-0002",
+      "internalId": "ARC-LEG-WTR-SER003-GEN001-0002",
       "themeCode": "LEG",
       "designCode": "WTR",
       "designFamily": "WHAT_THE_TIDE_REMEMBERED",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "LEG-LLT-SER003-GEN001-0003",
+      "internalId": "ARC-LEG-LLT-SER003-GEN001-0003",
       "themeCode": "LEG",
       "designCode": "LLT",
       "designFamily": "LANTERNS_LEFT_FOR_TOMORROW",
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "LEG-WWK-SER003-GEN001-0004",
+      "internalId": "ARC-LEG-WWK-SER003-GEN001-0004",
       "themeCode": "LEG",
       "designCode": "WWK",
       "designFamily": "WHAT_THE_WINTER_KEEPS",

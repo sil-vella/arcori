@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "ALL-PTL-SER003-GEN001-0001",
+      "internalId": "ARC-ALL-PTL-SER003-GEN001-0001",
       "themeCode": "ALL",
       "designCode": "PTL",
       "designFamily": "PACT_OF_TWO_LANDS",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "ALL-BJG-SER003-GEN001-0002",
+      "internalId": "ARC-ALL-BJG-SER003-GEN001-0002",
       "themeCode": "ALL",
       "designCode": "BJG",
       "designFamily": "BRIDGE_OF_JOINED_GUARDIANS",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "ALL-TSP-SER003-GEN001-0003",
+      "internalId": "ARC-ALL-TSP-SER003-GEN001-0003",
       "themeCode": "ALL",
       "designCode": "TSP",
       "designFamily": "THE_TWO_SHORES_PROMISE",
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "ALL-PGP-SER003-GEN001-0004",
+      "internalId": "ARC-ALL-PGP-SER003-GEN001-0004",
       "themeCode": "ALL",
       "designCode": "PGP",
       "designFamily": "THE_PACT_OF_GROVE_PEAK_AND_SEA",

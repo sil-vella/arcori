@@ -5,7 +5,7 @@ const stubArenaId = 'arena_velora_plaza';
 const stubArcoriId = 'ANM-TIG-SER001-0001';
 const stubAiArcoriId = 'ANM-WTI-SER001-0002';
 const stubGathererArcoriId = 'ANM-FOX-SER001-0003';
-const stubSlammerId = 'SLM-STR-SER001-0001';
+const stubSlammerId = 'SLM-SLM-STR-SER001-GEN001-0001';
 
 /// Quick Start / Invite always use seated-region arena pick.
 /// Special Event uses seated pick when rules say so (or no fixed resolve).

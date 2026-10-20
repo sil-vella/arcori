@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "DEV-VLL-SER003-GEN001-0001",
+      "internalId": "ARC-DEV-VLL-SER003-GEN001-0001",
       "themeCode": "DEV",
       "designCode": "VLL",
       "designFamily": "VIGIL_OF_THE_LAST_LIGHT",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "DEV-KFP-SER003-GEN001-0002",
+      "internalId": "ARC-DEV-KFP-SER003-GEN001-0002",
       "themeCode": "DEV",
       "designCode": "KFP",
       "designFamily": "KEEPER_OF_THE_FADING_PILLAR",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "DEV-GWS-SER003-GEN001-0003",
+      "internalId": "ARC-DEV-GWS-SER003-GEN001-0003",
       "themeCode": "DEV",
       "designCode": "GWS",
       "designFamily": "THE_GUARDIAN_WHO_STAYED",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "DEV-GLL-SER003-GEN001-0004",
+      "internalId": "ARC-DEV-GLL-SER003-GEN001-0004",
       "themeCode": "DEV",
       "designCode": "GLL",
       "designFamily": "GUARDIANS_OF_THE_LASTING_LIGHT",

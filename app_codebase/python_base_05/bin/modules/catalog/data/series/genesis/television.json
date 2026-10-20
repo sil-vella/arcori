@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "TEL-SGD-SER001-GEN001-0001",
+      "internalId": "ARC-TEL-SGD-SER001-GEN001-0001",
       "themeCode": "TEL",
       "designCode": "SGD",
       "designFamily": "SEALED_GATHERING",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "TEL-GRF-SER001-GEN001-0002",
+      "internalId": "ARC-TEL-GRF-SER001-GEN001-0002",
       "themeCode": "TEL",
       "designCode": "GRF",
       "designFamily": "GOLDEN_RUIN",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "TEL-UFC-SER001-GEN001-0003",
+      "internalId": "ARC-TEL-UFC-SER001-GEN001-0003",
       "themeCode": "TEL",
       "designCode": "UFC",
       "designFamily": "UNFINISHED_CASE",
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "TEL-OVR-SER001-GEN001-0004",
+      "internalId": "ARC-TEL-OVR-SER001-GEN001-0004",
       "themeCode": "TEL",
       "designCode": "OVR",
       "designFamily": "OVERNIGHT_RITUALS",
@@ -184,7 +184,7 @@
       }
     },
     {
-      "internalId": "TEL-OHP-SER001-GEN001-0005",
+      "internalId": "ARC-TEL-OHP-SER001-GEN001-0005",
       "themeCode": "TEL",
       "designCode": "OHP",
       "designFamily": "ORDINARY_HAPPINESS",
@@ -226,7 +226,7 @@
       }
     },
     {
-      "internalId": "TEL-PKD-SER001-GEN001-0006",
+      "internalId": "ARC-TEL-PKD-SER001-GEN001-0006",
       "themeCode": "TEL",
       "designCode": "PKD",
       "designFamily": "PACKED_DISAGREEMENT",
@@ -270,7 +270,7 @@
       }
     },
     {
-      "internalId": "TEL-SHK-SER001-GEN001-0007",
+      "internalId": "ARC-TEL-SHK-SER001-GEN001-0007",
       "themeCode": "TEL",
       "designCode": "SHK",
       "designFamily": "SHARED_KITCHEN",
@@ -316,7 +316,7 @@
       }
     },
     {
-      "internalId": "TEL-FDW-SER001-GEN001-0008",
+      "internalId": "ARC-TEL-FDW-SER001-GEN001-0008",
       "themeCode": "TEL",
       "designCode": "FDW",
       "designFamily": "FOLDED_WATCH",
@@ -362,7 +362,7 @@
       }
     },
     {
-      "internalId": "TEL-DWD-SER001-GEN001-0009",
+      "internalId": "ARC-TEL-DWD-SER001-GEN001-0009",
       "themeCode": "TEL",
       "designCode": "DWD",
       "designFamily": "DAWN_WARD",
@@ -404,7 +404,7 @@
       }
     },
     {
-      "internalId": "TEL-RVK-SER001-GEN001-0010",
+      "internalId": "ARC-TEL-RVK-SER001-GEN001-0010",
       "themeCode": "TEL",
       "designCode": "RVK",
       "designFamily": "RIVAL_KEELS",
@@ -448,7 +448,7 @@
       }
     },
     {
-      "internalId": "TEL-SCT-SER001-GEN001-0011",
+      "internalId": "ARC-TEL-SCT-SER001-GEN001-0011",
       "themeCode": "TEL",
       "designCode": "SCT",
       "designFamily": "SIX_CUPS",
@@ -494,7 +494,7 @@
       }
     },
     {
-      "internalId": "TEL-IHR-SER001-GEN001-0012",
+      "internalId": "ARC-TEL-IHR-SER001-GEN001-0012",
       "themeCode": "TEL",
       "designCode": "IHR",
       "designFamily": "INHERITED_RULES",
@@ -538,7 +538,7 @@
       }
     },
     {
-      "internalId": "TEL-EVK-SER001-GEN001-0013",
+      "internalId": "ARC-TEL-EVK-SER001-GEN001-0013",
       "themeCode": "TEL",
       "designCode": "EVK",
       "designFamily": "EVENING_KEEPSAKES",
@@ -584,7 +584,7 @@
       }
     },
     {
-      "internalId": "TEL-CFR-SER001-GEN001-0014",
+      "internalId": "ARC-TEL-CFR-SER001-GEN001-0014",
       "themeCode": "TEL",
       "designCode": "CFR",
       "designFamily": "CLIFF_RESCUE",
@@ -628,7 +628,7 @@
       }
     },
     {
-      "internalId": "TEL-FLA-SER001-GEN001-0015",
+      "internalId": "ARC-TEL-FLA-SER001-GEN001-0015",
       "themeCode": "TEL",
       "designCode": "FLA",
       "designFamily": "FLOODED_ARCHIVE",
@@ -672,7 +672,7 @@
       }
     },
     {
-      "internalId": "TEL-AWD-SER001-GEN001-0016",
+      "internalId": "ARC-TEL-AWD-SER001-GEN001-0016",
       "themeCode": "TEL",
       "designCode": "AWD",
       "designFamily": "ASHEN_WARD",
@@ -718,7 +718,7 @@
       }
     },
     {
-      "internalId": "TEL-IPB-SER001-GEN001-0017",
+      "internalId": "ARC-TEL-IPB-SER001-GEN001-0017",
       "themeCode": "TEL",
       "designCode": "IPB",
       "designFamily": "IMPOSSIBLE_BREAKFAST",
@@ -760,7 +760,7 @@
       }
     },
     {
-      "internalId": "TEL-CVW-SER001-GEN001-0018",
+      "internalId": "ARC-TEL-CVW-SER001-GEN001-0018",
       "themeCode": "TEL",
       "designCode": "CVW",
       "designFamily": "CIVIC_WRECKAGE",
@@ -802,7 +802,7 @@
       }
     },
     {
-      "internalId": "TEL-FVR-SER001-GEN001-0019",
+      "internalId": "ARC-TEL-FVR-SER001-GEN001-0019",
       "themeCode": "TEL",
       "designCode": "FVR",
       "designFamily": "FIVE_RELICS",
@@ -848,7 +848,7 @@
       }
     },
     {
-      "internalId": "TEL-ABC-SER001-GEN001-0020",
+      "internalId": "ARC-TEL-ABC-SER001-GEN001-0020",
       "themeCode": "TEL",
       "designCode": "ABC",
       "designFamily": "AMBER_CAMP",

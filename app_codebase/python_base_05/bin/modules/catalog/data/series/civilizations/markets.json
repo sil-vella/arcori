@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "MKT-FMD-SER004-GEN001-0001",
+      "internalId": "ARC-MKT-FMD-SER004-GEN001-0001",
       "themeCode": "MKT",
       "designCode": "FMD",
       "designFamily": "FROST_MARKET_DAY",
@@ -49,7 +49,7 @@
       }
     },
     {
-      "internalId": "MKT-TTS-SER004-GEN001-0002",
+      "internalId": "ARC-MKT-TTS-SER004-GEN001-0002",
       "themeCode": "MKT",
       "designCode": "TTS",
       "designFamily": "TIDE_TRADE_STALL",
@@ -93,7 +93,7 @@
       }
     },
     {
-      "internalId": "MKT-TMB-SER004-GEN001-0003",
+      "internalId": "ARC-MKT-TMB-SER004-GEN001-0003",
       "themeCode": "MKT",
       "designCode": "TMB",
       "designFamily": "TIDE_MARKET_BALANCE",
@@ -137,7 +137,7 @@
       }
     },
     {
-      "internalId": "MKT-ITS-SER004-GEN001-0004",
+      "internalId": "ARC-MKT-ITS-SER004-GEN001-0004",
       "themeCode": "MKT",
       "designCode": "ITS",
       "designFamily": "IVORY_TRADE_SCALE",

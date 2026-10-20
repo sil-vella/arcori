@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "INN-FIT-SER003-GEN001-0001",
+      "internalId": "ARC-INN-FIT-SER003-GEN001-0001",
       "themeCode": "INN",
       "designCode": "FIT",
       "designFamily": "THE_FIRST_TURNING",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "INN-LTL-SER003-GEN001-0002",
+      "internalId": "ARC-INN-LTL-SER003-GEN001-0002",
       "themeCode": "INN",
       "designCode": "LTL",
       "designFamily": "THE_LANTERN_THAT_LEARNED_THE_TIDE",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "INN-TIW-SER003-GEN001-0003",
+      "internalId": "ARC-INN-TIW-SER003-GEN001-0003",
       "themeCode": "INN",
       "designCode": "TIW",
       "designFamily": "THE_TIDEWHEEL_WORKSHOP",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "INN-BTC-SER003-GEN001-0004",
+      "internalId": "ARC-INN-BTC-SER003-GEN001-0004",
       "themeCode": "INN",
       "designCode": "BTC",
       "designFamily": "THE_BRIDGE_THAT_CHANGED_THE_GROVE",

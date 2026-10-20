@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "STY-FIC-SER003-GEN001-0001",
+      "internalId": "ARC-STY-FIC-SER003-GEN001-0001",
       "themeCode": "STY",
       "designCode": "FIC",
       "designFamily": "FIRESIDE_CHRONICLE",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "STY-SHB-SER003-GEN001-0002",
+      "internalId": "ARC-STY-SHB-SER003-GEN001-0002",
       "themeCode": "STY",
       "designCode": "SHB",
       "designFamily": "SHADOWS_BENEATH_OLD_BOUGHS",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "STY-TTR-SER003-GEN001-0003",
+      "internalId": "ARC-STY-TTR-SER003-GEN001-0003",
       "themeCode": "STY",
       "designCode": "TTR",
       "designFamily": "THE_TALE_THAT_RETURNED_BY_DAWN",
@@ -136,7 +136,7 @@
       }
     },
     {
-      "internalId": "STY-TTB-SER003-GEN001-0004",
+      "internalId": "ARC-STY-TTB-SER003-GEN001-0004",
       "themeCode": "STY",
       "designCode": "TTB",
       "designFamily": "TALES_THAT_BUILT_THE_TOWN",

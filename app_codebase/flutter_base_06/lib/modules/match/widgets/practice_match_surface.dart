@@ -34,8 +34,6 @@ import 'slam_result_modal.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
-const _dartWsId = 'dart';
-
 /// Match surface — Template 002 layout; gesture input on your turn.
 Future<void> showPracticeMatchSurface(BuildContext context, WidgetRef ref) {
   return AppModal.showFullScreen<void>(
@@ -215,28 +213,48 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     final pending = _pendingSlamResultEvent;
     if (pending == null) return;
     final pendingVersion = pending['version'];
-    if (pendingVersion is! int || pendingVersion != stackVersion) return;
-    _flushPendingSlamResultModal();
+    if (pendingVersion is int && pendingVersion == stackVersion) {
+      _flushPendingSlamResultModal();
+      return;
+    }
+    // endMatch replaces lastEvent with match_ended, so the build closure's
+    // version no longer matches the queued slam — still show the card.
+    if (ref.read(matchSnapshotProvider).isEnded) {
+      if (LOGGING_SWITCH) {
+        customlog(
+          'matchSurface: flush pending slam result after end '
+          'pending=$pendingVersion anim=$stackVersion',
+        );
+      }
+      _flushPendingSlamResultModal();
+    }
   }
 
   /// Close this shell even when another modal is on top (post-match / lobby).
   ///
   /// A queued or visible flip/miss card keeps the shell so that card can stay
-  /// the front route until it closes.
-  void _forceCloseShell({required String reason}) {
-    if (_pendingSlamResultEvent != null || SlamResultFront.isHolding) {
+  /// the front route until it closes — unless [force] after post-match exit.
+  void _forceCloseShell({required String reason, bool force = false}) {
+    if (!force &&
+        (_pendingSlamResultEvent != null || SlamResultFront.isHolding)) {
       if (LOGGING_SWITCH) {
         customlog('matchSurface: forceClose skipped reason=$reason');
       }
       return;
     }
-    _pendingSlamResultEvent = null;
+    if (force) {
+      _pendingSlamResultEvent = null;
+      SlamResultFront.cancelPending();
+    } else {
+      _pendingSlamResultEvent = null;
+    }
     if (!mounted) return;
     final route = ModalRoute.of(context);
     if (route == null) return;
     if (LOGGING_SWITCH) {
       customlog(
-        'matchSurface: forceClose reason=$reason current=${route.isCurrent}',
+        'matchSurface: forceClose reason=$reason current=${route.isCurrent}'
+        '${force ? ' force=true' : ''}',
       );
     }
     dismissModalRoute(context);
@@ -329,6 +347,18 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     final active = snap.active?['seatIndex'];
     if (active is! int) return false;
     return _mySeatIndex(snap, userId) == active;
+  }
+
+  /// Seat ring during post-slam anim: keep on the actor while input is locked
+  /// (server already advanced [active.seatIndex] to the next player).
+  int? _highlightSeatIndex(MatchSnapshotState snap) {
+    final active = snap.active?['seatIndex'];
+    final activeSeat = active is int ? active : null;
+    if (!activeInputLocked(snap.active)) return activeSeat;
+    final event = snap.lastEvent;
+    if (event == null || event['type'] != 'slam') return activeSeat;
+    final seat = event['seatIndex'];
+    return seat is int ? seat : activeSeat;
   }
 
   int _scoreFor(MatchSnapshotState snap, String userId) {
@@ -647,21 +677,10 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     );
   }
 
-  Future<void> _endOnline() async {
+  Future<void> _exitOnline() async {
     final snap = ref.read(matchSnapshotProvider);
-    final matchId = snap.matchId;
-    if (matchId == null || matchId.isEmpty || snap.isEnded) return;
-    final userId = ref.read(authProvider).userId?.trim();
-    if (userId == null || userId.isEmpty || snap.callerUserId != userId) {
-      return;
-    }
-    final manager = ref.read(wsConnectionManagerProvider.notifier);
-    await manager.send(
-      _dartWsId,
-      type: 'event',
-      channel: 'match/end',
-      payload: {'matchId': matchId},
-    );
+    if (snap.matchId == null || snap.matchId!.isEmpty || snap.isEnded) return;
+    await ref.read(matchFlowProvider.notifier).exitInMatch();
   }
 
   void _precacheTableArt(MatchSnapshotState snap) {
@@ -712,8 +731,8 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
       primary = 'Waiting for other player…';
     }
 
-    final showEnd = !local && !snap.isEnded;
-    if (primary == null && !showEnd) return null;
+    final showExit = !local && !snap.isEnded;
+    if (primary == null && !showExit) return null;
 
     // Stack + IgnorePointer so hints never steal aim/touch from the playfield.
     final hud = context.appHud;
@@ -724,7 +743,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
             Positioned(
               top: AppSpacing.sm,
               left: AppSpacing.md,
-              right: AppSpacing.md,
+              right: showExit ? 112 : AppSpacing.md,
               child: IgnorePointer(
                 child: Center(
                   child: AppHudGlassChip(
@@ -754,17 +773,14 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
                 ),
               ),
             ),
-          if (showEnd)
+          if (showExit)
             Positioned(
-              left: 0,
-              right: 0,
-              bottom: 96,
-              child: Center(
-                child: OutlinedButton(
-                  style: context.appButtons.tertiary.outlined,
-                  onPressed: _endOnline,
-                  child: const Text('End match'),
-                ),
+              top: AppSpacing.sm,
+              right: AppSpacing.md,
+              child: OutlinedButton(
+                style: context.appButtons.tertiary.outlined,
+                onPressed: _exitOnline,
+                child: const Text('Exit match'),
               ),
             ),
         ],
@@ -797,6 +813,16 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
       if (next.isEnded && prev?.isEnded != true && context.mounted) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
+          // endMatch wiped the slam lastEvent — flush queued miss/flip now
+          // so SlamResultFront.pending cannot stick after the anim restarts.
+          if (_pendingSlamResultEvent != null) {
+            if (LOGGING_SWITCH) {
+              customlog(
+                'matchSurface: flush pending slam result on match end',
+              );
+            }
+            _flushPendingSlamResultModal();
+          }
           if (_pendingSlamResultEvent != null || SlamResultFront.isHolding) {
             if (LOGGING_SWITCH) {
               customlog(
@@ -873,6 +899,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
       final me = _humanActorUserId(next);
       final actorIsMe = me != null && me.isNotEmpty && actorId == me;
       // Local strike still in flight (negative token + chrome rest hidden).
+      // Covers fly-in through return-home — do not remount/skip mid-anim.
       final localStrikeInFlight = _activeStrikeToken != null &&
           _activeStrikeToken! < 0 &&
           _strikeAnimUserId != null;
@@ -883,18 +910,23 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
         return;
       }
 
-      // Local already started a pre-authority strike — remount should skip the
-      // strike beat. Do not re-hide chrome if local already released rest.
-      if (actorIsMe && (localStrikeInFlight || _skipNextAuthorityStrike)) {
+      // Local predictive strike already running: keep its negative token and
+      // do not set skipStrike. Swapping token→version remounts the stack and
+      // skipStrike jumps past size/position fly-in (feels cut short / skipped).
+      if (actorIsMe && localStrikeInFlight) {
+        if (mounted) {
+          setState(() {
+            _lastSlamStrikeArmedVersion = version;
+          });
+        }
+      } else if (actorIsMe && _skipNextAuthorityStrike) {
+        // Fly-in already finished (or look-less slam); adopt authority token
+        // and skip a second strike beat on the next stack instance.
         if (mounted) {
           setState(() {
             _lastSlamStrikeArmedVersion = version;
             _skipNextAuthorityStrike = true;
             _activeStrikeToken = version;
-            // Bump hide claim so the disposed stack's abort cannot clear us.
-            if (localStrikeInFlight) {
-              _claimSlammerHide(me);
-            }
           });
         }
       } else {
@@ -990,6 +1022,18 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     });
 
     ref.listen(matchFlowProvider, (prev, next) {
+      // After Done, flow returns to idle/selectingType — tear down any shell
+      // left up because a last-turn miss never attached its result card.
+      if (next.phase == MatchFlowPhase.idle ||
+          next.phase == MatchFlowPhase.selectingType) {
+        if (prev?.phase == MatchFlowPhase.postMatch ||
+            prev?.phase == MatchFlowPhase.inMatch ||
+            _pendingSlamResultEvent != null ||
+            SlamResultFront.isHolding) {
+          _forceCloseShell(reason: 'flow=${next.phase.name}', force: true);
+        }
+        return;
+      }
       if (prev?.phase != MatchFlowPhase.inMatch) return;
       if (next.phase == MatchFlowPhase.inMatch) return;
       if (_pendingSlamResultEvent != null || SlamResultFront.isHolding) {
@@ -1016,9 +1060,15 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     final stackImpulse =
         simReady ? null : (authorityImpulse ?? _predictiveImpulse);
 
-    final stackKey = ValueKey(
-      'stack-${snap.matchId}-s${(lastEvent != null && lastEvent['type'] == 'slam') ? lastEvent['version'] : 0}',
-    );
+    // Keep one stack instance through local fly-in→return. Keying on authority
+    // version remounts mid-strike and skipStrike drops the size/position beat.
+    final localStackLocked = _activeStrikeToken != null &&
+        _activeStrikeToken! < 0 &&
+        _strikeAnimUserId != null;
+    final stackSlamTag = localStackLocked
+        ? 'L$_activeStrikeToken'
+        : 's${(lastEvent != null && lastEvent['type'] == 'slam') ? lastEvent['version'] : 0}';
+    final stackKey = ValueKey('stack-${snap.matchId}-$stackSlamTag');
 
     final mySeatIdx = _mySeatIndex(snap, userId);
     MatchSeatView? selfSeat;
@@ -1033,7 +1083,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     opponents.sort((a, b) => a.seatIndex.compareTo(b.seatIndex));
     selfSeat ??= snap.seats.isNotEmpty ? snap.seats.first : null;
 
-    final activeSeat = snap.active?['seatIndex'];
+    final highlightSeat = _highlightSeatIndex(snap);
 
     return SlamInputCapture(
       key: ValueKey(
@@ -1226,7 +1276,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
                 username: _displayNameFor(seat: selfSeat, isSelf: true),
                 avatarUrl: _avatarUrlFor(seat: selfSeat, isSelf: true),
                 isSelf: true,
-                isActive: activeSeat == selfSeat.seatIndex,
+                isActive: highlightSeat == selfSeat.seatIndex,
                 avatarKey: _selfAvatarKey,
                 slammerKey: _selfSlammerKey,
                 slammerLook: _slammerLookFor(selfSeat),
@@ -1241,7 +1291,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
             MatchPlayerChrome(
               username: _displayNameFor(seat: opponents[i], isSelf: false),
               avatarUrl: _avatarUrlFor(seat: opponents[i], isSelf: false),
-              isActive: activeSeat == opponents[i].seatIndex,
+              isActive: highlightSeat == opponents[i].seatIndex,
               avatarKey: i < _oppAvatarKeys.length ? _oppAvatarKeys[i] : null,
               slammerKey:
                   i < _oppSlammerKeys.length ? _oppSlammerKeys[i] : null,

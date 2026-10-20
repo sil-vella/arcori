@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "OCN-CRF-SER001-GEN001-0001",
+      "internalId": "ARC-OCN-CRF-SER001-GEN001-0001",
       "themeCode": "OCN",
       "designCode": "CRF",
       "designFamily": "CORAL_KINGDOM",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "OCN-ANG-SER001-GEN001-0002",
+      "internalId": "ARC-OCN-ANG-SER001-GEN001-0002",
       "themeCode": "OCN",
       "designCode": "ANG",
       "designFamily": "ANGLER_DEPTH",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "OCN-SQD-SER001-GEN001-0003",
+      "internalId": "ARC-OCN-SQD-SER001-GEN001-0003",
       "themeCode": "OCN",
       "designCode": "SQD",
       "designFamily": "GIANT_SQUID",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "OCN-KRK-SER001-GEN001-0004",
+      "internalId": "ARC-OCN-KRK-SER001-GEN001-0004",
       "themeCode": "OCN",
       "designCode": "KRK",
       "designFamily": "KRAKEN",
@@ -182,7 +182,7 @@
       }
     },
     {
-      "internalId": "OCN-PIR-SER001-GEN001-0005",
+      "internalId": "ARC-OCN-PIR-SER001-GEN001-0005",
       "themeCode": "OCN",
       "designCode": "PIR",
       "designFamily": "PIRATE_CAPTAIN",
@@ -226,7 +226,7 @@
       }
     },
     {
-      "internalId": "OCN-BCC-SER001-GEN001-0006",
+      "internalId": "ARC-OCN-BCC-SER001-GEN001-0006",
       "themeCode": "OCN",
       "designCode": "BCC",
       "designFamily": "BLACK_CORSAIR",
@@ -270,7 +270,7 @@
       }
     },
     {
-      "internalId": "OCN-GAL-SER001-GEN001-0007",
+      "internalId": "ARC-OCN-GAL-SER001-GEN001-0007",
       "themeCode": "OCN",
       "designCode": "GAL",
       "designFamily": "TREASURE_GALLEON",
@@ -314,7 +314,7 @@
       }
     },
     {
-      "internalId": "OCN-SUB-SER001-GEN001-0008",
+      "internalId": "ARC-OCN-SUB-SER001-GEN001-0008",
       "themeCode": "OCN",
       "designCode": "SUB",
       "designFamily": "DEEP_SUBMARINE",
@@ -358,7 +358,7 @@
       }
     },
     {
-      "internalId": "OCN-TRE-SER001-GEN001-0009",
+      "internalId": "ARC-OCN-TRE-SER001-GEN001-0009",
       "themeCode": "OCN",
       "designCode": "TRE",
       "designFamily": "SUNKEN_TREASURE",
@@ -402,7 +402,7 @@
       }
     },
     {
-      "internalId": "OCN-DOL-SER001-GEN001-0010",
+      "internalId": "ARC-OCN-DOL-SER001-GEN001-0010",
       "themeCode": "OCN",
       "designCode": "DOL",
       "designFamily": "OCEAN_DOLPHIN",
@@ -446,7 +446,7 @@
       }
     },
     {
-      "internalId": "OCN-WHL-SER001-GEN001-0011",
+      "internalId": "ARC-OCN-WHL-SER001-GEN001-0011",
       "themeCode": "OCN",
       "designCode": "WHL",
       "designFamily": "BLUE_WHALE",
@@ -490,7 +490,7 @@
       }
     },
     {
-      "internalId": "OCN-SEA-SER001-GEN001-0012",
+      "internalId": "ARC-OCN-SEA-SER001-GEN001-0012",
       "themeCode": "OCN",
       "designCode": "SEA",
       "designFamily": "SEA_TURTLE",

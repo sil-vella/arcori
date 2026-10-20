@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "TRN-GOP-SER003-GEN001-0001",
+      "internalId": "ARC-TRN-GOP-SER003-GEN001-0001",
       "themeCode": "TRN",
       "designCode": "GOP",
       "designFamily": "THE_GOLDEN_PASSING",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "TRN-KFL-SER003-GEN001-0002",
+      "internalId": "ARC-TRN-KFL-SER003-GEN001-0002",
       "themeCode": "TRN",
       "designCode": "KFL",
       "designFamily": "KEEPING_OF_THE_FIRST_LANTERNS",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "TRN-ALP-SER003-GEN001-0003",
+      "internalId": "ARC-TRN-ALP-SER003-GEN001-0003",
       "themeCode": "TRN",
       "designCode": "ALP",
       "designFamily": "THE_ASH_LANTERN_PROCESSION",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "TRN-FOF-SER003-GEN001-0004",
+      "internalId": "ARC-TRN-FOF-SER003-GEN001-0004",
       "themeCode": "TRN",
       "designCode": "FOF",
       "designFamily": "FOLLOWING_THE_OLD_FOOTPRINTS",

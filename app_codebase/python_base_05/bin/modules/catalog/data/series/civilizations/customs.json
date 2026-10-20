@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CUS-LGW-SER004-GEN001-0001",
+      "internalId": "ARC-CUS-LGW-SER004-GEN001-0001",
       "themeCode": "CUS",
       "designCode": "LGW",
       "designFamily": "LANTERNS_ON_GREY_WATER",
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "CUS-WRX-SER004-GEN001-0002",
+      "internalId": "ARC-CUS-WRX-SER004-GEN001-0002",
       "themeCode": "CUS",
       "designCode": "WRX",
       "designFamily": "WINTER_RITUALS",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "internalId": "CUS-WHT-SER004-GEN001-0003",
+      "internalId": "ARC-CUS-WHT-SER004-GEN001-0003",
       "themeCode": "CUS",
       "designCode": "WHT",
       "designFamily": "WINTER_HEARTH_TEAPOT",
@@ -137,7 +137,7 @@
       }
     },
     {
-      "internalId": "CUS-EBX-SER004-GEN001-0004",
+      "internalId": "ARC-CUS-EBX-SER004-GEN001-0004",
       "themeCode": "CUS",
       "designCode": "EBX",
       "designFamily": "EMBERLESS_BRAZIER",
@@ -183,7 +183,7 @@
       }
     },
     {
-      "internalId": "CUS-FMB-SER004-GEN001-0005",
+      "internalId": "ARC-CUS-FMB-SER004-GEN001-0005",
       "themeCode": "CUS",
       "designCode": "FMB",
       "designFamily": "FADED_MOURNING_BANNER",
@@ -229,7 +229,7 @@
       }
     },
     {
-      "internalId": "CUS-HSX-SER004-GEN001-0006",
+      "internalId": "ARC-CUS-HSX-SER004-GEN001-0006",
       "themeCode": "CUS",
       "designCode": "HSX",
       "designFamily": "HARMONY_SEAL",

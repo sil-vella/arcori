@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "KNO-AML-SER003-GEN001-0001",
+      "internalId": "ARC-KNO-AML-SER003-GEN001-0001",
       "themeCode": "KNO",
       "designCode": "AML",
       "designFamily": "ARCHIVE_OF_MANY_LIGHTS",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "KNO-OLL-SER003-GEN001-0002",
+      "internalId": "ARC-KNO-OLL-SER003-GEN001-0002",
       "themeCode": "KNO",
       "designCode": "OLL",
       "designFamily": "OBSERVATORY_OF_LIVING_LIGHT",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "KNO-LFA-SER003-GEN001-0003",
+      "internalId": "ARC-KNO-LFA-SER003-GEN001-0003",
       "themeCode": "KNO",
       "designCode": "LFA",
       "designFamily": "THE_LIBRARY_IN_FALLING_ASH",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "KNO-ABA-SER003-GEN001-0004",
+      "internalId": "ARC-KNO-ABA-SER003-GEN001-0004",
       "themeCode": "KNO",
       "designCode": "ABA",
       "designFamily": "THE_ARCHIVE_BENEATH_THE_ASH",

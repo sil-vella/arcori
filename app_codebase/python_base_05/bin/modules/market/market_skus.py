@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 # Genesis Rim — Market Slammers section v1.
-MARKET_SLAMMER_IDS: tuple[str, ...] = ("SLM-RIM-SER001-GEN001-0011",)
+MARKET_SLAMMER_IDS: tuple[str, ...] = ("SLM-SLM-RIM-SER001-GEN001-0011",)
 
 DEFAULT_SHOP_PRICE_GOLD_ARCORI = 4
 DEFAULT_RECHARGE_PRICE_GOLD_ARCORI = 4

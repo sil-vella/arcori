@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "WAY-IMB-SER003-GEN001-0001",
+      "internalId": "ARC-WAY-IMB-SER003-GEN001-0001",
       "themeCode": "WAY",
       "designCode": "IMB",
       "designFamily": "THE_IMPOSSIBLE_BEACON",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "WAY-PFL-SER003-GEN001-0002",
+      "internalId": "ARC-WAY-PFL-SER003-GEN001-0002",
       "themeCode": "WAY",
       "designCode": "PFL",
       "designFamily": "PATH_OF_FIVE_LIGHTS",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "WAY-LAV-SER003-GEN001-0003",
+      "internalId": "ARC-WAY-LAV-SER003-GEN001-0003",
       "themeCode": "WAY",
       "designCode": "LAV",
       "designFamily": "LANTERNS_ACROSS_THE_VANISHED_ROAD",
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "WAY-LRX-SER003-GEN001-0004",
+      "internalId": "ARC-WAY-LRX-SER003-GEN001-0004",
       "themeCode": "WAY",
       "designCode": "LRX",
       "designFamily": "THE_LANTERN_ROAD",

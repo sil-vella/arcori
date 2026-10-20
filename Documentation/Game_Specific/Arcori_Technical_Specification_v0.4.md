@@ -29,7 +29,7 @@ Fields: internalId, themeCode, designCode, designFamily, design, inspiration, re
 
 | Layer | Role |
 |-------|------|
-| **Arcori Catalog** | Runtime SSOT = Postgres `catalog_designs` (seed / admin import / Legacy echo). Theme JSON under `modules/catalog/data/series/` is **authoring only** — import via wfrun `import_catalog_designs.py`. Art remains under `/catalog-media` (`:ro`). `internalId` shape: `{THEME}-{CODE}-SERnnn-GENnnn-####` (`SER` = series, `GEN` = generation). See [catalog-db-gen-serial.md](../01_Active_Plans/catalog-db-gen-serial.md) |
+| **Arcori Catalog** | Runtime SSOT = Postgres `catalog_designs` (seed / admin import / Legacy echo). Theme JSON under `modules/catalog/data/series/` is **authoring only** — import via wfrun `import_catalog_designs.py`. Art remains under `/catalog-media` (`:ro`). `internalId` shape: `{TYPE}-{THEME}-{CODE}-SERnnn-GENnnn-####` (`TYPE` = `ARC`\|`SLM`, `SER` = series, `GEN` = generation; Kin stays `KIN-{token}-SERnnn-GENnnn-####`). Art basename strips TYPE+GEN. See [design-id-gen-unify.md](../01_Active_Plans/design-id-gen-unify.md) |
 | **Region Catalog** | Politics and geography — five launch regions in `01_regions.json` |
 | **Standings** | Live per-design community state for the **active** generation (mastery ranks, generation fill, leader window) |
 | **Museum** | World historical snapshots of **closed** generations (factual archive) |
@@ -73,7 +73,7 @@ Shipped Arcori preserve still writes a Trove mint and Legacy Owner. That path is
 | **Foundations** | `series/foundations/` | `assets/images/arcori/003_foundations/` | `SER003` | 250 | 500 | Civilization / society themes (40 themes × 4 designs); closes between Pioneers and Genesis |
 | **Civilizations** | `series/civilizations/` | `assets/images/arcori/004_civilizations/` | `SER004` | 300 | 600 | Civic institutions (20 themes, 94 designs); closes between Foundations and Genesis |
 
-`SER000` / `SER001` / `SER002` / `SER003` / `SER004` mark **series** in the serial. Generation is a separate `GENnnn` token (and `generation.number` in the design doc / DB). Example: `ANM-TIG-SER001-GEN001-0001`. Art filenames omit GEN (reuse GEN001 webp via `art_basename`). Pioneers is the original ten seed designs; it is not a second full catalog. Creation is excluded from the starter unlock pool (Genesis + Pioneers only).
+`SER000` / `SER001` / `SER002` / `SER003` / `SER004` mark **series** in the serial. Generation is a separate `GENnnn` token (and `generation.number` in the design doc / DB). Examples: `ARC-ANM-TIG-SER001-GEN001-0001`, `SLM-SLM-STR-SER001-GEN001-0001`. Art filenames omit TYPE+GEN (reuse `ANM-TIG-SER001-0001.webp` via `art_basename`). Pioneers is the original ten seed designs; it is not a second full catalog. Creation is excluded from the starter unlock pool (Genesis + Pioneers only).
 
 ## UI surfaces (client)
 

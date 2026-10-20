@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SPC-DSR-SER002-GEN001-0008",
+      "internalId": "ARC-SPC-DSR-SER002-GEN001-0008",
       "themeCode": "SPC",
       "designCode": "DSR",
       "designFamily": "DUST_ROVER",

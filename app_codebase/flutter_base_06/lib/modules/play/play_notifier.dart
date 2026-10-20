@@ -9,7 +9,8 @@ import '../../core/ws/ws_connection_manager.dart';
 import '../../utils/dev_logger.dart';
 import '../avari/avari_api.dart';
 import '../avari/avari_notifier.dart';
-import '../match/input/slam_resolver.dart' show practiceHumanArcoriId;
+import '../match/input/slam_resolver.dart'
+    show ensureGen001DesignId, practiceHumanArcoriId;
 import '../match/input/turn_pacing.dart';
 import '../match/state/match_notifier.dart';
 import '../match/state/match_snapshot_state.dart';
@@ -43,6 +44,11 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
   /// Per-actor flips of each design this match (post-match stats + mastery).
   /// Outer key = actorUserId; inner = designId → flip count.
   final Map<String, Map<String, int>> _flipsByActorDesign = {};
+  /// Per-actor slammer mastery gained (Dart: flips × (0.55 + 0.45 × fit)).
+  /// Never stores preferenceFit / hitTarget — only the mastery number.
+  final Map<String, Map<String, double>> _slammerMasteryByActor = {};
+  /// Per-actor Arcori flipped with each slammer (for usage counters).
+  final Map<String, Map<String, int>> _slammerFlipsByActor = {};
   int? _lastFlipEventVersion;
 
   @override
@@ -55,6 +61,8 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
 
   void _resetMasteryTracking() {
     _flipsByActorDesign.clear();
+    _slammerMasteryByActor.clear();
+    _slammerFlipsByActor.clear();
     _lastFlipEventVersion = null;
   }
 
@@ -76,6 +84,36 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       }
     }
     final local = _flipsByActorDesign['local'];
+    if (local != null && local.isNotEmpty) {
+      return Map<String, int>.from(local);
+    }
+    return const {};
+  }
+
+  Map<String, double> _localActorSlammerMastery(String? authUserId) {
+    final me = (authUserId ?? '').trim();
+    if (me.isNotEmpty) {
+      final mine = _slammerMasteryByActor[me];
+      if (mine != null && mine.isNotEmpty) {
+        return Map<String, double>.from(mine);
+      }
+    }
+    final local = _slammerMasteryByActor['local'];
+    if (local != null && local.isNotEmpty) {
+      return Map<String, double>.from(local);
+    }
+    return const {};
+  }
+
+  Map<String, int> _localActorSlammerFlips(String? authUserId) {
+    final me = (authUserId ?? '').trim();
+    if (me.isNotEmpty) {
+      final mine = _slammerFlipsByActor[me];
+      if (mine != null && mine.isNotEmpty) {
+        return Map<String, int>.from(mine);
+      }
+    }
+    final local = _slammerFlipsByActor['local'];
     if (local != null && local.isNotEmpty) {
       return Map<String, int>.from(local);
     }
@@ -107,6 +145,41 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
             .where((e) => e.isNotEmpty)
             .toList()
         : const <String>[];
+
+    final slammerId = event['slammerId']?.toString().trim() ?? '';
+    if (slammerId.isNotEmpty && outcome is Map) {
+      final rawGain = outcome['slammerMasteryAdded'];
+      double gain = 0;
+      if (rawGain is num) {
+        gain = rawGain.toDouble();
+      } else if (rawGain is String) {
+        gain = double.tryParse(rawGain.trim()) ?? 0;
+      }
+      if (gain > 0) {
+        final masteryBucket = _slammerMasteryByActor.putIfAbsent(
+          actor,
+          () => <String, double>{},
+        );
+        masteryBucket[slammerId] = (masteryBucket[slammerId] ?? 0) + gain;
+        if (LOGGING_SWITCH) {
+          customlog(
+            'play: slammerMastery accumulate actor=$actor '
+            'slammer=$slammerId gain=${gain.toStringAsFixed(3)} '
+            'total=${masteryBucket[slammerId]!.toStringAsFixed(3)} '
+            'flips=${flippedIds.length}',
+          );
+        }
+      }
+      if (flippedIds.isNotEmpty) {
+        final flipBucket = _slammerFlipsByActor.putIfAbsent(
+          actor,
+          () => <String, int>{},
+        );
+        flipBucket[slammerId] =
+            (flipBucket[slammerId] ?? 0) + flippedIds.length;
+      }
+    }
+
     if (flippedIds.isEmpty) {
       _lastFlipEventVersion = v;
       return;
@@ -247,6 +320,43 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       return 'Rematch needs another player.';
     }
     return null;
+  }
+
+  /// Mid-match exit: leave the room for this client only; do not call
+  /// `match/end`. Remaining players keep the match; empty room may end it.
+  Future<void> exitInMatch() async {
+    if (state.phase != MatchFlowPhase.inMatch) return;
+    _runId++;
+    _finalizeStarted = false;
+    final snap = ref.read(matchSnapshotProvider);
+    final matchId = snap.matchId;
+    final local = matchId != null && matchId.startsWith('local_practice_');
+    final online = !local && matchId != null && matchId.isNotEmpty;
+
+    if (LOGGING_SWITCH) {
+      customlog(
+        'play: exitInMatch matchId=${matchId ?? '-'} online=$online',
+      );
+    }
+
+    ref.read(matchSnapshotProvider.notifier).clear(ignoreMatchId: matchId);
+    ref.read(lobbySnapshotProvider.notifier).clear();
+    state = const MatchFlowState();
+
+    if (!online) return;
+    try {
+      final manager = ref.read(wsConnectionManagerProvider.notifier);
+      await manager.send(
+        _dartWsId,
+        type: 'event',
+        channel: 'match/leave',
+        payload: {'matchId': matchId},
+      );
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('play: exitInMatch leave error: $e');
+      }
+    }
   }
 
   /// Leave room, clear snapshots, return to idle.
@@ -516,7 +626,9 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
   bool practiceFastStub = false;
 
   String get _equippedSlammerId {
-    final id = ref.read(gameControlsProvider).equippedSlammerId.trim();
+    final id = ensureGen001DesignId(
+      ref.read(gameControlsProvider).equippedSlammerId.trim(),
+    );
     return id.isNotEmpty ? id : stubSlammerId;
   }
 
@@ -1117,6 +1229,8 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
 
     final me = ref.read(authProvider).userId?.trim() ?? '';
     final flipsByDesign = _localActorFlipsByDesign(me);
+    final slammerMasteryByDesign = _localActorSlammerMastery(me);
+    final slammerFlipsByDesign = _localActorSlammerFlips(me);
     // Actor flip sum — not seat.score (score used to credit piece owners).
     var flips = flipsByDesign.values.fold<int>(0, (a, b) => a + b);
     String? playedDesignId;
@@ -1155,6 +1269,13 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
                 ? state.selectedEventId!.trim()
                 : stubSpecialEventId)
             : null);
+    if (LOGGING_SWITCH) {
+      customlog(
+        'play: finalize send matchId=$matchId '
+        'slammerMasteryByDesign=$slammerMasteryByDesign '
+        'slammerFlipsByDesign=$slammerFlipsByDesign',
+      );
+    }
     final outcome = await api.finalizeMatch(
       accessToken: token,
       matchId: matchId,
@@ -1165,6 +1286,8 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
       playedDesignId: playedDesignId,
       eventId: eventId,
       flipsByDesign: flipsByDesign,
+      slammerMasteryByDesign: slammerMasteryByDesign,
+      slammerFlipsByDesign: slammerFlipsByDesign,
       result: snap.result,
     );
 
@@ -1188,7 +1311,8 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
           'play: finalize ok applied=${data.applied} '
           'reason=${data.reason} netFrags=${data.goldFragmentsDelta} '
           'flips=${data.flipsRewarded} fee=${data.feeFragments} '
-          'mastery=${data.masteryChanges.length}',
+          'mastery=${data.masteryChanges.length} '
+          'slammerMastery=${data.slammerMasteryChanges.length}',
         );
       }
       return;

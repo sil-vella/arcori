@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "HOS-HEW-SER003-GEN001-0001",
+      "internalId": "ARC-HOS-HEW-SER003-GEN001-0001",
       "themeCode": "HOS",
       "designCode": "HEW",
       "designFamily": "HEARTH_FOR_THE_WANDERER",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "internalId": "HOS-DTW-SER003-GEN001-0002",
+      "internalId": "ARC-HOS-DTW-SER003-GEN001-0002",
       "themeCode": "HOS",
       "designCode": "DTW",
       "designFamily": "THE_DOOR_THROUGH_THE_WHITEOUT",
@@ -90,7 +90,7 @@
       }
     },
     {
-      "internalId": "HOS-LEP-SER003-GEN001-0003",
+      "internalId": "ARC-HOS-LEP-SER003-GEN001-0003",
       "themeCode": "HOS",
       "designCode": "LEP",
       "designFamily": "THE_LANTERN_AT_THE_EMPTY_PIER",
@@ -134,7 +134,7 @@
       }
     },
     {
-      "internalId": "HOS-LLS-SER003-GEN001-0004",
+      "internalId": "ARC-HOS-LLS-SER003-GEN001-0004",
       "themeCode": "HOS",
       "designCode": "LLS",
       "designFamily": "A_LIGHT_LEFT_FOR_STRANGERS",

@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "DYN-WTX-SER004-GEN001-0001",
+      "internalId": "ARC-DYN-WTX-SER004-GEN001-0001",
       "themeCode": "DYN",
       "designCode": "WTX",
       "designFamily": "WINTER_THRONE",
@@ -49,7 +49,7 @@
       }
     },
     {
-      "internalId": "DYN-HRX-SER004-GEN001-0002",
+      "internalId": "ARC-DYN-HRX-SER004-GEN001-0002",
       "themeCode": "DYN",
       "designCode": "HRX",
       "designFamily": "HEIRLOOM_REGALIA",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "internalId": "DYN-SDC-SER004-GEN001-0003",
+      "internalId": "ARC-DYN-SDC-SER004-GEN001-0003",
       "themeCode": "DYN",
       "designCode": "SDC",
       "designFamily": "SUNLEAF_DYNASTY_CROWN",
@@ -141,7 +141,7 @@
       }
     },
     {
-      "internalId": "DYN-SSR-SER004-GEN001-0004",
+      "internalId": "ARC-DYN-SSR-SER004-GEN001-0004",
       "themeCode": "DYN",
       "designCode": "SSR",
       "designFamily": "SOOTED_SIGNET_RING",
@@ -187,7 +187,7 @@
       }
     },
     {
-      "internalId": "DYN-STX-SER004-GEN001-0005",
+      "internalId": "ARC-DYN-STX-SER004-GEN001-0005",
       "themeCode": "DYN",
       "designCode": "STX",
       "designFamily": "SUNLEAF_TIARA",

@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "ACA-PCX-SER004-GEN001-0001",
+      "internalId": "ARC-ACA-PCX-SER004-GEN001-0001",
       "themeCode": "ACA",
       "designCode": "PCX",
       "designFamily": "PRISM_COLLEGIUM",
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "ACA-SSL-SER004-GEN001-0002",
+      "internalId": "ARC-ACA-SSL-SER004-GEN001-0002",
       "themeCode": "ACA",
       "designCode": "SSL",
       "designFamily": "SCHOLAR_S_LIGHT",
@@ -99,7 +99,7 @@
       }
     },
     {
-      "internalId": "ACA-CAA-SER004-GEN001-0003",
+      "internalId": "ARC-ACA-CAA-SER004-GEN001-0003",
       "themeCode": "ACA",
       "designCode": "CAA",
       "designFamily": "CELESTIAL_ACADEMY_ASTROLABE",
@@ -145,7 +145,7 @@
       }
     },
     {
-      "internalId": "ACA-CAO-SER004-GEN001-0004",
+      "internalId": "ARC-ACA-CAO-SER004-GEN001-0004",
       "themeCode": "ACA",
       "designCode": "CAO",
       "designFamily": "CRYSTAL_ACADEMY_ORB",
@@ -191,7 +191,7 @@
       }
     },
     {
-      "internalId": "ACA-COX-SER004-GEN001-0005",
+      "internalId": "ARC-ACA-COX-SER004-GEN001-0005",
       "themeCode": "ACA",
       "designCode": "COX",
       "designFamily": "CELESTIAL_ORRERY",

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SHE-STR-SER003-GEN001-0001",
+      "internalId": "ARC-SHE-STR-SER003-GEN001-0001",
       "themeCode": "SHE",
       "designCode": "STR",
       "designFamily": "STORMWARD_REFUGE",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "SHE-HLL-SER003-GEN001-0002",
+      "internalId": "ARC-SHE-HLL-SER003-GEN001-0002",
       "themeCode": "SHE",
       "designCode": "HLL",
       "designFamily": "HARBOR_OF_THE_LAST_LANTERN",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "SHE-USG-SER003-GEN001-0003",
+      "internalId": "ARC-SHE-USG-SER003-GEN001-0003",
       "themeCode": "SHE",
       "designCode": "USG",
       "designFamily": "UNDER_THE_SLEEPING_GIANT",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "SHE-RAT-SER003-GEN001-0004",
+      "internalId": "ARC-SHE-RAT-SER003-GEN001-0004",
       "themeCode": "SHE",
       "designCode": "RAT",
       "designFamily": "REFUGE_ABOVE_THE_TIDE",

@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "GLD-TGX-SER004-GEN001-0001",
+      "internalId": "ARC-GLD-TGX-SER004-GEN001-0001",
       "themeCode": "GLD",
       "designCode": "TGX",
       "designFamily": "TIMBER_GUILDS",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "internalId": "GLD-GTX-SER004-GEN001-0002",
+      "internalId": "ARC-GLD-GTX-SER004-GEN001-0002",
       "themeCode": "GLD",
       "designCode": "GTX",
       "designFamily": "GUILD_TABLE",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "internalId": "GLD-GEX-SER004-GEN001-0003",
+      "internalId": "ARC-GLD-GEX-SER004-GEN001-0003",
       "themeCode": "GLD",
       "designCode": "GEX",
       "designFamily": "GUILDHALL_EMBLEM",
@@ -139,7 +139,7 @@
       }
     },
     {
-      "internalId": "GLD-ALX-SER004-GEN001-0004",
+      "internalId": "ARC-GLD-ALX-SER004-GEN001-0004",
       "themeCode": "GLD",
       "designCode": "ALX",
       "designFamily": "ASHMARKED_LEDGER",

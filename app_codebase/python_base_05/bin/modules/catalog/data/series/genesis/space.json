@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SPC-SAT-SER001-GEN001-0001",
+      "internalId": "ARC-SPC-SAT-SER001-GEN001-0001",
       "themeCode": "SPC",
       "designCode": "SAT",
       "designFamily": "SATURN_EXPLORER",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "SPC-MAR-SER001-GEN001-0002",
+      "internalId": "ARC-SPC-MAR-SER001-GEN001-0002",
       "themeCode": "SPC",
       "designCode": "MAR",
       "designFamily": "MARS_PIONEER",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "SPC-NEP-SER001-GEN001-0003",
+      "internalId": "ARC-SPC-NEP-SER001-GEN001-0003",
       "themeCode": "SPC",
       "designCode": "NEP",
       "designFamily": "NEPTUNE_VOYAGER",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "SPC-LUN-SER001-GEN001-0004",
+      "internalId": "ARC-SPC-LUN-SER001-GEN001-0004",
       "themeCode": "SPC",
       "designCode": "LUN",
       "designFamily": "LUNAR_PIONEER",
@@ -182,7 +182,7 @@
       }
     },
     {
-      "internalId": "SPC-COS-SER001-GEN001-0005",
+      "internalId": "ARC-SPC-COS-SER001-GEN001-0005",
       "themeCode": "SPC",
       "designCode": "COS",
       "designFamily": "COSMIC_WALKER",
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "SPC-STA-SER001-GEN001-0006",
+      "internalId": "ARC-SPC-STA-SER001-GEN001-0006",
       "themeCode": "SPC",
       "designCode": "STA",
       "designFamily": "STAR_CAPTAIN",
@@ -274,7 +274,7 @@
       }
     },
     {
-      "internalId": "SPC-CRU-SER001-GEN001-0007",
+      "internalId": "ARC-SPC-CRU-SER001-GEN001-0007",
       "themeCode": "SPC",
       "designCode": "CRU",
       "designFamily": "STAR_CRUISER",
@@ -320,7 +320,7 @@
       }
     },
     {
-      "internalId": "SPC-FRG-SER001-GEN001-0008",
+      "internalId": "ARC-SPC-FRG-SER001-GEN001-0008",
       "themeCode": "SPC",
       "designCode": "FRG",
       "designFamily": "BATTLE_FRIGATE",
@@ -366,7 +366,7 @@
       }
     },
     {
-      "internalId": "SPC-EXP-SER001-GEN001-0009",
+      "internalId": "ARC-SPC-EXP-SER001-GEN001-0009",
       "themeCode": "SPC",
       "designCode": "EXP",
       "designFamily": "DEEP_EXPLORER",
@@ -410,7 +410,7 @@
       }
     },
     {
-      "internalId": "SPC-ALN-SER001-GEN001-0010",
+      "internalId": "ARC-SPC-ALN-SER001-GEN001-0010",
       "themeCode": "SPC",
       "designCode": "ALN",
       "designFamily": "NEBULA_VISITOR",
@@ -456,7 +456,7 @@
       }
     },
     {
-      "internalId": "SPC-GRY-SER001-GEN001-0011",
+      "internalId": "ARC-SPC-GRY-SER001-GEN001-0011",
       "themeCode": "SPC",
       "designCode": "GRY",
       "designFamily": "GREY_VISITOR",
@@ -502,7 +502,7 @@
       }
     },
     {
-      "internalId": "SPC-XEN-SER001-GEN001-0012",
+      "internalId": "ARC-SPC-XEN-SER001-GEN001-0012",
       "themeCode": "SPC",
       "designCode": "XEN",
       "designFamily": "XENO_OVERLORD",
@@ -548,7 +548,7 @@
       }
     },
     {
-      "internalId": "SPC-BHO-SER001-GEN001-0013",
+      "internalId": "ARC-SPC-BHO-SER001-GEN001-0013",
       "themeCode": "SPC",
       "designCode": "BHO",
       "designFamily": "EVENT_HORIZON",
@@ -594,7 +594,7 @@
       }
     },
     {
-      "internalId": "SPC-QSR-SER001-GEN001-0014",
+      "internalId": "ARC-SPC-QSR-SER001-GEN001-0014",
       "themeCode": "SPC",
       "designCode": "QSR",
       "designFamily": "QUASAR_CORE",
@@ -640,7 +640,7 @@
       }
     },
     {
-      "internalId": "SPC-MIL-SER001-GEN001-0015",
+      "internalId": "ARC-SPC-MIL-SER001-GEN001-0015",
       "themeCode": "SPC",
       "designCode": "MIL",
       "designFamily": "MILKY_SPIRAL",
@@ -686,7 +686,7 @@
       }
     },
     {
-      "internalId": "SPC-AND-SER001-GEN001-0016",
+      "internalId": "ARC-SPC-AND-SER001-GEN001-0016",
       "themeCode": "SPC",
       "designCode": "AND",
       "designFamily": "ANDROMEDA",
@@ -732,7 +732,7 @@
       }
     },
     {
-      "internalId": "SPC-COM-SER001-GEN001-0017",
+      "internalId": "ARC-SPC-COM-SER001-GEN001-0017",
       "themeCode": "SPC",
       "designCode": "COM",
       "designFamily": "COMET_RUNNER",
@@ -776,7 +776,7 @@
       }
     },
     {
-      "internalId": "SPC-MET-SER001-GEN001-0018",
+      "internalId": "ARC-SPC-MET-SER001-GEN001-0018",
       "themeCode": "SPC",
       "designCode": "MET",
       "designFamily": "METEOR_STORM",
@@ -818,7 +818,7 @@
       }
     },
     {
-      "internalId": "SPC-AST-SER001-GEN001-0019",
+      "internalId": "ARC-SPC-AST-SER001-GEN001-0019",
       "themeCode": "SPC",
       "designCode": "AST",
       "designFamily": "ASTEROID_MINER",
@@ -862,7 +862,7 @@
       }
     },
     {
-      "internalId": "SPC-SOL-SER001-GEN001-0020",
+      "internalId": "ARC-SPC-SOL-SER001-GEN001-0020",
       "themeCode": "SPC",
       "designCode": "SOL",
       "designFamily": "SOLAR_FLARE",

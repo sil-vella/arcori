@@ -241,6 +241,11 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
     if (_shouldStrike) {
       _slammerPhase = SlammerArenaPhase.flyIn;
     } else if (widget.skipStrike || _struckTokens.contains(token)) {
+      // Never jump to scatter while a fly-in is still playing — that cuts the
+      // size/position beat short when authority arrives mid-strike.
+      if (_awaitingStrike && _slammerPhase == SlammerArenaPhase.flyIn) {
+        return;
+      }
       _slammerPhase = SlammerArenaPhase.scatter;
       _slammerOffset = _impactOffsetPx();
       _slammerQuat = _Quat.faceUp();
@@ -249,6 +254,10 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
   }
 
   void _beginSlamMotion({bool forceSim = false}) {
+    // Authority sim/impulse can arrive mid fly-in; finish the strike first.
+    if (_awaitingStrike && _slammerPhase == SlammerArenaPhase.flyIn) {
+      return;
+    }
     if (_shouldStrike) {
       final token = widget.strikeToken!;
       if (_awaitingStrike && _activeStrikeToken == token) return;

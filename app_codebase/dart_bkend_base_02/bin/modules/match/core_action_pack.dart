@@ -153,6 +153,8 @@ class CoreActionPack implements MatchActionPack {
         'outcome': {
           'flippedPieceIds': resolved.flippedPieceIds,
           'impulse': resolved.impulse,
+          // Mastery gain only (never preferenceFit / hitTarget / powerBracket).
+          'slammerMasteryAdded': resolved.slammerMasteryAdded,
           if (resolved.sim != null) 'sim': resolved.sim,
         },
         'version': snap.version + 1,

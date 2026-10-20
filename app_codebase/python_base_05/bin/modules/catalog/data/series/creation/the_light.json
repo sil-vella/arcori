@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LGT-TLT-SER000-GEN001-0001",
+      "internalId": "ARC-LGT-TLT-SER000-GEN001-0001",
       "themeCode": "LGT",
       "designCode": "TLT",
       "designFamily": "THE_LIGHT",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "LGT-IGW-SER000-GEN001-0002",
+      "internalId": "ARC-LGT-IGW-SER000-GEN001-0002",
       "themeCode": "LGT",
       "designCode": "IGW",
       "designFamily": "IVORY_GATEWALKER",

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "NAT-FOR-SER001-GEN001-0001",
+      "internalId": "ARC-NAT-FOR-SER001-GEN001-0001",
       "themeCode": "NAT",
       "designCode": "FOR",
       "designFamily": "ANCIENT_FOREST",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "NAT-OAK-SER001-GEN001-0002",
+      "internalId": "ARC-NAT-OAK-SER001-GEN001-0002",
       "themeCode": "NAT",
       "designCode": "OAK",
       "designFamily": "GREAT_OAK",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "NAT-MTN-SER001-GEN001-0003",
+      "internalId": "ARC-NAT-MTN-SER001-GEN001-0003",
       "themeCode": "NAT",
       "designCode": "MTN",
       "designFamily": "SNOW_PEAK",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "NAT-VOL-SER001-GEN001-0004",
+      "internalId": "ARC-NAT-VOL-SER001-GEN001-0004",
       "themeCode": "NAT",
       "designCode": "VOL",
       "designFamily": "VOLCANO_CORE",
@@ -184,7 +184,7 @@
       }
     },
     {
-      "internalId": "NAT-RIV-SER001-GEN001-0005",
+      "internalId": "ARC-NAT-RIV-SER001-GEN001-0005",
       "themeCode": "NAT",
       "designCode": "RIV",
       "designFamily": "CRYSTAL_RIVER",
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "NAT-WAT-SER001-GEN001-0006",
+      "internalId": "ARC-NAT-WAT-SER001-GEN001-0006",
       "themeCode": "NAT",
       "designCode": "WAT",
       "designFamily": "WATERFALL",
@@ -272,7 +272,7 @@
       }
     },
     {
-      "internalId": "NAT-ROS-SER001-GEN001-0007",
+      "internalId": "ARC-NAT-ROS-SER001-GEN001-0007",
       "themeCode": "NAT",
       "designCode": "ROS",
       "designFamily": "ROSE_BLOOM",
@@ -318,7 +318,7 @@
       }
     },
     {
-      "internalId": "NAT-LOT-SER001-GEN001-0008",
+      "internalId": "ARC-NAT-LOT-SER001-GEN001-0008",
       "themeCode": "NAT",
       "designCode": "LOT",
       "designFamily": "LOTUS",
@@ -362,7 +362,7 @@
       }
     },
     {
-      "internalId": "NAT-STM-SER001-GEN001-0009",
+      "internalId": "ARC-NAT-STM-SER001-GEN001-0009",
       "themeCode": "NAT",
       "designCode": "STM",
       "designFamily": "THUNDERSTORM",
@@ -408,7 +408,7 @@
       }
     },
     {
-      "internalId": "NAT-BLZ-SER001-GEN001-0010",
+      "internalId": "ARC-NAT-BLZ-SER001-GEN001-0010",
       "themeCode": "NAT",
       "designCode": "BLZ",
       "designFamily": "BLIZZARD",
@@ -450,7 +450,7 @@
       }
     },
     {
-      "internalId": "NAT-AUR-SER001-GEN001-0011",
+      "internalId": "ARC-NAT-AUR-SER001-GEN001-0011",
       "themeCode": "NAT",
       "designCode": "AUR",
       "designFamily": "AURORA",
@@ -496,7 +496,7 @@
       }
     },
     {
-      "internalId": "NAT-DSK-SER001-GEN001-0012",
+      "internalId": "ARC-NAT-DSK-SER001-GEN001-0012",
       "themeCode": "NAT",
       "designCode": "DSK",
       "designFamily": "SUNSET_DUNES",

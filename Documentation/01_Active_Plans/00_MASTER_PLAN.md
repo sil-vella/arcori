@@ -2,11 +2,11 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-10-09
+**Last Updated:** 2026-10-15
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
-**Next app build:** Post-match P0 leftovers (celebration/mastery anims + achievements env) — [core-match-loop.md](core-match-loop.md). Daily Cache claim shipped — [daily-goals.md](daily-goals.md). Progression feel backlog: special-match Arcori select + mastery medallion visuals. **Direction (2026-10-09):** personal Legacy / physical mint moves to slammers; Arcori stay world history — [slammer-legacy.md](slammer-legacy.md).
+**Next app build:** Post-match P0 leftovers (celebration/mastery anims + achievements env) — [core-match-loop.md](core-match-loop.md). Daily Cache claim shipped — [daily-goals.md](daily-goals.md). Progression feel backlog: special-match Arcori select + mastery medallion visuals. **In progress (2026-10-15):** Unify Arcori/Slammer ids to always include `GENnnn` — [design-id-gen-unify.md](design-id-gen-unify.md).
 
 **Narrative:** [03_CASE_STUDY.md](03_CASE_STUDY.md) — full game implementation case study (design → matchmaking; template infra out of scope).
 
@@ -67,6 +67,7 @@ Done:
 
 Open (ordered):
 
+- [x] **Design id GEN unify** (short→`GENnnn` writes; merge duplicate slammers) — [design-id-gen-unify.md](design-id-gen-unify.md)
 - [ ] **UI visual refactor** (gallery-first reliquary; theme tokens + hubs + match HUD) — [ui-visual-refactor.md](ui-visual-refactor.md)
 - [ ] **Achievements SSOT** (code landed; env apply `016` + smoke + optional auth hydrate) — [achievements.md](achievements.md)
 - [x] **Daily Goals** (JSON catalog, miss-continue, Daily Cache +2 fragments claim, media/`post_task`) — [daily-goals.md](daily-goals.md)
@@ -88,7 +89,7 @@ Open (ordered):
 - [ ] **Special-match Arcori select** (player picks Arcori for hard-pick / special matches; QS/Invite stay auto) — [special-match-arcori-select.md](special-match-arcori-select.md)
 - [ ] **Mastery medallion visuals** (design stays; per-player medallion tier from mastery) — [mastery-medallion-visuals.md](mastery-medallion-visuals.md)
 - [ ] **Kin creation** (wizard + Genesis claim live; production Lottie / idle anims open) — [kin-creation.md](kin-creation.md)
-- [ ] **Slammer Legacy** (personal physical mint; Arcori stay Mastery → Generation → Closure → Museum) — [slammer-legacy.md](slammer-legacy.md)
+- [x] **Slammer Legacy** (sweet-spot mastery; Arcori close→Velora; preserve/mint on slammers; Museum/Trove SLM-only) — [slammer-legacy.md](slammer-legacy.md)
 - [x] Home sink Trove • PLAY • Market (`hub_sink`); first-time / returning startup still open
 - [ ] My Mastery tab (Trove screen holds mints + closed gens; circulating Arcori on profile)
 - [x] Slammer charge spend + Market Rim (buy 4GA/20; top-up 4GA/+100; −1/slam) — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
@@ -140,9 +141,10 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | [practice-match-v1.md](practice-match-v1.md) | Superseded routing | Loadout + local practice; Dart packs dormant for practice |
 | [core-match-loop.md](core-match-loop.md) | In Progress | Spine live; P0–P2 remaining gaps tracked |
 | [legacy-preserve.md](legacy-preserve.md) | In Progress (Arcori world closure) | Shipped preserve/checkout is world-gen history; personal physical mint moves to slammers |
-| [slammer-legacy.md](slammer-legacy.md) | Spec / direction locked | Acquire → Attune → Slammer Mastery → Legacy → mint; digital slammer stays usable |
+| [slammer-legacy.md](slammer-legacy.md) | Shipped (core) | Sweet-spot mastery → preserve on slammers; Arcori close→Velora; Museum/Trove SLM-only |
 | [museum-browse.md](museum-browse.md) | Completed | World Museum from `museum_generations`; profile Museum→Trove |
 | [catalog-db-gen-serial.md](catalog-db-gen-serial.md) | Completed | GEN in serial; catalog_designs DB SSOT; wfrun import; Lottie art_basename |
+| [design-id-gen-unify.md](design-id-gen-unify.md) | Shipped (core) | Force GEN form on writes; alias reads; merge short player_slammers |
 | [arcori-packs.md](arcori-packs.md) | Spec / backlog | Gold Arcori packs → runtime roll of circulating designs @ +5 mastery |
 | [active-window-arcori-play-selection.md](active-window-arcori-play-selection.md) | Completed (v1 SE) | Preservation Chase SE: human hard pick from open windows; AI from live global open-window roster |
 | [special-match-arcori-select.md](special-match-arcori-select.md) | Spec / backlog | Player chooses Arcori for special / hard-pick matches; QS/Invite stay weighted auto |

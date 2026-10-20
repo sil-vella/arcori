@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "NAV-KMC-SER003-GEN001-0001",
+      "internalId": "ARC-NAV-KMC-SER003-GEN001-0001",
       "themeCode": "NAV",
       "designCode": "KMC",
       "designFamily": "KEEPER_OF_THE_MOON_CHARTS",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "NAV-BBF-SER003-GEN001-0002",
+      "internalId": "ARC-NAV-BBF-SER003-GEN001-0002",
       "themeCode": "NAV",
       "designCode": "BBF",
       "designFamily": "BELL_BEYOND_THE_FOG",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "NAV-KEM-SER003-GEN001-0003",
+      "internalId": "ARC-NAV-KEM-SER003-GEN001-0003",
       "themeCode": "NAV",
       "designCode": "KEM",
       "designFamily": "KEEPER_OF_THE_MOON_CHARTS",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "NAV-CLT-SER003-GEN001-0004",
+      "internalId": "ARC-NAV-CLT-SER003-GEN001-0004",
       "themeCode": "NAV",
       "designCode": "CLT",
       "designFamily": "CHARTS_OF_THE_LIVING_TIDE",

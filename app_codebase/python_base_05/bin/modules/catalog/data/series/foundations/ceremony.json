@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CER-RFL-SER003-GEN001-0001",
+      "internalId": "ARC-CER-RFL-SER003-GEN001-0001",
       "themeCode": "CER",
       "designCode": "RFL",
       "designFamily": "RITE_OF_THE_FIRST_LIGHT",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "CER-PFF-SER003-GEN001-0002",
+      "internalId": "ARC-CER-PFF-SER003-GEN001-0002",
       "themeCode": "CER",
       "designCode": "PFF",
       "designFamily": "PROCESSION_OF_FIVE_FLAMES",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "CER-VBF-SER003-GEN001-0003",
+      "internalId": "ARC-CER-VBF-SER003-GEN001-0003",
       "themeCode": "CER",
       "designCode": "VBF",
       "designFamily": "THE_VOW_BENEATH_FIVE_PILLARS",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "CER-JPX-SER003-GEN001-0004",
+      "internalId": "ARC-CER-JPX-SER003-GEN001-0004",
       "themeCode": "CER",
       "designCode": "JPX",
       "designFamily": "THE_JOINING_OF_THE_PILLARS",

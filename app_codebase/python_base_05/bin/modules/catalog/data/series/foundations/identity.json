@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "IDN-CHS-SER003-GEN001-0001",
+      "internalId": "ARC-IDN-CHS-SER003-GEN001-0001",
       "themeCode": "IDN",
       "designCode": "CHS",
       "designFamily": "THE_CHOSEN_SELF",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "IDN-SWF-SER003-GEN001-0002",
+      "internalId": "ARC-IDN-SWF-SER003-GEN001-0002",
       "themeCode": "IDN",
       "designCode": "SWF",
       "designFamily": "THE_SELF_WOVEN_FREELY",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "IDN-MFH-SER003-GEN001-0003",
+      "internalId": "ARC-IDN-MFH-SER003-GEN001-0003",
       "themeCode": "IDN",
       "designCode": "MFH",
       "designFamily": "MASKS_OF_THE_FIVE_HARBORS",
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "IDN-PWL-SER003-GEN001-0004",
+      "internalId": "ARC-IDN-PWL-SER003-GEN001-0004",
       "themeCode": "IDN",
       "designCode": "PWL",
       "designFamily": "THE_PEOPLE_OF_THE_WAITING_LIGHTS",

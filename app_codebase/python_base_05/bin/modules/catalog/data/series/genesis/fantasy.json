@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "FAN-CDR-SER001-GEN001-0001",
+      "internalId": "ARC-FAN-CDR-SER001-GEN001-0001",
       "themeCode": "FAN",
       "designCode": "CDR",
       "designFamily": "CRIMSON_DRAGON",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "FAN-FDR-SER001-GEN001-0002",
+      "internalId": "ARC-FAN-FDR-SER001-GEN001-0002",
       "themeCode": "FAN",
       "designCode": "FDR",
       "designFamily": "FROST_DRAGON",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "FAN-EDR-SER001-GEN001-0003",
+      "internalId": "ARC-FAN-EDR-SER001-GEN001-0003",
       "themeCode": "FAN",
       "designCode": "EDR",
       "designFamily": "EMERALD_DRAGON",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "FAN-SDR-SER001-GEN001-0004",
+      "internalId": "ARC-FAN-SDR-SER001-GEN001-0004",
       "themeCode": "FAN",
       "designCode": "SDR",
       "designFamily": "SHADOW_DRAGON",
@@ -186,7 +186,7 @@
       }
     },
     {
-      "internalId": "FAN-ARC-SER001-GEN001-0005",
+      "internalId": "ARC-FAN-ARC-SER001-GEN001-0005",
       "themeCode": "FAN",
       "designCode": "ARC",
       "designFamily": "ARCANE_MAGE",
@@ -232,7 +232,7 @@
       }
     },
     {
-      "internalId": "FAN-FMA-SER001-GEN001-0006",
+      "internalId": "ARC-FAN-FMA-SER001-GEN001-0006",
       "themeCode": "FAN",
       "designCode": "FMA",
       "designFamily": "FIRE_MAGE",
@@ -278,7 +278,7 @@
       }
     },
     {
-      "internalId": "FAN-IMA-SER001-GEN001-0007",
+      "internalId": "ARC-FAN-IMA-SER001-GEN001-0007",
       "themeCode": "FAN",
       "designCode": "IMA",
       "designFamily": "ICE_MAGE",
@@ -320,7 +320,7 @@
       }
     },
     {
-      "internalId": "FAN-STW-SER001-GEN001-0008",
+      "internalId": "ARC-FAN-STW-SER001-GEN001-0008",
       "themeCode": "FAN",
       "designCode": "STW",
       "designFamily": "STAR_WIZARD",
@@ -366,7 +366,7 @@
       }
     },
     {
-      "internalId": "FAN-FRR-SER001-GEN001-0009",
+      "internalId": "ARC-FAN-FRR-SER001-GEN001-0009",
       "themeCode": "FAN",
       "designCode": "FRR",
       "designFamily": "FOREST_RANGER",
@@ -410,7 +410,7 @@
       }
     },
     {
-      "internalId": "FAN-MEL-SER001-GEN001-0010",
+      "internalId": "ARC-FAN-MEL-SER001-GEN001-0010",
       "themeCode": "FAN",
       "designCode": "MEL",
       "designFamily": "MOON_ELF",
@@ -454,7 +454,7 @@
       }
     },
     {
-      "internalId": "FAN-HEL-SER001-GEN001-0011",
+      "internalId": "ARC-FAN-HEL-SER001-GEN001-0011",
       "themeCode": "FAN",
       "designCode": "HEL",
       "designFamily": "HIGH_ELF",
@@ -500,7 +500,7 @@
       }
     },
     {
-      "internalId": "FAN-SEL-SER001-GEN001-0012",
+      "internalId": "ARC-FAN-SEL-SER001-GEN001-0012",
       "themeCode": "FAN",
       "designCode": "SEL",
       "designFamily": "SHADOW_ELF",
@@ -546,7 +546,7 @@
       }
     },
     {
-      "internalId": "FAN-OWL-SER001-GEN001-0013",
+      "internalId": "ARC-FAN-OWL-SER001-GEN001-0013",
       "themeCode": "FAN",
       "designCode": "OWL",
       "designFamily": "ORC_WARLORD",
@@ -590,7 +590,7 @@
       }
     },
     {
-      "internalId": "FAN-OBR-SER001-GEN001-0014",
+      "internalId": "ARC-FAN-OBR-SER001-GEN001-0014",
       "themeCode": "FAN",
       "designCode": "OBR",
       "designFamily": "ORC_BERSERKER",
@@ -634,7 +634,7 @@
       }
     },
     {
-      "internalId": "FAN-OSH-SER001-GEN001-0015",
+      "internalId": "ARC-FAN-OSH-SER001-GEN001-0015",
       "themeCode": "FAN",
       "designCode": "OSH",
       "designFamily": "ORC_SHAMAN",
@@ -678,7 +678,7 @@
       }
     },
     {
-      "internalId": "FAN-MBL-SER001-GEN001-0016",
+      "internalId": "ARC-FAN-MBL-SER001-GEN001-0016",
       "themeCode": "FAN",
       "designCode": "MBL",
       "designFamily": "MOUNTAIN_BLACKSMITH",
@@ -722,7 +722,7 @@
       }
     },
     {
-      "internalId": "FAN-DGU-SER001-GEN001-0017",
+      "internalId": "ARC-FAN-DGU-SER001-GEN001-0017",
       "themeCode": "FAN",
       "designCode": "DGU",
       "designFamily": "DWARF_GUARDIAN",
@@ -768,7 +768,7 @@
       }
     },
     {
-      "internalId": "FAN-RFO-SER001-GEN001-0018",
+      "internalId": "ARC-FAN-RFO-SER001-GEN001-0018",
       "themeCode": "FAN",
       "designCode": "RFO",
       "designFamily": "RUNE_FORGER",
@@ -812,7 +812,7 @@
       }
     },
     {
-      "internalId": "FAN-MFA-SER001-GEN001-0019",
+      "internalId": "ARC-FAN-MFA-SER001-GEN001-0019",
       "themeCode": "FAN",
       "designCode": "MFA",
       "designFamily": "MOON_FAIRY",
@@ -856,7 +856,7 @@
       }
     },
     {
-      "internalId": "FAN-PTR-SER001-GEN001-0020",
+      "internalId": "ARC-FAN-PTR-SER001-GEN001-0020",
       "themeCode": "FAN",
       "designCode": "PTR",
       "designFamily": "PIXIE_TRICKSTER",
@@ -898,7 +898,7 @@
       }
     },
     {
-      "internalId": "FAN-SFA-SER001-GEN001-0021",
+      "internalId": "ARC-FAN-SFA-SER001-GEN001-0021",
       "themeCode": "FAN",
       "designCode": "SFA",
       "designFamily": "SUN_FAIRY",
@@ -944,7 +944,7 @@
       }
     },
     {
-      "internalId": "FAN-GOB-SER001-GEN001-0022",
+      "internalId": "ARC-FAN-GOB-SER001-GEN001-0022",
       "themeCode": "FAN",
       "designCode": "GOB",
       "designFamily": "CAVE_GOBLIN",
@@ -986,7 +986,7 @@
       }
     },
     {
-      "internalId": "FAN-GTH-SER001-GEN001-0023",
+      "internalId": "ARC-FAN-GTH-SER001-GEN001-0023",
       "themeCode": "FAN",
       "designCode": "GTH",
       "designFamily": "GOBLIN_THIEF",
@@ -1028,7 +1028,7 @@
       }
     },
     {
-      "internalId": "FAN-GTK-SER001-GEN001-0024",
+      "internalId": "ARC-FAN-GTK-SER001-GEN001-0024",
       "themeCode": "FAN",
       "designCode": "GTK",
       "designFamily": "GOBLIN_TINKERER",
@@ -1070,7 +1070,7 @@
       }
     },
     {
-      "internalId": "FAN-UNI-SER001-GEN001-0025",
+      "internalId": "ARC-FAN-UNI-SER001-GEN001-0025",
       "themeCode": "FAN",
       "designCode": "UNI",
       "designFamily": "SILVER_UNICORN",
@@ -1116,7 +1116,7 @@
       }
     },
     {
-      "internalId": "FAN-PHX-SER001-GEN001-0026",
+      "internalId": "ARC-FAN-PHX-SER001-GEN001-0026",
       "themeCode": "FAN",
       "designCode": "PHX",
       "designFamily": "PHOENIX",
@@ -1162,7 +1162,7 @@
       }
     },
     {
-      "internalId": "FAN-GPH-SER001-GEN001-0027",
+      "internalId": "ARC-FAN-GPH-SER001-GEN001-0027",
       "themeCode": "FAN",
       "designCode": "GPH",
       "designFamily": "GRIFFIN",
@@ -1208,7 +1208,7 @@
       }
     },
     {
-      "internalId": "FAN-BAS-SER001-GEN001-0028",
+      "internalId": "ARC-FAN-BAS-SER001-GEN001-0028",
       "themeCode": "FAN",
       "designCode": "BAS",
       "designFamily": "BASILISK",
@@ -1252,7 +1252,7 @@
       }
     },
     {
-      "internalId": "FAN-MIN-SER001-GEN001-0029",
+      "internalId": "ARC-FAN-MIN-SER001-GEN001-0029",
       "themeCode": "FAN",
       "designCode": "MIN",
       "designFamily": "MINOTAUR",
@@ -1296,7 +1296,7 @@
       }
     },
     {
-      "internalId": "FAN-SPX-SER001-GEN001-0030",
+      "internalId": "ARC-FAN-SPX-SER001-GEN001-0030",
       "themeCode": "FAN",
       "designCode": "SPX",
       "designFamily": "SPHINX",

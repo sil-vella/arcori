@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CHR-TEN-SER001-GEN001-0001",
+      "internalId": "ARC-CHR-TEN-SER001-GEN001-0001",
       "themeCode": "CHR",
       "designCode": "TEN",
       "designFamily": "TEN",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "internalId": "CHR-LEM-SER001-GEN001-0002",
+      "internalId": "ARC-CHR-LEM-SER001-GEN001-0002",
       "themeCode": "CHR",
       "designCode": "LEM",
       "designFamily": "LEMON",
@@ -90,7 +90,7 @@
       }
     },
     {
-      "internalId": "CHR-TLM-SER001-GEN001-0003",
+      "internalId": "ARC-CHR-TLM-SER001-GEN001-0003",
       "themeCode": "CHR",
       "designCode": "TLM",
       "designFamily": "TEN_LEMON",

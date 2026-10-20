@@ -21,6 +21,7 @@ from models.player_progress import (
     PlayerTrove,
 )
 from modules.avari.gold_economy import SIGNUP_GOLD_ARCORI
+from modules.catalog.catalog_ids import design_id_aliases, ensure_typed_id
 
 
 def _as_uuid(user_id: str) -> uuid.UUID | None:
@@ -28,6 +29,105 @@ def _as_uuid(user_id: str) -> uuid.UUID | None:
         return uuid.UUID(user_id)
     except ValueError:
         return None
+
+
+def _canonical_design_id(design_id: str) -> str:
+    """Wire/storage form: TYPE-THEME-CODE-SERnnn-GENnnn-####."""
+    raw = (design_id or "").strip()
+    if not raw:
+        return ""
+    try:
+        return ensure_typed_id(raw)
+    except ValueError:
+        return raw
+
+
+def _merge_slammer_stats(target: PlayerSlammer, donor: PlayerSlammer) -> None:
+    """Fold donor counters into target (same design family)."""
+    if bool(donor.permanent):
+        target.permanent = True
+        target.charges_remaining = None
+    elif not bool(target.permanent):
+        t_ch = target.charges_remaining
+        d_ch = donor.charges_remaining
+        if t_ch is None and d_ch is not None:
+            target.charges_remaining = d_ch
+        elif t_ch is not None and d_ch is not None:
+            target.charges_remaining = max(int(t_ch), int(d_ch))
+    target.mastery_points = float(target.mastery_points or 0) + float(
+        donor.mastery_points or 0
+    )
+    target.matches_count = int(target.matches_count or 0) + int(
+        donor.matches_count or 0
+    )
+    target.successful_slams = int(target.successful_slams or 0) + int(
+        donor.successful_slams or 0
+    )
+    target.arcori_flipped = int(target.arcori_flipped or 0) + int(
+        donor.arcori_flipped or 0
+    )
+    target.best_slam = max(int(target.best_slam or 0), int(donor.best_slam or 0))
+    if not target.legacy_id and donor.legacy_id:
+        target.legacy_id = donor.legacy_id
+        target.legacy_snapshot = donor.legacy_snapshot
+    # Prefer starter source over mastery-created duplicate.
+    if (target.source or "") == "mastery" and (donor.source or "") == "starter":
+        target.source = "starter"
+
+
+def _pick_preferred_slammer(rows: list[PlayerSlammer], canonical: str) -> PlayerSlammer:
+    for row in rows:
+        if str(row.design_id or "").strip() == canonical:
+            return row
+    for row in rows:
+        if "-GEN" in str(row.design_id or "").upper():
+            return row
+    return rows[0]
+
+
+def _get_slammer_rows(
+    session: Session, *, user_id: uuid.UUID, design_id: str
+) -> list[PlayerSlammer]:
+    aliases = design_id_aliases(design_id) or [design_id]
+    return list(
+        session.scalars(
+            select(PlayerSlammer).where(
+                PlayerSlammer.user_id == user_id,
+                PlayerSlammer.design_id.in_(aliases),
+            )
+        ).all()
+    )
+
+
+def _resolve_slammer_for_write(
+    session: Session, *, user_id: uuid.UUID, design_id: str
+) -> PlayerSlammer | None:
+    """Return one row for the design family; merge+delete short duplicates."""
+    did = _canonical_design_id(design_id)
+    if not did:
+        return None
+    rows = _get_slammer_rows(session, user_id=user_id, design_id=did)
+    if not rows:
+        return None
+    preferred = _pick_preferred_slammer(rows, did)
+    for row in rows:
+        if row is preferred:
+            continue
+        _merge_slammer_stats(preferred, row)
+        session.delete(row)
+    if preferred.design_id != did and len(did) <= 64:
+        # Only rename when no other row already holds the canonical id.
+        clash = session.scalar(
+            select(PlayerSlammer).where(
+                PlayerSlammer.user_id == user_id,
+                PlayerSlammer.design_id == did,
+                PlayerSlammer.id != preferred.id,
+            )
+        )
+        if clash is None:
+            preferred.design_id = did
+    session.flush()
+    return preferred
 
 
 def find_avari_profile(session: Session, user_id: str) -> AvariProfile | None:
@@ -440,25 +540,26 @@ def ensure_slammer(
     permanent: bool = True,
     charges_remaining: int | None = None,
     source: str = "starter",
+    mastery_points: float | None = None,
 ) -> PlayerSlammer:
-    """Grant a slammer instance (idempotent on user+design)."""
+    """Grant a slammer instance (idempotent on user+design; GEN canonical)."""
     uid = _as_uuid(user_id) if not isinstance(user_id, uuid.UUID) else user_id
     if uid is None:
         raise ValueError("user_id required")
-    did = (design_id or "").strip()
+    did = _canonical_design_id(design_id)
     if not did:
         raise ValueError("design_id required")
-    existing = session.scalar(
-        select(PlayerSlammer).where(
-            PlayerSlammer.user_id == uid,
-            PlayerSlammer.design_id == did,
-        )
-    )
+    existing = _resolve_slammer_for_write(session, user_id=uid, design_id=did)
     if existing is not None:
         if permanent and not bool(existing.permanent):
             existing.permanent = True
             existing.charges_remaining = None
             session.flush()
+        if mastery_points is not None:
+            seed = max(0.0, float(mastery_points))
+            if float(existing.mastery_points or 0) < seed:
+                existing.mastery_points = seed
+                session.flush()
         return existing
     row = PlayerSlammer(
         user_id=uid,
@@ -466,10 +567,65 @@ def ensure_slammer(
         permanent=bool(permanent),
         charges_remaining=None if permanent else charges_remaining,
         source=(source or "starter").strip()[:32] or "starter",
+        mastery_points=max(0.0, float(mastery_points or 0)),
     )
     session.add(row)
     session.flush()
     return row
+
+
+def get_slammer(
+    session: Session, *, user_id: str | uuid.UUID, design_id: str
+) -> PlayerSlammer | None:
+    """Find by canonical id or any GEN/short alias (prefers GEN row)."""
+    uid = _as_uuid(user_id) if not isinstance(user_id, uuid.UUID) else user_id
+    did = (design_id or "").strip()
+    if uid is None or not did:
+        return None
+    rows = _get_slammer_rows(session, user_id=uid, design_id=did)
+    if not rows:
+        return None
+    return _pick_preferred_slammer(rows, _canonical_design_id(did))
+
+
+def apply_slammer_mastery(
+    session: Session,
+    *,
+    user_id: str | uuid.UUID,
+    design_id: str,
+    mastery_added: float,
+    flips_this_slam: int = 0,
+    match_count_delta: int = 0,
+) -> tuple[PlayerSlammer, float, float]:
+    """Add fit×flips mastery on an owned slammer. Returns (row, before, after)."""
+    uid = _as_uuid(user_id) if not isinstance(user_id, uuid.UUID) else user_id
+    did = _canonical_design_id(design_id)
+    if uid is None or not did:
+        raise ValueError("user_id and design_id required")
+    row = _resolve_slammer_for_write(session, user_id=uid, design_id=did)
+    if row is None:
+        row = ensure_slammer(
+            session,
+            user_id=uid,
+            design_id=did,
+            permanent=False,
+            source="mastery",
+        )
+    before = float(row.mastery_points or 0)
+    added = max(0.0, float(mastery_added))
+    after = before + added
+    row.mastery_points = after
+    flips_n = max(0, int(flips_this_slam))
+    if flips_n > 0:
+        row.successful_slams = int(row.successful_slams or 0) + 1
+        row.arcori_flipped = int(row.arcori_flipped or 0) + flips_n
+        if flips_n > int(row.best_slam or 0):
+            row.best_slam = flips_n
+    match_delta = max(0, int(match_count_delta))
+    if match_delta:
+        row.matches_count = int(row.matches_count or 0) + match_delta
+    session.flush()
+    return row, before, after
 
 
 def list_slammers(session: Session, user_id: str) -> list[PlayerSlammer]:

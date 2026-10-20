@@ -234,8 +234,6 @@ class SlammerGameplayAttributes {
     this.control,
     this.recovery,
     this.spread,
-    this.hitTarget,
-    this.powerBracket,
   });
 
   static const List<(String key, String label)> displayOrder = [
@@ -245,8 +243,6 @@ class SlammerGameplayAttributes {
     ('recovery', 'Recovery'),
     ('spread', 'Spread'),
   ];
-
-  static const Set<String> _validHitTargets = {'center', 'mid', 'edge'};
 
   static SlammerGameplayAttributes? tryParse(Object? raw) {
     if (raw is! Map) return null;
@@ -266,24 +262,14 @@ class SlammerGameplayAttributes {
       return n;
     }
 
-    String? parseHit(Object? value) {
-      if (value is! String) return null;
-      final hit = value.trim().toLowerCase();
-      return _validHitTargets.contains(hit) ? hit : null;
-    }
-
     final parsed = SlammerGameplayAttributes(
       impact: parseOne(raw['impact']),
       precision: parseOne(raw['precision']),
       control: parseOne(raw['control']),
       recovery: parseOne(raw['recovery']),
       spread: parseOne(raw['spread']),
-      hitTarget: parseHit(raw['hitTarget']),
-      powerBracket: SlammerPowerBracket.tryParse(raw['powerBracket']),
     );
-    if (parsed.labeledValues.isEmpty &&
-        parsed.hitTarget == null &&
-        parsed.powerBracket == null) {
+    if (parsed.labeledValues.isEmpty) {
       return null;
     }
     return parsed;
@@ -294,12 +280,6 @@ class SlammerGameplayAttributes {
   final int? control;
   final int? recovery;
   final int? spread;
-
-  /// Preferred aim radius: `center` | `mid` | `edge`.
-  final String? hitTarget;
-
-  /// Preferred resolve-power band (0 = none, 1 = full).
-  final SlammerPowerBracket? powerBracket;
 
   /// GDD order: Impact, Precision, Control, Recovery, Spread.
   List<(String label, int value)> get labeledValues {
@@ -337,6 +317,8 @@ class AvariInventoryItem {
     this.masteryPoints = 0,
     this.mintReach,
     this.masteryCap,
+    this.legacyId,
+    this.legacySnapshot,
   });
 
   factory AvariInventoryItem.fromJson(Map<String, dynamic> json) {
@@ -359,6 +341,14 @@ class AvariInventoryItem {
       masteryCap = (parsed != null && parsed > 0) ? parsed : null;
     }
     final bg = json['background'];
+    final snap = json['legacySnapshot'];
+    double masteryPts = 0;
+    final rawMastery = json['masteryPoints'];
+    if (rawMastery is num) {
+      masteryPts = rawMastery.toDouble();
+    } else {
+      masteryPts = double.tryParse('${rawMastery ?? ''}') ?? 0;
+    }
     return AvariInventoryItem(
       designId: id,
       displayName: name.isNotEmpty ? name : id,
@@ -384,11 +374,12 @@ class AvariInventoryItem {
       gameplayAttributes: SlammerGameplayAttributes.tryParse(
         json['gameplayAttributes'],
       ),
-      masteryPoints: json['masteryPoints'] is int
-          ? json['masteryPoints'] as int
-          : int.tryParse('${json['masteryPoints'] ?? ''}') ?? 0,
+      masteryPoints: masteryPts,
       mintReach: mintReach,
       masteryCap: masteryCap,
+      legacyId: json['legacyId']?.toString(),
+      legacySnapshot:
+          snap is Map ? Map<String, dynamic>.from(snap) : null,
     );
   }
 
@@ -414,13 +405,21 @@ class AvariInventoryItem {
   final int? rechargePriceGoldArcori;
   final int? rechargeCharges;
   final SlammerGameplayAttributes? gameplayAttributes;
-  final int masteryPoints;
+
+  /// Arcori mastery is whole points; slammer mastery may be fractional.
+  final double masteryPoints;
 
   /// Catalog `legacy.preservationRequirement` — mint reach for this design.
   final int? mintReach;
 
   /// Active preservation window — `closureMilestone` (mastery cap / Lost line).
   final int? masteryCap;
+
+  /// Sealed Legacy ID when this slammer generation was minted.
+  final String? legacyId;
+
+  /// Frozen Legacy snapshot (no sweet-spot fields).
+  final Map<String, dynamic>? legacySnapshot;
 
   bool get hasLottieFace {
     final media = faceMedia?.trim().toLowerCase();
@@ -429,11 +428,19 @@ class AvariInventoryItem {
     return url.isNotEmpty;
   }
 
+  bool get isLegacySealed {
+    final id = legacyId?.trim() ?? '';
+    return id.isNotEmpty || legacySnapshot != null;
+  }
+
   /// Profile label: mastery / mint reach, or mastery / mastery cap when set.
   String get masteryOverMintReach {
     final reach = masteryCap ?? mintReach;
-    if (reach == null) return '$masteryPoints';
-    return '$masteryPoints/$reach';
+    final pts = masteryPoints == masteryPoints.roundToDouble()
+        ? '${masteryPoints.toInt()}'
+        : masteryPoints.toStringAsFixed(1);
+    if (reach == null) return pts;
+    return '$pts/$reach';
   }
 }
 
@@ -737,7 +744,7 @@ class AvariClosedGenerationItem {
       faceMedia: faceMedia,
       color: color,
       source: 'closed',
-      masteryPoints: masteryPoints,
+      masteryPoints: masteryPoints.toDouble(),
     );
   }
 }
@@ -876,6 +883,11 @@ class MasteryChange {
 
   factory MasteryChange.fromJson(Map<String, dynamic> json) {
     int asInt(dynamic v) => v is int ? v : int.tryParse('$v') ?? 0;
+    double asNum(dynamic v) {
+      if (v is num) return v.toDouble();
+      return double.tryParse('$v') ?? 0;
+    }
+
     final mintRaw = json['mintReach'];
     int? mintReach;
     if (mintRaw is int) {
@@ -890,9 +902,9 @@ class MasteryChange {
     final lottieUrl = json['lottieUrl']?.toString().trim() ?? '';
     return MasteryChange(
       designId: id,
-      delta: asInt(json['delta']),
-      pointsBefore: asInt(json['pointsBefore']),
-      pointsAfter: asInt(json['pointsAfter']),
+      delta: asNum(json['delta']),
+      pointsBefore: asNum(json['pointsBefore']),
+      pointsAfter: asNum(json['pointsAfter']),
       flips: asInt(json['flips']),
       kind: json['kind']?.toString() ?? 'own',
       mintReach: mintReach,
@@ -905,9 +917,9 @@ class MasteryChange {
   }
 
   final String designId;
-  final int delta;
-  final int pointsBefore;
-  final int pointsAfter;
+  final double delta;
+  final double pointsBefore;
+  final double pointsAfter;
   final int flips;
   final String kind;
   final int? mintReach;
@@ -924,13 +936,19 @@ class MasteryChange {
 
   String get masteryOverMintReach {
     final reach = mintReach;
-    if (reach == null) return '$pointsAfter';
-    return '$pointsAfter/$reach';
+    final pts = _fmtPts(pointsAfter);
+    if (reach == null) return pts;
+    return '$pts/$reach';
   }
 
   String get relativeDeltaLabel {
     final sign = delta >= 0 ? '+' : '';
-    return '$sign$delta';
+    return '$sign${_fmtPts(delta)}';
+  }
+
+  static String _fmtPts(double v) {
+    if (v == v.roundToDouble()) return '${v.toInt()}';
+    return v.toStringAsFixed(1);
   }
 }
 
@@ -947,6 +965,7 @@ class MatchFinalizeResult {
     this.feeFragments = 0,
     this.flipsRewarded = 0,
     this.masteryChanges = const [],
+    this.slammerMasteryChanges = const [],
     this.achievementsUnlocked = const [],
     this.daily,
     this.eventProgress,
@@ -957,11 +976,20 @@ class MatchFinalizeResult {
 
   factory MatchFinalizeResult.fromJson(Map<String, dynamic> json) {
     final rawChanges = json['masteryChanges'];
+    final rawSlammer = json['slammerMasteryChanges'];
     final rawAchievements = json['achievementsUnlocked'];
     int asInt(dynamic v) =>
         v is int ? v : int.tryParse('$v') ?? 0;
     Map<String, dynamic>? asMap(dynamic v) =>
         v is Map ? Map<String, dynamic>.from(v) : null;
+    List<MasteryChange> parseChanges(Object? raw) {
+      if (raw is! List) return const [];
+      return raw
+          .whereType<Map>()
+          .map((e) => MasteryChange.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+    }
+
     final rawOffers = json['legacyOffers'];
     final offers = <Map<String, dynamic>>[];
     if (rawOffers is List) {
@@ -984,12 +1012,8 @@ class MatchFinalizeResult {
       goldArcori: asInt(json['goldArcori']),
       feeFragments: asInt(json['feeFragments']),
       flipsRewarded: asInt(json['flipsRewarded']),
-      masteryChanges: rawChanges is List
-          ? rawChanges
-              .whereType<Map>()
-              .map((e) => MasteryChange.fromJson(Map<String, dynamic>.from(e)))
-              .toList()
-          : const [],
+      masteryChanges: parseChanges(rawChanges),
+      slammerMasteryChanges: parseChanges(rawSlammer),
       achievementsUnlocked: rawAchievements is List
           ? rawAchievements
               .whereType<Map>()
@@ -1017,6 +1041,9 @@ class MatchFinalizeResult {
   final int feeFragments;
   final int flipsRewarded;
   final List<MasteryChange> masteryChanges;
+
+  /// Slammer mastery gained this match (number only — no sweet spot).
+  final List<MasteryChange> slammerMasteryChanges;
   final List<AchievementEntry> achievementsUnlocked;
   final Map<String, dynamic>? daily;
   final Map<String, dynamic>? eventProgress;

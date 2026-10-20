@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SAN-HGR-SER003-GEN001-0001",
+      "internalId": "ARC-SAN-HGR-SER003-GEN001-0001",
       "themeCode": "SAN",
       "designCode": "HGR",
       "designFamily": "THE_HIDDEN_GOLDEN_REFUGE",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "SAN-HBR-SER003-GEN001-0002",
+      "internalId": "ARC-SAN-HBR-SER003-GEN001-0002",
       "themeCode": "SAN",
       "designCode": "HBR",
       "designFamily": "HARBOR_BENEATH_THE_ROOTS",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "SAN-HWS-SER003-GEN001-0003",
+      "internalId": "ARC-SAN-HWS-SER003-GEN001-0003",
       "themeCode": "SAN",
       "designCode": "HWS",
       "designFamily": "THE_HOLLOW_WHERE_STORMS_DIVIDE",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "SAN-HAR-SER003-GEN001-0004",
+      "internalId": "ARC-SAN-HAR-SER003-GEN001-0004",
       "themeCode": "SAN",
       "designCode": "HAR",
       "designFamily": "HAVEN_OF_THE_ANCIENT_ROOTS",

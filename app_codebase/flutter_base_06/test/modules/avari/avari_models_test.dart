@@ -213,13 +213,13 @@ void main() {
         'displayName': 'P',
         'gameplayAttributes': {
           'impact': 5,
+          // Sweet-spot keys must be ignored if a leak reaches the client.
           'hitTarget': 'edge',
           'powerBracket': {'min': 0.75, 'max': 0.95},
         },
       });
-      expect(prefs.gameplayAttributes!.hitTarget, 'edge');
-      expect(prefs.gameplayAttributes!.powerBracket!.min, 0.75);
-      expect(prefs.gameplayAttributes!.powerBracket!.max, 0.95);
+      expect(prefs.gameplayAttributes!.impact, 5);
+      expect(prefs.gameplayAttributes!.labeledValues.length, 1);
 
       final empty = AvariInventoryItem.fromJson({
         'designId': 'SLM-Y',

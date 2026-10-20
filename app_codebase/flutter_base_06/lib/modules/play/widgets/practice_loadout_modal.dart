@@ -47,7 +47,7 @@ class _PracticeLoadoutBodyState extends ConsumerState<_PracticeLoadoutBody> {
   );
 
   static const _fallbackSlammer = AvariInventoryItem(
-    designId: 'SLM-STR-SER001-0001',
+    designId: 'SLM-SLM-STR-SER001-GEN001-0001',
     displayName: 'Starter Slammer',
   );
 

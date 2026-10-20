@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../match/input/slam_motion_capability.dart';
+import '../match/input/slam_resolver.dart' show ensureGen001DesignId;
 import '../match/state/match_notifier.dart';
 
 /// Exclusive slam control: phone motion vs touch.
@@ -36,11 +37,15 @@ class GameControlsPrefs {
   Future<String> readEquippedSlammerId() async {
     final v = await _storage.read(key: equippedSlammerKey);
     if (v == null || v.isEmpty) return stubSlammerId;
-    return v;
+    final canonical = ensureGen001DesignId(v);
+    if (canonical != v) {
+      await _storage.write(key: equippedSlammerKey, value: canonical);
+    }
+    return canonical;
   }
 
   Future<void> writeEquippedSlammerId(String id) async {
-    final trimmed = id.trim();
+    final trimmed = ensureGen001DesignId(id.trim());
     if (trimmed.isEmpty) return;
     await _storage.write(key: equippedSlammerKey, value: trimmed);
   }
@@ -120,8 +125,9 @@ class GameControlsNotifier extends Notifier<GameControlsState> {
   }
 
   Future<void> setEquippedSlammerId(String id) async {
-    await _prefs.writeEquippedSlammerId(id);
-    state = state.copyWith(equippedSlammerId: id.trim(), loaded: true);
+    final canonical = ensureGen001DesignId(id.trim());
+    await _prefs.writeEquippedSlammerId(canonical);
+    state = state.copyWith(equippedSlammerId: canonical, loaded: true);
   }
 
   Future<void> setSlamControlMode(SlamControlMode mode) async {

@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "FES-FRO-SER004-GEN001-0001",
+      "internalId": "ARC-FES-FRO-SER004-GEN001-0001",
       "themeCode": "FES",
       "designCode": "FRO",
       "designFamily": "FROSTFAIR",
@@ -49,7 +49,7 @@
       }
     },
     {
-      "internalId": "FES-PGX-SER004-GEN001-0002",
+      "internalId": "ARC-FES-PGX-SER004-GEN001-0002",
       "themeCode": "FES",
       "designCode": "PGX",
       "designFamily": "PRISMATIC_GATHERING",
@@ -93,7 +93,7 @@
       }
     },
     {
-      "internalId": "FES-HFL-SER004-GEN001-0003",
+      "internalId": "ARC-FES-HFL-SER004-GEN001-0003",
       "themeCode": "FES",
       "designCode": "HFL",
       "designFamily": "HARVESTLIGHT_FESTIVAL_LANTERN",
@@ -137,7 +137,7 @@
       }
     },
     {
-      "internalId": "FES-UBX-SER004-GEN001-0004",
+      "internalId": "ARC-FES-UBX-SER004-GEN001-0004",
       "themeCode": "FES",
       "designCode": "UBX",
       "designFamily": "UNITY_BELL",

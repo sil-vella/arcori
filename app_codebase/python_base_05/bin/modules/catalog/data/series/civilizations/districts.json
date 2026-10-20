@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "DST-TDX-SER004-GEN001-0001",
+      "internalId": "ARC-DST-TDX-SER004-GEN001-0001",
       "themeCode": "DST",
       "designCode": "TDX",
       "designFamily": "TIDESIDE_DISTRICTS",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "internalId": "DST-CMX-SER004-GEN001-0002",
+      "internalId": "ARC-DST-CMX-SER004-GEN001-0002",
       "themeCode": "DST",
       "designCode": "CMX",
       "designFamily": "CIVIC_MEDALLIONS",
@@ -97,7 +97,7 @@
       }
     },
     {
-      "internalId": "DST-SDE-SER004-GEN001-0003",
+      "internalId": "ARC-DST-SDE-SER004-GEN001-0003",
       "themeCode": "DST",
       "designCode": "SDE",
       "designFamily": "SIXFOLD_DISTRICT_EMBLEM",
@@ -139,7 +139,7 @@
       }
     },
     {
-      "internalId": "DST-PSM-SER004-GEN001-0004",
+      "internalId": "ARC-DST-PSM-SER004-GEN001-0004",
       "themeCode": "DST",
       "designCode": "PSM",
       "designFamily": "PILLAR_SIGIL_MEDALLION",

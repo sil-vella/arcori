@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "HEA-EMB-SER003-GEN001-0001",
+      "internalId": "ARC-HEA-EMB-SER003-GEN001-0001",
       "themeCode": "HEA",
       "designCode": "EMB",
       "designFamily": "EMBERHOME",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "HEA-ROH-SER003-GEN001-0002",
+      "internalId": "ARC-HEA-ROH-SER003-GEN001-0002",
       "themeCode": "HEA",
       "designCode": "ROH",
       "designFamily": "ROOTFIRE_HALL",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "HEA-FTK-SER003-GEN001-0003",
+      "internalId": "ARC-HEA-FTK-SER003-GEN001-0003",
       "themeCode": "HEA",
       "designCode": "FTK",
       "designFamily": "THE_FIRE_THAT_KNEW_EVERY_NAME",
@@ -136,7 +136,7 @@
       }
     },
     {
-      "internalId": "HEA-HBA-SER003-GEN001-0004",
+      "internalId": "ARC-HEA-HBA-SER003-GEN001-0004",
       "themeCode": "HEA",
       "designCode": "HBA",
       "designFamily": "THE_HEARTH_BENEATH_THE_ASH",

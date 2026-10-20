@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "VEH-SUP-SER001-GEN001-0001",
+      "internalId": "ARC-VEH-SUP-SER001-GEN001-0001",
       "themeCode": "VEH",
       "designCode": "SUP",
       "designFamily": "HYPERCAR",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "VEH-MCL-SER001-GEN001-0002",
+      "internalId": "ARC-VEH-MCL-SER001-GEN001-0002",
       "themeCode": "VEH",
       "designCode": "MCL",
       "designFamily": "CLASSIC_COUPE",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "VEH-BIK-SER001-GEN001-0003",
+      "internalId": "ARC-VEH-BIK-SER001-GEN001-0003",
       "themeCode": "VEH",
       "designCode": "BIK",
       "designFamily": "STREET_BIKE",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "VEH-CRS-SER001-GEN001-0004",
+      "internalId": "ARC-VEH-CRS-SER001-GEN001-0004",
       "themeCode": "VEH",
       "designCode": "CRS",
       "designFamily": "CRUISER_BIKE",
@@ -184,7 +184,7 @@
       }
     },
     {
-      "internalId": "VEH-JET-SER001-GEN001-0005",
+      "internalId": "ARC-VEH-JET-SER001-GEN001-0005",
       "themeCode": "VEH",
       "designCode": "JET",
       "designFamily": "JET_FIGHTER",
@@ -230,7 +230,7 @@
       }
     },
     {
-      "internalId": "VEH-HEL-SER001-GEN001-0006",
+      "internalId": "ARC-VEH-HEL-SER001-GEN001-0006",
       "themeCode": "VEH",
       "designCode": "HEL",
       "designFamily": "RESCUE_HELICOPTER",
@@ -276,7 +276,7 @@
       }
     },
     {
-      "internalId": "VEH-BLT-SER001-GEN001-0007",
+      "internalId": "ARC-VEH-BLT-SER001-GEN001-0007",
       "themeCode": "VEH",
       "designCode": "BLT",
       "designFamily": "BULLET_TRAIN",
@@ -322,7 +322,7 @@
       }
     },
     {
-      "internalId": "VEH-STM-SER001-GEN001-0008",
+      "internalId": "ARC-VEH-STM-SER001-GEN001-0008",
       "themeCode": "VEH",
       "designCode": "STM",
       "designFamily": "STEAM_ENGINE",
@@ -368,7 +368,7 @@
       }
     },
     {
-      "internalId": "VEH-YCH-SER001-GEN001-0009",
+      "internalId": "ARC-VEH-YCH-SER001-GEN001-0009",
       "themeCode": "VEH",
       "designCode": "YCH",
       "designFamily": "LUXURY_YACHT",
@@ -412,7 +412,7 @@
       }
     },
     {
-      "internalId": "VEH-SPB-SER001-GEN001-0010",
+      "internalId": "ARC-VEH-SPB-SER001-GEN001-0010",
       "themeCode": "VEH",
       "designCode": "SPB",
       "designFamily": "SPEED_BOAT",
@@ -456,7 +456,7 @@
       }
     },
     {
-      "internalId": "VEH-BLD-SER001-GEN001-0011",
+      "internalId": "ARC-VEH-BLD-SER001-GEN001-0011",
       "themeCode": "VEH",
       "designCode": "BLD",
       "designFamily": "BULLDOZER",
@@ -498,7 +498,7 @@
       }
     },
     {
-      "internalId": "VEH-CRN-SER001-GEN001-0012",
+      "internalId": "ARC-VEH-CRN-SER001-GEN001-0012",
       "themeCode": "VEH",
       "designCode": "CRN",
       "designFamily": "TOWER_CRANE",

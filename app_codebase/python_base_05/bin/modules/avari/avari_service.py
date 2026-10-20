@@ -55,7 +55,12 @@ from modules.avari.kin_genesis import (
     normalize_color,
     subtheme_for_type,
 )
-from modules.catalog.catalog_ids import art_basename
+from modules.catalog.catalog_ids import (
+    art_basename,
+    design_id_aliases,
+    ensure_typed_id,
+    family_key,
+)
 from modules.catalog.catalog_errors import NOT_FOUND as CATALOG_NOT_FOUND
 from modules.catalog.catalog_service import get_design
 from modules.catalog.kin_design_store import (
@@ -254,7 +259,10 @@ def _world_state_closed(design: dict[str, Any] | None) -> bool:
 
 
 def _gameplay_attributes(design: dict[str, Any]) -> dict[str, Any] | None:
-    """Catalog slam stats + preferred slam conditions. Omitted when none."""
+    """Public slam feel stats for clients.
+
+    ``hitTarget`` / ``powerBracket`` stay server-only (Dart freeze + resolve).
+    """
     raw = design.get("gameplayAttributes")
     if not isinstance(raw, dict):
         return None
@@ -269,16 +277,6 @@ def _gameplay_attributes(design: dict[str, Any]) -> dict[str, Any] | None:
             out[key] = max(1, min(10, int(value)))
         elif isinstance(value, str) and value.strip().isdigit():
             out[key] = max(1, min(10, int(value.strip())))
-
-    hit_raw = raw.get("hitTarget")
-    if isinstance(hit_raw, str):
-        hit = hit_raw.strip().lower()
-        if hit in ("center", "mid", "edge"):
-            out["hitTarget"] = hit
-
-    bracket = _power_bracket(raw.get("powerBracket"))
-    if bracket is not None:
-        out["powerBracket"] = bracket
 
     return out or None
 
@@ -540,11 +538,11 @@ def generation_number_for_design_id(design_id: str) -> int:
         return generation_number_from_id(iid, default=1)
 
 
-def _slammer_usable(row: Any) -> bool:
+def _slammer_usable(row: dict[str, Any]) -> bool:
     """Permanent always usable; charged slammers need charges_remaining > 0."""
-    if bool(getattr(row, "permanent", False)):
+    if bool(row.get("permanent")):
         return True
-    remaining = getattr(row, "charges_remaining", None)
+    remaining = row.get("charges_remaining")
     if remaining is None:
         return False
     try:
@@ -553,16 +551,35 @@ def _slammer_usable(row: Any) -> bool:
         return False
 
 
-def _fallback_slammer_id(rows: list[Any]) -> str:
+def _canonical_slammer_id(design_id: str) -> str:
+    raw = (design_id or "").strip()
+    if not raw:
+        return ""
+    try:
+        return ensure_typed_id(raw, design_type="Slammer")
+    except ValueError:
+        return raw
+
+
+def _slammer_row_snapshot(row: Any) -> dict[str, Any]:
+    """Copy fields while the ORM instance is still session-bound."""
+    return {
+        "design_id": str(getattr(row, "design_id", "") or "").strip(),
+        "permanent": bool(getattr(row, "permanent", False)),
+        "charges_remaining": getattr(row, "charges_remaining", None),
+    }
+
+
+def _fallback_slammer_id(rows: list[dict[str, Any]]) -> str:
     for row in rows:
-        if bool(getattr(row, "permanent", False)):
-            design_id = str(getattr(row, "design_id", "") or "").strip()
+        if bool(row.get("permanent")):
+            design_id = _canonical_slammer_id(str(row.get("design_id") or ""))
             if design_id:
                 return design_id
     for row in rows:
         if not _slammer_usable(row):
             continue
-        design_id = str(getattr(row, "design_id", "") or "").strip()
+        design_id = _canonical_slammer_id(str(row.get("design_id") or ""))
         if design_id:
             return design_id
     return ""
@@ -582,30 +599,46 @@ def verify_slammers_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
             raise AppError(INVALID_QUERY, message="seat.userId required")
         requested = str(raw.get("slammerId") or "").strip()
 
+        # Snapshot inside the session — do not touch ORM rows after close
+        # (DetachedInstanceError → Dart falls back to stub slammer).
         with session_scope() as session:
-            rows = repo.list_slammers(session, user_id)
+            rows = [
+                _slammer_row_snapshot(r)
+                for r in repo.list_slammers(session, user_id)
+            ]
 
-        usable_by_id: dict[str, Any] = {}
+        usable_by_alias: dict[str, dict[str, Any]] = {}
+        owned_aliases: set[str] = set()
         owned: list[str] = []
-        seen: set[str] = set()
+        seen_canonical: set[str] = set()
         for row in rows:
-            design_id = str(getattr(row, "design_id", "") or "").strip()
-            if not design_id or design_id in seen:
+            design_id = str(row.get("design_id") or "").strip()
+            if not design_id:
                 continue
-            seen.add(design_id)
-            owned.append(design_id)
-            if _slammer_usable(row):
-                usable_by_id[design_id] = row
+            canonical = _canonical_slammer_id(design_id)
+            if canonical not in seen_canonical:
+                seen_canonical.add(canonical)
+                owned.append(canonical)
+            for alias in design_id_aliases(design_id) or [design_id]:
+                owned_aliases.add(alias)
+                if _slammer_usable(row):
+                    usable_by_alias[alias] = row
 
-        if requested and requested in usable_by_id:
-            chosen = requested
+        if requested and requested in usable_by_alias:
+            chosen = _canonical_slammer_id(
+                str(usable_by_alias[requested].get("design_id") or requested)
+            )
             source = SOURCE_OWNED
             reason = "owned"
         else:
             chosen = _fallback_slammer_id(rows)
             if chosen:
                 source = SOURCE_FALLBACK
-                if requested and requested in seen and requested not in usable_by_id:
+                if (
+                    requested
+                    and requested in owned_aliases
+                    and requested not in usable_by_alias
+                ):
                     reason = "no_charges"
                 elif requested:
                     reason = "not_owned"
@@ -678,11 +711,7 @@ def spend_slammer_charge(
                         "intentId": intent,
                     }
 
-            row = None
-            for candidate in repo.list_slammers(session, uid):
-                if str(getattr(candidate, "design_id", "") or "").strip() == did:
-                    row = candidate
-                    break
+            row = repo.get_slammer(session, user_id=uid, design_id=did)
 
             if row is None or bool(row.permanent):
                 payload = {
@@ -1000,14 +1029,51 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
                         background=kin_background,
                     ),
                 )
-        slammer_payload: list[dict[str, Any]] = []
-        seen_slammers: set[str] = set()
+        # One tile per design family — merge short + GEN duplicate rows.
+        slammer_by_family: dict[str, Any] = {}
         for row in slammer_rows:
             design_id = str(row.design_id or "").strip()
+            if not design_id:
+                continue
+            canonical = _canonical_slammer_id(design_id)
+            fam = family_key(design_id) or canonical
+            prev = slammer_by_family.get(fam)
+            if prev is None:
+                slammer_by_family[fam] = row
+                continue
+            # Prefer GEN / permanent / higher mastery for display source row.
+            prev_id = str(prev.design_id or "")
+            prefer = False
+            if "-GEN" in canonical.upper() and "-GEN" not in prev_id.upper():
+                prefer = True
+            elif bool(row.permanent) and not bool(prev.permanent):
+                prefer = True
+            elif float(getattr(row, "mastery_points", 0) or 0) > float(
+                getattr(prev, "mastery_points", 0) or 0
+            ):
+                prefer = True
+            if prefer:
+                # Fold prev stats into chosen row for the payload only.
+                row_mastery = float(getattr(row, "mastery_points", 0) or 0)
+                prev_mastery = float(getattr(prev, "mastery_points", 0) or 0)
+                setattr(row, "_payload_mastery", row_mastery + prev_mastery)
+                slammer_by_family[fam] = row
+            else:
+                prev_mastery = float(getattr(prev, "mastery_points", 0) or 0)
+                row_mastery = float(getattr(row, "mastery_points", 0) or 0)
+                setattr(prev, "_payload_mastery", prev_mastery + row_mastery)
+
+        slammer_payload: list[dict[str, Any]] = []
+        seen_slammers: set[str] = set()
+        for row in slammer_by_family.values():
+            design_id = _canonical_slammer_id(str(row.design_id or "").strip())
             if not design_id or design_id in seen_slammers:
                 continue
             seen_slammers.add(design_id)
             card = catalog_card_for_design(design_id) or {}
+            mastery_pts = getattr(row, "_payload_mastery", None)
+            if mastery_pts is None:
+                mastery_pts = float(getattr(row, "mastery_points", 0) or 0)
             entry: dict[str, Any] = {
                 "designId": design_id,
                 "displayName": card.get("displayName") or design_id,
@@ -1016,6 +1082,14 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
                 "permanent": bool(row.permanent),
                 "chargesRemaining": row.charges_remaining,
                 "source": row.source,
+                "masteryPoints": float(mastery_pts),
+                "matchesCount": int(getattr(row, "matches_count", 0) or 0),
+                "successfulSlams": int(getattr(row, "successful_slams", 0) or 0),
+                "arcoriFlipped": int(getattr(row, "arcori_flipped", 0) or 0),
+                "bestSlam": int(getattr(row, "best_slam", 0) or 0),
+                "legacyId": getattr(row, "legacy_id", None),
+                "legacySnapshot": getattr(row, "legacy_snapshot", None),
+                "mintReach": card.get("mintReach"),
             }
             attrs = card.get("gameplayAttributes")
             if isinstance(attrs, dict) and attrs:
@@ -1040,6 +1114,9 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         for row in trove_rows:
             design_id = str(row.design_id or "").strip()
             if not design_id:
+                continue
+            # Trove is Legacy Slammers only (closed Arcori belong in Velora).
+            if not design_id.upper().startswith("SLM-"):
                 continue
             card = catalog_card_for_design(design_id) or {}
             trove_payload.append(
@@ -1713,6 +1790,8 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
     played_raw = body.get("playedDesignId")
     played_design_id = str(played_raw or "").strip() if played_raw is not None else ""
     flips_by_design_raw = body.get("flipsByDesign")
+    slammer_mastery_raw = body.get("slammerMasteryByDesign")
+    slammer_flips_raw = body.get("slammerFlipsByDesign")
 
     if not match_id:
         raise AppError(INVALID_MATCH_FINALIZE, message="matchId is required")
@@ -1723,6 +1802,16 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
     if flips_by_design_raw is not None and not isinstance(flips_by_design_raw, dict):
         raise AppError(
             INVALID_MATCH_FINALIZE, message="flipsByDesign must be an object"
+        )
+    if slammer_mastery_raw is not None and not isinstance(slammer_mastery_raw, dict):
+        raise AppError(
+            INVALID_MATCH_FINALIZE,
+            message="slammerMasteryByDesign must be an object",
+        )
+    if slammer_flips_raw is not None and not isinstance(slammer_flips_raw, dict):
+        raise AppError(
+            INVALID_MATCH_FINALIZE,
+            message="slammerFlipsByDesign must be an object",
         )
 
     cleaned_ids = (
@@ -1743,6 +1832,40 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
                     INVALID_MATCH_FINALIZE,
                     message="flipsByDesign values must be ints",
                 ) from None
+
+    slammer_mastery_by_design: dict[str, float] = {}
+    if isinstance(slammer_mastery_raw, dict):
+        for key, value in slammer_mastery_raw.items():
+            did = _canonical_slammer_id(str(key or ""))
+            if not did:
+                continue
+            try:
+                added = max(0.0, float(value))
+            except (TypeError, ValueError) as exc:
+                raise AppError(
+                    INVALID_MATCH_FINALIZE,
+                    message="slammerMasteryByDesign values must be numbers",
+                ) from exc
+            slammer_mastery_by_design[did] = (
+                slammer_mastery_by_design.get(did, 0.0) + added
+            )
+
+    slammer_flips_by_design: dict[str, int] = {}
+    if isinstance(slammer_flips_raw, dict):
+        for key, value in slammer_flips_raw.items():
+            did = _canonical_slammer_id(str(key or ""))
+            if not did:
+                continue
+            try:
+                flips_n = max(0, int(value))
+            except (TypeError, ValueError) as exc:
+                raise AppError(
+                    INVALID_MATCH_FINALIZE,
+                    message="slammerFlipsByDesign values must be ints",
+                ) from exc
+            slammer_flips_by_design[did] = (
+                slammer_flips_by_design.get(did, 0) + flips_n
+            )
 
     empty_economy = {
         "applied": False,
@@ -1941,6 +2064,51 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
             sync_player_access_pool(session, uid)
             session.flush()
 
+            # Slammer mastery: Dart sends flips×(0.55+0.45×fit) as a number only.
+            slammer_mastery_changes: list[dict[str, Any]] = []
+            if LOGGING_SWITCH:
+                customlog(
+                    f"avari: slammerMastery inbound user={uid} matchId={match_id} "
+                    f"byDesign={slammer_mastery_by_design} "
+                    f"flipsByDesign={slammer_flips_by_design}"
+                )
+            for did, added in slammer_mastery_by_design.items():
+                if added <= 0:
+                    continue
+                flips_n = int(slammer_flips_by_design.get(did, 0) or 0)
+                _srow, before_m, after_m = repo.apply_slammer_mastery(
+                    session,
+                    user_id=uid,
+                    design_id=did,
+                    mastery_added=added,
+                    flips_this_slam=flips_n,
+                    match_count_delta=1,
+                )
+                if LOGGING_SWITCH:
+                    customlog(
+                        f"avari: slammerMastery apply user={uid} design={did} "
+                        f"added={added:.4f} flips={flips_n} "
+                        f"before={before_m:.4f} after={after_m:.4f}"
+                    )
+                card = catalog_card_for_design(did) or {}
+                slammer_mastery_changes.append(
+                    {
+                        "designId": did,
+                        "delta": after_m - before_m,
+                        "pointsBefore": before_m,
+                        "pointsAfter": after_m,
+                        "flips": flips_n,
+                        "kind": "slammer",
+                        "generationNumber": generation_number_for_design_id(did),
+                        "mintReach": card.get("mintReach"),
+                        "displayName": card.get("displayName") or did,
+                        "imageUrl": card.get("imageUrl"),
+                        "lottieUrl": card.get("lottieUrl"),
+                        "color": card.get("color"),
+                        "masteryGained": after_m - before_m,
+                    }
+                )
+
             mastery_after: dict[str, int] = {}
             for mrow in repo.list_mastery_rows(session, uid):
                 did = str(mrow.design_id or "").strip()
@@ -1960,6 +2128,7 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
             mint_payload: dict[str, Any] | None = None
             from modules.legacy.legacy_service import on_mastery_progress
 
+            # Arcori: close-only at closureMilestone (no offer/mint).
             for change in mastery_changes:
                 did = str(change.get("designId") or "").strip()
                 if not did:
@@ -2013,6 +2182,42 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
                             f"finalize_match: legacyEvent design={did} "
                             f"reason={legacy_event.get('reason')}"
                         )
+
+            # Slammer: preserve offer / window / lost / mint from slammer mastery.
+            for change in slammer_mastery_changes:
+                did = str(change.get("designId") or "").strip()
+                if not did:
+                    continue
+                try:
+                    pts_after = float(change.get("pointsAfter") or 0)
+                    pts_before = float(change.get("pointsBefore") or 0)
+                    gen_n = int(
+                        change.get("generationNumber")
+                        or generation_number_for_design_id(did)
+                    )
+                except (TypeError, ValueError):
+                    continue
+                ev = on_mastery_progress(
+                    session,
+                    user_id=uid,
+                    design_id=did,
+                    generation_number=gen_n,
+                    points_after=pts_after,
+                    points_before=pts_before,
+                )
+                if not isinstance(ev, dict):
+                    continue
+                if isinstance(ev.get("legacyOffer"), dict):
+                    legacy_offers.append(ev["legacyOffer"])
+                prox = ev.get("legacyProximity")
+                if isinstance(prox, list):
+                    for row in prox:
+                        if isinstance(row, dict):
+                            legacy_proximity.append(row)
+                if isinstance(ev.get("legacyEvent"), dict):
+                    legacy_event = ev["legacyEvent"]
+                    if isinstance(legacy_event.get("mint"), dict):
+                        mint_payload = legacy_event.get("mint")
 
             event_progress: dict[str, Any] = {}
             is_special_event = match_type in ("specialEvent", "special_event")
@@ -2081,6 +2286,7 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
                     f"type={match_type or '-'} fee={fee} flips={flips} "
                     f"netFrags={net_fragments} goldArcori={after_a} frags={after_f} "
                     f"played={played_design_id or '-'} mastery={len(mastery_changes)} "
+                    f"slammerMastery={len(slammer_mastery_changes)} "
                     f"achievements={len(achievements_unlocked)} "
                     f"dailyChanged={daily_payload.get('changedGoalIds')} "
                     f"designs={len(cleaned_ids)}"
@@ -2097,6 +2303,7 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
                 "feeFragments": fee,
                 "flipsRewarded": flips,
                 "masteryChanges": mastery_changes,
+                "slammerMasteryChanges": slammer_mastery_changes,
                 "achievementsUnlocked": achievements_unlocked,
                 "daily": daily_payload,
                 "eventProgress": event_progress.get(event_id) if event_id else None,

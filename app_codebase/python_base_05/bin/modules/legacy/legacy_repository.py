@@ -70,6 +70,7 @@ def ensure_lifecycle(
 def get_mastery_points(
     session: Session, user_id: str, design_id: str, generation_number: int
 ) -> int:
+    """Arcori mastery points (integer). Prefer get_progress_points for mixed ids."""
     uid = _as_uuid(user_id)
     did = (design_id or "").strip()
     if uid is None or not did:
@@ -87,6 +88,40 @@ def get_mastery_points(
         return int(row.points or 0)
     except (TypeError, ValueError):
         return 0
+
+
+def get_slammer_mastery_points(session: Session, user_id: str, design_id: str) -> float:
+    """Slammer mastery (fit×flips decimal) from player_slammers."""
+    from models.player_progress import PlayerSlammer
+
+    uid = _as_uuid(user_id)
+    did = (design_id or "").strip()
+    if uid is None or not did:
+        return 0.0
+    row = session.scalars(
+        select(PlayerSlammer).where(
+            PlayerSlammer.user_id == uid,
+            PlayerSlammer.design_id == did,
+        )
+    ).first()
+    if row is None:
+        return 0.0
+    try:
+        return float(row.mastery_points or 0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def get_progress_points(
+    session: Session, user_id: str, design_id: str, generation_number: int
+) -> float:
+    """Mastery for lifecycle compares — slammer float or Arcori int."""
+    did = (design_id or "").strip().upper()
+    if did.startswith("SLM-"):
+        return get_slammer_mastery_points(session, user_id, design_id)
+    return float(
+        get_mastery_points(session, user_id, design_id, generation_number)
+    )
 
 
 def get_intent(session: Session, intent_id: str) -> LegacyPreserveIntent | None:

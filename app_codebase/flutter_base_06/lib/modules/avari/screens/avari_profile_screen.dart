@@ -190,6 +190,15 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
         ? 'None yet'
         : profile.titles.join(' · ');
 
+    void openCatalogDesign(String designId) {
+      final id = designId.trim();
+      if (id.isEmpty) return;
+      Nav.push(
+        context,
+        '${AppPaths.arcoriDetail}?id=${Uri.encodeQueryComponent(id)}',
+      );
+    }
+
     return [
       gapSection(
         AppChromeSection(
@@ -316,10 +325,7 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
                         );
                         return;
                       }
-                      Nav.push(
-                        context,
-                        '${AppPaths.arcoriDetail}?id=${Uri.encodeQueryComponent(id)}',
-                      );
+                      openCatalogDesign(id);
                     },
                   );
                 },
@@ -371,7 +377,10 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
                 Text('None yet', style: bodySmall)
               else
                 for (final item in profile.slammers) ...[
-                  SlammerInventoryTile(item: item),
+                  SlammerInventoryTile(
+                    item: item,
+                    onTap: () => openCatalogDesign(item.designId),
+                  ),
                   AppSpacing.gapSm,
                 ],
             ],
@@ -419,7 +428,7 @@ List<AvariInventoryItem> _arcoriAccessWithKinFirst(
           background: kin.background,
           color: kin.color,
           source: 'kin',
-          masteryPoints: kin.masteryPoints,
+          masteryPoints: kin.masteryPoints.toDouble(),
           mintReach: kin.mintReach ?? 500,
         );
     // Ensure Lottie face even if access row omitted it.

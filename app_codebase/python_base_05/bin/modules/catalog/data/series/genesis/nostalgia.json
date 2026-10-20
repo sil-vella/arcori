@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "NOS-KNK-SER001-GEN001-0001",
+      "internalId": "ARC-NOS-KNK-SER001-GEN001-0001",
       "themeCode": "NOS",
       "designCode": "KNK",
       "designFamily": "MARBLE_POUCH",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "NOS-DBL-SER001-GEN001-0002",
+      "internalId": "ARC-NOS-DBL-SER001-GEN001-0002",
       "themeCode": "NOS",
       "designCode": "DBL",
       "designFamily": "DIABOLO",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "NOS-RLB-SER001-GEN001-0003",
+      "internalId": "ARC-NOS-RLB-SER001-GEN001-0003",
       "themeCode": "NOS",
       "designCode": "RLB",
       "designFamily": "ROLLERBLADES",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "NOS-SLK-SER001-GEN001-0004",
+      "internalId": "ARC-NOS-SLK-SER001-GEN001-0004",
       "themeCode": "NOS",
       "designCode": "SLK",
       "designFamily": "PLASTIC_SLINKY",
@@ -184,7 +184,7 @@
       }
     },
     {
-      "internalId": "NOS-TIC-SER001-GEN001-0005",
+      "internalId": "ARC-NOS-TIC-SER001-GEN001-0005",
       "themeCode": "NOS",
       "designCode": "TIC",
       "designFamily": "INFLATABLE_CHAIR",
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "NOS-WPT-SER001-GEN001-0006",
+      "internalId": "ARC-NOS-WPT-SER001-GEN001-0006",
       "themeCode": "NOS",
       "designCode": "WPT",
       "designFamily": "WATER_PISTOL",
@@ -272,7 +272,7 @@
       }
     },
     {
-      "internalId": "NOS-TRL-SER001-GEN001-0007",
+      "internalId": "ARC-NOS-TRL-SER001-GEN001-0007",
       "themeCode": "NOS",
       "designCode": "TRL",
       "designFamily": "TROLL_DOLL",
@@ -318,7 +318,7 @@
       }
     },
     {
-      "internalId": "NOS-HGC-SER001-GEN001-0008",
+      "internalId": "ARC-NOS-HGC-SER001-GEN001-0008",
       "themeCode": "NOS",
       "designCode": "HGC",
       "designFamily": "HANDHELD_CONSOLE",
@@ -364,7 +364,7 @@
       }
     },
     {
-      "internalId": "NOS-CDP-SER001-GEN001-0009",
+      "internalId": "ARC-NOS-CDP-SER001-GEN001-0009",
       "themeCode": "NOS",
       "designCode": "CDP",
       "designFamily": "CD_PLAYER",
@@ -406,7 +406,7 @@
       }
     },
     {
-      "internalId": "NOS-DSP-SER001-GEN001-0010",
+      "internalId": "ARC-NOS-DSP-SER001-GEN001-0010",
       "themeCode": "NOS",
       "designCode": "DSP",
       "designFamily": "DISPOSABLE_CAMERA",
@@ -450,7 +450,7 @@
       }
     },
     {
-      "internalId": "NOS-FTC-SER001-GEN001-0011",
+      "internalId": "ARC-NOS-FTC-SER001-GEN001-0011",
       "themeCode": "NOS",
       "designCode": "FTC",
       "designFamily": "FANTASY_CARDS",
@@ -494,7 +494,7 @@
       }
     },
     {
-      "internalId": "NOS-ICP-SER001-GEN001-0012",
+      "internalId": "ARC-NOS-ICP-SER001-GEN001-0012",
       "themeCode": "NOS",
       "designCode": "ICP",
       "designFamily": "CONSTRUCTION_PIECES",
@@ -538,7 +538,7 @@
       }
     },
     {
-      "internalId": "NOS-GBB-SER001-GEN001-0013",
+      "internalId": "ARC-NOS-GBB-SER001-GEN001-0013",
       "themeCode": "NOS",
       "designCode": "GBB",
       "designFamily": "GABBER_ACCESSORIES",
@@ -584,7 +584,7 @@
       }
     },
     {
-      "internalId": "NOS-MTC-SER001-GEN001-0014",
+      "internalId": "ARC-NOS-MTC-SER001-GEN001-0014",
       "themeCode": "NOS",
       "designCode": "MTC",
       "designFamily": "MUSIC_TELEVISION",
@@ -630,7 +630,7 @@
       }
     },
     {
-      "internalId": "NOS-CTP-SER001-GEN001-0015",
+      "internalId": "ARC-NOS-CTP-SER001-GEN001-0015",
       "themeCode": "NOS",
       "designCode": "CTP",
       "designFamily": "TELEVISION_PROPS",
@@ -672,7 +672,7 @@
       }
     },
     {
-      "internalId": "NOS-FSA-SER001-GEN001-0016",
+      "internalId": "ARC-NOS-FSA-SER001-GEN001-0016",
       "themeCode": "NOS",
       "designCode": "FSA",
       "designFamily": "STICKER_ALBUM",
@@ -716,7 +716,7 @@
       }
     },
     {
-      "internalId": "NOS-MWT-SER001-GEN001-0017",
+      "internalId": "ARC-NOS-MWT-SER001-GEN001-0017",
       "themeCode": "NOS",
       "designCode": "MWT",
       "designFamily": "MAGIC_WORM",
@@ -760,7 +760,7 @@
       }
     },
     {
-      "internalId": "NOS-MDB-SER001-GEN001-0018",
+      "internalId": "ARC-NOS-MDB-SER001-GEN001-0018",
       "themeCode": "NOS",
       "designCode": "MDB",
       "designFamily": "DRAWING_BOARD",
@@ -806,7 +806,7 @@
       }
     },
     {
-      "internalId": "NOS-GCS-SER001-GEN001-0019",
+      "internalId": "ARC-NOS-GCS-SER001-GEN001-0019",
       "themeCode": "NOS",
       "designCode": "GCS",
       "designFamily": "CEILING_STARS",
@@ -852,7 +852,7 @@
       }
     },
     {
-      "internalId": "NOS-CDF-SER001-GEN001-0020",
+      "internalId": "ARC-NOS-CDF-SER001-GEN001-0020",
       "themeCode": "NOS",
       "designCode": "CDF",
       "designFamily": "COLLECTIBLE_DISCS",
@@ -898,7 +898,7 @@
       }
     },
     {
-      "internalId": "NOS-DTC-SER001-GEN001-0021",
+      "internalId": "ARC-NOS-DTC-SER001-GEN001-0021",
       "themeCode": "NOS",
       "designCode": "DTC",
       "designFamily": "TELEPHONE_CARDS",
@@ -942,7 +942,7 @@
       }
     },
     {
-      "internalId": "NOS-STK-SER001-GEN001-0022",
+      "internalId": "ARC-NOS-STK-SER001-GEN001-0022",
       "themeCode": "NOS",
       "designCode": "STK",
       "designFamily": "STRIPPENKAART",
@@ -988,7 +988,7 @@
       }
     },
     {
-      "internalId": "NOS-GLN-SER001-GEN001-0023",
+      "internalId": "ARC-NOS-GLN-SER001-GEN001-0023",
       "themeCode": "NOS",
       "designCode": "GLN",
       "designFamily": "GUILDER_NOTES",
@@ -1032,7 +1032,7 @@
       }
     },
     {
-      "internalId": "NOS-VHS-SER001-GEN001-0024",
+      "internalId": "ARC-NOS-VHS-SER001-GEN001-0024",
       "themeCode": "NOS",
       "designCode": "VHS",
       "designFamily": "VHS_CASSETTE",
@@ -1078,7 +1078,7 @@
       }
     },
     {
-      "internalId": "NOS-SCS-SER001-GEN001-0025",
+      "internalId": "ARC-NOS-SCS-SER001-GEN001-0025",
       "themeCode": "NOS",
       "designCode": "SCS",
       "designFamily": "SCENTED_STATIONERY",
@@ -1120,7 +1120,7 @@
       }
     },
     {
-      "internalId": "NOS-SBC-SER001-GEN001-0026",
+      "internalId": "ARC-NOS-SBC-SER001-GEN001-0026",
       "themeCode": "NOS",
       "designCode": "SBC",
       "designFamily": "SLAP_BRACELETS",
@@ -1166,7 +1166,7 @@
       }
     },
     {
-      "internalId": "NOS-FBB-SER001-GEN001-0027",
+      "internalId": "ARC-NOS-FBB-SER001-GEN001-0027",
       "themeCode": "NOS",
       "designCode": "FBB",
       "designFamily": "FRIENDSHIP_BRACELETS",
@@ -1210,7 +1210,7 @@
       }
     },
     {
-      "internalId": "NOS-BFP-SER001-GEN001-0028",
+      "internalId": "ARC-NOS-BFP-SER001-GEN001-0028",
       "themeCode": "NOS",
       "designCode": "BFP",
       "designFamily": "BEAN_PLUSH",
@@ -1254,7 +1254,7 @@
       }
     },
     {
-      "internalId": "NOS-LVL-SER001-GEN001-0029",
+      "internalId": "ARC-NOS-LVL-SER001-GEN001-0029",
       "themeCode": "NOS",
       "designCode": "LVL",
       "designFamily": "LAVA_LAMP",
@@ -1298,7 +1298,7 @@
       }
     },
     {
-      "internalId": "NOS-MPH-SER001-GEN001-0030",
+      "internalId": "ARC-NOS-MPH-SER001-GEN001-0030",
       "themeCode": "NOS",
       "designCode": "MPH",
       "designFamily": "MOBILE_PHONE",
@@ -1344,7 +1344,7 @@
       }
     },
     {
-      "internalId": "NOS-TCC-SER001-GEN001-0031",
+      "internalId": "ARC-NOS-TCC-SER001-GEN001-0031",
       "themeCode": "NOS",
       "designCode": "TCC",
       "designFamily": "TOY_CATALOGUE",
@@ -1390,7 +1390,7 @@
       }
     },
     {
-      "internalId": "NOS-CMG-SER001-GEN001-0032",
+      "internalId": "ARC-NOS-CMG-SER001-GEN001-0032",
       "themeCode": "NOS",
       "designCode": "CMG",
       "designFamily": "MAGAZINE_GADGET",
@@ -1432,7 +1432,7 @@
       }
     },
     {
-      "internalId": "NOS-SSA-SER001-GEN001-0033",
+      "internalId": "ARC-NOS-SSA-SER001-GEN001-0033",
       "themeCode": "NOS",
       "designCode": "SSA",
       "designFamily": "SCHOOL_AGENDA",
@@ -1476,7 +1476,7 @@
       }
     },
     {
-      "internalId": "NOS-PSB-SER001-GEN001-0034",
+      "internalId": "ARC-NOS-PSB-SER001-GEN001-0034",
       "themeCode": "NOS",
       "designCode": "PSB",
       "designFamily": "SKIP_BALL",
@@ -1520,7 +1520,7 @@
       }
     },
     {
-      "internalId": "NOS-TFG-SER001-GEN001-0035",
+      "internalId": "ARC-NOS-TFG-SER001-GEN001-0035",
       "themeCode": "NOS",
       "designCode": "TFG",
       "designFamily": "TABLETOP_FOOTBALL",

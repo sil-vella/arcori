@@ -188,6 +188,14 @@ void main() {
       );
     });
 
+    test('masteryWeightFromFit floors cold hits and peaks at 1', () {
+      expect(masteryWeightFromFit(0), closeTo(0.55, 1e-9));
+      expect(masteryWeightFromFit(1), closeTo(1.0, 1e-9));
+      expect(masteryWeightFromFit(0.5), closeTo(0.775, 1e-9));
+      // Flips with fit=0 still award mastery (not zero).
+      expect(3 * masteryWeightFromFit(0), closeTo(1.65, 1e-9));
+    });
+
     test('weak slam counts but barely moves and usually does not wipe the stack', () {
       final r = resolveSlam(
         matchId: 'm_weak',

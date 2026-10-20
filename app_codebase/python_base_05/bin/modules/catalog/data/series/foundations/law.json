@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LAW-CAS-SER003-GEN001-0001",
+      "internalId": "ARC-LAW-CAS-SER003-GEN001-0001",
       "themeCode": "LAW",
       "designCode": "CAS",
       "designFamily": "COVENANT_OF_ASH_AND_STONE",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "LAW-CFL-SER003-GEN001-0002",
+      "internalId": "ARC-LAW-CFL-SER003-GEN001-0002",
       "themeCode": "LAW",
       "designCode": "CFL",
       "designFamily": "THE_COVENANT_OF_FIVE_LIGHTS",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "LAW-MBI-SER003-GEN001-0003",
+      "internalId": "ARC-LAW-MBI-SER003-GEN001-0003",
       "themeCode": "LAW",
       "designCode": "MBI",
       "designFamily": "THE_MEASURE_BENEATH_THE_ICE",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "LAW-MMT-SER003-GEN001-0004",
+      "internalId": "ARC-LAW-MMT-SER003-GEN001-0004",
       "themeCode": "LAW",
       "designCode": "MMT",
       "designFamily": "THE_MEASURE_OF_MOON_AND_TIDE",

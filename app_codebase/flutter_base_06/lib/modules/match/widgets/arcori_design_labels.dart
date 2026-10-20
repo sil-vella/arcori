@@ -1,8 +1,8 @@
 /// Series / generation / serial parsed from a catalog [designId].
 ///
-/// Wire shape: `THEME-CODE-SERnnn-GENnnn-####`
-/// e.g. `ANM-TIG-SER001-GEN001-0001` (SER = series, GEN = generation).
-/// Legacy ids without GEN (`ANM-TIG-SER001-0001`) treat generation as I.
+/// Wire shape: `TYPE-THEME-CODE-SERnnn-GENnnn-####`
+/// e.g. `ARC-ANM-TIG-SER001-GEN001-0001` (TYPE = ARC|SLM, SER = series, GEN = generation).
+/// Legacy ids without TYPE/GEN still parse (generation defaults to I).
 class ArcoriDesignLabels {
   const ArcoriDesignLabels({
     required this.series,

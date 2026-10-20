@@ -138,6 +138,8 @@ class AvariServiceTests(unittest.TestCase):
         self.assertEqual(attrs["control"], 5)
         self.assertEqual(attrs["recovery"], 5)
         self.assertEqual(attrs["spread"], 5)
+        self.assertNotIn("hitTarget", attrs)
+        self.assertNotIn("powerBracket", attrs)
         self.assertNotIn("gameplayAttributes", payload["access"][0])
         self.assertTrue(payload["onboarding"]["completed"])
         self.assertEqual(payload["trove"], [])

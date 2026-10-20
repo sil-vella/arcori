@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "HLD-OHX-SER004-GEN001-0001",
+      "internalId": "ARC-HLD-OHX-SER004-GEN001-0001",
       "themeCode": "HLD",
       "designCode": "OHX",
       "designFamily": "OAKCREST_HALL",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "internalId": "HLD-CCX-SER004-GEN001-0002",
+      "internalId": "ARC-HLD-CCX-SER004-GEN001-0002",
       "themeCode": "HLD",
       "designCode": "CCX",
       "designFamily": "CIVILIZATION_CRESTS",
@@ -93,7 +93,7 @@
       }
     },
     {
-      "internalId": "HLD-OHS-SER004-GEN001-0003",
+      "internalId": "ARC-HLD-OHS-SER004-GEN001-0003",
       "themeCode": "HLD",
       "designCode": "OHS",
       "designFamily": "OAKCREST_HERALDIC_SHIELD",
@@ -137,7 +137,7 @@
       }
     },
     {
-      "internalId": "HLD-HOM-SER004-GEN001-0004",
+      "internalId": "ARC-HLD-HOM-SER004-GEN001-0004",
       "themeCode": "HLD",
       "designCode": "HOM",
       "designFamily": "HOLLOW_OATH_MEDALLION",
@@ -183,7 +183,7 @@
       }
     },
     {
-      "internalId": "HLD-LBX-SER004-GEN001-0005",
+      "internalId": "ARC-HLD-LBX-SER004-GEN001-0005",
       "themeCode": "HLD",
       "designCode": "LBX",
       "designFamily": "LIGHTWOVEN_BANNER",
@@ -229,7 +229,7 @@
       }
     },
     {
-      "internalId": "HLD-GHS-SER004-GEN001-0006",
+      "internalId": "ARC-HLD-GHS-SER004-GEN001-0006",
       "themeCode": "HLD",
       "designCode": "GHS",
       "designFamily": "GOLDLEAF_HERALDIC_SHIELD",

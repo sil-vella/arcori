@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CMY-COT-SER003-GEN001-0001",
+      "internalId": "ARC-CMY-COT-SER003-GEN001-0001",
       "themeCode": "CMY",
       "designCode": "COT",
       "designFamily": "THE_COMMON_TABLE",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "internalId": "CMY-SAB-SER003-GEN001-0002",
+      "internalId": "ARC-CMY-SAB-SER003-GEN001-0002",
       "themeCode": "CMY",
       "designCode": "SAB",
       "designFamily": "SUPPER_AFTER_THE_BLIZZARD",
@@ -90,7 +90,7 @@
       }
     },
     {
-      "internalId": "CMY-MHO-SER003-GEN001-0003",
+      "internalId": "ARC-CMY-MHO-SER003-GEN001-0003",
       "themeCode": "CMY",
       "designCode": "MHO",
       "designFamily": "MANY_HANDS_ONE_ROOF",
@@ -132,7 +132,7 @@
       }
     },
     {
-      "internalId": "CMY-TTH-SER003-GEN001-0004",
+      "internalId": "ARC-CMY-TTH-SER003-GEN001-0004",
       "themeCode": "CMY",
       "designCode": "TTH",
       "designFamily": "THE_TOWN_THAT_BUILDS_TOGETHER",

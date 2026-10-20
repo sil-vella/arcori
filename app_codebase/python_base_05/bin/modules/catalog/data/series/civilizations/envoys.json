@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "ENV-GLG-SER004-GEN001-0001",
+      "internalId": "ARC-ENV-GLG-SER004-GEN001-0001",
       "themeCode": "ENV",
       "designCode": "GLG",
       "designFamily": "GIFT_OF_THE_LIVING_GROVE",
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "ENV-DKX-SER004-GEN001-0002",
+      "internalId": "ARC-ENV-DKX-SER004-GEN001-0002",
       "themeCode": "ENV",
       "designCode": "DKX",
       "designFamily": "DIPLOMATIC_KIT",
@@ -97,7 +97,7 @@
       }
     },
     {
-      "internalId": "ENV-HES-SER004-GEN001-0003",
+      "internalId": "ARC-ENV-HES-SER004-GEN001-0003",
       "themeCode": "ENV",
       "designCode": "HES",
       "designFamily": "HARBOR_ENVOY_SCROLLCASE",
@@ -141,7 +141,7 @@
       }
     },
     {
-      "internalId": "ENV-DSC-SER004-GEN001-0004",
+      "internalId": "ARC-ENV-DSC-SER004-GEN001-0004",
       "themeCode": "ENV",
       "designCode": "DSC",
       "designFamily": "DUSTBOUND_SCROLL_CASE",

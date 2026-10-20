@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "WCH-HWX-SER004-GEN001-0001",
+      "internalId": "ARC-WCH-HWX-SER004-GEN001-0001",
       "themeCode": "WCH",
       "designCode": "HWX",
       "designFamily": "HARBOR_WATCH",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "internalId": "WCH-ASX-SER004-GEN001-0002",
+      "internalId": "ARC-WCH-ASX-SER004-GEN001-0002",
       "themeCode": "WCH",
       "designCode": "ASX",
       "designFamily": "ASHEN_SENTINELS",
@@ -97,7 +97,7 @@
       }
     },
     {
-      "internalId": "WCH-ASH-SER004-GEN001-0003",
+      "internalId": "ARC-WCH-ASH-SER004-GEN001-0003",
       "themeCode": "WCH",
       "designCode": "ASH",
       "designFamily": "ASHEN_SENTINEL_HELM",
@@ -143,7 +143,7 @@
       }
     },
     {
-      "internalId": "WCH-RLX-SER004-GEN001-0004",
+      "internalId": "ARC-WCH-RLX-SER004-GEN001-0004",
       "themeCode": "WCH",
       "designCode": "RLX",
       "designFamily": "RUINKEEPER_LANTERN",
@@ -189,7 +189,7 @@
       }
     },
     {
-      "internalId": "WCH-WIT-SER004-GEN001-0005",
+      "internalId": "ARC-WCH-WIT-SER004-GEN001-0005",
       "themeCode": "WCH",
       "designCode": "WIT",
       "designFamily": "WATCHERS_IRON_TOKEN",

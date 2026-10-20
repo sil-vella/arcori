@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "HAR-EVG-SER003-GEN001-0001",
+      "internalId": "ARC-HAR-EVG-SER003-GEN001-0001",
       "themeCode": "HAR",
       "designCode": "EVG",
       "designFamily": "EVERGOLD_GATHERING",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "HAR-BBP-SER003-GEN001-0002",
+      "internalId": "ARC-HAR-BBP-SER003-GEN001-0002",
       "themeCode": "HAR",
       "designCode": "BBP",
       "designFamily": "BOUNTY_BENEATH_THE_PILLARS",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "HAR-GAP-SER003-GEN001-0003",
+      "internalId": "ARC-HAR-GAP-SER003-GEN001-0003",
       "themeCode": "HAR",
       "designCode": "GAP",
       "designFamily": "GATHERING_THE_PILLARFRUIT",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "HAR-HGW-SER003-GEN001-0004",
+      "internalId": "ARC-HAR-HGW-SER003-GEN001-0004",
       "themeCode": "HAR",
       "designCode": "HGW",
       "designFamily": "HARVEST_OF_THE_GOLDEN_WILD",

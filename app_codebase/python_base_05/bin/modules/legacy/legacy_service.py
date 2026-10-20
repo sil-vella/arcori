@@ -51,6 +51,24 @@ TITLE_LEGACY_OWNER = "Legacy Owner"
 TITLE_GENERATION_CREATOR = "Generation Creator"
 TITLE_MASTER = "Master"
 
+# Slammer Legacy defaults when catalog omits a legacy block.
+SLAMMER_PRESERVE_DEFAULT = 750
+SLAMMER_CLOSURE_DEFAULT = 1000
+
+
+def is_slammer_design_id(design_id: str) -> bool:
+    return (design_id or "").strip().upper().startswith("SLM-")
+
+
+def is_slammer_design(design: dict[str, Any] | None, design_id: str = "") -> bool:
+    if is_slammer_design_id(design_id):
+        return True
+    if not isinstance(design, dict):
+        return False
+    theme_code = str(design.get("themeCode") or "").strip().upper()
+    design_type = str(design.get("type") or "").strip().lower()
+    return theme_code == "SLM" or design_type == "slammer"
+
 
 def _closure_milestone_for_design(design: dict[str, Any] | None) -> int:
     if not isinstance(design, dict):
@@ -60,6 +78,8 @@ def _closure_milestone_for_design(design: dict[str, Any] | None) -> int:
     try:
         return max(1, int(raw))
     except (TypeError, ValueError):
+        if is_slammer_design(design):
+            return SLAMMER_CLOSURE_DEFAULT
         return 1000
 
 
@@ -71,6 +91,15 @@ def _thresholds(design_id: str) -> tuple[int, int]:
         design = None
     if not isinstance(design, dict):
         design = None
+    if is_slammer_design(design, design_id):
+        if design is None:
+            return SLAMMER_PRESERVE_DEFAULT, SLAMMER_CLOSURE_DEFAULT
+        legacy = design.get("legacy") if isinstance(design.get("legacy"), dict) else {}
+        try:
+            preserve = max(1, int(legacy.get("preservationRequirement")))
+        except (TypeError, ValueError):
+            preserve = SLAMMER_PRESERVE_DEFAULT
+        return preserve, _closure_milestone_for_design(design)
     return mint_reach_or_series_default(design), _closure_milestone_for_design(design)
 
 
@@ -661,6 +690,17 @@ def _apply_preserve_mint(
     generation_number: int,
     life: Any,
 ) -> dict[str, Any]:
+    """Physical mint: seal slammer Legacy; Museum/Trove are slammer-only."""
+    if not is_slammer_design_id(design_id):
+        # Arcori no longer mint into Trove — close+echo only.
+        return _apply_arcori_generation_close(
+            session,
+            life=life,
+            design_id=design_id,
+            generation_number=generation_number,
+            closer_user_id=user_id,
+        )
+
     repo.insert_trove_mint(
         session,
         user_id=user_id,
@@ -683,6 +723,10 @@ def _apply_preserve_mint(
     life.preserved_user_id = uuid.UUID(user_id)
     life.closed_at = now
 
+    snapshot = _seal_slammer_legacy(
+        session, user_id=user_id, design_id=design_id
+    )
+
     actor_name = _display_name_for_user(session, user_id)
     arcori_name = _arcori_display_name(design_id)
     history = _museum_history_summary(
@@ -704,6 +748,8 @@ def _apply_preserve_mint(
             "actorRole": "legacy_owner",
             "arcoriDisplayName": arcori_name,
             "historySummary": history,
+            "kind": "slammer",
+            "legacySnapshot": snapshot,
         },
     )
 
@@ -713,6 +759,7 @@ def _apply_preserve_mint(
         closed_generation_number=generation_number,
         life=life,
         creator_user_id=user_id,
+        grant_slammer=True,
     )
 
     return {
@@ -729,12 +776,14 @@ def _apply_preserve_mint(
         "actorDisplayName": actor_name,
         "arcoriDisplayName": arcori_name,
         "preservedUserId": user_id,
+        "legacySnapshot": snapshot,
         "mint": {
             "designId": design_id,
             "serial": design_id,
             "generationNumber": generation_number,
             "legacyTitle": TITLE_LEGACY_OWNER,
             "creatorAttributed": True,
+            "legacyId": (snapshot or {}).get("legacyId"),
         },
     }
 
@@ -747,6 +796,15 @@ def _apply_lost_close(
     generation_number: int,
     closer_user_id: str | None,
 ) -> dict[str, Any]:
+    if not is_slammer_design_id(design_id):
+        return _apply_arcori_generation_close(
+            session,
+            life=life,
+            design_id=design_id,
+            generation_number=generation_number,
+            closer_user_id=closer_user_id,
+        )
+
     now = repo.utcnow()
     life.phase = PHASE_LOST_CLOSED
     life.legacy_state = LEGACY_LOST
@@ -784,6 +842,7 @@ def _apply_lost_close(
             "actorRole": "master",
             "arcoriDisplayName": arcori_name,
             "historySummary": history,
+            "kind": "slammer",
         },
     )
     echo = _echo_next_generation(
@@ -814,6 +873,8 @@ def _echo_next_generation(
     closed_generation_number: int,
     life: Any,
     creator_user_id: str | None,
+    grant_slammer: bool | None = None,
+    write_museum: bool = True,
 ) -> dict[str, Any]:
     """Close catalog row, insert echo design in DB, open lifecycle, copy access."""
     from modules.catalog import catalog_repository as catalog_repo
@@ -828,6 +889,10 @@ def _echo_next_generation(
     except ValueError:
         # Legacy ids without parseable GEN — fall back to same id + gen column.
         echo_id = closed_design_id
+
+    is_slammer = is_slammer_design_id(closed_design_id)
+    if grant_slammer is None:
+        grant_slammer = is_slammer
 
     closed_row = catalog_repo.mark_closed(session, closed_design_id)
     series_key = (
@@ -877,29 +942,41 @@ def _echo_next_generation(
         preservation_requirement=int(life.preservation_requirement),
         closure_milestone=int(life.closure_milestone),
     )
-    copied = catalog_repo.copy_design_access(
-        session,
-        from_design_id=closed_design_id,
-        to_design_id=echo_id,
-    )
-    revoked = catalog_repo.revoke_all_access_for_design(
-        session, closed_design_id
-    )
-    seeded = _seed_echo_mastery(
-        session,
-        closed_design_id=closed_design_id,
-        closed_generation_number=int(closed_generation_number),
-        echo_design_id=echo_id,
-        echo_generation_number=next_gen,
-        preservation_requirement=int(life.preservation_requirement),
-        legacy_state=str(getattr(life, "legacy_state", "") or ""),
-        closed_at=getattr(life, "closed_at", None),
-    )
+    copied = 0
+    revoked = 0
+    if not is_slammer:
+        copied = catalog_repo.copy_design_access(
+            session,
+            from_design_id=closed_design_id,
+            to_design_id=echo_id,
+        )
+        revoked = catalog_repo.revoke_all_access_for_design(
+            session, closed_design_id
+        )
+        seeded = _seed_echo_mastery(
+            session,
+            closed_design_id=closed_design_id,
+            closed_generation_number=int(closed_generation_number),
+            echo_design_id=echo_id,
+            echo_generation_number=next_gen,
+            preservation_requirement=int(life.preservation_requirement),
+            legacy_state=str(getattr(life, "legacy_state", "") or ""),
+            closed_at=getattr(life, "closed_at", None),
+        )
+    else:
+        seeded = _seed_echo_slammer_mastery(
+            session,
+            closed_design_id=closed_design_id,
+            echo_design_id=echo_id,
+            preservation_requirement=int(life.preservation_requirement),
+            grant_slammer=bool(grant_slammer),
+        )
+    _ = write_museum  # museum writes stay in preserve/lost callers
     if LOGGING_SWITCH:
         customlog(
             f"legacy: echo closed={closed_design_id} → {echo_id} "
             f"gen={next_gen} accessCopied={copied} accessRevoked={revoked} "
-            f"masterySeeded={seeded}"
+            f"masterySeeded={seeded} slammer={is_slammer}"
         )
     return {
         "echoDesignId": echo_id,
@@ -987,6 +1064,88 @@ def _seed_echo_mastery(
     return seeded_players
 
 
+def _seed_echo_slammer_mastery(
+    session: Any,
+    *,
+    closed_design_id: str,
+    echo_design_id: str,
+    preservation_requirement: int,
+    grant_slammer: bool = True,
+) -> int:
+    """Seed next-gen slammer mastery (30% rule) and grant player_slammers row."""
+    from modules.avari import avari_repository as avari_repo
+    from modules.avari.mastery_economy import echo_mastery_seed
+    from models.player_progress import PlayerSlammer
+    from sqlalchemy import select
+
+    closed_id = (closed_design_id or "").strip()
+    echo_id = (echo_design_id or "").strip()
+    if not closed_id or not echo_id or not grant_slammer:
+        return 0
+    rows = list(
+        session.scalars(
+            select(PlayerSlammer).where(PlayerSlammer.design_id == closed_id)
+        ).all()
+    )
+    seeded_players = 0
+    for row in rows:
+        closed_pts = float(getattr(row, "mastery_points", 0) or 0)
+        if closed_pts <= 0:
+            continue
+        uid = getattr(row, "user_id", None)
+        if uid is None:
+            continue
+        seed = float(
+            echo_mastery_seed(
+                int(closed_pts),
+                preservation_requirement=preservation_requirement,
+            )
+        )
+        if seed <= 0:
+            continue
+        avari_repo.ensure_slammer(
+            session,
+            user_id=uid,
+            design_id=echo_id,
+            permanent=bool(row.permanent),
+            charges_remaining=row.charges_remaining,
+            source="echo",
+            mastery_points=seed,
+        )
+        seeded_players += 1
+    return seeded_players
+
+
+def _seal_slammer_legacy(
+    session: Any,
+    *,
+    user_id: str,
+    design_id: str,
+) -> dict[str, Any] | None:
+    """Freeze Legacy snapshot on the player's slammer; keep the row usable."""
+    from modules.avari import avari_repository as avari_repo
+    import secrets
+
+    row = avari_repo.get_slammer(session, user_id=user_id, design_id=design_id)
+    if row is None:
+        return None
+    legacy_id = (row.legacy_id or "").strip() or f"LGC-{secrets.token_hex(8)}"
+    snapshot = {
+        "ownerUserId": user_id,
+        "designId": design_id,
+        "mastery": float(row.mastery_points or 0),
+        "matches": int(row.matches_count or 0),
+        "successfulSlams": int(row.successful_slams or 0),
+        "arcoriFlipped": int(row.arcori_flipped or 0),
+        "bestSlam": int(row.best_slam or 0),
+        "legacyId": legacy_id,
+    }
+    row.legacy_id = legacy_id[:64]
+    row.legacy_snapshot = snapshot
+    session.flush()
+    return snapshot
+
+
 def _proximity_gaps_crossed(*, gap_before: int, gap_after: int) -> list[int]:
     """Integer gaps in 1..LEADER_PROXIMITY_POINTS that this mastery step crossed into.
 
@@ -1017,17 +1176,21 @@ def on_mastery_progress(
     user_id: str,
     design_id: str,
     generation_number: int,
-    points_after: int,
-    points_before: int | None = None,
+    points_after: float | int,
+    points_before: float | int | None = None,
 ) -> dict[str, Any] | None:
-    """Called inside finalize txn after mastery write. Returns offer/mint event or None."""
+    """Called after mastery write.
+
+    Arcori: close at ``closureMilestone`` then echo (no offer / mint / museum).
+    Slammer: preserve offer → leader window → lost or mint (Museum + Trove).
+    """
     uid = (user_id or "").strip()
     did = (design_id or "").strip()
     if not uid or not did:
         return None
     gen = int(generation_number)
-    pts = int(points_after)
-    before = int(points_before) if points_before is not None else pts
+    pts = float(points_after)
+    before = float(points_before) if points_before is not None else pts
     design = None
     try:
         design = get_design(did)
@@ -1035,8 +1198,9 @@ def on_mastery_progress(
         design = None
     if not isinstance(design, dict):
         design = None
-    pres = mint_reach_or_series_default(design)
-    clos = _closure_milestone_for_design(design)
+
+    slammer = is_slammer_design(design, did)
+    pres, clos = _thresholds(did)
 
     life = repo.ensure_lifecycle(
         session,
@@ -1048,7 +1212,24 @@ def on_mastery_progress(
     if life.phase in (PHASE_PRESERVED, PHASE_LOST_CLOSED):
         return None
 
-    # Auto-close at mastery cap before preserve.
+    # --- Arcori: mastery → generation close → next gen only ---
+    if not slammer:
+        if pts >= int(life.closure_milestone):
+            closed = _apply_arcori_generation_close(
+                session,
+                life=life,
+                design_id=did,
+                generation_number=gen,
+                closer_user_id=uid,
+            )
+            if LOGGING_SWITCH:
+                customlog(
+                    f"legacy: arcori close design={did} gen={gen} user={uid} pts={pts}"
+                )
+            return {"legacyEvent": closed}
+        return None
+
+    # --- Slammer: offer / window / lost / mint ---
     if pts >= int(life.closure_milestone) and life.phase not in (
         PHASE_PRESERVED,
         PHASE_LOST_CLOSED,
@@ -1062,11 +1243,11 @@ def on_mastery_progress(
         )
         if LOGGING_SWITCH:
             customlog(
-                f"legacy: auto-close lost design={did} gen={gen} user={uid} pts={pts}"
+                f"legacy: slammer auto-close lost design={did} gen={gen} "
+                f"user={uid} pts={pts}"
             )
         return {"legacyEvent": lost}
 
-    # First offer claim (idempotent: only from racing).
     if life.phase == PHASE_RACING and pts >= int(life.preservation_requirement):
         life.phase = PHASE_FIRST_OFFER
         life.first_offer_user_id = uuid.UUID(uid)
@@ -1077,18 +1258,19 @@ def on_mastery_progress(
         session.flush()
         if LOGGING_SWITCH:
             customlog(
-                f"legacy: first_offer user={uid} design={did} gen={gen} pts={pts} "
-                f"expires_in_min={FIRST_OFFER_MINUTES}"
+                f"legacy: slammer first_offer user={uid} design={did} gen={gen} "
+                f"pts={pts} expires_in_min={FIRST_OFFER_MINUTES}"
             )
         return {
             "legacyOffer": _serialize_lifecycle(life, viewer_user_id=uid),
         }
 
-    # Leader updates during first_offer (others racing mastery) or leader_window.
     if life.phase in (PHASE_FIRST_OFFER, PHASE_LEADER_WINDOW):
         current_leader = str(life.leader_user_id) if life.leader_user_id else None
         if current_leader and current_leader != uid:
-            leader_pts = repo.get_mastery_points(session, current_leader, did, gen)
+            leader_pts = repo.get_progress_points(
+                session, current_leader, did, gen
+            )
             if pts > leader_pts:
                 life.leader_user_id = uuid.UUID(uid)
                 life.leader_since = repo.utcnow()
@@ -1096,8 +1278,8 @@ def on_mastery_progress(
                 session.flush()
                 if LOGGING_SWITCH:
                     customlog(
-                        f"legacy: new leader user={uid} design={did} gen={gen} "
-                        f"pts={pts} hold_min={LEADER_HOLD_MINUTES}"
+                        f"legacy: slammer new leader user={uid} design={did} "
+                        f"gen={gen} pts={pts} hold_min={LEADER_HOLD_MINUTES}"
                     )
                 return {
                     "legacyLeaderChanged": _serialize_lifecycle(
@@ -1105,15 +1287,14 @@ def on_mastery_progress(
                     ),
                 }
 
-            # Leader-window proximity: one event per gap 5..1 crossed this step.
             if life.phase == PHASE_LEADER_WINDOW:
-                gap_before = int(leader_pts) - before
-                gap_after = int(leader_pts) - pts
+                gap_before = int(leader_pts) - int(before)
+                gap_after = int(leader_pts) - int(pts)
                 gaps = _proximity_gaps_crossed(
                     gap_before=gap_before, gap_after=gap_after
                 )
                 if gaps:
-                    arcori = _arcori_display_name_from_design(design, did)
+                    name = _arcori_display_name_from_design(design, did)
                     events = [
                         {
                             "designId": did,
@@ -1121,20 +1302,67 @@ def on_mastery_progress(
                             "gap": g,
                             "leaderUserId": current_leader,
                             "challengerUserId": uid,
-                            "leaderPoints": int(leader_pts),
+                            "leaderPoints": float(leader_pts),
                             "challengerPoints": pts,
-                            "arcoriDisplayName": arcori,
+                            "arcoriDisplayName": name,
                         }
                         for g in gaps
                     ]
                     if LOGGING_SWITCH:
                         customlog(
-                            f"legacy: proximity design={did} gen={gen} "
-                            f"challenger={uid} leader={current_leader} "
-                            f"gaps={gaps} before={gap_before} after={gap_after}"
+                            f"legacy: slammer proximity design={did} gen={gen} "
+                            f"challenger={uid} leader={current_leader} gaps={gaps}"
                         )
                     return {"legacyProximity": events}
     return None
+
+
+def _apply_arcori_generation_close(
+    session: Any,
+    *,
+    life: Any,
+    design_id: str,
+    generation_number: int,
+    closer_user_id: str | None,
+) -> dict[str, Any]:
+    """Close an Arcori generation: echo next gen, no Museum / Trove / Legacy Owner."""
+    now = repo.utcnow()
+    life.phase = PHASE_LOST_CLOSED
+    life.legacy_state = LEGACY_LOST
+    life.closed_at = now
+    if closer_user_id:
+        from sqlalchemy import select
+
+        avari = session.scalars(
+            select(AvariProfile).where(
+                AvariProfile.user_id == uuid.UUID(closer_user_id)
+            )
+        ).first()
+        if avari is not None:
+            _ensure_title(avari, TITLE_MASTER)
+
+    echo = _echo_next_generation(
+        session,
+        closed_design_id=design_id,
+        closed_generation_number=int(generation_number),
+        life=life,
+        creator_user_id=None,
+        grant_slammer=False,
+        write_museum=False,
+    )
+    return {
+        "applied": True,
+        "reason": "arcori_generation_closed",
+        "designId": design_id,
+        "serial": design_id,
+        "generationNumber": generation_number,
+        "echoGenerationNumber": echo["echoGenerationNumber"],
+        "echoDesignId": echo["echoDesignId"],
+        "legacyState": LEGACY_LOST,
+        "museumWritten": False,
+        "troveWritten": False,
+        "preservedUserId": None,
+    }
 
 
 def tick_expire_offers() -> dict[str, Any]:
@@ -1352,6 +1580,10 @@ def list_museum(
         )
         items: list[dict[str, Any]] = []
         for row in rows:
+            # Museum is slammer-only (closed Arcori live in Velora).
+            did = str(getattr(row, "design_id", "") or "").strip()
+            if not is_slammer_design_id(did):
+                continue
             item = _serialize_museum_item(session, row)
             if needle:
                 hay = f"{item.get('displayName', '')} {item.get('designId', '')}".lower()
@@ -1441,6 +1673,8 @@ def get_museum_item(*, design_id: str, generation_number: int) -> dict[str, Any]
     did = (design_id or "").strip()
     if not did:
         raise AppError(INVALID_QUERY, message="designId is required")
+    if not is_slammer_design_id(did):
+        raise AppError(MUSEUM_NOT_FOUND)
     try:
         gen = int(generation_number)
     except (TypeError, ValueError) as exc:
@@ -1485,8 +1719,17 @@ def get_museum_banner() -> dict[str, Any]:
             serial = str(entry.get("serial") or "").strip()
             if not serial:
                 continue
+            # Museum banner is slammer-only (closed Arcori → Velora).
+            if not is_slammer_design_id(serial) and not any(
+                is_slammer_design_id(a)
+                for a in (design_id_aliases(serial) or [])
+            ):
+                continue
             gen = entry.get("generationNumber")
             candidates = design_id_aliases(serial) or [serial]
+            candidates = [c for c in candidates if is_slammer_design_id(c)]
+            if not candidates and is_slammer_design_id(serial):
+                candidates = [serial]
             row = None
             for did in candidates:
                 if gen is not None:

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LIF-RGT-SER001-GEN001-0001",
+      "internalId": "ARC-LIF-RGT-SER001-GEN001-0001",
       "themeCode": "LIF",
       "designCode": "RGT",
       "designFamily": "ROCK_GUITARIST",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "internalId": "LIF-DDJ-SER001-GEN001-0002",
+      "internalId": "ARC-LIF-DDJ-SER001-GEN001-0002",
       "themeCode": "LIF",
       "designCode": "DDJ",
       "designFamily": "DJ_PULSE",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "LIF-VSO-SER001-GEN001-0003",
+      "internalId": "ARC-LIF-VSO-SER001-GEN001-0003",
       "themeCode": "LIF",
       "designCode": "VSO",
       "designFamily": "VIOLIN_SOLOIST",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "LIF-BRK-SER001-GEN001-0004",
+      "internalId": "ARC-LIF-BRK-SER001-GEN001-0004",
       "themeCode": "LIF",
       "designCode": "BRK",
       "designFamily": "STREET_BREAKER",
@@ -182,7 +182,7 @@
       }
     },
     {
-      "internalId": "LIF-BAL-SER001-GEN001-0005",
+      "internalId": "ARC-LIF-BAL-SER001-GEN001-0005",
       "themeCode": "LIF",
       "designCode": "BAL",
       "designFamily": "BALLET_STAR",
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "LIF-POP-SER001-GEN001-0006",
+      "internalId": "ARC-LIF-POP-SER001-GEN001-0006",
       "themeCode": "LIF",
       "designCode": "POP",
       "designFamily": "POP_PERFORMER",
@@ -274,7 +274,7 @@
       }
     },
     {
-      "internalId": "LIF-MBG-SER001-GEN001-0007",
+      "internalId": "ARC-LIF-MBG-SER001-GEN001-0007",
       "themeCode": "LIF",
       "designCode": "MBG",
       "designFamily": "MEGA_BURGER",
@@ -316,7 +316,7 @@
       }
     },
     {
-      "internalId": "LIF-SSH-SER001-GEN001-0008",
+      "internalId": "ARC-LIF-SSH-SER001-GEN001-0008",
       "themeCode": "LIF",
       "designCode": "SSH",
       "designFamily": "SUSHI_MASTER",
@@ -360,7 +360,7 @@
       }
     },
     {
-      "internalId": "LIF-PZA-SER001-GEN001-0009",
+      "internalId": "ARC-LIF-PZA-SER001-GEN001-0009",
       "themeCode": "LIF",
       "designCode": "PZA",
       "designFamily": "PIZZA_CHEF",
@@ -402,7 +402,7 @@
       }
     },
     {
-      "internalId": "LIF-GEX-SER001-GEN001-0010",
+      "internalId": "ARC-LIF-GEX-SER001-GEN001-0010",
       "themeCode": "LIF",
       "designCode": "GEX",
       "designFamily": "GLOBE_EXPLORER",
@@ -446,7 +446,7 @@
       }
     },
     {
-      "internalId": "LIF-TRB-SER001-GEN001-0011",
+      "internalId": "ARC-LIF-TRB-SER001-GEN001-0011",
       "themeCode": "LIF",
       "designCode": "TRB",
       "designFamily": "TRAIL_BACKPACKER",
@@ -490,7 +490,7 @@
       }
     },
     {
-      "internalId": "LIF-AFL-SER001-GEN001-0012",
+      "internalId": "ARC-LIF-AFL-SER001-GEN001-0012",
       "themeCode": "LIF",
       "designCode": "AFL",
       "designFamily": "AROUND_THE_WORLD",
@@ -534,7 +534,7 @@
       }
     },
     {
-      "internalId": "LIF-USR-SER001-GEN001-0013",
+      "internalId": "ARC-LIF-USR-SER001-GEN001-0013",
       "themeCode": "LIF",
       "designCode": "USR",
       "designFamily": "URBAN_STREETWEAR",
@@ -576,7 +576,7 @@
       }
     },
     {
-      "internalId": "LIF-RUN-SER001-GEN001-0014",
+      "internalId": "ARC-LIF-RUN-SER001-GEN001-0014",
       "themeCode": "LIF",
       "designCode": "RUN",
       "designFamily": "RUNWAY_ICON",
@@ -622,7 +622,7 @@
       }
     },
     {
-      "internalId": "LIF-VIN-SER001-GEN001-0015",
+      "internalId": "ARC-LIF-VIN-SER001-GEN001-0015",
       "themeCode": "LIF",
       "designCode": "VIN",
       "designFamily": "VINTAGE_TAILOR",
@@ -668,7 +668,7 @@
       }
     },
     {
-      "internalId": "LIF-NPH-SER001-GEN001-0016",
+      "internalId": "ARC-LIF-NPH-SER001-GEN001-0016",
       "themeCode": "LIF",
       "designCode": "NPH",
       "designFamily": "NIGHT_PHOTOGRAPHER",
@@ -714,7 +714,7 @@
       }
     },
     {
-      "internalId": "LIF-WLF-SER001-GEN001-0017",
+      "internalId": "ARC-LIF-WLF-SER001-GEN001-0017",
       "themeCode": "LIF",
       "designCode": "WLF",
       "designFamily": "WILDLIFE_PHOTOGRAPHER",
@@ -758,7 +758,7 @@
       }
     },
     {
-      "internalId": "LIF-DRN-SER001-GEN001-0018",
+      "internalId": "ARC-LIF-DRN-SER001-GEN001-0018",
       "themeCode": "LIF",
       "designCode": "DRN",
       "designFamily": "DRONE_PHOTOGRAPHER",
@@ -804,7 +804,7 @@
       }
     },
     {
-      "internalId": "LIF-BAR-SER001-GEN001-0019",
+      "internalId": "ARC-LIF-BAR-SER001-GEN001-0019",
       "themeCode": "LIF",
       "designCode": "BAR",
       "designFamily": "MASTER_BARISTA",
@@ -846,7 +846,7 @@
       }
     },
     {
-      "internalId": "LIF-VINY-SER001-GEN001-0020",
+      "internalId": "ARC-LIF-VINY-SER001-GEN001-0020",
       "themeCode": "LIF",
       "designCode": "VINY",
       "designFamily": "VINYL_COLLECTOR",

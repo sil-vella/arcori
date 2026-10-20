@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "EXP-BGP-SER003-GEN001-0001",
+      "internalId": "ARC-EXP-BGP-SER003-GEN001-0001",
       "themeCode": "EXP",
       "designCode": "BGP",
       "designFamily": "BEYOND_THE_GOLDEN_PATH",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "EXP-RUA-SER003-GEN001-0002",
+      "internalId": "ARC-EXP-RUA-SER003-GEN001-0002",
       "themeCode": "EXP",
       "designCode": "RUA",
       "designFamily": "THE_ROAD_UNDER_ASH",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "EXP-BRT-SER003-GEN001-0003",
+      "internalId": "ARC-EXP-BRT-SER003-GEN001-0003",
       "themeCode": "EXP",
       "designCode": "BRT",
       "designFamily": "BEYOND_THE_REOPENED_TRAIL",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "EXP-BGC-SER003-GEN001-0004",
+      "internalId": "ARC-EXP-BGC-SER003-GEN001-0004",
       "themeCode": "EXP",
       "designCode": "BGC",
       "designFamily": "BEYOND_THE_GOLDEN_CANOPY",

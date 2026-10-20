@@ -206,7 +206,6 @@ class _RimSkuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hit = (sku.hitTarget ?? 'edge').toLowerCase();
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
       child: Column(
@@ -220,7 +219,7 @@ class _RimSkuCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'High precision · prefers $hit shots · mid power. '
+            'High precision · learn its feel in matches. '
             'Buy for ${sku.shopPriceGoldArcori} Gold Arcori '
             '(${sku.maxCharges} uses). Top up +${sku.rechargeCharges} '
             'for ${sku.rechargePriceGoldArcori} Gold Arcori.',

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SET-DAH-SER003-GEN001-0001",
+      "internalId": "ARC-SET-DAH-SER003-GEN001-0001",
       "themeCode": "SET",
       "designCode": "DAH",
       "designFamily": "DAWNSTONE_HAVEN",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "SET-FLN-SER003-GEN001-0002",
+      "internalId": "ARC-SET-FLN-SER003-GEN001-0002",
       "themeCode": "SET",
       "designCode": "FLN",
       "designFamily": "FIRST_LANTERNS_OF_THE_NEW_SHORE",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "SET-HAF-SER003-GEN001-0003",
+      "internalId": "ARC-SET-HAF-SER003-GEN001-0003",
       "themeCode": "SET",
       "designCode": "HAF",
       "designFamily": "HOMES_ALONG_THE_FORGOTTEN_ROAD",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "SET-FPF-SER003-GEN001-0004",
+      "internalId": "ARC-SET-FPF-SER003-GEN001-0004",
       "themeCode": "SET",
       "designCode": "FPF",
       "designFamily": "THE_FIRST_PERMANENT_FLAME",

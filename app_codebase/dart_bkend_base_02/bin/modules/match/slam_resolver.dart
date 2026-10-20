@@ -26,6 +26,13 @@ const double kHitPrefTol = 0.45;
 /// Falloff distance outside the preferred power band (keeps ~90% vs 0.4–0.6 medium-low).
 const double kPowerPrefTol = 0.45;
 
+/// Per-flip mastery at fit=0 (still awards something when flips land).
+/// Mirrors [effectivePowerFromFit]'s 0.55 floor so a cold hit is not zero mastery.
+const double kMasteryFitFloor = 0.55;
+
+/// Extra per-flip mastery from fit 0→1 (floor + span = 1.0 at perfect fit).
+const double kMasteryFitSpan = 0.45;
+
 class SlamResolveResult {
   const SlamResolveResult({
     required this.pieces,
@@ -34,6 +41,8 @@ class SlamResolveResult {
     required this.impulse,
     required this.result,
     this.sim,
+    this.preferenceFit = 0.0,
+    this.slammerMasteryAdded = 0.0,
   });
 
   final List<Map<String, dynamic>> pieces;
@@ -42,6 +51,10 @@ class SlamResolveResult {
   final Map<String, dynamic> impulse;
   final String result; // flip | miss
   final Map<String, dynamic>? sim;
+  /// Server-internal fit 0..1 (not stamped on the client wire).
+  final double preferenceFit;
+  /// Player-facing mastery gain: flips × (0.55 + 0.45 × fit). Miss / 0 flips → 0.
+  final double slammerMasteryAdded;
 }
 
 int _attr(Map<String, dynamic>? attrs, String key) {
@@ -146,6 +159,12 @@ double preferenceFit({
 
 double effectivePowerFromFit(double power, double fit) {
   return (power * (0.55 + 0.70 * fit)).clamp(0.0, 1.0);
+}
+
+/// Mastery weight per flipped piece (0.55 at fit=0 → 1.0 at fit=1).
+double masteryWeightFromFit(double fit) {
+  final f = fit.clamp(0.0, 1.0);
+  return (kMasteryFitFloor + kMasteryFitSpan * f).clamp(0.0, 1.0);
 }
 
 int seedFromMatch(String matchId, int version, int seatIndex) {
@@ -304,13 +323,26 @@ SlamResolveResult resolveSlam({
     Map<String, dynamic>.from(physics.sim),
   );
 
+  final flips = physics.flippedPieceIds.length;
+  final masteryWeight = masteryWeightFromFit(fit);
+  final masteryAdded = flips <= 0 ? 0.0 : flips * masteryWeight;
+  if (LOGGING_SWITCH) {
+    customlog(
+      'slamResolve: slammerMastery matchId=$matchId seat=$actorSeatIndex '
+      'flips=$flips prefFit=${fit.toStringAsFixed(3)} '
+      'masteryWeight=${masteryWeight.toStringAsFixed(3)} '
+      'slammerMasteryAdded=${masteryAdded.toStringAsFixed(3)}',
+    );
+  }
   return SlamResolveResult(
     pieces: physics.pieces,
     scoreDeltas: physics.scoreDeltas,
     flippedPieceIds: physics.flippedPieceIds,
     impulse: impulse,
-    result: physics.flippedPieceIds.isEmpty ? 'miss' : 'flip',
+    result: flips == 0 ? 'miss' : 'flip',
     sim: sim,
+    preferenceFit: fit,
+    slammerMasteryAdded: masteryAdded,
   );
 }
 

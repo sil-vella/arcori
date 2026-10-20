@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "COU-CMV-SER003-GEN001-0001",
+      "internalId": "ARC-COU-CMV-SER003-GEN001-0001",
       "themeCode": "COU",
       "designCode": "CMV",
       "designFamily": "CIRCLE_OF_MANY_VOICES",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "COU-CQV-SER003-GEN001-0002",
+      "internalId": "ARC-COU-CQV-SER003-GEN001-0002",
       "themeCode": "COU",
       "designCode": "CQV",
       "designFamily": "THE_CIRCLE_OF_QUIET_VOICES",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "COU-COR-SER003-GEN001-0003",
+      "internalId": "ARC-COU-COR-SER003-GEN001-0003",
       "themeCode": "COU",
       "designCode": "COR",
       "designFamily": "COUNCIL_OF_THE_OPEN_ROOT",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "COU-VWA-SER003-GEN001-0004",
+      "internalId": "ARC-COU-VWA-SER003-GEN001-0004",
       "themeCode": "COU",
       "designCode": "VWA",
       "designFamily": "VOICES_WITHIN_THE_ASH",

@@ -11,7 +11,9 @@ import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../../utils/dev_logger.dart';
 import '../../avari/avari_models.dart';
+import '../../avari/avari_notifier.dart';
 import '../../kin/widgets/kin_lottie_preview.dart';
+import '../../match/input/slam_resolver.dart';
 import '../../match/practice_ai_pool.dart';
 import '../../match/state/match_notifier.dart';
 import '../../match/state/match_snapshot_state.dart';
@@ -200,6 +202,13 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
           AppSpacing.gapSm,
           _RewardRow(
             finalize: flow.postMatchFinalize,
+          ),
+          _SlammerMasteryHero(
+            snap: snap,
+            localUserId: userId,
+            finalize: flow.postMatchFinalize,
+            ownedSlammers:
+                ref.watch(avariProfileProvider).profile?.slammers ?? const [],
           ),
           AppSpacing.gapMd,
           Text(
@@ -429,13 +438,7 @@ class _CombinedResultsBlock extends StatelessWidget {
   }
 
   bool _isLocalSeat(MatchSeatView seat) {
-    final uid = seat.userId.trim();
-    if (localUserId.isNotEmpty && uid == localUserId) return true;
-    if (seat.kind == 'human' &&
-        (uid == 'local' || uid.isEmpty || localUserId.isEmpty)) {
-      return seat.seatIndex == 0 || uid == 'local';
-    }
-    return false;
+    return _isLocalMatchSeat(seat, localUserId);
   }
 
   Map<String, int> _flipsForSeat(MatchSeatView seat) {
@@ -561,26 +564,33 @@ class _PlayerResults extends StatelessWidget {
           ),
         ] else ...[
           AppSpacing.gapXs,
-          for (final designId in designIds)
-            Padding(
-              padding: const EdgeInsets.only(left: 8, bottom: AppSpacing.sm),
-              child: _ArcoriResultRow(
-                snap: snap,
-                designId: designId,
-                flips: flipsByDesign[designId] ??
-                    masteryByDesign[designId]?.flips ??
-                    0,
-                mastery: masteryByDesign[designId],
-              ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (var i = 0; i < designIds.length; i++) ...[
+                  if (i > 0) AppSpacing.gapSm,
+                  _ArcoriResultColumn(
+                    snap: snap,
+                    designId: designIds[i],
+                    flips: flipsByDesign[designIds[i]] ??
+                        masteryByDesign[designIds[i]]?.flips ??
+                        0,
+                    mastery: masteryByDesign[designIds[i]],
+                  ),
+                ],
+              ],
             ),
+          ),
         ],
       ],
     );
   }
 }
 
-class _ArcoriResultRow extends StatelessWidget {
-  const _ArcoriResultRow({
+class _ArcoriResultColumn extends StatelessWidget {
+  const _ArcoriResultColumn({
     required this.snap,
     required this.designId,
     required this.flips,
@@ -592,102 +602,369 @@ class _ArcoriResultRow extends StatelessWidget {
   final int flips;
   final MasteryChange? mastery;
 
+  static const double _width = 92;
+  static const double _disc = 64;
+
   @override
   Widget build(BuildContext context) {
-    final piece = _pieceFor(designId);
-    final m = mastery;
-    final lottieUrl = (m?.lottieUrl != null && m!.lottieUrl!.isNotEmpty)
-        ? m.lottieUrl
-        : piece?.lottieUrl;
-    final useLottie = (lottieUrl ?? '').trim().isNotEmpty;
-    final imageUrl = useLottie
-        ? null
-        : ((m?.imageUrl != null && m!.imageUrl!.isNotEmpty)
-            ? m.imageUrl
-            : piece?.imageUrl);
-    final color = (m?.color != null && m!.color!.isNotEmpty)
-        ? m.color
-        : piece?.color;
-    final name = (m?.displayName != null && m!.displayName!.trim().isNotEmpty)
-        ? m.displayName!.trim()
-        : _shortDesignLabel(designId);
-    final kindLabel = m == null
-        ? null
-        : (m.kind == 'own' ? 'Own' : 'Other');
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        ArcoriCylinder(
-          size: 40,
-          look: ArcoriLook(
-            designId: designId,
-            imageUrl: imageUrl,
-            colorHex: color,
-          ),
-          faceUp: true,
-          showThickness: false,
-          face: useLottie
-              ? KinSceneStack(
-                  lottieUrl: lottieUrl,
-                  fit: BoxFit.cover,
-                )
-              : null,
-        ),
-        AppSpacing.gapSm,
-        Expanded(
+    final face = _ResolvedDisc.resolve(
+      snap: snap,
+      designId: designId,
+      mastery: mastery,
+    );
+    return SizedBox(
+      width: _width,
+      child: InkWell(
+        onTap: () {
+          unawaited(
+            AppModal.showCenteredShell(
+              context,
+              title: face.name,
+              child: _ArcoriFocus(
+                face: face,
+                flips: flips,
+                mastery: mastery,
+              ),
+            ),
+          );
+        },
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxs),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
+              face.disc(_disc),
+              AppSpacing.gapXxs,
               Text(
-                name,
-                style: context.appTypography.body,
-                maxLines: 1,
+                face.name,
+                style: context.appTypography.caption,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
               ),
               Text(
                 flips == 1 ? '1 flip' : '$flips flips',
-                style: context.appTypography.bodySmall,
+                style: context.appTypography.caption.copyWith(
+                  color: context.appColorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
               ),
-              if (m != null)
+              if (mastery != null)
                 Text(
-                  'Mastery ${m.masteryOverMintReach}'
-                  '${kindLabel != null ? ' · $kindLabel' : ''}'
-                  ' · ${m.relativeDeltaLabel}',
+                  '${mastery!.relativeDeltaLabel} · ${mastery!.masteryOverMintReach}',
                   style: context.appTypography.caption.copyWith(
-                    color: context.appColorScheme.onSurfaceVariant,
+                    color: AppSurfaces.frameGold(Brightness.dark),
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                 ),
             ],
           ),
         ),
-        // Always flip count here — mastery delta is labeled under the name.
+      ),
+    );
+  }
+}
+
+class _ArcoriFocus extends StatelessWidget {
+  const _ArcoriFocus({
+    required this.face,
+    required this.flips,
+    this.mastery,
+  });
+
+  final _ResolvedDisc face;
+  final int flips;
+  final MasteryChange? mastery;
+
+  @override
+  Widget build(BuildContext context) {
+    final kindLabel = mastery == null
+        ? null
+        : (mastery!.kind == 'own' ? 'Own' : 'Other');
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Center(child: face.disc(220)),
+        AppSpacing.gapSm,
         Text(
-          '×$flips',
-          style: context.appTypography.h3,
+          flips == 1 ? '1 flip' : '$flips flips',
+          style: context.appTypography.h3.copyWith(
+            color: AppColors.onSurfaceDark,
+          ),
+          textAlign: TextAlign.center,
         ),
+        if (mastery != null) ...[
+          AppSpacing.gapXs,
+          Text(
+            'Mastery ${mastery!.masteryOverMintReach}'
+            '${kindLabel != null ? ' · $kindLabel' : ''}'
+            ' · ${mastery!.relativeDeltaLabel}',
+            style: context.appTypography.body.copyWith(
+              color: AppColors.onSurfaceDark,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ],
     );
   }
+}
 
-  MatchPieceView? _pieceFor(String id) {
-    final want = id.trim();
-    if (want.isEmpty) return null;
+class _ResolvedDisc {
+  const _ResolvedDisc({
+    required this.name,
+    required this.designId,
+    this.imageUrl,
+    this.lottieUrl,
+    this.color,
+  });
+
+  final String name;
+  final String designId;
+  final String? imageUrl;
+  final String? lottieUrl;
+  final String? color;
+
+  bool get useLottie => (lottieUrl ?? '').trim().isNotEmpty;
+
+  factory _ResolvedDisc.resolve({
+    required MatchSnapshotState snap,
+    required String designId,
+    MasteryChange? mastery,
+  }) {
+    MatchPieceView? piece;
+    final want = designId.trim();
     for (final p in snap.pieces) {
-      if (p.designId == want) return p;
+      if (p.designId == want) {
+        piece = p;
+        break;
+      }
+    }
+    final lottie = _firstNonEmpty(mastery?.lottieUrl, piece?.lottieUrl);
+    final image = lottie != null
+        ? null
+        : _firstNonEmpty(mastery?.imageUrl, piece?.imageUrl);
+    final name = _firstNonEmpty(mastery?.displayName) ??
+        _shortDesignLabel(designId);
+    return _ResolvedDisc(
+      name: name,
+      designId: designId,
+      imageUrl: image,
+      lottieUrl: lottie,
+      color: _firstNonEmpty(mastery?.color, piece?.color),
+    );
+  }
+
+  Widget disc(double size) {
+    return ArcoriCylinder(
+      size: size,
+      look: ArcoriLook(
+        designId: designId,
+        imageUrl: useLottie ? null : imageUrl,
+        colorHex: color,
+      ),
+      faceUp: true,
+      showThickness: false,
+      face: useLottie
+          ? KinSceneStack(
+              lottieUrl: lottieUrl,
+              fit: BoxFit.cover,
+            )
+          : null,
+    );
+  }
+}
+
+class _SlammerMasteryHero extends StatelessWidget {
+  const _SlammerMasteryHero({
+    required this.snap,
+    required this.localUserId,
+    required this.ownedSlammers,
+    this.finalize,
+  });
+
+  final MatchSnapshotState snap;
+  final String localUserId;
+  final MatchFinalizeResult? finalize;
+  final List<AvariInventoryItem> ownedSlammers;
+
+  static const double _disc = 112;
+
+  @override
+  Widget build(BuildContext context) {
+    final seat = _localSeat();
+    final changes = finalize?.slammerMasteryChanges ?? const <MasteryChange>[];
+    final change = _changeForSeat(seat, changes);
+    final owned = _ownedFor(seat, change);
+    final slammerId = (change?.designId ?? seat?.slammerId ?? '').trim();
+    if (slammerId.isEmpty && change == null && owned == null) {
+      return const SizedBox.shrink();
+    }
+
+    final practice = finalize?.reason == 'practice';
+    final pending = finalize == null ||
+        (finalize!.applied != true && !practice);
+    final face = _slammerFace(seat, change, owned, slammerId);
+    final total = change?.masteryOverMintReach ??
+        (practice || pending ? null : owned?.masteryOverMintReach);
+    final gain = change?.relativeDeltaLabel;
+
+    final gold = AppSurfaces.frameGold(Brightness.dark);
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.md),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: AppColors.surfaceDark.withValues(alpha: 0.7),
+          borderRadius: BorderRadius.circular(AppRadii.md),
+          border: Border.all(color: gold.withValues(alpha: 0.65)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            children: [
+              Text(
+                'Slammer Mastery',
+                style: context.appTypography.label.copyWith(color: gold),
+              ),
+              AppSpacing.gapSm,
+              face.disc(_disc),
+              AppSpacing.gapXs,
+              Text(
+                face.name,
+                style: context.appTypography.subtitle.copyWith(
+                  color: AppColors.onSurfaceDark,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              if (total != null) ...[
+                AppSpacing.gapXxs,
+                Text(
+                  total,
+                  style: context.appTypography.h1.copyWith(color: gold),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+              AppSpacing.gapXxs,
+              Text(
+                practice
+                    ? 'Practice — no mastery'
+                    : pending
+                        ? 'Waiting for mastery…'
+                        : gain == null
+                            ? '+0 this match'
+                            : '$gain this match',
+                style: context.appTypography.body.copyWith(
+                  color: AppColors.onSurfaceDark,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  MatchSeatView? _localSeat() {
+    for (final seat in snap.seats) {
+      if (_isLocalMatchSeat(seat, localUserId)) return seat;
     }
     return null;
   }
 
-  String _shortDesignLabel(String id) {
-    final raw = id.trim();
-    if (raw.isEmpty) return 'Arcori';
-    final parts = raw.split('-');
-    if (parts.length >= 2 && parts[1].isNotEmpty) {
-      return parts[1];
+  MasteryChange? _changeForSeat(
+    MatchSeatView? seat,
+    List<MasteryChange> changes,
+  ) {
+    if (changes.isEmpty) return null;
+    final want = ensureGen001DesignId(seat?.slammerId ?? '');
+    if (want.isNotEmpty) {
+      for (final change in changes) {
+        if (ensureGen001DesignId(change.designId) == want) return change;
+      }
     }
-    return raw;
+    return changes.first;
   }
+
+  AvariInventoryItem? _ownedFor(MatchSeatView? seat, MasteryChange? change) {
+    final ids = <String>{
+      if ((seat?.slammerId ?? '').trim().isNotEmpty)
+        ensureGen001DesignId(seat!.slammerId),
+      if (change != null) ensureGen001DesignId(change.designId),
+    };
+    if (ids.isEmpty) return null;
+    for (final item in ownedSlammers) {
+      if (ids.contains(ensureGen001DesignId(item.designId))) return item;
+    }
+    return null;
+  }
+
+  _ResolvedDisc _slammerFace(
+    MatchSeatView? seat,
+    MasteryChange? change,
+    AvariInventoryItem? owned,
+    String slammerId,
+  ) {
+    final practice = practiceSlammerFaceFor(slammerId.isEmpty ? null : slammerId);
+    final lottie = _firstNonEmpty(
+      seat?.lottieUrl,
+      change?.lottieUrl,
+      owned?.lottieUrl,
+    );
+    final image = lottie != null
+        ? null
+        : _firstNonEmpty(
+            seat?.imageUrl,
+            change?.imageUrl,
+            owned?.imageUrl,
+            practice['imageUrl'],
+          );
+    final name = _firstNonEmpty(change?.displayName, owned?.displayName) ??
+        _shortDesignLabel(slammerId.isEmpty ? 'Slammer' : slammerId);
+    return _ResolvedDisc(
+      name: name,
+      designId: slammerId.isEmpty ? (owned?.designId ?? 'slammer') : slammerId,
+      imageUrl: image,
+      lottieUrl: lottie,
+      color: _firstNonEmpty(
+        seat?.color,
+        change?.color,
+        owned?.color,
+        practice['color'],
+      ),
+    );
+  }
+}
+
+bool _isLocalMatchSeat(MatchSeatView seat, String localUserId) {
+  final uid = seat.userId.trim();
+  if (localUserId.isNotEmpty && uid == localUserId) return true;
+  if (seat.kind == 'human' &&
+      (uid == 'local' || uid.isEmpty || localUserId.isEmpty)) {
+    return seat.seatIndex == 0 || uid == 'local';
+  }
+  return false;
+}
+
+String? _firstNonEmpty(String? a, [String? b, String? c, String? d]) {
+  for (final value in [a, b, c, d]) {
+    final text = value?.trim() ?? '';
+    if (text.isNotEmpty) return text;
+  }
+  return null;
+}
+
+String _shortDesignLabel(String id) {
+  final raw = id.trim();
+  if (raw.isEmpty) return 'Arcori';
+  final parts = raw.split('-');
+  if (parts.length >= 2 && parts[1].isNotEmpty) {
+    return parts[1];
+  }
+  return raw;
 }
 
 class _DailyProgressBlock extends StatelessWidget {

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "TRD-SUE-SER003-GEN001-0001",
+      "internalId": "ARC-TRD-SUE-SER003-GEN001-0001",
       "themeCode": "TRD",
       "designCode": "SUE",
       "designFamily": "SUNMARKET_EXCHANGE",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "TRD-GRE-SER003-GEN001-0002",
+      "internalId": "ARC-TRD-GRE-SER003-GEN001-0002",
       "themeCode": "TRD",
       "designCode": "GRE",
       "designFamily": "GROVEBOUND_EXCHANGE",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "TRD-MBS-SER003-GEN001-0003",
+      "internalId": "ARC-TRD-MBS-SER003-GEN001-0003",
       "themeCode": "TRD",
       "designCode": "MBS",
       "designFamily": "THE_MARKET_BETWEEN_SNOWFALLS",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "TRD-ETH-SER003-GEN001-0004",
+      "internalId": "ARC-TRD-ETH-SER003-GEN001-0004",
       "themeCode": "TRD",
       "designCode": "ETH",
       "designFamily": "EXCHANGE_OF_THREE_HEIGHTS",

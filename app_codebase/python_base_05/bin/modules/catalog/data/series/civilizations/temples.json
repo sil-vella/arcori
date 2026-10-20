@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "TMP-THM-SER004-GEN001-0001",
+      "internalId": "ARC-TMP-THM-SER004-GEN001-0001",
       "themeCode": "TMP",
       "designCode": "THM",
       "designFamily": "TEMPLE_OF_THE_HIGH_MOON",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "internalId": "TMP-MTS-SER004-GEN001-0002",
+      "internalId": "ARC-TMP-MTS-SER004-GEN001-0002",
       "themeCode": "TMP",
       "designCode": "MTS",
       "designFamily": "MOON_TIDE_SHRINE",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "internalId": "TMP-MTC-SER004-GEN001-0003",
+      "internalId": "ARC-TMP-MTC-SER004-GEN001-0003",
       "themeCode": "TMP",
       "designCode": "MTC",
       "designFamily": "MOONTIDE_TEMPLE_CENSER",
@@ -139,7 +139,7 @@
       }
     },
     {
-      "internalId": "TMP-APM-SER004-GEN001-0004",
+      "internalId": "ARC-TMP-APM-SER004-GEN001-0004",
       "themeCode": "TMP",
       "designCode": "APM",
       "designFamily": "ASHFALL_PRAYER_MASK",
@@ -185,7 +185,7 @@
       }
     },
     {
-      "internalId": "TMP-PRC-SER004-GEN001-0005",
+      "internalId": "ARC-TMP-PRC-SER004-GEN001-0005",
       "themeCode": "TMP",
       "designCode": "PRC",
       "designFamily": "PRISM_CHALICE",
@@ -231,7 +231,7 @@
       }
     },
     {
-      "internalId": "TMP-CRX-SER004-GEN001-0006",
+      "internalId": "ARC-TMP-CRX-SER004-GEN001-0006",
       "themeCode": "TMP",
       "designCode": "CRX",
       "designFamily": "CRYSTAL_RELIQUARY",

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CMC-MRT-SER003-GEN001-0001",
+      "internalId": "ARC-CMC-MRT-SER003-GEN001-0001",
       "themeCode": "CMC",
       "designCode": "MRT",
       "designFamily": "MARKET_OF_RETURNING_TIDES",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "CMC-MUF-SER003-GEN001-0002",
+      "internalId": "ARC-CMC-MUF-SER003-GEN001-0002",
       "themeCode": "CMC",
       "designCode": "MUF",
       "designFamily": "MARKET_UPON_THE_FROZEN_CANAL",
@@ -92,7 +92,7 @@
       }
     },
     {
-      "internalId": "CMC-CAM-SER003-GEN001-0003",
+      "internalId": "ARC-CMC-CAM-SER003-GEN001-0003",
       "themeCode": "CMC",
       "designCode": "CAM",
       "designFamily": "CARAVANS_AT_MIDWINTER",
@@ -134,7 +134,7 @@
       }
     },
     {
-      "internalId": "CMC-MAB-SER003-GEN001-0004",
+      "internalId": "ARC-CMC-MAB-SER003-GEN001-0004",
       "themeCode": "CMC",
       "designCode": "MAB",
       "designFamily": "THE_MARKET_ABOVE_THE_BURIED_ROAD",

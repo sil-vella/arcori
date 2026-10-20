@@ -19,7 +19,6 @@ class MarketSlammerSku {
     required this.owned,
     required this.permanent,
     this.chargesRemaining,
-    this.hitTarget,
     this.color,
     this.canAffordPurchase = false,
     this.canAffordRecharge = false,
@@ -36,7 +35,6 @@ class MarketSlammerSku {
       owned: json['owned'] == true,
       permanent: json['permanent'] == true,
       chargesRemaining: _asInt(json['chargesRemaining']),
-      hitTarget: json['hitTarget']?.toString(),
       color: json['color']?.toString(),
       canAffordPurchase: json['canAffordPurchase'] == true,
       canAffordRecharge: json['canAffordRecharge'] == true,
@@ -52,7 +50,6 @@ class MarketSlammerSku {
   final bool owned;
   final bool permanent;
   final int? chargesRemaining;
-  final String? hitTarget;
   final String? color;
   final bool canAffordPurchase;
   final bool canAffordRecharge;

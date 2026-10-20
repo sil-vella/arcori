@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CCL-CAX-SER004-GEN001-0001",
+      "internalId": "ARC-CCL-CAX-SER004-GEN001-0001",
       "themeCode": "CCL",
       "designCode": "CAX",
       "designFamily": "COUNCIL_OF_ASH",
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "CCL-FCX-SER004-GEN001-0002",
+      "internalId": "ARC-CCL-FCX-SER004-GEN001-0002",
       "themeCode": "CCL",
       "designCode": "FCX",
       "designFamily": "FROST_COUNCIL",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "internalId": "CCL-FGC-SER004-GEN001-0003",
+      "internalId": "ARC-CCL-FGC-SER004-GEN001-0003",
       "themeCode": "CCL",
       "designCode": "FGC",
       "designFamily": "FIVE_GEM_COUNCIL_STAFF",
@@ -137,7 +137,7 @@
       }
     },
     {
-      "internalId": "CCL-FCB-SER004-GEN001-0004",
+      "internalId": "ARC-CCL-FCB-SER004-GEN001-0004",
       "themeCode": "CCL",
       "designCode": "FCB",
       "designFamily": "FORGOTTEN_COUNCIL_BELL",
@@ -183,7 +183,7 @@
       }
     },
     {
-      "internalId": "CCL-RCS-SER004-GEN001-0005",
+      "internalId": "ARC-CCL-RCS-SER004-GEN001-0005",
       "themeCode": "CCL",
       "designCode": "RCS",
       "designFamily": "RADIANT_COUNCIL_STAFF",

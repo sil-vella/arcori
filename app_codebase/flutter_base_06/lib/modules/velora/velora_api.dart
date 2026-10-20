@@ -53,14 +53,18 @@ class VeloraApiClient {
   /// Circulating designs only (`worldState == Active`).
   /// Optional [theme] / [series] filter by theme code|name and series key|slug.
   /// Pass [limit]/[offset] for scroll paging (server returns [CatalogIndexResult.total]).
+  /// Set [closedOnly] to list closed Arcori generations (Velora archive).
   Future<VeloraApiOutcome<CatalogIndexResult>> fetchIndex({
     required String accessToken,
     String? theme,
     String? series,
     int? limit,
     int offset = 0,
+    bool closedOnly = false,
   }) {
-    final params = <String, String>{'circulating': '1'};
+    final params = <String, String>{
+      if (closedOnly) 'closed': '1' else 'circulating': '1',
+    };
     if (theme != null && theme.isNotEmpty) {
       params['theme'] = theme;
     }

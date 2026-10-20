@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "MUS-LPS-SER001-GEN001-0001",
+      "internalId": "ARC-MUS-LPS-SER001-GEN001-0001",
       "themeCode": "MUS",
       "designCode": "LPS",
       "designFamily": "LIMITLESS_PULSE",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "MUS-HBH-SER001-GEN001-0002",
+      "internalId": "ARC-MUS-HBH-SER001-GEN001-0002",
       "themeCode": "MUS",
       "designCode": "HBH",
       "designFamily": "HARBOR_HOLIDAY",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "MUS-ACS-SER001-GEN001-0003",
+      "internalId": "ARC-MUS-ACS-SER001-GEN001-0003",
       "themeCode": "MUS",
       "designCode": "ACS",
       "designFamily": "ASHCORE_SIGNAL",
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "MUS-FRF-SER001-GEN001-0004",
+      "internalId": "ARC-MUS-FRF-SER001-GEN001-0004",
       "themeCode": "MUS",
       "designCode": "FRF",
       "designFamily": "FROST_FREQUENCY",
@@ -184,7 +184,7 @@
       }
     },
     {
-      "internalId": "MUS-WBC-SER001-GEN001-0005",
+      "internalId": "ARC-MUS-WBC-SER001-GEN001-0005",
       "themeCode": "MUS",
       "designCode": "WBC",
       "designFamily": "WILDBEAT_COLLECTIVE",
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "MUS-TFR-SER001-GEN001-0006",
+      "internalId": "ARC-MUS-TFR-SER001-GEN001-0006",
       "themeCode": "MUS",
       "designCode": "TFR",
       "designFamily": "TWENTY_FOUR_REFLECTIONS",
@@ -274,7 +274,7 @@
       }
     },
     {
-      "internalId": "MUS-EHM-SER001-GEN001-0007",
+      "internalId": "ARC-MUS-EHM-SER001-GEN001-0007",
       "themeCode": "MUS",
       "designCode": "EHM",
       "designFamily": "EVERLIGHT_HOUSEMASTER",
@@ -320,7 +320,7 @@
       }
     },
     {
-      "internalId": "MUS-TDT-SER001-GEN001-0008",
+      "internalId": "ARC-MUS-TDT-SER001-GEN001-0008",
       "themeCode": "MUS",
       "designCode": "TDT",
       "designFamily": "TIDE_TRANCE",
@@ -364,7 +364,7 @@
       }
     },
     {
-      "internalId": "MUS-WBD-SER001-GEN001-0009",
+      "internalId": "ARC-MUS-WBD-SER001-GEN001-0009",
       "themeCode": "MUS",
       "designCode": "WBD",
       "designFamily": "WINTER_BALLADEER",
@@ -406,7 +406,7 @@
       }
     },
     {
-      "internalId": "MUS-ASV-SER001-GEN001-0010",
+      "internalId": "ARC-MUS-ASV-SER001-GEN001-0010",
       "themeCode": "MUS",
       "designCode": "ASV",
       "designFamily": "AMBERSTORM_VOICE",
@@ -450,7 +450,7 @@
       }
     },
     {
-      "internalId": "MUS-GSG-SER001-GEN001-0011",
+      "internalId": "ARC-MUS-GSG-SER001-GEN001-0011",
       "themeCode": "MUS",
       "designCode": "GSG",
       "designFamily": "GROVE_SINGALONG",
@@ -496,7 +496,7 @@
       }
     },
     {
-      "internalId": "MUS-TTD-SER001-GEN001-0012",
+      "internalId": "ARC-MUS-TTD-SER001-GEN001-0012",
       "themeCode": "MUS",
       "designCode": "TTD",
       "designFamily": "TOTAL_TIDE",
@@ -540,7 +540,7 @@
       }
     },
     {
-      "internalId": "MUS-TCS-SER001-GEN001-0013",
+      "internalId": "ARC-MUS-TCS-SER001-GEN001-0013",
       "themeCode": "MUS",
       "designCode": "TCS",
       "designFamily": "TWO_CHAIRS",
@@ -582,7 +582,7 @@
       }
     },
     {
-      "internalId": "MUS-ACV-SER001-GEN001-0014",
+      "internalId": "ARC-MUS-ACV-SER001-GEN001-0014",
       "themeCode": "MUS",
       "designCode": "ACV",
       "designFamily": "ASHEN_CAFE",
@@ -628,7 +628,7 @@
       }
     },
     {
-      "internalId": "MUS-FDF-SER001-GEN001-0015",
+      "internalId": "ARC-MUS-FDF-SER001-GEN001-0015",
       "themeCode": "MUS",
       "designCode": "FDF",
       "designFamily": "FOLDED_FIRE",
@@ -674,7 +674,7 @@
       }
     },
     {
-      "internalId": "MUS-FVL-SER001-GEN001-0016",
+      "internalId": "ARC-MUS-FVL-SER001-GEN001-0016",
       "themeCode": "MUS",
       "designCode": "FVL",
       "designFamily": "FIVE_LIGHTS",
@@ -720,7 +720,7 @@
       }
     },
     {
-      "internalId": "MUS-RHA-SER001-GEN001-0017",
+      "internalId": "ARC-MUS-RHA-SER001-GEN001-0017",
       "themeCode": "MUS",
       "designCode": "RHA",
       "designFamily": "RETURNING_HARMONY",
@@ -764,7 +764,7 @@
       }
     },
     {
-      "internalId": "MUS-GGR-SER001-GEN001-0018",
+      "internalId": "ARC-MUS-GGR-SER001-GEN001-0018",
       "themeCode": "MUS",
       "designCode": "GGR",
       "designFamily": "GREY_GYM",
@@ -810,7 +810,7 @@
       }
     },
     {
-      "internalId": "MUS-NSS-SER001-GEN001-0019",
+      "internalId": "ARC-MUS-NSS-SER001-GEN001-0019",
       "themeCode": "MUS",
       "designCode": "NSS",
       "designFamily": "NEON_SNOWSTAR",
@@ -852,7 +852,7 @@
       }
     },
     {
-      "internalId": "MUS-GMO-SER001-GEN001-0020",
+      "internalId": "ARC-MUS-GMO-SER001-GEN001-0020",
       "themeCode": "MUS",
       "designCode": "GMO",
       "designFamily": "GOLDEN_MOTION",

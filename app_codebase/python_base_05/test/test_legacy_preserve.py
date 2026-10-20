@@ -11,11 +11,14 @@ from core.errors.app_error import AppError
 from modules.legacy import legacy_service as svc
 from modules.legacy.legacy_errors import INTENT_NOT_FOUND, NOT_ELIGIBLE
 
+SLM_ID = "SLM-VOD-SER001-0001"
+ARC_ID = "ANM-GWO-SER001-0010"
+
 
 def _life(
     *,
     phase: str = "racing",
-    design_id: str = "design.a",
+    design_id: str = SLM_ID,
     gen: int = 1,
     first_offer_user_id=None,
     leader_user_id=None,
@@ -40,6 +43,20 @@ def _life(
     return row
 
 
+def _slammer_design(**extra):
+    base = {
+        "themeCode": "SLM",
+        "type": "slammer",
+        "design": "Void",
+        "legacy": {
+            "preservationRequirement": 100,
+            "closureMilestone": 500,
+        },
+    }
+    base.update(extra)
+    return base
+
+
 class TestLegacyPreserve(unittest.TestCase):
     def test_on_mastery_first_offer_claim_idempotent_second_caller(self):
         uid_a = str(uuid4())
@@ -50,7 +67,7 @@ class TestLegacyPreserve(unittest.TestCase):
         with patch.object(svc.repo, "ensure_lifecycle", return_value=life), patch.object(
             svc,
             "get_design",
-            return_value={"preservationRequirement": 100, "closureMilestone": 500},
+            return_value=_slammer_design(),
         ), patch.object(
             svc, "mint_reach_or_series_default", return_value=100
         ), patch.object(
@@ -61,11 +78,11 @@ class TestLegacyPreserve(unittest.TestCase):
             svc.repo, "minutes_from_now", return_value=datetime.now(timezone.utc)
         ), patch.object(
             svc.repo, "utcnow", return_value=datetime.now(timezone.utc)
-        ), patch.object(svc.repo, "get_mastery_points", return_value=120):
+        ), patch.object(svc.repo, "get_progress_points", return_value=120):
             first = svc.on_mastery_progress(
                 session,
                 user_id=uid_a,
-                design_id="design.a",
+                design_id=SLM_ID,
                 generation_number=1,
                 points_after=120,
             )
@@ -77,12 +94,89 @@ class TestLegacyPreserve(unittest.TestCase):
             second = svc.on_mastery_progress(
                 session,
                 user_id=uid_b,
-                design_id="design.a",
+                design_id=SLM_ID,
                 generation_number=1,
                 points_after=130,
             )
             self.assertTrue(second is None or "legacyOffer" not in second)
             self.assertEqual(str(life.first_offer_user_id), uid_a)
+
+    def test_arcori_closure_milestone_closes_without_offer(self):
+        uid = str(uuid4())
+        life = _life(
+            phase="racing",
+            design_id=ARC_ID,
+            preservation_requirement=100,
+            closure_milestone=500,
+        )
+        session = MagicMock()
+        closed = {
+            "applied": True,
+            "reason": "arcori_generation_closed",
+            "designId": ARC_ID,
+            "museumWritten": False,
+            "troveWritten": False,
+        }
+        with patch.object(svc.repo, "ensure_lifecycle", return_value=life), patch.object(
+            svc,
+            "get_design",
+            return_value={
+                "themeCode": "ANM",
+                "design": "Grey Wolf",
+                "legacy": {"preservationRequirement": 100, "closureMilestone": 500},
+            },
+        ), patch.object(
+            svc, "mint_reach_or_series_default", return_value=100
+        ), patch.object(
+            svc, "_closure_milestone_for_design", return_value=500
+        ), patch.object(
+            svc,
+            "_apply_arcori_generation_close",
+            return_value=closed,
+        ) as close_mock:
+            out = svc.on_mastery_progress(
+                session,
+                user_id=uid,
+                design_id=ARC_ID,
+                generation_number=1,
+                points_after=500,
+            )
+        self.assertIsNotNone(out)
+        self.assertEqual(out["legacyEvent"]["reason"], "arcori_generation_closed")
+        self.assertFalse(out["legacyEvent"]["museumWritten"])
+        close_mock.assert_called_once()
+
+    def test_arcori_below_closure_does_not_open_offer(self):
+        uid = str(uuid4())
+        life = _life(
+            phase="racing",
+            design_id=ARC_ID,
+            preservation_requirement=100,
+            closure_milestone=500,
+        )
+        session = MagicMock()
+        with patch.object(svc.repo, "ensure_lifecycle", return_value=life), patch.object(
+            svc,
+            "get_design",
+            return_value={
+                "themeCode": "ANM",
+                "design": "Grey Wolf",
+                "legacy": {"preservationRequirement": 100, "closureMilestone": 500},
+            },
+        ), patch.object(
+            svc, "mint_reach_or_series_default", return_value=100
+        ), patch.object(
+            svc, "_closure_milestone_for_design", return_value=500
+        ):
+            out = svc.on_mastery_progress(
+                session,
+                user_id=uid,
+                design_id=ARC_ID,
+                generation_number=1,
+                points_after=120,
+            )
+        self.assertIsNone(out)
+        self.assertEqual(life.phase, "racing")
 
     def test_expire_open_first_offers_enters_leader_window(self):
         uid = uuid4()
@@ -101,7 +195,9 @@ class TestLegacyPreserve(unittest.TestCase):
             svc.repo, "days_from_now", return_value=datetime.now(timezone.utc)
         ), patch.object(
             svc.repo, "minutes_from_now", return_value=datetime.now(timezone.utc)
-        ), patch.object(svc.repo, "utcnow", return_value=datetime.now(timezone.utc)):
+        ), patch.object(
+            svc.repo, "utcnow", return_value=datetime.now(timezone.utc)
+        ):
             scope.return_value.__enter__.return_value = session
             out = svc.tick_expire_offers()
         self.assertEqual(out["expiredOffers"], 1)
@@ -113,7 +209,7 @@ class TestLegacyPreserve(unittest.TestCase):
         existing.response_json = {
             "applied": True,
             "reason": "preserved",
-            "designId": "design.a",
+            "designId": SLM_ID,
             "generationNumber": 1,
         }
         with patch(
@@ -125,7 +221,7 @@ class TestLegacyPreserve(unittest.TestCase):
                     "orderId": "ord-1",
                     "intentId": str(uuid4()),
                     "userId": str(uuid4()),
-                    "designId": "design.a",
+                    "designId": SLM_ID,
                     "generationNumber": 1,
                 }
             )
@@ -137,7 +233,7 @@ class TestLegacyPreserve(unittest.TestCase):
         user_id = str(uuid4())
         intent = MagicMock()
         intent.user_id = user_id
-        intent.design_id = "design.a"
+        intent.design_id = SLM_ID
         intent.generation_number = 1
         with patch(
             "modules.legacy.legacy_service.session_scope"
@@ -203,7 +299,10 @@ class TestLegacyPreserve(unittest.TestCase):
         with patch.object(svc.repo, "ensure_lifecycle", return_value=life), patch.object(
             svc,
             "get_design",
-            return_value={"design": "Grey Wolf", "legacy": {"closureMilestone": 1000}},
+            return_value=_slammer_design(
+                design="Void",
+                legacy={"preservationRequirement": 100, "closureMilestone": 1000},
+            ),
         ), patch.object(
             svc, "mint_reach_or_series_default", return_value=100
         ), patch.object(
@@ -211,13 +310,13 @@ class TestLegacyPreserve(unittest.TestCase):
         ), patch.object(
             # Leader at 510; challenger 504→506 → gaps 6→4 → emit 5,4
             svc.repo,
-            "get_mastery_points",
+            "get_progress_points",
             return_value=510,
         ):
             out = svc.on_mastery_progress(
                 session,
                 user_id=challenger,
-                design_id="design.a",
+                design_id=SLM_ID,
                 generation_number=1,
                 points_after=506,
                 points_before=504,
@@ -225,7 +324,7 @@ class TestLegacyPreserve(unittest.TestCase):
         self.assertIsNotNone(out)
         events = out["legacyProximity"]
         self.assertEqual([e["gap"] for e in events], [5, 4])
-        self.assertEqual(events[0]["arcoriDisplayName"], "Grey Wolf")
+        self.assertEqual(events[0]["arcoriDisplayName"], "Void")
         self.assertEqual(events[0]["leaderUserId"], str(leader))
         self.assertEqual(events[0]["challengerUserId"], challenger)
 
@@ -241,16 +340,16 @@ class TestLegacyPreserve(unittest.TestCase):
         )
         session = MagicMock()
         with patch.object(svc.repo, "ensure_lifecycle", return_value=life), patch.object(
-            svc, "get_design", return_value={"design": "Lion"}
+            svc, "get_design", return_value=_slammer_design(design="Void")
         ), patch.object(
             svc, "mint_reach_or_series_default", return_value=100
         ), patch.object(
             svc, "_closure_milestone_for_design", return_value=1000
-        ), patch.object(svc.repo, "get_mastery_points", return_value=510):
+        ), patch.object(svc.repo, "get_progress_points", return_value=510):
             out = svc.on_mastery_progress(
                 session,
                 user_id=challenger,
-                design_id="design.a",
+                design_id=SLM_ID,
                 generation_number=1,
                 points_after=506,
                 points_before=504,
@@ -269,28 +368,28 @@ class TestLegacyPreserve(unittest.TestCase):
 
         with patch.object(notif, "create_for_user", side_effect=_fake_create), patch.object(
             notif, "_player_display_name", side_effect=lambda u: f"name-{u[:8]}"
-        ), patch.object(notif, "_arcori_display_name", return_value="Grey Wolf"):
+        ), patch.object(notif, "_arcori_display_name", return_value="Void"):
             n = notif.notify_legacy_leader_proximity(
                 events=[
                     {
-                        "designId": "ANM-GWO-SER001-0010",
+                        "designId": SLM_ID,
                         "generationNumber": 1,
                         "gap": 5,
                         "leaderUserId": leader,
                         "challengerUserId": challenger,
                         "leaderPoints": 510,
                         "challengerPoints": 505,
-                        "arcoriDisplayName": "Grey Wolf",
+                        "arcoriDisplayName": "Void",
                     },
                     {
-                        "designId": "ANM-GWO-SER001-0010",
+                        "designId": SLM_ID,
                         "generationNumber": 1,
                         "gap": 4,
                         "leaderUserId": leader,
                         "challengerUserId": challenger,
                         "leaderPoints": 510,
                         "challengerPoints": 506,
-                        "arcoriDisplayName": "Grey Wolf",
+                        "arcoriDisplayName": "Void",
                     },
                 ]
             )
@@ -302,6 +401,29 @@ class TestLegacyPreserve(unittest.TestCase):
             c["msg_id"].rsplit(":", 1)[-1] for c in created_calls
         }
         self.assertEqual(gaps_in_ids, {"5", "4"})
+
+
+class TestStripGameplayPrefs(unittest.TestCase):
+    def test_strip_removes_hit_target_and_power_bracket(self):
+        from modules.catalog.catalog_service import strip_gameplay_prefs_for_client
+
+        design = {
+            "internalId": SLM_ID,
+            "gameplayAttributes": {
+                "impact": 7,
+                "hitTarget": "edge",
+                "powerBracket": {"min": 0.7, "max": 0.9},
+                "precision": 4,
+            },
+        }
+        out = strip_gameplay_prefs_for_client(design)
+        attrs = out["gameplayAttributes"]
+        self.assertEqual(attrs["impact"], 7)
+        self.assertEqual(attrs["precision"], 4)
+        self.assertNotIn("hitTarget", attrs)
+        self.assertNotIn("powerBracket", attrs)
+        # Original untouched
+        self.assertIn("hitTarget", design["gameplayAttributes"])
 
 
 if __name__ == "__main__":

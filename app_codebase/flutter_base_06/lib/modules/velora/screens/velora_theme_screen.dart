@@ -328,6 +328,16 @@ class _DesignTile extends StatelessWidget {
                       color: AppColors.onSurfaceDark,
                     ),
                   ),
+                  if ((design.worldState ?? '').toLowerCase() == 'closed')
+                    Text(
+                      'Closed',
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: context.appTypography.caption.copyWith(
+                        color: gold.withValues(alpha: 0.85),
+                        fontSize: 10,
+                      ),
+                    ),
                 ],
               ),
             ),

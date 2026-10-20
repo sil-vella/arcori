@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "ARC-PAX-SER004-GEN001-0001",
+      "internalId": "ARC-ARC-PAX-SER004-GEN001-0001",
       "themeCode": "ARC",
       "designCode": "PAX",
       "designFamily": "PILLAR_ARCHIVES",
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "ARC-ARX-SER004-GEN001-0002",
+      "internalId": "ARC-ARC-ARX-SER004-GEN001-0002",
       "themeCode": "ARC",
       "designCode": "ARX",
       "designFamily": "ASHEN_RECORDS",
@@ -99,7 +99,7 @@
       }
     },
     {
-      "internalId": "ARC-AAT-SER004-GEN001-0003",
+      "internalId": "ARC-ARC-AAT-SER004-GEN001-0003",
       "themeCode": "ARC",
       "designCode": "AAT",
       "designFamily": "ASHBOUND_ARCHIVE_TOME",
@@ -145,7 +145,7 @@
       }
     },
     {
-      "internalId": "ARC-OMG-SER004-GEN001-0004",
+      "internalId": "ARC-ARC-OMG-SER004-GEN001-0004",
       "themeCode": "ARC",
       "designCode": "OMG",
       "designFamily": "OBSIDIAN_MEMORY_GEM",
@@ -191,7 +191,7 @@
       }
     },
     {
-      "internalId": "ARC-EAK-SER004-GEN001-0005",
+      "internalId": "ARC-ARC-EAK-SER004-GEN001-0005",
       "themeCode": "ARC",
       "designCode": "EAK",
       "designFamily": "EMERALD_ARCHIVE_KEY",

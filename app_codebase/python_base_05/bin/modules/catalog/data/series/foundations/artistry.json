@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "ART-REC-SER003-GEN001-0001",
+      "internalId": "ARC-ART-REC-SER003-GEN001-0001",
       "themeCode": "ART",
       "designCode": "REC",
       "designFamily": "THE_REMEMBERED_CANVAS",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "ART-FFR-SER003-GEN001-0002",
+      "internalId": "ARC-ART-FFR-SER003-GEN001-0002",
       "themeCode": "ART",
       "designCode": "FFR",
       "designFamily": "FORMS_THE_FOREST_REMEMBERED",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "ART-CGF-SER003-GEN001-0003",
+      "internalId": "ARC-ART-CGF-SER003-GEN001-0003",
       "themeCode": "ART",
       "designCode": "CGF",
       "designFamily": "COLORS_GIVEN_FORM",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "ART-CPL-SER003-GEN001-0004",
+      "internalId": "ARC-ART-CPL-SER003-GEN001-0004",
       "themeCode": "ART",
       "designCode": "CPL",
       "designFamily": "THE_CITY_PAINTED_BY_LIGHT",

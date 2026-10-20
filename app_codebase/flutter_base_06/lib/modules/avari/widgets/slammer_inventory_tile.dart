@@ -5,11 +5,16 @@ import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
 import '../avari_models.dart';
 
-/// Owned slammer row — cylinder + name + catalog gameplay attributes.
+/// Owned slammer row — cylinder, name, mastery, and catalog gameplay attributes.
 class SlammerInventoryTile extends StatelessWidget {
-  const SlammerInventoryTile({required this.item, super.key});
+  const SlammerInventoryTile({
+    required this.item,
+    this.onTap,
+    super.key,
+  });
 
   final AvariInventoryItem item;
+  final VoidCallback? onTap;
 
   static const double _size = 64;
 
@@ -17,10 +22,11 @@ class SlammerInventoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = context.appColorScheme;
     final attrs = item.gameplayAttributes;
-    return DecoratedBox(
+    final radius = BorderRadius.circular(AppButtonMetrics.radius);
+    final tile = DecoratedBox(
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest.withValues(alpha: 0.45),
-        borderRadius: BorderRadius.circular(AppButtonMetrics.radius),
+        borderRadius: radius,
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.sm),
@@ -44,22 +50,34 @@ class SlammerInventoryTile extends StatelessWidget {
                     item.displayName,
                     style: context.appTypography.subtitle,
                   ),
-                  if (attrs != null && attrs.labeledValues.isNotEmpty) ...[
-                    AppSpacing.gapXxs,
-                    Wrap(
-                      spacing: AppSpacing.md,
-                      runSpacing: AppSpacing.xxs,
-                      children: [
+                  AppSpacing.gapXxs,
+                  Wrap(
+                    spacing: AppSpacing.md,
+                    runSpacing: AppSpacing.xxs,
+                    children: [
+                      _AttrStat(
+                        label: 'Mastery',
+                        value: item.masteryOverMintReach,
+                      ),
+                      if (attrs != null)
                         for (final row in attrs.labeledValues)
-                          _AttrStat(label: row.$1, value: row.$2),
-                      ],
-                    ),
-                  ],
+                          _AttrStat(label: row.$1, value: '${row.$2}'),
+                    ],
+                  ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+    if (onTap == null) return tile;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: radius,
+        child: tile,
       ),
     );
   }
@@ -69,7 +87,7 @@ class _AttrStat extends StatelessWidget {
   const _AttrStat({required this.label, required this.value});
 
   final String label;
-  final int value;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +101,7 @@ class _AttrStat extends StatelessWidget {
             ),
           ),
           TextSpan(
-            text: '$value',
+            text: value,
             style: context.appTypography.body,
           ),
         ],

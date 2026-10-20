@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CFM-TIM-SER004-GEN001-0001",
+      "internalId": "ARC-CFM-TIM-SER004-GEN001-0001",
       "themeCode": "CFM",
       "designCode": "TIM",
       "designFamily": "TIMBERCRAFT",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "internalId": "CFM-ABX-SER004-GEN001-0002",
+      "internalId": "ARC-CFM-ABX-SER004-GEN001-0002",
       "themeCode": "CFM",
       "designCode": "ABX",
       "designFamily": "ARTISAN_BENCH",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "internalId": "CFM-LCH-SER004-GEN001-0003",
+      "internalId": "ARC-CFM-LCH-SER004-GEN001-0003",
       "themeCode": "CFM",
       "designCode": "LCH",
       "designFamily": "LEAFFORGED_CRAFT_HAMMER",
@@ -139,7 +139,7 @@
       }
     },
     {
-      "internalId": "CFM-RUC-SER004-GEN001-0004",
+      "internalId": "ARC-CFM-RUC-SER004-GEN001-0004",
       "themeCode": "CFM",
       "designCode": "RUC",
       "designFamily": "RUINSMITH_CHISEL",
@@ -185,7 +185,7 @@
       }
     },
     {
-      "internalId": "CFM-LVR-SER004-GEN001-0005",
+      "internalId": "ARC-CFM-LVR-SER004-GEN001-0005",
       "themeCode": "CFM",
       "designCode": "LVR",
       "designFamily": "LIVING_VINE_RING",

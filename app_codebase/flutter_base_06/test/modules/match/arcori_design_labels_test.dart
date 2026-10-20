@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('parses SER + GEN design id', () {
     final labels =
-        ArcoriDesignLabels.fromDesignId('ANM-TIG-SER001-GEN001-0001');
+        ArcoriDesignLabels.fromDesignId('ARC-ANM-TIG-SER001-GEN001-0001');
     expect(labels.series, 'Genesis');
     expect(labels.generation, 'I');
     expect(labels.serial, '0001');
@@ -12,7 +12,7 @@ void main() {
 
   test('parses creation series', () {
     final labels =
-        ArcoriDesignLabels.fromDesignId('LGT-IGW-SER000-GEN001-0002');
+        ArcoriDesignLabels.fromDesignId('ARC-LGT-IGW-SER000-GEN001-0002');
     expect(labels.series, 'Creation');
     expect(labels.generation, 'I');
     expect(labels.serial, '0002');
@@ -20,7 +20,7 @@ void main() {
 
   test('parses civilizations series', () {
     final labels =
-        ArcoriDesignLabels.fromDesignId('CAP-RCX-SER004-GEN001-0001');
+        ArcoriDesignLabels.fromDesignId('ARC-CAP-RCX-SER004-GEN001-0001');
     expect(labels.series, 'Civilizations');
     expect(labels.generation, 'I');
     expect(labels.serial, '0001');

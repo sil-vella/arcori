@@ -13,6 +13,9 @@ import '../avari/avari_api.dart';
 import '../avari/avari_models.dart';
 import '../avari/avari_notifier.dart';
 import '../hub/hub_bottom_nav.dart';
+import '../kin/widgets/kin_lottie_preview.dart';
+import '../match/widgets/arcori_cylinder.dart';
+import '../match/widgets/arcori_look.dart';
 import '../notifications/notification_modal.dart';
 import '../notifications/notifications_notifier.dart';
 import '../notifications/notifications_state.dart';
@@ -24,7 +27,7 @@ import '../tasks/tasks_store.dart';
 
 const String _kWorldNewsCategory = 'news';
 
-/// Body for `/` — Mastery Value, Daily Missions, featured event, World News, ticker.
+/// Body for `/` — featured event, mastery (total + top slammer), daily and news columns, ticker.
 ///
 /// Visual language matches Museum / Velora / Play via [AppChromePage].
 class HomeScreen extends ConsumerStatefulWidget {
@@ -130,7 +133,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final profileState = ref.watch(avariProfileProvider);
     final notifications = ref.watch(notificationsProvider);
-    final mastery = profileState.profile?.mastery;
+    final profile = profileState.profile;
+    final mastery = profile?.mastery;
+    final topSlammer = _mostMasteredSlammer(profile?.slammers ?? const []);
     final news = _worldNews(notifications);
 
     return ModuleScreenRegistrar(
@@ -167,20 +172,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       AppSpacing.gapMd,
                       AppChromeSection(
-                        title: 'Daily Missions',
-                        actionLabel: 'All',
-                        onAction: () => Nav.go(context, AppPaths.tasks),
-                        child: _DailyMissionsStrip(goals: daily),
-                      ),
-                      AppSpacing.gapMd,
-                      AppChromeSection(
-                        title: 'World News',
-                        actionLabel: 'Inbox',
-                        onAction: () =>
-                            Nav.go(context, AppPaths.notifications),
-                        child: _WorldNewsList(
-                          items: news.take(8).toList(),
-                          onTap: _openNews,
+                        title: 'Mastery Value',
+                        actionLabel: 'Profile',
+                        onAction: () => Nav.go(context, AppPaths.avari),
+                        goldFrame: true,
+                        child: _MasteryHeroBody(
+                          mastery: mastery,
+                          topSlammer: topSlammer,
+                          recent: _recentMastery,
+                          loading: profileState.isLoading &&
+                              !profileState.loaded,
                         ),
                       ),
                       AppSpacing.gapMd,
@@ -189,25 +190,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           Expanded(
                             child: AppChromeSection(
-                              title: 'Mastery Value',
-                              actionLabel: 'Profile',
-                              onAction: () =>
-                                  Nav.go(context, AppPaths.avari),
-                              goldFrame: true,
-                              child: _MasteryHeroBody(
-                                mastery: mastery,
-                                loading: profileState.isLoading &&
-                                    !profileState.loaded,
-                                compact: true,
-                              ),
+                              title: 'Daily Missions',
+                              actionLabel: 'All',
+                              onAction: () => Nav.go(context, AppPaths.tasks),
+                              child: _DailyMissionsStrip(goals: daily),
                             ),
                           ),
                           const SizedBox(width: AppSpacing.sm),
                           Expanded(
                             child: AppChromeSection(
-                              title: 'Recent Mastery',
-                              child: _MasteryTicker(
-                                items: _recentMastery,
+                              title: 'World News',
+                              actionLabel: 'Inbox',
+                              onAction: () =>
+                                  Nav.go(context, AppPaths.notifications),
+                              child: _WorldNewsList(
+                                items: news.take(8).toList(),
+                                onTap: _openNews,
                               ),
                             ),
                           ),
@@ -346,6 +344,8 @@ class _WorldNewsList extends StatelessWidget {
                     Expanded(
                       child: Text(
                         items[i].title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: context.appTypography.subtitle.copyWith(
                           color: AppChrome.onSurface,
                         ),
@@ -384,12 +384,14 @@ class _MasteryHeroBody extends StatelessWidget {
   const _MasteryHeroBody({
     required this.mastery,
     required this.loading,
-    this.compact = false,
+    this.topSlammer,
+    this.recent = const [],
   });
 
   final AvariMasterySummary? mastery;
   final bool loading;
-  final bool compact;
+  final AvariInventoryItem? topSlammer;
+  final List<MasteryRecentChange> recent;
 
   @override
   Widget build(BuildContext context) {
@@ -398,33 +400,111 @@ class _MasteryHeroBody extends StatelessWidget {
     final gold = AppChrome.accentGold;
     if (loading) {
       return SizedBox(
-        height: compact ? 44 : 56,
+        height: 72,
         child: Center(
           child: CircularProgressIndicator(strokeWidth: 2, color: gold),
         ),
       );
     }
+    final slammer = topSlammer;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          '$value',
-          style: (compact
-                  ? context.appTypography.h2
-                  : context.appTypography.h1)
-              .copyWith(color: gold),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '$value',
+                    style: context.appTypography.h1.copyWith(color: gold),
+                  ),
+                  Text(
+                    label,
+                    style: context.appTypography.title.copyWith(
+                      color: AppChrome.onSurface,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (slammer != null) ...[
+              const SizedBox(width: AppSpacing.sm),
+              _TopSlammerFace(item: slammer),
+            ],
+          ],
         ),
-        Text(
-          label,
-          style: context.appTypography.title.copyWith(
-            color: AppChrome.onSurface,
-          ),
-          maxLines: compact ? 2 : null,
-          overflow: compact ? TextOverflow.ellipsis : null,
-        ),
+        AppSpacing.gapSm,
+        _MasteryTicker(items: recent),
       ],
     );
   }
+}
+
+class _TopSlammerFace extends StatelessWidget {
+  const _TopSlammerFace({required this.item});
+
+  final AvariInventoryItem item;
+
+  static const double _size = 72;
+
+  @override
+  Widget build(BuildContext context) {
+    final useLottie = item.hasLottieFace;
+    return SizedBox(
+      width: 96,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ArcoriCylinder(
+            look: ArcoriLook(
+              designId: item.designId,
+              imageUrl: useLottie ? null : item.imageUrl,
+              colorHex: item.color,
+            ),
+            size: _size,
+            face: useLottie
+                ? KinSceneStack(
+                    lottieUrl: item.lottieUrl,
+                    fit: BoxFit.cover,
+                  )
+                : null,
+          ),
+          AppSpacing.gapXxs,
+          Text(
+            item.displayName,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: context.appTypography.caption.copyWith(
+              color: AppChrome.onSurface,
+            ),
+          ),
+          Text(
+            item.masteryOverMintReach,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: context.appTypography.caption.copyWith(
+              color: AppChrome.accentGold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+AvariInventoryItem? _mostMasteredSlammer(List<AvariInventoryItem> slammers) {
+  AvariInventoryItem? best;
+  for (final item in slammers) {
+    if (best == null || item.masteryPoints > best.masteryPoints) {
+      best = item;
+    }
+  }
+  return best;
 }
 
 
@@ -530,6 +610,8 @@ class _DailyMissionsStrip extends StatelessWidget {
                 Expanded(
                   child: Text(
                     goals[i].name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: context.appTypography.subtitle.copyWith(
                       color: AppChrome.onSurface,
                     ),

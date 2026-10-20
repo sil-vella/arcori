@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CAP-RCX-SER004-GEN001-0001",
+      "internalId": "ARC-CAP-RCX-SER004-GEN001-0001",
       "themeCode": "CAP",
       "designCode": "RCX",
       "designFamily": "RADIANT_CAPITAL",
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "CAP-LSX-SER004-GEN001-0002",
+      "internalId": "ARC-CAP-LSX-SER004-GEN001-0002",
       "themeCode": "CAP",
       "designCode": "LSX",
       "designFamily": "LUMINOUS_SEAT",
@@ -99,7 +99,7 @@
       }
     },
     {
-      "internalId": "CAP-CCK-SER004-GEN001-0003",
+      "internalId": "ARC-CAP-CCK-SER004-GEN001-0003",
       "themeCode": "CAP",
       "designCode": "CCK",
       "designFamily": "CEREMONIAL_CITY_KEY",
@@ -145,7 +145,7 @@
       }
     },
     {
-      "internalId": "CAP-GSX-SER004-GEN001-0004",
+      "internalId": "ARC-CAP-GSX-SER004-GEN001-0004",
       "themeCode": "CAP",
       "designCode": "GSX",
       "designFamily": "GUARDIAN_SCEPTER",

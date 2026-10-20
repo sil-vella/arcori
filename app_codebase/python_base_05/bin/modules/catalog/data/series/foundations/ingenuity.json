@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "IGY-TSA-SER003-GEN001-0001",
+      "internalId": "ARC-IGY-TSA-SER003-GEN001-0001",
       "themeCode": "IGY",
       "designCode": "TSA",
       "designFamily": "TIDEWRIGHT_S_ANSWER",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "IGY-BWL-SER003-GEN001-0002",
+      "internalId": "ARC-IGY-BWL-SER003-GEN001-0002",
       "themeCode": "IGY",
       "designCode": "BWL",
       "designFamily": "THE_BRIDGE_WOVEN_FROM_LIGHT",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "IGY-LLL-SER003-GEN001-0003",
+      "internalId": "ARC-IGY-LLL-SER003-GEN001-0003",
       "themeCode": "IGY",
       "designCode": "LLL",
       "designFamily": "THE_LOOM_OF_LIVING_LIGHT",
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "IGY-BBT-SER003-GEN001-0004",
+      "internalId": "ARC-IGY-BBT-SER003-GEN001-0004",
       "themeCode": "IGY",
       "designCode": "BBT",
       "designFamily": "BUILT_BETWEEN_THE_TIDES",

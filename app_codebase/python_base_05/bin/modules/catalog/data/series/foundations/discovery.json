@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "DIS-CBW-SER003-GEN001-0001",
+      "internalId": "ARC-DIS-CBW-SER003-GEN001-0001",
       "themeCode": "DIS",
       "designCode": "CBW",
       "designFamily": "CIRCLE_BENEATH_THE_WILD",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "DIS-DWS-SER003-GEN001-0002",
+      "internalId": "ARC-DIS-DWS-SER003-GEN001-0002",
       "themeCode": "DIS",
       "designCode": "DWS",
       "designFamily": "DOOR_WITHIN_THE_STORMSPLIT_TREE",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "DIS-SBL-SER003-GEN001-0003",
+      "internalId": "ARC-DIS-SBL-SER003-GEN001-0003",
       "themeCode": "DIS",
       "designCode": "SBL",
       "designFamily": "STEPS_BENEATH_THE_LOWEST_TIDE",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "DIS-SBM-SER003-GEN001-0004",
+      "internalId": "ARC-DIS-SBM-SER003-GEN001-0004",
       "themeCode": "DIS",
       "designCode": "SBM",
       "designFamily": "THE_SHORE_BENEATH_THE_MOON",

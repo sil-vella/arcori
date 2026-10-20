@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LAN-SAT-SER003-GEN001-0001",
+      "internalId": "ARC-LAN-SAT-SER003-GEN001-0001",
       "themeCode": "LAN",
       "designCode": "SAT",
       "designFamily": "SIGNS_ACROSS_THE_TIDE",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "LAN-SHS-SER003-GEN001-0002",
+      "internalId": "ARC-LAN-SHS-SER003-GEN001-0002",
       "themeCode": "LAN",
       "designCode": "SHS",
       "designFamily": "THE_SHARED_SIGNAL",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "LAN-FSS-SER003-GEN001-0003",
+      "internalId": "ARC-LAN-FSS-SER003-GEN001-0003",
       "themeCode": "LAN",
       "designCode": "FSS",
       "designFamily": "THE_FIRST_SHARED_SIGN",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "LAN-SSL-SER003-GEN001-0004",
+      "internalId": "ARC-LAN-SSL-SER003-GEN001-0004",
       "themeCode": "LAN",
       "designCode": "SSL",
       "designFamily": "SIGNS_OF_SHARED_LIGHT",

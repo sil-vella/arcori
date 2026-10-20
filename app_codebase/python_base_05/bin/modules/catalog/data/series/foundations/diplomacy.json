@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "DIP-ABP-SER003-GEN001-0001",
+      "internalId": "ARC-DIP-ABP-SER003-GEN001-0001",
       "themeCode": "DIP",
       "designCode": "ABP",
       "designFamily": "ACCORD_BENEATH_THE_PILLARS",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "DIP-SBO-SER003-GEN001-0002",
+      "internalId": "ARC-DIP-SBO-SER003-GEN001-0002",
       "themeCode": "DIP",
       "designCode": "SBO",
       "designFamily": "THE_SAPLING_AT_THE_BOUNDARY",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "internalId": "DIP-WAA-SER003-GEN001-0003",
+      "internalId": "ARC-DIP-WAA-SER003-GEN001-0003",
       "themeCode": "DIP",
       "designCode": "WAA",
       "designFamily": "WORDS_ACROSS_THE_ASH",
@@ -142,7 +142,7 @@
       }
     },
     {
-      "internalId": "DIP-AWB-SER003-GEN001-0004",
+      "internalId": "ARC-DIP-AWB-SER003-GEN001-0004",
       "themeCode": "DIP",
       "designCode": "AWB",
       "designFamily": "ACCORD_AT_THE_WINTER_BRIDGE",

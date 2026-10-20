@@ -20,6 +20,8 @@ from modules.catalog.current_series import (
 from modules.catalog.velora_media import enrich_regions_meta
 
 _CLIENT_OMIT_KEYS = frozenset({"artworkPrompt"})
+# Preferred slam conditions — authuser catalog only; Dart freeze keeps them.
+_GAMEPLAY_PREF_KEYS = frozenset({"hitTarget", "powerBracket"})
 
 
 def _load_guarded(fn, *args, **kwargs):
@@ -40,6 +42,21 @@ def strip_for_client(value: Any) -> Any:
     if isinstance(value, list):
         return [strip_for_client(item) for item in value]
     return value
+
+
+def strip_gameplay_prefs_for_client(design: dict[str, Any]) -> dict[str, Any]:
+    """Remove hitTarget / powerBracket from a design doc for Flutter/authuser."""
+    out = dict(design)
+    raw = out.get("gameplayAttributes")
+    if isinstance(raw, dict):
+        cleaned = {
+            k: v for k, v in raw.items() if k not in _GAMEPLAY_PREF_KEYS
+        }
+        if cleaned:
+            out["gameplayAttributes"] = cleaned
+        else:
+            out.pop("gameplayAttributes", None)
+    return out
 
 
 def _slug(value: str) -> str:
@@ -149,6 +166,7 @@ def get_index(
     theme: str | None = None,
     subtheme: str | None = None,
     circulating: bool = False,
+    closed_only: bool = False,
     limit: int | None = None,
     offset: int = 0,
 ) -> dict[str, Any]:
@@ -164,6 +182,7 @@ def get_index(
     items: list[dict[str, Any]] = []
     from core.state.session_scope import session_scope
     from modules.catalog import catalog_repository as catalog_repo
+    from models.catalog_design import WORLD_CLOSED
 
     with session_scope() as session:
         rows = catalog_repo.list_designs(
@@ -171,7 +190,8 @@ def get_index(
             series=series_filter,
             theme=theme_filter,
             subtheme=subtheme_filter,
-            circulating=circulating,
+            circulating=circulating and not closed_only,
+            closed_only=closed_only,
         )
         for row in rows:
             design = dict(row.design_json or {})
@@ -183,7 +203,21 @@ def get_index(
                 internal_id=row.internal_id,
             ):
                 continue
-            if circulating and not design_series_is_active(
+            world = str(
+                row.world_state or design.get("worldState") or ""
+            ).strip()
+            if closed_only:
+                if world != WORLD_CLOSED:
+                    continue
+                # Closed Arcori only (slammers use Museum).
+                theme_code = str(
+                    row.theme_code or design.get("themeCode") or ""
+                ).strip().upper()
+                iid = str(row.internal_id or "").strip().upper()
+                if theme_code == "SLM" or iid.startswith("SLM-"):
+                    continue
+                design["worldState"] = WORLD_CLOSED
+            elif circulating and not design_series_is_active(
                 design,
                 series_key=row.series_key,
                 internal_id=row.internal_id,
@@ -198,7 +232,9 @@ def get_index(
             )
 
     # Player Kin: one JSON file per design (no shared category file).
-    if _should_include_player_kins(theme_filter, series_filter):
+    if not closed_only and _should_include_player_kins(
+        theme_filter, series_filter
+    ):
         items.extend(_player_kin_index_items(
             circulating=circulating,
             theme_filter=theme_filter,

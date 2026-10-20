@@ -90,6 +90,8 @@ class AvariApiClient {
     String? playedDesignId,
     String? eventId,
     Map<String, int>? flipsByDesign,
+    Map<String, double>? slammerMasteryByDesign,
+    Map<String, int>? slammerFlipsByDesign,
     Map<String, dynamic>? result,
   }) async {
     final uri = Uri.parse('$_baseUrl/authuser/avari/match/finalize');
@@ -105,6 +107,10 @@ class AvariApiClient {
         'eventId': eventId.trim(),
       if (flipsByDesign != null && flipsByDesign.isNotEmpty)
         'flipsByDesign': flipsByDesign,
+      if (slammerMasteryByDesign != null && slammerMasteryByDesign.isNotEmpty)
+        'slammerMasteryByDesign': slammerMasteryByDesign,
+      if (slammerFlipsByDesign != null && slammerFlipsByDesign.isNotEmpty)
+        'slammerFlipsByDesign': slammerFlipsByDesign,
       if (result != null) 'result': result,
     };
     try {

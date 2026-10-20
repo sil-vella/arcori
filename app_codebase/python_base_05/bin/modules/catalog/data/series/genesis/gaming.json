@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "GAM-DHR-SER001-GEN001-0001",
+      "internalId": "ARC-GAM-DHR-SER001-GEN001-0001",
       "themeCode": "GAM",
       "designCode": "DHR",
       "designFamily": "DUNGEON_HERO",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "GAM-ELK-SER001-GEN001-0002",
+      "internalId": "ARC-GAM-ELK-SER001-GEN001-0002",
       "themeCode": "GAM",
       "designCode": "ELK",
       "designFamily": "ELF_KNIGHT",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "GAM-BST-SER001-GEN001-0003",
+      "internalId": "ARC-GAM-BST-SER001-GEN001-0003",
       "themeCode": "GAM",
       "designCode": "BST",
       "designFamily": "BOSS_TITAN",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "GAM-PWR-SER001-GEN001-0004",
+      "internalId": "ARC-GAM-PWR-SER001-GEN001-0004",
       "themeCode": "GAM",
       "designCode": "PWR",
       "designFamily": "PIXEL_WARRIOR",
@@ -186,7 +186,7 @@
       }
     },
     {
-      "internalId": "GAM-8BT-SER001-GEN001-0005",
+      "internalId": "ARC-GAM-8BT-SER001-GEN001-0005",
       "themeCode": "GAM",
       "designCode": "8BT",
       "designFamily": "8_BIT_BLASTER",
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "GAM-ARC-SER001-GEN001-0006",
+      "internalId": "ARC-GAM-ARC-SER001-GEN001-0006",
       "themeCode": "GAM",
       "designCode": "ARC",
       "designFamily": "ARCADE_CHAMPION",
@@ -270,7 +270,7 @@
       }
     },
     {
-      "internalId": "GAM-TDR-SER001-GEN001-0007",
+      "internalId": "ARC-GAM-TDR-SER001-GEN001-0007",
       "themeCode": "GAM",
       "designCode": "TDR",
       "designFamily": "TURBO_DRIVER",
@@ -312,7 +312,7 @@
       }
     },
     {
-      "internalId": "GAM-NDR-SER001-GEN001-0008",
+      "internalId": "ARC-GAM-NDR-SER001-GEN001-0008",
       "themeCode": "GAM",
       "designCode": "NDR",
       "designFamily": "NITRO_RACER",
@@ -354,7 +354,7 @@
       }
     },
     {
-      "internalId": "GAM-DRF-SER001-GEN001-0009",
+      "internalId": "ARC-GAM-DRF-SER001-GEN001-0009",
       "themeCode": "GAM",
       "designCode": "DRF",
       "designFamily": "DRIFT_KING",
@@ -396,7 +396,7 @@
       }
     },
     {
-      "internalId": "GAM-LSV-SER001-GEN001-0010",
+      "internalId": "ARC-GAM-LSV-SER001-GEN001-0010",
       "themeCode": "GAM",
       "designCode": "LSV",
       "designFamily": "LAST_SURVIVOR",
@@ -442,7 +442,7 @@
       }
     },
     {
-      "internalId": "GAM-WLD-SER001-GEN001-0011",
+      "internalId": "ARC-GAM-WLD-SER001-GEN001-0011",
       "themeCode": "GAM",
       "designCode": "WLD",
       "designFamily": "WILD_TRACKER",
@@ -486,7 +486,7 @@
       }
     },
     {
-      "internalId": "GAM-APX-SER001-GEN001-0012",
+      "internalId": "ARC-GAM-APX-SER001-GEN001-0012",
       "themeCode": "GAM",
       "designCode": "APX",
       "designFamily": "APEX_HUNTER",
@@ -530,7 +530,7 @@
       }
     },
     {
-      "internalId": "GAM-CHC-SER001-GEN001-0013",
+      "internalId": "ARC-GAM-CHC-SER001-GEN001-0013",
       "themeCode": "GAM",
       "designCode": "CHC",
       "designFamily": "CHESS_COMMANDER",
@@ -576,7 +576,7 @@
       }
     },
     {
-      "internalId": "GAM-WAR-SER001-GEN001-0014",
+      "internalId": "ARC-GAM-WAR-SER001-GEN001-0014",
       "themeCode": "GAM",
       "designCode": "WAR",
       "designFamily": "WAR_TACTICIAN",
@@ -622,7 +622,7 @@
       }
     },
     {
-      "internalId": "GAM-EMP-SER001-GEN001-0015",
+      "internalId": "ARC-GAM-EMP-SER001-GEN001-0015",
       "themeCode": "GAM",
       "designCode": "EMP",
       "designFamily": "EMPIRE_BUILDER",
@@ -668,7 +668,7 @@
       }
     },
     {
-      "internalId": "GAM-BLD-SER001-GEN001-0016",
+      "internalId": "ARC-GAM-BLD-SER001-GEN001-0016",
       "themeCode": "GAM",
       "designCode": "BLD",
       "designFamily": "BLOCK_BUILDER",
@@ -710,7 +710,7 @@
       }
     },
     {
-      "internalId": "GAM-RED-SER001-GEN001-0017",
+      "internalId": "ARC-GAM-RED-SER001-GEN001-0017",
       "themeCode": "GAM",
       "designCode": "RED",
       "designFamily": "REDSTONE_ENGINEER",
@@ -752,7 +752,7 @@
       }
     },
     {
-      "internalId": "GAM-WRL-SER001-GEN001-0018",
+      "internalId": "ARC-GAM-WRL-SER001-GEN001-0018",
       "themeCode": "GAM",
       "designCode": "WRL",
       "designFamily": "WORLD_CREATOR",
@@ -798,7 +798,7 @@
       }
     },
     {
-      "internalId": "GAM-ECH-SER001-GEN001-0019",
+      "internalId": "ARC-GAM-ECH-SER001-GEN001-0019",
       "themeCode": "GAM",
       "designCode": "ECH",
       "designFamily": "ESPORTS_CHAMPION",
@@ -844,7 +844,7 @@
       }
     },
     {
-      "internalId": "GAM-PRO-SER001-GEN001-0020",
+      "internalId": "ARC-GAM-PRO-SER001-GEN001-0020",
       "themeCode": "GAM",
       "designCode": "PRO",
       "designFamily": "PRO_GAMER",
@@ -886,7 +886,7 @@
       }
     },
     {
-      "internalId": "GAM-LGG-SER001-GEN001-0021",
+      "internalId": "ARC-GAM-LGG-SER001-GEN001-0021",
       "themeCode": "GAM",
       "designCode": "LGG",
       "designFamily": "LEEG",

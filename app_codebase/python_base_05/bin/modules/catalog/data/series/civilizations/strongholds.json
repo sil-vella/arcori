@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SGH-FSX-SER004-GEN001-0001",
+      "internalId": "ARC-SGH-FSX-SER004-GEN001-0001",
       "themeCode": "SGH",
       "designCode": "FSX",
       "designFamily": "FROSTWATCH_STRONGHOLD",
@@ -49,7 +49,7 @@
       }
     },
     {
-      "internalId": "SGH-CBX-SER004-GEN001-0002",
+      "internalId": "ARC-SGH-CBX-SER004-GEN001-0002",
       "themeCode": "SGH",
       "designCode": "CBX",
       "designFamily": "CRYSTAL_BASTION",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "internalId": "SGH-FLX-SER004-GEN001-0003",
+      "internalId": "ARC-SGH-FLX-SER004-GEN001-0003",
       "themeCode": "SGH",
       "designCode": "FLX",
       "designFamily": "FORTRESS_LOCKSHIELD",
@@ -137,7 +137,7 @@
       }
     },
     {
-      "internalId": "SGH-BRK-SER004-GEN001-0004",
+      "internalId": "ARC-SGH-BRK-SER004-GEN001-0004",
       "themeCode": "SGH",
       "designCode": "BRK",
       "designFamily": "BLACKENED_RELIC_KEY",

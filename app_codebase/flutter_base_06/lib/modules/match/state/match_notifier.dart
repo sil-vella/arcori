@@ -19,7 +19,7 @@ import 'match_snapshot_state.dart';
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
 const stubArenaId = 'arena_velora_plaza';
-const stubSlammerId = 'SLM-STR-SER001-0001';
+const stubSlammerId = 'SLM-SLM-STR-SER001-GEN001-0001';
 
 /// Practice backdrop — same amberwild arena used in snapshot parse tests.
 const stubPracticeArenaImageUrl =
@@ -521,7 +521,8 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
     final nextRound = advanced.round;
 
     final slamInput = input ?? timeoutSlamInputMap();
-    final attrs = practiceSlammerAttrs[actor.slammerId] ??
+    final attrs = practiceSlammerAttrs[ensureGen001DesignId(actor.slammerId)] ??
+        practiceSlammerAttrs[actor.slammerId] ??
         defaultGameplayAttributes.map((k, v) => MapEntry(k, v));
 
     final resolved = resolveSlam(

@@ -53,9 +53,12 @@ def list_designs(
     theme: str | None = None,
     subtheme: str | None = None,
     circulating: bool = False,
+    closed_only: bool = False,
 ) -> list[CatalogDesign]:
     stmt = select(CatalogDesign)
-    if circulating:
+    if closed_only:
+        stmt = stmt.where(CatalogDesign.world_state == WORLD_CLOSED)
+    elif circulating:
         stmt = stmt.where(CatalogDesign.world_state == WORLD_ACTIVE)
     theme_f = (theme or "").strip()
     if theme_f:

@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "HBR-MHX-SER004-GEN001-0001",
+      "internalId": "ARC-HBR-MHX-SER004-GEN001-0001",
       "themeCode": "HBR",
       "designCode": "MHX",
       "designFamily": "MOONWAKE_HARBOR",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "internalId": "HBR-HLX-SER004-GEN001-0002",
+      "internalId": "ARC-HBR-HLX-SER004-GEN001-0002",
       "themeCode": "HBR",
       "designCode": "HLX",
       "designFamily": "HARBOR_LOGBOOK",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "internalId": "HBR-HGL-SER004-GEN001-0003",
+      "internalId": "ARC-HBR-HGL-SER004-GEN001-0003",
       "themeCode": "HBR",
       "designCode": "HGL",
       "designFamily": "HARBOR_GUIDING_LANTERN",
@@ -139,7 +139,7 @@
       }
     },
     {
-      "internalId": "HBR-BLX-SER004-GEN001-0004",
+      "internalId": "ARC-HBR-BLX-SER004-GEN001-0004",
       "themeCode": "HBR",
       "designCode": "BLX",
       "designFamily": "BEACON_LANTERN",

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "INH-WEC-SER003-GEN001-0001",
+      "internalId": "ARC-INH-WEC-SER003-GEN001-0001",
       "themeCode": "INH",
       "designCode": "WEC",
       "designFamily": "WHAT_THE_ELDERS_CARRIED",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "INH-KPT-SER003-GEN001-0002",
+      "internalId": "ARC-INH-KPT-SER003-GEN001-0002",
       "themeCode": "INH",
       "designCode": "KPT",
       "designFamily": "THE_KEY_PASSED_THROUGH_WINTER",
@@ -92,7 +92,7 @@
       }
     },
     {
-      "internalId": "INH-LMF-SER003-GEN001-0003",
+      "internalId": "ARC-INH-LMF-SER003-GEN001-0003",
       "themeCode": "INH",
       "designCode": "LMF",
       "designFamily": "THE_LAST_MAP_OF_THE_FORGOTTEN",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "INH-PEX-SER003-GEN001-0004",
+      "internalId": "ARC-INH-PEX-SER003-GEN001-0004",
       "themeCode": "INH",
       "designCode": "PEX",
       "designFamily": "THE_PATH_ENTRUSTED",

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "UNI-WAL-SER003-GEN001-0001",
+      "internalId": "ARC-UNI-WAL-SER003-GEN001-0001",
       "themeCode": "UNI",
       "designCode": "WAL",
       "designFamily": "WHEN_ALL_LIGHTS_BECOME_ONE",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "UNI-WHE-SER003-GEN001-0002",
+      "internalId": "ARC-UNI-WHE-SER003-GEN001-0002",
       "themeCode": "UNI",
       "designCode": "WHE",
       "designFamily": "WHEN_EVERY_COLOR_BECAME_ONE",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "UNI-OLA-SER003-GEN001-0003",
+      "internalId": "ARC-UNI-OLA-SER003-GEN001-0003",
       "themeCode": "UNI",
       "designCode": "OLA",
       "designFamily": "ONE_LIGHT_ABOVE_THE_GROVE",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "UNI-WEL-SER003-GEN001-0004",
+      "internalId": "ARC-UNI-WEL-SER003-GEN001-0004",
       "themeCode": "UNI",
       "designCode": "WEL",
       "designFamily": "WHEN_EVERY_LIGHT_BECOMES_ONE",

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "FAN-SGL-SER002-GEN001-0002",
+      "internalId": "ARC-FAN-SGL-SER002-GEN001-0002",
       "themeCode": "FAN",
       "designCode": "SGL",
       "designFamily": "STONE_GOLEM",

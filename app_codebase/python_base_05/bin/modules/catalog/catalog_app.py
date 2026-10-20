@@ -15,6 +15,7 @@ from modules.catalog.catalog_service import (
     get_meta,
     get_series,
     get_theme,
+    strip_gameplay_prefs_for_client,
 )
 from modules.catalog.catalog_select import select_arena_for_arcori_ids, select_for_seats
 
@@ -72,6 +73,7 @@ def _handle_index(res: HttpResponseContract):
         theme = None
         subtheme = None
         circulating = False
+        closed_only = False
         limit: int | None = None
         offset = 0
         if request is not None:
@@ -79,6 +81,11 @@ def _handle_index(res: HttpResponseContract):
             theme = request.query_params.get("theme") or None
             subtheme = request.query_params.get("subtheme") or None
             circulating = request.query_params.get("circulating", "").lower() in {
+                "1",
+                "true",
+                "yes",
+            }
+            closed_only = request.query_params.get("closed", "").lower() in {
                 "1",
                 "true",
                 "yes",
@@ -93,6 +100,7 @@ def _handle_index(res: HttpResponseContract):
                 theme=theme,
                 subtheme=subtheme,
                 circulating=circulating,
+                closed_only=closed_only,
                 limit=limit,
                 offset=offset,
             )
@@ -130,7 +138,8 @@ def _handle_design(res: HttpResponseContract):
                 or request.query_params.get("internal_id")
                 or ""
             )
-        return res.json_ok(get_design(internal_id))
+        # Authuser clients never see sweet-spot prefs; service batch keeps them.
+        return res.json_ok(strip_gameplay_prefs_for_client(get_design(internal_id)))
     except AppError as err:
         return err.to_http_response()
 

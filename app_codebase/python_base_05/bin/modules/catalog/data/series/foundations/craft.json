@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CRA-PAH-SER003-GEN001-0001",
+      "internalId": "ARC-CRA-PAH-SER003-GEN001-0001",
       "themeCode": "CRA",
       "designCode": "PAH",
       "designFamily": "THE_PATIENT_HAND",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "CRA-TSI-SER003-GEN001-0002",
+      "internalId": "ARC-CRA-TSI-SER003-GEN001-0002",
       "themeCode": "CRA",
       "designCode": "TSI",
       "designFamily": "THE_TIDECARVER_S_INSTRUMENT",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "CRA-HAG-SER003-GEN001-0003",
+      "internalId": "ARC-CRA-HAG-SER003-GEN001-0003",
       "themeCode": "CRA",
       "designCode": "HAG",
       "designFamily": "HANDS_AGAINST_THE_GREY",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "CRA-CLL-SER003-GEN001-0004",
+      "internalId": "ARC-CRA-CLL-SER003-GEN001-0004",
       "themeCode": "CRA",
       "designCode": "CLL",
       "designFamily": "CRAFTED_FROM_LIVING_LIGHT",

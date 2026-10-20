@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "LED-LAF-SER003-GEN001-0001",
+      "internalId": "ARC-LED-LAF-SER003-GEN001-0001",
       "themeCode": "LED",
       "designCode": "LAF",
       "designFamily": "LANTERN_AT_THE_FRONT",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "internalId": "LED-FIW-SER003-GEN001-0002",
+      "internalId": "ARC-LED-FIW-SER003-GEN001-0002",
       "themeCode": "LED",
       "designCode": "FIW",
       "designFamily": "FIRST_INTO_THE_WHITE_ASH",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "LED-CWT-SER003-GEN001-0003",
+      "internalId": "ARC-LED-CWT-SER003-GEN001-0003",
       "themeCode": "LED",
       "designCode": "CWT",
       "designFamily": "THE_CAPTAIN_WHO_TURNED_BACK",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "LED-FTG-SER003-GEN001-0004",
+      "internalId": "ARC-LED-FTG-SER003-GEN001-0004",
       "themeCode": "LED",
       "designCode": "FTG",
       "designFamily": "THE_FIRST_THROUGH_THE_GREY",

@@ -7,7 +7,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "ROD-RBA-SER004-GEN001-0001",
+      "internalId": "ARC-ROD-RBA-SER004-GEN001-0001",
       "themeCode": "ROD",
       "designCode": "RBA",
       "designFamily": "ROADS_BENEATH_ASH",
@@ -53,7 +53,7 @@
       }
     },
     {
-      "internalId": "ROD-WKX-SER004-GEN001-0002",
+      "internalId": "ARC-ROD-WKX-SER004-GEN001-0002",
       "themeCode": "ROD",
       "designCode": "WKX",
       "designFamily": "WAYFINDER_KIT",
@@ -97,7 +97,7 @@
       }
     },
     {
-      "internalId": "ROD-FWX-SER004-GEN001-0003",
+      "internalId": "ARC-ROD-FWX-SER004-GEN001-0003",
       "themeCode": "ROD",
       "designCode": "FWX",
       "designFamily": "FOREST_WAYMARKER",
@@ -141,7 +141,7 @@
       }
     },
     {
-      "internalId": "ROD-ECX-SER004-GEN001-0004",
+      "internalId": "ARC-ROD-ECX-SER004-GEN001-0004",
       "themeCode": "ROD",
       "designCode": "ECX",
       "designFamily": "ECHO_COMPASS",
@@ -187,7 +187,7 @@
       }
     },
     {
-      "internalId": "ROD-GCX-SER004-GEN001-0005",
+      "internalId": "ARC-ROD-GCX-SER004-GEN001-0005",
       "themeCode": "ROD",
       "designCode": "GCX",
       "designFamily": "GROVEKEEPER_COMPASS",

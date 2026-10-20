@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "KNS-FIK-SER003-GEN001-0001",
+      "internalId": "ARC-KNS-FIK-SER003-GEN001-0001",
       "themeCode": "KNS",
       "designCode": "FIK",
       "designFamily": "FIRESIDE_KIN",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "internalId": "KNS-WIC-SER003-GEN001-0002",
+      "internalId": "ARC-KNS-WIC-SER003-GEN001-0002",
       "themeCode": "KNS",
       "designCode": "WIC",
       "designFamily": "WINTERBLOOD_CIRCLE",
@@ -90,7 +90,7 @@
       }
     },
     {
-      "internalId": "KNS-BSL-SER003-GEN001-0003",
+      "internalId": "ARC-KNS-BSL-SER003-GEN001-0003",
       "themeCode": "KNS",
       "designCode": "BSL",
       "designFamily": "BRANCHES_OF_THE_SAME_LIGHT",
@@ -136,7 +136,7 @@
       }
     },
     {
-      "internalId": "KNS-OWM-SER003-GEN001-0004",
+      "internalId": "ARC-KNS-OWM-SER003-GEN001-0004",
       "themeCode": "KNS",
       "designCode": "OWM",
       "designFamily": "ONE_WINTER_MANY_HOMES",

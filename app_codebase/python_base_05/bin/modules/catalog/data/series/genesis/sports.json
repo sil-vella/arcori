@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "SPT-FST-SER001-GEN001-0001",
+      "internalId": "ARC-SPT-FST-SER001-GEN001-0001",
       "themeCode": "SPT",
       "designCode": "FST",
       "designFamily": "GOLDEN_STRIKER",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "SPT-GKP-SER001-GEN001-0002",
+      "internalId": "ARC-SPT-GKP-SER001-GEN001-0002",
       "themeCode": "SPT",
       "designCode": "GKP",
       "designFamily": "IRON_GOALKEEPER",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "SPT-CAP-SER001-GEN001-0003",
+      "internalId": "ARC-SPT-CAP-SER001-GEN001-0003",
       "themeCode": "SPT",
       "designCode": "CAP",
       "designFamily": "TEAM_CAPTAIN",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "SPT-SDK-SER001-GEN001-0004",
+      "internalId": "ARC-SPT-SDK-SER001-GEN001-0004",
       "themeCode": "SPT",
       "designCode": "SDK",
       "designFamily": "SLAM_DUNK",
@@ -186,7 +186,7 @@
       }
     },
     {
-      "internalId": "SPT-CTR-SER001-GEN001-0005",
+      "internalId": "ARC-SPT-CTR-SER001-GEN001-0005",
       "themeCode": "SPT",
       "designCode": "CTR",
       "designFamily": "COURT_KING",
@@ -228,7 +228,7 @@
       }
     },
     {
-      "internalId": "SPT-THP-SER001-GEN001-0006",
+      "internalId": "ARC-SPT-THP-SER001-GEN001-0006",
       "themeCode": "SPT",
       "designCode": "THP",
       "designFamily": "THREE_POINT_ACE",
@@ -270,7 +270,7 @@
       }
     },
     {
-      "internalId": "SPT-GSA-SER001-GEN001-0007",
+      "internalId": "ARC-SPT-GSA-SER001-GEN001-0007",
       "themeCode": "SPT",
       "designCode": "GSA",
       "designFamily": "GRAND_SLAM_ACE",
@@ -312,7 +312,7 @@
       }
     },
     {
-      "internalId": "SPT-SRV-SER001-GEN001-0008",
+      "internalId": "ARC-SPT-SRV-SER001-GEN001-0008",
       "themeCode": "SPT",
       "designCode": "SRV",
       "designFamily": "POWER_SERVER",
@@ -354,7 +354,7 @@
       }
     },
     {
-      "internalId": "SPT-RLY-SER001-GEN001-0009",
+      "internalId": "ARC-SPT-RLY-SER001-GEN001-0009",
       "themeCode": "SPT",
       "designCode": "RLY",
       "designFamily": "RALLY_MASTER",
@@ -396,7 +396,7 @@
       }
     },
     {
-      "internalId": "SPT-FRM-SER001-GEN001-0010",
+      "internalId": "ARC-SPT-FRM-SER001-GEN001-0010",
       "themeCode": "SPT",
       "designCode": "FRM",
       "designFamily": "FORMULA_RACER",
@@ -442,7 +442,7 @@
       }
     },
     {
-      "internalId": "SPT-DRF-SER001-GEN001-0011",
+      "internalId": "ARC-SPT-DRF-SER001-GEN001-0011",
       "themeCode": "SPT",
       "designCode": "DRF",
       "designFamily": "DRIFT_LEGEND",
@@ -484,7 +484,7 @@
       }
     },
     {
-      "internalId": "SPT-RAL-SER001-GEN001-0012",
+      "internalId": "ARC-SPT-RAL-SER001-GEN001-0012",
       "themeCode": "SPT",
       "designCode": "RAL",
       "designFamily": "RALLY_DRIVER",
@@ -528,7 +528,7 @@
       }
     },
     {
-      "internalId": "SPT-DRK-SER001-GEN001-0013",
+      "internalId": "ARC-SPT-DRK-SER001-GEN001-0013",
       "themeCode": "SPT",
       "designCode": "DRK",
       "designFamily": "DRAGON_KICK",
@@ -574,7 +574,7 @@
       }
     },
     {
-      "internalId": "SPT-BXM-SER001-GEN001-0014",
+      "internalId": "ARC-SPT-BXM-SER001-GEN001-0014",
       "themeCode": "SPT",
       "designCode": "BXM",
       "designFamily": "BOXING_CHAMPION",
@@ -616,7 +616,7 @@
       }
     },
     {
-      "internalId": "SPT-JDM-SER001-GEN001-0015",
+      "internalId": "ARC-SPT-JDM-SER001-GEN001-0015",
       "themeCode": "SPT",
       "designCode": "JDM",
       "designFamily": "JUDO_MASTER",
@@ -662,7 +662,7 @@
       }
     },
     {
-      "internalId": "SPT-MFR-SER001-GEN001-0016",
+      "internalId": "ARC-SPT-MFR-SER001-GEN001-0016",
       "themeCode": "SPT",
       "designCode": "MFR",
       "designFamily": "MOUNTAIN_FREERIDER",
@@ -706,7 +706,7 @@
       }
     },
     {
-      "internalId": "SPT-SKB-SER001-GEN001-0017",
+      "internalId": "ARC-SPT-SKB-SER001-GEN001-0017",
       "themeCode": "SPT",
       "designCode": "SKB",
       "designFamily": "SKATE_LEGEND",
@@ -748,7 +748,7 @@
       }
     },
     {
-      "internalId": "SPT-BMX-SER001-GEN001-0018",
+      "internalId": "ARC-SPT-BMX-SER001-GEN001-0018",
       "themeCode": "SPT",
       "designCode": "BMX",
       "designFamily": "BMX_RIDER",
@@ -790,7 +790,7 @@
       }
     },
     {
-      "internalId": "SPT-ARC-SER001-GEN001-0019",
+      "internalId": "ARC-SPT-ARC-SER001-GEN001-0019",
       "themeCode": "SPT",
       "designCode": "ARC",
       "designFamily": "ARCHERY_MASTER",
@@ -836,7 +836,7 @@
       }
     },
     {
-      "internalId": "SPT-CLM-SER001-GEN001-0020",
+      "internalId": "ARC-SPT-CLM-SER001-GEN001-0020",
       "themeCode": "SPT",
       "designCode": "CLM",
       "designFamily": "SUMMIT_CLIMBER",

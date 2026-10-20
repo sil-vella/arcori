@@ -102,14 +102,13 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
     expect(find.text('FLIP'), findsOneWidget);
-    expect(find.text('+1'), findsNothing);
+    expect(find.textContaining('+1 Mastery'), findsNothing);
 
     await tester.pump(AppModalMetrics.transitionDuration);
     await tester.pump(kSlamFlipFlight);
     await tester.pump(const Duration(milliseconds: 50));
 
-    expect(find.text('+1'), findsOneWidget);
-    expect(find.text('Mastery'), findsOneWidget);
+    expect(find.textContaining('+1 Mastery'), findsOneWidget);
     expect(find.text('1 flipped'), findsOneWidget);
   });
 
@@ -138,8 +137,18 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('MISS'), findsOneWidget);
     expect(find.text('No flips'), findsOneWidget);
-    expect(find.text('+1'), findsNothing);
-    expect(find.text('Mastery'), findsNothing);
+    expect(find.textContaining('+1 Mastery'), findsNothing);
+  });
+
+  test('frontRoute timeout clears stuck pending', () async {
+    SlamResultFront.markPending();
+    expect(SlamResultFront.isHolding, isTrue);
+    final front = await SlamResultFront.frontRoute(
+      timeout: const Duration(milliseconds: 20),
+    );
+    expect(front, isNull);
+    expect(SlamResultFront.pending, isFalse);
+    expect(SlamResultFront.isHolding, isFalse);
   });
 
   testWidgets('end modal installs under a live slam result', (tester) async {

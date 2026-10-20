@@ -2,7 +2,7 @@
 
 **Status:** In Progress  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-09-20
+**Last Updated:** 2026-10-20 (home: daily|news columns, mastery + top slammer, ticker above news)
 
 Related: [returning-player-startup-flow.md](returning-player-startup-flow.md) · [core-match-loop.md](core-match-loop.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [first-time-player-flow.md](first-time-player-flow.md) · [NOTIFICATION_SYSTEM.md](../03_Base/NOTIFICATION_SYSTEM.md) · Flutter bottom-nav docs in `03_Base/Flutter/`
 
@@ -17,11 +17,11 @@ Ship Home widgets (Mastery Value, Daily Missions, featured events, World News, m
 
 Home contains:
 
-- **Total Mastery Value** (profile aggregate + Fair→Priceless label)
-- **Daily Missions** (featured strip → Tasks)
-- **Featured events** (special events catalog; `homeFeatured` pin)
+- **Total Mastery Value** (profile aggregate + Fair→Priceless label) and the player’s most-mastered slammer (face + `points/reach`)
+- **Daily Missions** and **World News** side by side
+- **Featured events** stay full width (`homeFeatured` pin)
 - **World News** (notifications with `category=news`)
-- **Mastery ticker** (horizontal animated text: last 5 player mastery deltas)
+- **Mastery ticker** inside the Mastery Value card, under the standing label (last 5 player mastery deltas)
 
 Deferred (prior GDD / this plan): Main Play card, Velora hero entry.
 
@@ -68,6 +68,8 @@ Uses the platform **screen-scoped bottom action bar** ([BOTTOM_NAV_REGISTRATION.
 ## Current Progress
 
 2026-09-20 — Hub sink live (Trove / Play / Market); Trove screen holds Legacy mints + closed gens / preservation; Market empty stub; profile links to Trove.
+
+2026-10-20 — Home: featured stays full width. Daily Missions and World News share one row. Mastery Value shows the aggregate plus the most-mastered slammer face, with the recent-mastery ticker under that standing label.
 
 ## Files Modified
 

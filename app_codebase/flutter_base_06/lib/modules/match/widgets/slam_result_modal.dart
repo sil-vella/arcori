@@ -84,6 +84,9 @@ class SlamResultFront {
       _waiters.remove(waiter);
       final current = active;
       if (current != null && current.isActive) return current;
+      // Queued result never opened (e.g. endMatch replaced lastEvent mid-anim).
+      // Clear pending so the match shell is not held forever.
+      cancelPending();
       return null;
     });
   }
@@ -131,6 +134,10 @@ const double _kDiscSolo = 104;
 const double _kDiscPair = 88;
 const double _kDiscFew = 72;
 const double _kDiscMany = 56;
+
+/// Space above each landing disc for the +1 Mastery pop (keeps it off FLIP).
+double slamMasteryLabelBand(double discSize) =>
+    (discSize * 0.55).clamp(40.0, 64.0);
 
 /// One flipped disc to fly into the slam-result card.
 class SlamFlipFace {
@@ -278,14 +285,19 @@ class _SlamResultStageState extends State<_SlamResultStage>
       widget.flips.length,
       (_) => GlobalKey(),
     );
+    void tick() {
+      if (mounted) setState(() {});
+    }
+
     _flight = AnimationController(vsync: this, duration: kSlamFlipFlight)
-      ..addListener(() {
-        if (mounted) setState(() {});
-      });
+      ..addListener(tick);
+    // Keep mastery + sparkles looping until the modal closes (flight alone stops).
     _glint = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900),
-    )..repeat();
+    )
+      ..addListener(tick)
+      ..repeat();
     _timer = Timer(widget.autoClose, _close);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) setState(() {});
@@ -397,7 +409,7 @@ class _SlamResultStageState extends State<_SlamResultStage>
     );
     final masteryT = slamMasteryPopT(flightT);
     final pos = Offset.lerp(from, to, flightT)!;
-    final labelBand = discSize * 0.78;
+    final labelBand = slamMasteryLabelBand(discSize);
     return Positioned(
       left: pos.dx - discSize / 2,
       top: pos.dy - discSize / 2 - labelBand,
@@ -473,12 +485,13 @@ class _ResultCard extends StatelessWidget {
                   color: isFlip ? gold : context.appColorScheme.onSurfaceVariant,
                 ),
               ),
-              AppSpacing.gapSm,
-              if (isFlip)
+              if (isFlip) ...[
+                // Clear lane for per-disc +1 Mastery (flyers paint above the card).
+                SizedBox(height: slamMasteryLabelBand(discSize)),
                 Wrap(
                   alignment: WrapAlignment.center,
                   spacing: AppSpacing.sm,
-                  runSpacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.md + slamMasteryLabelBand(discSize) * 0.35,
                   children: [
                     for (var i = 0; i < slotKeys.length; i++)
                       SizedBox(
@@ -495,22 +508,22 @@ class _ResultCard extends StatelessWidget {
                         ),
                       ),
                   ],
-                )
-              else
-                Text(
-                  'No flips',
-                  textAlign: TextAlign.center,
-                  style: context.appTypography.body.copyWith(
-                    color: context.appColorScheme.onSurface,
-                  ),
                 ),
-              if (isFlip) ...[
-                AppSpacing.gapSm,
+                AppSpacing.gapMd,
                 Text(
                   flipCount == 1 ? '1 flipped' : '$flipCount flipped',
                   textAlign: TextAlign.center,
                   style: context.appTypography.bodySmall.copyWith(
                     color: context.appColorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ] else ...[
+                AppSpacing.gapSm,
+                Text(
+                  'No flips',
+                  textAlign: TextAlign.center,
+                  style: context.appTypography.body.copyWith(
+                    color: context.appColorScheme.onSurface,
                   ),
                 ),
               ],
@@ -638,41 +651,55 @@ class _MasteryPop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final shown = masteryT.clamp(0.0, 1.0);
-    final pop = Curves.easeOutBack.transform(shown);
-    final wave = math.sin(glint * math.pi * 2);
-    final enter = (1 - pop) * 16;
-    final bounce = wave * -8 * shown;
+    if (shown <= 0) return const SizedBox.shrink();
+
+    // One-shot land, then pulse/sparkle on [glint] until the modal closes.
+    final intro = Curves.easeOutBack.transform(shown);
+    final loop = 0.5 + 0.5 * math.sin(glint * math.pi * 2);
+    final pulse = Curves.easeInOut.transform(loop);
+    final live = shown < 1.0 ? shown : 1.0;
+    // Stay inside the reserved label band — no climb into FLIP / neighbors.
+    final rise = ((1 - intro) * 10) + ((pulse - 0.5) * -6 * live);
+    final scale = 0.82 + (0.18 * intro) + (0.1 * pulse * live);
+    final opacity = shown < 1.0 ? shown : (0.82 + 0.18 * pulse);
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: Transform.translate(
-        offset: Offset(0, enter + bounce),
+        offset: Offset(0, rise),
         child: Opacity(
-          opacity: shown,
+          opacity: opacity,
           child: Transform.scale(
-            scale: 0.76 + (0.24 * pop),
+            scale: scale,
             child: Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
                 for (var i = 0; i < 4; i++)
-                  _LabelSparkle(index: i, glint: glint, shown: shown),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '+1',
-                      style: context.appTypography.title.copyWith(
-                        color: AppColors.secondary,
-                        height: 1,
+                  _LabelSparkle(index: i, glint: glint, shown: live),
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '+1',
+                        style: context.appTypography.label.copyWith(
+                          color: AppColors.secondary,
+                          fontWeight: FontWeight.w700,
+                          height: 1,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Mastery',
-                      style: context.appTypography.label.copyWith(
-                        color: AppColors.secondary,
+                      TextSpan(
+                        text: ' Mastery',
+                        style: context.appTypography.label.copyWith(
+                          color: AppColors.secondary,
+                          height: 1,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
                 ),
               ],
             ),

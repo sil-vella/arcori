@@ -10,6 +10,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Integer,
+    Numeric,
     String,
     UniqueConstraint,
     func,
@@ -118,6 +119,8 @@ class PlayerMasteryChangeLog(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
 
 
 class PlayerSlammer(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
+    """Owned slammer instance — personal mastery + optional sealed Legacy."""
+
     __tablename__ = "player_slammers"
     __table_args__ = (
         UniqueConstraint("user_id", "design_id", name="uq_player_slammers_user_design"),
@@ -135,10 +138,28 @@ class PlayerSlammer(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     )
     charges_remaining: Mapped[int | None] = mapped_column(Integer, nullable=True)
     source: Mapped[str] = mapped_column(String(32), nullable=False, default="starter")
+    # fit×flips running total (online only); sweet spot never exposed to clients.
+    mastery_points: Mapped[float] = mapped_column(
+        Numeric(12, 4), nullable=False, default=0, server_default="0"
+    )
+    matches_count: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    successful_slams: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    arcori_flipped: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    best_slam: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+    legacy_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    legacy_snapshot: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
 
 class PlayerTrove(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
-    """Minted closed Arcori only (out of circulation)."""
+    """Minted Legacy Slammers (personal physical seal). Arcori no longer mint here."""
 
     __tablename__ = "player_trove"
     __table_args__ = (

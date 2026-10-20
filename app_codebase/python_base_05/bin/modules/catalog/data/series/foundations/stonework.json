@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "STN-ARP-SER003-GEN001-0001",
+      "internalId": "ARC-STN-ARP-SER003-GEN001-0001",
       "themeCode": "STN",
       "designCode": "ARP",
       "designFamily": "ARCH_OF_RETURNING_PATHS",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "STN-GGS-SER003-GEN001-0002",
+      "internalId": "ARC-STN-GGS-SER003-GEN001-0002",
       "themeCode": "STN",
       "designCode": "GGS",
       "designFamily": "GATE_OF_GOLDEN_STONE",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "STN-SFR-SER003-GEN001-0003",
+      "internalId": "ARC-STN-SFR-SER003-GEN001-0003",
       "themeCode": "STN",
       "designCode": "SFR",
       "designFamily": "THE_STAIR_THE_FOREST_REVEALED",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "STN-RWX-SER003-GEN001-0004",
+      "internalId": "ARC-STN-RWX-SER003-GEN001-0004",
       "themeCode": "STN",
       "designCode": "RWX",
       "designFamily": "THE_RISING_WALLS",

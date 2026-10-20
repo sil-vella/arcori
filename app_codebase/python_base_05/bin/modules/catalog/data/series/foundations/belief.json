@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "BEL-UNF-SER003-GEN001-0001",
+      "internalId": "ARC-BEL-UNF-SER003-GEN001-0001",
       "themeCode": "BEL",
       "designCode": "UNF",
       "designFamily": "THE_UNANSWERED_FLAME",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "BEL-SBA-SER003-GEN001-0002",
+      "internalId": "ARC-BEL-SBA-SER003-GEN001-0002",
       "themeCode": "BEL",
       "designCode": "SBA",
       "designFamily": "THE_SEED_BENEATH_THE_ASH",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "BEL-FNO-SER003-GEN001-0003",
+      "internalId": "ARC-BEL-FNO-SER003-GEN001-0003",
       "themeCode": "BEL",
       "designCode": "FNO",
       "designFamily": "THE_FLAME_NO_ONE_FOUND",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "BEL-FBF-SER003-GEN001-0004",
+      "internalId": "ARC-BEL-FBF-SER003-GEN001-0004",
       "themeCode": "BEL",
       "designCode": "FBF",
       "designFamily": "FAITH_BENEATH_THE_FALLING_ASH",

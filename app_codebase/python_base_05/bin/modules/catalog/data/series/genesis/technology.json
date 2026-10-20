@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "TEC-TBT-SER001-GEN001-0001",
+      "internalId": "ARC-TEC-TBT-SER001-GEN001-0001",
       "themeCode": "TEC",
       "designCode": "TBT",
       "designFamily": "TITAN_BOT",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "TEC-SRV-SER001-GEN001-0002",
+      "internalId": "ARC-TEC-SRV-SER001-GEN001-0002",
       "themeCode": "TEC",
       "designCode": "SRV",
       "designFamily": "SERVICE_DROID",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "TEC-GRD-SER001-GEN001-0003",
+      "internalId": "ARC-TEC-GRD-SER001-GEN001-0003",
       "themeCode": "TEC",
       "designCode": "GRD",
       "designFamily": "GUARDIAN_ANDROID",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "TEC-MEC-SER001-GEN001-0004",
+      "internalId": "ARC-TEC-MEC-SER001-GEN001-0004",
       "themeCode": "TEC",
       "designCode": "MEC",
       "designFamily": "ATLAS_MECH",
@@ -186,7 +186,7 @@
       }
     },
     {
-      "internalId": "TEC-RGN-SER001-GEN001-0005",
+      "internalId": "ARC-TEC-RGN-SER001-GEN001-0005",
       "themeCode": "TEC",
       "designCode": "RGN",
       "designFamily": "RAILGUN_MECH",
@@ -232,7 +232,7 @@
       }
     },
     {
-      "internalId": "TEC-SKT-SER001-GEN001-0006",
+      "internalId": "ARC-TEC-SKT-SER001-GEN001-0006",
       "themeCode": "TEC",
       "designCode": "SKT",
       "designFamily": "SCOUT_MECH",
@@ -276,7 +276,7 @@
       }
     },
     {
-      "internalId": "TEC-NMI-SER001-GEN001-0007",
+      "internalId": "ARC-TEC-NMI-SER001-GEN001-0007",
       "themeCode": "TEC",
       "designCode": "NMI",
       "designFamily": "NEURAL_MIND",
@@ -322,7 +322,7 @@
       }
     },
     {
-      "internalId": "TEC-QAI-SER001-GEN001-0008",
+      "internalId": "ARC-TEC-QAI-SER001-GEN001-0008",
       "themeCode": "TEC",
       "designCode": "QAI",
       "designFamily": "QUANTUM_AI",
@@ -368,7 +368,7 @@
       }
     },
     {
-      "internalId": "TEC-DAI-SER001-GEN001-0009",
+      "internalId": "ARC-TEC-DAI-SER001-GEN001-0009",
       "themeCode": "TEC",
       "designCode": "DAI",
       "designFamily": "DIGITAL_ORACLE",
@@ -414,7 +414,7 @@
       }
     },
     {
-      "internalId": "TEC-NRN-SER001-GEN001-0010",
+      "internalId": "ARC-TEC-NRN-SER001-GEN001-0010",
       "themeCode": "TEC",
       "designCode": "NRN",
       "designFamily": "NEON_RUNNER",
@@ -460,7 +460,7 @@
       }
     },
     {
-      "internalId": "TEC-CSN-SER001-GEN001-0011",
+      "internalId": "ARC-TEC-CSN-SER001-GEN001-0011",
       "themeCode": "TEC",
       "designCode": "CSN",
       "designFamily": "CYBER_SAMURAI",
@@ -506,7 +506,7 @@
       }
     },
     {
-      "internalId": "TEC-HKR-SER001-GEN001-0012",
+      "internalId": "ARC-TEC-HKR-SER001-GEN001-0012",
       "themeCode": "TEC",
       "designCode": "HKR",
       "designFamily": "NET_HACKER",
@@ -548,7 +548,7 @@
       }
     },
     {
-      "internalId": "TEC-SDR-SER001-GEN001-0013",
+      "internalId": "ARC-TEC-SDR-SER001-GEN001-0013",
       "themeCode": "TEC",
       "designCode": "SDR",
       "designFamily": "SKY_SCOUT",
@@ -594,7 +594,7 @@
       }
     },
     {
-      "internalId": "TEC-WRD-SER001-GEN001-0014",
+      "internalId": "ARC-TEC-WRD-SER001-GEN001-0014",
       "themeCode": "TEC",
       "designCode": "WRD",
       "designFamily": "WAR_DRONE",
@@ -640,7 +640,7 @@
       }
     },
     {
-      "internalId": "TEC-RDR-SER001-GEN001-0015",
+      "internalId": "ARC-TEC-RDR-SER001-GEN001-0015",
       "themeCode": "TEC",
       "designCode": "RDR",
       "designFamily": "RESCUE_DRONE",
@@ -686,7 +686,7 @@
       }
     },
     {
-      "internalId": "TEC-QWT-SER001-GEN001-0016",
+      "internalId": "ARC-TEC-QWT-SER001-GEN001-0016",
       "themeCode": "TEC",
       "designCode": "QWT",
       "designFamily": "QUANTUM_WATCH",
@@ -732,7 +732,7 @@
       }
     },
     {
-      "internalId": "TEC-HLM-SER001-GEN001-0017",
+      "internalId": "ARC-TEC-HLM-SER001-GEN001-0017",
       "themeCode": "TEC",
       "designCode": "HLM",
       "designFamily": "HOLO_LENS",
@@ -776,7 +776,7 @@
       }
     },
     {
-      "internalId": "TEC-PLG-SER001-GEN001-0018",
+      "internalId": "ARC-TEC-PLG-SER001-GEN001-0018",
       "themeCode": "TEC",
       "designCode": "PLG",
       "designFamily": "PLASMA_GAUNTLET",
@@ -822,7 +822,7 @@
       }
     },
     {
-      "internalId": "TEC-NBC-SER001-GEN001-0019",
+      "internalId": "ARC-TEC-NBC-SER001-GEN001-0019",
       "themeCode": "TEC",
       "designCode": "NBC",
       "designFamily": "NANO_BATTERY",
@@ -866,7 +866,7 @@
       }
     },
     {
-      "internalId": "TEC-NSW-SER001-GEN001-0020",
+      "internalId": "ARC-TEC-NSW-SER001-GEN001-0020",
       "themeCode": "TEC",
       "designCode": "NSW",
       "designFamily": "NANO_SWARM",

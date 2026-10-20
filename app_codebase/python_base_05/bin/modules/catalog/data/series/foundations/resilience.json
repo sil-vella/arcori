@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "RES-TTR-SER003-GEN001-0001",
+      "internalId": "ARC-RES-TTR-SER003-GEN001-0001",
       "themeCode": "RES",
       "designCode": "TTR",
       "designFamily": "THE_TOWN_THAT_ROSE_AGAIN",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "internalId": "RES-TOT-SER003-GEN001-0002",
+      "internalId": "ARC-RES-TOT-SER003-GEN001-0002",
       "themeCode": "RES",
       "designCode": "TOT",
       "designFamily": "THE_TOWN_THAT_ROSE_BY_MORNING",
@@ -90,7 +90,7 @@
       }
     },
     {
-      "internalId": "RES-LAA-SER003-GEN001-0003",
+      "internalId": "ARC-RES-LAA-SER003-GEN001-0003",
       "themeCode": "RES",
       "designCode": "LAA",
       "designFamily": "LIGHTS_AFTER_THE_AVALANCHE",
@@ -132,7 +132,7 @@
       }
     },
     {
-      "internalId": "RES-MOA-SER003-GEN001-0004",
+      "internalId": "ARC-RES-MOA-SER003-GEN001-0004",
       "themeCode": "RES",
       "designCode": "MOA",
       "designFamily": "MORNING_AFTER_THE_BREAKING",

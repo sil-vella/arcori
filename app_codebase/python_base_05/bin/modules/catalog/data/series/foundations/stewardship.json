@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "STE-KYB-SER003-GEN001-0001",
+      "internalId": "ARC-STE-KYB-SER003-GEN001-0001",
       "themeCode": "STE",
       "designCode": "KYB",
       "designFamily": "KEEPER_OF_THE_YOUNG_BOUGH",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "STE-WQS-SER003-GEN001-0002",
+      "internalId": "ARC-STE-WQS-SER003-GEN001-0002",
       "themeCode": "STE",
       "designCode": "WQS",
       "designFamily": "WARDEN_OF_THE_QUIET_SPRING",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "internalId": "STE-KRP-SER003-GEN001-0003",
+      "internalId": "ARC-STE-KRP-SER003-GEN001-0003",
       "themeCode": "STE",
       "designCode": "KRP",
       "designFamily": "KEEPERS_OF_THE_RETURNING_PATHS",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "internalId": "STE-KRE-SER003-GEN001-0004",
+      "internalId": "ARC-STE-KRE-SER003-GEN001-0004",
       "themeCode": "STE",
       "designCode": "KRE",
       "designFamily": "KEEPERS_OF_THE_RETURNING_PATHS",

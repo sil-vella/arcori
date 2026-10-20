@@ -69,19 +69,12 @@ def _sku_payload(
 ) -> dict[str, Any]:
     eco = parse_slammer_economy(design)
     display = str(design.get("design") or design_id).strip() or design_id
+    # hitTarget / powerBracket stay server-only (sweet spot).
     return {
         "designId": design_id,
         "displayName": display,
         "imageUrl": design.get("imageUrl"),
         "color": design.get("color"),
-        "hitTarget": (design.get("gameplayAttributes") or {}).get("hitTarget")
-        if isinstance(design.get("gameplayAttributes"), dict)
-        else None,
-        "powerBracket": (design.get("gameplayAttributes") or {}).get(
-            "powerBracket"
-        )
-        if isinstance(design.get("gameplayAttributes"), dict)
-        else None,
         "shopPriceGoldArcori": eco["shopPriceGoldArcori"],
         "rechargePriceGoldArcori": eco["rechargePriceGoldArcori"],
         "rechargeCharges": eco["rechargeCharges"],

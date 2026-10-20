@@ -362,10 +362,27 @@ class VeloraThemeBrowseNotifier
       return;
     }
     final page = List<DesignSummary>.from(outcome.data!.items);
+    // Closed Arcori generations are Velora-only (not Museum).
+    final closedOutcome = await _api.fetchIndex(
+      accessToken: token,
+      theme: arg.themeCode,
+      series: arg.seriesKey,
+      closedOnly: true,
+      limit: 200,
+      offset: 0,
+    );
+    final closed = closedOutcome.isSuccess
+        ? List<DesignSummary>.from(closedOutcome.data!.items)
+        : <DesignSummary>[];
+    final seen = {for (final d in page) d.internalId};
+    final merged = [
+      ...page,
+      ...closed.where((d) => d.internalId.isNotEmpty && !seen.contains(d.internalId)),
+    ];
     state = state.copyWith(
-      designs: List.unmodifiable(page),
+      designs: List.unmodifiable(merged),
       featured: pickFeaturedDesign(page),
-      total: outcome.data!.total,
+      total: outcome.data!.total + closed.length,
       isLoading: false,
       loaded: true,
       clearError: true,

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "DRK-TDK-SER000-GEN001-0001",
+      "internalId": "ARC-DRK-TDK-SER000-GEN001-0001",
       "themeCode": "DRK",
       "designCode": "TDK",
       "designFamily": "THE_DARK",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "internalId": "DRK-EVW-SER000-GEN001-0002",
+      "internalId": "ARC-DRK-EVW-SER000-GEN001-0002",
       "themeCode": "DRK",
       "designCode": "EVW",
       "designFamily": "ECLIPSE_VEILWALKER",

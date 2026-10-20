@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "MEM-ETR-SER003-GEN001-0001",
+      "internalId": "ARC-MEM-ETR-SER003-GEN001-0001",
       "themeCode": "MEM",
       "designCode": "ETR",
       "designFamily": "ECHOES_THAT_REMAIN",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "MEM-FFA-SER003-GEN001-0002",
+      "internalId": "ARC-MEM-FFA-SER003-GEN001-0002",
       "themeCode": "MEM",
       "designCode": "FFA",
       "designFamily": "FACES_IN_FALLING_ASH",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "MEM-EWT-SER003-GEN001-0003",
+      "internalId": "ARC-MEM-EWT-SER003-GEN001-0003",
       "themeCode": "MEM",
       "designCode": "EWT",
       "designFamily": "ECHOES_WALKING_THROUGH_GREY",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "internalId": "MEM-FRX-SER003-GEN001-0004",
+      "internalId": "ARC-MEM-FRX-SER003-GEN001-0004",
       "themeCode": "MEM",
       "designCode": "FRX",
       "designFamily": "THE_FOREST_REMEMBERS",

@@ -6,7 +6,7 @@
   "version": 1,
   "designs": [
     {
-      "internalId": "CEL-FJL-SER003-GEN001-0001",
+      "internalId": "ARC-CEL-FJL-SER003-GEN001-0001",
       "themeCode": "CEL",
       "designCode": "FJL",
       "designFamily": "FESTIVAL_OF_JOINED_LIGHTS",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "internalId": "CEL-NTR-SER003-GEN001-0002",
+      "internalId": "ARC-CEL-NTR-SER003-GEN001-0002",
       "themeCode": "CEL",
       "designCode": "NTR",
       "designFamily": "NIGHT_OF_A_THOUSAND_RIBBONS",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "internalId": "CEL-FAS-SER003-GEN001-0003",
+      "internalId": "ARC-CEL-FAS-SER003-GEN001-0003",
       "themeCode": "CEL",
       "designCode": "FAS",
       "designFamily": "THE_FESTIVAL_AFTER_THE_STORM",
@@ -140,7 +140,7 @@
       }
     },
     {
-      "internalId": "CEL-FRP-SER003-GEN001-0004",
+      "internalId": "ARC-CEL-FRP-SER003-GEN001-0004",
       "themeCode": "CEL",
       "designCode": "FRP",
       "designFamily": "FESTIVAL_OF_THE_RETURNING_PATH",
