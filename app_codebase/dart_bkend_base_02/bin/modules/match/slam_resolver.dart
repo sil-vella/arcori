@@ -22,6 +22,29 @@ const Map<String, dynamic> defaultGameplayAttributes = {
   'powerBracket': {'min': 0.4, 'max': 0.6},
 };
 
+/// Copy catalog feel stats and overlay this player's saved sweet spot.
+///
+/// Does not mutate [catalogAttrs]. Missing spot leaves the catalog prefs.
+Map<String, dynamic>? applyPlayerSweetSpot(
+  Map<String, dynamic>? catalogAttrs,
+  Map<String, dynamic>? sweetSpot,
+) {
+  if (catalogAttrs == null && sweetSpot == null) return null;
+  final attrs = catalogAttrs == null
+      ? <String, dynamic>{}
+      : Map<String, dynamic>.from(catalogAttrs);
+  if (sweetSpot == null) return attrs;
+  final hit = sweetSpot['hitTarget']?.toString().trim().toLowerCase() ?? '';
+  if (hit == 'center' || hit == 'mid' || hit == 'edge') {
+    attrs['hitTarget'] = hit;
+  }
+  final band = sweetSpot['powerBracket'];
+  if (band is Map) {
+    attrs['powerBracket'] = Map<String, dynamic>.from(band);
+  }
+  return attrs;
+}
+
 const double kHitPrefTol = 0.45;
 /// Falloff distance outside the preferred power band (keeps ~90% vs 0.4–0.6 medium-low).
 const double kPowerPrefTol = 0.45;
@@ -32,6 +55,9 @@ const double kMasteryFitFloor = 0.55;
 
 /// Extra per-flip mastery from fit 0→1 (floor + span = 1.0 at perfect fit).
 const double kMasteryFitSpan = 0.45;
+
+/// Slammer mastery uses the same fit curve, counted ten times.
+const double kSlammerMasteryScale = 10;
 
 class SlamResolveResult {
   const SlamResolveResult({
@@ -53,7 +79,7 @@ class SlamResolveResult {
   final Map<String, dynamic>? sim;
   /// Server-internal fit 0..1 (not stamped on the client wire).
   final double preferenceFit;
-  /// Player-facing mastery gain: flips × (0.55 + 0.45 × fit). Miss / 0 flips → 0.
+  /// Player-facing mastery gain: 10 × flips × (0.55 + 0.45 × fit). Miss / 0 flips → 0.
   final double slammerMasteryAdded;
 }
 
@@ -161,10 +187,16 @@ double effectivePowerFromFit(double power, double fit) {
   return (power * (0.55 + 0.70 * fit)).clamp(0.0, 1.0);
 }
 
-/// Mastery weight per flipped piece (0.55 at fit=0 → 1.0 at fit=1).
+/// Mastery weight per flipped piece before the slammer scale (0.55 at fit=0 → 1.0 at fit=1).
 double masteryWeightFromFit(double fit) {
   final f = fit.clamp(0.0, 1.0);
   return (kMasteryFitFloor + kMasteryFitSpan * f).clamp(0.0, 1.0);
+}
+
+/// Slammer mastery for this slam. Same fit curve, ten times the gain.
+double slammerMasteryFromFlips(int flips, double fit) {
+  if (flips <= 0) return 0;
+  return flips * masteryWeightFromFit(fit) * kSlammerMasteryScale;
 }
 
 int seedFromMatch(String matchId, int version, int seatIndex) {
@@ -325,7 +357,7 @@ SlamResolveResult resolveSlam({
 
   final flips = physics.flippedPieceIds.length;
   final masteryWeight = masteryWeightFromFit(fit);
-  final masteryAdded = flips <= 0 ? 0.0 : flips * masteryWeight;
+  final masteryAdded = slammerMasteryFromFlips(flips, fit);
   if (LOGGING_SWITCH) {
     customlog(
       'slamResolve: slammerMastery matchId=$matchId seat=$actorSeatIndex '

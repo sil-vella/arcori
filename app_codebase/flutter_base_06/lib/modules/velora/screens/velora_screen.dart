@@ -6,11 +6,11 @@ import '../../../core/navigation/app_navigation.dart';
 import '../../../core/navigation/app_paths.dart';
 import '../../../core/screen/screen.dart';
 import '../../../core/state/auth/auth_providers.dart';
-import '../../../core/state/auth/auth_state.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/app_visuals.dart';
+import '../../../core/widgets/app_chrome.dart';
+import '../../../core/widgets/app_mark_icon.dart';
 import '../velora_assets.dart';
-import '../velora_chrome.dart';
+import '../velora_models.dart';
 import '../velora_notifier.dart';
 
 /// Velora entry: series list (Creation → Civilizations).
@@ -45,156 +45,248 @@ class _VeloraScreenState extends ConsumerState<VeloraScreen> {
 
     return ModuleScreenRegistrar(
       appBarItems: const [
-        AppBarTitle(text: 'Velora', icon: Icons.public_outlined),
+        AppBarTitle(text: 'Velora', iconAsset: AppMarks.velora),
       ],
-      child: RefreshIndicator(
-        onRefresh: () =>
-            ref.read(veloraProvider.notifier).loadSeries(force: true),
-        child: AppScreenTemplate001(
-          backgroundAsset: kVeloraWorldBackgroundAsset,
-          scrimOpacity: 0,
-          appBarForeground: AppColors.onSurfaceDark,
-          banner: Stack(
-            fit: StackFit.expand,
-            children: [veloraBannerFade()],
-          ),
-          slivers: [
-            ..._buildContentSlivers(context, auth: auth, velora: velora),
+      child: AppChromePage(
+        child: !auth.isAuthenticated && !auth.isBootstrapping
+            ? AppChromeCentered(
+                child: Text(
+                  'Sign in to browse Velora',
+                  style: context.appTypography.body.copyWith(
+                    color: AppChrome.onSurface,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              )
+            : RefreshIndicator(
+                onRefresh: () =>
+                    ref.read(veloraProvider.notifier).loadSeries(force: true),
+                child: ListView(
+                  padding: EdgeInsets.fromLTRB(
+                    AppSpacing.md,
+                    AppChromePage.topClearance(context) + AppSpacing.sm,
+                    AppSpacing.md,
+                    AppSpacing.xxl,
+                  ),
+                  children: [
+                    const _WorldCard(),
+                    AppSpacing.gapMd,
+                    if (velora.isLoading && velora.series.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
+                        child: Center(child: CircularProgressIndicator()),
+                      )
+                    else if (velora.errorMessage != null &&
+                        velora.series.isEmpty)
+                      Column(
+                        children: [
+                          Text(
+                            velora.errorMessage!,
+                            style: context.appTypography.body.copyWith(
+                              color: context.appColors.red,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          AppSpacing.gapMd,
+                          FilledButton(
+                            style: context.appButtons.primary.filled,
+                            onPressed: () => ref
+                                .read(veloraProvider.notifier)
+                                .loadSeries(force: true),
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      )
+                    else ...[
+                      _SeriesSection(
+                        title: 'Arcori',
+                        mark: const AppMarkIcon(AppMarks.arcori),
+                        series: velora.series,
+                        empty: 'No Arcori series yet',
+                      ),
+                      AppSpacing.gapMd,
+                      _SeriesSection(
+                        title: 'Slammers',
+                        mark: const AppMarkIcon(AppMarks.slammers),
+                        series: [
+                          for (final series in velora.series)
+                            if (_isSlammerSeries(series)) series,
+                        ],
+                        empty: 'No Slammer series yet',
+                        slammers: true,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
+}
+
+class _SeriesSection extends StatelessWidget {
+  const _SeriesSection({
+    required this.title,
+    required this.mark,
+    required this.series,
+    required this.empty,
+    this.slammers = false,
+  });
+
+  final String title;
+  final Widget mark;
+  final List<CatalogSeriesEntry> series;
+  final String empty;
+  final bool slammers;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppChromeSection(
+      title: title,
+      mark: mark,
+      goldFrame: true,
+      child: series.isEmpty
+          ? Text(
+              empty,
+              style: context.appTypography.bodySmall.copyWith(
+                color: AppChrome.onSurfaceMuted,
+              ),
+            )
+          : Column(
+              children: [
+                for (var i = 0; i < series.length; i++) ...[
+                  if (i > 0)
+                    Divider(
+                      height: 1,
+                      color: AppChrome.panelBorder.withValues(alpha: 0.35),
+                    ),
+                  _SeriesRow(series: series[i], slammers: slammers),
+                ],
+              ],
+            ),
+    );
+  }
+}
+
+class _SeriesRow extends StatelessWidget {
+  const _SeriesRow({required this.series, this.slammers = false});
+
+  final CatalogSeriesEntry series;
+  final bool slammers;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Nav.push(
+          context,
+          Uri(
+            path: AppPaths.veloraSeries,
+            queryParameters: {
+              'key': series.key,
+              'name': series.label,
+              if (slammers) 'focus': 'slammers',
+            },
+          ).toString(),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                series.label,
+                style: context.appTypography.title.copyWith(
+                  color: AppChrome.onSurface,
+                ),
+              ),
+            ),
+            Icon(Icons.chevron_right, color: AppChrome.accentGold),
           ],
         ),
       ),
     );
   }
+}
 
-  List<Widget> _buildContentSlivers(
-    BuildContext context, {
-    required AuthState auth,
-    required VeloraState velora,
-  }) {
-    final bg = veloraContentCanvas();
+bool _isSlammerSeries(CatalogSeriesEntry series) {
+  final key = series.key.trim().toLowerCase();
+  final seriesKey = series.seriesKey.trim().toLowerCase();
+  return key == 'genesis' || seriesKey == 'genesis';
+}
 
-    if (!auth.isAuthenticated && !auth.isBootstrapping) {
-      return [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: ColoredBox(
-            color: bg,
-            child: Center(
-              child: Padding(
-                padding: AppSpacing.screenPadding,
-                child: Text(
-                  'Sign in to browse Velora',
-                  style: context.appTypography.body.copyWith(
-                    color: AppColors.onSurfaceDark,
-                  ),
-                  textAlign: TextAlign.center,
+class _WorldCard extends StatelessWidget {
+  const _WorldCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppChromeSection(
+      title: 'The world',
+      mark: const AppMarkIcon(AppMarks.velora),
+      goldFrame: true,
+      background: const _WorldMapCover(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: FractionallySizedBox(
+              widthFactor: 0.62,
+              child: Text(
+                'Five known lands, and what the Chronicle still cannot prove.',
+                style: context.appTypography.bodySmall.copyWith(
+                  color: AppChrome.onSurface,
+                  height: 1.35,
                 ),
               ),
             ),
           ),
-        ),
-      ];
-    }
-
-    if (velora.isLoading && velora.series.isEmpty) {
-      return [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: ColoredBox(
-            color: bg,
-            child: const Center(child: CircularProgressIndicator()),
+          AppSpacing.gapSm,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: FilledButton(
+              style: context.appButtons.primary.filled,
+              onPressed: () => Nav.push(context, AppPaths.veloraWorld),
+              child: const Text('Learn about the world'),
+            ),
           ),
-        ),
-      ];
-    }
+        ],
+      ),
+    );
+  }
+}
 
-    if (velora.errorMessage != null && velora.series.isEmpty) {
-      return [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: ColoredBox(
-            color: bg,
-            child: Center(
-              child: Padding(
-                padding: AppSpacing.screenPadding,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      velora.errorMessage!,
-                      style: context.appTypography.body.copyWith(
-                        color: context.appColors.red,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    AppSpacing.gapMd,
-                    FilledButton(
-                      onPressed: () => ref
-                          .read(veloraProvider.notifier)
-                          .loadSeries(force: true),
-                      child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              ),
+class _WorldMapCover extends StatelessWidget {
+  const _WorldMapCover();
+
+  @override
+  Widget build(BuildContext context) {
+    final ink = AppColors.surfaceDark;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.asset(
+          kVeloraWorldBackgroundAsset,
+          fit: BoxFit.cover,
+          alignment: Alignment.centerRight,
+          errorBuilder: (_, __, ___) => ColoredBox(color: AppChrome.fieldFill),
+        ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                ink.withValues(alpha: 0.94),
+                ink.withValues(alpha: 0.72),
+                ink.withValues(alpha: 0),
+              ],
+              stops: const [0.0, 0.28, 0.5],
             ),
           ),
         ),
-      ];
-    }
-
-    if (velora.series.isEmpty) {
-      return [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: ColoredBox(
-            color: bg,
-            child: const AppEmptyState(
-              message: 'No series yet',
-              icon: Icons.public_outlined,
-            ),
-          ),
-        ),
-      ];
-    }
-
-    return [
-      DecoratedSliver(
-        decoration: BoxDecoration(color: bg),
-        sliver: SliverPadding(
-          padding: AppSpacing.screenPaddingCompact,
-          sliver: SliverList.separated(
-            itemCount: velora.series.length,
-            separatorBuilder: (_, __) => AppSpacing.gapSm,
-            itemBuilder: (context, index) {
-              final series = velora.series[index];
-              return VeloraChromeButton(
-                label: series.label,
-                textStyle: context.appTypography.title.copyWith(
-                  color: AppColors.onSurfaceDark,
-                ),
-                onTap: () {
-                  final q = {
-                    'key': series.key,
-                    'name': series.label,
-                  };
-                  Nav.push(
-                    context,
-                    Uri(
-                      path: AppPaths.veloraSeries,
-                      queryParameters: q,
-                    ).toString(),
-                  );
-                },
-              );
-            },
-          ),
-        ),
-      ),
-      SliverFillRemaining(
-        hasScrollBody: false,
-        child: ColoredBox(color: bg),
-      ),
-    ];
+      ],
+    );
   }
 }

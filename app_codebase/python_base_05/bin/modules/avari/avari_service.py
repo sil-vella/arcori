@@ -468,6 +468,10 @@ def catalog_card_from_design_doc(
     color_raw = design.get("color")
     color = str(color_raw).strip() if color_raw else ""
     attrs = _gameplay_attributes(design)
+    from modules.catalog.current_series import resolve_design_series_key
+
+    series_key = resolve_design_series_key(design, internal_id=iid)
+    subtheme = str(design.get("subtheme") or "").strip()
     card: dict[str, Any] = {
         "designId": iid,
         "displayName": name,
@@ -477,6 +481,8 @@ def catalog_card_from_design_doc(
         "color": color or None,
         "circulating": _is_circulating(design),
         "theme": str(design.get("theme") or "").strip() or None,
+        "subtheme": subtheme or None,
+        "seriesKey": series_key or None,
         "generationNumber": generation_number_for_design(design),
         "mintReach": mint_reach_or_series_default(design),
     }
@@ -502,6 +508,10 @@ def _access_entry_from_card(
         "source": source,
         "masteryPoints": int(mastery_points),
         "mintReach": card.get("mintReach"),
+        "theme": card.get("theme"),
+        "subtheme": card.get("subtheme"),
+        "seriesKey": card.get("seriesKey"),
+        "generationNumber": card.get("generationNumber"),
     }
     if isinstance(background, dict) and background:
         entry["background"] = background
@@ -563,10 +573,13 @@ def _canonical_slammer_id(design_id: str) -> str:
 
 def _slammer_row_snapshot(row: Any) -> dict[str, Any]:
     """Copy fields while the ORM instance is still session-bound."""
+    from modules.avari.slammer_sweet_spot import stored_sweet_spot
+
     return {
         "design_id": str(getattr(row, "design_id", "") or "").strip(),
         "permanent": bool(getattr(row, "permanent", False)),
         "charges_remaining": getattr(row, "charges_remaining", None),
+        "sweet_spot": stored_sweet_spot(getattr(row, "sweet_spot", None)),
     }
 
 
@@ -602,10 +615,12 @@ def verify_slammers_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
         # Snapshot inside the session — do not touch ORM rows after close
         # (DetachedInstanceError → Dart falls back to stub slammer).
         with session_scope() as session:
-            rows = [
-                _slammer_row_snapshot(r)
-                for r in repo.list_slammers(session, user_id)
-            ]
+            from modules.avari.slammer_sweet_spot import bind_sweet_spot
+
+            rows = []
+            for owned_row in repo.list_slammers(session, user_id):
+                bind_sweet_spot(session, owned_row)
+                rows.append(_slammer_row_snapshot(owned_row))
 
         usable_by_alias: dict[str, dict[str, Any]] = {}
         owned_aliases: set[str] = set()
@@ -648,11 +663,18 @@ def verify_slammers_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
                 source = SOURCE_EMPTY
                 reason = "empty_player_slammers"
 
+        sweet_spot = None
+        if chosen:
+            for row in rows:
+                row_id = _canonical_slammer_id(str(row.get("design_id") or ""))
+                if row_id == chosen:
+                    sweet_spot = row.get("sweet_spot")
+                    break
         if LOGGING_SWITCH:
             customlog(
                 f"avari: verify_slammer user={user_id} requested={requested or '-'} "
                 f"chosen={chosen or '-'} source={source} reason={reason} "
-                f"owned={len(owned)}"
+                f"owned={len(owned)} sweetSpot={'yes' if sweet_spot else 'no'}"
             )
         assignments.append(
             {
@@ -660,6 +682,7 @@ def verify_slammers_for_seats(seats: list[dict[str, Any]]) -> dict[str, Any]:
                 "slammerId": chosen,
                 "source": source,
                 "reason": reason,
+                "sweetSpot": sweet_spot,
             }
         )
 
@@ -1009,6 +1032,8 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
                     "faceMedia": "lottie",
                     "color": color,
                     "circulating": True,
+                    "theme": "Kin",
+                    "seriesKey": "Kin",
                     "mintReach": mint_reach_or_series_default(None),
                 }
             if not kin_card.get("lottieUrl"):
@@ -1070,6 +1095,9 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
             if not design_id or design_id in seen_slammers:
                 continue
             seen_slammers.add(design_id)
+            from modules.avari.slammer_sweet_spot import bind_sweet_spot
+
+            bind_sweet_spot(session, row)
             card = catalog_card_for_design(design_id) or {}
             mastery_pts = getattr(row, "_payload_mastery", None)
             if mastery_pts is None:
@@ -1096,7 +1124,12 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
                 entry["gameplayAttributes"] = attrs
             if not bool(row.permanent):
                 try:
-                    from modules.market.market_skus import parse_slammer_economy
+                    from modules.market.market_skus import (
+                        DEFAULT_MAX_CHARGES,
+                        DEFAULT_RECHARGE_CHARGES,
+                        DEFAULT_RECHARGE_PRICE_GOLD_ARCORI,
+                        parse_slammer_economy,
+                    )
 
                     design = get_design(design_id)
                     eco = parse_slammer_economy(design)
@@ -1106,9 +1139,11 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
                     )
                     entry["rechargeCharges"] = eco.get("rechargeCharges")
                 except AppError:
-                    entry["maxCharges"] = 20
-                    entry["rechargePriceGoldArcori"] = 4
-                    entry["rechargeCharges"] = 100
+                    entry["maxCharges"] = DEFAULT_MAX_CHARGES
+                    entry["rechargePriceGoldArcori"] = (
+                        DEFAULT_RECHARGE_PRICE_GOLD_ARCORI
+                    )
+                    entry["rechargeCharges"] = DEFAULT_RECHARGE_CHARGES
             slammer_payload.append(entry)
         trove_payload = []
         for row in trove_rows:
@@ -2064,7 +2099,7 @@ def finalize_match(user_id: str, body: dict[str, Any] | None) -> dict[str, Any]:
             sync_player_access_pool(session, uid)
             session.flush()
 
-            # Slammer mastery: Dart sends flips×(0.55+0.45×fit) as a number only.
+            # Slammer mastery: Dart sends 10×flips×(0.55+0.45×fit) as a number only.
             slammer_mastery_changes: list[dict[str, Any]] = []
             if LOGGING_SWITCH:
                 customlog(

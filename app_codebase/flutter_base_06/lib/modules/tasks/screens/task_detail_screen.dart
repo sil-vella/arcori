@@ -8,6 +8,7 @@ import '../../../core/screen/module_screen_registrar.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_chrome.dart';
+import '../../../core/widgets/economy_icon.dart';
 import '../../../utils/dev_logger.dart';
 import '../tasks_api.dart';
 import '../tasks_models.dart';
@@ -260,9 +261,10 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                     ),
                   ),
                   if (isClaimGate) ...[
-                    FilledButton(
+                    FilledButton.icon(
                       onPressed: canClaim ? () => _claim() : null,
-                      child: Text(
+                      icon: const EconomyIcon(EconomyMark.fragment, size: 22),
+                      label: Text(
                         cacheState == DailyCacheUiState.claimed
                             ? 'Claimed'
                             : 'Claim (+$rewardAmount Fragments)',
@@ -271,15 +273,24 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                     AppSpacing.gapSm,
                   ],
                   if (miss) ...[
-                    FilledButton(
-                      onPressed: continueEnabled ? () => _continueGoal() : null,
-                      child: Text(
-                        progress?.continueCost != null &&
-                                progress!.continueCost > 0
-                            ? 'Continue (${progress.continueCost} Gold Arcori)'
-                            : 'Continue',
+                    if (progress != null && progress.continueCost > 0)
+                      FilledButton.icon(
+                        onPressed:
+                            continueEnabled ? () => _continueGoal() : null,
+                        icon: const EconomyIcon(
+                          EconomyMark.goldArcori,
+                          size: 22,
+                        ),
+                        label: Text(
+                          'Continue (${progress.continueCost} Gold Arcori)',
+                        ),
+                      )
+                    else
+                      FilledButton(
+                        onPressed:
+                            continueEnabled ? () => _continueGoal() : null,
+                        child: const Text('Continue'),
                       ),
-                    ),
                     AppSpacing.gapSm,
                     OutlinedButton(
                       onPressed: canReset ? () => _acceptReset() : null,

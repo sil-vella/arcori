@@ -23,6 +23,9 @@ abstract final class AppColors {
   /// Arcori gold — secondary actions, wordmark-aligned accents.
   static const Color secondary = Color(0xFFFAB537);
 
+  /// Champagne gold for headings and frames. Lighter than [secondary].
+  static const Color headingGold = Color(0xFFF4E4C3);
+
   /// Light gold — secondary containers.
   static const Color secondaryPastel = Color(0xFFFDEAC7);
 

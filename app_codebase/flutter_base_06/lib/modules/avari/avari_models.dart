@@ -3,6 +3,11 @@ library;
 
 import '../achievements/achievements_models.dart';
 
+String? _textOrNull(Object? raw) {
+  final text = raw?.toString().trim() ?? '';
+  return text.isEmpty ? null : text;
+}
+
 class AvariIdentity {
   const AvariIdentity({
     required this.userId,
@@ -317,6 +322,10 @@ class AvariInventoryItem {
     this.masteryPoints = 0,
     this.mintReach,
     this.masteryCap,
+    this.theme,
+    this.subtheme,
+    this.seriesKey,
+    this.generationNumber,
     this.legacyId,
     this.legacySnapshot,
   });
@@ -377,6 +386,12 @@ class AvariInventoryItem {
       masteryPoints: masteryPts,
       mintReach: mintReach,
       masteryCap: masteryCap,
+      theme: _textOrNull(json['theme']),
+      subtheme: _textOrNull(json['subtheme']),
+      seriesKey: _textOrNull(json['seriesKey']),
+      generationNumber: json['generationNumber'] is int
+          ? json['generationNumber'] as int
+          : int.tryParse('${json['generationNumber'] ?? ''}'),
       legacyId: json['legacyId']?.toString(),
       legacySnapshot:
           snap is Map ? Map<String, dynamic>.from(snap) : null,
@@ -414,6 +429,11 @@ class AvariInventoryItem {
 
   /// Active preservation window — `closureMilestone` (mastery cap / Lost line).
   final int? masteryCap;
+
+  final String? theme;
+  final String? subtheme;
+  final String? seriesKey;
+  final int? generationNumber;
 
   /// Sealed Legacy ID when this slammer generation was minted.
   final String? legacyId;

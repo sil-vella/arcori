@@ -1,16 +1,15 @@
-"""Market slammer SKUs (v1: Rim only)."""
+"""Market slammer SKUs — every non-permanent Shop slammer."""
 
 from __future__ import annotations
 
 from typing import Any
 
-# Genesis Rim — Market Slammers section v1.
-MARKET_SLAMMER_IDS: tuple[str, ...] = ("SLM-SLM-RIM-SER001-GEN001-0011",)
-
+# Genesis shop defaults. Catalog economy overrides these when present.
+# Starter stays permanent and is never a Market SKU.
 DEFAULT_SHOP_PRICE_GOLD_ARCORI = 4
 DEFAULT_RECHARGE_PRICE_GOLD_ARCORI = 4
 DEFAULT_RECHARGE_CHARGES = 100
-DEFAULT_MAX_CHARGES = 20
+DEFAULT_MAX_CHARGES = 25
 DEFAULT_CHARGE_COST_PER_USE = 1
 
 
@@ -58,6 +57,23 @@ def parse_slammer_economy(design: dict[str, Any] | None) -> dict[str, Any]:
     }
 
 
-def is_market_slammer(design_id: str) -> bool:
-    did = (design_id or "").strip()
-    return did in MARKET_SLAMMER_IDS
+def is_shop_slammer(design: dict[str, Any] | None, *, design_id: str = "") -> bool:
+    """True when this catalog design is sold on the Market.
+
+    Shop slammers only. Permanent / Starter / any other origin stay off the shelf.
+    """
+    if not isinstance(design, dict):
+        return False
+    iid = (design_id or str(design.get("internalId") or "")).strip()
+    code = str(design.get("designCode") or "").strip().upper()
+    origin = str(design.get("origin") or "").strip().lower()
+    eco = design.get("economy") if isinstance(design.get("economy"), dict) else {}
+    if bool(eco.get("permanent")) or code == "STR" or origin == "starter":
+        return False
+    if origin != "shop":
+        return False
+    theme = str(design.get("themeCode") or "").strip().upper()
+    dtype = str(design.get("type") or "").strip().lower()
+    if theme == "SLM" or dtype == "slammer" or iid.upper().startswith("SLM-"):
+        return True
+    return False

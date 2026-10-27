@@ -2,7 +2,7 @@
 
 **Status:** Completed  
 **Created:** 2026-08-23  
-**Last Updated:** 2026-09-23
+**Last Updated:** 2026-10-27
 
 Related: [player-slam-input.md](player-slam-input.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md) · [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
 
@@ -12,7 +12,7 @@ Face-down Arcori stack on the table; slam input + frozen slammer attrs resolve f
 
 ## Slammer resolve pipeline (SSOT)
 
-Dart `resolveSlam` (Flutter practice mirror identical). Frozen catalog `gameplayAttributes` shape the outcome in this order:
+Dart `resolveSlam` (Flutter practice mirror identical, except practice skips the fit bonus). Frozen catalog feel stats shape the slam. The preferred band is that player's saved sweet spot when the match froze one:
 
 ```text
 aim + speed

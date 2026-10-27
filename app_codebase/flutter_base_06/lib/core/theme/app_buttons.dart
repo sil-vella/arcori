@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
@@ -162,6 +164,15 @@ class AppButtonStyles {
         textFg: AppColors.secondary,
         iconFg: AppColors.secondary,
         disabledFg: muted,
+        // Inward corner bends on all four sides — cross-shaped gold CTA.
+        inwardCorners: true,
+        filledGradient: <Color>[
+          Color.lerp(AppColors.secondary, AppColors.tertiary, 0.45)!,
+          AppColors.secondary,
+          Color.lerp(AppColors.secondary, AppColors.headingGold, 0.35)!,
+          AppColors.secondary,
+          Color.lerp(AppColors.secondary, AppColors.tertiary, 0.45)!,
+        ],
       ),
       secondary: _tone(
         textStyle: typography.button,
@@ -261,6 +272,10 @@ class AppButtonStyles {
     required Color textFg,
     required Color iconFg,
     required Color disabledFg,
+    double? filledRadius,
+    BorderSide? filledSide,
+    List<Color>? filledGradient,
+    bool inwardCorners = false,
   }) {
     return AppToneButtonStyles(
       filled: _filled(
@@ -268,6 +283,10 @@ class AppButtonStyles {
         foreground: filledFg,
         textStyle: textStyle,
         disabledFg: disabledFg,
+        radius: filledRadius,
+        side: filledSide,
+        gradient: filledGradient,
+        inwardCorners: inwardCorners,
       ),
       tonal: _filled(
         background: tonalBg,
@@ -317,9 +336,38 @@ class AppButtonStyles {
     required Color foreground,
     required TextStyle textStyle,
     required Color disabledFg,
+    double? radius,
+    BorderSide? side,
+    List<Color>? gradient,
+    bool inwardCorners = false,
   }) {
+    final corner = radius ?? AppButtonMetrics.radius;
     return _base(textStyle: textStyle).copyWith(
+      shape: WidgetStateProperty.resolveWith((states) {
+        if (inwardCorners) {
+          final disabled = states.contains(WidgetState.disabled);
+          return InwardCornerBorder(
+            side: BorderSide(
+              color: AppColors.surface.withValues(alpha: disabled ? 0.35 : 1),
+              width: 1,
+            ),
+          );
+        }
+        final border = side == null
+            ? BorderSide.none
+            : states.contains(WidgetState.disabled)
+                ? BorderSide(
+                    color: side.color.withValues(alpha: 0.38),
+                    width: side.width,
+                  )
+                : side;
+        return RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(corner),
+          side: border,
+        );
+      }),
       backgroundColor: WidgetStateProperty.resolveWith((states) {
+        if (gradient != null) return Colors.transparent;
         if (states.contains(WidgetState.disabled)) {
           return background.withValues(alpha: 0.12);
         }
@@ -337,14 +385,94 @@ class AppButtonStyles {
         }
         return background;
       }),
+      backgroundBuilder: gradient == null
+          ? null
+          : (context, states, child) {
+              final disabled = states.contains(WidgetState.disabled);
+              final pressed = states.contains(WidgetState.pressed);
+              final colors = <Color>[
+                for (final color in gradient)
+                  disabled
+                      ? color.withValues(alpha: 0.28)
+                      : pressed
+                          ? Color.alphaBlend(
+                              foreground.withValues(alpha: 0.08),
+                              color,
+                            )
+                          : color,
+              ];
+              return ClipPath(
+                clipper: const ShapeBorderClipper(
+                  shape: InwardCornerBorder(),
+                ),
+                child: Stack(
+                  fit: StackFit.passthrough,
+                  children: [
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: colors,
+                            stops: const [0.0, 0.32, 0.5, 0.68, 1.0],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: RadialGradient(
+                            center: Alignment.topCenter,
+                            radius: 1.9,
+                            colors: [
+                              AppColors.surface.withValues(
+                                alpha: disabled ? 0.05 : 0.32,
+                              ),
+                              AppColors.surface.withValues(alpha: 0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: RadialGradient(
+                            center: Alignment.bottomCenter,
+                            radius: 2.5,
+                            colors: [
+                              AppColors.surface.withValues(
+                                alpha: disabled ? 0.1 : 0.78,
+                              ),
+                              AppColors.surface.withValues(
+                                alpha: disabled ? 0.03 : 0.22,
+                              ),
+                              AppColors.surface.withValues(alpha: 0),
+                            ],
+                            stops: const [0.0, 0.48, 1.0],
+                          ),
+                        ),
+                      ),
+                    ),
+                    ?child,
+                  ],
+                ),
+              );
+            },
       foregroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) return disabledFg;
         return foreground;
       }),
       elevation: WidgetStateProperty.resolveWith((states) {
+        if (inwardCorners) return 0;
         if (states.contains(WidgetState.pressed)) return 1;
         return 0;
       }),
+      shadowColor: inwardCorners
+          ? const WidgetStatePropertyAll(Colors.transparent)
+          : null,
     );
   }
 
@@ -482,5 +610,186 @@ class AppButtonStylesExtension extends ThemeExtension<AppButtonStylesExtension> 
   ) {
     if (other == null) return this;
     return t < 0.5 ? this : other;
+  }
+}
+
+/// Rectangle with a circular bite at each corner. The outside of each inward bend is empty.
+class InwardCornerBorder extends OutlinedBorder {
+  const InwardCornerBorder({super.side});
+
+  /// Share of the short side used by each inward corner.
+  static const double _cornerShare = 0.115;
+
+  /// Gold left outside the shine-colored line.
+  static const double _edgeGap = 1.25;
+
+  @override
+  OutlinedBorder copyWith({BorderSide? side}) {
+    return InwardCornerBorder(side: side ?? this.side);
+  }
+
+  @override
+  ShapeBorder scale(double t) {
+    return InwardCornerBorder(side: side.scale(t));
+  }
+
+  @override
+  ShapeBorder? lerpFrom(ShapeBorder? a, double t) {
+    if (a is InwardCornerBorder) {
+      return InwardCornerBorder(side: BorderSide.lerp(a.side, side, t));
+    }
+    return super.lerpFrom(a, t);
+  }
+
+  @override
+  ShapeBorder? lerpTo(ShapeBorder? b, double t) {
+    if (b is InwardCornerBorder) {
+      return InwardCornerBorder(side: BorderSide.lerp(side, b.side, t));
+    }
+    return super.lerpTo(b, t);
+  }
+
+  @override
+  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
+    return _outline(rect);
+  }
+
+  @override
+  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
+    return _outline(rect);
+  }
+
+  @override
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
+    if (side.style == BorderStyle.none || side.width <= 0) return;
+    final face = _outline(rect);
+    final line = _outline(rect, inset: _edgeGap + side.width / 2);
+    canvas.save();
+    canvas.clipPath(face);
+    canvas.drawPath(
+      line,
+      Paint()
+        ..color = side.color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = side.width
+        ..strokeJoin = StrokeJoin.round,
+    );
+    canvas.restore();
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is InwardCornerBorder && other.side == side;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, side);
+
+  static double _radius(Rect rect) {
+    final shortest = rect.width < rect.height ? rect.width : rect.height;
+    return shortest * _cornerShare;
+  }
+
+  /// Gold face, optionally inset by [inset] so the border can sit on it.
+  ///
+  /// Arc centers stay on the original corners. [inset] moves the straight
+  /// edges inward and uses a smaller radius on the same centers.
+  static Path _outline(Rect rect, {double inset = 0}) {
+    final outerRadius = _radius(rect);
+    final radius = outerRadius - inset;
+    if (radius <= 0) {
+      return Path()..addRect(rect.deflate(inset));
+    }
+    if (inset <= 0) {
+      final left = rect.left;
+      final top = rect.top;
+      final right = rect.right;
+      final bottom = rect.bottom;
+      return Path()
+        ..moveTo(left + outerRadius, top)
+        ..lineTo(right - outerRadius, top)
+        ..arcTo(
+          Rect.fromCircle(center: rect.topRight, radius: outerRadius),
+          math.pi,
+          -math.pi / 2,
+          false,
+        )
+        ..lineTo(right, bottom - outerRadius)
+        ..arcTo(
+          Rect.fromCircle(center: rect.bottomRight, radius: outerRadius),
+          -math.pi / 2,
+          -math.pi / 2,
+          false,
+        )
+        ..lineTo(left + outerRadius, bottom)
+        ..arcTo(
+          Rect.fromCircle(center: rect.bottomLeft, radius: outerRadius),
+          0,
+          -math.pi / 2,
+          false,
+        )
+        ..lineTo(left, top + outerRadius)
+        ..arcTo(
+          Rect.fromCircle(center: rect.topLeft, radius: outerRadius),
+          math.pi / 2,
+          -math.pi / 2,
+          false,
+        )
+        ..close();
+    }
+
+    final join = math.sqrt(radius * radius - inset * inset);
+    final top = rect.top + inset;
+    final bottom = rect.bottom - inset;
+    final left = rect.left + inset;
+    final right = rect.right - inset;
+
+    final trStart = math.atan2(inset, -join);
+    final trSweep = _clockwiseSweep(trStart, math.atan2(join, -inset));
+    final brStart = math.atan2(-join, -inset);
+    final brSweep = _clockwiseSweep(brStart, math.atan2(-inset, -join));
+    final blStart = math.atan2(-inset, join);
+    final blSweep = _clockwiseSweep(blStart, math.atan2(-join, inset));
+    final tlStart = math.atan2(join, inset);
+    final tlSweep = _clockwiseSweep(tlStart, math.atan2(inset, join));
+
+    return Path()
+      ..moveTo(rect.left + join, top)
+      ..lineTo(rect.right - join, top)
+      ..arcTo(
+        Rect.fromCircle(center: rect.topRight, radius: radius),
+        trStart,
+        trSweep,
+        false,
+      )
+      ..lineTo(right, rect.bottom - join)
+      ..arcTo(
+        Rect.fromCircle(center: rect.bottomRight, radius: radius),
+        brStart,
+        brSweep,
+        false,
+      )
+      ..lineTo(rect.left + join, bottom)
+      ..arcTo(
+        Rect.fromCircle(center: rect.bottomLeft, radius: radius),
+        blStart,
+        blSweep,
+        false,
+      )
+      ..lineTo(left, rect.top + join)
+      ..arcTo(
+        Rect.fromCircle(center: rect.topLeft, radius: radius),
+        tlStart,
+        tlSweep,
+        false,
+      )
+      ..close();
+  }
+
+  static double _clockwiseSweep(double start, double end) {
+    var sweep = end - start;
+    if (sweep > 0) sweep -= math.pi * 2;
+    if (sweep < -math.pi) sweep += math.pi * 2;
+    return sweep;
   }
 }

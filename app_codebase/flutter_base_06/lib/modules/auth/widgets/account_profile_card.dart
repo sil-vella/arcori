@@ -8,6 +8,7 @@ import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/state/user/user_profile_provider.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_chrome.dart';
+import '../../../core/widgets/app_mark_icon.dart';
 import '../../avari/widgets/profile_face_avatar.dart';
 
 const int _avatarMaxUploadBytes = 2 * 1024 * 1024;
@@ -27,6 +28,7 @@ class AccountProfileCard extends ConsumerWidget {
 
     return AppChromeSection(
       title: 'Profile',
+      mark: const AppMarkIcon(AppMarks.avari),
       goldFrame: true,
       margin: const EdgeInsets.only(bottom: AppSpacing.md),
       child: Column(
@@ -169,8 +171,6 @@ class _ProfileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initials = username.isNotEmpty ? username[0].toUpperCase() : '?';
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -182,7 +182,6 @@ class _ProfileBody extends StatelessWidget {
               ProfileFaceAvatar(
                 avatarUrl: avatarUrl,
                 size: 80,
-                fallbackLabel: initials,
               ),
               if (isUploading)
                 Positioned.fill(

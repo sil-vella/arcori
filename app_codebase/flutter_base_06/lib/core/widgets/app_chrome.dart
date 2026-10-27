@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../bottom_nav/shell_bottom_bar.dart';
 import '../screen/shell_chrome_registrar.dart';
 import '../theme/theme.dart';
+import 'app_visuals.dart';
 
 /// Shared Museum / Velora / Home dark chrome (canvas, glass panels, type).
 ///
@@ -79,6 +81,10 @@ abstract final class AppChrome {
   }
 }
 
+/// Default full-page mural behind shell screens.
+const String kMainBackgroundAsset =
+    'assets/images/backgrounds/main_background.webp';
+
 /// Full-page dark canvas under a transparent AppBar.
 ///
 /// Put [topClearance] at the start of scroll content (or pad a non-scroll
@@ -93,9 +99,13 @@ class AppChromePage extends StatelessWidget {
   final Widget child;
   final bool extendBodyBehindAppBar;
 
-  /// Space below the status bar + toolbar for content under a transparent bar.
+  /// Inset that already clears the transparent AppBar.
+  ///
+  /// With [Scaffold.extendBodyBehindAppBar], [MediaQuery.padding.top] is the
+  /// full bar (status bar + toolbar). Adding [kToolbarHeight] again left an
+  /// empty band under the bar.
   static double topClearance(BuildContext context) =>
-      MediaQuery.paddingOf(context).top + kToolbarHeight;
+      MediaQuery.paddingOf(context).top;
 
   @override
   Widget build(BuildContext context) {
@@ -106,19 +116,68 @@ class AppChromePage extends StatelessWidget {
         data: AppTheme.dark,
         child: Builder(
           builder: (context) {
+            final bottom = MediaQuery.paddingOf(context).bottom;
+            final sinkClearance =
+                bottom > ShellBottomBar.barContentHeight && bottom < 180
+                    ? bottom - ShellBottomBar.playProtrusion
+                    : 0.0;
             return DefaultTextStyle.merge(
               style: context.appTypography.body.copyWith(
                 color: AppChrome.onSurface,
               ),
               child: IconTheme.merge(
                 data: IconThemeData(color: AppChrome.onSurfaceMuted),
-                child: ColoredBox(
-                  color: AppChrome.canvas,
-                  child: child,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Positioned.fill(
+                      child: Image.asset(
+                        kMainBackgroundAsset,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                        errorBuilder: (_, __, ___) =>
+                            ColoredBox(color: AppChrome.canvas),
+                      ),
+                    ),
+                    const Positioned.fill(child: _MainBackgroundScrim()),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: sinkClearance),
+                      child: child,
+                    ),
+                  ],
                 ),
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+/// Dark wash over [kMainBackgroundAsset], top to bottom.
+///
+/// 0–20% of the page: 20% → 80%. 20–50%: 80% → 95%.
+/// 50–80%: 95% → 80%. 80–100%: 80% → 20%.
+class _MainBackgroundScrim extends StatelessWidget {
+  const _MainBackgroundScrim();
+
+  @override
+  Widget build(BuildContext context) {
+    final ink = AppColors.backgroundDark;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            ink.withValues(alpha: 0.20),
+            ink.withValues(alpha: 0.80),
+            ink.withValues(alpha: 0.95),
+            ink.withValues(alpha: 0.80),
+            ink.withValues(alpha: 0.20),
+          ],
+          stops: const [0.0, 0.20, 0.50, 0.80, 1.0],
         ),
       ),
     );
@@ -131,69 +190,88 @@ class AppChromeSection extends StatelessWidget {
     super.key,
     required this.title,
     required this.child,
+    this.icon,
+    this.mark,
     this.actionLabel,
     this.onAction,
+    this.trailing,
     this.goldFrame = false,
     this.margin,
+    this.background,
   });
 
   final String title;
+  final IconData? icon;
+
+  /// Painted mark in the title row. Used in place of [icon] when set.
+  final Widget? mark;
   final Widget child;
   final String? actionLabel;
   final VoidCallback? onAction;
+
+  /// Sits on the right of the title. An [actionLabel] button takes this spot when both are set.
+  final Widget? trailing;
   final bool goldFrame;
   final EdgeInsetsGeometry? margin;
 
+  /// Painted edge to edge under the label, padding, and body. Clipped to the card.
+  final Widget? background;
+
   @override
   Widget build(BuildContext context) {
-    final radius = BorderRadius.circular(AppSurfaces.exhibitRadius);
-    final panel = DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppChrome.panelFill,
-        borderRadius: radius,
-        border: Border.all(
-          color: goldFrame ? AppChrome.panelBorderGold : AppChrome.panelBorder,
-          width: 1,
-        ),
-      ),
-      child: Padding(
-        padding: AppSpacing.screenPaddingCompact,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 3,
-                  height: 20,
-                  margin: const EdgeInsets.only(right: AppSpacing.sm),
-                  decoration: BoxDecoration(
-                    color: AppChrome.accentBronze,
-                    borderRadius: BorderRadius.circular(AppRadii.pill),
-                  ),
+    final backdrop = background;
+    final content = Padding(
+      padding: AppSpacing.screenPaddingCompact,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 3,
+                height: 20,
+                margin: const EdgeInsets.only(right: AppSpacing.sm),
+                decoration: BoxDecoration(
+                  color: AppChrome.accentBronze,
+                  borderRadius: BorderRadius.circular(AppRadii.pill),
                 ),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: context.appTypography.title.copyWith(
-                      color: AppChrome.onSurface,
-                    ),
-                  ),
-                ),
-                if (actionLabel != null && onAction != null)
-                  TextButton(
-                    onPressed: onAction,
-                    style: context.appButtons.primary.text,
-                    child: Text(actionLabel!),
-                  ),
+              ),
+              if (mark != null) ...[
+                SizedBox(width: 22, height: 22, child: mark),
+                const SizedBox(width: AppSpacing.xs),
+              ] else if (icon != null) ...[
+                Icon(icon, size: 18, color: AppChrome.accentGold),
+                const SizedBox(width: AppSpacing.xs),
               ],
-            ),
-            AppSpacing.gapSm,
-            child,
-          ],
-        ),
+              Expanded(
+                child: Text(
+                  title,
+                  style: context.appTypography.title.copyWith(
+                    color: AppChrome.onSurface,
+                  ),
+                ),
+              ),
+              if (actionLabel != null && onAction != null)
+                TextButton(
+                  onPressed: onAction,
+                  style: context.appButtons.primary.text,
+                  child: Text(actionLabel!),
+                )
+              else if (trailing != null)
+                trailing!,
+            ],
+          ),
+          AppSpacing.gapSm,
+          child,
+        ],
       ),
+    );
+    final panel = AppCardFrame(
+      gold: goldFrame,
+      fill: backdrop == null ? AppChrome.panelFill : null,
+      background: backdrop,
+      child: content,
     );
     if (margin == null) return panel;
     return Padding(padding: margin!, child: panel);
@@ -202,10 +280,7 @@ class AppChromeSection extends StatelessWidget {
 
 /// Centered empty / error / loading body on the chrome canvas.
 class AppChromeCentered extends StatelessWidget {
-  const AppChromeCentered({
-    super.key,
-    required this.child,
-  });
+  const AppChromeCentered({super.key, required this.child});
 
   final Widget child;
 
@@ -214,10 +289,7 @@ class AppChromeCentered extends StatelessWidget {
     return ColoredBox(
       color: AppChrome.canvas,
       child: Center(
-        child: Padding(
-          padding: AppSpacing.screenPadding,
-          child: child,
-        ),
+        child: Padding(padding: AppSpacing.screenPadding, child: child),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/modal/modal.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/economy_icon.dart';
 
 /// Confirm online match fee before deduct + matchmaking.
 ///
@@ -44,18 +45,28 @@ class _MatchFeeConfirmBody extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          '$matchLabel costs $feeFragments Gold Fragments.\n'
-          'Confirm to pay and find a match.',
-          style: context.appTypography.body.copyWith(
-            color: AppColors.onSurfaceDark,
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const EconomyIcon(EconomyMark.fragment, size: 48),
+            AppSpacing.gapSm,
+            Expanded(
+              child: Text(
+                '$matchLabel costs $feeFragments Gold Fragments.\n'
+                'Confirm to pay and find a match.',
+                style: context.appTypography.body.copyWith(
+                  color: AppColors.onSurfaceDark,
+                ),
+              ),
+            ),
+          ],
         ),
         AppSpacing.gapMd,
-        FilledButton(
+        FilledButton.icon(
           style: context.appButtons.primary.filled,
           onPressed: () => AppModal.dismiss(context, true),
-          child: Text('Pay $feeFragments Fragments'),
+          icon: const EconomyIcon(EconomyMark.fragment, size: 22),
+          label: Text('Pay $feeFragments Fragments'),
         ),
         AppSpacing.gapSm,
         OutlinedButton(

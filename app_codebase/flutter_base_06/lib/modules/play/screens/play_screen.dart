@@ -293,7 +293,7 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
 
     return ModuleScreenRegistrar(
       appBarItems: const [
-        AppBarTitle(text: 'Play', icon: Icons.sports_esports_outlined),
+        AppBarTitle(text: 'Match', icon: Icons.sports_esports_outlined),
       ],
       bottomNavModuleId: hubSinkBottomNavModuleId,
       bottomNavItems: hubSinkBottomNavItems(context),
@@ -306,6 +306,13 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
             AppSpacing.xxl,
           ),
           children: [
+            Text(
+              'Choose a game mode and enter the arena.',
+              style: context.appTypography.bodyMuted.copyWith(
+                color: AppChrome.onSurfaceMuted,
+              ),
+            ),
+            AppSpacing.gapMd,
             if (!flow.isIdle) ...[
               Text(
                 flow.phase.label,
@@ -328,27 +335,26 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
             ],
             AppChromeSection(
               title: 'Featured',
+              icon: Icons.auto_awesome,
               goldFrame: true,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              background: const _FeaturedCover(),
+              child: Column(
                 children: [
                   for (var i = 0; i < kPlayFeaturedTypes.length; i++) ...[
                     if (i > 0) AppSpacing.gapSm,
-                    Expanded(
-                      child: _MatchTypeCard(
-                        type: kPlayFeaturedTypes[i],
-                        subtitle: featuredSubtitle[kPlayFeaturedTypes[i]],
-                        featured: true,
-                        enabled: canSelect,
-                        bannerUrl: kPlayFeaturedTypes[i] ==
-                                    MatchType.specialEvent &&
-                                featuredEvent?.banner != null &&
-                                featuredEvent!.banner!.isValid
-                            ? resolveMediaUrl(featuredEvent.banner!.value)
-                            : null,
-                        onTap: () =>
-                            _onMatchTypePressed(kPlayFeaturedTypes[i]),
-                      ),
+                    _MatchTypeCard(
+                      type: kPlayFeaturedTypes[i],
+                      subtitle: featuredSubtitle[kPlayFeaturedTypes[i]],
+                      featured: true,
+                      wide: true,
+                      enabled: canSelect,
+                      bannerUrl: kPlayFeaturedTypes[i] ==
+                                  MatchType.specialEvent &&
+                              featuredEvent?.banner != null &&
+                              featuredEvent!.banner!.isValid
+                          ? resolveMediaUrl(featuredEvent.banner!.value)
+                          : null,
+                      onTap: () => _onMatchTypePressed(kPlayFeaturedTypes[i]),
                     ),
                   ],
                 ],
@@ -357,6 +363,7 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
             AppSpacing.gapMd,
             AppChromeSection(
               title: 'Match types',
+              icon: Icons.grid_view,
               child: _MatchTypeGrid(
                 types: MatchType.values,
                 enabled: canSelect,
@@ -422,6 +429,42 @@ class _MatchTypeGrid extends StatelessWidget {
   }
 }
 
+const String _quickStartArtAsset =
+    'assets/images/backgrounds/quick_start_card.webp';
+
+class _FeaturedCover extends StatelessWidget {
+  const _FeaturedCover();
+
+  @override
+  Widget build(BuildContext context) {
+    final ink = AppColors.surfaceDark;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.asset(
+          _quickStartArtAsset,
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+          filterQuality: FilterQuality.medium,
+        ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                ink.withValues(alpha: 0.72),
+                ink.withValues(alpha: 0.42),
+                ink.withValues(alpha: 0.55),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _MatchTypeCard extends StatelessWidget {
   const _MatchTypeCard({
     required this.type,
@@ -429,12 +472,14 @@ class _MatchTypeCard extends StatelessWidget {
     required this.onTap,
     this.subtitle,
     this.featured = false,
+    this.wide = false,
     this.bannerUrl,
   });
 
   final MatchType type;
   final String? subtitle;
   final bool featured;
+  final bool wide;
   final bool enabled;
   final String? bannerUrl;
   final VoidCallback onTap;
@@ -442,49 +487,74 @@ class _MatchTypeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radius = BorderRadius.circular(AppRadii.md);
-    final child = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    final copy = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (featured && bannerUrl != null && bannerUrl!.isNotEmpty) ...[
-          ClipRRect(
-            borderRadius: radius,
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Image.network(
-                bannerUrl!,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => ColoredBox(
-                  color: AppChrome.fieldFill,
-                  child: Icon(
-                    Icons.sports_esports_outlined,
-                    color: AppChrome.onSurfaceMuted,
-                  ),
+        Row(
+          children: [
+            Icon(type.icon, size: 18, color: AppChrome.accentGold),
+            const SizedBox(width: AppSpacing.xs),
+            Expanded(
+              child: Text(
+                type.label,
+                style: (featured
+                        ? context.appTypography.h3
+                        : context.appTypography.body)
+                    .copyWith(
+                  color: featured ? AppChrome.accentGold : AppChrome.onSurface,
                 ),
               ),
             ),
-          ),
-          AppSpacing.gapSm,
-        ],
-        Text(
-          type.label,
-          style: (featured
-                  ? context.appTypography.title
-                  : context.appTypography.body)
-              .copyWith(color: AppChrome.onSurface),
+          ],
         ),
         if (subtitle != null && subtitle!.isNotEmpty) ...[
           AppSpacing.gapXxs,
           Text(
             subtitle!,
-            maxLines: featured ? 2 : 3,
+            maxLines: featured ? 3 : 3,
             overflow: TextOverflow.ellipsis,
             style: context.appTypography.caption.copyWith(
               color: AppChrome.onSurfaceMuted,
             ),
           ),
         ],
+        if (wide) ...[
+          AppSpacing.gapSm,
+          FilledButton.icon(
+            style: context.appButtons.primary.filled,
+            onPressed: enabled ? onTap : null,
+            icon: const Icon(Icons.play_arrow),
+            label: const Text('Play Now'),
+          ),
+        ],
       ],
     );
+    final art = featured
+        ? ClipRRect(
+            borderRadius: radius,
+            child: SizedBox(
+              width: wide ? 120 : double.infinity,
+              height: wide ? 120 : 72,
+              child: _featuredArt(),
+            ),
+          )
+        : null;
+    final child = wide
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: copy),
+              const SizedBox(width: AppSpacing.sm),
+              if (art != null) art,
+            ],
+          )
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (art != null) ...[art, AppSpacing.gapSm],
+              copy,
+            ],
+          );
 
     return Material(
       color: AppChrome.fieldFill.withValues(alpha: enabled ? 0.55 : 0.28),
@@ -505,6 +575,32 @@ class _MatchTypeCard extends StatelessWidget {
           child: child,
         ),
       ),
+    );
+  }
+
+  Widget _featuredArt() {
+    if (type == MatchType.quickStart) {
+      return Image.asset(
+        _quickStartArtAsset,
+        fit: BoxFit.cover,
+        filterQuality: FilterQuality.medium,
+        errorBuilder: (_, __, ___) => _typeArt(type),
+      );
+    }
+    if (bannerUrl != null && bannerUrl!.isNotEmpty) {
+      return Image.network(
+        bannerUrl!,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => _typeArt(type),
+      );
+    }
+    return _typeArt(type);
+  }
+
+  Widget _typeArt(MatchType type) {
+    return ColoredBox(
+      color: AppChrome.fieldFill,
+      child: Icon(type.icon, color: AppChrome.accentGold, size: 36),
     );
   }
 }

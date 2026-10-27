@@ -64,7 +64,7 @@ Arcori physical mint into Trove is retired. Preserve / mint runs on **slammers**
 Acquire → Learn (online sweet spot) → Slammer Mastery → Preserve race → Mint or Lost
 ```
 
-Online slams add **slammer mastery** as `flipCount × preferenceFit` (server-only sweet spot). Practice grants nothing and does not apply the fit bonus. The player sees mastery gained as a number only — never the hit target or power band.
+Online slams add **slammer mastery** as `10 × flipCount × (0.55 + 0.45 × preferenceFit)` (server-only sweet spot). A cold flip still awards 5.5; a perfect fit awards 10 per flip. Practice grants nothing and does not apply the fit bonus. The player sees mastery gained as a number only — never the hit target or power band.
 
 When mastery reaches catalog `legacy.preservationRequirement` (Genesis starters: 750), the existing preserve phases run (first offer → leader window → minted or lost at `closureMilestone`, default 1000). Mint seals the Legacy snapshot (owner, mastery, matches, slams, flips, best slam, Legacy ID). The digital slammer stays playable. Echo grants the next generation on `player_slammers` at `floor(closed × 0.30)`, min 1, cap preserve−1.
 

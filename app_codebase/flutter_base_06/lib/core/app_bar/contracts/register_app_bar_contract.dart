@@ -36,14 +36,18 @@ final class AppBarTitle extends AppBarItem {
   const AppBarTitle({
     this.text,
     this.icon,
+    this.iconAsset,
     super.slot = AppBarSlot.center,
     super.lifetime = AppBarLifetime.screen,
     super.priority = 0,
     super.visibleWhen,
-  }) : assert(text != null || icon != null);
+  }) : assert(text != null || icon != null || iconAsset != null);
 
   final String? text;
   final IconData? icon;
+
+  /// Painted mark. Used in place of [icon] when set.
+  final String? iconAsset;
 }
 
 /// Tappable toolbar control with optional label.

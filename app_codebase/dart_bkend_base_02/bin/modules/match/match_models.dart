@@ -321,9 +321,13 @@ class MatchRuntime {
     required this.matchId,
     required this.frozenAt,
     required this.catalogById,
+    this.sweetSpotByUserId = const {},
   });
 
   final String matchId;
   final DateTime frozenAt;
   final Map<String, Map<String, dynamic>> catalogById;
+
+  /// userId → saved sweet spot. Server-private; never copied onto the snapshot.
+  final Map<String, Map<String, dynamic>> sweetSpotByUserId;
 }

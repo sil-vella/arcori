@@ -8,7 +8,8 @@ import '../../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../../core/screen/screen.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/app_visuals.dart';
+import '../../../core/widgets/app_chrome.dart';
+import '../../../core/widgets/app_mark_icon.dart';
 import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
 import '../museum_api.dart';
@@ -307,197 +308,182 @@ class _MuseumScreenState extends ConsumerState<MuseumScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = ref.watch(authProvider);
     return ModuleScreenRegistrar(
       appBarItems: const [
-        AppBarTitle(text: 'Museum', icon: Icons.account_balance_outlined),
+        AppBarTitle(text: 'Museum', iconAsset: AppMarks.museum),
       ],
-      child: NotificationListener<ScrollNotification>(
-        onNotification: _onScroll,
-        child: AppScreenTemplate001(
-          backgroundAsset: kMuseumHallBackgroundAsset,
-          scrimOpacity: 0,
-          appBarForeground: AppColors.onSurfaceDark,
-          banner: Stack(
-            fit: StackFit.expand,
-            children: [
-              Positioned.fill(
-                child: IgnorePointer(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.center,
-                        colors: [
-                          _contentCanvasBase.withValues(alpha: 0.8),
-                          _contentCanvasBase.withValues(alpha: 0),
-                        ],
+      child: AppChromePage(
+        child: !auth.isAuthenticated && !auth.isBootstrapping
+            ? AppChromeCentered(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Sign in to view the Museum',
+                      style: context.appTypography.body.copyWith(
+                        color: AppChrome.onSurface,
                       ),
+                      textAlign: TextAlign.center,
                     ),
+                  ],
+                ),
+              )
+            : NotificationListener<ScrollNotification>(
+                onNotification: _onScroll,
+                child: ListView(
+                  padding: EdgeInsets.fromLTRB(
+                    AppSpacing.md,
+                    AppChromePage.topClearance(context) + AppSpacing.sm,
+                    AppSpacing.md,
+                    AppSpacing.xxl,
                   ),
+                  children: _pageChildren(context),
                 ),
               ),
-              _FeaturedBanner(
-                item: _featuredItem,
-                onTap: _featuredItem == null
-                    ? null
-                    : () => _openDetail(_featuredItem!),
-              ),
-            ],
-          ),
-          slivers: [
-            SliverToBoxAdapter(
-              child: ColoredBox(
-                color: _contentCanvas,
-                child: _buildHeader(context),
-              ),
-            ),
-            ..._buildContentSlivers(context),
-          ],
-        ),
       ),
     );
   }
 
-  /// Museum content panel — dark theme canvas at 80% so the hall mural shows through.
-  Color get _contentCanvasBase => AppSurfaces.canvas(Brightness.dark);
+  List<Widget> _pageChildren(BuildContext context) {
+    return [
+      _gap(
+        AppChromeSection(
+          title: 'Featured',
+          icon: Icons.auto_awesome,
+          goldFrame: true,
+          child: _FeaturedBanner(
+            item: _featuredItem,
+            onTap: _featuredItem == null
+                ? null
+                : () => _openDetail(_featuredItem!),
+          ),
+        ),
+      ),
+      _gap(
+        AppChromeSection(
+          title: 'Browse',
+          mark: const AppMarkIcon(AppMarks.museum),
+          goldFrame: true,
+          child: _browseControls(context),
+        ),
+      ),
+      ..._results(context),
+    ];
+  }
 
-  Color get _contentCanvas => _contentCanvasBase.withValues(alpha: 0.8);
+  Widget _gap(Widget section) => Padding(
+        padding: const EdgeInsets.only(bottom: AppSpacing.md),
+        child: section,
+      );
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _browseControls(BuildContext context) {
     final series = _series;
     final searching = _q.isNotEmpty;
-    return Padding(
-      padding: AppSpacing.screenPaddingCompact,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextField(
-            controller: _searchController,
-            style: context.appTypography.body.copyWith(
-              color: AppColors.onSurfaceDark,
-            ),
-            cursorColor: AppSurfaces.frameGold(Brightness.dark),
-            decoration: InputDecoration(
-              hintText: 'Search any Arcori',
-              hintStyle: context.appTypography.bodyMuted.copyWith(
-                color: AppColors.onSurfaceMutedDark,
-              ),
-              isDense: true,
-              filled: true,
-              fillColor: AppColors.surfaceDark,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadii.md),
-                borderSide: BorderSide(
-                  color: AppSurfaces.frameBronze(Brightness.dark),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadii.md),
-                borderSide: BorderSide(
-                  color: AppSurfaces.frameGold(Brightness.dark),
-                  width: 1.5,
-                ),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: AppSurfaces.frameGold(Brightness.dark),
-                ),
-                onPressed: _applySearch,
-              ),
-            ),
-            textInputAction: TextInputAction.search,
-            onSubmitted: (_) => _applySearch(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TextField(
+          controller: _searchController,
+          style: context.appTypography.body.copyWith(
+            color: AppChrome.onSurface,
           ),
+          cursorColor: AppChrome.accentGold,
+          decoration: AppChrome.inputDecoration(
+            context,
+            hintText: 'Search any Arcori',
+            suffixIcon: IconButton(
+              icon: Icon(Icons.search, color: AppChrome.accentGold),
+              onPressed: _applySearch,
+            ),
+          ),
+          textInputAction: TextInputAction.search,
+          onSubmitted: (_) => _applySearch(),
+        ),
+        AppSpacing.gapSm,
+        Row(
+          children: [
+            Expanded(
+              child: FilledButton(
+                style: _filter == _MuseumFilter.legacies
+                    ? context.appButtons.primary.filled
+                    : context.appButtons.primary.tonal,
+                onPressed: () => _setFilter(_MuseumFilter.legacies),
+                child: const Text('Legacies'),
+              ),
+            ),
+            AppSpacing.gapSm,
+            Expanded(
+              child: FilledButton(
+                style: _filter == _MuseumFilter.lostGenerations
+                    ? context.appButtons.primary.filled
+                    : context.appButtons.primary.tonal,
+                onPressed: () => _setFilter(_MuseumFilter.lostGenerations),
+                child: const Text('Lost Generations'),
+              ),
+            ),
+          ],
+        ),
+        if (series != null && !searching) ...[
           AppSpacing.gapSm,
           Row(
             children: [
-              Expanded(
-                child: _MuseumChromeButton(
-                  label: 'Legacies',
-                  selected: _filter == _MuseumFilter.legacies,
-                  onTap: () => _setFilter(_MuseumFilter.legacies),
-                ),
+              IconButton(
+                tooltip: 'All series',
+                onPressed: _clearSeries,
+                color: AppChrome.onSurface,
+                icon: const Icon(Icons.arrow_back),
               ),
-              AppSpacing.gapSm,
               Expanded(
-                child: _MuseumChromeButton(
-                  label: 'Lost Generations',
-                  selected: _filter == _MuseumFilter.lostGenerations,
-                  onTap: () => _setFilter(_MuseumFilter.lostGenerations),
+                child: Text(
+                  series.label,
+                  style: context.appTypography.subtitle.copyWith(
+                    color: AppChrome.onSurface,
+                  ),
                 ),
               ),
             ],
           ),
-          if (series != null && !searching) ...[
-            AppSpacing.gapSm,
-            Row(
-              children: [
-                IconButton(
-                  tooltip: 'All series',
-                  onPressed: _clearSeries,
-                  color: AppColors.onSurfaceDark,
-                  icon: const Icon(Icons.arrow_back),
-                ),
-                Expanded(
-                  child: Text(
-                    series.label,
-                    style: context.appTypography.subtitle.copyWith(
-                      color: AppColors.onSurfaceDark,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
         ],
-      ),
+      ],
     );
   }
 
-  List<Widget> _buildContentSlivers(BuildContext context) {
-    final bg = _contentCanvas;
+  List<Widget> _results(BuildContext context) {
     final searching = _q.isNotEmpty;
+    final muted = context.appTypography.bodySmall.copyWith(
+      color: AppChrome.onSurfaceMuted,
+    );
 
     if (!_showingResults) {
       if (_seriesLoading) {
         return [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: ColoredBox(
-              color: bg,
-              child: const Center(child: CircularProgressIndicator()),
+          _gap(
+            const AppChromeSection(
+              title: 'Series',
+              goldFrame: true,
+              child: Center(child: CircularProgressIndicator()),
             ),
           ),
         ];
       }
       if (_seriesError != null) {
         return [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: ColoredBox(
-              color: bg,
-              child: Center(
-                child: Padding(
-                  padding: AppSpacing.screenPadding,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        _seriesError!,
-                        style: context.appTypography.body.copyWith(
-                          color: AppColors.onSurfaceDark,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      AppSpacing.gapMd,
-                      FilledButton(
-                        onPressed: _loadAvailableSeries,
-                        child: const Text('Retry'),
-                      ),
-                    ],
+          _gap(
+            AppChromeSection(
+              title: 'Series',
+              goldFrame: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(_seriesError!, style: muted),
+                  AppSpacing.gapSm,
+                  FilledButton(
+                    style: context.appButtons.primary.filled,
+                    onPressed: _loadAvailableSeries,
+                    child: const Text('Retry'),
                   ),
-                ),
+                ],
               ),
             ),
           ),
@@ -509,84 +495,88 @@ class _MuseumScreenState extends ConsumerState<MuseumScreen> {
           _MuseumFilter.lostGenerations => 'No Lost Generations yet.',
         };
         return [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: ColoredBox(
-              color: bg,
-              child: AppEmptyState(
-                message: empty,
-                icon: Icons.account_balance_outlined,
-              ),
+          _gap(
+            AppChromeSection(
+              title: 'Series',
+              goldFrame: true,
+              child: Text(empty, style: muted),
             ),
           ),
         ];
       }
       return [
-        DecoratedSliver(
-          decoration: BoxDecoration(color: bg),
-          sliver: SliverPadding(
-            padding: AppSpacing.screenPaddingCompact,
-            sliver: SliverList.separated(
-              itemCount: _availableSeries.length,
-              separatorBuilder: (_, __) => AppSpacing.gapSm,
-              itemBuilder: (context, index) {
-                final series = _availableSeries[index];
-                return _MuseumChromeButton(
-                  label: series.label,
-                  selected: false,
-                  onTap: () => _selectSeries(series),
-                  textStyle: context.appTypography.title.copyWith(
-                    color: AppColors.onSurfaceDark,
+        _gap(
+          AppChromeSection(
+            title: 'Series',
+            goldFrame: true,
+            child: Column(
+              children: [
+                for (var i = 0; i < _availableSeries.length; i++) ...[
+                  if (i > 0)
+                    Divider(
+                      height: 1,
+                      color: AppChrome.panelBorder.withValues(alpha: 0.35),
+                    ),
+                  InkWell(
+                    onTap: () => _selectSeries(_availableSeries[i]),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.sm,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _availableSeries[i].label,
+                              style: context.appTypography.title.copyWith(
+                                color: AppChrome.onSurface,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: AppChrome.accentGold,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                );
-              },
+                ],
+              ],
             ),
           ),
-        ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: ColoredBox(color: bg),
         ),
       ];
     }
 
     if (_loading) {
       return [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: ColoredBox(
-            color: bg,
-            child: const Center(child: CircularProgressIndicator()),
+        _gap(
+          const AppChromeSection(
+            title: 'Arcori',
+            goldFrame: true,
+            child: Center(child: CircularProgressIndicator()),
           ),
         ),
       ];
     }
     if (_error != null) {
       return [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: ColoredBox(
-            color: bg,
-            child: Center(
-              child: Padding(
-                padding: AppSpacing.screenPadding,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      _error!,
-                      style: context.appTypography.body.copyWith(
-                        color: AppColors.onSurfaceDark,
-                      ),
-                    ),
-                    AppSpacing.gapMd,
-                    FilledButton(
-                      onPressed: () => _load(reset: true),
-                      child: const Text('Retry'),
-                    ),
-                  ],
+        _gap(
+          AppChromeSection(
+            title: 'Arcori',
+            goldFrame: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(_error!, style: muted),
+                AppSpacing.gapSm,
+                FilledButton(
+                  style: context.appButtons.primary.filled,
+                  onPressed: () => _load(reset: true),
+                  child: const Text('Retry'),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -601,58 +591,46 @@ class _MuseumScreenState extends ConsumerState<MuseumScreen> {
                 'No Lost Generations in this series yet.',
             };
       return [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: ColoredBox(
-            color: bg,
-            child: AppEmptyState(
-              message: empty,
-              icon: Icons.account_balance_outlined,
-            ),
+        _gap(
+          AppChromeSection(
+            title: 'Arcori',
+            goldFrame: true,
+            child: Text(empty, style: muted),
           ),
         ),
       ];
     }
 
     return [
-      DecoratedSliver(
-        decoration: BoxDecoration(color: bg),
-        sliver: SliverPadding(
-          padding: AppSpacing.screenPaddingCompact,
-          sliver: SliverGrid(
+      _gap(
+        AppChromeSection(
+          title: 'Arcori',
+          goldFrame: true,
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               mainAxisSpacing: AppSpacing.sm,
               crossAxisSpacing: AppSpacing.sm,
               childAspectRatio: 0.78,
             ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final item = _items[index];
-                return _MuseumTile(
-                  item: item,
-                  onTap: () => _openDetail(item),
-                );
-              },
-              childCount: _items.length,
-            ),
+            itemCount: _items.length,
+            itemBuilder: (context, index) {
+              final item = _items[index];
+              return _MuseumTile(
+                item: item,
+                onTap: () => _openDetail(item),
+              );
+            },
           ),
         ),
       ),
       if (_loadingMore)
-        SliverToBoxAdapter(
-          child: ColoredBox(
-            color: bg,
-            child: const Padding(
-              padding: AppSpacing.screenPaddingCompact,
-              child: Center(child: CircularProgressIndicator()),
-            ),
-          ),
+        const Padding(
+          padding: EdgeInsets.only(bottom: AppSpacing.md),
+          child: Center(child: CircularProgressIndicator()),
         ),
-      SliverFillRemaining(
-        hasScrollBody: false,
-        child: ColoredBox(color: bg),
-      ),
     ];
   }
 }
@@ -699,7 +677,9 @@ class _FeaturedBannerState extends State<_FeaturedBanner>
       return Center(
         child: Text(
           'No featured Arcori',
-          style: context.appTypography.bodyMuted,
+          style: context.appTypography.bodyMuted.copyWith(
+            color: AppChrome.onSurfaceMuted,
+          ),
           textAlign: TextAlign.center,
         ),
       );
@@ -784,7 +764,7 @@ class _FeaturedBannerState extends State<_FeaturedBanner>
         Text(
           featured.displayName,
           style: context.appTypography.h3.copyWith(
-            color: AppColors.onSurfaceDark,
+            color: AppChrome.onSurface,
           ),
           textAlign: TextAlign.center,
           maxLines: 2,
@@ -794,7 +774,7 @@ class _FeaturedBannerState extends State<_FeaturedBanner>
         Text(
           _featuredSubline(featured),
           style: context.appTypography.caption.copyWith(
-            color: context.appSurfaces.frameGold,
+            color: AppChrome.accentGold,
           ),
           textAlign: TextAlign.center,
           maxLines: 1,
@@ -825,62 +805,6 @@ class _FeaturedBannerState extends State<_FeaturedBanner>
   }
 }
 
-class _MuseumChromeButton extends StatelessWidget {
-  const _MuseumChromeButton({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-    this.textStyle,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-  final TextStyle? textStyle;
-
-  static const _brightness = Brightness.dark;
-
-  @override
-  Widget build(BuildContext context) {
-    final gold = AppSurfaces.frameGold(_brightness);
-    final bronze = AppSurfaces.frameBronze(_brightness);
-    final fill = selected
-        ? AppColors.primaryContainerDark
-        : AppColors.surfaceDark;
-    final border = selected ? gold : bronze;
-    final labelStyle = (textStyle ?? context.appTypography.subtitle).copyWith(
-      color: selected ? gold : AppColors.onSurfaceDark,
-    );
-
-    return Material(
-      color: fill,
-      borderRadius: BorderRadius.circular(AppRadii.md),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppRadii.md),
-            border: Border.all(
-              color: border,
-              width: selected ? 1.5 : 1,
-            ),
-          ),
-          child: Text(
-            label,
-            style: labelStyle,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _MuseumTile extends StatelessWidget {
   const _MuseumTile({
     required this.item,
@@ -895,7 +819,7 @@ class _MuseumTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gold = AppSurfaces.frameGold(Brightness.dark);
+    final gold = AppChrome.accentGold;
     final radius = BorderRadius.circular(AppRadii.md);
     final stageHeight = _discSize * 0.72 + _pedestalHeight;
     return Material(
@@ -955,7 +879,7 @@ class _MuseumTile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: context.appTypography.caption.copyWith(
-                      color: AppColors.onSurfaceDark,
+                      color: AppChrome.onSurface,
                     ),
                   ),
                 ],

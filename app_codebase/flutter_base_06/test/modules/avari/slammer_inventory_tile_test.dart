@@ -13,9 +13,14 @@ void main() {
       MaterialApp(
         theme: AppTheme.light,
         home: Scaffold(
-          body: SlammerInventoryTile(
-            onTap: () => taps += 1,
-            item: const AvariInventoryItem(
+          body: SizedBox(
+            width: 360,
+            height: SlammerInventoryTile.pageHeight,
+            child: SlammerInventoryTile(
+              onTap: () => taps += 1,
+              detail:
+                  'Slammers you own — Game Controls equips from this list.',
+              item: const AvariInventoryItem(
               designId: 'SLM-STR-SER001-0001',
               displayName: 'Starter Slammer',
               color: '#C6A15B',
@@ -29,6 +34,7 @@ void main() {
                 spread: 5,
               ),
             ),
+            ),
           ),
         ),
       ),
@@ -39,7 +45,7 @@ void main() {
     expect(find.textContaining('12.4/750'), findsOneWidget);
     expect(find.textContaining('Impact'), findsOneWidget);
     expect(find.textContaining('Precision'), findsOneWidget);
-    expect(find.textContaining('Control'), findsOneWidget);
+    expect(find.text('Control'), findsOneWidget);
     expect(find.textContaining('Recovery'), findsOneWidget);
     expect(find.textContaining('Spread'), findsOneWidget);
 

@@ -44,7 +44,7 @@ class MatchFlowNotifier extends Notifier<MatchFlowState> {
   /// Per-actor flips of each design this match (post-match stats + mastery).
   /// Outer key = actorUserId; inner = designId → flip count.
   final Map<String, Map<String, int>> _flipsByActorDesign = {};
-  /// Per-actor slammer mastery gained (Dart: flips × (0.55 + 0.45 × fit)).
+  /// Per-actor slammer mastery gained (Dart: 10 × flips × (0.55 + 0.45 × fit)).
   /// Never stores preferenceFit / hitTarget — only the mastery number.
   final Map<String, Map<String, double>> _slammerMasteryByActor = {};
   /// Per-actor Arcori flipped with each slammer (for usage counters).

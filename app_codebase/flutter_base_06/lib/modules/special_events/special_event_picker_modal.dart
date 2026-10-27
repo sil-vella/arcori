@@ -5,6 +5,7 @@ import '../../core/http/media_url.dart';
 import '../../core/modal/modal.dart';
 import '../../core/state/auth/auth_providers.dart';
 import '../../core/theme/theme.dart';
+import '../../core/widgets/economy_icon.dart';
 import '../../utils/dev_logger.dart';
 import 'special_events_api.dart';
 import 'special_events_models.dart';
@@ -211,14 +212,36 @@ class _EventRow extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     AppSpacing.gapXs,
-                    Text(
-                      subtitle,
-                      style: context.appTypography.bodySmall.copyWith(
-                        color: blocked
-                            ? context.appColors.red
-                            : AppSurfaces.frameGold(Brightness.dark),
+                    if (blocked)
+                      Text(
+                        subtitle,
+                        style: context.appTypography.bodySmall.copyWith(
+                          color: context.appColors.red,
+                        ),
+                      )
+                    else
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: AppSpacing.xxs,
+                        runSpacing: AppSpacing.xxs,
+                        children: [
+                          const EconomyIcon(EconomyMark.match, size: 16),
+                          Text(
+                            '${entry.progress.progressLabel} matches',
+                            style: context.appTypography.bodySmall.copyWith(
+                              color: AppSurfaces.frameGold(Brightness.dark),
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.xs),
+                          const EconomyIcon(EconomyMark.fragment, size: 16),
+                          Text(
+                            '${entry.feeFragments} frag fee',
+                            style: context.appTypography.bodySmall.copyWith(
+                              color: AppSurfaces.frameGold(Brightness.dark),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
                   ],
                 ),
               ),

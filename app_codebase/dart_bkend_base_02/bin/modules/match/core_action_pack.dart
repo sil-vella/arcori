@@ -79,12 +79,16 @@ class CoreActionPack implements MatchActionPack {
 
     final runtime = store.getRuntime(current.matchId);
     final frozen = runtime?.catalogById[slammerId];
-    Map<String, dynamic>? attrs;
+    Map<String, dynamic>? catalogAttrs;
     if (frozen != null && frozen['gameplayAttributes'] is Map) {
-      attrs = Map<String, dynamic>.from(
+      catalogAttrs = Map<String, dynamic>.from(
         frozen['gameplayAttributes'] as Map,
       );
     }
+    final attrs = applyPlayerSweetSpot(
+      catalogAttrs,
+      runtime?.sweetSpotByUserId[actorUserId],
+    );
 
     final resolved = resolveSlam(
       matchId: current.matchId,

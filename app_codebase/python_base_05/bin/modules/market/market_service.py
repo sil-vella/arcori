@@ -12,6 +12,7 @@ from core.utils.dev_logger import customlog
 from modules.auth.auth_service import get_user_profile
 from modules.avari import avari_repository as avari_repo
 from modules.avari.gold_economy import normalize_wallet
+from modules.catalog import catalog_repository as catalog_repo
 from modules.catalog.catalog_errors import NOT_FOUND as CATALOG_NOT_FOUND
 from modules.catalog.catalog_service import get_design
 from modules.market.market_errors import (
@@ -23,8 +24,7 @@ from modules.market.market_errors import (
     PERMANENT_NO_RECHARGE,
 )
 from modules.market.market_skus import (
-    MARKET_SLAMMER_IDS,
-    is_market_slammer,
+    is_shop_slammer,
     parse_slammer_economy,
 )
 
@@ -48,6 +48,26 @@ def _design_or_raise(design_id: str) -> dict[str, Any]:
         if err.code == CATALOG_NOT_FOUND.code:
             raise AppError(NOT_FOR_SALE) from err
         raise
+
+
+def _shop_slammer_ids(session: Session) -> list[str]:
+    """Catalog Shop slammers, stable id order. Starter is excluded."""
+    ids: list[str] = []
+    for row in catalog_repo.list_by_theme_code(session, "SLM"):
+        iid = str(row.internal_id or "").strip()
+        design = dict(row.design_json or {})
+        if is_shop_slammer(design, design_id=iid):
+            ids.append(iid)
+
+    def _serial(iid: str) -> tuple[int, str]:
+        tail = iid.rsplit("-", 1)[-1]
+        try:
+            return (int(tail), iid)
+        except ValueError:
+            return (10**9, iid)
+
+    ids.sort(key=_serial)
+    return ids
 
 
 def _owned_row(session: Session, user_id: str, design_id: str):
@@ -105,7 +125,7 @@ def list_market_slammers(session: Session, *, user_id: str) -> dict[str, Any]:
         str(r.design_id).strip(): r for r in avari_repo.list_slammers(session, user_id)
     }
     items: list[dict[str, Any]] = []
-    for design_id in MARKET_SLAMMER_IDS:
+    for design_id in _shop_slammer_ids(session):
         design = _design_or_raise(design_id)
         row = owned_by_id.get(design_id)
         owned = row is not None
@@ -136,13 +156,13 @@ def purchase_slammer(
     did = (design_id or "").strip()
     if not did:
         raise AppError(INVALID_QUERY, message="designId required")
-    if not is_market_slammer(did):
-        raise AppError(NOT_FOR_SALE)
 
     design = _design_or_raise(did)
     eco = parse_slammer_economy(design)
     if eco["permanent"]:
         raise AppError(NOT_FOR_SALE, message="Permanent slammers are not sold here")
+    if not is_shop_slammer(design, design_id=did):
+        raise AppError(NOT_FOR_SALE)
 
     existing = _owned_row(session, user_id, did)
     if existing is not None:
@@ -161,7 +181,7 @@ def purchase_slammer(
     avari.gold_arcori = gold_a - cost
     avari.gold_fragments = gold_f
 
-    charges = int(eco["maxCharges"] or eco["rechargeCharges"] or 20)
+    charges = int(eco["maxCharges"] or eco["rechargeCharges"] or 25)
     avari_repo.ensure_slammer(
         session,
         user_id=user_id,
@@ -191,11 +211,11 @@ def recharge_slammer(
     did = (design_id or "").strip()
     if not did:
         raise AppError(INVALID_QUERY, message="designId required")
-    if not is_market_slammer(did):
-        raise AppError(NOT_FOR_SALE)
 
     design = _design_or_raise(did)
     eco = parse_slammer_economy(design)
+    if not is_shop_slammer(design, design_id=did):
+        raise AppError(NOT_FOR_SALE)
     row = _owned_row(session, user_id, did)
     if row is None:
         raise AppError(NOT_OWNED)

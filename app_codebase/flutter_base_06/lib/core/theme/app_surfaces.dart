@@ -24,9 +24,9 @@ abstract final class AppSurfaces {
       ? AppColors.primaryContainerDark
       : AppColors.primaryPastel.withValues(alpha: 0.35);
 
-  /// Hairline gold frame for hero frames and CTAs.
+  /// Hairline gold frame and heading gold. Dark mode uses the light champagne.
   static Color frameGold(Brightness brightness) => brightness == Brightness.dark
-      ? AppColors.secondary.withValues(alpha: 0.72)
+      ? AppColors.headingGold
       : AppColors.secondary;
 
   /// Hairline bronze frame for section rails and quiet cards.

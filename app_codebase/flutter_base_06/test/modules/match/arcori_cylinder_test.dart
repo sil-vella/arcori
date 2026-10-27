@@ -13,6 +13,10 @@ void main() {
     );
     expect(look.accent, const Color(0xFFC6A15B));
     expect(look.innerLineColor, arcoriBackInnerLineColor(look.backColor));
+    expect(
+      HSLColor.fromColor(look.edgeColor).lightness,
+      lessThan(HSLColor.fromColor(look.accent).lightness),
+    );
   });
 
   group('arcoriBackInnerLineColor', () {
@@ -65,15 +69,19 @@ void main() {
       ),
     );
 
-    final paint = tester.widgetList<CustomPaint>(find.byType(CustomPaint)).firstWhere(
-          (w) => w.painter is ArcoriRimPainter,
-        );
+    final paint = tester
+        .widgetList<CustomPaint>(find.byType(CustomPaint))
+        .firstWhere((w) => w.painter is ArcoriRimPainter);
     final painter = paint.painter! as ArcoriRimPainter;
     expect(painter.rimColor, const Color(0xFFC6A15B));
+    expect(painter.rimWidth, 72 * kArcoriRimDiameterFraction);
+    expect(painter.slammerRing, isFalse);
     expect(painter.paintInnerLine, isFalse);
   });
 
-  testWidgets('back face paints auto-contrast inner line at rim', (tester) async {
+  testWidgets('back face paints auto-contrast inner line at rim', (
+    tester,
+  ) async {
     const look = ArcoriLook(
       designId: 'ARC-ANI-SER001-0001',
       colorHex: '#C6A15B',
@@ -96,16 +104,46 @@ void main() {
     // Allow asset decode (or errorBuilder) for back-side.webp.
     await tester.pump();
 
-    final paint = tester.widgetList<CustomPaint>(find.byType(CustomPaint)).firstWhere(
-          (w) => w.painter is ArcoriRimPainter,
-        );
+    final paint = tester
+        .widgetList<CustomPaint>(find.byType(CustomPaint))
+        .firstWhere((w) => w.painter is ArcoriRimPainter);
     final painter = paint.painter! as ArcoriRimPainter;
     expect(painter.paintInnerLine, isTrue);
+    expect(painter.rimWidth, 72 * kArcoriRimDiameterFraction);
     expect(painter.innerLineWidth, kArcoriInnerLineWidth);
     expect(painter.innerLineColor, look.innerLineColor);
     expect(find.text('Genesis'), findsOneWidget);
     expect(find.text('I'), findsOneWidget);
     expect(find.text('0001'), findsOneWidget);
+  });
+
+  testWidgets('slammer ring is 2/16 with a darker edge', (tester) async {
+    const look = ArcoriLook(
+      designId: 'SLM-SLM-TTN-SER001-GEN001-0002',
+      colorHex: '#C6A15B',
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light,
+        home: const Scaffold(
+          body: Center(
+            child: ArcoriCylinder(look: look, size: 80, showThickness: false),
+          ),
+        ),
+      ),
+    );
+
+    final paint = tester
+        .widgetList<CustomPaint>(find.byType(CustomPaint))
+        .firstWhere((w) => w.painter is ArcoriRimPainter);
+    final painter = paint.painter! as ArcoriRimPainter;
+    expect(painter.slammerRing, isTrue);
+    expect(painter.rimWidth, 80 * kSlammerRimDiameterFraction);
+    expect(painter.rimEdgeColor, look.rimEdgeColor);
+    expect(
+      HSLColor.fromColor(painter.rimEdgeColor!).lightness,
+      lessThan(HSLColor.fromColor(look.accent).lightness),
+    );
   });
 }
 

@@ -113,7 +113,20 @@ flutter:
     - assets/images/
     - assets/images/arcori/
     - assets/images/velora/museum/
-    - assets/images/velora/maps/
+    - assets/images/velora/regions/amberwild/
+    - assets/images/velora/regions/ashdrift-hill/
+    - assets/images/velora/regions/everlight-grove/
+    - assets/images/velora/regions/little-frost/
+    - assets/images/velora/regions/moonwake-bay/
+    - assets/images/velora/regions/realm-beyond/
+    - assets/images/backgrounds/main_background.webp
+    - assets/images/backgrounds/mastery.webp
+    - assets/images/backgrounds/slammer_card_back.webp
+    - assets/images/backgrounds/quick_start_card.webp
+    - assets/images/backgrounds/individual_slammer.webp
+    - assets/images/backgrounds/029_arcori_sanctuary_desktop_21x9.webp
+    - assets/images/backgrounds/six_region_map.webp
+    - assets/images/icons/
     - assets/lottie/
     - assets/videos/
     - assets/kin/

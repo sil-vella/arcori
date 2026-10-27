@@ -6,9 +6,8 @@ import '../../../core/navigation/app_navigation.dart';
 import '../../../core/navigation/app_paths.dart';
 import '../../../core/screen/screen.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/app_visuals.dart';
-import '../velora_assets.dart';
-import '../velora_chrome.dart';
+import '../../../core/widgets/app_chrome.dart';
+import '../velora_models.dart';
 import '../velora_notifier.dart';
 
 /// Themes circulating inside one series.
@@ -16,11 +15,15 @@ class VeloraSeriesScreen extends ConsumerStatefulWidget {
   const VeloraSeriesScreen({
     required this.seriesKey,
     this.seriesName,
+    this.slammersOnly = false,
     super.key,
   });
 
   final String seriesKey;
   final String? seriesName;
+
+  /// Slammers series: only the Slammers theme. Arcori series omit it.
+  final bool slammersOnly;
 
   @override
   ConsumerState<VeloraSeriesScreen> createState() => _VeloraSeriesScreenState();
@@ -50,125 +53,156 @@ class _VeloraSeriesScreenState extends ConsumerState<VeloraSeriesScreen> {
   @override
   Widget build(BuildContext context) {
     final browse = ref.watch(veloraSeriesBrowseProvider(widget.seriesKey));
-    final title = (widget.seriesName != null && widget.seriesName!.isNotEmpty)
-        ? widget.seriesName!
-        : widget.seriesKey;
-    final bg = veloraContentCanvas();
+    final themes = [
+      for (final theme in browse.themes)
+        if (widget.slammersOnly
+            ? _isSlammerTheme(theme)
+            : !_isSlammerTheme(theme))
+          theme,
+    ];
+    final seriesLabel =
+        (widget.seriesName != null && widget.seriesName!.isNotEmpty)
+            ? widget.seriesName!
+            : widget.seriesKey;
+    final title =
+        widget.slammersOnly ? '$seriesLabel Slammers' : seriesLabel;
+    final muted = context.appTypography.bodySmall.copyWith(
+      color: AppChrome.onSurfaceMuted,
+    );
 
     return ModuleScreenRegistrar(
       appBarItems: [
         AppBarTitle(text: title, icon: Icons.auto_stories_outlined),
       ],
-      child: RefreshIndicator(
-        onRefresh: () => ref
-            .read(veloraSeriesBrowseProvider(widget.seriesKey).notifier)
-            .load(force: true),
-        child: AppScreenTemplate001(
-          backgroundAsset: kVeloraWorldBackgroundAsset,
-          scrimOpacity: 0,
-          appBarForeground: AppColors.onSurfaceDark,
-          banner: Stack(
-            fit: StackFit.expand,
-            children: [veloraBannerFade()],
-          ),
-          slivers: [
-            if (browse.isLoading && browse.themes.isEmpty)
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: ColoredBox(
-                  color: bg,
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
-              )
-            else if (browse.errorMessage != null && browse.themes.isEmpty)
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: ColoredBox(
-                  color: bg,
-                  child: Center(
-                    child: Padding(
-                      padding: AppSpacing.screenPadding,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            browse.errorMessage!,
-                            style: context.appTypography.body.copyWith(
-                              color: context.appColors.red,
-                            ),
-                            textAlign: TextAlign.center,
+      child: AppChromePage(
+        child: browse.isLoading && browse.themes.isEmpty
+            ? const AppChromeCentered(child: CircularProgressIndicator())
+            : browse.errorMessage != null && browse.themes.isEmpty
+                ? AppChromeCentered(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          browse.errorMessage!,
+                          style: context.appTypography.body.copyWith(
+                            color: context.appColors.red,
                           ),
-                          AppSpacing.gapMd,
-                          FilledButton(
-                            onPressed: () => ref
-                                .read(
-                                  veloraSeriesBrowseProvider(widget.seriesKey)
-                                      .notifier,
-                                )
-                                .load(force: true),
-                            child: const Text('Retry'),
-                          ),
-                        ],
+                          textAlign: TextAlign.center,
+                        ),
+                        AppSpacing.gapMd,
+                        FilledButton(
+                          style: context.appButtons.primary.filled,
+                          onPressed: () => ref
+                              .read(
+                                veloraSeriesBrowseProvider(widget.seriesKey)
+                                    .notifier,
+                              )
+                              .load(force: true),
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () => ref
+                        .read(
+                          veloraSeriesBrowseProvider(widget.seriesKey).notifier,
+                        )
+                        .load(force: true),
+                    child: ListView(
+                      padding: EdgeInsets.fromLTRB(
+                        AppSpacing.md,
+                        AppChromePage.topClearance(context) + AppSpacing.sm,
+                        AppSpacing.md,
+                        AppSpacing.xxl,
                       ),
+                      children: [
+                        AppChromeSection(
+                          title: widget.slammersOnly ? 'Slammers' : 'Themes',
+                          icon: Icons.category_outlined,
+                          goldFrame: true,
+                          child: themes.isEmpty
+                              ? Text(
+                                  widget.slammersOnly
+                                      ? 'No slammers in this series'
+                                      : 'No circulating themes in this series',
+                                  style: muted,
+                                )
+                              : Column(
+                                  children: [
+                                    for (var i = 0; i < themes.length; i++) ...[
+                                      if (i > 0)
+                                        Divider(
+                                          height: 1,
+                                          color: AppChrome.panelBorder
+                                              .withValues(alpha: 0.35),
+                                        ),
+                                      _ThemeRow(
+                                        theme: themes[i],
+                                        seriesKey: widget.seriesKey,
+                                        seriesName: widget.seriesName,
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              )
-            else if (browse.themes.isEmpty)
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: ColoredBox(
-                  color: bg,
-                  child: const AppEmptyState(
-                    message: 'No circulating themes in this series',
-                    icon: Icons.category_outlined,
-                  ),
-                ),
-              )
-            else ...[
-              DecoratedSliver(
-                decoration: BoxDecoration(color: bg),
-                sliver: SliverPadding(
-                  padding: AppSpacing.screenPaddingCompact,
-                  sliver: SliverList.separated(
-                    itemCount: browse.themes.length,
-                    separatorBuilder: (_, __) => AppSpacing.gapSm,
-                    itemBuilder: (context, index) {
-                      final theme = browse.themes[index];
-                      return VeloraChromeButton(
-                        label: theme.label,
-                        textStyle: context.appTypography.title.copyWith(
-                          color: AppColors.onSurfaceDark,
-                        ),
-                        onTap: () {
-                          final q = {
-                            'code': theme.themeCode,
-                            'name': theme.label,
-                            'series': widget.seriesKey,
-                            if ((widget.seriesName ?? '').isNotEmpty)
-                              'seriesName': widget.seriesName!,
-                          };
-                          Nav.push(
-                            context,
-                            Uri(
-                              path: AppPaths.veloraTheme,
-                              queryParameters: q,
-                            ).toString(),
-                          );
-                        },
-                      );
-                    },
-                  ),
+      ),
+    );
+  }
+}
+
+class _ThemeRow extends StatelessWidget {
+  const _ThemeRow({
+    required this.theme,
+    required this.seriesKey,
+    this.seriesName,
+  });
+
+  final VeloraThemeInSeries theme;
+  final String seriesKey;
+  final String? seriesName;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Nav.push(
+          context,
+          Uri(
+            path: AppPaths.veloraTheme,
+            queryParameters: {
+              'code': theme.themeCode,
+              'name': theme.label,
+              'series': seriesKey,
+              if ((seriesName ?? '').isNotEmpty) 'seriesName': seriesName!,
+            },
+          ).toString(),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                theme.label,
+                style: context.appTypography.title.copyWith(
+                  color: AppChrome.onSurface,
                 ),
               ),
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: ColoredBox(color: bg),
-              ),
-            ],
+            ),
+            Icon(Icons.chevron_right, color: AppChrome.accentGold),
           ],
         ),
       ),
     );
   }
+}
+
+bool _isSlammerTheme(VeloraThemeInSeries theme) {
+  return theme.themeCode.trim().toUpperCase() == 'SLM' ||
+      theme.theme.trim().toLowerCase() == 'slammers';
 }

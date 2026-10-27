@@ -7,6 +7,8 @@ import 'screens/arcori_detail_screen.dart';
 import 'screens/velora_screen.dart';
 import 'screens/velora_series_screen.dart';
 import 'screens/velora_theme_screen.dart';
+import 'screens/velora_region_screen.dart';
+import 'screens/velora_world_screen.dart';
 
 void registerVeloraRoutes(
   AppRouteSink routes,
@@ -23,12 +25,30 @@ void registerVeloraRoutes(
       builder: (context, state) => const VeloraScreen(),
     ),
     GoRoute(
+      path: AppPaths.veloraWorld,
+      name: 'velora-world',
+      builder: (context, state) => const VeloraWorldScreen(),
+    ),
+    GoRoute(
+      path: AppPaths.veloraRegion,
+      name: 'velora-region',
+      builder: (context, state) {
+        final code = state.uri.queryParameters['code'] ?? '';
+        return VeloraRegionScreen(regionCode: code);
+      },
+    ),
+    GoRoute(
       path: AppPaths.veloraSeries,
       name: 'velora-series',
       builder: (context, state) {
         final key = state.uri.queryParameters['key'] ?? '';
         final name = state.uri.queryParameters['name'];
-        return VeloraSeriesScreen(seriesKey: key, seriesName: name);
+        final slammersOnly = state.uri.queryParameters['focus'] == 'slammers';
+        return VeloraSeriesScreen(
+          seriesKey: key,
+          seriesName: name,
+          slammersOnly: slammersOnly,
+        );
       },
     ),
     GoRoute(
@@ -52,7 +72,11 @@ void registerVeloraRoutes(
       name: 'arcori-detail',
       builder: (context, state) {
         final id = state.uri.queryParameters['id'] ?? '';
-        return ArcoriDetailScreen(internalId: id);
+        final standings = state.uri.queryParameters['tab'] == 'standings';
+        return ArcoriDetailScreen(
+          internalId: id,
+          openStandings: standings,
+        );
       },
     ),
   ]);

@@ -211,7 +211,7 @@ class MatchService implements MatchLifecycleContract {
       );
     }
 
-    Map<String, String> verifiedSlammers = {};
+    Map<String, VerifiedSlammer> verifiedSlammers = {};
     try {
       verifiedSlammers = await _avari.verifySlammers(
         seats: [
@@ -222,7 +222,7 @@ class MatchService implements MatchLifecycleContract {
       if (LOGGING_SWITCH) {
         customlog(
           'match: startFromLobby verify_slammers ok '
-          'picks=${verifiedSlammers.entries.map((e) => '${e.key}:${e.value}').join(',')}',
+          'picks=${verifiedSlammers.entries.map((e) => '${e.key}:${e.value.slammerId}').join(',')}',
         );
       }
     } catch (e) {
@@ -278,7 +278,7 @@ class MatchService implements MatchLifecycleContract {
 
     final seats = <MatchSeat>[];
     for (final s in requestedSeats) {
-      final verified = verifiedSlammers[s.userId]?.trim() ?? '';
+      final verified = verifiedSlammers[s.userId]?.slammerId.trim() ?? '';
       final slammer = verified.isNotEmpty ? verified : s.slammerId;
       seats.add(
         MatchSeat(
@@ -419,6 +419,10 @@ class MatchService implements MatchLifecycleContract {
     }
 
     final callerUserId = humans.first.userId;
+    final sweetSpotByUserId = <String, Map<String, dynamic>>{
+      for (final entry in verifiedSlammers.entries)
+        if (entry.value.sweetSpot != null) entry.key: entry.value.sweetSpot!,
+    };
     final stampedSeats = stampSlammerFaces(assigned, catalogById);
     var snapshot = _store.createFromLobby(
       callerUserId: callerUserId,
@@ -430,6 +434,7 @@ class MatchService implements MatchLifecycleContract {
       gathererArcoriId: gathererArcoriId,
       firstSeatIndex: firstSeatIndex,
       random: stubLoop.random,
+      sweetSpotByUserId: sweetSpotByUserId,
     );
 
     final grace = stubLoop.matchStartGrace;

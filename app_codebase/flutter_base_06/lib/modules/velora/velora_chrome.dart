@@ -2,97 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../core/theme/theme.dart';
+import '../../core/widgets/app_chrome.dart';
 import '../kin/widgets/kin_lottie_preview.dart';
 import '../match/widgets/arcori_cylinder.dart';
 import '../match/widgets/arcori_look.dart';
 import 'velora_assets.dart';
 import 'velora_models.dart';
 
-Color veloraContentCanvasBase() => AppSurfaces.canvas(Brightness.dark);
-
-Color veloraContentCanvas() =>
-    veloraContentCanvasBase().withValues(alpha: 0.8);
-
-/// Bottom→mid fade over the mural (same as Museum featured section).
-Widget veloraBannerFade() {
-  final base = veloraContentCanvasBase();
-  return Positioned.fill(
-    child: IgnorePointer(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.center,
-            colors: [
-              base.withValues(alpha: 0.8),
-              base.withValues(alpha: 0),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-/// Dark chrome list / filter control (Museum-aligned).
-class VeloraChromeButton extends StatelessWidget {
-  const VeloraChromeButton({
-    super.key,
-    required this.label,
-    required this.onTap,
-    this.selected = false,
-    this.textStyle,
-  });
-
-  final String label;
-  final VoidCallback onTap;
-  final bool selected;
-  final TextStyle? textStyle;
-
-  static const _brightness = Brightness.dark;
-
-  @override
-  Widget build(BuildContext context) {
-    final gold = AppSurfaces.frameGold(_brightness);
-    final bronze = AppSurfaces.frameBronze(_brightness);
-    final fill = selected
-        ? AppColors.primaryContainerDark
-        : AppColors.surfaceDark;
-    final border = selected ? gold : bronze;
-    final labelStyle = (textStyle ?? context.appTypography.subtitle).copyWith(
-      color: selected ? gold : AppColors.onSurfaceDark,
-    );
-
-    return Material(
-      color: fill,
-      borderRadius: BorderRadius.circular(AppRadii.md),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppRadii.md),
-            border: Border.all(
-              color: border,
-              width: selected ? 1.5 : 1,
-            ),
-          ),
-          child: Text(
-            label,
-            style: labelStyle,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Featured disc stage with glow + pedestal (Museum-aligned).
+/// Featured disc stage with glow + pedestal.
 class VeloraFeaturedStage extends StatefulWidget {
   const VeloraFeaturedStage({
     super.key,
@@ -144,7 +61,7 @@ class _VeloraFeaturedStageState extends State<VeloraFeaturedStage>
         child: Text(
           'No featured Arcori',
           style: context.appTypography.bodyMuted.copyWith(
-            color: AppColors.onSurfaceMutedDark,
+            color: AppChrome.onSurfaceMuted,
           ),
           textAlign: TextAlign.center,
         ),
@@ -237,7 +154,7 @@ class _VeloraFeaturedStageState extends State<VeloraFeaturedStage>
         Text(
           featured.displayName,
           style: context.appTypography.h3.copyWith(
-            color: AppColors.onSurfaceDark,
+            color: AppChrome.onSurface,
           ),
           textAlign: TextAlign.center,
           maxLines: 2,
@@ -248,7 +165,7 @@ class _VeloraFeaturedStageState extends State<VeloraFeaturedStage>
           Text(
             widget.subtitle!.trim(),
             style: context.appTypography.caption.copyWith(
-              color: AppSurfaces.frameGold(Brightness.dark),
+              color: AppChrome.accentGold,
             ),
             textAlign: TextAlign.center,
             maxLines: 1,

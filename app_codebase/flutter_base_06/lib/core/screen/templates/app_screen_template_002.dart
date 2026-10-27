@@ -54,9 +54,9 @@ class AppScreenTemplate002 extends StatelessWidget {
     this.stackAreaKey,
     super.key,
   }) : assert(
-          opponents.length <= 2,
-          'Template 002 supports at most 2 opponents',
-        );
+         opponents.length <= 2,
+         'Template 002 supports at most 2 opponents',
+       );
 
   /// Local player chrome (bottom-center).
   final Widget self;
@@ -120,9 +120,8 @@ class AppScreenTemplate002 extends StatelessWidget {
                 fit: BoxFit.cover,
                 alignment: alignment,
                 gaplessPlayback: true,
-                errorBuilder: (_, __, ___) => ColoredBox(
-                  color: context.appSurfaces.canvas,
-                ),
+                errorBuilder: (_, __, ___) =>
+                    ColoredBox(color: context.appSurfaces.canvas),
               ),
             )
           else
@@ -132,8 +131,9 @@ class AppScreenTemplate002 extends StatelessWidget {
           if (mural != null && scrimOpacity > 0)
             Positioned.fill(
               child: ColoredBox(
-                color:
-                    context.appSurfaces.canvas.withValues(alpha: scrimOpacity),
+                color: context.appSurfaces.canvas.withValues(
+                  alpha: scrimOpacity,
+                ),
               ),
             ),
         ],
@@ -182,9 +182,13 @@ class AppScreenTemplate002 extends StatelessWidget {
           bottom: safe.bottom + AppScreenTemplate002Metrics.edgeInset,
           child: IgnorePointer(child: Center(child: self)),
         ),
-        // 3) Hints / End under playfield so aim/swipe always win in the slot
+        // 3) Dark-to-light frame under status and Exit so those stay opaque.
+        const Positioned.fill(
+          child: IgnorePointer(child: _MatchEdgeGradient()),
+        ),
+        // 4) Hints / Exit under the playfield so aim/swipe still win in the slot
         if (overlay != null) Positioned.fill(child: overlay!),
-        // 4) Center playfield hit-slot ON TOP (aim + lock + swipe)
+        // 5) Center playfield hit-slot ON TOP (aim + lock + swipe)
         Positioned.fill(
           child: SafeArea(
             child: Center(
@@ -198,6 +202,29 @@ class AppScreenTemplate002 extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Dark at the screen edge, clear toward the table.
+class _MatchEdgeGradient extends StatelessWidget {
+  const _MatchEdgeGradient();
+
+  @override
+  Widget build(BuildContext context) {
+    final edge = AppColors.backgroundDark;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: RadialGradient(
+          radius: 0.92,
+          colors: [
+            edge.withValues(alpha: 0),
+            edge.withValues(alpha: 0.18),
+            edge.withValues(alpha: 0.82),
+          ],
+          stops: const [0.46, 0.74, 1],
+        ),
+      ),
     );
   }
 }

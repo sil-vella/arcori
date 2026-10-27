@@ -25,12 +25,16 @@ class AppDrawerDestination {
     required this.label,
     required this.icon,
     required this.selectedIcon,
+    this.iconAsset,
   });
 
   final String path;
   final String label;
   final IconData icon;
   final IconData selectedIcon;
+
+  /// Painted mark. Used in place of [icon] and [selectedIcon] when set.
+  final String? iconAsset;
 }
 
 /// One icon in the drawer bottom row; [path] is the same string used in [GoRoute.path].

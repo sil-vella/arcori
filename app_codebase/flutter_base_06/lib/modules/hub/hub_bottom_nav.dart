@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/bottom_nav/contracts/register_bottom_nav_contract.dart';
 import '../../core/navigation/app_navigation.dart';
 import '../../core/navigation/app_paths.dart';
+import '../../core/widgets/app_mark_icon.dart';
 
 /// Shared Home hub sink: Trove • PLAY • Market ([BOTTOM_NAV_REGISTRATION.md]).
 const hubSinkBottomNavModuleId = 'hub_sink';
@@ -25,9 +26,8 @@ List<BottomNavItem> hubSinkBottomNavItems(BuildContext context) {
 
   return [
     BottomNavAction(
-      icon: loc == AppPaths.trove
-          ? Icons.inventory_2
-          : Icons.inventory_2_outlined,
+      icon: Icons.inventory_2_outlined,
+      iconAsset: AppMarks.trove,
       label: 'Trove',
       tooltip: 'Trove',
       onTap: () {
@@ -36,18 +36,19 @@ List<BottomNavItem> hubSinkBottomNavItems(BuildContext context) {
       },
     ),
     BottomNavAction(
-      icon: loc == AppPaths.play
-          ? Icons.sports_esports
-          : Icons.sports_esports_outlined,
-      label: 'PLAY',
-      tooltip: 'Play',
+      icon: Icons.sports_martial_arts,
+      iconAsset: AppMarks.arena,
+      label: 'Match',
+      tooltip: 'Match',
+      emphasized: true,
       onTap: () {
         if (loc == AppPaths.play) return;
         Nav.go(context, AppPaths.play);
       },
     ),
     BottomNavAction(
-      icon: loc == AppPaths.market ? Icons.storefront : Icons.storefront_outlined,
+      icon: Icons.storefront_outlined,
+      iconAsset: AppMarks.market,
       label: 'Market',
       tooltip: 'Market',
       onTap: () {

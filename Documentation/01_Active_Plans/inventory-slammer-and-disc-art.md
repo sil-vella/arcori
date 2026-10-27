@@ -2,7 +2,7 @@
 
 **Status**: Completed  
 **Created**: 2026-09-05  
-**Last Updated**: 2026-09-05
+**Last Updated**: 2026-10-27
 
 Related: [slam-aim-game-controls.md](slam-aim-game-controls.md) · [stub-match-arcori-selection.md](stub-match-arcori-selection.md) · [avari-profile.md](avari-profile.md)
 
@@ -27,6 +27,8 @@ Game Controls and practice list **owned slammers** (`player_slammers`). Avari Pr
 ## Current Progress
 
 Complete. Stack discs inset the face so the catalog rim shows. Back-face inner hairline uses `arcoriBackInnerLineColor`. Play screen precaches circulating + practice art into `ImageCache`; face-down discs still mount `Image.network` so a flip does not start the download. Velora theme tiles and Arcori Detail hero use the same `ArcoriCylinder` as match / Avari.
+
+2026-10-27: Ring width is a fraction of the diameter — Arcori 1/16, slammers 2/16 (halved from 1/8 and 2/8). Slammer rings add a machined groove, radial tick, and grain texture in the catalog hue, a darker same-hue border on the outer and inner edge, plus a shine across the band. The same texture continues on the cylinder side edge, painted a darker shade of the rim color. Face art stays inset inside the ring.
 
 ## Next Steps
 
@@ -55,3 +57,5 @@ Celebration / Match Summary (master plan).
 ## Task Manager
 
 App Dev (task `32`): checklist **Inventory slammer + disc face** — item `238` checked. New line for stack rim + back inner line.
+
+App Dev checklist 391 checked: Arcori ring 1/8 of the diameter; slammer ring 2/8 with darker outer and inner borders and a shine. Checklist 392 checked: both rings halved to 1/16 and 2/16. Checklist 393 checked: slammer ring texture. Checklist 394 checked: the cylinder side edge uses the same texture. Checklist 395 checked: side edge is a darker shade of the rim.

@@ -6,16 +6,16 @@ import '../../../core/navigation/app_navigation.dart';
 import '../../../core/navigation/app_paths.dart';
 import '../../../core/screen/screen.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/app_visuals.dart';
+import '../../../core/widgets/app_chrome.dart';
+import '../../../core/widgets/app_mark_icon.dart';
+import '../../kin/widgets/kin_lottie_preview.dart';
 import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
-import '../../kin/widgets/kin_lottie_preview.dart';
-import '../velora_assets.dart';
 import '../velora_chrome.dart';
 import '../velora_models.dart';
 import '../velora_notifier.dart';
 
-/// Circulating designs for one theme inside a series + featured banner.
+/// Circulating designs for one theme inside a series.
 class VeloraThemeScreen extends ConsumerStatefulWidget {
   const VeloraThemeScreen({
     required this.themeCode,
@@ -75,25 +75,25 @@ class _VeloraThemeScreenState extends ConsumerState<VeloraThemeScreen> {
     final title = (widget.themeName != null && widget.themeName!.isNotEmpty)
         ? widget.themeName!
         : widget.themeCode;
-    final bg = veloraContentCanvas();
+    final muted = context.appTypography.bodySmall.copyWith(
+      color: AppChrome.onSurfaceMuted,
+    );
 
     String? lore;
     for (final theme in ref.watch(veloraProvider).themes) {
       if (theme.themeCode == widget.themeCode) {
         final text = theme.loreDescription?.trim();
-        if (text != null && text.isNotEmpty) {
-          lore = text;
-        }
+        if (text != null && text.isNotEmpty) lore = text;
         break;
       }
     }
 
     final featured = browse.featured;
     final gen = featured?.generation?.display;
-    final seriesLabel = (widget.seriesName != null &&
-            widget.seriesName!.trim().isNotEmpty)
-        ? widget.seriesName!.trim()
-        : widget.seriesKey.trim();
+    final seriesLabel =
+        (widget.seriesName != null && widget.seriesName!.trim().isNotEmpty)
+            ? widget.seriesName!.trim()
+            : widget.seriesKey.trim();
     final subtitle = [
       if ((gen ?? '').isNotEmpty) 'Gen $gen',
       if (seriesLabel.isNotEmpty) seriesLabel,
@@ -103,154 +103,124 @@ class _VeloraThemeScreenState extends ConsumerState<VeloraThemeScreen> {
       appBarItems: [
         AppBarTitle(text: title, icon: Icons.category_outlined),
       ],
-      child: NotificationListener<ScrollNotification>(
-        onNotification: _onScroll,
-        child: RefreshIndicator(
-          onRefresh: () => ref
-              .read(veloraThemeBrowseProvider(_args).notifier)
-              .load(force: true),
-          child: AppScreenTemplate001(
-          backgroundAsset: kVeloraWorldBackgroundAsset,
-          scrimOpacity: 0,
-          appBarForeground: AppColors.onSurfaceDark,
-          banner: Stack(
-            fit: StackFit.expand,
-            children: [
-              veloraBannerFade(),
-              VeloraFeaturedStage(
-                design: featured,
-                subtitle: subtitle.isEmpty ? null : subtitle,
-                onTap: featured == null
-                    ? null
-                    : () => Nav.push(
-                          context,
-                          '${AppPaths.arcoriDetail}?id=${Uri.encodeQueryComponent(featured.internalId)}',
+      child: AppChromePage(
+        child: browse.isLoading && browse.designs.isEmpty
+            ? const AppChromeCentered(child: CircularProgressIndicator())
+            : browse.errorMessage != null && browse.designs.isEmpty
+                ? AppChromeCentered(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          browse.errorMessage!,
+                          style: context.appTypography.body.copyWith(
+                            color: context.appColors.red,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-              ),
-            ],
-          ),
-          slivers: [
-            if (browse.isLoading && browse.designs.isEmpty)
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: ColoredBox(
-                  color: bg,
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
-              )
-            else if (browse.errorMessage != null && browse.designs.isEmpty)
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: ColoredBox(
-                  color: bg,
-                  child: Center(
-                    child: Padding(
-                      padding: AppSpacing.screenPadding,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
+                        AppSpacing.gapMd,
+                        FilledButton(
+                          style: context.appButtons.primary.filled,
+                          onPressed: () => ref
+                              .read(veloraThemeBrowseProvider(_args).notifier)
+                              .load(force: true),
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  )
+                : NotificationListener<ScrollNotification>(
+                    onNotification: _onScroll,
+                    child: RefreshIndicator(
+                      onRefresh: () => ref
+                          .read(veloraThemeBrowseProvider(_args).notifier)
+                          .load(force: true),
+                      child: ListView(
+                        padding: EdgeInsets.fromLTRB(
+                          AppSpacing.md,
+                          AppChromePage.topClearance(context) + AppSpacing.sm,
+                          AppSpacing.md,
+                          AppSpacing.xxl,
+                        ),
                         children: [
-                          Text(
-                            browse.errorMessage!,
-                            style: context.appTypography.body.copyWith(
-                              color: context.appColors.red,
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: AppSpacing.md,
                             ),
-                            textAlign: TextAlign.center,
+                            child: AppChromeSection(
+                              title: 'Featured',
+                              mark: const AppMarkIcon(AppMarks.arcori),
+                              goldFrame: true,
+                              child: Column(
+                                children: [
+                                  VeloraFeaturedStage(
+                                    design: featured,
+                                    subtitle:
+                                        subtitle.isEmpty ? null : subtitle,
+                                    onTap: featured == null
+                                        ? null
+                                        : () => Nav.push(
+                                              context,
+                                              '${AppPaths.arcoriDetail}?id=${Uri.encodeQueryComponent(featured.internalId)}',
+                                            ),
+                                  ),
+                                  if (lore != null) ...[
+                                    AppSpacing.gapSm,
+                                    Text(lore, style: muted),
+                                  ],
+                                ],
+                              ),
+                            ),
                           ),
-                          AppSpacing.gapMd,
-                          FilledButton(
-                            onPressed: () => ref
-                                .read(veloraThemeBrowseProvider(_args).notifier)
-                                .load(force: true),
-                            child: const Text('Retry'),
+                          AppChromeSection(
+                            title: 'Arcori',
+                            goldFrame: true,
+                            child: browse.designs.isEmpty
+                                ? Text(
+                                    'No circulating Arcori in this theme',
+                                    style: muted,
+                                  )
+                                : GridView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      mainAxisSpacing: AppSpacing.sm,
+                                      crossAxisSpacing: AppSpacing.sm,
+                                      childAspectRatio: 0.72,
+                                    ),
+                                    itemCount: browse.designs.length,
+                                    itemBuilder: (context, i) {
+                                      final design = browse.designs[i];
+                                      return _DesignTile(
+                                        design: design,
+                                        onTap: () => Nav.push(
+                                          context,
+                                          '${AppPaths.arcoriDetail}?id=${Uri.encodeQueryComponent(design.internalId)}',
+                                        ),
+                                      );
+                                    },
+                                  ),
                           ),
+                          if (browse.isLoadingMore)
+                            const Padding(
+                              padding: EdgeInsets.only(top: AppSpacing.md),
+                              child: Center(
+                                child: SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),
                   ),
-                ),
-              )
-            else if (browse.designs.isEmpty)
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: ColoredBox(
-                  color: bg,
-                  child: const AppEmptyState(
-                    message: 'No circulating Arcori in this theme',
-                    icon: Icons.category_outlined,
-                  ),
-                ),
-              )
-            else ...[
-              if (lore != null)
-                SliverToBoxAdapter(
-                  child: ColoredBox(
-                    color: bg,
-                    child: Padding(
-                      padding: AppSpacing.screenPaddingCompact,
-                      child: Text(
-                        lore,
-                        style: context.appTypography.bodyMuted.copyWith(
-                          color: AppColors.onSurfaceMutedDark,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              DecoratedSliver(
-                decoration: BoxDecoration(color: bg),
-                sliver: SliverPadding(
-                  padding: AppSpacing.screenPaddingCompact,
-                  sliver: SliverGrid(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: AppSpacing.sm,
-                      crossAxisSpacing: AppSpacing.sm,
-                      childAspectRatio: 0.72,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) {
-                        final design = browse.designs[i];
-                        return _DesignTile(
-                          design: design,
-                          onTap: () => Nav.push(
-                            context,
-                            '${AppPaths.arcoriDetail}?id=${Uri.encodeQueryComponent(design.internalId)}',
-                          ),
-                        );
-                      },
-                      childCount: browse.designs.length,
-                    ),
-                  ),
-                ),
-              ),
-              if (browse.isLoadingMore)
-                SliverToBoxAdapter(
-                  child: ColoredBox(
-                    color: bg,
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
-                      child: Center(
-                        child: SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              else
-                SliverToBoxAdapter(
-                  child: ColoredBox(
-                    color: bg,
-                    child: const SizedBox(height: AppSpacing.lg),
-                  ),
-                ),
-            ],
-          ],
-        ),
-        ),
       ),
     );
   }
@@ -264,83 +234,68 @@ class _DesignTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gold = AppSurfaces.frameGold(Brightness.dark);
+    final gold = AppChrome.accentGold;
     final radius = BorderRadius.circular(AppRadii.md);
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: radius,
-        child: ClipRRect(
-          borderRadius: radius,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: gold.withValues(alpha: 0.5),
-                  width: 1,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.xs,
+            4,
+            AppSpacing.xs,
+            6,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final box = constraints.biggest.shortestSide;
+                    final size = (box / (1 + kArcoriThicknessFactor * 0.55))
+                        .clamp(1.0, box);
+                    return Center(
+                      child: ArcoriCylinder(
+                        look: ArcoriLook(
+                          designId: design.internalId,
+                          imageUrl:
+                              design.hasLottieFace ? null : design.imageUrl,
+                          colorHex: design.color,
+                        ),
+                        size: size,
+                        face: design.hasLottieFace
+                            ? KinSceneStack(
+                                lottieUrl: design.lottieUrl,
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                      ),
+                    );
+                  },
                 ),
               ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.xs,
-                4,
-                AppSpacing.xs,
-                6,
+              AppSpacing.gapXxs,
+              Text(
+                design.displayName,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: context.appTypography.caption.copyWith(
+                  color: AppChrome.onSurface,
+                ),
               ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final box = constraints.biggest.shortestSide;
-                        final size =
-                            (box / (1 + kArcoriThicknessFactor * 0.55))
-                                .clamp(1.0, box);
-                        return Center(
-                          child: ArcoriCylinder(
-                            look: ArcoriLook(
-                              designId: design.internalId,
-                              imageUrl:
-                                  design.hasLottieFace ? null : design.imageUrl,
-                              colorHex: design.color,
-                            ),
-                            size: size,
-                            face: design.hasLottieFace
-                                ? KinSceneStack(
-                                    lottieUrl: design.lottieUrl,
-                                    fit: BoxFit.cover,
-                                  )
-                                : null,
-                          ),
-                        );
-                      },
-                    ),
+              if ((design.worldState ?? '').toLowerCase() == 'closed')
+                Text(
+                  'Closed',
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: context.appTypography.caption.copyWith(
+                    color: gold.withValues(alpha: 0.85),
                   ),
-                  AppSpacing.gapXxs,
-                  Text(
-                    design.displayName,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: context.appTypography.caption.copyWith(
-                      color: AppColors.onSurfaceDark,
-                    ),
-                  ),
-                  if ((design.worldState ?? '').toLowerCase() == 'closed')
-                    Text(
-                      'Closed',
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                      style: context.appTypography.caption.copyWith(
-                        color: gold.withValues(alpha: 0.85),
-                        fontSize: 10,
-                      ),
-                    ),
-                ],
-              ),
-            ),
+                ),
+            ],
           ),
         ),
       ),

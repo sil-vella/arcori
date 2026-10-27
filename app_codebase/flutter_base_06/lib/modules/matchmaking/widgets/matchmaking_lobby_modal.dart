@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/modal/modal.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_mark_icon.dart';
 import '../../../utils/dev_logger.dart';
 import '../../match/state/match_notifier.dart';
 import '../../match/state/match_snapshot_state.dart';
@@ -24,7 +25,7 @@ Future<void> showMatchmakingLobbyModal(BuildContext context, WidgetRef ref) {
     builder: (ctx) => Theme(
       data: AppTheme.dark,
       child: const AppCenteredModal(
-        title: 'Finding players…',
+        title: 'Finding a match',
         showCloseButton: false,
         child: _LobbyBody(),
       ),
@@ -48,9 +49,7 @@ class _LobbyBodyState extends ConsumerState<_LobbyBody> {
     MatchSnapshotState match,
   ) {
     // Live match only — ignore leftover ended snapshots after Play New leave.
-    if (match.matchId != null &&
-        match.matchId!.isNotEmpty &&
-        !match.isEnded) {
+    if (match.matchId != null && match.matchId!.isNotEmpty && !match.isEnded) {
       return true;
     }
     if (lobby.isPromoted) return true;
@@ -89,12 +88,13 @@ class _LobbyBodyState extends ConsumerState<_LobbyBody> {
     String via,
   ) {
     if (!_shouldClose(lobby, flow, match)) return;
-    final reason = via +
+    final reason =
+        via +
         ' lobbyId=${lobby.lobbyId} phase=${lobby.phase} '
-        'promoted=${lobby.isPromoted} members=${lobby.members.length}/'
-        '${lobby.targetSeats} flowPhase=${flow.phase.name} '
-        'matchId=${match.matchId ?? '-'} '
-        'error=${flow.errorMessage ?? '-'}';
+            'promoted=${lobby.isPromoted} members=${lobby.members.length}/'
+            '${lobby.targetSeats} flowPhase=${flow.phase.name} '
+            'matchId=${match.matchId ?? '-'} '
+            'error=${flow.errorMessage ?? '-'}';
     _closeOnce(reason: reason);
   }
 
@@ -131,50 +131,25 @@ class _LobbyBodyState extends ConsumerState<_LobbyBody> {
 
     _maybeClose(lobby, flow, match, 'build');
 
-    final ends = lobby.endsAt;
-    final remaining = ends == null
-        ? null
-        : ends.difference(DateTime.now().toUtc()).inSeconds;
-
-    final lobbyFull = lobby.targetSeats > 0 &&
-        lobby.members.length >= lobby.targetSeats;
-    final starting = lobby.isPromoted ||
+    final lobbyFull =
+        lobby.targetSeats > 0 && lobby.members.length >= lobby.targetSeats;
+    final starting =
+        lobby.isPromoted ||
         lobbyFull ||
         (match.matchId != null && match.matchId!.isNotEmpty);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          'Lobby ${lobby.lobbyId ?? '—'}',
-          style: context.appTypography.bodySmall.copyWith(
-            color: AppColors.onSurfaceMutedDark,
-          ),
-        ),
-        AppSpacing.gapXs,
-        Text(
-          'Players ${lobby.members.length}/${lobby.targetSeats}'
-          '${remaining != null ? ' · ~${remaining.clamp(0, 99)}s' : ''}',
-          style: context.appTypography.body.copyWith(
-            color: AppColors.onSurfaceDark,
-          ),
-        ),
+        const AppMarkIcon(AppMarks.arena, size: 48),
         AppSpacing.gapSm,
-        for (final m in lobby.members)
-          Text(
-            '• ${m['userId'] ?? '—'}',
-            style: context.appTypography.bodySmall.copyWith(
-              color: AppColors.onSurfaceMutedDark,
+        Expanded(
+          child: Text(
+            starting ? 'Match starting…' : 'Looking for a match.',
+            style: context.appTypography.body.copyWith(
+              color: AppColors.onSurfaceDark,
             ),
           ),
-        AppSpacing.gapMd,
-        Text(
-          starting ? 'Match starting…' : 'Waiting for players or timer…',
-          style: context.appTypography.bodySmall.copyWith(
-            color: AppSurfaces.frameGold(Brightness.dark),
-          ),
-          textAlign: TextAlign.center,
         ),
       ],
     );

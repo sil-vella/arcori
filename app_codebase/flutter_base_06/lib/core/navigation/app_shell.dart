@@ -32,13 +32,39 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _scrolledUnder = false;
 
   @override
   void didUpdateWidget(covariant AppShell oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.child != widget.child) {
+      _scrolledUnder = false;
       _scheduleRebuild();
     }
+  }
+
+  bool _onScroll(ScrollNotification notification) {
+    if (notification.depth != 0 || notification.metrics.axis != Axis.vertical) {
+      return false;
+    }
+    final scrolled =
+        notification.metrics.pixels > notification.metrics.minScrollExtent;
+    if (scrolled == _scrolledUnder) return false;
+    final phase = SchedulerBinding.instance.schedulerPhase;
+    if (phase == SchedulerPhase.persistentCallbacks ||
+        phase == SchedulerPhase.midFrameMicrotasks) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _setScrolledUnder(scrolled);
+      });
+    } else {
+      _setScrolledUnder(scrolled);
+    }
+    return false;
+  }
+
+  void _setScrolledUnder(bool value) {
+    if (!mounted || _scrolledUnder == value) return;
+    setState(() => _scrolledUnder = value);
   }
 
   void _scheduleRebuild() {
@@ -99,10 +125,12 @@ class _AppShellState extends State<AppShell> {
               builder: (context, _) {
                 return Scaffold(
                   key: _scaffoldKey,
+                  extendBody: true,
                   extendBodyBehindAppBar:
                       shellChromeController.extendBodyBehindAppBar,
                   appBar: ShellAppBar(
                     controller: appBarController,
+                    scrolledUnder: _scrolledUnder,
                     shellNavControls: ShellNavControls(
                       showBack: Nav.canPop(context),
                       onBack: () => Nav.pop(context),
@@ -153,18 +181,36 @@ class _AppShellState extends State<AppShell> {
                                                     i < destinations.length;
                                                     i++)
                                                   ListTile(
-                                                    leading: Icon(
-                                                      selectedIndex == i
-                                                          ? destinations[i]
-                                                              .selectedIcon
-                                                          : destinations[i]
-                                                              .icon,
-                                                      color: selectedIndex == i
-                                                          ? AppChrome
-                                                              .accentGold
-                                                          : AppChrome
-                                                              .onSurfaceMuted,
-                                                    ),
+                                                    leading: destinations[i].iconAsset !=
+                                                            null
+                                                        ? Image.asset(
+                                                            destinations[i]
+                                                                .iconAsset!,
+                                                            width: 24,
+                                                            height: 24,
+                                                            fit: BoxFit.contain,
+                                                            opacity:
+                                                                AlwaysStoppedAnimation(
+                                                              selectedIndex == i
+                                                                  ? 1
+                                                                  : 0.72,
+                                                            ),
+                                                          )
+                                                        : Icon(
+                                                            selectedIndex == i
+                                                                ? destinations[
+                                                                        i]
+                                                                    .selectedIcon
+                                                                : destinations[
+                                                                        i]
+                                                                    .icon,
+                                                            color: selectedIndex ==
+                                                                    i
+                                                                ? AppChrome
+                                                                    .accentGold
+                                                                : AppChrome
+                                                                    .onSurfaceMuted,
+                                                          ),
                                                     title: Text(
                                                       destinations[i].label,
                                                       style: drawerContext
@@ -248,7 +294,10 @@ class _AppShellState extends State<AppShell> {
                       : null,
                   bottomNavigationBar:
                       ShellBottomBar(controller: bottomNavController),
-                  body: widget.child,
+                  body: NotificationListener<ScrollNotification>(
+                    onNotification: _onScroll,
+                    child: widget.child,
+                  ),
                 );
               },
             ),

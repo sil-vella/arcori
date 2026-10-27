@@ -175,7 +175,7 @@ abstract final class AppTypography {
         color: color,
         height: height,
         fontFamily: AppFonts.display,
-        letterSpacing: 0.4,
+        letterSpacing: 0,
       );
     }
 
@@ -196,14 +196,13 @@ abstract final class AppTypography {
       ),
       h1: displayUi(size: AppFontSizes.h1, weight: AppFontWeights.bold),
       h2: displayUi(size: AppFontSizes.h2, weight: AppFontWeights.semiBold),
-      h3: ui(size: AppFontSizes.h3, weight: AppFontWeights.semiBold),
-      h4: ui(size: AppFontSizes.h4, weight: AppFontWeights.medium),
+      h3: displayUi(size: AppFontSizes.h3, weight: AppFontWeights.semiBold),
+      h4: displayUi(size: AppFontSizes.h4, weight: AppFontWeights.regular),
       title: ui(size: AppFontSizes.title, weight: AppFontWeights.semiBold),
       subtitle: ui(size: AppFontSizes.subtitle, weight: AppFontWeights.medium),
-      appBarTitle: ui(
+      appBarTitle: displayUi(
         size: AppFontSizes.appBar,
         weight: AppFontWeights.semiBold,
-        height: AppLineHeights.tight,
       ),
       menu: ui(size: AppFontSizes.menu, weight: AppFontWeights.medium),
       menuSmall: ui(

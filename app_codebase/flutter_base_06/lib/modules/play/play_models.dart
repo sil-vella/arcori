@@ -4,6 +4,8 @@
 /// specialEvent → Event Match; invite → Friend Match.
 library;
 
+import 'package:flutter/material.dart';
+
 import '../avari/avari_models.dart' show MatchFinalizeResult;
 
 enum MatchType {
@@ -26,6 +28,13 @@ extension MatchTypeLabel on MatchType {
         MatchType.quickStart => 'Jump into a random match',
         MatchType.specialEvent => 'Limited rules and rewards',
         MatchType.invite => 'Challenge a friend',
+      };
+
+  IconData get icon => switch (this) {
+        MatchType.practice => Icons.fitness_center,
+        MatchType.quickStart => Icons.bolt,
+        MatchType.specialEvent => Icons.emoji_events_outlined,
+        MatchType.invite => Icons.group_outlined,
       };
 }
 

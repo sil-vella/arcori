@@ -156,6 +156,8 @@ class PlayerSlammer(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     )
     legacy_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
     legacy_snapshot: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    # Rolled once on collection entry. Server-only (hitTarget + powerBracket).
+    sweet_spot: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
 
 class PlayerTrove(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):

@@ -4,6 +4,7 @@ import '../../core/app_bar/contracts/register_app_bar_contract.dart';
 import '../../core/screen/module_screen_registrar.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/app_chrome.dart';
+import '../../core/widgets/app_mark_icon.dart';
 import 'widgets/account_profile_card.dart';
 import 'widgets/email_verify_banner.dart';
 import 'widgets/guest_convert_banner.dart';
@@ -49,7 +50,7 @@ class _AccountScreenState extends State<AccountScreen>
   Widget build(BuildContext context) {
     return ModuleScreenRegistrar(
       appBarItems: const [
-        AppBarTitle(text: 'Account', icon: Icons.person_outlined),
+        AppBarTitle(text: 'Account', iconAsset: AppMarks.avari),
       ],
       child: AppChromePage(
         child: AnimatedBuilder(

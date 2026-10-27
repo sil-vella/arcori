@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../screen/shell_chrome_scope.dart';
 import '../theme/theme.dart';
+import '../widgets/app_chrome.dart';
 import 'app_bar_controller.dart';
 import 'contracts/register_app_bar_contract.dart';
 
@@ -10,11 +11,15 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ShellAppBar({
     required this.controller,
     required this.shellNavControls,
+    this.scrolledUnder = false,
     super.key,
   });
 
   final AppBarController controller;
   final ShellNavControls shellNavControls;
+
+  /// Page has moved down from the top, so the bar picks up a 0.7 opacity fill.
+  final bool scrolledUnder;
 
   static const double _kNavSlotWidth = 48;
   static const double _kOverflowWidth = 40;
@@ -37,7 +42,9 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
 
         return AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
+          backgroundColor: scrolledUnder
+              ? AppChrome.canvasBase.withValues(alpha: 0.7)
+              : Colors.transparent,
           foregroundColor: foreground,
           iconTheme: IconThemeData(color: foreground),
           actionsIconTheme: IconThemeData(color: foreground),
@@ -178,12 +185,20 @@ class ShellAppBar extends StatelessWidget implements PreferredSizeWidget {
     Color foreground,
   ) {
     return switch (item) {
-      AppBarTitle(:final text, :final icon) => Flexible(
+      AppBarTitle(:final text, :final icon, :final iconAsset) => Flexible(
           fit: FlexFit.loose,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (icon != null) ...[
+              if (iconAsset != null) ...[
+                Image.asset(
+                  iconAsset,
+                  width: 22,
+                  height: 22,
+                  fit: BoxFit.contain,
+                ),
+                AppSpacing.gapXs,
+              ] else if (icon != null) ...[
                 Icon(icon, size: 22, color: foreground),
                 AppSpacing.gapXs,
               ],

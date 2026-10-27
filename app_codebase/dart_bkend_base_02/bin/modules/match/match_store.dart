@@ -162,6 +162,7 @@ class MatchStore {
     String? gathererArcoriId,
     int? firstSeatIndex,
     Random? random,
+    Map<String, Map<String, dynamic>> sweetSpotByUserId = const {},
   }) {
     if (seats.isEmpty) {
       throw ArgumentError('seats required');
@@ -233,6 +234,7 @@ class MatchStore {
       matchId: matchId,
       frozenAt: DateTime.now().toUtc(),
       catalogById: catalogById,
+      sweetSpotByUserId: sweetSpotByUserId,
     );
     return snapshot;
   }

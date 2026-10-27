@@ -1,8 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/app_visuals.dart';
-import '../../avari/widgets/profile_face_avatar.dart';
 import '../../kin/widgets/kin_lottie_preview.dart';
 import 'arcori_cylinder.dart';
 import 'arcori_look.dart';
@@ -18,10 +18,11 @@ enum SlammerDockSide { top, bottom, left, right }
 class MatchPlayerChrome extends StatelessWidget {
   const MatchPlayerChrome({
     required this.username,
-    this.avatarUrl,
     this.isActive = false,
     this.isSelf = false,
     this.avatarKey,
+    this.arcoriLook,
+    this.arcoriLottieUrl,
     this.slammerKey,
     this.slammerLook,
     this.slammerLottieUrl,
@@ -31,9 +32,12 @@ class MatchPlayerChrome extends StatelessWidget {
   });
 
   final String username;
-  final String? avatarUrl;
   final bool isActive;
   final bool isSelf;
+
+  /// Arcori this seat is playing. Replaces the profile mark.
+  final ArcoriLook? arcoriLook;
+  final String? arcoriLottieUrl;
 
   /// Optional key on the avatar circle.
   final Key? avatarKey;
@@ -69,53 +73,20 @@ class MatchPlayerChrome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hud = context.appHud;
-    final surfaces = context.appSurfaces;
     final name = username.trim().isEmpty ? '?' : username.trim();
-    final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
-    final ring = isActive ? hud.armed : surfaces.frameGold;
-
-    final chip = AppHudGlassChip(
-      emphasized: isActive,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm,
-        vertical: AppSpacing.xs,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            key: avatarKey,
-            width: avatarSize,
-            height: avatarSize,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: ring, width: isActive ? 2.5 : 1.5),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: ProfileFaceAvatar(
-              avatarUrl: avatarUrl,
-              size: avatarSize,
-              fallbackLabel: initial,
-            ),
-          ),
-          AppSpacing.gapXs,
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 88),
-            child: Text(
-              name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: context.appTypography.label.copyWith(
-                color: hud.onGlass,
-                fontWeight:
-                    isSelf || isActive ? FontWeight.w600 : FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ),
+    final chip = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _PlayedArcoriFace(
+          key: avatarKey,
+          look: arcoriLook,
+          lottieUrl: arcoriLottieUrl,
+          inPlay: isActive,
+          size: avatarSize,
+        ),
+        AppSpacing.gapXs,
+        _UsernameRing(name: name, current: isActive, self: isSelf),
+      ],
     );
 
     final resting = _restingSlammerSlot();
@@ -126,24 +97,40 @@ class MatchPlayerChrome extends StatelessWidget {
       case SlammerDockSide.top:
         return Column(
           mainAxisSize: MainAxisSize.min,
-          children: [resting, const SizedBox(height: gap), chip],
+          children: [
+            resting,
+            const SizedBox(height: gap),
+            chip,
+          ],
         );
       case SlammerDockSide.bottom:
         return Column(
           mainAxisSize: MainAxisSize.min,
-          children: [chip, const SizedBox(height: gap), resting],
+          children: [
+            chip,
+            const SizedBox(height: gap),
+            resting,
+          ],
         );
       case SlammerDockSide.left:
         return Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [resting, const SizedBox(width: gap), chip],
+          children: [
+            resting,
+            const SizedBox(width: gap),
+            chip,
+          ],
         );
       case SlammerDockSide.right:
         return Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [chip, const SizedBox(width: gap), resting],
+          children: [
+            chip,
+            const SizedBox(width: gap),
+            resting,
+          ],
         );
     }
   }
@@ -163,10 +150,7 @@ class MatchPlayerChrome extends StatelessWidget {
       faceUp: true,
       showThickness: true,
       face: useLottie
-          ? KinSceneStack(
-              lottieUrl: slammerLottieUrl,
-              fit: BoxFit.cover,
-            )
+          ? KinSceneStack(lottieUrl: slammerLottieUrl, fit: BoxFit.cover)
           : null,
     );
     return Visibility(
@@ -175,10 +159,133 @@ class MatchPlayerChrome extends StatelessWidget {
       maintainAnimation: true,
       maintainState: true,
       maintainInteractivity: false,
-      child: KeyedSubtree(
-        key: slammerKey,
-        child: disc,
+      child: KeyedSubtree(key: slammerKey, child: disc),
+    );
+  }
+}
+
+/// Played Arcori. The outer border turns green while this seat is in play.
+class _PlayedArcoriFace extends StatelessWidget {
+  const _PlayedArcoriFace({
+    super.key,
+    required this.look,
+    required this.inPlay,
+    required this.size,
+    this.lottieUrl,
+  });
+
+  final ArcoriLook? look;
+  final String? lottieUrl;
+  final bool inPlay;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final gold = AppSurfaces.frameGold(Brightness.dark);
+    final live = context.appHud.armed;
+    final border = inPlay ? live : gold;
+    final useLottie = (lottieUrl ?? '').trim().isNotEmpty;
+    final face = look;
+    return Container(
+      width: size + 6,
+      height: size + 6,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: border, width: inPlay ? 2.5 : 1.5),
+        boxShadow: [
+          if (inPlay)
+            BoxShadow(color: live.withValues(alpha: 0.7), blurRadius: 12),
+        ],
       ),
+      child: face == null
+          ? const SizedBox.shrink()
+          : ArcoriCylinder(
+              look: ArcoriLook(
+                designId: face.designId,
+                imageUrl: useLottie ? null : face.imageUrl,
+                colorHex: face.colorHex,
+              ),
+              size: size,
+              faceUp: true,
+              showThickness: false,
+              face: useLottie
+                  ? KinSceneStack(lottieUrl: lottieUrl, fit: BoxFit.cover)
+                  : null,
+            ),
+    );
+  }
+}
+
+/// Gold rim around the name, a diamond at the bottom, and a green dot in play.
+class _UsernameRing extends StatelessWidget {
+  const _UsernameRing({
+    required this.name,
+    required this.current,
+    required this.self,
+  });
+
+  final String name;
+  final bool current;
+  final bool self;
+
+  @override
+  Widget build(BuildContext context) {
+    final gold = AppSurfaces.frameGold(Brightness.dark);
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        Container(
+          constraints: const BoxConstraints(maxWidth: 112),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.sm,
+            vertical: AppSpacing.xxs,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.backgroundDark.withValues(alpha: 0.82),
+            borderRadius: BorderRadius.circular(AppRadii.pill),
+            border: Border.all(color: gold, width: 1.5),
+          ),
+          child: Text(
+            name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: context.appTypography.label.copyWith(
+              color: AppColors.onSurfaceDark,
+              fontWeight: current || self ? FontWeight.w700 : FontWeight.w600,
+            ),
+          ),
+        ),
+        if (current)
+          Positioned(
+            top: -4,
+            child: Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: context.appHud.armed,
+                border: Border.all(color: AppColors.backgroundDark, width: 1),
+              ),
+            ),
+          ),
+        Positioned(
+          bottom: -5,
+          child: Transform.rotate(
+            angle: math.pi / 4,
+            child: Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: gold,
+                border: Border.all(color: AppColors.backgroundDark, width: 0.6),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

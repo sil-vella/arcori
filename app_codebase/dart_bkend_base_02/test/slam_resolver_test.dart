@@ -192,8 +192,10 @@ void main() {
       expect(masteryWeightFromFit(0), closeTo(0.55, 1e-9));
       expect(masteryWeightFromFit(1), closeTo(1.0, 1e-9));
       expect(masteryWeightFromFit(0.5), closeTo(0.775, 1e-9));
-      // Flips with fit=0 still award mastery (not zero).
-      expect(3 * masteryWeightFromFit(0), closeTo(1.65, 1e-9));
+      // Flips with fit=0 still award mastery (not zero). Gain is 10× the fit weight.
+      expect(slammerMasteryFromFlips(3, 0), closeTo(16.5, 1e-9));
+      expect(slammerMasteryFromFlips(1, 1), closeTo(10, 1e-9));
+      expect(slammerMasteryFromFlips(0, 1), 0);
     });
 
     test('weak slam counts but barely moves and usually does not wipe the stack', () {
@@ -701,6 +703,34 @@ void main() {
         }
       }
       expect(tipped, greaterThan(0));
+    });
+  });
+
+  group('applyPlayerSweetSpot', () {
+    test('overlays the player spot without mutating the catalog map', () {
+      final catalog = {
+        'impact': 9,
+        'hitTarget': 'edge',
+        'powerBracket': {'min': 0.8, 'max': 1.0},
+      };
+      final spot = {
+        'hitTarget': 'center',
+        'powerBracket': {'min': 0.22, 'max': 0.42},
+      };
+      final attrs = applyPlayerSweetSpot(catalog, spot);
+      expect(attrs!['impact'], 9);
+      expect(attrs['hitTarget'], 'center');
+      expect(attrs['powerBracket']['min'], 0.22);
+      expect(catalog['hitTarget'], 'edge');
+      expect((catalog['powerBracket'] as Map)['min'], 0.8);
+    });
+
+    test('keeps catalog prefs when the player has no spot', () {
+      final attrs = applyPlayerSweetSpot(
+        {'hitTarget': 'mid', 'impact': 5},
+        null,
+      );
+      expect(attrs!['hitTarget'], 'mid');
     });
   });
 }

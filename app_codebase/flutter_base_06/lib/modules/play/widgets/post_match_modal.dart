@@ -9,6 +9,7 @@ import '../../../core/navigation/app_paths.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/economy_icon.dart';
 import '../../../utils/dev_logger.dart';
 import '../../avari/avari_models.dart';
 import '../../avari/avari_notifier.dart';
@@ -85,6 +86,7 @@ class _PostMatchBody extends ConsumerStatefulWidget {
 
 class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
   bool _exiting = false;
+
   /// Absorb residual slam/pointer-up so it cannot tap Done the frame we open.
   bool _actionsArmed = false;
 
@@ -98,8 +100,9 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
     Future.microtask(() {
       if (!mounted) return;
       final snap = ref.read(matchSnapshotProvider);
-      final flips =
-          ref.read(matchFlowProvider.notifier).flipsByActorDesignSnapshot();
+      final flips = ref
+          .read(matchFlowProvider.notifier)
+          .flipsByActorDesignSnapshot();
       setState(() {
         _frozenSnap = snap;
         _frozenFlipsByActor = flips;
@@ -153,17 +156,21 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
   }
 
   void _playNew() {
-    unawaited(_exit(() {
-      ref.read(matchFlowProvider.notifier).completePostMatchPlayNew();
-    }));
+    unawaited(
+      _exit(() {
+        ref.read(matchFlowProvider.notifier).completePostMatchPlayNew();
+      }),
+    );
   }
 
   void _rematch() {
     final flow = ref.read(matchFlowProvider.notifier);
     if (!flow.rematchAvailable()) return;
-    unawaited(_exit(() {
-      flow.completePostMatchRematch();
-    }));
+    unawaited(
+      _exit(() {
+        flow.completePostMatchRematch();
+      }),
+    );
   }
 
   @override
@@ -193,16 +200,7 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Celebration & mastery animations — soon',
-            style: context.appTypography.bodySmall.copyWith(
-              color: AppColors.onSurfaceMutedDark,
-            ),
-          ),
-          AppSpacing.gapSm,
-          _RewardRow(
-            finalize: flow.postMatchFinalize,
-          ),
+          _RewardRow(finalize: flow.postMatchFinalize),
           _SlammerMasteryHero(
             snap: snap,
             localUserId: userId,
@@ -214,7 +212,7 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
           Text(
             'Results',
             style: context.appTypography.label.copyWith(
-              color: AppColors.onSurfaceDark,
+              color: AppSurfaces.frameGold(Brightness.dark),
             ),
           ),
           AppSpacing.gapXs,
@@ -228,7 +226,7 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
           Text(
             'Daily',
             style: context.appTypography.label.copyWith(
-              color: AppColors.onSurfaceDark,
+              color: AppSurfaces.frameGold(Brightness.dark),
             ),
           ),
           AppSpacing.gapXs,
@@ -246,7 +244,7 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
             Text(
               'Event',
               style: context.appTypography.label.copyWith(
-                color: AppColors.onSurfaceDark,
+                color: AppSurfaces.frameGold(Brightness.dark),
               ),
             ),
             AppSpacing.gapXs,
@@ -267,8 +265,9 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
           AppSpacing.gapLg,
           FilledButton(
             style: context.appButtons.primary.filled,
-            onPressed:
-                rematchOk && !_exiting && _actionsArmed ? _rematch : null,
+            onPressed: rematchOk && !_exiting && _actionsArmed
+                ? _rematch
+                : null,
             child: const Text('Rematch'),
           ),
           if (!rematchOk && rematchReason != null) ...[
@@ -282,7 +281,14 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
           ],
           AppSpacing.gapSm,
           FilledButton(
-            style: context.appButtons.secondary.filled,
+            style: context.appButtons.secondary.filled.copyWith(
+              foregroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.disabled)) {
+                  return AppColors.onSurfaceMutedDark;
+                }
+                return Colors.black;
+              }),
+            ),
             onPressed: !_exiting && _actionsArmed ? _playNew : null,
             child: const Text('Play New'),
           ),
@@ -314,50 +320,48 @@ class _RewardRow extends StatelessWidget {
     final fragLabel = applied
         ? '${net >= 0 ? '+' : ''}$net Fragments'
         : (finalize?.reason == 'practice'
-            ? 'Practice — no economy'
-            : '+0 Fragments');
+              ? 'Practice — no economy'
+              : '+0 Fragments');
     final detail = applied && (fee > 0 || flips > 0)
         ? 'flips +$flips · fee −$fee'
         : null;
 
+    final gold = AppSurfaces.frameGold(Brightness.dark);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.sm,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Chip(
-              label: Text(
-                fragLabel,
-                style: context.appTypography.bodySmall.copyWith(
-                  color: AppColors.onSurfaceDark,
-                ),
-              ),
-              backgroundColor: AppColors.surfaceDark.withValues(alpha: 0.7),
-              side: BorderSide(
-                color: AppSurfaces.frameGold(Brightness.dark)
-                    .withValues(alpha: 0.5),
+            const EconomyIcon(EconomyMark.fragment, size: 48),
+            AppSpacing.gapSm,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    fragLabel,
+                    style: context.appTypography.body.copyWith(color: gold),
+                  ),
+                  if (detail != null)
+                    Text(
+                      detail,
+                      style: context.appTypography.bodySmall.copyWith(
+                        color: AppColors.onSurfaceMutedDark,
+                      ),
+                    ),
+                ],
               ),
             ),
           ],
         ),
-        if (detail != null) ...[
-          AppSpacing.gapXs,
-          Text(
-            detail,
-            style: context.appTypography.bodySmall.copyWith(
-              color: AppColors.onSurfaceMutedDark,
-            ),
-          ),
-        ],
         if (applied &&
             (finalize?.achievementsUnlocked.isNotEmpty ?? false)) ...[
           AppSpacing.gapSm,
           Text(
             'Achievements',
             style: context.appTypography.label.copyWith(
-              color: AppColors.onSurfaceDark,
+              color: AppSurfaces.frameGold(Brightness.dark),
             ),
           ),
           AppSpacing.gapXs,
@@ -421,9 +425,11 @@ class _CombinedResultsBlock extends StatelessWidget {
                 playerLabel: _seatLabel(seat),
                 totalFlips: total,
                 flipsByDesign: byDesign,
-                masteryByDesign:
-                    _isLocalSeat(seat) ? masteryByDesign : const {},
-                showMasteryPending: _isLocalSeat(seat) &&
+                masteryByDesign: _isLocalSeat(seat)
+                    ? masteryByDesign
+                    : const {},
+                showMasteryPending:
+                    _isLocalSeat(seat) &&
                     finalize != null &&
                     !applied &&
                     !practice,
@@ -501,17 +507,17 @@ class _PlayerResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final designIds = <String>{
-      ...flipsByDesign.keys.where((k) => (flipsByDesign[k] ?? 0) > 0),
-      ...masteryByDesign.keys,
-    }.toList()
-      ..sort((a, b) {
-        final fa = flipsByDesign[a] ?? masteryByDesign[a]?.flips ?? 0;
-        final fb = flipsByDesign[b] ?? masteryByDesign[b]?.flips ?? 0;
-        final cmp = fb.compareTo(fa);
-        if (cmp != 0) return cmp;
-        return a.compareTo(b);
-      });
+    final designIds =
+        <String>{
+          ...flipsByDesign.keys.where((k) => (flipsByDesign[k] ?? 0) > 0),
+          ...masteryByDesign.keys,
+        }.toList()..sort((a, b) {
+          final fa = flipsByDesign[a] ?? masteryByDesign[a]?.flips ?? 0;
+          final fb = flipsByDesign[b] ?? masteryByDesign[b]?.flips ?? 0;
+          final cmp = fb.compareTo(fa);
+          if (cmp != 0) return cmp;
+          return a.compareTo(b);
+        });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -523,14 +529,18 @@ class _PlayerResults extends StatelessWidget {
             Expanded(
               child: Text(
                 playerLabel,
-                style: context.appTypography.body,
+                style: context.appTypography.body.copyWith(
+                  color: AppColors.onSurfaceDark,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             Text(
               '$totalFlips flip${totalFlips == 1 ? '' : 's'}',
-              style: context.appTypography.h3,
+              style: context.appTypography.h3.copyWith(
+                color: AppSurfaces.frameGold(Brightness.dark),
+              ),
             ),
           ],
         ),
@@ -574,7 +584,8 @@ class _PlayerResults extends StatelessWidget {
                   _ArcoriResultColumn(
                     snap: snap,
                     designId: designIds[i],
-                    flips: flipsByDesign[designIds[i]] ??
+                    flips:
+                        flipsByDesign[designIds[i]] ??
                         masteryByDesign[designIds[i]]?.flips ??
                         0,
                     mastery: masteryByDesign[designIds[i]],
@@ -620,11 +631,7 @@ class _ArcoriResultColumn extends StatelessWidget {
             AppModal.showCenteredShell(
               context,
               title: face.name,
-              child: _ArcoriFocus(
-                face: face,
-                flips: flips,
-                mastery: mastery,
-              ),
+              child: _ArcoriFocus(face: face, flips: flips, mastery: mastery),
             ),
           );
         },
@@ -669,11 +676,7 @@ class _ArcoriResultColumn extends StatelessWidget {
 }
 
 class _ArcoriFocus extends StatelessWidget {
-  const _ArcoriFocus({
-    required this.face,
-    required this.flips,
-    this.mastery,
-  });
+  const _ArcoriFocus({required this.face, required this.flips, this.mastery});
 
   final _ResolvedDisc face;
   final int flips;
@@ -747,8 +750,8 @@ class _ResolvedDisc {
     final image = lottie != null
         ? null
         : _firstNonEmpty(mastery?.imageUrl, piece?.imageUrl);
-    final name = _firstNonEmpty(mastery?.displayName) ??
-        _shortDesignLabel(designId);
+    final name =
+        _firstNonEmpty(mastery?.displayName) ?? _shortDesignLabel(designId);
     return _ResolvedDisc(
       name: name,
       designId: designId,
@@ -769,10 +772,7 @@ class _ResolvedDisc {
       faceUp: true,
       showThickness: false,
       face: useLottie
-          ? KinSceneStack(
-              lottieUrl: lottieUrl,
-              fit: BoxFit.cover,
-            )
+          ? KinSceneStack(lottieUrl: lottieUrl, fit: BoxFit.cover)
           : null,
     );
   }
@@ -791,8 +791,6 @@ class _SlammerMasteryHero extends StatelessWidget {
   final MatchFinalizeResult? finalize;
   final List<AvariInventoryItem> ownedSlammers;
 
-  static const double _disc = 112;
-
   @override
   Widget build(BuildContext context) {
     final seat = _localSeat();
@@ -805,65 +803,74 @@ class _SlammerMasteryHero extends StatelessWidget {
     }
 
     final practice = finalize?.reason == 'practice';
-    final pending = finalize == null ||
-        (finalize!.applied != true && !practice);
+    final pending =
+        finalize == null || (finalize!.applied != true && !practice);
     final face = _slammerFace(seat, change, owned, slammerId);
-    final total = change?.masteryOverMintReach ??
+    final total =
+        change?.masteryOverMintReach ??
         (practice || pending ? null : owned?.masteryOverMintReach);
     final gain = change?.relativeDeltaLabel;
 
     final gold = AppSurfaces.frameGold(Brightness.dark);
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.md),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.surfaceDark.withValues(alpha: 0.7),
-          borderRadius: BorderRadius.circular(AppRadii.md),
-          border: Border.all(color: gold.withValues(alpha: 0.65)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          child: Column(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
             children: [
-              Text(
-                'Slammer Mastery',
-                style: context.appTypography.label.copyWith(color: gold),
+              Icon(Icons.bar_chart, size: 16, color: gold),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                child: Text(
+                  'Slammer Mastery',
+                  style: context.appTypography.label.copyWith(color: gold),
+                ),
               ),
-              AppSpacing.gapSm,
-              face.disc(_disc),
-              AppSpacing.gapXs,
-              Text(
-                face.name,
-                style: context.appTypography.subtitle.copyWith(
-                  color: AppColors.onSurfaceDark,
+              Flexible(
+                child: Text(
+                  face.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.appTypography.caption.copyWith(
+                    color: AppColors.onSurfaceMutedDark,
+                  ),
                 ),
-                textAlign: TextAlign.center,
-              ),
-              if (total != null) ...[
-                AppSpacing.gapXxs,
-                Text(
-                  total,
-                  style: context.appTypography.h1.copyWith(color: gold),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-              AppSpacing.gapXxs,
-              Text(
-                practice
-                    ? 'Practice — no mastery'
-                    : pending
-                        ? 'Waiting for mastery…'
-                        : gain == null
-                            ? '+0 this match'
-                            : '$gain this match',
-                style: context.appTypography.body.copyWith(
-                  color: AppColors.onSurfaceDark,
-                ),
-                textAlign: TextAlign.center,
               ),
             ],
           ),
-        ),
+          AppSpacing.gapSm,
+          Row(
+            children: [
+              face.disc(72),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (total != null)
+                      Text(
+                        total,
+                        style: context.appTypography.h2.copyWith(color: gold),
+                      ),
+                    Text(
+                      practice
+                          ? 'Practice — no mastery'
+                          : pending
+                          ? 'Waiting for mastery…'
+                          : gain == null
+                          ? '+0 this match'
+                          : '$gain this match',
+                      style: context.appTypography.body.copyWith(
+                        color: AppColors.onSurfaceDark,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -908,7 +915,9 @@ class _SlammerMasteryHero extends StatelessWidget {
     AvariInventoryItem? owned,
     String slammerId,
   ) {
-    final practice = practiceSlammerFaceFor(slammerId.isEmpty ? null : slammerId);
+    final practice = practiceSlammerFaceFor(
+      slammerId.isEmpty ? null : slammerId,
+    );
     final lottie = _firstNonEmpty(
       seat?.lottieUrl,
       change?.lottieUrl,
@@ -922,7 +931,8 @@ class _SlammerMasteryHero extends StatelessWidget {
             owned?.imageUrl,
             practice['imageUrl'],
           );
-    final name = _firstNonEmpty(change?.displayName, owned?.displayName) ??
+    final name =
+        _firstNonEmpty(change?.displayName, owned?.displayName) ??
         _shortDesignLabel(slammerId.isEmpty ? 'Slammer' : slammerId);
     return _ResolvedDisc(
       name: name,
@@ -978,25 +988,27 @@ class _DailyProgressBlock extends StatelessWidget {
     if (payload == null || payload.isEmpty) {
       return Text(
         'No daily progress this match',
-        style: context.appTypography.bodySmall,
+        style: context.appTypography.bodySmall.copyWith(
+          color: AppColors.onSurfaceMutedDark,
+        ),
       );
     }
 
     final goalsRaw = payload['goals'];
-    final lines = <String>[];
-    String? cacheLine;
+    final tiles = <({String name, String status, IconData icon})>[];
     if (goalsRaw is List) {
       for (final item in goalsRaw) {
         if (item is! Map) continue;
         final map = Map<String, dynamic>.from(item);
         final id = (map['goalId'] ?? map['goal_id'] ?? '').toString().trim();
-        final type =
-            (map['taskType'] ?? map['task_type'] ?? '').toString().toLowerCase();
+        final type = (map['taskType'] ?? map['task_type'] ?? '')
+            .toString()
+            .toLowerCase();
         final featured = map['featured'] == true;
         final progress = map['progressToday'] ?? map['progress_today'] ?? 0;
         final target = map['target'] ?? 1;
-        final done = map['completedToday'] == true ||
-            map['completed_today'] == true;
+        final done =
+            map['completedToday'] == true || map['completed_today'] == true;
         final name = (map['name']?.toString().trim().isNotEmpty == true)
             ? map['name'].toString().trim()
             : (id.isEmpty ? 'Daily goal' : id.replaceAll('_', ' '));
@@ -1005,38 +1017,67 @@ class _DailyProgressBlock extends StatelessWidget {
           final cacheStatus = done
               ? 'claimed'
               : _cacheReadyFromPayload(goalsRaw)
-                  ? 'ready'
-                  : 'locked';
-          cacheLine = '$name — $cacheStatus';
+              ? 'ready'
+              : 'locked';
+          tiles.add((
+            name: name,
+            status: cacheStatus,
+            icon: Icons.lock_outline,
+          ));
           continue;
         }
 
         if (!featured) continue;
-        final label = done ? 'Done' : '$progress / $target';
-        lines.add('$name — $label');
+        tiles.add((
+          name: name,
+          status: done ? 'Done' : '$progress / $target',
+          icon: type.contains('flip')
+              ? Icons.hourglass_bottom
+              : Icons.check_circle_outline,
+        ));
       }
     }
 
-    if (lines.isEmpty && cacheLine == null) {
+    if (tiles.isEmpty) {
       return Text(
         'Daily goals updated',
-        style: context.appTypography.bodySmall,
+        style: context.appTypography.bodySmall.copyWith(
+          color: AppColors.onSurfaceMutedDark,
+        ),
       );
     }
 
-    return Column(
+    final gold = AppSurfaces.frameGold(Brightness.dark);
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final line in lines)
-          Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.xxs),
-            child: Text(line, style: context.appTypography.bodySmall),
+        for (var i = 0; i < tiles.length; i++) ...[
+          if (i > 0) const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Column(
+              children: [
+                Icon(tiles[i].icon, size: 18, color: gold),
+                const SizedBox(height: AppSpacing.xxs),
+                Text(
+                  tiles[i].name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: context.appTypography.caption.copyWith(
+                    color: AppColors.onSurfaceDark,
+                  ),
+                ),
+                Text(
+                  tiles[i].status,
+                  textAlign: TextAlign.center,
+                  style: context.appTypography.caption.copyWith(
+                    color: AppColors.onSurfaceMutedDark,
+                  ),
+                ),
+              ],
+            ),
           ),
-        if (cacheLine != null)
-          Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.xxs),
-            child: Text(cacheLine, style: context.appTypography.bodySmall),
-          ),
+        ],
       ],
     );
   }
@@ -1050,7 +1091,8 @@ class _DailyProgressBlock extends StatelessWidget {
       final m = Map<String, dynamic>.from(item);
       final id = (m['goalId'] ?? m['goal_id'] ?? '').toString().trim();
       if (id.isEmpty) continue;
-      doneById[id] = m['completedToday'] == true || m['completed_today'] == true;
+      doneById[id] =
+          m['completedToday'] == true || m['completed_today'] == true;
     }
     for (final id in fallbackRequires) {
       if (doneById[id] != true) return false;
@@ -1066,15 +1108,16 @@ class _EventProgressBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final credited = progress['matchesCredited'] ?? progress['matches_credited'] ?? 0;
+    final credited =
+        progress['matchesCredited'] ?? progress['matches_credited'] ?? 0;
     final required =
         progress['matchesRequired'] ?? progress['matches_required'] ?? 1;
     final flips = progress['flips'] ?? 0;
-    final eid = progress['eventId'] ?? progress['event_id'] ?? '';
     return Text(
-      '${eid.toString().isEmpty ? 'Event' : eid}: '
-      '$credited/$required matches credited · $flips flips',
-      style: context.appTypography.bodySmall,
+      '$credited/$required matches · $flips flips',
+      style: context.appTypography.body.copyWith(
+        color: AppColors.onSurfaceDark,
+      ),
     );
   }
 }
@@ -1108,10 +1151,7 @@ class _SeatFace extends StatelessWidget {
       faceUp: true,
       showThickness: false,
       face: useLottie
-          ? KinSceneStack(
-              lottieUrl: piece!.lottieUrl,
-              fit: BoxFit.cover,
-            )
+          ? KinSceneStack(lottieUrl: piece!.lottieUrl, fit: BoxFit.cover)
           : null,
     );
   }

@@ -560,6 +560,9 @@ def ensure_slammer(
             if float(existing.mastery_points or 0) < seed:
                 existing.mastery_points = seed
                 session.flush()
+        from modules.avari.slammer_sweet_spot import bind_sweet_spot
+
+        bind_sweet_spot(session, existing)
         return existing
     row = PlayerSlammer(
         user_id=uid,
@@ -571,6 +574,9 @@ def ensure_slammer(
     )
     session.add(row)
     session.flush()
+    from modules.avari.slammer_sweet_spot import bind_sweet_spot
+
+    bind_sweet_spot(session, row)
     return row
 
 

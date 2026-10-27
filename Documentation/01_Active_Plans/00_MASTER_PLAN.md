@@ -92,7 +92,7 @@ Open (ordered):
 - [x] **Slammer Legacy** (sweet-spot mastery; Arcori close→Velora; preserve/mint on slammers; Museum/Trove SLM-only) — [slammer-legacy.md](slammer-legacy.md)
 - [x] Home sink Trove • PLAY • Market (`hub_sink`); first-time / returning startup still open
 - [ ] My Mastery tab (Trove screen holds mints + closed gens; circulating Arcori on profile)
-- [x] Slammer charge spend + Market Rim (buy 4GA/20; top-up 4GA/+100; −1/slam) — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
+- [x] Slammer charge spend + Market shop slammers (buy 4GA/25; top-up 4GA/+100; −1/slam; Starter free) — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
 - [ ] Slammer recovery slam-stat *(future)* — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
 
 Standings surface is live with an open tail (My Mastery) covered above.
@@ -119,7 +119,7 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | [first-time-player-flow.md](first-time-player-flow.md) | Spec | Splash → Kin/Genesis → starter access → guided practice → intros → Home |
 | [kin-creation.md](kin-creation.md) | In Progress | Claim slim bake + nginx 20m; idle anims open |
 | [returning-player-startup-flow.md](returning-player-startup-flow.md) | Spec | Auto login → sync → overnight → notification queue → Home |
-| [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | In Progress | Home widgets (MV, missions, events, World News, ticker); sink deferred |
+| [home-and-play-hub-flow.md](home-and-play-hub-flow.md) | In Progress | Home/Play/Trove/Market chrome vs ui_designs mockups; live stack unchanged |
 | [match-setting-core-flow.md](match-setting-core-flow.md) | Partial | Play hub + types; practice offline; quick/event/invite online |
 | [match-hot-state.md](match-hot-state.md) | Done (online room SSOT) | Dart match module + Flutter mirror; used by matchmaking promote |
 | [practice-offline-routing.md](practice-offline-routing.md) | Completed | Practice = Flutter-only; embedded 10 AI pool |
@@ -156,10 +156,11 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | [mastery.md](mastery.md) | Writers + echo seed live | Own/other finalize; Mastery Value; Closed Generations; My Mastery tab open |
 | [arcori-standings-surface.md](arcori-standings-surface.md) | Partial | Standings + Detail tab; My Mastery still open |
 | [catalog-hot-reload.md](catalog-hot-reload.md) | Done | Catalog JSON mtime cache, authuser APIs, Flutter Velora |
+| [velora-world.md](velora-world.md) | Done | World screen region tiles; each land opens lore, standings, and places |
 | [series-circulation-switch.md](series-circulation-switch.md) | Completed | `03_series.json` master switch; Genesis+Pioneers active; dual gate with `worldState` |
 | [creation-catalog-import.md](creation-catalog-import.md) | Completed | SER000 seq 0002: Ivory Gatewalker (EVG) + Eclipse Veilwalker (ASH) |
 | [pioneers-catalog-expansion.md](pioneers-catalog-expansion.md) | Completed | 75 new Genesis Arcori (Nostalgia / Music / Television); Pioneers stays original 10 |
-| [avari-profile.md](avari-profile.md) | Done | Avari Profile `/avari` + Trove + Closed Generations |
+| [avari-profile.md](avari-profile.md) | Done | Avari Profile `/avari` + Trove; Arcori card and Circulating are canisters (100 each) |
 | [player-profile-schema.md](player-profile-schema.md) | Done | Auth + Avari tables, admin testuser seed |
 | [ui-visual-refactor.md](ui-visual-refactor.md) | In Progress | Gallery-first reliquary: theme tokens, hubs, match HUD chrome |
 | [play-target-sdk-billing.md](play-target-sdk-billing.md) | Completed | Play API 36, minSdk 23, Billing 9.1.0 force + staged 0.4.0+5 patch |

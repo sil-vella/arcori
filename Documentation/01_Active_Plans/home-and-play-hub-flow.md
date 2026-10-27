@@ -2,7 +2,7 @@
 
 **Status:** In Progress  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-10-20 (home: daily|news columns, mastery + top slammer, ticker above news)
+**Last Updated:** 2026-10-27 (match seat chrome: played Arcori, gold name ring)
 
 Related: [returning-player-startup-flow.md](returning-player-startup-flow.md) · [core-match-loop.md](core-match-loop.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [first-time-player-flow.md](first-time-player-flow.md) · [NOTIFICATION_SYSTEM.md](../03_Base/NOTIFICATION_SYSTEM.md) · Flutter bottom-nav docs in `03_Base/Flutter/`
 
@@ -42,7 +42,7 @@ Uses the platform **screen-scoped bottom action bar** ([BOTTOM_NAV_REGISTRATION.
 
 - **Trove** (`/trove`) — **shipped:** minted closed Arcori + closed gens / preservation windows. **Target:** My Legacy Slammers ([slammer-legacy.md](slammer-legacy.md)). Circulating Arcori stay on the Avari profile.
 - **PLAY** (`/play`) — Play Hub (circulating mastery-accessible designs).
-- **Market** (`/market`) — **Slammers** section (Rim buy / recharge); packs later — [arcori-packs.md](arcori-packs.md).
+- **Market** (`/market`) — **Slammers** section (Genesis shop slammers, buy / recharge); packs later — [arcori-packs.md](arcori-packs.md).
 - **Velora** — first-class from Home (and related), not under Trove.
 
 ## Play Hub
@@ -71,6 +71,16 @@ Uses the platform **screen-scoped bottom action bar** ([BOTTOM_NAV_REGISTRATION.
 
 2026-10-20 — Home: featured stays full width. Daily Missions and World News share one row. Mastery Value shows the aggregate plus the most-mastered slammer face, with the recent-mastery ticker under that standing label.
 
+2026-10-20 — Visual pass against `assets/ui_designs` (existing art and icons only). Featured and Play mode cards are split copy + art with gold Play Now. Bottom PLAY is a raised gold circle. Trove sections show counts. Market opens with a Gold Arcori wallet, a wide featured slammer, then a row of the rest. Post-match fragments sit in a gold banner; slammer mastery is a horizontal disc + total/gain; daily goals sit in a row. Live match stays the real stack — the arena illustration is not a replacement surface.
+
+2026-10-23 — PLAY orb overflow: the disc is drawn above the 72px sink, and its layout box stays inside the bar so the caption no longer overflows by 1px.
+
+2026-10-23 — Home featured event: banner art covers the card. Title, copy, and Play Now sit on a dark wash that fades out toward the right.
+
+2026-10-27 — Play screen title is Match. The Featured card uses the altar WebP as its cover. The sink PLAY item is a gold circle on the bar's top edge, so half of it sits above the sink, with the arena mark at twice the other sink icons and the Match label underneath. The top half of the circle is part of the tap target, so it opens Match.
+
+2026-10-23 — Mastery Value: total and top slammer are two columns with a gold divider. The total sits in a thin gold ring with a medal icon; the slammer score has a disc icon. Ticker stays full width under both. Featured and Mastery covers fill the whole card, including the label and padding. The featured wash fades out by the midpoint; the right half is the cover image only.
+
 ## Files Modified
 
 - `Documentation/01_Active_Plans/home-and-play-hub-flow.md`, `returning-player-startup-flow.md`, `00_MASTER_PLAN.md`, `03_CASE_STUDY.md`, `avari-profile.md`
@@ -87,3 +97,11 @@ Play/Velora hero on Home; Market packs UI; returning-player overnight/startup qu
 ## Notes
 
 Critical generation/event news may interrupt as full-screen modals (`instant`); routine items stay in World News (`inbox`). Full startup sequencer is still later — instant news works via `NotificationHost` without it.
+
+2026-10-27: Match search modal shows only “Looking for a match.” / “Match starting…” (no lobby id, timer, or player ids). Match screen has a dark-to-clear edge gradient. End-match summary uses the same modal row and gold labels as the other match dialogs. App Dev checklist 396.
+
+Match status (Your turn, Waiting, Get ready, Resolving slam) is a gold banner above the table, with the status as the large line and the how-to underneath. App Dev checklist 397.
+
+2026-10-27: Match seats show the Arcori that player is playing (green border while that seat is in play) instead of the profile mark. The username sits in a gold rim with a gold diamond at the bottom and a green dot while that player is current. The status banner uses the same gold card frame as the screen cards. App Dev checklist 398.
+
+Exit match sits above the edge vignette, with a solid dark fill and gold border, so the corner wash no longer covers it. App Dev checklist 399.

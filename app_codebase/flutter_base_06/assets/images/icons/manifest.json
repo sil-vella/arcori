@@ -1,0 +1,51 @@
+[
+  {
+    "name": "velora_world",
+    "file": "velora_world.webp",
+    "source": "ornate_celestial_world_emblem.png",
+    "size": "1254x1254",
+    "transparent": true
+  },
+  {
+    "name": "slammers",
+    "file": "slammers.webp",
+    "source": "arcane_sapphire_spinning_emblem.png",
+    "size": "1254x1254",
+    "transparent": true
+  },
+  {
+    "name": "arcori",
+    "file": "arcori.webp",
+    "source": "ornate_golden_celestial_compass_crest.png",
+    "size": "1254x1254",
+    "transparent": true
+  },
+  {
+    "name": "museum",
+    "file": "museum.webp",
+    "source": "ornate_golden_astrolabe_shrine_emblem.png",
+    "size": "1254x1254",
+    "transparent": true
+  },
+  {
+    "name": "trove",
+    "file": "trove.webp",
+    "source": "arcane_celestial_treasure_chest.png",
+    "size": "1254x1254",
+    "transparent": true
+  },
+  {
+    "name": "market",
+    "file": "market.webp",
+    "source": "market.png",
+    "size": "1254x1254",
+    "transparent": true
+  },
+  {
+    "name": "avari_profile",
+    "file": "avari_profile.webp",
+    "source": "celestial_gold_avatar_crest.png",
+    "size": "1254x1254",
+    "transparent": true
+  }
+]

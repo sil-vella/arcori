@@ -14,6 +14,8 @@ abstract final class AppPaths {
   static const exampleModule = '/example-module';
   static const notifications = '/notifications';
   static const velora = '/velora';
+  static const veloraWorld = '/velora/world';
+  static const veloraRegion = '/velora/region';
   static const veloraSeries = '/velora/series';
   static const veloraTheme = '/velora/theme';
   static const arcoriDetail = '/velora/arcori';
@@ -29,6 +31,8 @@ abstract final class AppPaths {
   static const museum = '/museum';
   static const trove = '/trove';
   static const market = '/market';
+  static const avariCirculating = '/avari/circulating';
+  static const avariCanister = '/avari/circulating/canister';
 
   static const _protectedPaths = {wsDemo};
 

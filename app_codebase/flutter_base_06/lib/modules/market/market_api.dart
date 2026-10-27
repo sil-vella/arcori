@@ -19,6 +19,7 @@ class MarketSlammerSku {
     required this.owned,
     required this.permanent,
     this.chargesRemaining,
+    this.imageUrl,
     this.color,
     this.canAffordPurchase = false,
     this.canAffordRecharge = false,
@@ -31,10 +32,11 @@ class MarketSlammerSku {
       shopPriceGoldArcori: _asInt(json['shopPriceGoldArcori']) ?? 4,
       rechargePriceGoldArcori: _asInt(json['rechargePriceGoldArcori']) ?? 4,
       rechargeCharges: _asInt(json['rechargeCharges']) ?? 100,
-      maxCharges: _asInt(json['maxCharges']) ?? 20,
+      maxCharges: _asInt(json['maxCharges']) ?? 25,
       owned: json['owned'] == true,
       permanent: json['permanent'] == true,
       chargesRemaining: _asInt(json['chargesRemaining']),
+      imageUrl: json['imageUrl']?.toString(),
       color: json['color']?.toString(),
       canAffordPurchase: json['canAffordPurchase'] == true,
       canAffordRecharge: json['canAffordRecharge'] == true,
@@ -50,6 +52,7 @@ class MarketSlammerSku {
   final bool owned;
   final bool permanent;
   final int? chargesRemaining;
+  final String? imageUrl;
   final String? color;
   final bool canAffordPurchase;
   final bool canAffordRecharge;
@@ -116,8 +119,8 @@ class MarketPurchaseResult {
 
 class MarketApiClient {
   MarketApiClient({http.Client? client, String? baseUrl})
-      : _client = client ?? http.Client(),
-        _baseUrl = baseUrl ?? WsConfig.apiRestBase;
+    : _client = client ?? http.Client(),
+      _baseUrl = baseUrl ?? WsConfig.apiRestBase;
 
   final http.Client _client;
   final String _baseUrl;

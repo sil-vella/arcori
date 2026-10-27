@@ -32,17 +32,25 @@ final class BottomNavAction extends BottomNavItem {
   const BottomNavAction({
     required this.icon,
     required this.onTap,
+    this.iconAsset,
     this.label,
     this.tooltip,
+    this.emphasized = false,
     super.lifetime = BottomNavLifetime.screen,
     super.priority = 0,
     super.visibleWhen,
   });
 
   final IconData icon;
+
+  /// Painted mark. Used in place of [icon] when set.
+  final String? iconAsset;
   final VoidCallback onTap;
   final String? label;
   final String? tooltip;
+
+  /// Raised center action (hub Play). Other items stay flat.
+  final bool emphasized;
 }
 
 /// Navigate within the module; path must match the module's registered prefixes.

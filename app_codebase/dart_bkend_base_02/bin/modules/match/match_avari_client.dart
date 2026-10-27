@@ -11,14 +11,22 @@ import 'match_errors.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
+/// Owned slammer chosen for a seat, plus that player's saved sweet spot.
+class VerifiedSlammer {
+  const VerifiedSlammer({required this.slammerId, this.sweetSpot});
+
+  final String slammerId;
+  final Map<String, dynamic>? sweetSpot;
+}
+
 class MatchAvariClient {
   MatchAvariClient({FastApiServiceClient? fastApi})
       : _fastApi = fastApi ?? FastApiServiceClient();
 
   final FastApiServiceClient _fastApi;
 
-  /// Returns userId → owned (or fallback) slammerId. Empty values omitted.
-  Future<Map<String, String>> verifySlammers({
+  /// Returns userId → owned slammer and that player's saved sweet spot.
+  Future<Map<String, VerifiedSlammer>> verifySlammers({
     required List<Map<String, dynamic>> seats,
   }) async {
     final uri = Uri.parse('${_fastApi.baseUrl}/service/avari/verify_slammers');
@@ -64,13 +72,19 @@ class MatchAvariClient {
           message: 'verify_slammers assignments missing',
         );
       }
-      final out = <String, String>{};
+      final out = <String, VerifiedSlammer>{};
       for (final item in raw) {
         if (item is! Map) continue;
         final userId = item['userId']?.toString().trim() ?? '';
         final slammerId = item['slammerId']?.toString().trim() ?? '';
         if (userId.isEmpty || slammerId.isEmpty) continue;
-        out[userId] = slammerId;
+        final rawSpot = item['sweetSpot'];
+        out[userId] = VerifiedSlammer(
+          slammerId: slammerId,
+          sweetSpot: rawSpot is Map
+              ? Map<String, dynamic>.from(rawSpot)
+              : null,
+        );
       }
       if (LOGGING_SWITCH) {
         customlog('match avari verify_slammers ok count=${out.length}');

@@ -81,6 +81,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
   final _arenaPovScale = ValueNotifier<double>(1.0);
   late final AnimationController _hitShake;
   int _hitShakeSeed = 0;
+
   /// Dedupe vibrate/shake across predictive → authority remounts.
   DateTime? _lastLocalHitAt;
 
@@ -92,13 +93,17 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
   String? _strikeLottieUrl;
   Alignment _strikeFrom = Alignment.bottomCenter;
   Offset? _strikeHomeOffset;
+
   /// Seat whose arena anim owns the slammer (chrome rest hidden for that seat).
   String? _strikeAnimUserId;
+
   /// Monotonic claim id so stale remount/dispose cannot leave rest hidden.
   int _slammerHideGen = 0;
   int _slammerHideClaimGen = 0;
+
   /// Claim id handed to the live [ArcoriStackSurface] callback (captured per build).
   int? _stackSlammerHideClaim;
+
   /// Authority slam version already armed — ignore later snapshot echoes.
   int? _lastSlamStrikeArmedVersion;
 
@@ -146,7 +151,8 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
   void _playLocalHitFeedback() {
     final now = DateTime.now();
     final last = _lastLocalHitAt;
-    if (last != null && now.difference(last) < const Duration(milliseconds: 500)) {
+    if (last != null &&
+        now.difference(last) < const Duration(milliseconds: 500)) {
       return;
     }
     _lastLocalHitAt = now;
@@ -373,10 +379,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     return frames is List && frames.length >= 2;
   }
 
-  String _displayNameFor({
-    required MatchSeatView seat,
-    required bool isSelf,
-  }) {
+  String _displayNameFor({required MatchSeatView seat, required bool isSelf}) {
     if (isSelf) {
       final profileName =
           ref.read(userProfileProvider).profile?.username.trim() ?? '';
@@ -390,18 +393,22 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     return id.length <= 8 ? id : id.substring(0, 8);
   }
 
-  String? _avatarUrlFor({
-    required MatchSeatView seat,
-    required bool isSelf,
-  }) {
-    if (isSelf) {
-      final profileUrl = ref.read(userProfileProvider).profile?.avatarUrl;
-      if (profileUrl != null && profileUrl.trim().isNotEmpty) {
-        return profileUrl;
-      }
+  _PlayedFace? _playedArcoriFor(MatchSnapshotState snap, MatchSeatView seat) {
+    for (final piece in snap.pieces) {
+      if (piece.isGatherer) continue;
+      if (piece.seatIndex != seat.seatIndex) continue;
+      return _PlayedFace(
+        ArcoriLook(
+          designId: piece.designId,
+          imageUrl: piece.hasLottieFace ? null : piece.imageUrl,
+          colorHex: piece.color,
+        ),
+        piece.lottieUrl,
+      );
     }
-    final fromSeat = seat.avatarUrl?.trim() ?? '';
-    return fromSeat.isNotEmpty ? fromSeat : null;
+    final id = seat.arcoriIds.isEmpty ? '' : seat.arcoriIds.first.trim();
+    if (id.isEmpty) return null;
+    return _PlayedFace(ArcoriLook(designId: id), null);
   }
 
   ArcoriLook? _slammerLookFor(MatchSeatView? seat) {
@@ -455,17 +462,14 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     if (slamCtx == null || stackCtx == null) return null;
     final slamBox = slamCtx.findRenderObject() as RenderBox?;
     final sBox = stackCtx.findRenderObject() as RenderBox?;
-    if (slamBox == null ||
-        sBox == null ||
-        !slamBox.hasSize ||
-        !sBox.hasSize) {
+    if (slamBox == null || sBox == null || !slamBox.hasSize || !sBox.hasSize) {
       return null;
     }
 
     final slamCenter = slamBox.localToGlobal(slamBox.size.center(Offset.zero));
     final restLocal = sBox.globalToLocal(slamCenter);
-    var home = restLocal -
-        Offset(sBox.size.width * 0.5, sBox.size.height * 0.5);
+    var home =
+        restLocal - Offset(sBox.size.width * 0.5, sBox.size.height * 0.5);
     // Internal fit-zoom scales paint but not this RenderBox — undo it.
     if (stackAppliesFitZoom) {
       final fit = _arenaPovScale.value;
@@ -488,10 +492,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
       opponents: opponents,
     );
     if (key == null) return null;
-    return _homeAtSlammerRest(
-      key,
-      stackAppliesFitZoom: stackAppliesFitZoom,
-    );
+    return _homeAtSlammerRest(key, stackAppliesFitZoom: stackAppliesFitZoom);
   }
 
   void _scheduleStrikeHomeResolve({
@@ -523,9 +524,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     _strikeAnimUserId = userId;
     _stackSlammerHideClaim = _slammerHideClaimGen;
     if (LOGGING_SWITCH) {
-      customlog(
-        'slammerHide: claim user=$userId gen=$_slammerHideClaimGen',
-      );
+      customlog('slammerHide: claim user=$userId gen=$_slammerHideClaimGen');
     }
     return _slammerHideClaimGen;
   }
@@ -551,9 +550,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
       return;
     }
     if (LOGGING_SWITCH) {
-      customlog(
-        'slammerHide: release user=$_strikeAnimUserId claim=$claimGen',
-      );
+      customlog('slammerHide: release user=$_strikeAnimUserId claim=$claimGen');
     }
     _clearSlammerHideFields();
     if (!mounted) return;
@@ -593,8 +590,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     final token = --_localStrikeSeq;
     final look = _slammerLookFor(me);
     final actor = me ?? snap.seats.first;
-    final stackAppliesFitZoom =
-        resolveMediaUrl(snap.arenaImageUrl).isEmpty;
+    final stackAppliesFitZoom = resolveMediaUrl(snap.arenaImageUrl).isEmpty;
     final home = _resolveStrikeHomeOffset(
       actor: actor,
       selfSeat: me,
@@ -661,10 +657,9 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     }
 
     if (_isLocal(matchId)) {
-      await ref.read(matchSnapshotProvider.notifier).localSlam(
-            actorUserId: userId,
-            input: input,
-          );
+      await ref
+          .read(matchSnapshotProvider.notifier)
+          .localSlam(actorUserId: userId, input: input);
       return;
     }
 
@@ -708,67 +703,51 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     required Duration? graceLeft,
     required SlamControlMode controlMode,
   }) {
-    String? primary;
-    String? secondary;
+    String? title;
+    String? detail;
+    var yours = false;
     if (inGrace) {
-      primary = 'Get ready…';
-      secondary = graceLeft != null && graceLeft.inSeconds > 0
+      title = 'Get ready';
+      detail = graceLeft != null && graceLeft.inSeconds > 0
           ? 'Match starts in ${graceLeft.inSeconds}s'
           : 'Match starting…';
     } else if (inputLocked) {
-      primary = 'Resolving slam…';
-      secondary = 'Wait for the table to settle';
+      title = 'Resolving slam';
+      detail = 'Wait for the table to settle';
     } else if (armed) {
+      yours = true;
       final shakeProbe = ref.watch(slamShakeAvailableProvider);
       final shakeAvailable = shakeProbe.value ?? false;
       final hints = slamTurnHints(
         shakeAvailable: shakeAvailable,
         controlMode: controlMode,
       );
-      primary = hints.primary;
-      secondary = hints.secondary;
+      title = 'Your turn';
+      final action = hints.primary.replaceFirst('Your turn — ', '');
+      detail = '$action. ${hints.secondary}';
     } else if (!snap.isEnded && snap.phase == 'playing') {
-      primary = 'Waiting for other player…';
+      title = 'Waiting for the other player';
     }
 
     final showExit = !local && !snap.isEnded;
-    if (primary == null && !showExit) return null;
+    if (title == null && !showExit) return null;
 
-    // Stack + IgnorePointer so hints never steal aim/touch from the playfield.
-    final hud = context.appHud;
+    // IgnorePointer on the banner so hints never steal aim/touch.
     return SafeArea(
       child: Stack(
         children: [
-          if (primary != null)
-            Positioned(
-              top: AppSpacing.sm,
-              left: AppSpacing.md,
-              right: showExit ? 112 : AppSpacing.md,
+          if (title != null)
+            Align(
+              alignment: const Alignment(0, -0.72),
               child: IgnorePointer(
-                child: Center(
-                  child: AppHudGlassChip(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          primary,
-                          style: context.appTypography.label.copyWith(
-                            color: hud.onGlass,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        if (secondary != null) ...[
-                          AppSpacing.gapXs,
-                          Text(
-                            secondary,
-                            style: context.appTypography.bodySmall.copyWith(
-                              color: hud.onGlassMuted,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ],
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                  ),
+                  child: _MatchStatusBanner(
+                    title: title,
+                    detail: detail,
+                    emphasized: yours,
                   ),
                 ),
               ),
@@ -778,7 +757,20 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
               top: AppSpacing.sm,
               right: AppSpacing.md,
               child: OutlinedButton(
-                style: context.appButtons.tertiary.outlined,
+                style: context.appButtons.tertiary.outlined.copyWith(
+                  backgroundColor: const WidgetStatePropertyAll(
+                    AppColors.backgroundDark,
+                  ),
+                  foregroundColor: WidgetStatePropertyAll(
+                    AppSurfaces.frameGold(Brightness.dark),
+                  ),
+                  side: WidgetStatePropertyAll(
+                    BorderSide(
+                      color: AppSurfaces.frameGold(Brightness.dark),
+                      width: 1.5,
+                    ),
+                  ),
+                ),
                 onPressed: _exitOnline,
                 child: const Text('Exit match'),
               ),
@@ -794,14 +786,14 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     final local = _isLocal(snap.matchId);
     ref.watch(authProvider.select((a) => a.userId?.trim()));
     ref.watch(userProfileProvider.select((p) => p.profile?.username));
-    ref.watch(userProfileProvider.select((p) => p.profile?.avatarUrl));
     final userId = _humanActorUserId(snap);
     final inGrace = activeInGracePeriod(snap.active);
     final inputLocked = activeInputLocked(snap.active);
     _syncGraceTicker(inGrace || inputLocked);
     final graceLeft = graceRemaining(snap.active);
     final myTurn = _isMyTurn(snap, userId);
-    final armed = snap.phase == 'playing' &&
+    final armed =
+        snap.phase == 'playing' &&
         !snap.isEnded &&
         myTurn &&
         !inGrace &&
@@ -817,17 +809,13 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
           // so SlamResultFront.pending cannot stick after the anim restarts.
           if (_pendingSlamResultEvent != null) {
             if (LOGGING_SWITCH) {
-              customlog(
-                'matchSurface: flush pending slam result on match end',
-              );
+              customlog('matchSurface: flush pending slam result on match end');
             }
             _flushPendingSlamResultModal();
           }
           if (_pendingSlamResultEvent != null || SlamResultFront.isHolding) {
             if (LOGGING_SWITCH) {
-              customlog(
-                'matchSurface: keep shell, slam result still in front',
-              );
+              customlog('matchSurface: keep shell, slam result still in front');
             }
             return;
           }
@@ -841,12 +829,14 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
       final nextGrace = activeInGracePeriod(next.active);
       final nextMe = _humanActorUserId(next);
       final nextMyTurn = _isMyTurn(next, nextMe);
-      final nextArmed = next.phase == 'playing' &&
+      final nextArmed =
+          next.phase == 'playing' &&
           !next.isEnded &&
           nextMyTurn &&
           !nextGrace &&
           !activeInputLocked(next.active);
-      final prevArmed = prev != null &&
+      final prevArmed =
+          prev != null &&
           prev.phase == 'playing' &&
           !prev.isEnded &&
           _isMyTurn(prev, _humanActorUserId(prev)) &&
@@ -881,7 +871,8 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
       }
 
       final outcome = event['outcome'];
-      final hasSim = outcome is Map &&
+      final hasSim =
+          outcome is Map &&
           outcome['sim'] is Map &&
           _simHasFrames(Map<String, dynamic>.from(outcome['sim'] as Map));
       if (hasSim && _predictiveImpulse != null && mounted) {
@@ -900,7 +891,8 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
       final actorIsMe = me != null && me.isNotEmpty && actorId == me;
       // Local strike still in flight (negative token + chrome rest hidden).
       // Covers fly-in through return-home — do not remount/skip mid-anim.
-      final localStrikeInFlight = _activeStrikeToken != null &&
+      final localStrikeInFlight =
+          _activeStrikeToken != null &&
           _activeStrikeToken! < 0 &&
           _strikeAnimUserId != null;
 
@@ -943,8 +935,9 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
             }
           }
           opponents.sort((a, b) => a.seatIndex.compareTo(b.seatIndex));
-          final stackAppliesFitZoom =
-              resolveMediaUrl(next.arenaImageUrl).isEmpty;
+          final stackAppliesFitZoom = resolveMediaUrl(
+            next.arenaImageUrl,
+          ).isEmpty;
           final look = _slammerLookFor(actor);
           final home = _resolveStrikeHomeOffset(
             actor: actor,
@@ -1008,8 +1001,9 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
       if (_lastSlamResultModalVersion == version) return;
 
       _lastSlamResultModalVersion = version;
-      final delta =
-          prev == null ? 0 : _scoreFor(next, me) - _scoreFor(prev, me);
+      final delta = prev == null
+          ? 0
+          : _scoreFor(next, me) - _scoreFor(prev, me);
       _pendingSlamResultEvent = Map<String, dynamic>.from(event);
       _pendingSlamResultDelta = delta;
       SlamResultFront.markPending();
@@ -1057,12 +1051,14 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
         ? Map<String, dynamic>.from(outcome['sim'] as Map)
         : null;
     final simReady = _simHasFrames(authoritySim);
-    final stackImpulse =
-        simReady ? null : (authorityImpulse ?? _predictiveImpulse);
+    final stackImpulse = simReady
+        ? null
+        : (authorityImpulse ?? _predictiveImpulse);
 
     // Keep one stack instance through local fly-in→return. Keying on authority
     // version remounts mid-strike and skipStrike drops the size/position beat.
-    final localStackLocked = _activeStrikeToken != null &&
+    final localStackLocked =
+        _activeStrikeToken != null &&
         _activeStrikeToken! < 0 &&
         _strikeAnimUserId != null;
     final stackSlamTag = localStackLocked
@@ -1131,7 +1127,8 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
             strikeFrom: _strikeFrom,
             strikeHomeOffset: _strikeHomeOffset,
             strikeToken: _activeStrikeToken,
-            skipStrike: _skipNextAuthorityStrike &&
+            skipStrike:
+                _skipNextAuthorityStrike &&
                 lastEvent != null &&
                 lastEvent['type'] == 'slam' &&
                 _activeStrikeToken == lastEvent['version'],
@@ -1173,7 +1170,8 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
               _releaseSlammerHide(claimGen: slammerHideClaimAtBuild);
             },
             onAnimComplete: () {
-              final v = (lastEvent != null &&
+              final v =
+                  (lastEvent != null &&
                       lastEvent['type'] == 'slam' &&
                       lastEvent['version'] is int)
                   ? lastEvent['version'] as int
@@ -1184,8 +1182,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
                   _pendingPredictiveImpulse = null;
                   // Drop local negative token so authority does not treat us
                   // as still in pre-strike after rest was restored.
-                  if (_activeStrikeToken != null &&
-                      _activeStrikeToken! < 0) {
+                  if (_activeStrikeToken != null && _activeStrikeToken! < 0) {
                     _activeStrikeToken = null;
                   }
                 });
@@ -1203,10 +1200,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
           aimOverlay = Positioned.fill(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final area = Size(
-                  constraints.maxWidth,
-                  constraints.maxHeight,
-                );
+                final area = Size(constraints.maxWidth, constraints.maxHeight);
                 if (!armed) {
                   return const SizedBox.expand();
                 }
@@ -1270,19 +1264,22 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
         );
 
         final animUid = _strikeAnimUserId;
+        final selfPlayed = selfSeat == null
+            ? null
+            : _playedArcoriFor(snap, selfSeat);
         final selfChrome = selfSeat == null
             ? const SizedBox.shrink()
             : MatchPlayerChrome(
                 username: _displayNameFor(seat: selfSeat, isSelf: true),
-                avatarUrl: _avatarUrlFor(seat: selfSeat, isSelf: true),
                 isSelf: true,
                 isActive: highlightSeat == selfSeat.seatIndex,
                 avatarKey: _selfAvatarKey,
+                arcoriLook: selfPlayed?.look,
+                arcoriLottieUrl: selfPlayed?.lottieUrl,
                 slammerKey: _selfSlammerKey,
                 slammerLook: _slammerLookFor(selfSeat),
                 slammerLottieUrl: selfSeat.lottieUrl,
-                showSlammer:
-                    animUid == null || animUid != selfSeat.userId,
+                showSlammer: animUid == null || animUid != selfSeat.userId,
                 slammerDock: MatchPlayerChrome.dockSelf,
               );
 
@@ -1290,20 +1287,21 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
           for (var i = 0; i < opponents.length; i++)
             MatchPlayerChrome(
               username: _displayNameFor(seat: opponents[i], isSelf: false),
-              avatarUrl: _avatarUrlFor(seat: opponents[i], isSelf: false),
               isActive: highlightSeat == opponents[i].seatIndex,
               avatarKey: i < _oppAvatarKeys.length ? _oppAvatarKeys[i] : null,
-              slammerKey:
-                  i < _oppSlammerKeys.length ? _oppSlammerKeys[i] : null,
+              arcoriLook: _playedArcoriFor(snap, opponents[i])?.look,
+              arcoriLottieUrl: _playedArcoriFor(snap, opponents[i])?.lottieUrl,
+              slammerKey: i < _oppSlammerKeys.length
+                  ? _oppSlammerKeys[i]
+                  : null,
               slammerLook: _slammerLookFor(opponents[i]),
               slammerLottieUrl: opponents[i].lottieUrl,
-              showSlammer:
-                  animUid == null || animUid != opponents[i].userId,
+              showSlammer: animUid == null || animUid != opponents[i].userId,
               slammerDock: opponents.length <= 1
                   ? MatchPlayerChrome.dockOpponentTop
                   : (i == 0
-                      ? MatchPlayerChrome.dockOpponentLeft
-                      : MatchPlayerChrome.dockOpponentRight),
+                        ? MatchPlayerChrome.dockOpponentLeft
+                        : MatchPlayerChrome.dockOpponentRight),
             ),
         ];
 
@@ -1320,8 +1318,9 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
                       stackLayer: stack,
                     )
                   : null,
-              backgroundNetworkUrl:
-                  (!hasArena && arenaUrl.isNotEmpty) ? arenaUrl : null,
+              backgroundNetworkUrl: (!hasArena && arenaUrl.isNotEmpty)
+                  ? arenaUrl
+                  : null,
               self: selfChrome,
               opponents: oppChrome,
               center: playfield,
@@ -1342,6 +1341,68 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
   }
 }
 
+class _PlayedFace {
+  const _PlayedFace(this.look, this.lottieUrl);
+
+  final ArcoriLook look;
+  final String? lottieUrl;
+}
+
+/// Prominent match status — your turn, waiting, grace, resolving.
+class _MatchStatusBanner extends StatelessWidget {
+  const _MatchStatusBanner({
+    required this.title,
+    this.detail,
+    this.emphasized = false,
+  });
+
+  final String title;
+  final String? detail;
+  final bool emphasized;
+
+  @override
+  Widget build(BuildContext context) {
+    final gold = AppSurfaces.frameGold(Brightness.dark);
+    final line = (detail ?? '').trim();
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 420),
+      child: AppCardFrame(
+        gold: true,
+        fill: AppColors.backgroundDark.withValues(alpha: 0.9),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.sm,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: context.appTypography.h3.copyWith(
+                  color: emphasized ? context.appHud.armed : gold,
+                  height: 1.1,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              if (line.isNotEmpty) ...[
+                AppSpacing.gapXxs,
+                Text(
+                  line,
+                  style: context.appTypography.bodySmall.copyWith(
+                    color: AppColors.onSurfaceDark,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Match gestures must not lose to overscroll / parent scrollables.
 class _MatchNoScrollBehavior extends ScrollBehavior {
   const _MatchNoScrollBehavior();
@@ -1351,16 +1412,14 @@ class _MatchNoScrollBehavior extends ScrollBehavior {
     BuildContext context,
     Widget child,
     ScrollableDetails details,
-  ) =>
-      child;
+  ) => child;
 
   @override
   Widget buildScrollbar(
     BuildContext context,
     Widget child,
     ScrollableDetails details,
-  ) =>
-      child;
+  ) => child;
 
   @override
   ScrollPhysics getScrollPhysics(BuildContext context) =>
