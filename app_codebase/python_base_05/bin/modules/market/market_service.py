@@ -15,6 +15,7 @@ from modules.avari.gold_economy import normalize_wallet
 from modules.catalog import catalog_repository as catalog_repo
 from modules.catalog.catalog_errors import NOT_FOUND as CATALOG_NOT_FOUND
 from modules.catalog.catalog_service import get_design
+from modules.catalog.current_series import list_series_catalog
 from modules.market.market_errors import (
     ALREADY_OWNED,
     INSUFFICIENT_GOLD,
@@ -70,6 +71,31 @@ def _shop_slammer_ids(session: Session) -> list[str]:
     return ids
 
 
+def _series_label(design: dict[str, Any]) -> str:
+    """Catalog series name for Market grouping (row seriesKey, else design series)."""
+    key = str(design.get("seriesKey") or "").strip()
+    if key and key.lower() != "unknown":
+        return key if key != key.lower() else key.replace("-", " ").title()
+    name = str(design.get("series") or "").strip()
+    return name or "Series"
+
+
+def _series_order(design: dict[str, Any]) -> int:
+    """Index in 03_series.json. Higher is a later series. Unknown is -1."""
+    label = _series_label(design).strip().lower()
+    if not label or label == "series":
+        return -1
+    for index, row in enumerate(list_series_catalog()):
+        names = {
+            str(row.get("seriesKey") or "").strip().lower(),
+            str(row.get("label") or "").strip().lower(),
+            str(row.get("key") or "").strip().lower(),
+        }
+        if label in names:
+            return index
+    return -1
+
+
 def _owned_row(session: Session, user_id: str, design_id: str):
     rows = avari_repo.list_slammers(session, user_id)
     for row in rows:
@@ -93,6 +119,8 @@ def _sku_payload(
     return {
         "designId": design_id,
         "displayName": display,
+        "series": _series_label(design),
+        "seriesOrder": _series_order(design),
         "imageUrl": design.get("imageUrl"),
         "color": design.get("color"),
         "shopPriceGoldArcori": eco["shopPriceGoldArcori"],

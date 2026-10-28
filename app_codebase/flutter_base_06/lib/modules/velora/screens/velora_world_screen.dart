@@ -24,7 +24,7 @@ class VeloraWorldScreen extends StatelessWidget {
     );
     return ModuleScreenRegistrar(
       appBarItems: const [
-        AppBarTitle(text: 'The world', iconAsset: AppMarks.velora),
+        AppBarTitle(text: 'The World', iconAsset: AppMarks.velora),
       ],
       child: AppChromePage(
         child: ListView(
@@ -69,6 +69,13 @@ const List<_WorldBlock> _blocks = [
   _WorldBlock(
     'Avari',
     'Avari walk beside the Arcori. They do not command them, and mastery is progress on a living echo, not ownership. The Chronicle may later name an Avari Master, Generation Creator, or Legacy. The name Avari remains.',
+  ),
+  _WorldBlock(
+    'Gameplay',
+    'A match seats three Avari. Each brings one circulating Arcori from their collection. An extra Arcori referred to as the gatherer from the region where the match is taking place is also added to the stack. You play two rounds, and flips add to your mastery of the arcori. Practice is where you learn the slam. It does not change mastery.\n\n'
+        'Collecting an Arcori means earning the right to play it, not owning it. A new Avari starts with a handful of Genesis and Pioneers designs, and a starter slammer that never runs out. In an online match, the Arcori you flip gain mastery. That mastery keeps them in your collection for later matches, and it builds the Mastery Value. Rarer designs add more. When a generation closes, it leaves circulation and stays here in Velora, and the next generation enters circulation. Arcori are the world’s history.\n\n'
+        'Slammers are how a Legacy reaches your Trove. Each slam adds slammer mastery. You see only the number you gained. Keep playing that slammer. When its mastery reaches the preserve line, you can seal a Legacy. A minted Legacy is kept in your Trove..\n\n'
+        'When an Arcori generation is closed, the next generation is created. Slammers follow the same rules, however if a slammer legacy is seealed and minted by an Avari, they become their Legacy Owner and creator of the new generation.',
   ),
   _WorldBlock('Regions', ''),
   _WorldBlock(

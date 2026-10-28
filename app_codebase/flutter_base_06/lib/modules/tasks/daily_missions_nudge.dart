@@ -51,7 +51,8 @@ class _DailyMissionsNudgeHostState
   @override
   Widget build(BuildContext context) {
     ref.listen<AuthState>(authProvider, (previous, next) {
-      final becameReady = previous?.isBootstrapping == true &&
+      final becameReady =
+          previous?.isBootstrapping == true &&
           !next.isBootstrapping &&
           next.isAuthenticated;
       if (!becameReady) return;
@@ -157,7 +158,7 @@ class _DailyMissionsNudgeBody extends StatelessWidget {
             AppModal.dismiss(context);
             final rootCtx = appRootNavigatorKey.currentContext;
             if (rootCtx != null && rootCtx.mounted) {
-              Nav.go(rootCtx, AppPaths.tasks);
+              Nav.push(rootCtx, AppPaths.tasks);
             }
           },
           child: const Text('Open'),

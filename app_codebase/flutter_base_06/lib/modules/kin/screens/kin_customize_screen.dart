@@ -53,8 +53,10 @@ class KinCustomizeScreen extends ConsumerStatefulWidget {
 class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
   bool _saving = false;
   bool _savingDraft = false;
+
   /// Active draft serial already applied for this visit (`resume=1`).
   String? _resumedDraftSerial;
+
   /// Seed template display name once; do not refill after the user clears it.
   bool _didSeedDefaultName = false;
   late final TextEditingController _nameController;
@@ -197,18 +199,23 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
     return future;
   }
 
-  Future<void> _saveDraft(KinTemplate template, KinCreationCatalog catalog) async {
+  Future<void> _saveDraft(
+    KinTemplate template,
+    KinCreationCatalog catalog,
+  ) async {
     if (_saving || _savingDraft) return;
 
     final customize = ref.read(kinCustomizeProvider(widget.kinSerial));
     final bgCatalog =
         ref.read(kinBackgroundCatalogProvider).asData?.value ??
-            KinBackgroundCatalog.empty;
+        KinBackgroundCatalog.empty;
     final bgScene = customize.resolveBackgroundScene(bgCatalog);
 
     setState(() => _savingDraft = true);
     final name = customize.chosenName.trim();
-    final draft = await ref.read(kinActiveSaveProvider.notifier).save(
+    final draft = await ref
+        .read(kinActiveSaveProvider.notifier)
+        .save(
           template: template,
           catalog: catalog,
           applied: customize.toAppliedList(),
@@ -223,17 +230,38 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
     if (!mounted) return;
     setState(() => _savingDraft = false);
     if (draft == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not save draft')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Could not save draft')));
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Draft saved (${draft.serial})')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Draft saved (${draft.serial})')));
   }
 
-  Future<void> _claimKin(KinTemplate template, KinCreationCatalog catalog) async {
+  /// Pop back to the profile already on the stack. Push it only if this
+  /// claim was opened from somewhere else.
+  void _returnToAvari() {
+    const target = AppPaths.avari;
+    var hops = 0;
+    while (hops < 8 &&
+        mounted &&
+        Nav.canPop(context) &&
+        !Nav.matchedLocation(context).startsWith(target)) {
+      Nav.pop(context);
+      hops++;
+    }
+    if (!mounted) return;
+    if (!Nav.matchedLocation(context).startsWith(target)) {
+      Nav.push(context, target);
+    }
+  }
+
+  Future<void> _claimKin(
+    KinTemplate template,
+    KinCreationCatalog catalog,
+  ) async {
     if (_saving || _savingDraft) return;
     final customize = ref.read(kinCustomizeProvider(widget.kinSerial));
     if (!customize.canClaim) {
@@ -256,12 +284,14 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
 
     final bgCatalog =
         ref.read(kinBackgroundCatalogProvider).asData?.value ??
-            KinBackgroundCatalog.empty;
+        KinBackgroundCatalog.empty;
     final bgScene = customize.resolveBackgroundScene(bgCatalog);
 
     setState(() => _saving = true);
     final name = customize.chosenName.trim();
-    final draft = await ref.read(kinActiveSaveProvider.notifier).save(
+    final draft = await ref
+        .read(kinActiveSaveProvider.notifier)
+        .save(
           template: template,
           catalog: catalog,
           applied: customize.toAppliedList(),
@@ -284,7 +314,9 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
 
     final String claimLottie;
     try {
-      claimLottie = await ref.read(kinSaveStoreProvider).buildBakedLottieJson(
+      claimLottie = await ref
+          .read(kinSaveStoreProvider)
+          .buildBakedLottieJson(
             template: template,
             catalog: catalog,
             applied: customize.toAppliedList(),
@@ -320,9 +352,9 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
       final message = outcome.isNetworkError
           ? 'Network error — try again'
           : (outcome.error?.message ?? 'Could not claim Kin');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
       return;
     }
 
@@ -332,7 +364,7 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Claimed ${outcome.data!.chosenName}')),
     );
-    Nav.go(context, AppPaths.avari);
+    _returnToAvari();
   }
 
   @override
@@ -350,14 +382,13 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
       theme: customize.backgroundTheme,
       styleToken: customize.backgroundStyle,
     );
-    final selectedBg = bgCatalog.byId(customize.backgroundId) ??
+    final selectedBg =
+        bgCatalog.byId(customize.backgroundId) ??
         (bgOptions.isNotEmpty ? bgOptions.first : null);
 
     if (catalogState.isLoading && catalog == null) {
       return const ModuleScreenRegistrar(
-        appBarItems: [
-          AppBarTitle(text: 'Customize Kin', icon: Icons.tune),
-        ],
+        appBarItems: [AppBarTitle(text: 'Customize Kin', icon: Icons.tune)],
         child: AppChromePage(
           child: AppChromeCentered(child: CircularProgressIndicator()),
         ),
@@ -395,8 +426,9 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
           ref
               .read(kinCustomizeProvider(widget.kinSerial).notifier)
               .restoreFromDraft(draft);
-          final restored =
-              ref.read(kinCustomizeProvider(widget.kinSerial)).chosenName;
+          final restored = ref
+              .read(kinCustomizeProvider(widget.kinSerial))
+              .chosenName;
           _nameController.text = restored;
           _didSeedDefaultName = true;
           setState(() => _resumedDraftSerial = draft.serial);
@@ -404,7 +436,8 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
       }
     }
 
-    final resumePending = widget.resumeDraft &&
+    final resumePending =
+        widget.resumeDraft &&
         _resumedDraftSerial == null &&
         (activeSave.isLoading ||
             (activeSave.draft?.kinSerial == widget.kinSerial));
@@ -415,21 +448,20 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
         customize.chosenName.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted || _didSeedDefaultName) return;
-        final notifier =
-            ref.read(kinCustomizeProvider(widget.kinSerial).notifier);
+        final notifier = ref.read(
+          kinCustomizeProvider(widget.kinSerial).notifier,
+        );
         notifier.setChosenName(template.displayName);
         _nameController.text = template.displayName;
         _didSeedDefaultName = true;
       });
     }
 
-    final selected = template.partBySerial(
-          customize.selectedPartSerial ?? '',
-        ) ??
+    final selected =
+        template.partBySerial(customize.selectedPartSerial ?? '') ??
         (template.parts.isNotEmpty ? template.parts.first : null);
 
-    if (selected != null &&
-        customize.selectedPartSerial != selected.serial) {
+    if (selected != null && customize.selectedPartSerial != selected.serial) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref
             .read(kinCustomizeProvider(widget.kinSerial).notifier)
@@ -448,8 +480,9 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
       });
     }
 
-    final allowedCustoms =
-        selected == null ? const <KinCustom>[] : catalog.allowedCustomsFor(selected);
+    final allowedCustoms = selected == null
+        ? const <KinCustom>[]
+        : catalog.allowedCustomsFor(selected);
 
     final styles = resolveLayerStyles(
       template: template,
@@ -476,9 +509,7 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
     );
 
     return ModuleScreenRegistrar(
-      appBarItems: [
-        AppBarTitle(text: template.displayName, icon: Icons.tune),
-      ],
+      appBarItems: [AppBarTitle(text: template.displayName, icon: Icons.tune)],
       child: AppChromePage(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -493,7 +524,8 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                     child: FutureBuilder<String?>(
                       future: composeFuture,
                       builder: (context, snap) {
-                        final composed = snap.data ??
+                        final composed =
+                            snap.data ??
                             (snap.connectionState == ConnectionState.waiting
                                 ? _lastComposedJson
                                 : snap.data);
@@ -529,9 +561,9 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
                         face: FutureBuilder<String?>(
                           future: composeFuture,
                           builder: (context, snap) {
-                            final composed = snap.data ??
-                                (snap.connectionState ==
-                                        ConnectionState.waiting
+                            final composed =
+                                snap.data ??
+                                (snap.connectionState == ConnectionState.waiting
                                     ? _lastComposedJson
                                     : snap.data);
                             return KinSceneStack(
@@ -558,493 +590,505 @@ class _KinCustomizeScreenState extends ConsumerState<KinCustomizeScreen> {
               child: ListView(
                 padding: AppSpacing.screenPadding,
                 children: [
-                _AdditionsSection(
-                  kinSerial: widget.kinSerial,
-                  template: template,
-                  catalog: catalog,
-                  applied: customize.applied,
-                ),
-                AppSpacing.gapMd,
-                Text('Parts', style: context.appTypography.title),
-                AppSpacing.gapSm,
-                Wrap(
-                  spacing: AppSpacing.xs,
-                  runSpacing: AppSpacing.xs,
-                  children: [
-                    for (final part in template.parts)
-                      ChoiceChip(
-                        label: Text(part.displayName),
-                        selected: selected?.serial == part.serial,
-                        onSelected: (_) {
-                          ref
-                              .read(
-                                kinCustomizeProvider(widget.kinSerial).notifier,
-                              )
-                              .selectPart(part.serial);
-                        },
-                      ),
-                  ],
-                ),
-                if (selected != null) ...[
-                  AppSpacing.gapMd,
-                  Text(
-                    selected.anatomical == null
-                        ? selected.displayName
-                        : '${selected.displayName} (${selected.anatomical})',
-                    style: context.appTypography.title,
+                  _AdditionsSection(
+                    kinSerial: widget.kinSerial,
+                    template: template,
+                    catalog: catalog,
+                    applied: customize.applied,
                   ),
+                  AppSpacing.gapMd,
+                  Text('Parts', style: context.appTypography.title),
+                  AppSpacing.gapSm,
+                  Wrap(
+                    spacing: AppSpacing.xs,
+                    runSpacing: AppSpacing.xs,
+                    children: [
+                      for (final part in template.parts)
+                        ChoiceChip(
+                          label: Text(part.displayName),
+                          selected: selected?.serial == part.serial,
+                          onSelected: (_) {
+                            ref
+                                .read(
+                                  kinCustomizeProvider(
+                                    widget.kinSerial,
+                                  ).notifier,
+                                )
+                                .selectPart(part.serial);
+                          },
+                        ),
+                    ],
+                  ),
+                  if (selected != null) ...[
+                    AppSpacing.gapMd,
+                    Text(
+                      selected.anatomical == null
+                          ? selected.displayName
+                          : '${selected.displayName} (${selected.anatomical})',
+                      style: context.appTypography.title,
+                    ),
+                    AppSpacing.gapXxs,
+                    Text(
+                      selected.styleLayerNames.length <= 1
+                          ? 'Layer ${selected.layerName}'
+                          : 'Layers ${selected.styleLayerNames.join(', ')}',
+                      style: context.appTypography.caption.copyWith(
+                        color: AppChrome.onSurfaceMuted,
+                      ),
+                    ),
+                    AppSpacing.gapMd,
+                    if (allowedCustoms.isEmpty)
+                      Text(
+                        'No customs for this part',
+                        style: context.appTypography.bodyMuted,
+                      )
+                    else
+                      for (final custom in allowedCustoms) ...[
+                        _CustomControl(
+                          kinSerial: widget.kinSerial,
+                          part: selected,
+                          custom: custom,
+                          catalog: catalog,
+                          value:
+                              customize.applied[KinCustomizeState.keyFor(
+                                selected.serial,
+                                custom.serial,
+                              )],
+                        ),
+                        AppSpacing.gapMd,
+                      ],
+                  ],
+                  AppSpacing.gapMd,
+                  Text('Background', style: context.appTypography.title),
                   AppSpacing.gapXxs,
                   Text(
-                    selected.styleLayerNames.length <= 1
-                        ? 'Layer ${selected.layerName}'
-                        : 'Layers ${selected.styleLayerNames.join(', ')}',
+                    'Theme or style for art; solid / gradient with texture',
                     style: context.appTypography.caption.copyWith(
                       color: AppChrome.onSurfaceMuted,
                     ),
                   ),
-                  AppSpacing.gapMd,
-                  if (allowedCustoms.isEmpty)
-                    Text(
-                      'No customs for this part',
+                  AppSpacing.gapSm,
+                  bgAsync.when(
+                    loading: () => const LinearProgressIndicator(),
+                    error: (_, __) => Text(
+                      'Backgrounds unavailable',
                       style: context.appTypography.bodyMuted,
-                    )
-                  else
-                    for (final custom in allowedCustoms) ...[
-                      _CustomControl(
-                        kinSerial: widget.kinSerial,
-                        part: selected,
-                        custom: custom,
-                        catalog: catalog,
-                        value: customize.applied[KinCustomizeState.keyFor(
-                          selected.serial,
-                          custom.serial,
-                        )],
-                      ),
-                      AppSpacing.gapMd,
-                    ],
-                ],
-                AppSpacing.gapMd,
-                Text('Background', style: context.appTypography.title),
-                AppSpacing.gapXxs,
-                Text(
-                  'Theme or style for art; solid / gradient with texture',
-                  style: context.appTypography.caption.copyWith(
-                    color: AppChrome.onSurfaceMuted,
-                  ),
-                ),
-                AppSpacing.gapSm,
-                bgAsync.when(
-                  loading: () => const LinearProgressIndicator(),
-                  error: (_, __) => Text(
-                    'Backgrounds unavailable',
-                    style: context.appTypography.bodyMuted,
-                  ),
-                  data: (catalog) {
-                    final filterMode = customize.backgroundFilterMode;
-                    final themes = catalog.filterThemes();
-                    final styles = catalog.allStyles();
-                    final theme = customize.backgroundTheme.toUpperCase();
-                    final isSolid = theme == kKinBgThemeSolid;
-                    final isGradient = theme == kKinBgThemeGradient;
-                    final isPainted = isSolid || isGradient;
-                    if (filterMode == KinBackgroundFilterMode.style &&
-                        (customize.backgroundStyle == null ||
-                            customize.backgroundStyle!.isEmpty) &&
-                        styles.isNotEmpty) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ref
-                            .read(
-                              kinCustomizeProvider(widget.kinSerial).notifier,
-                            )
-                            .setBackgroundStyle(styles.first);
-                      });
-                    }
-                    final options = catalog.filtered(
-                      mode: filterMode,
-                      theme: customize.backgroundTheme,
-                      styleToken: customize.backgroundStyle,
-                    );
-                    final notifier = ref.read(
-                      kinCustomizeProvider(widget.kinSerial).notifier,
-                    );
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Wrap(
-                          spacing: AppSpacing.xs,
-                          runSpacing: AppSpacing.xs,
-                          children: [
-                            ChoiceChip(
-                              label: const Text('By theme'),
-                              selected:
-                                  filterMode == KinBackgroundFilterMode.theme,
-                              onSelected: (_) => notifier
-                                  .setBackgroundFilterMode(
-                                KinBackgroundFilterMode.theme,
-                              ),
-                            ),
-                            ChoiceChip(
-                              label: const Text('By style'),
-                              selected:
-                                  filterMode == KinBackgroundFilterMode.style,
-                              onSelected: (_) => notifier
-                                  .setBackgroundFilterMode(
-                                KinBackgroundFilterMode.style,
-                              ),
-                            ),
-                          ],
-                        ),
-                        AppSpacing.gapSm,
-                        if (filterMode == KinBackgroundFilterMode.theme)
-                          Wrap(
-                            spacing: AppSpacing.xs,
-                            runSpacing: AppSpacing.xs,
-                            children: [
-                              for (final t in themes)
-                                ChoiceChip(
-                                  label: Text(kinBackgroundThemeLabel(t)),
-                                  selected: customize.backgroundTheme == t,
-                                  onSelected: (_) =>
-                                      notifier.setBackgroundTheme(t),
-                                ),
-                            ],
-                          )
-                        else
-                          Wrap(
-                            spacing: AppSpacing.xs,
-                            runSpacing: AppSpacing.xs,
-                            children: [
-                              for (final style in styles)
-                                ChoiceChip(
-                                  label: Text(titleFromKinBgToken(style)),
-                                  selected:
-                                      customize.backgroundStyle == style,
-                                  onSelected: (_) =>
-                                      notifier.setBackgroundStyle(style),
-                                ),
-                            ],
-                          ),
-                        AppSpacing.gapSm,
-                        if (isSolid) ...[
-                          Text('Color', style: context.appTypography.body),
-                          AppSpacing.gapXs,
-                          _SolidSwatchRow(
-                            selectedHex: customize.backgroundColorHex,
-                            onSelect: (hex, id) =>
-                                notifier.setBackgroundSolidColor(hex, id: id),
-                          ),
-                        ] else if (isGradient) ...[
-                          Text('Color A', style: context.appTypography.body),
-                          AppSpacing.gapXs,
-                          _SolidSwatchRow(
-                            selectedHex: customize.backgroundColorHex,
-                            onSelect: (hex, _) =>
-                                notifier.setBackgroundGradientColorA(hex),
-                          ),
-                          AppSpacing.gapSm,
-                          Text('Color B', style: context.appTypography.body),
-                          AppSpacing.gapXs,
-                          _SolidSwatchRow(
-                            selectedHex: customize.backgroundColorHexB ??
-                                kArcoriAccentHexes.first,
-                            onSelect: (hex, _) =>
-                                notifier.setBackgroundGradientColorB(hex),
-                          ),
-                          AppSpacing.gapSm,
-                          Text(
-                            'Angle ${customize.backgroundAngleDegrees.round()}°',
-                            style: context.appTypography.body,
-                          ),
-                          Slider(
-                            value: customize.backgroundAngleDegrees
-                                .clamp(0, 359),
-                            min: 0,
-                            max: 359,
-                            onChanged: notifier.setBackgroundAngleDegrees,
-                          ),
-                        ] else if (options.isEmpty)
-                          Text(
-                            filterMode == KinBackgroundFilterMode.style &&
-                                    (customize.backgroundStyle == null ||
-                                        customize.backgroundStyle!.isEmpty)
-                                ? 'Pick a style'
-                                : catalog.images.isEmpty
-                                    ? 'No backgrounds from server yet'
-                                    : 'No backgrounds for this filter',
-                            style: context.appTypography.bodyMuted,
-                          )
-                        else
-                          SizedBox(
-                            height: 88,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: options.length,
-                              separatorBuilder: (_, __) =>
-                                  const SizedBox(width: AppSpacing.xs),
-                              itemBuilder: (context, index) {
-                                final opt = options[index];
-                                final selected =
-                                    customize.backgroundId == opt.id ||
-                                        (customize.backgroundId == null &&
-                                            index == 0);
-                                final thumbUrl =
-                                    resolveMediaUrl(opt.imageUrl);
-                                return InkWell(
-                                  onTap: () =>
-                                      notifier.setBackgroundId(opt.id),
-                                  borderRadius: BorderRadius.circular(
-                                    AppSpacing.sm,
-                                  ),
-                                  child: Container(
-                                    width: 88,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                        AppSpacing.sm,
-                                      ),
-                                      border: Border.all(
-                                        color: selected
-                                            ? AppChrome.accentGold
-                                            : AppChrome.panelBorder,
-                                        width: selected ? 2 : 1,
-                                      ),
-                                      image: opt.isImage &&
-                                              thumbUrl.isNotEmpty
-                                          ? DecorationImage(
-                                              image: NetworkImage(thumbUrl),
-                                              fit: BoxFit.cover,
-                                              onError: (_, __) {},
-                                            )
-                                          : null,
-                                    ),
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: AppSpacing.xxs,
-                                        vertical: 2,
-                                      ),
-                                      color: AppColors.backgroundDark
-                                          .withValues(alpha: 0.72),
-                                      child: Text(
-                                        filterMode ==
-                                                KinBackgroundFilterMode.theme
-                                            ? opt.styleLabel
-                                            : titleFromKinBgToken(opt.theme),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                        style: context.appTypography.caption
-                                            .copyWith(
-                                          color: AppColors.onSurfaceDark,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        if (isPainted) ...[
-                          AppSpacing.gapMd,
-                          Text(
-                            'Saturation ${customize.backgroundSaturation.toStringAsFixed(2)}',
-                            style: context.appTypography.body,
-                          ),
-                          Slider(
-                            value: customize.backgroundSaturation
-                                .clamp(kKinBgSatMin, kKinBgSatMax),
-                            min: kKinBgSatMin,
-                            max: kKinBgSatMax,
-                            onChanged: notifier.setBackgroundSaturation,
-                          ),
-                          Text(
-                            'Light / dark ${customize.backgroundLightDark.toStringAsFixed(2)}',
-                            style: context.appTypography.body,
-                          ),
-                          Slider(
-                            value: customize.backgroundLightDark.clamp(
-                              kKinBgLightDarkMin,
-                              kKinBgLightDarkMax,
-                            ),
-                            min: kKinBgLightDarkMin,
-                            max: kKinBgLightDarkMax,
-                            onChanged: notifier.setBackgroundLightDark,
-                          ),
-                          AppSpacing.gapSm,
-                          Text('Texture', style: context.appTypography.body),
-                          AppSpacing.gapXs,
-                          Wrap(
-                            spacing: AppSpacing.xs,
-                            runSpacing: AppSpacing.xs,
-                            children: [
-                              for (final tex in kKinBackgroundTextures)
-                                ChoiceChip(
-                                  label: Text(
-                                    kinBackgroundTextureLabel(tex),
-                                  ),
-                                  selected:
-                                      customize.backgroundTextureId == tex,
-                                  onSelected: (_) =>
-                                      notifier.setBackgroundTexture(tex),
-                                ),
-                            ],
-                          ),
-                          if (customize.backgroundTextureId !=
-                              kKinBgTextureNone) ...[
-                            AppSpacing.gapSm,
-                            Text(
-                              'Texture intensity ${customize.backgroundTextureIntensity.toStringAsFixed(2)}',
-                              style: context.appTypography.body,
-                            ),
-                            Slider(
-                              value: customize.backgroundTextureIntensity
-                                  .clamp(
-                                kKinBgTextureIntensityMin,
-                                kKinBgTextureIntensityMax,
-                              ),
-                              min: kKinBgTextureIntensityMin,
-                              max: kKinBgTextureIntensityMax,
-                              onChanged:
-                                  notifier.setBackgroundTextureIntensity,
-                            ),
-                          ],
-                        ],
-                      ],
-                    );
-                  },
-                ),
-                AppSpacing.gapMd,
-                Text('Arcori color', style: context.appTypography.title),
-                AppSpacing.gapXxs,
-                Text(
-                  'Rim and back of the disc',
-                  style: context.appTypography.caption.copyWith(
-                    color: AppChrome.onSurfaceMuted,
-                  ),
-                ),
-                AppSpacing.gapSm,
-                Wrap(
-                  spacing: AppSpacing.xs,
-                  runSpacing: AppSpacing.xs,
-                  children: [
-                    for (var i = 0; i < kArcoriAccentPalette.length; i++)
-                      ChoiceChip(
-                        avatar: CircleAvatar(
-                          backgroundColor: kArcoriAccentPalette[i],
-                          radius: 8,
-                        ),
-                        label: Text(kArcoriAccentNames[i]),
-                        selected: customize.colorHex?.toUpperCase() ==
-                            kArcoriAccentHexes[i].toUpperCase(),
-                        onSelected: (_) {
+                    ),
+                    data: (catalog) {
+                      final filterMode = customize.backgroundFilterMode;
+                      final themes = catalog.filterThemes();
+                      final styles = catalog.allStyles();
+                      final theme = customize.backgroundTheme.toUpperCase();
+                      final isSolid = theme == kKinBgThemeSolid;
+                      final isGradient = theme == kKinBgThemeGradient;
+                      final isPainted = isSolid || isGradient;
+                      if (filterMode == KinBackgroundFilterMode.style &&
+                          (customize.backgroundStyle == null ||
+                              customize.backgroundStyle!.isEmpty) &&
+                          styles.isNotEmpty) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
                           ref
                               .read(
                                 kinCustomizeProvider(widget.kinSerial).notifier,
                               )
-                              .setColorHex(kArcoriAccentHexes[i]);
-                        },
-                      ),
-                  ],
-                ),
-                AppSpacing.gapMd,
-                Text('Region', style: context.appTypography.title),
-                AppSpacing.gapXxs,
-                Text(
-                  'Assigned Velora land (Realm Beyond excluded)',
-                  style: context.appTypography.caption.copyWith(
-                    color: AppChrome.onSurfaceMuted,
+                              .setBackgroundStyle(styles.first);
+                        });
+                      }
+                      final options = catalog.filtered(
+                        mode: filterMode,
+                        theme: customize.backgroundTheme,
+                        styleToken: customize.backgroundStyle,
+                      );
+                      final notifier = ref.read(
+                        kinCustomizeProvider(widget.kinSerial).notifier,
+                      );
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Wrap(
+                            spacing: AppSpacing.xs,
+                            runSpacing: AppSpacing.xs,
+                            children: [
+                              ChoiceChip(
+                                label: const Text('By theme'),
+                                selected:
+                                    filterMode == KinBackgroundFilterMode.theme,
+                                onSelected: (_) =>
+                                    notifier.setBackgroundFilterMode(
+                                      KinBackgroundFilterMode.theme,
+                                    ),
+                              ),
+                              ChoiceChip(
+                                label: const Text('By style'),
+                                selected:
+                                    filterMode == KinBackgroundFilterMode.style,
+                                onSelected: (_) =>
+                                    notifier.setBackgroundFilterMode(
+                                      KinBackgroundFilterMode.style,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          AppSpacing.gapSm,
+                          if (filterMode == KinBackgroundFilterMode.theme)
+                            Wrap(
+                              spacing: AppSpacing.xs,
+                              runSpacing: AppSpacing.xs,
+                              children: [
+                                for (final t in themes)
+                                  ChoiceChip(
+                                    label: Text(kinBackgroundThemeLabel(t)),
+                                    selected: customize.backgroundTheme == t,
+                                    onSelected: (_) =>
+                                        notifier.setBackgroundTheme(t),
+                                  ),
+                              ],
+                            )
+                          else
+                            Wrap(
+                              spacing: AppSpacing.xs,
+                              runSpacing: AppSpacing.xs,
+                              children: [
+                                for (final style in styles)
+                                  ChoiceChip(
+                                    label: Text(titleFromKinBgToken(style)),
+                                    selected:
+                                        customize.backgroundStyle == style,
+                                    onSelected: (_) =>
+                                        notifier.setBackgroundStyle(style),
+                                  ),
+                              ],
+                            ),
+                          AppSpacing.gapSm,
+                          if (isSolid) ...[
+                            Text('Color', style: context.appTypography.body),
+                            AppSpacing.gapXs,
+                            _SolidSwatchRow(
+                              selectedHex: customize.backgroundColorHex,
+                              onSelect: (hex, id) =>
+                                  notifier.setBackgroundSolidColor(hex, id: id),
+                            ),
+                          ] else if (isGradient) ...[
+                            Text('Color A', style: context.appTypography.body),
+                            AppSpacing.gapXs,
+                            _SolidSwatchRow(
+                              selectedHex: customize.backgroundColorHex,
+                              onSelect: (hex, _) =>
+                                  notifier.setBackgroundGradientColorA(hex),
+                            ),
+                            AppSpacing.gapSm,
+                            Text('Color B', style: context.appTypography.body),
+                            AppSpacing.gapXs,
+                            _SolidSwatchRow(
+                              selectedHex:
+                                  customize.backgroundColorHexB ??
+                                  kArcoriAccentHexes.first,
+                              onSelect: (hex, _) =>
+                                  notifier.setBackgroundGradientColorB(hex),
+                            ),
+                            AppSpacing.gapSm,
+                            Text(
+                              'Angle ${customize.backgroundAngleDegrees.round()}°',
+                              style: context.appTypography.body,
+                            ),
+                            Slider(
+                              value: customize.backgroundAngleDegrees.clamp(
+                                0,
+                                359,
+                              ),
+                              min: 0,
+                              max: 359,
+                              onChanged: notifier.setBackgroundAngleDegrees,
+                            ),
+                          ] else if (options.isEmpty)
+                            Text(
+                              filterMode == KinBackgroundFilterMode.style &&
+                                      (customize.backgroundStyle == null ||
+                                          customize.backgroundStyle!.isEmpty)
+                                  ? 'Pick a style'
+                                  : catalog.images.isEmpty
+                                  ? 'No backgrounds from server yet'
+                                  : 'No backgrounds for this filter',
+                              style: context.appTypography.bodyMuted,
+                            )
+                          else
+                            SizedBox(
+                              height: 88,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: options.length,
+                                separatorBuilder: (_, __) =>
+                                    const SizedBox(width: AppSpacing.xs),
+                                itemBuilder: (context, index) {
+                                  final opt = options[index];
+                                  final selected =
+                                      customize.backgroundId == opt.id ||
+                                      (customize.backgroundId == null &&
+                                          index == 0);
+                                  final thumbUrl = resolveMediaUrl(
+                                    opt.imageUrl,
+                                  );
+                                  return InkWell(
+                                    onTap: () =>
+                                        notifier.setBackgroundId(opt.id),
+                                    borderRadius: BorderRadius.circular(
+                                      AppSpacing.sm,
+                                    ),
+                                    child: Container(
+                                      width: 88,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          AppSpacing.sm,
+                                        ),
+                                        border: Border.all(
+                                          color: selected
+                                              ? AppChrome.accentGold
+                                              : AppChrome.panelBorder,
+                                          width: selected ? 2 : 1,
+                                        ),
+                                        image:
+                                            opt.isImage && thumbUrl.isNotEmpty
+                                            ? DecorationImage(
+                                                image: NetworkImage(thumbUrl),
+                                                fit: BoxFit.cover,
+                                                onError: (_, __) {},
+                                              )
+                                            : null,
+                                      ),
+                                      alignment: Alignment.bottomCenter,
+                                      child: Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: AppSpacing.xxs,
+                                          vertical: 2,
+                                        ),
+                                        color: AppColors.backgroundDark
+                                            .withValues(alpha: 0.72),
+                                        child: Text(
+                                          filterMode ==
+                                                  KinBackgroundFilterMode.theme
+                                              ? opt.styleLabel
+                                              : titleFromKinBgToken(opt.theme),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                          style: context.appTypography.caption
+                                              .copyWith(
+                                                color: AppColors.onSurfaceDark,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          if (isPainted) ...[
+                            AppSpacing.gapMd,
+                            Text(
+                              'Saturation ${customize.backgroundSaturation.toStringAsFixed(2)}',
+                              style: context.appTypography.body,
+                            ),
+                            Slider(
+                              value: customize.backgroundSaturation.clamp(
+                                kKinBgSatMin,
+                                kKinBgSatMax,
+                              ),
+                              min: kKinBgSatMin,
+                              max: kKinBgSatMax,
+                              onChanged: notifier.setBackgroundSaturation,
+                            ),
+                            Text(
+                              'Light / dark ${customize.backgroundLightDark.toStringAsFixed(2)}',
+                              style: context.appTypography.body,
+                            ),
+                            Slider(
+                              value: customize.backgroundLightDark.clamp(
+                                kKinBgLightDarkMin,
+                                kKinBgLightDarkMax,
+                              ),
+                              min: kKinBgLightDarkMin,
+                              max: kKinBgLightDarkMax,
+                              onChanged: notifier.setBackgroundLightDark,
+                            ),
+                            AppSpacing.gapSm,
+                            Text('Texture', style: context.appTypography.body),
+                            AppSpacing.gapXs,
+                            Wrap(
+                              spacing: AppSpacing.xs,
+                              runSpacing: AppSpacing.xs,
+                              children: [
+                                for (final tex in kKinBackgroundTextures)
+                                  ChoiceChip(
+                                    label: Text(kinBackgroundTextureLabel(tex)),
+                                    selected:
+                                        customize.backgroundTextureId == tex,
+                                    onSelected: (_) =>
+                                        notifier.setBackgroundTexture(tex),
+                                  ),
+                              ],
+                            ),
+                            if (customize.backgroundTextureId !=
+                                kKinBgTextureNone) ...[
+                              AppSpacing.gapSm,
+                              Text(
+                                'Texture intensity ${customize.backgroundTextureIntensity.toStringAsFixed(2)}',
+                                style: context.appTypography.body,
+                              ),
+                              Slider(
+                                value: customize.backgroundTextureIntensity
+                                    .clamp(
+                                      kKinBgTextureIntensityMin,
+                                      kKinBgTextureIntensityMax,
+                                    ),
+                                min: kKinBgTextureIntensityMin,
+                                max: kKinBgTextureIntensityMax,
+                                onChanged:
+                                    notifier.setBackgroundTextureIntensity,
+                              ),
+                            ],
+                          ],
+                        ],
+                      );
+                    },
                   ),
-                ),
-                AppSpacing.gapSm,
-                regionsAsync.when(
-                  loading: () => const LinearProgressIndicator(),
-                  error: (_, __) => Wrap(
+                  AppSpacing.gapMd,
+                  Text('Arcori color', style: context.appTypography.title),
+                  AppSpacing.gapXxs,
+                  Text(
+                    'Rim and back of the disc',
+                    style: context.appTypography.caption.copyWith(
+                      color: AppChrome.onSurfaceMuted,
+                    ),
+                  ),
+                  AppSpacing.gapSm,
+                  Wrap(
                     spacing: AppSpacing.xs,
                     runSpacing: AppSpacing.xs,
                     children: [
-                      for (final r in _fallbackRegions())
+                      for (var i = 0; i < kArcoriAccentPalette.length; i++)
                         ChoiceChip(
-                          label: Text(r.name),
-                          selected: customize.regionCode == r.regionCode,
+                          avatar: CircleAvatar(
+                            backgroundColor: kArcoriAccentPalette[i],
+                            radius: 8,
+                          ),
+                          label: Text(kArcoriAccentNames[i]),
+                          selected:
+                              customize.colorHex?.toUpperCase() ==
+                              kArcoriAccentHexes[i].toUpperCase(),
                           onSelected: (_) {
                             ref
                                 .read(
-                                  kinCustomizeProvider(widget.kinSerial)
-                                      .notifier,
+                                  kinCustomizeProvider(
+                                    widget.kinSerial,
+                                  ).notifier,
                                 )
-                                .setRegionCode(r.regionCode);
+                                .setColorHex(kArcoriAccentHexes[i]);
                           },
                         ),
                     ],
                   ),
-                  data: (regions) => Wrap(
-                    spacing: AppSpacing.xs,
-                    runSpacing: AppSpacing.xs,
-                    children: [
-                      for (final r in regions)
-                        ChoiceChip(
-                          label: Text(r.name),
-                          selected: customize.regionCode == r.regionCode,
-                          onSelected: (_) {
-                            ref
-                                .read(
-                                  kinCustomizeProvider(widget.kinSerial)
-                                      .notifier,
-                                )
-                                .setRegionCode(r.regionCode);
-                          },
-                        ),
-                    ],
+                  AppSpacing.gapMd,
+                  Text('Region', style: context.appTypography.title),
+                  AppSpacing.gapXxs,
+                  Text(
+                    'Assigned Velora land (Realm Beyond excluded)',
+                    style: context.appTypography.caption.copyWith(
+                      color: AppChrome.onSurfaceMuted,
+                    ),
                   ),
-                ),
-                AppSpacing.gapMd,
-                Text('Name', style: context.appTypography.title),
-                AppSpacing.gapSm,
-                TextField(
-                  controller: _nameController,
-                  style: context.appTypography.body.copyWith(
-                    color: AppChrome.onSurface,
+                  AppSpacing.gapSm,
+                  regionsAsync.when(
+                    loading: () => const LinearProgressIndicator(),
+                    error: (_, __) => Wrap(
+                      spacing: AppSpacing.xs,
+                      runSpacing: AppSpacing.xs,
+                      children: [
+                        for (final r in _fallbackRegions())
+                          ChoiceChip(
+                            label: Text(r.name),
+                            selected: customize.regionCode == r.regionCode,
+                            onSelected: (_) {
+                              ref
+                                  .read(
+                                    kinCustomizeProvider(
+                                      widget.kinSerial,
+                                    ).notifier,
+                                  )
+                                  .setRegionCode(r.regionCode);
+                            },
+                          ),
+                      ],
+                    ),
+                    data: (regions) => Wrap(
+                      spacing: AppSpacing.xs,
+                      runSpacing: AppSpacing.xs,
+                      children: [
+                        for (final r in regions)
+                          ChoiceChip(
+                            label: Text(r.name),
+                            selected: customize.regionCode == r.regionCode,
+                            onSelected: (_) {
+                              ref
+                                  .read(
+                                    kinCustomizeProvider(
+                                      widget.kinSerial,
+                                    ).notifier,
+                                  )
+                                  .setRegionCode(r.regionCode);
+                            },
+                          ),
+                      ],
+                    ),
                   ),
-                  decoration: AppChrome.inputDecoration(
-                    context,
-                    hintText: 'Chosen name',
+                  AppSpacing.gapMd,
+                  Text('Name', style: context.appTypography.title),
+                  AppSpacing.gapSm,
+                  TextField(
+                    controller: _nameController,
+                    style: context.appTypography.body.copyWith(
+                      color: AppChrome.onSurface,
+                    ),
+                    decoration: AppChrome.inputDecoration(
+                      context,
+                      hintText: 'Chosen name',
+                    ),
+                    onChanged: (v) {
+                      ref
+                          .read(kinCustomizeProvider(widget.kinSerial).notifier)
+                          .setChosenName(v);
+                    },
                   ),
-                  onChanged: (v) {
-                    ref
-                        .read(kinCustomizeProvider(widget.kinSerial).notifier)
-                        .setChosenName(v);
-                  },
-                ),
-                AppSpacing.gapLg,
-                OutlinedButton(
-                  onPressed: (_saving || _savingDraft)
-                      ? null
-                      : () => _saveDraft(template, catalog),
-                  child: Text(_savingDraft ? 'Saving draft…' : 'Save draft'),
-                ),
-                AppSpacing.gapSm,
-                FilledButton(
-                  onPressed: (_saving || _savingDraft || !customize.canClaim)
-                      ? null
-                      : () => _claimKin(template, catalog),
-                  child: Text(_saving ? 'Claiming…' : 'Claim Kin'),
-                ),
-              ],
+                  AppSpacing.gapLg,
+                  OutlinedButton(
+                    onPressed: (_saving || _savingDraft)
+                        ? null
+                        : () => _saveDraft(template, catalog),
+                    child: Text(_savingDraft ? 'Saving draft…' : 'Save draft'),
+                  ),
+                  AppSpacing.gapSm,
+                  FilledButton(
+                    onPressed: (_saving || _savingDraft || !customize.canClaim)
+                        ? null
+                        : () => _claimKin(template, catalog),
+                    child: Text(_saving ? 'Claiming…' : 'Claim Kin'),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
         ),
       ),
     );
   }
 
   List<KinRegionOption> _fallbackRegions() => const [
-        KinRegionOption(regionCode: 'ASH', name: 'Ashdrift Hill'),
-        KinRegionOption(regionCode: 'EVG', name: 'Everlight Grove'),
-        KinRegionOption(regionCode: 'LFR', name: 'Little Frost'),
-        KinRegionOption(regionCode: 'MWB', name: 'Moonwake Bay'),
-        KinRegionOption(regionCode: 'AMB', name: 'Amberwild'),
-      ];
+    KinRegionOption(regionCode: 'ASH', name: 'Ashdrift Hill'),
+    KinRegionOption(regionCode: 'EVG', name: 'Everlight Grove'),
+    KinRegionOption(regionCode: 'LFR', name: 'Little Frost'),
+    KinRegionOption(regionCode: 'MWB', name: 'Moonwake Bay'),
+    KinRegionOption(regionCode: 'AMB', name: 'Amberwild'),
+  ];
 }
 
 /// Multi-select additions: 3-col image grid; tint sliders for the focused pick.
@@ -1084,7 +1128,9 @@ class _AdditionsSectionState extends ConsumerState<_AdditionsSection> {
       return;
     }
     _lastTintNotify = now;
-    ref.read(kinCustomizeProvider(widget.kinSerial).notifier).setEmbedTint(
+    ref
+        .read(kinCustomizeProvider(widget.kinSerial).notifier)
+        .setEmbedTint(
           partSerial: partSerial,
           embedSerial: embedSerial,
           hue: hue,
@@ -1100,8 +1146,7 @@ class _AdditionsSectionState extends ConsumerState<_AdditionsSection> {
     );
     if (items.isEmpty) return const SizedBox.shrink();
 
-    final notifier =
-        ref.read(kinCustomizeProvider(widget.kinSerial).notifier);
+    final notifier = ref.read(kinCustomizeProvider(widget.kinSerial).notifier);
 
     // Merge selections across parts (character-wide).
     final selected = <String, KinEmbedTint>{};
@@ -1115,8 +1160,9 @@ class _AdditionsSectionState extends ConsumerState<_AdditionsSection> {
 
     // Keep focus on a still-selected embed; otherwise clear.
     final focus = _focusedEmbedSerial;
-    final focusValid =
-        focus != null && selected.containsKey(focus) ? focus : null;
+    final focusValid = focus != null && selected.containsKey(focus)
+        ? focus
+        : null;
     if (focus != null && focusValid == null && _focusedEmbedSerial != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) setState(() => _focusedEmbedSerial = null);
@@ -1277,8 +1323,8 @@ class _AdditionThumb extends StatelessWidget {
     final borderColor = focused
         ? AppChrome.accentGold
         : selected
-            ? AppChrome.onSurface
-            : AppChrome.panelBorder;
+        ? AppChrome.onSurface
+        : AppChrome.panelBorder;
     final borderWidth = focused || selected ? 2.0 : 1.0;
     return Material(
       color: AppChrome.panelFill,
@@ -1313,7 +1359,8 @@ class _AdditionThumb extends StatelessWidget {
         ),
       );
     }
-    final isNetwork = src.startsWith('http://') ||
+    final isNetwork =
+        src.startsWith('http://') ||
         src.startsWith('https://') ||
         src.startsWith('/catalog-media/') ||
         src.startsWith('/media/');
@@ -1327,17 +1374,15 @@ class _AdditionThumb extends StatelessWidget {
       return Image.network(
         url,
         fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => ColoredBox(
-          color: AppColors.backgroundDark.withValues(alpha: 0.13),
-        ),
+        errorBuilder: (_, __, ___) =>
+            ColoredBox(color: AppColors.backgroundDark.withValues(alpha: 0.13)),
       );
     }
     return Image.asset(
       src,
       fit: BoxFit.contain,
-      errorBuilder: (_, __, ___) => ColoredBox(
-        color: AppColors.backgroundDark.withValues(alpha: 0.13),
-      ),
+      errorBuilder: (_, __, ___) =>
+          ColoredBox(color: AppColors.backgroundDark.withValues(alpha: 0.13)),
     );
   }
 }
@@ -1371,7 +1416,9 @@ class _CustomControlState extends ConsumerState<_CustomControl> {
       return;
     }
     _lastNotify = now;
-    ref.read(kinCustomizeProvider(widget.kinSerial).notifier).applyCustom(
+    ref
+        .read(kinCustomizeProvider(widget.kinSerial).notifier)
+        .applyCustom(
           partSerial: widget.part.serial,
           customSerial: widget.custom.serial,
           value: v,
@@ -1391,10 +1438,12 @@ class _CustomControlState extends ConsumerState<_CustomControl> {
       case KinCustomType.lightDark:
       case KinCustomType.embedHue:
       case KinCustomType.embedLightDark:
-        final committed =
-            value is num ? value.toDouble() : custom.defaultNumber;
+        final committed = value is num
+            ? value.toDouble()
+            : custom.defaultNumber;
         final current = (_dragValue ?? committed).clamp(custom.min, custom.max);
-        final isHue = custom.customType == KinCustomType.hue ||
+        final isHue =
+            custom.customType == KinCustomType.hue ||
             custom.customType == KinCustomType.embedHue;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1458,10 +1507,7 @@ class _CustomControlState extends ConsumerState<_CustomControl> {
             Text(custom.displayName, style: context.appTypography.body),
             AppSpacing.gapXs,
             if (embeds.isEmpty)
-              Text(
-                'No embeds in pool',
-                style: context.appTypography.bodyMuted,
-              )
+              Text('No embeds in pool', style: context.appTypography.bodyMuted)
             else
               Wrap(
                 spacing: AppSpacing.xs,
@@ -1498,10 +1544,7 @@ class _CustomControlState extends ConsumerState<_CustomControl> {
 }
 
 class _SolidSwatchRow extends StatelessWidget {
-  const _SolidSwatchRow({
-    required this.selectedHex,
-    required this.onSelect,
-  });
+  const _SolidSwatchRow({required this.selectedHex, required this.onSelect});
 
   final String selectedHex;
   final void Function(String hex, String id) onSelect;
@@ -1533,8 +1576,7 @@ class _SolidSwatchRow extends StatelessWidget {
               radius: 8,
             ),
             label: Text(opt.displayName),
-            selected:
-                selectedHex.toUpperCase() == opt.colorHex!.toUpperCase(),
+            selected: selectedHex.toUpperCase() == opt.colorHex!.toUpperCase(),
             onSelected: (_) => onSelect(opt.colorHex!, opt.id),
           ),
       ],

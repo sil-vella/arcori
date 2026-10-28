@@ -1,0 +1,1269 @@
+{
+  "catalog": "Slammer The Deadcats Series",
+  "theme": "Slammers",
+  "series": "The Deadcats",
+  "themeCode": "SLM",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "SLM-SLM-CPT-SER006-GEN001-0001",
+      "themeCode": "SLM",
+      "designCode": "CPT",
+      "designFamily": "CAPTAIN_ROTFANG_SLAMMER",
+      "design": "Captain Rotfang",
+      "inspiration": "Pirate Deadcat",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Heavy Impact",
+      "style": "Realistic",
+      "finish": "Metallic",
+      "color": "#B82123",
+      "effect": "Pulse",
+      "selectionWeight": 9.2,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 9,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 7,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.8,
+          "max": 1.0
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Captain Rotfang. Square WebP, subject centered, named SLM-CPT-SER006-0001.webp.",
+      "loreDescription": "A collectible Captain Rotfang from Moonwake Bay, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-RBT-SER006-GEN001-0002",
+      "themeCode": "SLM",
+      "designCode": "RBT",
+      "designFamily": "ORBIT_STITCH_SLAMMER",
+      "design": "Orbit Stitch",
+      "inspiration": "Astronaut Deadcat",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Precision",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "color": "#00D6D4",
+      "effect": "Glow",
+      "selectionWeight": 5.8,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 4,
+        "precision": 9,
+        "control": 8,
+        "recovery": 7,
+        "spread": 2,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.25,
+          "max": 0.45
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Orbit Stitch. Square WebP, subject centered, named SLM-RBT-SER006-0002.webp.",
+      "loreDescription": "A collectible Orbit Stitch from Everlight Grove, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-GRA-SER006-GEN001-0003",
+      "themeCode": "SLM",
+      "designCode": "GRA",
+      "designFamily": "GRAVEWOBBLE_SLAMMER",
+      "design": "Gravewobble",
+      "inspiration": "Zombie Deadcat",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Wide Spread",
+      "style": "Neon",
+      "finish": "Holographic",
+      "color": "#FCE699",
+      "effect": "Motion",
+      "selectionWeight": 7.6,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 4,
+        "control": 5,
+        "recovery": 4,
+        "spread": 9,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.45,
+          "max": 0.65
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Gravewobble. Square WebP, subject centered, named SLM-GRA-SER006-0003.webp.",
+      "loreDescription": "A collectible Gravewobble from Ashdrift Hill, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-WSP-SER006-GEN001-0004",
+      "themeCode": "SLM",
+      "designCode": "WSP",
+      "designFamily": "WISP_WHISKER_SLAMMER",
+      "design": "Wisp Whisker",
+      "inspiration": "Ghost Deadcat",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Light Control",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "color": "#BACCFF",
+      "effect": "Sparkle",
+      "selectionWeight": 4.4,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 3,
+        "precision": 7,
+        "control": 9,
+        "recovery": 6,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.2,
+          "max": 0.4
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Wisp Whisker. Square WebP, subject centered, named SLM-WSP-SER006-0004.webp.",
+      "loreDescription": "A collectible Wisp Whisker from Ashdrift Hill, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-CNT-SER006-GEN001-0005",
+      "themeCode": "SLM",
+      "designCode": "CNT",
+      "designFamily": "COUNT_FANGRICK_SLAMMER",
+      "design": "Count Fangrick",
+      "inspiration": "Vampire Deadcat",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Brute Force",
+      "style": "Comic",
+      "finish": "Metallic",
+      "color": "#E61D29",
+      "effect": "Fire",
+      "selectionWeight": 8.8,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 10,
+        "precision": 2,
+        "control": 3,
+        "recovery": 2,
+        "spread": 6,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.75,
+          "max": 0.95
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Count Fangrick. Square WebP, subject centered, named SLM-CNT-SER006-0005.webp.",
+      "loreDescription": "A collectible Count Fangrick from Moonwake Bay, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-BLT-SER006-GEN001-0006",
+      "themeCode": "SLM",
+      "designCode": "BLT",
+      "designFamily": "BOLTBYTE_SLAMMER",
+      "design": "Boltbyte",
+      "inspiration": "Robot Deadcat",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Recovery",
+      "style": "Neon",
+      "finish": "Chrome",
+      "color": "#0143C6",
+      "effect": "Pulse",
+      "selectionWeight": 6.2,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 6,
+        "recovery": 9,
+        "spread": 4,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.35,
+          "max": 0.55
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Boltbyte. Square WebP, subject centered, named SLM-BLT-SER006-0006.webp.",
+      "loreDescription": "A collectible Boltbyte from Little Frost, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-RZR-SER006-GEN001-0007",
+      "themeCode": "SLM",
+      "designCode": "RZR",
+      "designFamily": "RAZOR_RIFF_SLAMMER",
+      "design": "Razor Riff",
+      "inspiration": "Punk Deadcat",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Weighted Control",
+      "style": "Low Poly",
+      "finish": "Matte",
+      "color": "#06BDD5",
+      "effect": "Glow",
+      "selectionWeight": 7.1,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 8,
+        "precision": 4,
+        "control": 7,
+        "recovery": 5,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.6,
+          "max": 0.8
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Razor Riff. Square WebP, subject centered, named SLM-RZR-SER006-0007.webp.",
+      "loreDescription": "A collectible Razor Riff from Amberwild, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-HXP-SER006-GEN001-0008",
+      "themeCode": "SLM",
+      "designCode": "HXP",
+      "designFamily": "HEXPURR_SLAMMER",
+      "design": "Hexpurr",
+      "inspiration": "Wizard Deadcat",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Visual Flair",
+      "style": "Pixel Art",
+      "finish": "Holographic",
+      "color": "#F1AB45",
+      "effect": "Pulse",
+      "selectionWeight": 8.0,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 6,
+        "control": 5,
+        "recovery": 4,
+        "spread": 8,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.5,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Hexpurr. Square WebP, subject centered, named SLM-HXP-SER006-0008.webp.",
+      "loreDescription": "A collectible Hexpurr from Everlight Grove, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SHD-SER006-GEN001-0009",
+      "themeCode": "SLM",
+      "designCode": "SHD",
+      "designFamily": "SHADECLAW_SLAMMER",
+      "design": "Shadeclaw",
+      "inspiration": "Ninja Deadcat",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Balanced",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#FC3437",
+      "effect": "None",
+      "selectionWeight": 5.0,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 5,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.55,
+          "max": 0.85
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Shadeclaw. Square WebP, subject centered, named SLM-SHD-SER006-0009.webp.",
+      "loreDescription": "A collectible Shadeclaw from Little Frost, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-JNX-SER006-GEN001-0010",
+      "themeCode": "SLM",
+      "designCode": "JNX",
+      "designFamily": "JINX_JESTER_SLAMMER",
+      "design": "Jinx Jester",
+      "inspiration": "Clown Deadcat",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Unstable",
+      "style": "Neon",
+      "finish": "Prismatic",
+      "color": "#F15836",
+      "effect": "Rainbow Shift",
+      "selectionWeight": 6.8,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 7,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 8,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.4,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Jinx Jester. Square WebP, subject centered, named SLM-JNX-SER006-0010.webp.",
+      "loreDescription": "A collectible Jinx Jester from Moonwake Bay, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-TMB-SER006-GEN001-0011",
+      "themeCode": "SLM",
+      "designCode": "TMB",
+      "designFamily": "TOMBWINK_SLAMMER",
+      "design": "Tombwink",
+      "inspiration": "Mummy Deadcat",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Heavy Impact",
+      "style": "Realistic",
+      "finish": "Metallic",
+      "color": "#8EFFFF",
+      "effect": "Pulse",
+      "selectionWeight": 9.2,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 9,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 7,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.8,
+          "max": 1.0
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Tombwink. Square WebP, subject centered, named SLM-TMB-SER006-0011.webp.",
+      "loreDescription": "A collectible Tombwink from Ashdrift Hill, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SLU-SER006-GEN001-0012",
+      "themeCode": "SLM",
+      "designCode": "SLU",
+      "designFamily": "SLUDGEBITE_SLAMMER",
+      "design": "Sludgebite",
+      "inspiration": "Toxic Deadcat",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Precision",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "color": "#D1FD18",
+      "effect": "Glow",
+      "selectionWeight": 5.8,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 4,
+        "precision": 9,
+        "control": 8,
+        "recovery": 7,
+        "spread": 2,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.25,
+          "max": 0.45
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Sludgebite. Square WebP, subject centered, named SLM-SLU-SER006-0012.webp.",
+      "loreDescription": "A collectible Sludgebite from Amberwild, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-FRS-SER006-GEN001-0013",
+      "themeCode": "SLM",
+      "designCode": "FRS",
+      "designFamily": "FROSTNIP_SLAMMER",
+      "design": "Frostnip",
+      "inspiration": "Ice Deadcat",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Wide Spread",
+      "style": "Neon",
+      "finish": "Holographic",
+      "color": "#86B9FD",
+      "effect": "Motion",
+      "selectionWeight": 7.6,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 4,
+        "control": 5,
+        "recovery": 4,
+        "spread": 9,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.45,
+          "max": 0.65
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Frostnip. Square WebP, subject centered, named SLM-FRS-SER006-0013.webp.",
+      "loreDescription": "A collectible Frostnip from Little Frost, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-CND-SER006-GEN001-0014",
+      "themeCode": "SLM",
+      "designCode": "CND",
+      "designFamily": "CINDERCLAW_SLAMMER",
+      "design": "Cinderclaw",
+      "inspiration": "Fire Deadcat",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Light Control",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "color": "#D82D08",
+      "effect": "Sparkle",
+      "selectionWeight": 4.4,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 3,
+        "precision": 7,
+        "control": 9,
+        "recovery": 6,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.2,
+          "max": 0.4
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Cinderclaw. Square WebP, subject centered, named SLM-CND-SER006-0014.webp.",
+      "loreDescription": "A collectible Cinderclaw from Amberwild, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SPR-SER006-GEN001-0015",
+      "themeCode": "SLM",
+      "designCode": "SPR",
+      "designFamily": "SPOREBLINK_SLAMMER",
+      "design": "Sporeblink",
+      "inspiration": "Mushroom Deadcat",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Brute Force",
+      "style": "Comic",
+      "finish": "Metallic",
+      "color": "#7B0C0E",
+      "effect": "Fire",
+      "selectionWeight": 8.8,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 10,
+        "precision": 2,
+        "control": 3,
+        "recovery": 2,
+        "spread": 6,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.75,
+          "max": 0.95
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Sporeblink. Square WebP, subject centered, named SLM-SPR-SER006-0015.webp.",
+      "loreDescription": "A collectible Sporeblink from Amberwild, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-BNG-SER006-GEN001-0016",
+      "themeCode": "SLM",
+      "designCode": "BNG",
+      "designFamily": "BONEGRIN_SLAMMER",
+      "design": "Bonegrin",
+      "inspiration": "Skeleton Deadcat",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Recovery",
+      "style": "Neon",
+      "finish": "Chrome",
+      "color": "#F47E5F",
+      "effect": "Pulse",
+      "selectionWeight": 6.2,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 6,
+        "recovery": 9,
+        "spread": 4,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.35,
+          "max": 0.55
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Bonegrin. Square WebP, subject centered, named SLM-BNG-SER006-0016.webp.",
+      "loreDescription": "A collectible Bonegrin from Ashdrift Hill, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-NBL-SER006-GEN001-0017",
+      "themeCode": "SLM",
+      "designCode": "NBL",
+      "designFamily": "NEBULISK_SLAMMER",
+      "design": "Nebulisk",
+      "inspiration": "Alien Deadcat",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Weighted Control",
+      "style": "Low Poly",
+      "finish": "Matte",
+      "color": "#FFDDBE",
+      "effect": "Glow",
+      "selectionWeight": 7.1,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 8,
+        "precision": 4,
+        "control": 7,
+        "recovery": 5,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.6,
+          "max": 0.8
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Nebulisk. Square WebP, subject centered, named SLM-NBL-SER006-0017.webp.",
+      "loreDescription": "A collectible Nebulisk from Everlight Grove, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-BRN-SER006-GEN001-0018",
+      "themeCode": "SLM",
+      "designCode": "BRN",
+      "designFamily": "BRINEGLOW_SLAMMER",
+      "design": "Brineglow",
+      "inspiration": "Deep-Sea Deadcat",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Visual Flair",
+      "style": "Pixel Art",
+      "finish": "Holographic",
+      "color": "#FCD988",
+      "effect": "Pulse",
+      "selectionWeight": 8.0,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 6,
+        "control": 5,
+        "recovery": 4,
+        "spread": 8,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.5,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Brineglow. Square WebP, subject centered, named SLM-BRN-SER006-0018.webp.",
+      "loreDescription": "A collectible Brineglow from Moonwake Bay, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-STT-SER006-GEN001-0019",
+      "themeCode": "SLM",
+      "designCode": "STT",
+      "designFamily": "STATIC_HEX_SLAMMER",
+      "design": "Static Hex",
+      "inspiration": "Glitch Deadcat",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Balanced",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#B310DC",
+      "effect": "None",
+      "selectionWeight": 5.0,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 5,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.55,
+          "max": 0.85
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Static Hex. Square WebP, subject centered, named SLM-STT-SER006-0019.webp.",
+      "loreDescription": "A collectible Static Hex from Little Frost, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-CRW-SER006-GEN001-0020",
+      "themeCode": "SLM",
+      "designCode": "CRW",
+      "designFamily": "CROWNSCAR_SLAMMER",
+      "design": "Crownscar",
+      "inspiration": "Royal Deadcat",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Unstable",
+      "style": "Neon",
+      "finish": "Prismatic",
+      "color": "#B10A34",
+      "effect": "Rainbow Shift",
+      "selectionWeight": 6.8,
+      "origin": "Shop",
+      "series": "Slammer The Deadcats Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 7,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 8,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.4,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Crownscar. Square WebP, subject centered, named SLM-CRW-SER006-0020.webp.",
+      "loreDescription": "A collectible Crownscar from Everlight Grove, generation I of the The Deadcats Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    }
+  ]
+}

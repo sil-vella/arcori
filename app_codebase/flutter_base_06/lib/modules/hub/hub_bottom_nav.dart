@@ -20,7 +20,7 @@ void registerHubSinkBottomNavScope(BottomNavScopeSink sink) {
   );
 }
 
-/// Bottom sink items for hub screens. Uses [Nav.go] so sink taps replace.
+/// Bottom sink items for hub screens. Taps push so Back returns here.
 List<BottomNavItem> hubSinkBottomNavItems(BuildContext context) {
   final loc = Nav.matchedLocation(context).split('?').first;
 
@@ -32,7 +32,7 @@ List<BottomNavItem> hubSinkBottomNavItems(BuildContext context) {
       tooltip: 'Trove',
       onTap: () {
         if (loc == AppPaths.trove) return;
-        Nav.go(context, AppPaths.trove);
+        Nav.push(context, AppPaths.trove);
       },
     ),
     BottomNavAction(
@@ -43,7 +43,7 @@ List<BottomNavItem> hubSinkBottomNavItems(BuildContext context) {
       emphasized: true,
       onTap: () {
         if (loc == AppPaths.play) return;
-        Nav.go(context, AppPaths.play);
+        Nav.push(context, AppPaths.play);
       },
     ),
     BottomNavAction(
@@ -53,7 +53,7 @@ List<BottomNavItem> hubSinkBottomNavItems(BuildContext context) {
       tooltip: 'Market',
       onTap: () {
         if (loc == AppPaths.market) return;
-        Nav.go(context, AppPaths.market);
+        Nav.push(context, AppPaths.market);
       },
     ),
   ];

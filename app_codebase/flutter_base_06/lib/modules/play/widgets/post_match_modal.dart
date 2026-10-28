@@ -151,7 +151,7 @@ class _PostMatchBodyState extends ConsumerState<_PostMatchBody> {
     });
     final rootCtx = appRootNavigatorKey.currentContext;
     if (rootCtx != null && rootCtx.mounted) {
-      Nav.go(rootCtx, AppPaths.tasks);
+      Nav.push(rootCtx, AppPaths.tasks);
     }
   }
 

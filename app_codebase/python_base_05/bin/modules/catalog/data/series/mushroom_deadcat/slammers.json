@@ -1,0 +1,1899 @@
+{
+  "catalog": "Slammer Mushroom Deadcat Series",
+  "theme": "Slammers",
+  "series": "Mushroom Deadcat",
+  "themeCode": "SLM",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "SLM-SLM-CTY-SER007-GEN001-0001",
+      "themeCode": "SLM",
+      "designCode": "CTY",
+      "designFamily": "CITY_OF_GIANTS_SLAMMER",
+      "design": "City of Giants",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Heavy Impact",
+      "style": "Realistic",
+      "finish": "Metallic",
+      "color": "#F17854",
+      "effect": "Pulse",
+      "selectionWeight": 9.2,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 9,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 7,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.8,
+          "max": 1.0
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for City of Giants. Square WebP, subject centered, named SLM-CTY-SER007-0001.webp.",
+      "loreDescription": "A collectible City of Giants from Moonwake Bay, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-RNW-SER007-GEN001-0002",
+      "themeCode": "SLM",
+      "designCode": "RNW",
+      "designFamily": "RAINWATCH_SLAMMER",
+      "design": "Rainwatch",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Precision",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "color": "#F7A45D",
+      "effect": "Glow",
+      "selectionWeight": 5.8,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 4,
+        "precision": 9,
+        "control": 8,
+        "recovery": 7,
+        "spread": 2,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.25,
+          "max": 0.45
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Rainwatch. Square WebP, subject centered, named SLM-RNW-SER007-0002.webp.",
+      "loreDescription": "A collectible Rainwatch from Little Frost, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-ST0-SER007-GEN001-0003",
+      "themeCode": "SLM",
+      "designCode": "ST0",
+      "designFamily": "STRANGE_AISLE_SLAMMER",
+      "design": "Strange Aisle",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Wide Spread",
+      "style": "Neon",
+      "finish": "Holographic",
+      "color": "#FF905F",
+      "effect": "Motion",
+      "selectionWeight": 7.6,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 4,
+        "control": 5,
+        "recovery": 4,
+        "spread": 9,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.45,
+          "max": 0.65
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Strange Aisle. Square WebP, subject centered, named SLM-ST0-SER007-0003.webp.",
+      "loreDescription": "A collectible Strange Aisle from Amberwild, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-TMN-SER007-GEN001-0004",
+      "themeCode": "SLM",
+      "designCode": "TMN",
+      "designFamily": "AUTUMN_NAP_SLAMMER",
+      "design": "Autumn Nap",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Light Control",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "color": "#D47416",
+      "effect": "Sparkle",
+      "selectionWeight": 4.4,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 3,
+        "precision": 7,
+        "control": 9,
+        "recovery": 6,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.2,
+          "max": 0.4
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Autumn Nap. Square WebP, subject centered, named SLM-TMN-SER007-0004.webp.",
+      "loreDescription": "A collectible Autumn Nap from Everlight Grove, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-LTT-SER007-GEN001-0005",
+      "themeCode": "SLM",
+      "designCode": "LTT",
+      "designFamily": "THE_LITTLE_SCHOLAR_SLAMMER",
+      "design": "The Little Scholar",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Brute Force",
+      "style": "Comic",
+      "finish": "Metallic",
+      "color": "#C52F17",
+      "effect": "Fire",
+      "selectionWeight": 8.8,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 10,
+        "precision": 2,
+        "control": 3,
+        "recovery": 2,
+        "spread": 6,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.75,
+          "max": 0.95
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Little Scholar. Square WebP, subject centered, named SLM-LTT-SER007-0005.webp.",
+      "loreDescription": "A collectible The Little Scholar from Everlight Grove, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-MNG-SER007-GEN001-0006",
+      "themeCode": "SLM",
+      "designCode": "MNG",
+      "designFamily": "AMONG_THE_FOOTSTEPS_SLAMMER",
+      "design": "Among the Footsteps",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Recovery",
+      "style": "Neon",
+      "finish": "Chrome",
+      "color": "#FFA278",
+      "effect": "Pulse",
+      "selectionWeight": 6.2,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 6,
+        "recovery": 9,
+        "spread": 4,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.35,
+          "max": 0.55
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Among the Footsteps. Square WebP, subject centered, named SLM-MNG-SER007-0006.webp.",
+      "loreDescription": "A collectible Among the Footsteps from Moonwake Bay, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-FLW-SER007-GEN001-0007",
+      "themeCode": "SLM",
+      "designCode": "FLW",
+      "designFamily": "FLOWER_THIEF_SLAMMER",
+      "design": "Flower Thief",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Weighted Control",
+      "style": "Low Poly",
+      "finish": "Matte",
+      "color": "#EAA62B",
+      "effect": "Glow",
+      "selectionWeight": 7.1,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 8,
+        "precision": 4,
+        "control": 7,
+        "recovery": 5,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.6,
+          "max": 0.8
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Flower Thief. Square WebP, subject centered, named SLM-FLW-SER007-0007.webp.",
+      "loreDescription": "A collectible Flower Thief from Amberwild, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-WTN-SER007-GEN001-0008",
+      "themeCode": "SLM",
+      "designCode": "WTN",
+      "designFamily": "WAITING_IN_THE_RAIN_SLAMMER",
+      "design": "Waiting in the Rain",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Visual Flair",
+      "style": "Pixel Art",
+      "finish": "Holographic",
+      "color": "#AA2F1B",
+      "effect": "Pulse",
+      "selectionWeight": 8.0,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 6,
+        "control": 5,
+        "recovery": 4,
+        "spread": 8,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.5,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Waiting in the Rain. Square WebP, subject centered, named SLM-WTN-SER007-0008.webp.",
+      "loreDescription": "A collectible Waiting in the Rain from Little Frost, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-PLT-SER007-GEN001-0009",
+      "themeCode": "SLM",
+      "designCode": "PLT",
+      "designFamily": "PLATFORM_WANDERER_SLAMMER",
+      "design": "Platform Wanderer",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Balanced",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#D4391B",
+      "effect": "None",
+      "selectionWeight": 5.0,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 5,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.55,
+          "max": 0.85
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Platform Wanderer. Square WebP, subject centered, named SLM-PLT-SER007-0009.webp.",
+      "loreDescription": "A collectible Platform Wanderer from Moonwake Bay, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-TNY-SER007-GEN001-0010",
+      "themeCode": "SLM",
+      "designCode": "TNY",
+      "designFamily": "TINY_BREAKFAST_SLAMMER",
+      "design": "Tiny Breakfast",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Unstable",
+      "style": "Neon",
+      "finish": "Prismatic",
+      "color": "#BF2718",
+      "effect": "Rainbow Shift",
+      "selectionWeight": 6.8,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 7,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 8,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.4,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Tiny Breakfast. Square WebP, subject centered, named SLM-TNY-SER007-0010.webp.",
+      "loreDescription": "A collectible Tiny Breakfast from Amberwild, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SNL-SER007-GEN001-0011",
+      "themeCode": "SLM",
+      "designCode": "SNL",
+      "designFamily": "SUNLIT_SPORE_SLAMMER",
+      "design": "Sunlit Spore",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Heavy Impact",
+      "style": "Realistic",
+      "finish": "Metallic",
+      "color": "#86020B",
+      "effect": "Pulse",
+      "selectionWeight": 9.2,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 9,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 7,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.8,
+          "max": 1.0
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Sunlit Spore. Square WebP, subject centered, named SLM-SNL-SER007-0011.webp.",
+      "loreDescription": "A collectible Sunlit Spore from Everlight Grove, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-WND-SER007-GEN001-0012",
+      "themeCode": "SLM",
+      "designCode": "WND",
+      "designFamily": "WINDOW_RAIN_SLAMMER",
+      "design": "Window Rain",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Precision",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "color": "#F38C62",
+      "effect": "Glow",
+      "selectionWeight": 5.8,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 4,
+        "precision": 9,
+        "control": 8,
+        "recovery": 7,
+        "spread": 2,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.25,
+          "max": 0.45
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Window Rain. Square WebP, subject centered, named SLM-WND-SER007-0012.webp.",
+      "loreDescription": "A collectible Window Rain from Little Frost, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-FOR-SER007-GEN001-0013",
+      "themeCode": "SLM",
+      "designCode": "FOR",
+      "designFamily": "FOREST_SPRITE_SLAMMER",
+      "design": "Forest Sprite",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Wide Spread",
+      "style": "Neon",
+      "finish": "Holographic",
+      "color": "#AE1123",
+      "effect": "Motion",
+      "selectionWeight": 7.6,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 4,
+        "control": 5,
+        "recovery": 4,
+        "spread": 9,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.45,
+          "max": 0.65
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Forest Sprite. Square WebP, subject centered, named SLM-FOR-SER007-0013.webp.",
+      "loreDescription": "A collectible Forest Sprite from Amberwild, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-NNS-SER007-GEN001-0014",
+      "themeCode": "SLM",
+      "designCode": "NNS",
+      "designFamily": "NEON_SPORE_SLAMMER",
+      "design": "Neon Spore",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Light Control",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "color": "#F94778",
+      "effect": "Sparkle",
+      "selectionWeight": 4.4,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 3,
+        "precision": 7,
+        "control": 9,
+        "recovery": 6,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.2,
+          "max": 0.4
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Neon Spore. Square WebP, subject centered, named SLM-NNS-SER007-0014.webp.",
+      "loreDescription": "A collectible Neon Spore from Moonwake Bay, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-PCK-SER007-GEN001-0015",
+      "themeCode": "SLM",
+      "designCode": "PCK",
+      "designFamily": "POCKET_DIORAMA_SLAMMER",
+      "design": "Pocket Diorama",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Brute Force",
+      "style": "Comic",
+      "finish": "Metallic",
+      "color": "#F97340",
+      "effect": "Fire",
+      "selectionWeight": 8.8,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 10,
+        "precision": 2,
+        "control": 3,
+        "recovery": 2,
+        "spread": 6,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.75,
+          "max": 0.95
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Pocket Diorama. Square WebP, subject centered, named SLM-PCK-SER007-0015.webp.",
+      "loreDescription": "A collectible Pocket Diorama from Everlight Grove, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SPO-SER007-GEN001-0016",
+      "themeCode": "SLM",
+      "designCode": "SPO",
+      "designFamily": "SPOREBLINK_FOREVER_SLAMMER",
+      "design": "Sporeblink Forever",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Recovery",
+      "style": "Neon",
+      "finish": "Chrome",
+      "color": "#870A0E",
+      "effect": "Pulse",
+      "selectionWeight": 6.2,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 6,
+        "recovery": 9,
+        "spread": 4,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.35,
+          "max": 0.55
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Sporeblink Forever. Square WebP, subject centered, named SLM-SPO-SER007-0016.webp.",
+      "loreDescription": "A collectible Sporeblink Forever from Ashdrift Hill, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-WLL-SER007-GEN001-0017",
+      "themeCode": "SLM",
+      "designCode": "WLL",
+      "designFamily": "WALL_BLOOM_SLAMMER",
+      "design": "Wall Bloom",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Weighted Control",
+      "style": "Low Poly",
+      "finish": "Matte",
+      "color": "#84000E",
+      "effect": "Glow",
+      "selectionWeight": 7.1,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 8,
+        "precision": 4,
+        "control": 7,
+        "recovery": 5,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.6,
+          "max": 0.8
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Wall Bloom. Square WebP, subject centered, named SLM-WLL-SER007-0017.webp.",
+      "loreDescription": "A collectible Wall Bloom from Ashdrift Hill, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-MRR-SER007-GEN001-0018",
+      "themeCode": "SLM",
+      "designCode": "MRR",
+      "designFamily": "MRRP_SLAMMER",
+      "design": "Mrrp!",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Visual Flair",
+      "style": "Pixel Art",
+      "finish": "Holographic",
+      "color": "#900A18",
+      "effect": "Pulse",
+      "selectionWeight": 8.0,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 6,
+        "control": 5,
+        "recovery": 4,
+        "spread": 8,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.5,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Mrrp!. Square WebP, subject centered, named SLM-MRR-SER007-0018.webp.",
+      "loreDescription": "A collectible Mrrp! from Amberwild, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-LST-SER007-GEN001-0019",
+      "themeCode": "SLM",
+      "designCode": "LST",
+      "designFamily": "LAST_LIGHT_SLAMMER",
+      "design": "Last Light",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Balanced",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#FCBA56",
+      "effect": "None",
+      "selectionWeight": 5.0,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 5,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.55,
+          "max": 0.85
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Last Light. Square WebP, subject centered, named SLM-LST-SER007-0019.webp.",
+      "loreDescription": "A collectible Last Light from Moonwake Bay, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-PRI-SER007-GEN001-0020",
+      "themeCode": "SLM",
+      "designCode": "PRI",
+      "designFamily": "PRISMATIC_BLOOM_SLAMMER",
+      "design": "Prismatic Bloom",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Unstable",
+      "style": "Neon",
+      "finish": "Prismatic",
+      "color": "#4A3C01",
+      "effect": "Rainbow Shift",
+      "selectionWeight": 6.8,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 7,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 8,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.4,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Prismatic Bloom. Square WebP, subject centered, named SLM-PRI-SER007-0020.webp.",
+      "loreDescription": "A collectible Prismatic Bloom from Everlight Grove, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-HLL-SER007-GEN001-0021",
+      "themeCode": "SLM",
+      "designCode": "HLL",
+      "designFamily": "HELLO_THERE_SLAMMER",
+      "design": "Hello There",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Heavy Impact",
+      "style": "Realistic",
+      "finish": "Metallic",
+      "color": "#9B0C22",
+      "effect": "Pulse",
+      "selectionWeight": 9.2,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 9,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 7,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.8,
+          "max": 1.0
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Hello There. Square WebP, subject centered, named SLM-HLL-SER007-0021.webp.",
+      "loreDescription": "A collectible Hello There from Amberwild, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-WWT-SER007-GEN001-0022",
+      "themeCode": "SLM",
+      "designCode": "WWT",
+      "designFamily": "WHAT_WAS_THAT_SLAMMER",
+      "design": "What Was That?",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Precision",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "color": "#FEAB5E",
+      "effect": "Glow",
+      "selectionWeight": 5.8,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 4,
+        "precision": 9,
+        "control": 8,
+        "recovery": 7,
+        "spread": 2,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.25,
+          "max": 0.45
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for What Was That?. Square WebP, subject centered, named SLM-WWT-SER007-0022.webp.",
+      "loreDescription": "A collectible What Was That? from Little Frost, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-CLD-SER007-GEN001-0023",
+      "themeCode": "SLM",
+      "designCode": "CLD",
+      "designFamily": "CLOUDCAP_SURPRISE_SLAMMER",
+      "design": "Cloudcap Surprise",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Wide Spread",
+      "style": "Neon",
+      "finish": "Holographic",
+      "color": "#DC5935",
+      "effect": "Motion",
+      "selectionWeight": 7.6,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 4,
+        "control": 5,
+        "recovery": 4,
+        "spread": 9,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.45,
+          "max": 0.65
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Cloudcap Surprise. Square WebP, subject centered, named SLM-CLD-SER007-0023.webp.",
+      "loreDescription": "A collectible Cloudcap Surprise from Everlight Grove, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-FMM-SER007-GEN001-0024",
+      "themeCode": "SLM",
+      "designCode": "FMM",
+      "designFamily": "FIVE_MORE_MINUTES_SLAMMER",
+      "design": "Five More Minutes",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Light Control",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "color": "#F56345",
+      "effect": "Sparkle",
+      "selectionWeight": 4.4,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 3,
+        "precision": 7,
+        "control": 9,
+        "recovery": 6,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.2,
+          "max": 0.4
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Five More Minutes. Square WebP, subject centered, named SLM-FMM-SER007-0024.webp.",
+      "loreDescription": "A collectible Five More Minutes from Little Frost, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-LPJ-SER007-GEN001-0025",
+      "themeCode": "SLM",
+      "designCode": "LPJ",
+      "designFamily": "LEAP_OF_JOY_SLAMMER",
+      "design": "Leap of Joy",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Brute Force",
+      "style": "Comic",
+      "finish": "Metallic",
+      "color": "#BFAD09",
+      "effect": "Fire",
+      "selectionWeight": 8.8,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 10,
+        "precision": 2,
+        "control": 3,
+        "recovery": 2,
+        "spread": 6,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.75,
+          "max": 0.95
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Leap of Joy. Square WebP, subject centered, named SLM-LPJ-SER007-0025.webp.",
+      "loreDescription": "A collectible Leap of Joy from Amberwild, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-NTM-SER007-GEN001-0026",
+      "themeCode": "SLM",
+      "designCode": "NTM",
+      "designFamily": "NOT_IMPRESSED_SLAMMER",
+      "design": "Not Impressed",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Recovery",
+      "style": "Neon",
+      "finish": "Chrome",
+      "color": "#FF317B",
+      "effect": "Pulse",
+      "selectionWeight": 6.2,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 6,
+        "recovery": 9,
+        "spread": 4,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.35,
+          "max": 0.55
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Not Impressed. Square WebP, subject centered, named SLM-NTM-SER007-0026.webp.",
+      "loreDescription": "A collectible Not Impressed from Ashdrift Hill, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SNK-SER007-GEN001-0027",
+      "themeCode": "SLM",
+      "designCode": "SNK",
+      "designFamily": "SNEAKY_STEP_SLAMMER",
+      "design": "Sneaky Step",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Weighted Control",
+      "style": "Low Poly",
+      "finish": "Matte",
+      "color": "#FF7976",
+      "effect": "Glow",
+      "selectionWeight": 7.1,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 8,
+        "precision": 4,
+        "control": 7,
+        "recovery": 5,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.6,
+          "max": 0.8
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Sneaky Step. Square WebP, subject centered, named SLM-SNK-SER007-0027.webp.",
+      "loreDescription": "A collectible Sneaky Step from Moonwake Bay, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SOF-SER007-GEN001-0028",
+      "themeCode": "SLM",
+      "designCode": "SOF",
+      "designFamily": "SOFTEST_TREASURE_SLAMMER",
+      "design": "Softest Treasure",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Visual Flair",
+      "style": "Pixel Art",
+      "finish": "Holographic",
+      "color": "#FD8378",
+      "effect": "Pulse",
+      "selectionWeight": 8.0,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 6,
+        "control": 5,
+        "recovery": 4,
+        "spread": 8,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.5,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Softest Treasure. Square WebP, subject centered, named SLM-SOF-SER007-0028.webp.",
+      "loreDescription": "A collectible Softest Treasure from Little Frost, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SP0-SER007-GEN001-0029",
+      "themeCode": "SLM",
+      "designCode": "SP0",
+      "designFamily": "SPORE_DIZZY_SLAMMER",
+      "design": "Spore Dizzy",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Balanced",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#AD1416",
+      "effect": "None",
+      "selectionWeight": 5.0,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 5,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.55,
+          "max": 0.85
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Spore Dizzy. Square WebP, subject centered, named SLM-SP0-SER007-0029.webp.",
+      "loreDescription": "A collectible Spore Dizzy from Ashdrift Hill, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-GLD-SER007-GEN001-0030",
+      "themeCode": "SLM",
+      "designCode": "GLD",
+      "designFamily": "GOLDEN_BLOOM_SLAMMER",
+      "design": "Golden Bloom",
+      "inspiration": "Sporeblink",
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Unstable",
+      "style": "Neon",
+      "finish": "Prismatic",
+      "color": "#F79E56",
+      "effect": "Rainbow Shift",
+      "selectionWeight": 6.8,
+      "origin": "Shop",
+      "series": "Slammer Mushroom Deadcat Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 7,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 8,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.4,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Golden Bloom. Square WebP, subject centered, named SLM-GLD-SER007-0030.webp.",
+      "loreDescription": "A collectible Golden Bloom from Everlight Grove, generation I of the Mushroom Deadcat Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    }
+  ]
+}

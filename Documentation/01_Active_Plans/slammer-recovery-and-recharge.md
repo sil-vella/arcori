@@ -2,7 +2,7 @@
 
 **Status:** Charge spend + Market shop slammers shipped; Recovery still deferred  
 **Created:** 2026-09-05  
-**Last Updated:** 2026-10-27
+**Last Updated:** 2026-10-28 (series 02–04 shop slammers)
 
 Related: [arcori-slam-impact.md](arcori-slam-impact.md) · [player-slam-input.md](player-slam-input.md) · [00_MASTER_PLAN.md](00_MASTER_PLAN.md) · [home-and-play-hub-flow.md](home-and-play-hub-flow.md)
 
@@ -47,11 +47,13 @@ Charge −1 per slam anytime a shop slammer is used. Every Genesis shop slammer:
 
 - `bin/modules/catalog/data/series/genesis/slammers.json` — Shop economy on all non-starter Genesis slammers
 - `bin/modules/market/market_skus.py` / `market_service.py` — shelf from catalog, not a Rim id list
-- `lib/modules/market/screens/market_screen.dart` — featured + vertical list; buy/charge confirm modal
+- `lib/modules/market/screens/market_screen.dart` — featured, then remaining slammers grouped by series in two-column tiles; buy/charge confirm modal
 - `lib/modules/market/market_spend_modal.dart` — confirm, then result in the same modal
 - `lib/modules/avari/widgets/slammer_inventory_tile.dart` — remaining uses + Charge
 - `lib/modules/avari/screens/avari_profile_screen.dart` — profile Charge opens the market modal
 - Local `catalog_designs` rows for the 11 SLM ids upserted from that JSON
+- `data/series/the_unrecognized|the_deadcats|mushroom_deadcat/slammers.json` — series 005–007 shop slammers
+- `assets/images/arcori/005_the_unrecognized|006_the_deadcats|007_mushroom_deadcat/slammers/` — 768 WebP faces
 
 ## Notes
 
@@ -61,6 +63,14 @@ Rim is no longer a catalog design. Players who already own a shop slammer keep t
 
 2026-10-27: Equipped slammer is the first page of the profile card. Market cards use the catalog disc (`imageUrl`) instead of the generic slammer mark. End-match Play New label is black.
 
+2026-10-28: Under Featured, the rest of the shelf is grouped by catalog series. Each series is a gold card with two tiles per row. The series name is the catalog `seriesKey` (Genesis). App Dev checklist 400.
+
+2026-10-28: Series cards collapse. The latest catalog series sits at the top and starts open. Opening one card closes the others. App Dev checklist 401.
+
+2026-10-28: Slammer series 02–04 were first filed under Pioneers, Foundations, and Civilizations. The art folders are 005, 006, and 007, so the catalog now matches that: The Unrecognized (SER005, 40), The Deadcats (SER006, 20), Mushroom Deadcat (SER007, 30). Kin stays on `005_kin`. Faces are 768 WebP under those media folders. They stay out of match circulation because theme SLM is not a playable Arcori. App Dev checklist 402.
+
+2026-10-28: Those three series also appear under Velora → Slammers. Market cards open the same Arcori detail screen Velora uses, and Buy / Charge live on that screen. App Dev checklist 403.
+
 ## Task Manager
 
 App Dev checklist checked: Genesis shop slammers (4 GA / 25, recharge 4 / +100, 1 use per slam; Starter free). Note added on the same card.
@@ -68,3 +78,11 @@ App Dev checklist checked: Genesis shop slammers (4 GA / 25, recharge 4 / +100, 
 App Dev checklist 389 checked: profile remaining uses + Charge, and Market buy/charge confirm modal with the result in that modal.
 
 App Dev checklist 390 checked: equipped slammer first on the profile card; Market cards show the catalog face; Play New label is black.
+
+App Dev checklist 400 checked: remaining Market slammers grouped by series in two-column tiles.
+
+App Dev checklist 401 checked: series cards are an accordion; latest series starts open at the top.
+
+App Dev checklist 402 checked: series 02–04 slammers (Unrecognized / Deadcats / Sporeblink) are catalog shop designs with 768 WebP faces.
+
+App Dev checklist 403 checked: slammer series on Velora; Market and Velora share the detail screen, with Buy / Charge there.

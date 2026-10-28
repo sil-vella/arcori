@@ -2,7 +2,7 @@
 
 **Status:** In Progress  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-10-27 (match seat chrome: played Arcori, gold name ring)
+**Last Updated:** 2026-10-28 (Home Learn the world card)
 
 Related: [returning-player-startup-flow.md](returning-player-startup-flow.md) · [core-match-loop.md](core-match-loop.md) · [match-setting-core-flow.md](match-setting-core-flow.md) · [first-time-player-flow.md](first-time-player-flow.md) · [NOTIFICATION_SYSTEM.md](../03_Base/NOTIFICATION_SYSTEM.md) · Flutter bottom-nav docs in `03_Base/Flutter/`
 
@@ -20,6 +20,7 @@ Home contains:
 - **Total Mastery Value** (profile aggregate + Fair→Priceless label) and the player’s most-mastered slammer (face + `points/reach`)
 - **Daily Missions** and **World News** side by side
 - **Featured events** stay full width (`homeFeatured` pin)
+- **Learn the world** — thin card between Featured Event and Mastery Value; opens Velora → The World
 - **World News** (notifications with `category=news`)
 - **Mastery ticker** inside the Mastery Value card, under the standing label (last 5 player mastery deltas)
 
@@ -105,3 +106,7 @@ Match status (Your turn, Waiting, Get ready, Resolving slam) is a gold banner ab
 2026-10-27: Match seats show the Arcori that player is playing (green border while that seat is in play) instead of the profile mark. The username sits in a gold rim with a gold diamond at the bottom and a green dot while that player is current. The status banner uses the same gold card frame as the screen cards. App Dev checklist 398.
 
 Exit match sits above the edge vignette, with a solid dark fill and gold border, so the corner wash no longer covers it. App Dev checklist 399.
+
+2026-10-28: Home has a thin Learn the world card between Featured Event and Mastery Value. It uses the Velora map and opens the same The World screen as Velora. That screen is titled The World, and a Gameplay card under Avari explains the match, collecting Arcori by mastery, and slammer mastery into the Trove. App Dev checklist 404.
+
+2026-10-28: Home card actions (Profile, Play, Tasks, Inbox) and the Trove / Match / Market sink push onto the stack. Back returns to the screen you left. App Dev checklist 405.

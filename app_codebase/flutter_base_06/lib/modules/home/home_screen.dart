@@ -12,6 +12,7 @@ import '../../core/state/auth/auth_providers.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/app_chrome.dart';
 import '../../core/widgets/app_mark_icon.dart';
+import '../../core/widgets/app_visuals.dart';
 import '../museum/museum_assets.dart';
 import '../velora/velora_assets.dart';
 import '../avari/avari_api.dart';
@@ -162,21 +163,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         title: 'Featured Event',
                         icon: Icons.auto_awesome,
                         actionLabel: 'Play',
-                        onAction: () => Nav.go(context, AppPaths.play),
+                        onAction: () => Nav.push(context, AppPaths.play),
                         goldFrame: true,
                         background: _FeaturedBackdrop(entry: _featuredEvent),
                         child: _FeaturedEventCard(
                           entry: _featuredEvent,
                           loading: _loadingExtras,
-                          onTap: () => Nav.go(context, AppPaths.play),
+                          onTap: () => Nav.push(context, AppPaths.play),
                         ),
                       ),
+                      AppSpacing.gapMd,
+                      const _LearnTheWorldCard(),
                       AppSpacing.gapMd,
                       AppChromeSection(
                         title: 'Mastery Value',
                         icon: Icons.bar_chart,
                         actionLabel: 'Profile',
-                        onAction: () => Nav.go(context, AppPaths.avari),
+                        onAction: () => Nav.push(context, AppPaths.avari),
                         goldFrame: true,
                         background: const _MasteryBackdrop(),
                         child: _MasteryHeroBody(
@@ -196,7 +199,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               title: 'Daily Missions',
                               icon: Icons.task_alt,
                               actionLabel: 'All',
-                              onAction: () => Nav.go(context, AppPaths.tasks),
+                              onAction: () => Nav.push(context, AppPaths.tasks),
                               child: _DailyMissionsStrip(goals: daily),
                             ),
                           ),
@@ -207,7 +210,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               mark: const AppMarkIcon(AppMarks.velora),
                               actionLabel: 'Inbox',
                               onAction: () =>
-                                  Nav.go(context, AppPaths.notifications),
+                                  Nav.push(context, AppPaths.notifications),
                               child: _WorldNewsList(
                                 items: news.take(8).toList(),
                                 onTap: _openNews,
@@ -311,6 +314,79 @@ class _FeaturedEventCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _LearnTheWorldCard extends StatelessWidget {
+  const _LearnTheWorldCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCardFrame(
+      gold: true,
+      background: const _HomeWorldCover(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Master the Arcori. Learn your slammer.',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: context.appTypography.bodySmall.copyWith(
+                  color: AppChrome.onSurface,
+                  height: 1.3,
+                ),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            FilledButton(
+              style: context.appButtons.primary.filled,
+              onPressed: () => Nav.push(context, AppPaths.veloraWorld),
+              child: const Text('Learn the world'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeWorldCover extends StatelessWidget {
+  const _HomeWorldCover();
+
+  @override
+  Widget build(BuildContext context) {
+    final ink = AppColors.surfaceDark;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.asset(
+          kVeloraWorldBackgroundAsset,
+          fit: BoxFit.cover,
+          alignment: Alignment.centerRight,
+          errorBuilder: (_, __, ___) => ColoredBox(color: AppChrome.fieldFill),
+        ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                ink.withValues(alpha: 0.92),
+                ink.withValues(alpha: 0.55),
+                ink.withValues(alpha: 0.15),
+              ],
+              stops: const [0.0, 0.42, 1.0],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -625,9 +701,7 @@ class _MasterySparklesState extends State<_MasterySparkles>
     return AnimatedBuilder(
       animation: _cycle,
       builder: (context, _) {
-        return CustomPaint(
-          painter: _MasterySparklePainter(t: _cycle.value),
-        );
+        return CustomPaint(painter: _MasterySparklePainter(t: _cycle.value));
       },
     );
   }
@@ -691,7 +765,13 @@ double _sparkleLife(double u) {
   return 1;
 }
 
-void _drawStar(Canvas canvas, Offset center, double radius, double turn, Color color) {
+void _drawStar(
+  Canvas canvas,
+  Offset center,
+  double radius,
+  double turn,
+  Color color,
+) {
   final path = Path();
   const points = 4;
   for (var i = 0; i < points * 2; i++) {
@@ -812,7 +892,12 @@ class _MasteryValuePainter extends CustomPainter {
     _paintShine(canvas, size, painter, offset);
   }
 
-  void _paintShine(Canvas canvas, Size size, TextPainter painter, Offset offset) {
+  void _paintShine(
+    Canvas canvas,
+    Size size,
+    TextPainter painter,
+    Offset offset,
+  ) {
     final travel = -1.15 + Curves.easeInOut.transform(shine) * 2.3;
     canvas.saveLayer(Offset.zero & size, Paint()..blendMode = BlendMode.plus);
     painter.paint(canvas, offset);
@@ -1051,7 +1136,7 @@ class _DailyMissionsStrip extends StatelessWidget {
             AppSpacing.gapSm,
           ],
           InkWell(
-            onTap: () => Nav.go(context, AppPaths.tasks),
+            onTap: () => Nav.push(context, AppPaths.tasks),
             child: Row(
               children: [
                 Icon(

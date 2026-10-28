@@ -31,10 +31,7 @@ class DesignGeneration {
 }
 
 class DesignLegacy {
-  const DesignLegacy({
-    this.preservationRequirement,
-    this.closureMilestone,
-  });
+  const DesignLegacy({this.preservationRequirement, this.closureMilestone});
 
   factory DesignLegacy.fromJson(Map<String, dynamic>? json) {
     if (json == null) return const DesignLegacy();
@@ -221,10 +218,7 @@ class DesignDetail {
 
 /// Designs under one series within a theme category.
 class VeloraSeriesGroup {
-  const VeloraSeriesGroup({
-    required this.seriesKey,
-    required this.designs,
-  });
+  const VeloraSeriesGroup({required this.seriesKey, required this.designs});
 
   final String seriesKey;
   final List<DesignSummary> designs;
@@ -247,10 +241,7 @@ class VeloraThemeInSeries {
 
 /// Theme category with nested series groups (theme → series).
 class VeloraThemeGroup {
-  const VeloraThemeGroup({
-    required this.theme,
-    required this.series,
-  });
+  const VeloraThemeGroup({required this.theme, required this.series});
 
   final String theme;
   final List<VeloraSeriesGroup> series;
@@ -262,22 +253,35 @@ class CatalogSeriesEntry {
     required this.key,
     required this.label,
     required this.seriesKey,
+    this.slammerSeries = false,
   });
 
   factory CatalogSeriesEntry.fromJson(Map<String, dynamic> json) {
     final key = json['key']?.toString().trim() ?? '';
     final label = json['label']?.toString().trim() ?? '';
     final seriesKey = json['seriesKey']?.toString().trim() ?? '';
+    final flag = json['slammerSeries'];
+    final slammerSeries =
+        flag == true ||
+        flag == 1 ||
+        flag?.toString().trim() == '1' ||
+        flag?.toString().trim().toLowerCase() == 'true';
     return CatalogSeriesEntry(
       key: key,
-      label: label.isNotEmpty ? label : (seriesKey.isNotEmpty ? seriesKey : key),
+      label: label.isNotEmpty
+          ? label
+          : (seriesKey.isNotEmpty ? seriesKey : key),
       seriesKey: seriesKey.isNotEmpty ? seriesKey : label,
+      slammerSeries: slammerSeries,
     );
   }
 
   final String key;
   final String label;
   final String seriesKey;
+
+  /// Slammer catalog series. Shown under Velora Slammers, not Arcori.
+  final bool slammerSeries;
 }
 
 /// Catalog theme from meta (lore lookup).
@@ -347,29 +351,30 @@ class DesignStandings {
       internalId: json['internalId']?.toString() ?? '',
       generationNumber: gen is Map
           ? (gen['number'] is int
-              ? gen['number'] as int
-              : int.tryParse('${gen['number']}'))
+                ? gen['number'] as int
+                : int.tryParse('${gen['number']}'))
           : null,
       generationRoman: gen is Map ? gen['roman']?.toString() : null,
       fillCurrent: fill is Map
           ? (fill['current'] is int
-              ? fill['current'] as int
-              : int.tryParse('${fill['current']}') ?? 0)
+                ? fill['current'] as int
+                : int.tryParse('${fill['current']}') ?? 0)
           : 0,
       fillCap: fill is Map
           ? (fill['cap'] is int
-              ? fill['cap'] as int
-              : int.tryParse('${fill['cap']}') ?? 0)
+                ? fill['cap'] as int
+                : int.tryParse('${fill['cap']}') ?? 0)
           : 0,
       leaderWindowEndsAt: json['leaderWindowEndsAt']?.toString(),
       ranks: rawRanks is List
           ? rawRanks
-              .whereType<Map>()
-              .map(
-                (item) =>
-                    StandingsRankEntry.fromJson(Map<String, dynamic>.from(item)),
-              )
-              .toList()
+                .whereType<Map>()
+                .map(
+                  (item) => StandingsRankEntry.fromJson(
+                    Map<String, dynamic>.from(item),
+                  ),
+                )
+                .toList()
           : const [],
     );
   }
@@ -382,6 +387,5 @@ class DesignStandings {
   final String? leaderWindowEndsAt;
   final List<StandingsRankEntry> ranks;
 
-  bool get isEmpty =>
-      ranks.isEmpty && fillCurrent == 0 && fillCap == 0;
+  bool get isEmpty => ranks.isEmpty && fillCurrent == 0 && fillCap == 0;
 }

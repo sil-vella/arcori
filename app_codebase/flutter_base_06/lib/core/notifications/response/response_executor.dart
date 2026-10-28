@@ -51,7 +51,7 @@ Future<void> executeNavigate({
   if (current == target) {
     return;
   }
-  Nav.go(context, path);
+  Nav.push(context, path);
 }
 
 String _normalizePath(String path) {
@@ -64,10 +64,7 @@ String _normalizePath(String path) {
 }
 
 class NotificationReplyResult {
-  const NotificationReplyResult({
-    required this.success,
-    this.data,
-  });
+  const NotificationReplyResult({required this.success, this.data});
 
   final bool success;
   final Map<String, dynamic>? data;

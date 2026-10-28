@@ -147,6 +147,14 @@ Documentation/02_FlowCharts/charts/**/*.pdf
 # iOS App Store assets. Xcode Cloud only builds what is in git.
 !app_codebase/flutter_base_06/ios/Runner/Assets.xcassets/**/*.png
 
+# Flutter image assets listed in pubspec.yaml. Cloud archive fails (xcodebuild 65)
+# if a listed file or directory is missing from the clone.
+!app_codebase/flutter_base_06/assets/**/*.webp
+!app_codebase/flutter_base_06/assets/**/*.png
+!app_codebase/flutter_base_06/assets/**/*.jpg
+!app_codebase/flutter_base_06/assets/**/*.jpeg
+!app_codebase/flutter_base_06/assets/**/*.gif
+
 # --- Kin Lottie media (large; local / Docker CATALOG_KIN_MEDIA_ROOT) ---
 assets/lottie/
 
@@ -162,6 +170,11 @@ assets/lottie/
 *.mpeg
 *.mpg
 *.3gp
+
+# Flutter video assets listed in pubspec.yaml (assets/videos/).
+!app_codebase/flutter_base_06/assets/**/*.mp4
+!app_codebase/flutter_base_06/assets/**/*.mov
+!app_codebase/flutter_base_06/assets/**/*.webm
 
 # --- Flutter Chrome profile (launch_chrome.sh) ---
 .flutter_chrome_profile_*/

@@ -49,7 +49,9 @@ _CapPose _capPose(double t) {
   const openRot = -38 * math.pi / 180;
   if (t <= closedEnd) return const _CapPose(0, 0);
   if (t <= riseEnd) {
-    final u = Curves.easeInOut.transform((t - closedEnd) / (riseEnd - closedEnd));
+    final u = Curves.easeInOut.transform(
+      (t - closedEnd) / (riseEnd - closedEnd),
+    );
     return _CapPose(riseDy * u, 0);
   }
   if (t <= tiltEnd) {
@@ -137,11 +139,7 @@ class _OpeningShinePainter extends CustomPainter {
       radius,
       Paint()
         ..shader = const RadialGradient(
-          colors: [
-            Color(0xFFFFFFFF),
-            Color(0xFFFFFFFF),
-            Color(0x00FFFFFF),
-          ],
+          colors: [Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0x00FFFFFF)],
           stops: [0.0, 0.72, 1.0],
         ).createShader(rect)
         ..blendMode = BlendMode.dstIn,
@@ -158,9 +156,7 @@ class _OpeningShinePainter extends CustomPainter {
             AppColors.secondary.withValues(alpha: 0),
           ],
           stops: const [0.0, 0.42, 1.0],
-        ).createShader(
-          Rect.fromCircle(center: center, radius: radius * 0.46),
-        )
+        ).createShader(Rect.fromCircle(center: center, radius: radius * 0.46))
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, radius * 0.08),
     );
     canvas.restore();
@@ -284,8 +280,9 @@ class _CanisterOpenScreenState extends State<CanisterOpenScreen>
                     fit: BoxFit.fill,
                     filterQuality: FilterQuality.medium,
                     errorBuilder: (_, __, ___) {
-                      WidgetsBinding.instance
-                          .addPostFrameCallback((_) => _reveal());
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (_) => _reveal(),
+                      );
                       return const SizedBox.shrink();
                     },
                   ),
@@ -404,7 +401,10 @@ class _CanisterOpenScreenState extends State<CanisterOpenScreen>
           ),
           AppSpacing.gapMd,
           if (items.isEmpty)
-            Text('No Arcori in this canister match these filters.', style: muted)
+            Text(
+              'No Arcori in this canister match these filters.',
+              style: muted,
+            )
           else
             GridView.builder(
               shrinkWrap: true,
@@ -447,10 +447,7 @@ class _FilterRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final choices = [
-      if (allowAll) null,
-      ...options,
-    ];
+    final choices = [if (allowAll) null, ...options];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -529,7 +526,7 @@ class CanisterOpenMissing extends StatelessWidget {
               AppSpacing.gapMd,
               FilledButton(
                 style: context.appButtons.primary.filled,
-                onPressed: () => Nav.go(context, AppPaths.avariCirculating),
+                onPressed: () => Nav.push(context, AppPaths.avariCirculating),
                 child: const Text('My Arcori'),
               ),
             ],

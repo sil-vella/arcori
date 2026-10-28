@@ -16,6 +16,7 @@ from modules.catalog.current_series import (
     list_series_catalog,
     media_folder_for_series,
     series_filter_matches,
+    series_is_slammer_catalog,
 )
 from modules.catalog.velora_media import enrich_regions_meta
 
@@ -155,9 +156,32 @@ def get_meta() -> dict[str, Any]:
     )
 
 
+def _slammer_series_browse(
+    design: dict[str, Any],
+    *,
+    series_key: str | None,
+    internal_id: str | None,
+) -> bool:
+    """Shop slammer series stay browsable in Velora when circulation is off."""
+    theme_code = str(design.get("themeCode") or "").strip().upper()
+    dtype = str(design.get("type") or "").strip().lower()
+    iid = str(internal_id or design.get("internalId") or "").strip().upper()
+    is_slammer = (
+        theme_code == "SLM" or dtype == "slammer" or iid.startswith("SLM-")
+    )
+    if not is_slammer:
+        return False
+    return series_is_slammer_catalog(str(series_key or ""))
+
+
 def get_series() -> dict[str, Any]:
-    """Velora home — ordered series with master switch active (03_series.json)."""
-    return {"series": list_series_catalog(active_only=True)}
+    """Velora home — active Arcori series plus slammer catalog series."""
+    return {
+        "series": list_series_catalog(
+            active_only=True,
+            include_slammer_series=True,
+        )
+    }
 
 
 def get_index(
@@ -222,7 +246,12 @@ def get_index(
                 series_key=row.series_key,
                 internal_id=row.internal_id,
             ):
-                continue
+                if not _slammer_series_browse(
+                    design,
+                    series_key=row.series_key,
+                    internal_id=row.internal_id,
+                ):
+                    continue
             items.append(
                 design_summary(
                     design,

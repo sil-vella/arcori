@@ -101,7 +101,10 @@ class _VeloraScreenState extends ConsumerState<VeloraScreen> {
                       _SeriesSection(
                         title: 'Arcori',
                         mark: const AppMarkIcon(AppMarks.arcori),
-                        series: velora.series,
+                        series: [
+                          for (final series in velora.series)
+                            if (!series.slammerSeries) series,
+                        ],
                         empty: 'No Arcori series yet',
                       ),
                       AppSpacing.gapMd,
@@ -178,15 +181,29 @@ class _SeriesRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        final seriesId = series.seriesKey.trim().isNotEmpty
+            ? series.seriesKey
+            : series.key;
+        if (slammers) {
+          Nav.push(
+            context,
+            Uri(
+              path: AppPaths.veloraTheme,
+              queryParameters: {
+                'code': 'SLM',
+                'name': series.label,
+                'series': seriesId,
+                'seriesName': series.label,
+              },
+            ).toString(),
+          );
+          return;
+        }
         Nav.push(
           context,
           Uri(
             path: AppPaths.veloraSeries,
-            queryParameters: {
-              'key': series.key,
-              'name': series.label,
-              if (slammers) 'focus': 'slammers',
-            },
+            queryParameters: {'key': seriesId, 'name': series.label},
           ).toString(),
         );
       },
@@ -211,6 +228,7 @@ class _SeriesRow extends StatelessWidget {
 }
 
 bool _isSlammerSeries(CatalogSeriesEntry series) {
+  if (series.slammerSeries) return true;
   final key = series.key.trim().toLowerCase();
   final seriesKey = series.seriesKey.trim().toLowerCase();
   return key == 'genesis' || seriesKey == 'genesis';
@@ -248,7 +266,7 @@ class _WorldCard extends StatelessWidget {
             child: FilledButton(
               style: context.appButtons.primary.filled,
               onPressed: () => Nav.push(context, AppPaths.veloraWorld),
-              child: const Text('Learn about the world'),
+              child: const Text('Learn the world'),
             ),
           ),
         ],

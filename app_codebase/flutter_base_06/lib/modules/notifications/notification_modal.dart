@@ -48,9 +48,9 @@ Future<void> showNotificationModalSequence(
       onAcknowledged: onAcknowledged,
       markRead: markRead,
       onMessageShown: (message) {
-        ref.read(notificationsProvider.notifier).markModalShown(
-              message.msgId ?? message.id,
-            );
+        ref
+            .read(notificationsProvider.notifier)
+            .markModalShown(message.msgId ?? message.id);
       },
     ),
   );
@@ -68,9 +68,7 @@ Future<void> showNotificationModal(
     context,
     ref,
     [message],
-    onAcknowledged: onAcknowledged == null
-        ? null
-        : (_) => onAcknowledged(),
+    onAcknowledged: onAcknowledged == null ? null : (_) => onAcknowledged(),
     markRead: markRead == null ? null : (_) => markRead(),
   );
 }
@@ -95,7 +93,8 @@ class _NotificationSequenceModal extends StatefulWidget {
       _NotificationSequenceModalState();
 }
 
-class _NotificationSequenceModalState extends State<_NotificationSequenceModal> {
+class _NotificationSequenceModalState
+    extends State<_NotificationSequenceModal> {
   int _index = 0;
   bool _advancing = false;
 
@@ -188,10 +187,7 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
       return AppCenteredModal(
         title: message.title,
         onClose: () => _completeCurrentMessage(runAcknowledged: true),
-        child: Text(
-          message.body,
-          style: context.appTypography.body,
-        ),
+        child: Text(message.body, style: context.appTypography.body),
         actions: [
           for (var index = 0; index < config.buttons.length; index++)
             _navigateActionButton(
@@ -215,10 +211,7 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
       return AppCenteredModal(
         title: message.title,
         onClose: () => _completeCurrentMessage(runAcknowledged: true),
-        child: Text(
-          message.body,
-          style: context.appTypography.body,
-        ),
+        child: Text(message.body, style: context.appTypography.body),
         actions: [
           for (var index = 0; index < config.options.length; index++)
             _replyActionButton(
@@ -242,10 +235,7 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
     return AppCenteredModal(
       title: message.title,
       onClose: () => _completeCurrentMessage(runAcknowledged: true),
-      child: Text(
-        message.body,
-        style: context.appTypography.body,
-      ),
+      child: Text(message.body, style: context.appTypography.body),
       actions: [
         FilledButton(
           style: context.appButtons.primary.filled,
@@ -288,8 +278,8 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
         title: message.title.isNotEmpty
             ? message.title
             : (preservable.length > 1
-                ? 'Legacy preserve (${preservable.length})'
-                : 'Legacy preserve available'),
+                  ? 'Legacy preserve (${preservable.length})'
+                  : 'Legacy preserve available'),
         showCloseButton: false,
         child: LegacyOfferCelebrateBody(
           offers: preservable.isNotEmpty ? preservable : offers,
@@ -312,8 +302,8 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
                   selected.isEmpty
                       ? 'Open leader window'
                       : (selected.length == 1
-                          ? 'Preserve selected'
-                          : 'Preserve ${selected.length} selected'),
+                            ? 'Preserve selected'
+                            : 'Preserve ${selected.length} selected'),
                 ),
               ),
               AppSpacing.gapSm,
@@ -331,8 +321,7 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
               AppSpacing.gapSm,
             ],
             OutlinedButton(
-              onPressed: () =>
-                  _completeCurrentMessage(runAcknowledged: true),
+              onPressed: () => _completeCurrentMessage(runAcknowledged: true),
               child: const Text('Dismiss'),
             ),
           ],
@@ -370,7 +359,9 @@ class _NotificationSequenceModalState extends State<_NotificationSequenceModal> 
         return null;
       }
       return AppCenteredModal(
-        title: message.title.isNotEmpty ? message.title : 'Achievement unlocked',
+        title: message.title.isNotEmpty
+            ? message.title
+            : 'Achievement unlocked',
         showCloseButton: false,
         child: AchievementUnlockCelebrateBody(
           entry: entry,
@@ -478,27 +469,17 @@ Widget _navigateActionButton({
     final target = _normalizeNavPath(path);
     if (current == target) {
       if (LOGGING_SWITCH) {
-        customlog(
-          'notifications: Play now skip nav (already on $target)',
-        );
+        customlog('notifications: Play now skip nav (already on $target)');
       }
       return;
     }
-    Nav.go(rootCtx, path);
+    Nav.push(rootCtx, path);
   }
 
   if (isPrimary) {
-    return FilledButton(
-      style: style,
-      onPressed: onTap,
-      child: child,
-    );
+    return FilledButton(style: style, onPressed: onTap, child: child);
   }
-  return TextButton(
-    style: style,
-    onPressed: onTap,
-    child: child,
-  );
+  return TextButton(style: style, onPressed: onTap, child: child);
 }
 
 String _normalizeNavPath(String path) {
@@ -554,17 +535,9 @@ Widget _replyActionButton({
       : context.appButtons.secondary.text;
   final child = Text(option.label);
   if (isPrimary) {
-    return FilledButton(
-      style: style,
-      onPressed: onTap,
-      child: child,
-    );
+    return FilledButton(style: style, onPressed: onTap, child: child);
   }
-  return TextButton(
-    style: style,
-    onPressed: onTap,
-    child: child,
-  );
+  return TextButton(style: style, onPressed: onTap, child: child);
 }
 
 String _acknowledgeLabel(NotificationMessage message) {

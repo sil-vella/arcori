@@ -6,6 +6,7 @@ import '../../../core/screen/screen.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_chrome.dart';
 import '../../../core/widgets/app_mark_icon.dart';
+import '../../market/slammer_market_action.dart';
 import '../velora_chrome.dart';
 import '../velora_models.dart';
 import '../velora_notifier.dart';
@@ -157,8 +158,8 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen> {
     final gen = design?.generation?.display;
     final seriesLabel =
         (design?.seriesKey != null && design!.seriesKey!.isNotEmpty)
-            ? design.seriesKey
-            : design?.series;
+        ? design.seriesKey
+        : design?.series;
     final subtitle = [
       if ((gen ?? '').isNotEmpty) 'Gen $gen',
       if ((seriesLabel ?? '').isNotEmpty) seriesLabel,
@@ -178,111 +179,112 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen> {
         child: detail.isLoading && design == null
             ? const AppChromeCentered(child: CircularProgressIndicator())
             : detail.errorMessage != null && design == null
-                ? AppChromeCentered(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          detail.errorMessage!,
-                          style: context.appTypography.body.copyWith(
-                            color: context.appColors.red,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        AppSpacing.gapMd,
-                        FilledButton(
-                          style: context.appButtons.primary.filled,
-                          onPressed: () => ref
-                              .read(arcoriDetailProvider.notifier)
-                              .load(widget.internalId),
-                          child: const Text('Retry'),
-                        ),
-                      ],
+            ? AppChromeCentered(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      detail.errorMessage!,
+                      style: context.appTypography.body.copyWith(
+                        color: context.appColors.red,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  )
-                : ListView(
-                    padding: EdgeInsets.fromLTRB(
-                      AppSpacing.md,
-                      AppChromePage.topClearance(context) + AppSpacing.sm,
-                      AppSpacing.md,
-                      AppSpacing.xxl,
+                    AppSpacing.gapMd,
+                    FilledButton(
+                      style: context.appButtons.primary.filled,
+                      onPressed: () => ref
+                          .read(arcoriDetailProvider.notifier)
+                          .load(widget.internalId),
+                      child: const Text('Retry'),
                     ),
-                    children: [
-                      if (design != null && slammer) ...[
-                        _slammerHero(summary, subtitle),
-                        AppSpacing.gapMd,
-                        AppChromeSection(
-                          title: 'Details',
-                          mark: const AppMarkIcon(AppMarks.slammers),
-                          goldFrame: true,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: _detailRows(context, design),
+                  ],
+                ),
+              )
+            : ListView(
+                padding: EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  AppChromePage.topClearance(context) + AppSpacing.sm,
+                  AppSpacing.md,
+                  AppSpacing.xxl,
+                ),
+                children: [
+                  if (design != null && slammer) ...[
+                    _slammerHero(summary, subtitle),
+                    AppSpacing.gapMd,
+                    AppChromeSection(
+                      title: 'Details',
+                      mark: const AppMarkIcon(AppMarks.slammers),
+                      goldFrame: true,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: _detailRows(context, design),
+                      ),
+                    ),
+                    AppSpacing.gapMd,
+                    AppChromeSection(
+                      title: 'Standings',
+                      mark: const AppMarkIcon(AppMarks.slammers),
+                      goldFrame: true,
+                      child: _StandingsBody(internalId: widget.internalId),
+                    ),
+                  ] else if (design != null)
+                    AppChromeSection(
+                      title: 'Arcori',
+                      mark: const AppMarkIcon(AppMarks.arcori),
+                      goldFrame: true,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              final disc = (constraints.maxWidth / 1.55).clamp(
+                                120.0,
+                                220.0,
+                              );
+                              return VeloraFeaturedStage(
+                                design: summary,
+                                subtitle: subtitle.isEmpty ? null : subtitle,
+                                discSize: disc,
+                              );
+                            },
                           ),
-                        ),
-                        AppSpacing.gapMd,
-                        AppChromeSection(
-                          title: 'Standings',
-                          mark: const AppMarkIcon(AppMarks.slammers),
-                          goldFrame: true,
-                          child: _StandingsBody(internalId: widget.internalId),
-                        ),
-                      ] else if (design != null)
-                        AppChromeSection(
-                          title: 'Arcori',
-                          mark: const AppMarkIcon(AppMarks.arcori),
-                          goldFrame: true,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                          AppSpacing.gapMd,
+                          Row(
                             children: [
-                              LayoutBuilder(
-                                builder: (context, constraints) {
-                                  final disc = (constraints.maxWidth / 1.55)
-                                      .clamp(120.0, 220.0);
-                                  return VeloraFeaturedStage(
-                                    design: summary,
-                                    subtitle:
-                                        subtitle.isEmpty ? null : subtitle,
-                                    discSize: disc,
-                                  );
-                                },
+                              Expanded(
+                                child: FilledButton(
+                                  style: _tab == _DetailTab.details
+                                      ? context.appButtons.primary.filled
+                                      : context.appButtons.primary.tonal,
+                                  onPressed: () =>
+                                      _selectTab(_DetailTab.details),
+                                  child: const Text('Details'),
+                                ),
                               ),
-                              AppSpacing.gapMd,
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: FilledButton(
-                                      style: _tab == _DetailTab.details
-                                          ? context.appButtons.primary.filled
-                                          : context.appButtons.primary.tonal,
-                                      onPressed: () =>
-                                          _selectTab(_DetailTab.details),
-                                      child: const Text('Details'),
-                                    ),
-                                  ),
-                                  AppSpacing.gapSm,
-                                  Expanded(
-                                    child: FilledButton(
-                                      style: _tab == _DetailTab.standings
-                                          ? context.appButtons.primary.filled
-                                          : context.appButtons.primary.tonal,
-                                      onPressed: () =>
-                                          _selectTab(_DetailTab.standings),
-                                      child: const Text('Standings'),
-                                    ),
-                                  ),
-                                ],
+                              AppSpacing.gapSm,
+                              Expanded(
+                                child: FilledButton(
+                                  style: _tab == _DetailTab.standings
+                                      ? context.appButtons.primary.filled
+                                      : context.appButtons.primary.tonal,
+                                  onPressed: () =>
+                                      _selectTab(_DetailTab.standings),
+                                  child: const Text('Standings'),
+                                ),
                               ),
-                              AppSpacing.gapMd,
-                              if (_tab == _DetailTab.details)
-                                ..._detailRows(context, design)
-                              else
-                                _StandingsBody(internalId: widget.internalId),
                             ],
                           ),
-                        ),
-                    ],
-                  ),
+                          AppSpacing.gapMd,
+                          if (_tab == _DetailTab.details)
+                            ..._detailRows(context, design)
+                          else
+                            _StandingsBody(internalId: widget.internalId),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
       ),
     );
   }
@@ -300,6 +302,7 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen> {
             design: summary,
             subtitle: subtitle.isEmpty ? null : subtitle,
             discSize: disc,
+            footer: SlammerMarketAction(designId: widget.internalId),
           );
         },
       ),
@@ -309,8 +312,8 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen> {
   List<Widget> _detailRows(BuildContext context, DesignDetail design) {
     final seriesLabel =
         (design.seriesKey != null && design.seriesKey!.isNotEmpty)
-            ? design.seriesKey
-            : design.series;
+        ? design.seriesKey
+        : design.series;
     final rows = <MapEntry<String, String?>>[
       MapEntry('Theme', design.theme),
       MapEntry('Subtheme', design.subtheme),

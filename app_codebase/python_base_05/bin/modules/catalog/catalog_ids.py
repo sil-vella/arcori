@@ -49,6 +49,8 @@ _SERIES_NAMES = {
     3: "Foundations",
     4: "Civilizations",
     5: "Kin",
+    6: "The Deadcats",
+    7: "Mushroom Deadcat",
 }
 
 _ROMAN = {

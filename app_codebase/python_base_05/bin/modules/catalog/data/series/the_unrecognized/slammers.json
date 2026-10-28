@@ -1,0 +1,2529 @@
+{
+  "catalog": "Slammer The Unrecognized Series",
+  "theme": "Slammers",
+  "series": "The Unrecognized",
+  "themeCode": "SLM",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "SLM-SLM-NWN-SER005-GEN001-0001",
+      "themeCode": "SLM",
+      "designCode": "NWN",
+      "designFamily": "THE_UNWINDING_SPHERE_SLAMMER",
+      "design": "The Unwinding Sphere",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Heavy Impact",
+      "style": "Realistic",
+      "finish": "Metallic",
+      "color": "#B65B08",
+      "effect": "Pulse",
+      "selectionWeight": 9.2,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 9,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 7,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.8,
+          "max": 1.0
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Unwinding Sphere. Square WebP, subject centered, named SLM-NWN-SER005-0001.webp.",
+      "loreDescription": "A collectible The Unwinding Sphere from Amberwild, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-BNT-SER005-GEN001-0002",
+      "themeCode": "SLM",
+      "designCode": "BNT",
+      "designFamily": "THE_BENT_MERIDIAN_SLAMMER",
+      "design": "The Bent Meridian",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Precision",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "color": "#120A04",
+      "effect": "Glow",
+      "selectionWeight": 5.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 4,
+        "precision": 9,
+        "control": 8,
+        "recovery": 7,
+        "spread": 2,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.25,
+          "max": 0.45
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Bent Meridian. Square WebP, subject centered, named SLM-BNT-SER005-0002.webp.",
+      "loreDescription": "A collectible The Bent Meridian from Everlight Grove, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SCR-SER005-GEN001-0003",
+      "themeCode": "SLM",
+      "designCode": "SCR",
+      "designFamily": "SCRIPT_OF_NO_TONGUE_SLAMMER",
+      "design": "Script of No Tongue",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Wide Spread",
+      "style": "Neon",
+      "finish": "Holographic",
+      "color": "#DDA864",
+      "effect": "Motion",
+      "selectionWeight": 7.6,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 4,
+        "control": 5,
+        "recovery": 4,
+        "spread": 9,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.45,
+          "max": 0.65
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Script of No Tongue. Square WebP, subject centered, named SLM-SCR-SER005-0003.webp.",
+      "loreDescription": "A collectible Script of No Tongue from Moonwake Bay, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-THR-SER005-GEN001-0004",
+      "themeCode": "SLM",
+      "designCode": "THR",
+      "designFamily": "THE_THIRD_MEASURE_SLAMMER",
+      "design": "The Third Measure",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Light Control",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "color": "#2E2112",
+      "effect": "Sparkle",
+      "selectionWeight": 4.4,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 3,
+        "precision": 7,
+        "control": 9,
+        "recovery": 6,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.2,
+          "max": 0.4
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Third Measure. Square WebP, subject centered, named SLM-THR-SER005-0004.webp.",
+      "loreDescription": "A collectible The Third Measure from Amberwild, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SLD-SER005-GEN001-0005",
+      "themeCode": "SLM",
+      "designCode": "SLD",
+      "designFamily": "THE_SEALED_STAR_SLAMMER",
+      "design": "The Sealed Star",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Brute Force",
+      "style": "Comic",
+      "finish": "Metallic",
+      "color": "#F5D399",
+      "effect": "Fire",
+      "selectionWeight": 8.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 10,
+        "precision": 2,
+        "control": 3,
+        "recovery": 2,
+        "spread": 6,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.75,
+          "max": 0.95
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Sealed Star. Square WebP, subject centered, named SLM-SLD-SER005-0005.webp.",
+      "loreDescription": "A collectible The Sealed Star from Moonwake Bay, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SFD-SER005-GEN001-0006",
+      "themeCode": "SLM",
+      "designCode": "SFD",
+      "designFamily": "SCATTER_OF_THE_FIRST_DEVICE_SLAMMER",
+      "design": "Scatter of the First Device",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Recovery",
+      "style": "Neon",
+      "finish": "Chrome",
+      "color": "#0E60A6",
+      "effect": "Pulse",
+      "selectionWeight": 6.2,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 6,
+        "recovery": 9,
+        "spread": 4,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.35,
+          "max": 0.55
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Scatter of the First Device. Square WebP, subject centered, named SLM-SFD-SER005-0006.webp.",
+      "loreDescription": "A collectible Scatter of the First Device from Ashdrift Hill, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SHT-SER005-GEN001-0007",
+      "themeCode": "SLM",
+      "designCode": "SHT",
+      "designFamily": "THE_SHATTERED_BEARING_SLAMMER",
+      "design": "The Shattered Bearing",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Weighted Control",
+      "style": "Low Poly",
+      "finish": "Matte",
+      "color": "#CFB69A",
+      "effect": "Glow",
+      "selectionWeight": 7.1,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 8,
+        "precision": 4,
+        "control": 7,
+        "recovery": 5,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.6,
+          "max": 0.8
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Shattered Bearing. Square WebP, subject centered, named SLM-SHT-SER005-0007.webp.",
+      "loreDescription": "A collectible The Shattered Bearing from Moonwake Bay, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-FGR-SER005-GEN001-0008",
+      "themeCode": "SLM",
+      "designCode": "FGR",
+      "designFamily": "FIGURE_WITHOUT_NAME_SLAMMER",
+      "design": "Figure Without Name",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Visual Flair",
+      "style": "Pixel Art",
+      "finish": "Holographic",
+      "color": "#F7874C",
+      "effect": "Pulse",
+      "selectionWeight": 8.0,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 6,
+        "control": 5,
+        "recovery": 4,
+        "spread": 8,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.5,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Figure Without Name. Square WebP, subject centered, named SLM-FGR-SER005-0008.webp.",
+      "loreDescription": "A collectible Figure Without Name from Little Frost, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-FAM-SER005-GEN001-0009",
+      "themeCode": "SLM",
+      "designCode": "FAM",
+      "designFamily": "FACES_AFTER_MEMORY_SLAMMER",
+      "design": "Faces After Memory",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Balanced",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#9F241C",
+      "effect": "None",
+      "selectionWeight": 5.0,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 5,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.55,
+          "max": 0.85
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Faces After Memory. Square WebP, subject centered, named SLM-FAM-SER005-0009.webp.",
+      "loreDescription": "A collectible Faces After Memory from Everlight Grove, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-CHR-SER005-GEN001-0010",
+      "themeCode": "SLM",
+      "designCode": "CHR",
+      "designFamily": "CHOIR_WITHOUT_SOUND_SLAMMER",
+      "design": "Choir Without Sound",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Unstable",
+      "style": "Neon",
+      "finish": "Prismatic",
+      "color": "#136EC5",
+      "effect": "Rainbow Shift",
+      "selectionWeight": 6.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 7,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 8,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.4,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Choir Without Sound. Square WebP, subject centered, named SLM-CHR-SER005-0010.webp.",
+      "loreDescription": "A collectible Choir Without Sound from Moonwake Bay, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-NSS-SER005-GEN001-0011",
+      "themeCode": "SLM",
+      "designCode": "NSS",
+      "designFamily": "UNSEASONED_SEEDS_SLAMMER",
+      "design": "Unseasoned Seeds",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Heavy Impact",
+      "style": "Realistic",
+      "finish": "Metallic",
+      "color": "#F6A743",
+      "effect": "Pulse",
+      "selectionWeight": 9.2,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 9,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 7,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.8,
+          "max": 1.0
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Unseasoned Seeds. Square WebP, subject centered, named SLM-NSS-SER005-0011.webp.",
+      "loreDescription": "A collectible Unseasoned Seeds from Everlight Grove, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-MSM-SER005-GEN001-0012",
+      "themeCode": "SLM",
+      "designCode": "MSM",
+      "designFamily": "MUSEUM_OF_NO_SPECIES_SLAMMER",
+      "design": "Museum of No Species",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Precision",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "color": "#55341E",
+      "effect": "Glow",
+      "selectionWeight": 5.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 4,
+        "precision": 9,
+        "control": 8,
+        "recovery": 7,
+        "spread": 2,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.25,
+          "max": 0.45
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Museum of No Species. Square WebP, subject centered, named SLM-MSM-SER005-0012.webp.",
+      "loreDescription": "A collectible Museum of No Species from Little Frost, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-CAT-SER005-GEN001-0013",
+      "themeCode": "SLM",
+      "designCode": "CAT",
+      "designFamily": "CABINET_OF_ALMOST_THINGS_SLAMMER",
+      "design": "Cabinet of Almost Things",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Wide Spread",
+      "style": "Neon",
+      "finish": "Holographic",
+      "color": "#130900",
+      "effect": "Motion",
+      "selectionWeight": 7.6,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 4,
+        "control": 5,
+        "recovery": 4,
+        "spread": 9,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.45,
+          "max": 0.65
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Cabinet of Almost Things. Square WebP, subject centered, named SLM-CAT-SER005-0013.webp.",
+      "loreDescription": "A collectible Cabinet of Almost Things from Little Frost, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-LCK-SER005-GEN001-0014",
+      "themeCode": "SLM",
+      "designCode": "LCK",
+      "designFamily": "THE_LOCK_WITHOUT_DOOR_SLAMMER",
+      "design": "The Lock Without Door",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Light Control",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "color": "#A17040",
+      "effect": "Sparkle",
+      "selectionWeight": 4.4,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 3,
+        "precision": 7,
+        "control": 9,
+        "recovery": 6,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.2,
+          "max": 0.4
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Lock Without Door. Square WebP, subject centered, named SLM-LCK-SER005-0014.webp.",
+      "loreDescription": "A collectible The Lock Without Door from Ashdrift Hill, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-TLS-SER005-GEN001-0015",
+      "themeCode": "SLM",
+      "designCode": "TLS",
+      "designFamily": "ATLAS_OF_ELSEWHERE_SLAMMER",
+      "design": "Atlas of Elsewhere",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Brute Force",
+      "style": "Comic",
+      "finish": "Metallic",
+      "color": "#DBA87D",
+      "effect": "Fire",
+      "selectionWeight": 8.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 10,
+        "precision": 2,
+        "control": 3,
+        "recovery": 2,
+        "spread": 6,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.75,
+          "max": 0.95
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Atlas of Elsewhere. Square WebP, subject centered, named SLM-TLS-SER005-0015.webp.",
+      "loreDescription": "A collectible Atlas of Elsewhere from Moonwake Bay, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-KYT-SER005-GEN001-0016",
+      "themeCode": "SLM",
+      "designCode": "KYT",
+      "designFamily": "KEY_TO_NO_THRESHOLD_SLAMMER",
+      "design": "Key to No Threshold",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Recovery",
+      "style": "Neon",
+      "finish": "Chrome",
+      "color": "#FEFAEA",
+      "effect": "Pulse",
+      "selectionWeight": 6.2,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 6,
+        "recovery": 9,
+        "spread": 4,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.35,
+          "max": 0.55
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Key to No Threshold. Square WebP, subject centered, named SLM-KYT-SER005-0016.webp.",
+      "loreDescription": "A collectible Key to No Threshold from Ashdrift Hill, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SFT-SER005-GEN001-0017",
+      "themeCode": "SLM",
+      "designCode": "SFT",
+      "designFamily": "THE_SOFT_KEY_SLAMMER",
+      "design": "The Soft Key",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Weighted Control",
+      "style": "Low Poly",
+      "finish": "Matte",
+      "color": "#CBAA7A",
+      "effect": "Glow",
+      "selectionWeight": 7.1,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 8,
+        "precision": 4,
+        "control": 7,
+        "recovery": 5,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.6,
+          "max": 0.8
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Soft Key. Square WebP, subject centered, named SLM-SFT-SER005-0017.webp.",
+      "loreDescription": "A collectible The Soft Key from Everlight Grove, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-PRS-SER005-GEN001-0018",
+      "themeCode": "SLM",
+      "designCode": "PRS",
+      "designFamily": "PRISM_VESSEL_SLAMMER",
+      "design": "Prism Vessel",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Visual Flair",
+      "style": "Pixel Art",
+      "finish": "Holographic",
+      "color": "#3DD7F5",
+      "effect": "Pulse",
+      "selectionWeight": 8.0,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 6,
+        "control": 5,
+        "recovery": 4,
+        "spread": 8,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.5,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Prism Vessel. Square WebP, subject centered, named SLM-PRS-SER005-0018.webp.",
+      "loreDescription": "A collectible Prism Vessel from Little Frost, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-NCM-SER005-GEN001-0019",
+      "themeCode": "SLM",
+      "designCode": "NCM",
+      "designFamily": "THE_INCOMPLETE_WITNESS_SLAMMER",
+      "design": "The Incomplete Witness",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Balanced",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#C77120",
+      "effect": "None",
+      "selectionWeight": 5.0,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 5,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.55,
+          "max": 0.85
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Incomplete Witness. Square WebP, subject centered, named SLM-NCM-SER005-0019.webp.",
+      "loreDescription": "A collectible The Incomplete Witness from Ashdrift Hill, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-BRK-SER005-GEN001-0020",
+      "themeCode": "SLM",
+      "designCode": "BRK",
+      "designFamily": "THE_BROKEN_ORBIT_SLAMMER",
+      "design": "The Broken Orbit",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Unstable",
+      "style": "Neon",
+      "finish": "Prismatic",
+      "color": "#FEC141",
+      "effect": "Rainbow Shift",
+      "selectionWeight": 6.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 7,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 8,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.4,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Broken Orbit. Square WebP, subject centered, named SLM-BRK-SER005-0020.webp.",
+      "loreDescription": "A collectible The Broken Orbit from Amberwild, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-RMN-SER005-GEN001-0021",
+      "themeCode": "SLM",
+      "designCode": "RMN",
+      "designFamily": "REMAINS_OF_A_MECHANISM_SLAMMER",
+      "design": "Remains of a Mechanism",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Heavy Impact",
+      "style": "Realistic",
+      "finish": "Metallic",
+      "color": "#7CD8FA",
+      "effect": "Pulse",
+      "selectionWeight": 9.2,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 9,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 7,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.8,
+          "max": 1.0
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Remains of a Mechanism. Square WebP, subject centered, named SLM-RMN-SER005-0021.webp.",
+      "loreDescription": "A collectible Remains of a Mechanism from Amberwild, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-TUH-SER005-GEN001-0022",
+      "themeCode": "SLM",
+      "designCode": "TUH",
+      "designFamily": "TOOL_FOR_AN_UNKNOWN_HAND_SLAMMER",
+      "design": "Tool for an Unknown Hand",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Precision",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "color": "#9E7340",
+      "effect": "Glow",
+      "selectionWeight": 5.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 4,
+        "precision": 9,
+        "control": 8,
+        "recovery": 7,
+        "spread": 2,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.25,
+          "max": 0.45
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Tool for an Unknown Hand. Square WebP, subject centered, named SLM-TUH-SER005-0022.webp.",
+      "loreDescription": "A collectible Tool for an Unknown Hand from Little Frost, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-TUS-SER005-GEN001-0023",
+      "themeCode": "SLM",
+      "designCode": "TUS",
+      "designFamily": "TABLET_OF_UNREAD_SIGNS_SLAMMER",
+      "design": "Tablet of Unread Signs",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Wide Spread",
+      "style": "Neon",
+      "finish": "Holographic",
+      "color": "#FAD792",
+      "effect": "Motion",
+      "selectionWeight": 7.6,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 4,
+        "control": 5,
+        "recovery": 4,
+        "spread": 9,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.45,
+          "max": 0.65
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Tablet of Unread Signs. Square WebP, subject centered, named SLM-TUS-SER005-0023.webp.",
+      "loreDescription": "A collectible Tablet of Unread Signs from Amberwild, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-NPN-SER005-GEN001-0024",
+      "themeCode": "SLM",
+      "designCode": "NPN",
+      "designFamily": "THE_UNOPENED_CORE_SLAMMER",
+      "design": "The Unopened Core",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Light Control",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "color": "#F2AA54",
+      "effect": "Sparkle",
+      "selectionWeight": 4.4,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 3,
+        "precision": 7,
+        "control": 9,
+        "recovery": 6,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.2,
+          "max": 0.4
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Unopened Core. Square WebP, subject centered, named SLM-NPN-SER005-0024.webp.",
+      "loreDescription": "A collectible The Unopened Core from Moonwake Bay, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-FML-SER005-GEN001-0025",
+      "themeCode": "SLM",
+      "designCode": "FML",
+      "designFamily": "FAMILIAR_VESSEL_SLAMMER",
+      "design": "Familiar Vessel",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Brute Force",
+      "style": "Comic",
+      "finish": "Metallic",
+      "color": "#E1BB85",
+      "effect": "Fire",
+      "selectionWeight": 8.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 10,
+        "precision": 2,
+        "control": 3,
+        "recovery": 2,
+        "spread": 6,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.75,
+          "max": 0.95
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Familiar Vessel. Square WebP, subject centered, named SLM-FML-SER005-0025.webp.",
+      "loreDescription": "A collectible Familiar Vessel from Little Frost, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-RPH-SER005-GEN001-0026",
+      "themeCode": "SLM",
+      "designCode": "RPH",
+      "designFamily": "ORPHAN_MARKS_SLAMMER",
+      "design": "Orphan Marks",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Recovery",
+      "style": "Neon",
+      "finish": "Chrome",
+      "color": "#FB730A",
+      "effect": "Pulse",
+      "selectionWeight": 6.2,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 6,
+        "recovery": 9,
+        "spread": 4,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.35,
+          "max": 0.55
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Orphan Marks. Square WebP, subject centered, named SLM-RPH-SER005-0026.webp.",
+      "loreDescription": "A collectible Orphan Marks from Amberwild, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-BLL-SER005-GEN001-0027",
+      "themeCode": "SLM",
+      "designCode": "BLL",
+      "designFamily": "BELL_OF_NO_ECHO_SLAMMER",
+      "design": "Bell of No Echo",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Weighted Control",
+      "style": "Low Poly",
+      "finish": "Matte",
+      "color": "#F8C06C",
+      "effect": "Glow",
+      "selectionWeight": 7.1,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 8,
+        "precision": 4,
+        "control": 7,
+        "recovery": 5,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.6,
+          "max": 0.8
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Bell of No Echo. Square WebP, subject centered, named SLM-BLL-SER005-0027.webp.",
+      "loreDescription": "A collectible Bell of No Echo from Ashdrift Hill, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-CRR-SER005-GEN001-0028",
+      "themeCode": "SLM",
+      "designCode": "CRR",
+      "designFamily": "CURRENCY_OF_NO_NATION_SLAMMER",
+      "design": "Currency of No Nation",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Visual Flair",
+      "style": "Pixel Art",
+      "finish": "Holographic",
+      "color": "#6D1EC3",
+      "effect": "Pulse",
+      "selectionWeight": 8.0,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 6,
+        "control": 5,
+        "recovery": 4,
+        "spread": 8,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.5,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Currency of No Nation. Square WebP, subject centered, named SLM-CRR-SER005-0028.webp.",
+      "loreDescription": "A collectible Currency of No Nation from Amberwild, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SLN-SER005-GEN001-0029",
+      "themeCode": "SLM",
+      "designCode": "SLN",
+      "designFamily": "THE_SILENT_CHIME_SLAMMER",
+      "design": "The Silent Chime",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Balanced",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#E821B9",
+      "effect": "None",
+      "selectionWeight": 5.0,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 5,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.55,
+          "max": 0.85
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Silent Chime. Square WebP, subject centered, named SLM-SLN-SER005-0029.webp.",
+      "loreDescription": "A collectible The Silent Chime from Moonwake Bay, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-VSS-SER005-GEN001-0030",
+      "themeCode": "SLM",
+      "designCode": "VSS",
+      "designFamily": "VESSEL_WITH_NO_USE_SLAMMER",
+      "design": "Vessel With No Use",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Unstable",
+      "style": "Neon",
+      "finish": "Prismatic",
+      "color": "#FFF4E6",
+      "effect": "Rainbow Shift",
+      "selectionWeight": 6.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 7,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 8,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.4,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Vessel With No Use. Square WebP, subject centered, named SLM-VSS-SER005-0030.webp.",
+      "loreDescription": "A collectible Vessel With No Use from Little Frost, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-NRC-SER005-GEN001-0031",
+      "themeCode": "SLM",
+      "designCode": "NRC",
+      "designFamily": "THE_UNRECOGNIZED_FACE_SLAMMER",
+      "design": "The Unrecognized Face",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Heavy Impact",
+      "style": "Realistic",
+      "finish": "Metallic",
+      "color": "#C59959",
+      "effect": "Pulse",
+      "selectionWeight": 9.2,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 9,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 7,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.8,
+          "max": 1.0
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Unrecognized Face. Square WebP, subject centered, named SLM-NRC-SER005-0031.webp.",
+      "loreDescription": "A collectible The Unrecognized Face from Ashdrift Hill, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-CRT-SER005-GEN001-0032",
+      "themeCode": "SLM",
+      "designCode": "CRT",
+      "designFamily": "CARTOGRAPHY_OF_NOWHERE_SLAMMER",
+      "design": "Cartography of Nowhere",
+      "inspiration": null,
+      "location": {
+        "regionCode": "MWB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Precision",
+      "style": "Minimalist",
+      "finish": "Chrome",
+      "color": "#0F444B",
+      "effect": "Glow",
+      "selectionWeight": 5.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 4,
+        "precision": 9,
+        "control": 8,
+        "recovery": 7,
+        "spread": 2,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.25,
+          "max": 0.45
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Cartography of Nowhere. Square WebP, subject centered, named SLM-CRT-SER005-0032.webp.",
+      "loreDescription": "A collectible Cartography of Nowhere from Moonwake Bay, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-RLC-SER005-GEN001-0033",
+      "themeCode": "SLM",
+      "designCode": "RLC",
+      "designFamily": "RELIC_OF_MISREMEMBERING_SLAMMER",
+      "design": "Relic of Misremembering",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Wide Spread",
+      "style": "Neon",
+      "finish": "Holographic",
+      "color": "#FADFB3",
+      "effect": "Motion",
+      "selectionWeight": 7.6,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 4,
+        "control": 5,
+        "recovery": 4,
+        "spread": 9,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.45,
+          "max": 0.65
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Relic of Misremembering. Square WebP, subject centered, named SLM-RLC-SER005-0033.webp.",
+      "loreDescription": "A collectible Relic of Misremembering from Everlight Grove, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-PRT-SER005-GEN001-0034",
+      "themeCode": "SLM",
+      "designCode": "PRT",
+      "designFamily": "PORTRAIT_OF_NOBODY_SLAMMER",
+      "design": "Portrait of Nobody",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Light Control",
+      "style": "Watercolor",
+      "finish": "Gloss",
+      "color": "#9B764F",
+      "effect": "Sparkle",
+      "selectionWeight": 4.4,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 3,
+        "precision": 7,
+        "control": 9,
+        "recovery": 6,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.2,
+          "max": 0.4
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Portrait of Nobody. Square WebP, subject centered, named SLM-PRT-SER005-0034.webp.",
+      "loreDescription": "A collectible Portrait of Nobody from Ashdrift Hill, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-FRG-SER005-GEN001-0035",
+      "themeCode": "SLM",
+      "designCode": "FRG",
+      "designFamily": "FORGOTTEN_TENDER_SLAMMER",
+      "design": "Forgotten Tender",
+      "inspiration": null,
+      "location": {
+        "regionCode": "AMB",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Brute Force",
+      "style": "Comic",
+      "finish": "Metallic",
+      "color": "#8B0B51",
+      "effect": "Fire",
+      "selectionWeight": 8.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 10,
+        "precision": 2,
+        "control": 3,
+        "recovery": 2,
+        "spread": 6,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.75,
+          "max": 0.95
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Forgotten Tender. Square WebP, subject centered, named SLM-FRG-SER005-0035.webp.",
+      "loreDescription": "A collectible Forgotten Tender from Amberwild, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-OTW-SER005-GEN001-0036",
+      "themeCode": "SLM",
+      "designCode": "OTW",
+      "designFamily": "ORDINARY_THINGS_WRONG_SKY_SLAMMER",
+      "design": "Ordinary Things, Wrong Sky",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Recovery",
+      "style": "Neon",
+      "finish": "Chrome",
+      "color": "#FAC899",
+      "effect": "Pulse",
+      "selectionWeight": 6.2,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 6,
+        "recovery": 9,
+        "spread": 4,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.35,
+          "max": 0.55
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Ordinary Things, Wrong Sky. Square WebP, subject centered, named SLM-OTW-SER005-0036.webp.",
+      "loreDescription": "A collectible Ordinary Things, Wrong Sky from Everlight Grove, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-FM0-SER005-GEN001-0037",
+      "themeCode": "SLM",
+      "designCode": "FM0",
+      "designFamily": "FAMILIARITY_ERROR_SLAMMER",
+      "design": "Familiarity Error",
+      "inspiration": null,
+      "location": {
+        "regionCode": "LFR",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Weighted Control",
+      "style": "Low Poly",
+      "finish": "Matte",
+      "color": "#C2700C",
+      "effect": "Glow",
+      "selectionWeight": 7.1,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 8,
+        "precision": 4,
+        "control": 7,
+        "recovery": 5,
+        "spread": 3,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.6,
+          "max": 0.8
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Familiarity Error. Square WebP, subject centered, named SLM-FM0-SER005-0037.webp.",
+      "loreDescription": "A collectible Familiarity Error from Little Frost, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-MSS-SER005-GEN001-0038",
+      "themeCode": "SLM",
+      "designCode": "MSS",
+      "designFamily": "THE_MISSING_SITTER_SLAMMER",
+      "design": "The Missing Sitter",
+      "inspiration": null,
+      "location": {
+        "regionCode": "ASH",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Visual Flair",
+      "style": "Pixel Art",
+      "finish": "Holographic",
+      "color": "#925E39",
+      "effect": "Pulse",
+      "selectionWeight": 8.0,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 6,
+        "precision": 6,
+        "control": 5,
+        "recovery": 4,
+        "spread": 8,
+        "hitTarget": "edge",
+        "powerBracket": {
+          "min": 0.5,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for The Missing Sitter. Square WebP, subject centered, named SLM-MSS-SER005-0038.webp.",
+      "loreDescription": "A collectible The Missing Sitter from Ashdrift Hill, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-SDS-SER005-GEN001-0039",
+      "themeCode": "SLM",
+      "designCode": "SDS",
+      "designFamily": "SEEDS_FROM_NO_SEASON_SLAMMER",
+      "design": "Seeds from No Season",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Balanced",
+      "style": "Minimalist",
+      "finish": "Standard",
+      "color": "#C75F0E",
+      "effect": "None",
+      "selectionWeight": 5.0,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 5,
+        "precision": 5,
+        "control": 5,
+        "recovery": 5,
+        "spread": 5,
+        "hitTarget": "center",
+        "powerBracket": {
+          "min": 0.55,
+          "max": 0.85
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Seeds from No Season. Square WebP, subject centered, named SLM-SDS-SER005-0039.webp.",
+      "loreDescription": "A collectible Seeds from No Season from Everlight Grove, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    },
+    {
+      "internalId": "SLM-SLM-CRS-SER005-GEN001-0040",
+      "themeCode": "SLM",
+      "designCode": "CRS",
+      "designFamily": "CRESTS_WITHOUT_HOUSES_SLAMMER",
+      "design": "Crests Without Houses",
+      "inspiration": null,
+      "location": {
+        "regionCode": "EVG",
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Slammer",
+      "theme": "Slammers",
+      "subtheme": "Unstable",
+      "style": "Neon",
+      "finish": "Prismatic",
+      "color": "#BE5B12",
+      "effect": "Rainbow Shift",
+      "selectionWeight": 6.8,
+      "origin": "Shop",
+      "series": "Slammer The Unrecognized Series",
+      "worldState": "Active",
+      "seasonState": "Active",
+      "gameplayAttributes": {
+        "impact": 7,
+        "precision": 3,
+        "control": 4,
+        "recovery": 3,
+        "spread": 8,
+        "hitTarget": "mid",
+        "powerBracket": {
+          "min": 0.4,
+          "max": 0.7
+        }
+      },
+      "economy": {
+        "permanent": false,
+        "maxCharges": 25,
+        "chargeCostPerUse": 1,
+        "shopPriceGoldArcori": 4,
+        "rechargePriceGoldArcori": 4,
+        "rechargeCharges": 100
+      },
+      "artworkPrompt": "Catalog face for Crests Without Houses. Square WebP, subject centered, named SLM-CRS-SER005-0040.webp.",
+      "loreDescription": "A collectible Crests Without Houses from Everlight Grove, generation I of the The Unrecognized Series.",
+      "legacy": {
+        "preservationRequirement": 750,
+        "closureMilestone": 1000
+      }
+    }
+  ]
+}

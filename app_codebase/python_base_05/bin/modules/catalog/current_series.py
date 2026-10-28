@@ -37,6 +37,9 @@ SERIES_MEDIA_FOLDERS: dict[str, str] = {
     "foundations": "003_foundations",
     "civilizations": "004_civilizations",
     "kin": "005_kin",
+    "the_unrecognized": "005_the_unrecognized",
+    "the_deadcats": "006_the_deadcats",
+    "mushroom_deadcat": "007_mushroom_deadcat",
 }
 
 # --- bump here when opening the next series for newly minted non-Kin Arcori ---
@@ -149,16 +152,24 @@ def _load_series_rows() -> list[dict[str, Any]]:
     return out
 
 
-def list_series_catalog(*, active_only: bool = False) -> list[dict[str, str]]:
+def list_series_catalog(
+    *,
+    active_only: bool = False,
+    include_slammer_series: bool = False,
+) -> list[dict[str, str]]:
     """Series list for Velora home (key / label / seriesKey).
 
     When ``active_only`` is True, only rows with ``active: true`` are returned
-    (master series circulation switch).
+    (master series circulation switch). ``include_slammer_series`` also keeps
+    rows marked ``slammerSeries`` so Velora can browse shop slammers whose
+    series is not an Arcori circulation switch.
     """
     out: list[dict[str, str]] = []
     for row in _load_series_rows():
+        is_slammer = bool(row.get("slammerSeries"))
         if active_only and not bool(row.get("active")):
-            continue
+            if not (include_slammer_series and is_slammer):
+                continue
         key = str(row.get("key") or "").strip()
         label = str(row.get("label") or "").strip()
         series_key = str(row.get("seriesKey") or label or key).strip()
@@ -169,9 +180,29 @@ def list_series_catalog(*, active_only: bool = False) -> list[dict[str, str]]:
                 "key": key or _normalize_series_slug(series_key),
                 "label": label or series_key or key,
                 "seriesKey": series_key or label or key,
+                "slammerSeries": "1" if is_slammer else "0",
             }
         )
     return out
+
+
+def series_is_slammer_catalog(series_key: str) -> bool:
+    """True when 03_series.json marks this series as a slammer catalog series."""
+    needle = _normalize_series_slug(series_key or "")
+    if not needle:
+        return False
+    for row in _load_series_rows():
+        if not bool(row.get("slammerSeries")):
+            continue
+        candidates = (
+            str(row.get("key") or ""),
+            str(row.get("seriesKey") or ""),
+            str(row.get("label") or ""),
+        )
+        for cand in candidates:
+            if cand.strip() and _normalize_series_slug(cand) == needle:
+                return True
+    return False
 
 
 def series_is_active(series_key: str) -> bool:

@@ -16,12 +16,16 @@ class VeloraFeaturedStage extends StatefulWidget {
     required this.design,
     this.onTap,
     this.subtitle,
+    this.footer,
     this.discSize = 140,
   });
 
   final DesignSummary? design;
   final VoidCallback? onTap;
   final String? subtitle;
+
+  /// Sits under the generation / series line. Kept outside the disc tap.
+  final Widget? footer;
 
   /// Disc diameter. Arcori Detail uses 280 (2× default).
   final double discSize;
@@ -93,8 +97,7 @@ class _VeloraFeaturedStageState extends State<VeloraFeaturedStage>
             ArcoriCylinder(
               look: ArcoriLook(
                 designId: featured.internalId,
-                imageUrl:
-                    featured.hasLottieFace ? null : featured.imageUrl,
+                imageUrl: featured.hasLottieFace ? null : featured.imageUrl,
                 colorHex: featured.color,
               ),
               size: _discSize,
@@ -146,16 +149,14 @@ class _VeloraFeaturedStageState extends State<VeloraFeaturedStage>
       ),
     );
 
-    final body = Column(
+    final copy = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         stage,
         AppSpacing.gapSm,
         Text(
           featured.displayName,
-          style: context.appTypography.h3.copyWith(
-            color: AppChrome.onSurface,
-          ),
+          style: context.appTypography.h3.copyWith(color: AppChrome.onSurface),
           textAlign: TextAlign.center,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
@@ -175,14 +176,17 @@ class _VeloraFeaturedStageState extends State<VeloraFeaturedStage>
       ],
     );
 
-    if (widget.onTap == null) return body;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: widget.onTap,
-        child: body,
-      ),
+    final tapped = widget.onTap == null
+        ? copy
+        : Material(
+            color: Colors.transparent,
+            child: InkWell(onTap: widget.onTap, child: copy),
+          );
+    final footer = widget.footer;
+    if (footer == null) return tapped;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [tapped, footer],
     );
   }
 }

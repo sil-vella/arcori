@@ -50,6 +50,33 @@
       "idToken": "SER005",
       "mediaFolder": "005_kin",
       "active": false
+    },
+    {
+      "key": "the_unrecognized",
+      "label": "The Unrecognized",
+      "seriesKey": "The Unrecognized",
+      "idToken": "SER005",
+      "mediaFolder": "005_the_unrecognized",
+      "active": false,
+      "slammerSeries": true
+    },
+    {
+      "key": "the_deadcats",
+      "label": "The Deadcats",
+      "seriesKey": "The Deadcats",
+      "idToken": "SER006",
+      "mediaFolder": "006_the_deadcats",
+      "active": false,
+      "slammerSeries": true
+    },
+    {
+      "key": "mushroom_deadcat",
+      "label": "Mushroom Deadcat",
+      "seriesKey": "Mushroom Deadcat",
+      "idToken": "SER007",
+      "mediaFolder": "007_mushroom_deadcat",
+      "active": false,
+      "slammerSeries": true
     }
   ]
 }

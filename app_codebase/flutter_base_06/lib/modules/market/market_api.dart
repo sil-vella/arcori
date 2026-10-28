@@ -12,6 +12,8 @@ class MarketSlammerSku {
   const MarketSlammerSku({
     required this.designId,
     required this.displayName,
+    required this.series,
+    this.seriesOrder = 0,
     required this.shopPriceGoldArcori,
     required this.rechargePriceGoldArcori,
     required this.rechargeCharges,
@@ -29,6 +31,8 @@ class MarketSlammerSku {
     return MarketSlammerSku(
       designId: json['designId']?.toString() ?? '',
       displayName: json['displayName']?.toString() ?? '',
+      series: json['series']?.toString().trim() ?? '',
+      seriesOrder: _asInt(json['seriesOrder']) ?? 0,
       shopPriceGoldArcori: _asInt(json['shopPriceGoldArcori']) ?? 4,
       rechargePriceGoldArcori: _asInt(json['rechargePriceGoldArcori']) ?? 4,
       rechargeCharges: _asInt(json['rechargeCharges']) ?? 100,
@@ -45,6 +49,10 @@ class MarketSlammerSku {
 
   final String designId;
   final String displayName;
+  final String series;
+
+  /// Catalog series index. Higher is a later series.
+  final int seriesOrder;
   final int shopPriceGoldArcori;
   final int rechargePriceGoldArcori;
   final int rechargeCharges;

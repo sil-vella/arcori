@@ -234,6 +234,7 @@ class MarketServiceTests(unittest.TestCase):
                 "type": "Slammer",
                 "origin": "Shop",
                 "design": iid,
+                "seriesKey": "Genesis",
                 "economy": {
                     "permanent": False,
                     "maxCharges": 25,
@@ -268,6 +269,8 @@ class MarketServiceTests(unittest.TestCase):
             [item["designId"] for item in out["slammers"]],
             [titan_id, cyclone_id],
         )
+        self.assertEqual(out["slammers"][0]["series"], "Genesis")
+        self.assertEqual(out["slammers"][0]["seriesOrder"], 1)
 
     def test_recharge_adds_100_for_4(self) -> None:
         session = MagicMock()
