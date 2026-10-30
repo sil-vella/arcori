@@ -205,38 +205,32 @@ android_screenshot_fit_copy() {
   local th="$3"
   local out="$4"
   local label="$5"
-  local w h scaled_w scaled_h tmp jpg
+  local w h
   w="$(_android_screenshot_px "$src" pixelWidth)"
   h="$(_android_screenshot_px "$src" pixelHeight)"
   if ! [[ "$w" =~ ^[0-9]+$ && "$h" =~ ^[0-9]+$ && "$w" -gt 0 && "$h" -gt 0 ]]; then
     echo "❌ Could not read screenshot size for $label" >&2
     return 1
   fi
-  if [ $((w * th)) -gt $((h * tw)) ]; then
-    scaled_h=$th
-    scaled_w=$((w * th / h))
-    [ "$scaled_w" -lt "$tw" ] && scaled_w=$tw
-  else
-    scaled_w=$tw
-    scaled_h=$((h * tw / w))
-    [ "$scaled_h" -lt "$th" ] && scaled_h=$th
-  fi
-  tmp="$(mktemp "${TMPDIR:-/tmp}/wf_shot_fit.XXXXXX.png")"
-  jpg="$(mktemp "${TMPDIR:-/tmp}/wf_shot_fit.XXXXXX.jpg")"
-  if ! cp "$src" "$tmp"; then
-    rm -f "$tmp" "$jpg"
-    echo "❌ Could not copy screenshot for $label" >&2
-    return 1
-  fi
-  if ! sips -z "$scaled_h" "$scaled_w" "$tmp" >/dev/null \
-    || ! sips --cropToHeightWidth "$th" "$tw" "$tmp" >/dev/null \
-    || ! sips -s format jpeg -s formatOptions 100 "$tmp" --out "$jpg" >/dev/null \
-    || ! sips -s format png "$jpg" --out "$out" >/dev/null; then
-    rm -f "$tmp" "$jpg" "$out"
+  # Scale the whole frame into the target. Do not crop. Pad with the app letterbox.
+  if ! WF_SHOT_SRC="$src" WF_SHOT_OUT="$out" WF_SHOT_W="$tw" WF_SHOT_H="$th" python3 - << 'PY'
+import os
+from PIL import Image
+src = os.environ["WF_SHOT_SRC"]
+out = os.environ["WF_SHOT_OUT"]
+tw = int(os.environ["WF_SHOT_W"])
+th = int(os.environ["WF_SHOT_H"])
+im = Image.open(src).convert("RGB")
+im.thumbnail((tw, th), Image.Resampling.LANCZOS)
+canvas = Image.new("RGB", (tw, th), (0x0F, 0x0E, 0x10))
+canvas.paste(im, ((tw - im.width) // 2, (th - im.height) // 2))
+canvas.save(out, "PNG")
+PY
+  then
     echo "❌ Failed to build $label screenshot" >&2
+    rm -f "$out"
     return 1
   fi
-  rm -f "$tmp" "$jpg"
   echo "✅ $label (${tw}×${th}): $out" >&2
 }
 
@@ -248,16 +242,23 @@ android_screenshot_save_console_set() {
   local t7h="$5"
   local t10w="$6"
   local t10h="$7"
-  local base phone t7 t10
+  local base name phone t7 t10
   base="${src%.png}"
-  phone="${base}_phone.png"
-  t7="${base}_tablet7.png"
-  t10="${base}_tablet10.png"
+  name="$(basename "$base")"
+  mkdir -p "$SCREENSHOTS_DIR/android/phone" "$SCREENSHOTS_DIR/android/tablet10"
+  phone="$SCREENSHOTS_DIR/android/phone/${name}_phone.png"
+  t10="$SCREENSHOTS_DIR/android/tablet10/${name}_tablet10.png"
+  t7=""
+  if [ "$pw" != "$t7w" ] || [ "$ph" != "$t7h" ]; then
+    mkdir -p "$SCREENSHOTS_DIR/android/tablet7"
+    t7="$SCREENSHOTS_DIR/android/tablet7/${name}_tablet7.png"
+  fi
   if android_screenshot_fit_copy "$src" "$pw" "$ph" "$phone" "Phone" \
-    && android_screenshot_fit_copy "$src" "$t7w" "$t7h" "$t7" "7-inch tablet" \
+    && { [ -z "$t7" ] || android_screenshot_fit_copy "$src" "$t7w" "$t7h" "$t7" "7-inch tablet"; } \
     && android_screenshot_fit_copy "$src" "$t10w" "$t10h" "$t10" "10-inch tablet"; then
-    rm -f "$src"
-    echo "✅ Play Console set saved: phone, 7-inch tablet, 10-inch tablet" >&2
+    mkdir -p "$SCREENSHOTS_DIR/android/original"
+    mv "$src" "$SCREENSHOTS_DIR/android/original/$(basename "$src")"
+    echo "✅ Play Console set saved under android/phone and android/tablet10" >&2
     return 0
   fi
   rm -f "$phone" "$t7" "$t10"
@@ -296,8 +297,11 @@ android_screenshot_offer_tablet_copy() {
     t10w=$TABLET10_SHOT_LANDSCAPE_W
     t10h=$TABLET10_SHOT_LANDSCAPE_H
   fi
-  echo "Align this snap to Play Console sizes and save 3 images? [y/N]" >&2
-  echo "  phone ${pw}×${ph}  |  7-inch tablet ${t7w}×${t7h}  |  10-inch tablet ${t10w}×${t10h}" >&2
+  echo "Align this snap to Play Console sizes and save 2 images? [y/N]" >&2
+  echo "  phone ${pw}×${ph}  |  10-inch tablet ${t10w}×${t10h}" >&2
+  if [ "$pw" = "$t7w" ] && [ "$ph" = "$t7h" ]; then
+    echo "  7-inch tablet matches the phone size, so it is not saved again" >&2
+  fi
   stty echo < /dev/tty 2>/dev/null || true
   if ! IFS= read -r -n 1 answer < /dev/tty; then
     stty -echo -icanon min 1 time 0 < /dev/tty 2>/dev/null || true

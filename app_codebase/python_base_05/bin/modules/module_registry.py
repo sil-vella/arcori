@@ -31,6 +31,8 @@ from modules.legacy.legacy_app import register_legacy_routes
 from modules.legacy.legacy_errors import register_legacy_errors
 from modules.market.market_app import register_market_routes
 from modules.market.market_errors import register_market_errors
+from modules.store.store_app import register_store_routes
+from modules.store.store_errors import register_store_errors
 from modules.contacts.contacts_app import register_contacts_routes
 from modules.contacts.contacts_errors import register_contacts_errors
 from modules.service.service_app import register_service_routes
@@ -94,6 +96,7 @@ def register_application_routes() -> None:
     register_legacy_routes(application_routes, http_responses)
     register_avari_routes(application_routes, http_responses)
     register_market_routes(application_routes, http_responses)
+    register_store_routes(application_routes, http_responses)
     register_achievements_routes(application_routes, http_responses)
     register_daily_goals_routes(application_routes, http_responses)
     register_special_events_routes(application_routes, http_responses)
@@ -115,6 +118,7 @@ def register_application_errors() -> None:
     register_legacy_errors(module_error_registrar)
     register_avari_errors(module_error_registrar)
     register_market_errors(module_error_registrar)
+    register_store_errors(module_error_registrar)
     register_achievements_errors(module_error_registrar)
     register_daily_goals_errors(module_error_registrar)
     register_special_events_errors(module_error_registrar)

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "packs": [
+    {
+      "product_id": "fragments_100",
+      "fragments": 100,
+      "price_label": "$0.99",
+      "label": "100 Gold Fragments",
+      "description": "Adds 100 Gold Fragments. Every 4 fragments become 1 Gold Arcori.",
+      "is_popular": false
+    },
+    {
+      "product_id": "fragments_300",
+      "fragments": 300,
+      "price_label": "$2.49",
+      "label": "300 Gold Fragments",
+      "description": "Adds 300 Gold Fragments. Every 4 fragments become 1 Gold Arcori.",
+      "is_popular": false
+    },
+    {
+      "product_id": "fragments_500",
+      "fragments": 500,
+      "price_label": "$3.99",
+      "label": "500 Gold Fragments",
+      "description": "Adds 500 Gold Fragments. Every 4 fragments become 1 Gold Arcori.",
+      "is_popular": false
+    },
+    {
+      "product_id": "fragments_700",
+      "fragments": 700,
+      "price_label": "$4.99",
+      "label": "700 Gold Fragments",
+      "description": "Adds 700 Gold Fragments. Every 4 fragments become 1 Gold Arcori.",
+      "is_popular": true
+    },
+    {
+      "product_id": "fragments_1500",
+      "fragments": 1500,
+      "price_label": "$9.99",
+      "label": "1500 Gold Fragments",
+      "description": "Adds 1500 Gold Fragments. Every 4 fragments become 1 Gold Arcori.",
+      "is_popular": false
+    },
+    {
+      "product_id": "fragments_3500",
+      "fragments": 3500,
+      "price_label": "$19.99",
+      "label": "3500 Gold Fragments",
+      "description": "Adds 3500 Gold Fragments. Every 4 fragments become 1 Gold Arcori.",
+      "is_popular": false
+    }
+  ]
+}

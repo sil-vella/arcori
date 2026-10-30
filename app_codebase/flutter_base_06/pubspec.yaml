@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts of the
 # product and file versions while build-number is used as the build suffix.
-version: 1.0.8+9
+version: 1.0.11+12
 
 environment:
   sdk: ^3.8.1
@@ -40,7 +40,6 @@ dependencies:
   flutter_riverpod: ^2.6.1
   http: ^1.2.2
   http_parser: ^4.1.2
-  image_picker: ^1.1.2
   flutter_secure_storage: ^9.2.4
   web_socket_channel: ^3.0.2
   lottie: ^3.3.1
@@ -60,6 +59,11 @@ dependencies:
   firebase_analytics: 11.0.0
   vector_math: ^2.1.4
   vibration: ^3.1.8
+  in_app_purchase: ^3.2.0
+  # 0.4.0+5 plus the Gradle Billing 9.1.0 patch. 0.5.x needs Dart 3.10+.
+  in_app_purchase_android: 0.4.0+5
+  # 0.4.1+ needs the iOS 17.4 StoreKit SDK (Xcode 15.3+).
+  in_app_purchase_storekit: 0.4.0
 
 dev_dependencies:
   flutter_test:
@@ -74,13 +78,17 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.3
   video_player_platform_interface: ^6.6.0
 
+dependency_overrides:
+  in_app_purchase_storekit: 0.4.0
+
 flutter_launcher_icons:
   android: true
   ios: true
   image_path: assets/images/branding/icon.png
   adaptive_icon_background: assets/images/branding/icon_background.png
   adaptive_icon_foreground: assets/images/branding/icon_foreground.png
-  adaptive_icon_foreground_inset: 16
+  # Foreground art already sits inside the adaptive safe zone.
+  adaptive_icon_foreground_inset: 0
   web:
     generate: true
   windows:
@@ -89,13 +97,15 @@ flutter_launcher_icons:
     generate: true
 
 flutter_native_splash:
-  color: "#2a5c32"
+  # Letterbox only. The splash image fills the screen.
+  color: "#0F0E10"
   image: assets/images/branding/splash_screen.png
   android_gravity: fill
   android_12:
-    color: "#2a5c32"
-    image: assets/images/branding/splash_screen.png
-    icon_background_color: "#2a5c32"
+    # Android 12 shows a circular icon, not the portrait splash.
+    color: "#6D2885"
+    image: assets/images/branding/icon.png
+    icon_background_color: "#6D2885"
   web: false
 
 # For information on the generic Dart part of this file, see the following page:

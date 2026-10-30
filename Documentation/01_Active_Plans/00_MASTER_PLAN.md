@@ -2,11 +2,11 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-10-15
+**Last Updated:** 2026-10-28
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
-**Next app build:** Post-match P0 leftovers (celebration/mastery anims + achievements env) — [core-match-loop.md](core-match-loop.md). Daily Cache claim shipped — [daily-goals.md](daily-goals.md). Progression feel backlog: special-match Arcori select + mastery medallion visuals. **In progress (2026-10-15):** Unify Arcori/Slammer ids to always include `GENnnn` — [design-id-gen-unify.md](design-id-gen-unify.md).
+**Next app build:** Gold Fragment store packs (Play + App Store, Dutch prices) — [store-fragment-iap.md](store-fragment-iap.md). Post-match P0 leftovers (celebration/mastery anims + achievements env) — [core-match-loop.md](core-match-loop.md). Daily Cache claim shipped — [daily-goals.md](daily-goals.md). Progression feel backlog: special-match Arcori select + mastery medallion visuals. **In progress (2026-10-15):** Unify Arcori/Slammer ids to always include `GENnnn` — [design-id-gen-unify.md](design-id-gen-unify.md).
 
 **Narrative:** [03_CASE_STUDY.md](03_CASE_STUDY.md) — full game implementation case study (design → matchmaking; template infra out of scope).
 
@@ -60,7 +60,8 @@ Done:
 - [x] **Legacy echo soft reset** (30% mastery seed + random approved color) — [legacy-preserve.md](legacy-preserve.md) · [mastery.md](mastery.md)
 - [x] **Closed Generations** on Avari (mastery at close + seeded amount on next gen) — [mastery.md](mastery.md) · [avari-profile.md](avari-profile.md)
 - [x] **Face media: Lottie for any theme** (not Kin-only; Kin resolves via art_basename) — [catalog-db-gen-serial.md](catalog-db-gen-serial.md)
-- [x] **Play target API 36 + Billing 9.1.0 Gradle alignment** (minSdk 23; portrait lock; plugin patch staged, IAP not in the app yet) — [play-target-sdk-billing.md](play-target-sdk-billing.md)
+- [x] **Play target API 36 + Billing 9.1.0 Gradle alignment** (minSdk 24 for Play automatic protection; portrait lock; Billing patch used by fragment IAP) — [play-target-sdk-billing.md](play-target-sdk-billing.md)
+- [ ] **Gold Fragment store packs** (catalogs created: Play console AI, App Store API; verify credentials still open) — [store-fragment-iap.md](store-fragment-iap.md)
 - [x] **Flutter intro video** (`assets/videos/intro.mp4` after native splash; `SHOW_INTRO_LOTTIE` unchanged) — [flutter-intro-video.md](flutter-intro-video.md)
 - [x] **Series circulation switch** (`03_series.json`; Genesis+Pioneers on; dual gate with design `worldState`) — [series-circulation-switch.md](series-circulation-switch.md)
 - [x] **Slam strike wind-up + hit** (two-phase fly-in, haptic, client audio module / `slam_hit` stub) — [slam-strike-motion.md](slam-strike-motion.md)
@@ -163,7 +164,7 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | [avari-profile.md](avari-profile.md) | Done | Avari Profile `/avari` + Trove; Arcori card and Circulating are canisters (100 each) |
 | [player-profile-schema.md](player-profile-schema.md) | Done | Auth + Avari tables, admin testuser seed |
 | [ui-visual-refactor.md](ui-visual-refactor.md) | In Progress | Gallery-first reliquary: theme tokens, hubs, match HUD chrome |
-| [play-target-sdk-billing.md](play-target-sdk-billing.md) | Completed | Play API 36, minSdk 23, Billing 9.1.0 force + staged 0.4.0+5 patch |
+| [play-target-sdk-billing.md](play-target-sdk-billing.md) | Completed | Play API 36, minSdk 24, Billing 9.1.0 force + staged 0.4.0+5 patch |
 | [flutter-intro-video.md](flutter-intro-video.md) | Completed | Startup intro plays `assets/videos/intro.mp4`; lottie package kept |
 
 ## Design references

@@ -29,8 +29,9 @@ android {
         applicationId = "com.reignofplay.arcori"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        // Play Billing 9.1.0 requires API 23. Flutter 3.32 still defaults to 21.
-        minSdk = maxOf(flutter.minSdkVersion, 23)
+        // Play Billing 9.1.0 requires API 23. Play automatic protection requires API 24.
+        // Flutter 3.32 still defaults to 21.
+        minSdk = maxOf(flutter.minSdkVersion, 24)
         targetSdk = maxOf(flutter.targetSdkVersion, 36)
         versionCode = flutter.versionCode
         versionName = flutter.versionName

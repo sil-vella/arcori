@@ -2,7 +2,7 @@
 
 Path used to get **Arcori 1.0.8** into TestFlight (October 2026). Xcode Cloud archives the IPA. Apple’s “prepare build for App Store Connect” step on Cloud failed after a successful export, so the IPA was delivered with **Transporter**.
 
-This app has **no in-app purchases**. Do not enable StoreKit or Apple Pay for this release.
+This app sold nothing in the 1.0.8 release. Gold Fragment packs added later use StoreKit. Do not enable Apple Pay (`com.apple.developer.in-app-payments`).
 
 Scripts that Cloud runs live next to the iOS project:
 
@@ -65,7 +65,7 @@ The first Cloud runs failed because the script was still the Dutch copy: it look
 
 ## Each release
 
-1. Confirm `Info.plist` still has the photo, camera, and microphone purpose strings (see [issue 4](#4-processing-failed-missing-nsmicrophoneusagedescription)).
+1. The profile face is the Kin Arcori. Do not add photo, camera, or microphone purpose strings (see [issue 4](#4-processing-failed-missing-nsmicrophoneusagedescription)).
 2. Confirm App Icon and Launch pngs are in git (see [issue 3](#3-app-icon-pngs-missing-on-cloud)).
 3. Push to `main`. Branch Changes starts Cloud. The Mac can be off while the build is queued; the queue is Apple’s, not this machine.
 4. Open the build. **Export succeeded** is not the same as **the build is in TestFlight**.
@@ -125,15 +125,9 @@ Force-add the pngs if they were already ignored. This cleared the warnings. It d
 
 Build **8** reached Apple and processing returned **90683**: `Runner.app` must have `NSMicrophoneUsageDescription` because the binary references microphone APIs.
 
-The profile screen only opens the photo library (`image_picker`, gallery). The plugin is still compiled in, so Apple requires the purpose string anyway. The same plugin references the camera.
+Build **8** failed because `image_picker` was compiled in for a gallery profile photo, and the binary referenced the microphone. The profile face is the Kin Arcori. That picker and the `image_picker` package are removed, so a new build does not need photo, camera, or microphone purpose strings.
 
-`ios/Runner/Info.plist` now has:
-
-- `NSPhotoLibraryUsageDescription` — choose a profile photo
-- `NSCameraUsageDescription` — take a profile photo
-- `NSMicrophoneUsageDescription` — photo picker includes microphone access; Arcori uses still photos
-
-Build **8** cannot be patched. Build **9** is the upload that included these keys.
+Build **8** cannot be patched. Build **9** is the upload that included those keys.
 
 ### 5. Missing Compliance after a successful upload
 
@@ -149,9 +143,27 @@ In **App Encryption Documentation**, select **None of the algorithms mentioned a
 
 | Dutch lesson | Arcori |
 |--------------|--------|
-| `Runner.entitlements` with `com.apple.developer.in-app-payments` breaks Cloud **export** (exit 70) | Do not add it. This app does not sell anything. Associated Domains may stay. A placeholder `applinks:your-domain.example` was present during the failed prepare step and was not the cause. |
+| `Runner.entitlements` with `com.apple.developer.in-app-payments` breaks Cloud **export** (exit 70) | Do not add that key. It is Apple Pay, not StoreKit. Fragment packs use StoreKit without an entitlements entry. |
 | Re-uploading a build already in TestFlight fails with `previousBundleVersion` | Same rule. Build 8 is in the list as **Failed**. Do not deliver that IPA again. |
-| IAP, coin catalog, AdMob, `apple_billing_module` | Not part of this app. |
+| IAP, coin catalog, AdMob, `apple_billing_module` | The 1.0.8 release had no IAP. Fragment packs added later use `in_app_purchase` and `POST /authuser/store/apple/verify`. Catalog setup is below. See [store-fragment-iap.md](../01_Active_Plans/store-fragment-iap.md). |
+
+---
+
+## Fragment packs in App Store Connect
+
+The six consumables are `fragments_100`, `fragments_300`, `fragments_500`, `fragments_700`, `fragments_1500`, and `fragments_3500`. USD prices are $0.99, $2.49, $3.99, $4.99, $9.99, and $19.99. The same product IDs exist on Google Play.
+
+Create and update these with the App Store Connect API. The key already used for sales reports (`ASC_ISSUER_ID`, `ASC_KEY_ID`, `ASC_PRIVATE_KEY_PATH`) is allowed to create consumables, set the USA price, add the English name, mark every territory available, and upload the review screenshot. `fragments_100` was entered in the website. The other five were created with `POST /v2/inAppPurchases`.
+
+If a later key is refused, use **Manage with AI** on the In-App Purchases page and give it the same product list. That is the fallback, not the first choice. Play needed that fallback because its publisher key cannot create products. This App Store key can.
+
+Review screenshots must match an accepted iPhone size. See [In-App Purchase information](https://developer.apple.com/help/app-store-connect/reference/in-app-purchases-and-subscriptions/in-app-purchase-information). Android phone snaps are `automation/frontend/launch_android_assets/android/phone/` at 1080×1920. The review upload was a 1242×2208 crop of the market captures. Those extra crops are not kept. The same captures at the required listing size are `ios/iphone/wf_shot_20261030_130059_iphone.png` (`fragments_1500`, `fragments_3500`) and `ios/iphone/wf_shot_20261030_130039_iphone.png` (the other packs).
+
+The saved English description is `Adds N Gold Fragments. 4 fragments = 1 Gold Arcori.` Play’s listing uses the longer catalog sentence. Display name is `N Gold Fragments`.
+
+Do not click **Add for Review** on the first consumable by itself. Apple reviews it with a new app version. Leave the Apple Pay entitlement off.
+
+Play’s matching steps (closed-testing bundle with the billing permission, then console AI when the API refuses) are in [store-fragment-iap.md](../01_Active_Plans/store-fragment-iap.md).
 
 ---
 
@@ -166,7 +178,8 @@ In **App Encryption Documentation**, select **None of the algorithms mentioned a
 | App Store listing (screenshots, privacy, age rating, Add for Review) | Not started |
 | `applinks:your-domain.example` | Still a placeholder. Not a TestFlight blocker. |
 | iOS Firebase keys in `.env.dart.defines.prod` | Still placeholders while `FIREBASE_SWITCH` is on. Not what blocked upload. Replace them and re-base64 the secret before a build that should report analytics. |
+| Download price | Requested **$2.59**. App Store has no $2.59 point, so both stores use **$2.99**. Play download price is not entered yet. |
 
 ---
 
-*Last updated: 2026-10-14 — Arcori 1.0.8 (9) in TestFlight via Xcode Cloud export + Transporter. Script paths and `ARCORI_API_REST_URL`, icon gitignore, microphone/camera purpose strings, export-compliance answer, Cloud prepare/proxy failure.*
+*Last updated: 2026-10-30 — Fragment-pack catalog: create with the App Store Connect API; use console Manage with AI only if that API refuses. 2026-10-14 note still stands for the 1.0.8 TestFlight path.*

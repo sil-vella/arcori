@@ -24,6 +24,7 @@ import 'avari/avari_drawer.dart';
 import 'avari/avari_routes.dart';
 import 'kin/kin_routes.dart';
 import 'market/market_routes.dart';
+import 'store/store_routes.dart';
 import 'match/register_match_state.dart';
 import 'matchmaking/register_matchmaking_state.dart';
 import 'notifications/notifications_drawer.dart';
@@ -72,6 +73,7 @@ void registerApplicationModules(
   registerMuseumDrawer(drawer);
   registerTroveRoutes(routes, notificationScreens);
   registerMarketRoutes(routes, notificationScreens);
+  registerStoreRoutes(routes, notificationScreens);
   registerKinRoutes(routes, notificationScreens);
   registerPlayRoutes(routes, notificationScreens);
   registerPlayNotifications();

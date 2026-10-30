@@ -2,7 +2,7 @@
 
 **Status**: Completed  
 **Created**: 2026-09-26  
-**Last Updated**: 2026-09-26
+**Last Updated**: 2026-10-29
 
 ## Objective
 
@@ -28,6 +28,12 @@ No store version bump. `pubspec.yaml` is still `1.0.0+1`. Dutch’s `2.1.27` bum
 
 When Play purchases are added, pin `in_app_purchase_android: 0.4.0+5` in `pubspec.yaml` (0.5.x needs Dart 3.10+). Do not upgrade Flutter just to take the newer plugin. Restore must keep using `queryPurchasesAsync`; `queryPurchaseHistoryAsync` returns an error under Billing 8+.
 
+**2026-10-28:** Fragment packs now depend on `in_app_purchase_android` 0.4.0+5 and `in_app_purchase_storekit` 0.4.0. See [store-fragment-iap.md](store-fragment-iap.md).
+
+**2026-10-29:** Play automatic protection rejected the 1.0.9 bundle because `minSdk` was 23. The Gradle floor is now 24 (Android 7.0). Billing 9.1.0 still accepts that floor.
+
+**2026-10-30:** The one-time-product catalog is not created by this Gradle setup. The publisher API refused `oneTimeProducts` create (“request billing permission”). The six `fragments_*` packs were created in the Play Console, the last five with **Manage with AI**. Steps and the App Store API path are in [store-fragment-iap.md](store-fragment-iap.md).
+
 ## Files Modified
 
 - `app_codebase/flutter_base_06/android/app/build.gradle.kts`
@@ -39,7 +45,7 @@ When Play purchases are added, pin `in_app_purchase_android: 0.4.0+5` in `pubspe
 
 ## Notes
 
-Play’s target-API rule applies to the next Arcori App Bundle. The Billing Library rule applies only once the app actually ships `com.android.billingclient`. `minSdk` 23 drops Android 5.0 and 5.1 (API 21–22), the same device cut Dutch accepted for Billing 9.1.0. Android 6.0+ (API 23+) stays supported.
+Play’s target-API rule applies to the next Arcori App Bundle. The Billing Library rule applies only once the app actually ships `com.android.billingclient`. `minSdk` 24 drops Android 6.0 (API 23) as well as 5.0 and 5.1. Android 7.0+ stays supported. Play automatic protection requires this floor.
 
 The patch copies plugin Java into the project build directory and replaces `queryProductDetailsAsync` so it reads `QueryProductDetailsResult.getProductDetailsList()`. The Pub cache file is not modified.
 

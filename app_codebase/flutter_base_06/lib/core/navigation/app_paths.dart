@@ -31,6 +31,7 @@ abstract final class AppPaths {
   static const museum = '/museum';
   static const trove = '/trove';
   static const market = '/market';
+  static const fragmentStore = '/market/fragments';
   static const avariCirculating = '/avari/circulating';
   static const avariCanister = '/avari/circulating/canister';
 

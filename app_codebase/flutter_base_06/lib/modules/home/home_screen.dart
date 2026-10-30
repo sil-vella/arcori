@@ -335,7 +335,7 @@ class _LearnTheWorldCard extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Master the Arcori. Learn your slammer.',
+                'Master and mint.',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: context.appTypography.bodySmall.copyWith(

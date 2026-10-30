@@ -126,22 +126,36 @@ class _MarketScreenState extends ConsumerState<MarketScreen> {
                 title: 'Your wallet',
                 icon: Icons.account_balance_wallet_outlined,
                 goldFrame: true,
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const EconomyIcon(EconomyMark.goldArcori, size: 28),
-                    const SizedBox(width: AppSpacing.sm),
-                    Text(
-                      gold == null ? '—' : '$gold',
-                      style: context.appTypography.h2.copyWith(
-                        color: AppChrome.accentGold,
-                      ),
+                    Row(
+                      children: [
+                        const EconomyIcon(EconomyMark.goldArcori, size: 28),
+                        const SizedBox(width: AppSpacing.sm),
+                        Text(
+                          gold == null ? '—' : '$gold',
+                          style: context.appTypography.h2.copyWith(
+                            color: AppChrome.accentGold,
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.xs),
+                        Text(
+                          'Gold Arcori',
+                          style: context.appTypography.body.copyWith(
+                            color: AppChrome.onSurface,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: AppSpacing.xs),
-                    Text(
-                      'Gold Arcori',
-                      style: context.appTypography.body.copyWith(
-                        color: AppChrome.onSurface,
-                      ),
+                    const SizedBox(height: AppSpacing.md),
+                    FilledButton(
+                      onPressed: () {
+                        GoRouter.of(context).push(AppPaths.fragmentStore).then((_) {
+                          if (mounted) _load();
+                        });
+                      },
+                      child: const Text('Get fragments'),
                     ),
                   ],
                 ),

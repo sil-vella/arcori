@@ -30,6 +30,7 @@ import models.legacy_preserve  # noqa: E402, F401
 import models.catalog_design  # noqa: E402, F401
 import models.example_module_record  # noqa: E402, F401
 import models.user_contact  # noqa: E402, F401
+import models.store_fragment_purchase  # noqa: E402, F401
 
 config = context.config
 

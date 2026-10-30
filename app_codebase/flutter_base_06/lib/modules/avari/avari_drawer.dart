@@ -51,15 +51,11 @@ class _AvariDrawerHeaderState extends ConsumerState<AvariDrawerHeader> {
     final userProfile = ref.watch(userProfileProvider).profile;
     final avariProfile = ref.watch(avariProfileProvider).profile;
 
-    // Prefer Kin Lottie face (same as Avari profile identity); user profile
-    // skips guests and can lag behind claim until refresh.
-    final avatarUrl = () {
-      final kinLottie = avariProfile?.kin?.lottieUrl?.trim() ?? '';
-      if (kinLottie.isNotEmpty) return kinLottie;
-      final identity = avariProfile?.identity.avatarUrl?.trim() ?? '';
-      if (identity.isNotEmpty) return identity;
-      return userProfile?.avatarUrl;
-    }();
+    final avatarUrl = resolveProfileFaceUrl(
+      kinLottieUrl: avariProfile?.kin?.lottieUrl,
+      identityAvatarUrl: avariProfile?.identity.avatarUrl,
+      userAvatarUrl: userProfile?.avatarUrl,
+    );
 
     final name = () {
       final fromAvari = avariProfile?.identity.displayName.trim() ?? '';

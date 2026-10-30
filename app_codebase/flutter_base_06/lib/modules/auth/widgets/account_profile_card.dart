@@ -1,30 +1,52 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../core/state/auth/auth_providers.dart';
 import '../../../core/state/user/user_profile_provider.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_chrome.dart';
 import '../../../core/widgets/app_mark_icon.dart';
+import '../../avari/avari_notifier.dart';
 import '../../avari/widgets/profile_face_avatar.dart';
 
-const int _avatarMaxUploadBytes = 2 * 1024 * 1024;
-const Set<String> _allowedExtensions = {'.jpg', '.jpeg', '.png', '.webp'};
-
-/// Profile header with avatar, username, email, and account type (full accounts only).
-class AccountProfileCard extends ConsumerWidget {
+/// Profile header with the Kin face, username, email, and account type.
+class AccountProfileCard extends ConsumerStatefulWidget {
   const AccountProfileCard({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AccountProfileCard> createState() => _AccountProfileCardState();
+}
+
+class _AccountProfileCardState extends ConsumerState<AccountProfileCard> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _ensureAvariLoaded());
+  }
+
+  void _ensureAvariLoaded() {
+    if (!mounted) return;
+    final auth = ref.read(authProvider);
+    if (!auth.isAuthenticated || auth.isGuest) return;
+    final avari = ref.read(avariProfileProvider);
+    if (!avari.loaded && !avari.isLoading) {
+      ref.read(avariProfileProvider.notifier).load();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
     if (!auth.isAuthenticated || auth.isGuest) return const SizedBox.shrink();
 
     final profileState = ref.watch(userProfileProvider);
     final profile = profileState.profile;
+    final avariProfile = ref.watch(avariProfileProvider).profile;
+    final faceUrl = resolveProfileFaceUrl(
+      kinLottieUrl: avariProfile?.kin?.lottieUrl,
+      identityAvatarUrl: avariProfile?.identity.avatarUrl,
+      userAvatarUrl: profile?.avatarUrl,
+    );
 
     return AppChromeSection(
       title: 'Profile',
@@ -41,9 +63,7 @@ class AccountProfileCard extends ConsumerWidget {
               username: profile.username,
               email: profile.email,
               accountType: profile.accountType,
-              avatarUrl: profile.avatarUrl,
-              isUploading: profileState.isUploading,
-              onAvatarTap: () => _pickAndUploadAvatar(context, ref),
+              faceUrl: faceUrl,
             )
           else
             Text(
@@ -65,91 +85,6 @@ class AccountProfileCard extends ConsumerWidget {
       ),
     );
   }
-
-  Future<void> _pickAndUploadAvatar(BuildContext context, WidgetRef ref) async {
-    final source = await showModalBottomSheet<ImageSource>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.photo_library_outlined),
-              title: const Text('Choose from gallery'),
-              onTap: () => Navigator.pop(context, ImageSource.gallery),
-            ),
-          ],
-        ),
-      ),
-    );
-    if (source == null) return;
-
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(
-      source: source,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      imageQuality: 90,
-    );
-    if (picked == null) return;
-
-    final bytes = await _readPickedImageBytes(picked);
-    var filename = picked.name.isNotEmpty ? picked.name : 'avatar.jpg';
-    if (!_allowedExtensions.contains(_extensionForFilename(filename))) {
-      filename = '$filename.jpg';
-    }
-    final ext = _extensionForFilename(filename);
-    if (bytes.isEmpty) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not read the selected image')),
-        );
-      }
-      return;
-    }
-    if (!_allowedExtensions.contains(ext)) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Only JPEG, PNG, and WebP images are allowed'),
-          ),
-        );
-      }
-      return;
-    }
-    if (bytes.length > _avatarMaxUploadBytes) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Image exceeds maximum size (2 MB)')),
-        );
-      }
-      return;
-    }
-
-    await ref.read(userProfileProvider.notifier).uploadAvatar(
-          bytes: bytes,
-          filename: filename,
-        );
-  }
-
-  String _extensionForFilename(String filename) {
-    final dot = filename.lastIndexOf('.');
-    if (dot < 0) return '.jpg';
-    return filename.substring(dot).toLowerCase();
-  }
-
-  Future<List<int>> _readPickedImageBytes(XFile picked) async {
-    try {
-      final bytes = await picked.readAsBytes();
-      if (bytes.isNotEmpty) return bytes;
-    } catch (_) {}
-    final path = picked.path;
-    if (path.isNotEmpty) {
-      return File(path).readAsBytes();
-    }
-    return const [];
-  }
 }
 
 class _ProfileBody extends StatelessWidget {
@@ -157,56 +92,22 @@ class _ProfileBody extends StatelessWidget {
     required this.username,
     required this.email,
     required this.accountType,
-    required this.avatarUrl,
-    required this.isUploading,
-    required this.onAvatarTap,
+    required this.faceUrl,
   });
 
   final String username;
   final String email;
   final String accountType;
-  final String? avatarUrl;
-  final bool isUploading;
-  final VoidCallback onAvatarTap;
+  final String? faceUrl;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        GestureDetector(
-          onTap: isUploading ? null : onAvatarTap,
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              ProfileFaceAvatar(
-                avatarUrl: avatarUrl,
-                size: 80,
-              ),
-              if (isUploading)
-                Positioned.fill(
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor:
-                        AppColors.backgroundDark.withValues(alpha: 0.55),
-                    child: const CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                ),
-              Positioned(
-                right: -2,
-                bottom: -2,
-                child: CircleAvatar(
-                  radius: 14,
-                  backgroundColor: AppChrome.accentGold,
-                  child: Icon(
-                    Icons.camera_alt_outlined,
-                    size: 16,
-                    color: AppChrome.canvasBase,
-                  ),
-                ),
-              ),
-            ],
-          ),
+        ProfileFaceAvatar(
+          avatarUrl: faceUrl,
+          size: 80,
         ),
         AppSpacing.gapMd,
         Expanded(

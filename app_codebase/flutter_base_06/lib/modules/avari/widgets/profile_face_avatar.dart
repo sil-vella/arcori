@@ -5,6 +5,21 @@ import '../../../core/http/media_url.dart';
 import '../../../core/widgets/app_chrome.dart';
 import '../../../core/widgets/app_mark_icon.dart';
 
+/// Face shown for the player: Kin Lottie, then identity art, then a stored URL.
+String? resolveProfileFaceUrl({
+  String? kinLottieUrl,
+  String? identityAvatarUrl,
+  String? userAvatarUrl,
+}) {
+  final kin = kinLottieUrl?.trim() ?? '';
+  if (kin.isNotEmpty) return kin;
+  final identity = identityAvatarUrl?.trim() ?? '';
+  if (identity.isNotEmpty) return identity;
+  final user = userAvatarUrl?.trim() ?? '';
+  if (user.isNotEmpty) return user;
+  return null;
+}
+
 /// Circular profile media: Kin Lottie (``.json``) or raster image URL.
 ///
 /// No [ArcoriCylinder] — just the face art clipped to a circle.

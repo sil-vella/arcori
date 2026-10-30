@@ -1,20 +1,15 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Internet permission required for Google Sign-In and API calls -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission
+        android:name="android.permission.INTERNET"/>
+    <!-- Required before Play Console will allow one-time products. -->
+    <uses-permission
+        android:name="com.android.vending.BILLING"/>
     <!-- Slam stack-hit motor pulse (`vibration` package). Normal install grant. -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <!--
-      Profile photo: use system photo picker (image_picker + image_picker_android backport via Play services).
-      Do not declare READ_MEDIA_* — Play Photo/Video Permissions policy for infrequent access.
-      Legacy gallery read only on API ≤32; API 33+ picker needs no broad media read.
-    -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:node="remove" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" tools:node="remove" />
-    
+    <uses-permission
+        android:name="android.permission.VIBRATE"/>
     <application
-        android:label="arcori"
+        android:label="Arcori"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <!--
@@ -23,8 +18,7 @@
         -->
         <property
             android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY"
-            android:value="true" />
-
+            android:value="true"/>
         <!-- AdMob App ID - Required for Google Mobile Ads SDK -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -33,7 +27,6 @@
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
             android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -44,60 +37,73 @@
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <!-- App Links: https://YOUR_DOMAIN/arcori-verify-email?token=… -->
             <!-- Replace host with ARCORI_PUBLIC_APP_URL host after rename. -->
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+            <intent-filter
+                android:autoVerify="true">
+                <action
+                    android:name="android.intent.action.VIEW"/>
+                <category
+                    android:name="android.intent.category.DEFAULT"/>
+                <category
+                    android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:scheme="https"
                     android:host="your-domain.example"
-                    android:pathPrefix="/arcori-verify-email" />
+                    android:pathPrefix="/arcori-verify-email"/>
             </intent-filter>
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+            <intent-filter
+                android:autoVerify="true">
+                <action
+                    android:name="android.intent.action.VIEW"/>
+                <category
+                    android:name="android.intent.category.DEFAULT"/>
+                <category
+                    android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:scheme="https"
                     android:host="your-domain.example"
-                    android:pathPrefix="/legacy-preserve-complete" />
+                    android:pathPrefix="/legacy-preserve-complete"/>
             </intent-filter>
             <!-- Custom scheme (Safari same-site cannot use Universal Links) -->
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <action
+                    android:name="android.intent.action.VIEW"/>
+                <category
+                    android:name="android.intent.category.DEFAULT"/>
+                <category
+                    android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:scheme="arcori"
-                    android:host="arcori-verify-email" />
+                    android:host="arcori-verify-email"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <action
+                    android:name="android.intent.action.VIEW"/>
+                <category
+                    android:name="android.intent.category.DEFAULT"/>
+                <category
+                    android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:scheme="arcori"
-                    android:host="legacy-preserve-complete" />
+                    android:host="legacy-preserve-complete"/>
             </intent-filter>
         </activity>
         <!-- Flutter built-in deep linking (go_router) -->
         <meta-data
             android:name="flutter_deeplinking_enabled"
-            android:value="true" />
+            android:value="true"/>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
-            android:value="2" />
+            android:value="2"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
@@ -106,8 +112,10 @@
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
         <intent>
-            <action android:name="android.intent.action.PROCESS_TEXT"/>
-            <data android:mimeType="text/plain"/>
+            <action
+                android:name="android.intent.action.PROCESS_TEXT"/>
+            <data
+                android:mimeType="text/plain"/>
         </intent>
     </queries>
 </manifest>

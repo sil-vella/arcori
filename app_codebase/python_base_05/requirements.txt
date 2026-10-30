@@ -10,3 +10,5 @@ redis>=5.0,<6
 PyJWT>=2.8,<3
 bcrypt>=4.0,<5
 Pillow>=10.0,<12
+google-auth>=2.23,<3
+app-store-server-library>=3.1,<4

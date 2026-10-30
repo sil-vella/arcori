@@ -89,7 +89,7 @@ These names are product decisions, not cosmetic labels. They drove schemas, scre
 | **Museum** | World factual history of closed Arcori gens | Not live stats; not the personal slammer Legacy |
 | **Chronicle** | Mythology | What cannot be proven |
 | **Slammer** | The player’s tool and personal history | Acquire → Attune → Slammer Mastery → Legacy → optional physical mint |
-| **Gold Fragments / Gold Arcori** | Economy | 4 Fragments = 1 Gold Arcori; fee 2 frags; +1 frag/flip; signup 20 Gold Arcori |
+| **Gold Fragments / Gold Arcori** | Economy | 4 Fragments = 1 Gold Arcori; fee 2 frags; +1 frag/flip; signup 20 Gold Arcori. Store packs sell fragments at Dutch coin prices (server-verified) |
 | **Caller** | Match initiator (`callerUserId`) | Arena / lobby authority (not “host/steward”) |
 | **Arena** | Match place (`arenaId`) | Backgrounds / FX for the whole match |
 | **Launch regions** | ASH / EVG / LFR / MWB / AMB (+ **RBY** Realm Beyond, no standing) | Politics + lore in Region Catalog; standing −2…+2, not a collect lock |
@@ -585,6 +585,7 @@ Plan: [ws-invite-match.md](ws-invite-match.md).
 | Special Event fully JSON-driven | Add events without forking matchmaking/match code | `special_events.json` v2 rules → service `match_rules` + authuser catalog; Dart applies seats/rounds/arena/media; multi-match open queue with `matches_credited` — [special-events.md](special-events.md) |
 | Daily / task complete via notifications | Rematch must not be blocked by celebrate modals; unlocks durable across restart | Finalize `create_for_user` `complete_v1` / `unlock_v1`; NotificationHost safe-surface gate; post-match keeps summary only — [daily-goals.md](daily-goals.md) |
 | Daily Cache = fixed +2 Gold Fragments | Simple claim loot without weighted mystery tables for v1 | `claim_gate` id `daily_mystery_box`; JSON `reward.amount`; `apply_fragment_delta`; `daily_cache_claimed_at`; Tasks Claim + soft returning nudge — [daily-goals.md](daily-goals.md) |
+| Store packs sell Gold Fragments | Same pack sizes and USD prices as Dutch coins, without Premium or Stripe | Play and App Store consumables `fragments_100`…`fragments_3500`. Play catalog created in the console with Manage with AI after the publisher API refused create. App Store catalog created with the Connect API. Server verifies the receipt, then `apply_fragment_delta` (4 fragments = 1 Gold Arcori). Idempotent ledger `store_fragment_purchases`. Plan: [store-fragment-iap.md](store-fragment-iap.md) |
 | selectionWeight only (no printedRarity) | One number for how-often and Mastery Value; tiers were confusing | Design field `0.01`…`10.00`; match/Gatherer × region mult from `04_selection_weights`; deleted `03_printed_rarity.json` |
 | Join-or-create + 5s + AI fill | Solo players still play | Shared matchmaking for quick/event |
 | Friend Match via notification reply | Guest can accept from any screen; invite is one-shot (soft-deleted after reply / lobby timeout) | `create_for_user` instant + `data.response` reply; cancel + inbox prune clear stale popups |
