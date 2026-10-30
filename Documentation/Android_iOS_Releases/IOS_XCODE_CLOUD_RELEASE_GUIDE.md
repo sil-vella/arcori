@@ -65,7 +65,7 @@ The first Cloud runs failed because the script was still the Dutch copy: it look
 
 ## Each release
 
-1. The profile face is the Kin Arcori. Do not add photo, camera, or microphone purpose strings (see [issue 4](#4-processing-failed-missing-nsmicrophoneusagedescription)).
+1. Keep `NSMicrophoneUsageDescription` in `Info.plist`. The match sound player references the microphone API, so Apple rejects a build without that sentence (see [issue 4](#4-processing-failed-missing-nsmicrophoneusagedescription)). Do not add photo or camera purpose strings.
 2. Confirm App Icon and Launch pngs are in git (see [issue 3](#3-app-icon-pngs-missing-on-cloud)).
 3. Push to `main`. Branch Changes starts Cloud. The Mac can be off while the build is queued; the queue is Apple’s, not this machine.
 4. Open the build. **Export succeeded** is not the same as **the build is in TestFlight**.
@@ -125,9 +125,11 @@ Force-add the pngs if they were already ignored. This cleared the warnings. It d
 
 Build **8** reached Apple and processing returned **90683**: `Runner.app` must have `NSMicrophoneUsageDescription` because the binary references microphone APIs.
 
-Build **8** failed because `image_picker` was compiled in for a gallery profile photo, and the binary referenced the microphone. The profile face is the Kin Arcori. That picker and the `image_picker` package are removed, so a new build does not need photo, camera, or microphone purpose strings.
+Build **8** reached Apple and processing returned **90683** because `image_picker` was compiled in. That picker is gone. The profile face is the Kin Arcori.
 
-Build **8** cannot be patched. Build **9** is the upload that included those keys.
+Build **12** (1.0.11) failed with the same **90683**. `just_audio` still links the microphone API through its audio session, even though Arcori only plays sound. `Info.plist` must keep `NSMicrophoneUsageDescription`. Do not add photo or camera purpose strings.
+
+Build **8** and build **12** cannot be patched. The next upload needs a higher build number and that purpose string.
 
 ### 5. Missing Compliance after a successful upload
 
