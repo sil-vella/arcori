@@ -6,10 +6,8 @@ import '../../../core/theme/theme.dart';
 import '../../kin/widgets/kin_lottie_preview.dart';
 import 'arcori_cylinder.dart';
 import 'arcori_look.dart';
+import 'hand_under_slammer.dart';
 import 'slammer_strike_overlay.dart';
-
-/// Where the resting slammer sits relative to the avatar (toward the board).
-enum SlammerDockSide { top, bottom, left, right }
 
 /// Avatar + username chip for match play chrome (Template 002 slots).
 ///
@@ -28,6 +26,8 @@ class MatchPlayerChrome extends StatelessWidget {
     this.slammerLottieUrl,
     this.showSlammer = true,
     this.slammerDock = SlammerDockSide.top,
+    this.handImageUrl,
+    this.handAspect = 768 / 512,
     super.key,
   });
 
@@ -56,6 +56,12 @@ class MatchPlayerChrome extends StatelessWidget {
   /// Side of the chrome facing the board (slammer docks here).
   final SlammerDockSide slammerDock;
 
+  /// Equipped hand art, painted under the resting disc. Empty hides it.
+  final String? handImageUrl;
+
+  /// Image width / height for [handImageUrl].
+  final double handAspect;
+
   static const double avatarSize = 52;
   static final double slammerSize = avatarSize * kSlammerToArcoriScale;
 
@@ -71,14 +77,13 @@ class MatchPlayerChrome extends StatelessWidget {
   /// Right opponent: dock toward board (left of avatar).
   static const SlammerDockSide dockOpponentRight = SlammerDockSide.left;
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _chip({required bool keyed}) {
     final name = username.trim().isEmpty ? '?' : username.trim();
-    final chip = Column(
+    return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         _PlayedArcoriFace(
-          key: avatarKey,
+          key: keyed ? avatarKey : null,
           look: arcoriLook,
           lottieUrl: arcoriLottieUrl,
           inPlay: isActive,
@@ -88,28 +93,54 @@ class MatchPlayerChrome extends StatelessWidget {
         _UsernameRing(name: name, current: isActive, self: isSelf),
       ],
     );
+  }
 
-    final resting = _restingSlammerSlot();
-    if (resting == null) return chip;
+  @override
+  Widget build(BuildContext context) {
+    if (slammerLook == null) return _chip(keyed: true);
 
+    // Front to back: slammer, profile, hand. Each layer keeps the same size.
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        _arranged(keyed: false, showHand: true, showDisc: false),
+        _arranged(keyed: true, showHand: false, showDisc: false),
+        _arranged(keyed: false, showHand: false, showDisc: true),
+      ],
+    );
+  }
+
+  Widget _arranged({
+    required bool keyed,
+    required bool showHand,
+    required bool showDisc,
+  }) {
+    final face = Visibility(
+      visible: keyed,
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      child: _chip(keyed: keyed),
+    );
+    final slot = _slammerSlot(showHand: showHand, showDisc: showDisc);
     const gap = 6.0;
     switch (slammerDock) {
       case SlammerDockSide.top:
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            resting,
+            slot,
             const SizedBox(height: gap),
-            chip,
+            face,
           ],
         );
       case SlammerDockSide.bottom:
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            chip,
+            face,
             const SizedBox(height: gap),
-            resting,
+            slot,
           ],
         );
       case SlammerDockSide.left:
@@ -117,9 +148,9 @@ class MatchPlayerChrome extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            resting,
+            slot,
             const SizedBox(width: gap),
-            chip,
+            face,
           ],
         );
       case SlammerDockSide.right:
@@ -127,18 +158,20 @@ class MatchPlayerChrome extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            chip,
+            face,
             const SizedBox(width: gap),
-            resting,
+            slot,
           ],
         );
     }
   }
 
-  /// Rest slot always reserved when a look exists; [showSlammer] only toggles paint.
-  Widget? _restingSlammerSlot() {
+  /// Disc-sized slot. Hand and disc are painted on separate chrome layers.
+  Widget _slammerSlot({required bool showHand, required bool showDisc}) {
     final look = slammerLook;
-    if (look == null) return null;
+    final box = SizedBox(width: slammerSize, height: slammerSize);
+    if (look == null) return box;
+    final url = (handImageUrl ?? '').trim();
     final useLottie = (slammerLottieUrl ?? '').trim().isNotEmpty;
     final disc = ArcoriCylinder(
       look: ArcoriLook(
@@ -153,13 +186,38 @@ class MatchPlayerChrome extends StatelessWidget {
           ? KinSceneStack(lottieUrl: slammerLottieUrl, fit: BoxFit.cover)
           : null,
     );
-    return Visibility(
-      visible: showSlammer,
-      maintainSize: true,
-      maintainAnimation: true,
-      maintainState: true,
-      maintainInteractivity: false,
-      child: KeyedSubtree(key: slammerKey, child: disc),
+    Widget parked(Widget child) {
+      return Visibility(
+        visible: showSlammer,
+        maintainSize: true,
+        maintainAnimation: true,
+        maintainState: true,
+        maintainInteractivity: false,
+        child: child,
+      );
+    }
+
+    return SizedBox(
+      width: slammerSize,
+      height: slammerSize,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          if (showHand && url.isNotEmpty)
+            parked(
+              HandUnderSlammer(
+                disc: const SizedBox.shrink(),
+                paintDisc: false,
+                discSize: slammerSize,
+                dock: slammerDock,
+                imageUrl: url,
+                aspectWidthOverHeight: handAspect,
+              ),
+            ),
+          if (showDisc) parked(KeyedSubtree(key: slammerKey, child: disc)),
+        ],
+      ),
     );
   }
 }

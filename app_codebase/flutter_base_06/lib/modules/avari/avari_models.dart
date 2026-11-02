@@ -780,6 +780,7 @@ class AvariProfile {
     this.kin,
     this.access = const [],
     this.slammers = const [],
+    this.hands = const [],
     this.trove = const [],
     this.closedGenerations = const [],
     this.preservationWindows = const [],
@@ -860,6 +861,7 @@ class AvariProfile {
       ),
       access: parseItems(json['access']),
       slammers: parseItems(json['slammers']),
+      hands: parseItems(json['hands']),
       trove: parseTrove(json['trove']),
       closedGenerations: parseClosed(json['closedGenerations']),
       preservationWindows: parseItems(json['preservationWindows']),
@@ -875,6 +877,7 @@ class AvariProfile {
   final AvariEconomy economy;
   final List<AvariInventoryItem> access;
   final List<AvariInventoryItem> slammers;
+  final List<AvariInventoryItem> hands;
   final List<AvariTroveItem> trove;
 
   /// Closed gens this player had mastery on (points frozen at close).

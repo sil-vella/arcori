@@ -13,6 +13,7 @@ class MatchSeatView {
     this.imageUrl,
     this.lottieUrl,
     this.color,
+    this.handId = '',
   });
 
   final String userId;
@@ -34,6 +35,9 @@ class MatchSeatView {
   final String? lottieUrl;
   final String? color;
 
+  /// Owned hand cosmetic. Empty when this seat has no hand.
+  final String handId;
+
   bool get hasLottieSlammerFace {
     final url = lottieUrl?.trim() ?? '';
     return url.isNotEmpty;
@@ -46,6 +50,7 @@ class MatchSeatView {
     String? imageUrl,
     String? lottieUrl,
     String? color,
+    String? handId,
   }) {
     return MatchSeatView(
       userId: userId,
@@ -60,6 +65,7 @@ class MatchSeatView {
       imageUrl: imageUrl ?? this.imageUrl,
       lottieUrl: lottieUrl ?? this.lottieUrl,
       color: color ?? this.color,
+      handId: handId ?? this.handId,
     );
   }
 
@@ -70,6 +76,7 @@ class MatchSeatView {
     final rawImage = json['imageUrl']?.toString().trim() ?? '';
     final rawLottie = json['lottieUrl']?.toString().trim() ?? '';
     final rawColor = json['color']?.toString().trim() ?? '';
+    final rawHand = json['handId']?.toString().trim() ?? '';
     return MatchSeatView(
       userId: json['userId']?.toString() ?? '',
       seatIndex: json['seatIndex'] is int ? json['seatIndex'] as int : 0,
@@ -85,6 +92,7 @@ class MatchSeatView {
       imageUrl: rawImage.isNotEmpty ? rawImage : null,
       lottieUrl: rawLottie.isNotEmpty ? rawLottie : null,
       color: rawColor.isNotEmpty ? rawColor : null,
+      handId: rawHand,
     );
   }
 }

@@ -661,6 +661,9 @@ def _insert_player(
     display = _display_name_from_username(username)
     ensure_avari_profile(session, user_id=user_id, display_name=display)
     _mark_ai_onboarded(session, user_id, marker=marker)
+    from modules.avari.ai_hands import grant_hand_for_ai_user
+
+    grant_hand_for_ai_user(session, user_id)
 
     claim_body = build_random_kin_claim_body(kin_name=kin_name, rng=rng)
     return user_id, claim_body

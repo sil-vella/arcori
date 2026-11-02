@@ -43,6 +43,7 @@ class MatchSeat {
     this.imageUrl,
     this.lottieUrl,
     this.color,
+    this.handId = '',
   });
 
   final String userId;
@@ -64,6 +65,9 @@ class MatchSeat {
   final String? lottieUrl;
   final String? color;
 
+  /// Owned hand cosmetic. Empty when this seat has no hand.
+  final String handId;
+
   MatchSeat copyWith({
     int? score,
     bool? connected,
@@ -72,6 +76,7 @@ class MatchSeat {
     String? imageUrl,
     String? lottieUrl,
     String? color,
+    String? handId,
   }) {
     return MatchSeat(
       userId: userId,
@@ -86,6 +91,7 @@ class MatchSeat {
       imageUrl: imageUrl ?? this.imageUrl,
       lottieUrl: lottieUrl ?? this.lottieUrl,
       color: color ?? this.color,
+      handId: handId ?? this.handId,
     );
   }
 
@@ -107,6 +113,7 @@ class MatchSeat {
       if (lottieUrl != null && lottieUrl!.trim().isNotEmpty)
         'lottieUrl': lottieUrl!.trim(),
       if (color != null && color!.trim().isNotEmpty) 'color': color!.trim(),
+      if (handId.trim().isNotEmpty) 'handId': handId.trim(),
     };
   }
 
@@ -120,6 +127,7 @@ class MatchSeat {
     final rawImage = payload['imageUrl']?.toString().trim() ?? '';
     final rawLottie = payload['lottieUrl']?.toString().trim() ?? '';
     final rawColor = payload['color']?.toString().trim() ?? '';
+    final rawHand = payload['handId']?.toString().trim() ?? '';
     return MatchSeat(
       userId: payload['userId']?.toString() ?? '',
       seatIndex: payload['seatIndex'] is int ? payload['seatIndex'] as int : 0,
@@ -133,6 +141,7 @@ class MatchSeat {
       imageUrl: rawImage.isNotEmpty ? rawImage : null,
       lottieUrl: rawLottie.isNotEmpty ? rawLottie : null,
       color: rawColor.isNotEmpty ? rawColor : null,
+      handId: rawHand,
     );
   }
 }

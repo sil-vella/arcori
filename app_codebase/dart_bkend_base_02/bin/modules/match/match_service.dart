@@ -291,6 +291,7 @@ class MatchService implements MatchLifecycleContract {
           connected: s.connected,
           username: s.username,
           avatarUrl: s.avatarUrl,
+          handId: s.handId,
         ),
       );
     }
@@ -322,6 +323,7 @@ class MatchService implements MatchLifecycleContract {
           connected: s.connected,
           username: s.username,
           avatarUrl: s.avatarUrl,
+          handId: s.handId,
         ),
       );
     }
@@ -423,7 +425,8 @@ class MatchService implements MatchLifecycleContract {
       for (final entry in verifiedSlammers.entries)
         if (entry.value.sweetSpot != null) entry.key: entry.value.sweetSpot!,
     };
-    final stampedSeats = stampSlammerFaces(assigned, catalogById);
+    final withHands = await _stampAiHands(assigned);
+    final stampedSeats = stampSlammerFaces(withHands, catalogById);
     var snapshot = _store.createFromLobby(
       callerUserId: callerUserId,
       matchType: matchType,
@@ -474,6 +477,33 @@ class MatchService implements MatchLifecycleContract {
       stubLoop.schedule(snapshot.matchId);
     }
     return snapshot;
+  }
+
+  /// Copy AI seats with the hand stored on that user. A lookup failure leaves
+  /// the seat without a hand so the match still starts.
+  Future<List<MatchSeat>> _stampAiHands(List<MatchSeat> seats) async {
+    final aiIds = [
+      for (final seat in seats)
+        if (seat.kind == 'ai' && seat.userId.trim().isNotEmpty) seat.userId,
+    ];
+    if (aiIds.isEmpty) return seats;
+    Map<String, String> owned = {};
+    try {
+      owned = await _avari.ownedHands(userIds: aiIds);
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('match: owned_hands failed → no AI hands err=$e');
+      }
+      return seats;
+    }
+    if (owned.isEmpty) return seats;
+    return [
+      for (final seat in seats)
+        if (seat.kind == 'ai' && (owned[seat.userId]?.trim().isNotEmpty ?? false))
+          seat.copyWith(handId: owned[seat.userId])
+        else
+          seat,
+    ];
   }
 
   MatchSnapshot join({

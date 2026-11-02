@@ -77,6 +77,14 @@
       "mediaFolder": "007_mushroom_deadcat",
       "active": false,
       "slammerSeries": true
+    },
+    {
+      "key": "avari_hands",
+      "label": "Avari Hands",
+      "seriesKey": "Avari Hands",
+      "idToken": "SER008",
+      "mediaFolder": "008_avari_hands",
+      "active": false
     }
   ]
 }

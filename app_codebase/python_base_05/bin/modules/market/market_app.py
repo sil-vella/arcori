@@ -10,8 +10,10 @@ from core.state.session_scope import session_scope
 from modules.auth.auth_service import parse_json_body
 from modules.market.market_errors import INVALID_QUERY
 from modules.market.market_service import (
+    list_market_hands,
     list_market_slammers,
     parse_design_id_body,
+    purchase_hand,
     purchase_slammer,
     recharge_slammer,
 )
@@ -24,6 +26,8 @@ def register_market_routes(
     routes.authuser_get("/market/slammers", lambda: _handle_list(res))
     routes.authuser_post("/market/slammers/purchase", lambda: _handle_purchase(res))
     routes.authuser_post("/market/slammers/recharge", lambda: _handle_recharge(res))
+    routes.authuser_get("/market/hands", lambda: _handle_list_hands(res))
+    routes.authuser_post("/market/hands/purchase", lambda: _handle_purchase_hand(res))
 
 
 def _require_user_id() -> str:
@@ -38,6 +42,28 @@ def _handle_list(res: HttpResponseContract):
         user_id = _require_user_id()
         with session_scope() as session:
             return res.json_ok(list_market_slammers(session, user_id=user_id))
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_list_hands(res: HttpResponseContract):
+    try:
+        user_id = _require_user_id()
+        with session_scope() as session:
+            return res.json_ok(list_market_hands(session, user_id=user_id))
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_purchase_hand(res: HttpResponseContract):
+    try:
+        user_id = _require_user_id()
+        body = parse_json_body()
+        design_id = parse_design_id_body(body)
+        with session_scope() as session:
+            return res.json_ok(
+                purchase_hand(session, user_id=user_id, design_id=design_id)
+            )
     except AppError as err:
         return err.to_http_response()
 

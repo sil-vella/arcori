@@ -51,6 +51,7 @@ _SERIES_NAMES = {
     5: "Kin",
     6: "The Deadcats",
     7: "Mushroom Deadcat",
+    8: "Avari Hands",
 }
 
 _ROMAN = {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/http/media_url.dart';
@@ -21,13 +22,17 @@ import '../practice_ai_pool.dart';
 import '../state/match_notifier.dart';
 import '../state/match_snapshot_state.dart';
 import '../state/slam_motion_capability_provider.dart';
+import '../../avari/avari_notifier.dart';
+import '../../play/avari_hand_catalog.dart';
 import '../../play/game_controls_prefs.dart';
+import '../input/slam_resolver.dart' show ensureGen001DesignId;
 import '../../play/play_models.dart';
 import '../../play/play_notifier.dart';
 import 'arcori_image_prefetch.dart';
 import 'arcori_look.dart';
 import 'arcori_stack_surface.dart';
 import 'arena_pov_backdrop.dart';
+import 'hand_under_slammer.dart';
 import 'match_player_chrome.dart';
 import 'slam_hit_feedback.dart';
 import 'slam_result_modal.dart';
@@ -91,6 +96,9 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
   bool _skipNextAuthorityStrike = false;
   ArcoriLook? _strikeLook;
   String? _strikeLottieUrl;
+  String? _strikeHandImageUrl;
+  double _strikeHandAspect = 768 / 512;
+  SlammerDockSide _strikeHandDock = SlammerDockSide.top;
   Alignment _strikeFrom = Alignment.bottomCenter;
   Offset? _strikeHomeOffset;
 
@@ -422,6 +430,46 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     );
   }
 
+  AvariHandOption? _ownedEquippedHand() {
+    final equipped = avariHandFor(ref.read(gameControlsProvider).equippedHandId);
+    if (equipped == null) return null;
+    final hands = ref.read(avariProfileProvider).profile?.hands ?? const [];
+    final owned = hands.any(
+      (item) => ensureGen001DesignId(item.designId) == equipped.id,
+    );
+    return owned ? equipped : null;
+  }
+
+  SlammerDockSide _handDockFor({
+    required MatchSeatView actor,
+    required MatchSeatView? selfSeat,
+    required List<MatchSeatView> opponents,
+  }) {
+    if (selfSeat != null && actor.userId == selfSeat.userId) {
+      return MatchPlayerChrome.dockSelf;
+    }
+    if (opponents.length <= 1) return MatchPlayerChrome.dockOpponentTop;
+    final idx = opponents.indexWhere((o) => o.userId == actor.userId);
+    if (idx <= 0) return MatchPlayerChrome.dockOpponentLeft;
+    return MatchPlayerChrome.dockOpponentRight;
+  }
+
+  void _armStrikeHand({
+    required MatchSeatView actor,
+    required MatchSeatView? selfSeat,
+    required List<MatchSeatView> opponents,
+  }) {
+    final mine = selfSeat != null && actor.userId == selfSeat.userId;
+    final hand = mine ? _ownedEquippedHand() : avariHandFor(actor.handId);
+    _strikeHandImageUrl = hand?.imageUrl;
+    _strikeHandAspect = hand?.aspectWidthOverHeight ?? (768 / 512);
+    _strikeHandDock = _handDockFor(
+      actor: actor,
+      selfSeat: selfSeat,
+      opponents: opponents,
+    );
+  }
+
   Alignment _strikeFromFor({
     required MatchSeatView actor,
     required MatchSeatView? selfSeat,
@@ -554,6 +602,17 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
     }
     _clearSlammerHideFields();
     if (!mounted) return;
+    // Stack dispose fires this during finalizeTree when the match closes
+    // mid-slam. setState is illegal until the frame lock lifts.
+    final phase = WidgetsBinding.instance.schedulerPhase;
+    if (phase == SchedulerPhase.persistentCallbacks ||
+        phase == SchedulerPhase.midFrameMicrotasks) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        setState(() {});
+      });
+      return;
+    }
     setState(() {});
   }
 
@@ -602,6 +661,7 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
       _skipNextAuthorityStrike = false;
       _strikeLook = look;
       _strikeLottieUrl = me?.lottieUrl;
+      _armStrikeHand(actor: actor, selfSeat: me, opponents: opponents);
       _strikeFrom = _strikeFromFor(
         actor: actor,
         selfSeat: me,
@@ -950,6 +1010,11 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
             _skipNextAuthorityStrike = false;
             _strikeLook = look;
             _strikeLottieUrl = actor.lottieUrl;
+            _armStrikeHand(
+              actor: actor,
+              selfSeat: selfSeat,
+              opponents: opponents,
+            );
             _strikeFrom = _strikeFromFor(
               actor: actor,
               selfSeat: selfSeat,
@@ -1124,6 +1189,9 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
             applyFitZoom: !hasArena,
             strikeLook: _strikeLook,
             strikeLottieUrl: _strikeLottieUrl,
+            strikeHandImageUrl: _strikeHandImageUrl,
+            strikeHandAspect: _strikeHandAspect,
+            strikeHandDock: _strikeHandDock,
             strikeFrom: _strikeFrom,
             strikeHomeOffset: _strikeHomeOffset,
             strikeToken: _activeStrikeToken,
@@ -1267,6 +1335,17 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
         final selfPlayed = selfSeat == null
             ? null
             : _playedArcoriFor(snap, selfSeat);
+        final equippedHand = avariHandFor(
+          ref.watch(gameControlsProvider).equippedHandId,
+        );
+        final ownedHands =
+            ref.watch(avariProfileProvider).profile?.hands ?? const [];
+        final handOwned = equippedHand != null &&
+            ownedHands.any(
+              (item) =>
+                  ensureGen001DesignId(item.designId) == equippedHand.id,
+            );
+        final shownHand = handOwned ? equippedHand : null;
         final selfChrome = selfSeat == null
             ? const SizedBox.shrink()
             : MatchPlayerChrome(
@@ -1281,11 +1360,15 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
                 slammerLottieUrl: selfSeat.lottieUrl,
                 showSlammer: animUid == null || animUid != selfSeat.userId,
                 slammerDock: MatchPlayerChrome.dockSelf,
+                handImageUrl: shownHand?.imageUrl,
+                handAspect: shownHand?.aspectWidthOverHeight ?? (768 / 512),
               );
 
         final oppChrome = [
           for (var i = 0; i < opponents.length; i++)
-            MatchPlayerChrome(
+            () {
+              final oppHand = avariHandFor(opponents[i].handId);
+              return MatchPlayerChrome(
               username: _displayNameFor(seat: opponents[i], isSelf: false),
               isActive: highlightSeat == opponents[i].seatIndex,
               avatarKey: i < _oppAvatarKeys.length ? _oppAvatarKeys[i] : null,
@@ -1302,7 +1385,10 @@ class _PracticeMatchBodyState extends ConsumerState<_PracticeMatchBody>
                   : (i == 0
                         ? MatchPlayerChrome.dockOpponentLeft
                         : MatchPlayerChrome.dockOpponentRight),
-            ),
+              handImageUrl: oppHand?.imageUrl,
+              handAspect: oppHand?.aspectWidthOverHeight ?? (768 / 512),
+            );
+            }(),
         ];
 
         return _withHitShake(

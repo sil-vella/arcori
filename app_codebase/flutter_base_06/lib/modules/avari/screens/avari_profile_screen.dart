@@ -20,6 +20,7 @@ import '../../kin/kin_notifier.dart';
 import '../../kin/widgets/kin_lottie_preview.dart';
 import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
+import '../../market/hand_art.dart';
 import '../../market/market_api.dart';
 import '../../market/market_spend_modal.dart';
 import '../../play/game_controls_prefs.dart';
@@ -363,6 +364,26 @@ class _AvariProfileScreenState extends ConsumerState<AvariProfileScreen>
       ),
       gapSection(
         AppChromeSection(
+          title: 'Hands',
+          icon: Icons.back_hand_outlined,
+          goldFrame: true,
+          child: profile.hands.isEmpty
+              ? _LeftHalf(child: Text('None yet', style: bodySmall))
+              : _HandPager(
+                  items: profile.hands,
+                  equippedId: ref.watch(gameControlsProvider).equippedHandId,
+                  onEquip: (item) {
+                    unawaited(
+                      ref
+                          .read(gameControlsProvider.notifier)
+                          .setEquippedHandId(item.designId),
+                    );
+                  },
+                ),
+        ),
+      ),
+      gapSection(
+        AppChromeSection(
           title: 'Arcori',
           mark: const AppMarkIcon(AppMarks.arcori),
           goldFrame: true,
@@ -557,6 +578,91 @@ bool _sameSlammer(String designId, String equippedId) {
   if (designId.isEmpty || equippedId.isEmpty) return false;
   if (designId == equippedId) return true;
   return ensureGen001DesignId(designId) == equippedId;
+}
+
+/// One owned hand at a time. Equip uses the same saved id as Game Controls.
+class _HandPager extends StatefulWidget {
+  const _HandPager({
+    required this.items,
+    required this.equippedId,
+    required this.onEquip,
+  });
+
+  final List<AvariInventoryItem> items;
+  final String equippedId;
+  final ValueChanged<AvariInventoryItem> onEquip;
+
+  @override
+  State<_HandPager> createState() => _HandPagerState();
+}
+
+class _HandPagerState extends State<_HandPager> {
+  int _index = 0;
+
+  @override
+  void didUpdateWidget(covariant _HandPager oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final last = widget.items.length - 1;
+    if (last < 0) return;
+    if (_index > last) _index = last;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final items = widget.items;
+    final current = items[_index];
+    final equipped = _sameSlammer(current.designId, widget.equippedId);
+    final gold = AppChrome.accentGold;
+    return Column(
+      children: [
+        HandArt(imageUrl: current.imageUrl, width: 220, height: 140),
+        AppSpacing.gapXs,
+        Text(
+          current.displayName,
+          textAlign: TextAlign.center,
+          style: context.appTypography.h3.copyWith(color: gold),
+        ),
+        AppSpacing.gapSm,
+        FilledButton(
+          style: equipped
+              ? context.appButtons.primary.tonal
+              : context.appButtons.primary.filled,
+          onPressed: current.designId.isEmpty || equipped
+              ? null
+              : () => widget.onEquip(current),
+          child: Text(equipped ? 'Equipped' : 'Equip'),
+        ),
+        if (items.length > 1) ...[
+          AppSpacing.gapXxs,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: _index > 0 ? () => setState(() => _index -= 1) : null,
+                icon: const Icon(Icons.chevron_left),
+                color: gold,
+                disabledColor: AppChrome.onSurfaceMuted,
+              ),
+              Text(
+                '${_index + 1} / ${items.length}',
+                style: context.appTypography.caption.copyWith(
+                  color: AppChrome.onSurfaceMuted,
+                ),
+              ),
+              IconButton(
+                onPressed: _index < items.length - 1
+                    ? () => setState(() => _index += 1)
+                    : null,
+                icon: const Icon(Icons.chevron_right),
+                color: gold,
+                disabledColor: AppChrome.onSurfaceMuted,
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
 }
 
 class _LeftHalf extends StatelessWidget {

@@ -8,6 +8,7 @@ from core.http.contracts.response_contract import HttpResponseContract
 from core.http.request_context import get_auth_user_id
 from modules.auth.auth_service import parse_json_body
 from modules.avari.avari_errors import INVALID_QUERY
+from modules.avari.ai_hands import owned_hands_for_users
 from modules.avari.avari_service import (
     claim_kin,
     finalize_match,
@@ -53,6 +54,7 @@ def register_avari_routes(
         lambda: _handle_match_finalize(res),
     )
     routes.service_post("/avari/verify_slammers", lambda: _handle_verify_slammers(res))
+    routes.service_post("/avari/owned_hands", lambda: _handle_owned_hands(res))
     routes.service_post(
         "/avari/spend_slammer_charge",
         lambda: _handle_spend_slammer_charge_service(res),
@@ -156,6 +158,18 @@ def _handle_verify_slammers(res: HttpResponseContract):
         return res.json_ok(
             verify_slammers_for_seats(seats if isinstance(seats, list) else [])
         )
+    except AppError as err:
+        return err.to_http_response()
+
+
+def _handle_owned_hands(res: HttpResponseContract):
+    try:
+        body = parse_json_body()
+        raw = body.get("userIds") if isinstance(body, dict) else None
+        if raw is not None and not isinstance(raw, list):
+            raise AppError(INVALID_QUERY, message="userIds must be a list")
+        user_ids = [str(item) for item in raw] if isinstance(raw, list) else []
+        return res.json_ok(owned_hands_for_users(user_ids))
     except AppError as err:
         return err.to_http_response()
 

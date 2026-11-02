@@ -14,6 +14,7 @@ from models.player_progress import (
     MatchFinalizeLedger,
     PlayerClosedGeneration,
     PlayerDesignAccess,
+    PlayerHand,
     PlayerKin,
     PlayerMastery,
     PlayerMasteryChangeLog,
@@ -641,6 +642,62 @@ def list_slammers(session: Session, user_id: str) -> list[PlayerSlammer]:
     return list(
         session.scalars(select(PlayerSlammer).where(PlayerSlammer.user_id == uid)).all()
     )
+
+
+def ensure_hand(
+    session: Session,
+    *,
+    user_id: str | uuid.UUID,
+    design_id: str,
+    source: str = "market",
+) -> PlayerHand:
+    """Grant a hand (idempotent on user+design). No charges."""
+    uid = _as_uuid(user_id) if not isinstance(user_id, uuid.UUID) else user_id
+    if uid is None:
+        raise ValueError("user_id required")
+    did = _canonical_design_id(design_id)
+    if not did:
+        raise ValueError("design_id required")
+    existing = session.scalar(
+        select(PlayerHand).where(
+            PlayerHand.user_id == uid,
+            PlayerHand.design_id == did[:64],
+        )
+    )
+    if existing is not None:
+        return existing
+    row = PlayerHand(
+        user_id=uid,
+        design_id=did[:64],
+        source=(source or "market").strip()[:32] or "market",
+    )
+    session.add(row)
+    session.flush()
+    return row
+
+
+def list_hands(session: Session, user_id: str) -> list[PlayerHand]:
+    uid = _as_uuid(user_id)
+    if uid is None:
+        return []
+    return list(
+        session.scalars(select(PlayerHand).where(PlayerHand.user_id == uid)).all()
+    )
+
+
+def earliest_hand_design_id(session: Session, user_id: str | uuid.UUID) -> str:
+    """First owned hand for [user_id], oldest row first. Empty when they own none."""
+    uid = user_id if isinstance(user_id, uuid.UUID) else _as_uuid(str(user_id))
+    if uid is None:
+        return ""
+    row = session.scalar(
+        select(PlayerHand)
+        .where(PlayerHand.user_id == uid)
+        .order_by(PlayerHand.created_at.asc(), PlayerHand.design_id.asc())
+    )
+    if row is None:
+        return ""
+    return str(row.design_id or "").strip()
 
 
 def list_trove(session: Session, user_id: str) -> list[PlayerTrove]:

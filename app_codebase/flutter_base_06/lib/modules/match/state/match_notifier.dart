@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../utils/dev_logger.dart';
 import '../../../core/state/auth/auth_providers.dart';
 import '../../avari/avari_api.dart';
+import '../../play/avari_hand_catalog.dart';
 import '../../play/play_models.dart';
 import '../input/match_grace.dart';
 import '../input/slam_input_models.dart';
@@ -160,6 +161,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         arcoriIds: [practiceAiArcoriIds[0]],
         slammerId: stubSlammerId,
         username: practiceAiUsernameFor(ais[0]),
+        handId: assignedAiHandId(ais[0]) ?? '',
         imageUrl: stubFace['imageUrl'],
         lottieUrl: stubFace['lottieUrl'],
         color: stubFace['color'],
@@ -173,6 +175,7 @@ class MatchSnapshotNotifier extends Notifier<MatchSnapshotState> {
         arcoriIds: [practiceAiArcoriIds[1]],
         slammerId: stubSlammerId,
         username: practiceAiUsernameFor(ais[1]),
+        handId: assignedAiHandId(ais[1]) ?? '',
         imageUrl: stubFace['imageUrl'],
         lottieUrl: stubFace['lottieUrl'],
         color: stubFace['color'],

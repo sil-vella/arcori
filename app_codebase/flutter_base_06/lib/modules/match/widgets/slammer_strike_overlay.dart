@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vector_math/vector_math_64.dart' show Quaternion, Vector3;
 
@@ -12,6 +13,7 @@ import '../input/turn_pacing.dart';
 import 'arcori_cylinder.dart';
 import 'arcori_disc.dart' show faceUpFromQuat, matrixFromQuat;
 import 'arcori_look.dart';
+import 'hand_under_slammer.dart';
 import 'slam_strike_motion.dart';
 
 /// Equipped slammer is slightly larger than an Arcori disc on the table.
@@ -56,6 +58,9 @@ class SlammerArenaDisc extends ConsumerStatefulWidget {
     this.faceUpOverride,
     this.flyInDuration = slamStrikeHoldDefault,
     this.size = 56,
+    this.handImageUrl,
+    this.handAspect = 768 / 512,
+    this.handDock = SlammerDockSide.top,
     this.onFlyInComplete,
     this.onLocalHitFeedback,
   });
@@ -79,6 +84,11 @@ class SlammerArenaDisc extends ConsumerStatefulWidget {
   final bool? faceUpOverride;
   final Duration flyInDuration;
   final double size;
+
+  /// Owned hand art. It follows the strike scale, then returns home.
+  final String? handImageUrl;
+  final double handAspect;
+  final SlammerDockSide handDock;
   final VoidCallback? onFlyInComplete;
 
   /// Local player only — vibrate/shake. Fired even when [onFlyInComplete] is null.
@@ -187,8 +197,7 @@ class _SlammerArenaDiscState extends ConsumerState<SlammerArenaDisc>
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _discLayer() {
     switch (widget.phase) {
       case SlammerArenaPhase.flyIn:
         return LayoutBuilder(
@@ -239,6 +248,245 @@ class _SlammerArenaDiscState extends ConsumerState<SlammerArenaDisc>
           child: _atHomeDisc(),
         );
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final disc = _discLayer();
+    final url = (widget.handImageUrl ?? '').trim();
+    if (url.isEmpty) return disc;
+    return Stack(
+      fit: StackFit.expand,
+      clipBehavior: Clip.none,
+      children: [
+        _RidingHand(
+          fly: _flyIn,
+          phase: widget.phase,
+          home: widget.home,
+          offset: widget.offset,
+          qx: widget.qx,
+          qy: widget.qy,
+          qz: widget.qz,
+          qw: widget.qw,
+          aimX: widget.aimX,
+          aimZ: widget.aimZ,
+          size: widget.size,
+          imageUrl: url,
+          aspect: widget.handAspect,
+          dock: widget.handDock,
+          token: widget.token,
+        ),
+        disc,
+      ],
+    );
+  }
+}
+
+/// Strike scale grows for the first half, then shrinks. The hand lets go
+/// halfway through that shrink, holds, then fades out.
+const double kHandReleaseFlyT = 0.5 + 0.5 * 0.5;
+
+const int kHandHoldMs = 2000;
+const int kHandFadeMs = 420;
+
+class _RidingHand extends StatefulWidget {
+  const _RidingHand({
+    required this.fly,
+    required this.phase,
+    required this.home,
+    required this.offset,
+    required this.qx,
+    required this.qy,
+    required this.qz,
+    required this.qw,
+    required this.aimX,
+    required this.aimZ,
+    required this.size,
+    required this.imageUrl,
+    required this.aspect,
+    required this.dock,
+    required this.token,
+  });
+
+  final Animation<double> fly;
+  final SlammerArenaPhase phase;
+  final Offset home;
+  final Offset offset;
+  final double qx;
+  final double qy;
+  final double qz;
+  final double qw;
+  final double aimX;
+  final double aimZ;
+  final double size;
+  final String imageUrl;
+  final double aspect;
+  final SlammerDockSide dock;
+  final int token;
+
+  @override
+  State<_RidingHand> createState() => _RidingHandState();
+}
+
+class _RidingHandState extends State<_RidingHand>
+    with SingleTickerProviderStateMixin {
+  late final Ticker _clock;
+  Duration _elapsed = Duration.zero;
+  Duration _heldAt = Duration.zero;
+  bool _held = false;
+  bool _gone = false;
+  Offset _stop = Offset.zero;
+  double _stopScale = 1;
+  double _stopQx = 0;
+  double _stopQy = 0;
+  double _stopQz = 0;
+  double _stopQw = 1;
+  Size _arena = Size.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    _clock = createTicker(_onTick)..start();
+  }
+
+  @override
+  void didUpdateWidget(covariant _RidingHand oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.token != widget.token) {
+      _held = false;
+      _gone = false;
+      _elapsed = Duration.zero;
+      _heldAt = Duration.zero;
+      _clock
+        ..stop()
+        ..start();
+    }
+  }
+
+  @override
+  void dispose() {
+    _clock.dispose();
+    super.dispose();
+  }
+
+  void _onTick(Duration elapsed) {
+    _elapsed = elapsed;
+    final pastShrink = widget.phase != SlammerArenaPhase.flyIn ||
+        widget.fly.value >= kHandReleaseFlyT;
+    if (!_held && pastShrink && _arena != Size.zero) {
+      _held = true;
+      _heldAt = elapsed;
+      final pose = _attached(_arena);
+      _stop = pose.pos;
+      _stopScale = pose.scale;
+      _stopQx = pose.qx;
+      _stopQy = pose.qy;
+      _stopQz = pose.qz;
+      _stopQw = pose.qw;
+    }
+    if (_held) {
+      final since = elapsed - _heldAt;
+      if (since.inMilliseconds >= kHandHoldMs + kHandFadeMs) {
+        _gone = true;
+        _clock.stop();
+      }
+    }
+    if (mounted) setState(() {});
+  }
+
+  double get _fade {
+    if (!_held) return 1;
+    final into = (_elapsed - _heldAt).inMilliseconds - kHandHoldMs;
+    if (into <= 0) return 1;
+    if (into >= kHandFadeMs) return 0;
+    return 1 - into / kHandFadeMs;
+  }
+
+  Offset _impact(Size arena) {
+    final impactX = (widget.aimX * 0.35).clamp(-0.35, 0.35);
+    final impactY = (widget.aimZ * 0.35).clamp(-0.35, 0.35);
+    return Offset(impactX * arena.width * 0.5, impactY * arena.height * 0.5);
+  }
+
+  ({Offset pos, double scale, double qx, double qy, double qz, double qw})
+      _attached(Size arena) {
+    switch (widget.phase) {
+      case SlammerArenaPhase.flyIn:
+        final t = widget.fly.value;
+        return (
+          pos: Offset.lerp(widget.home, _impact(arena), slamStrikeTravel(t))!,
+          scale: slamStrikeScale(t),
+          qx: 0.0,
+          qy: 0.0,
+          qz: 0.0,
+          qw: 1.0,
+        );
+      case SlammerArenaPhase.scatter:
+      case SlammerArenaPhase.returnHome:
+        return (
+          pos: widget.offset,
+          scale: 1.0,
+          qx: widget.qx,
+          qy: widget.qy,
+          qz: widget.qz,
+          qw: widget.qw,
+        );
+      case SlammerArenaPhase.atHome:
+        return (
+          pos: widget.home,
+          scale: 1.0,
+          qx: 0.0,
+          qy: 0.0,
+          qz: 0.0,
+          qw: 1.0,
+        );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_gone) return const SizedBox.shrink();
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final arena = Size(constraints.maxWidth, constraints.maxHeight);
+        _arena = arena;
+        final live = _attached(arena);
+        final pose = _held
+            ? (
+                pos: _stop,
+                scale: _stopScale,
+                qx: _stopQx,
+                qy: _stopQy,
+                qz: _stopQz,
+                qw: _stopQw,
+              )
+            : live;
+        return Opacity(
+          opacity: _fade,
+          child: Align(
+            alignment: Alignment.center,
+            child: Transform.translate(
+              offset: pose.pos,
+              child: Transform.scale(
+                scale: pose.scale,
+                child: Transform(
+                  alignment: Alignment.center,
+                  transform: matrixFromQuat(pose.qx, pose.qy, pose.qz, pose.qw),
+                  child: HandUnderSlammer(
+                    disc: const SizedBox.shrink(),
+                    paintDisc: false,
+                    discSize: widget.size,
+                    dock: widget.dock,
+                    imageUrl: widget.imageUrl,
+                    aspectWidthOverHeight: widget.aspect,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 

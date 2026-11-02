@@ -2,7 +2,7 @@
 
 **Status:** Living index  
 **Created:** 2026-07-20  
-**Last Updated:** 2026-10-28
+**Last Updated:** 2026-10-31
 
 Index of active implementation plans. Detail lives in the linked files; Game_Specific docs remain design SSOT for content/model.
 
@@ -95,6 +95,7 @@ Open (ordered):
 - [ ] My Mastery tab (Trove screen holds mints + closed gens; circulating Arcori on profile)
 - [x] Slammer charge spend + Market shop slammers (buy 4GA/25; top-up 4GA/+100; −1/slam; Starter free) — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
 - [ ] Slammer recovery slam-stat *(future)* — [slammer-recovery-and-recharge.md](slammer-recovery-and-recharge.md)
+- [ ] **Avari's hand** (Market cosmetic: splash-style glowing hands that play with the slammer animation) — [avaris-hand.md](avaris-hand.md)
 
 Standings surface is live with an open tail (My Mastery) covered above.
 
@@ -150,6 +151,7 @@ Standings surface is live with an open tail (My Mastery) covered above.
 | [active-window-arcori-play-selection.md](active-window-arcori-play-selection.md) | Completed (v1 SE) | Preservation Chase SE: human hard pick from open windows; AI from live global open-window roster |
 | [special-match-arcori-select.md](special-match-arcori-select.md) | Spec / backlog | Player chooses Arcori for special / hard-pick matches; QS/Invite stay weighted auto |
 | [mastery-medallion-visuals.md](mastery-medallion-visuals.md) | Spec / backlog | Per-player medallion tier from mastery; catalog design/face unchanged |
+| [avaris-hand.md](avaris-hand.md) | Spec / backlog | Market cosmetic: splash glowing hands timed to the slammer animation |
 | [achievements.md](achievements.md) | In Progress | JSON SSOT + finalize unlocks + Flutter list/celebration; Alembic 016 apply open |
 | [unlock-types.md](unlock-types.md) | Spec | Shared unlock_type + event dispatch across goals/tasks/achievements |
 | [special-event-achievements.md](special-event-achievements.md) | In Progress | Per-event flips / roster clear → same celebrate + View pipeline |

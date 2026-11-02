@@ -66,6 +66,7 @@ services:
       - ${APP_ROOT:-/opt/apps/arcori}/data/catalog-arcori:/data/catalog-media:ro
       - ${APP_ROOT:-/opt/apps/arcori}/data/catalog-velora:/data/catalog-velora:ro
       - ${APP_ROOT:-/opt/apps/arcori}/data/catalog-kin:/data/catalog-kin:ro
+      - ${APP_ROOT:-/opt/apps/arcori}/data/secrets:/app/secrets:ro
     networks:
       - app-network
     restart: unless-stopped

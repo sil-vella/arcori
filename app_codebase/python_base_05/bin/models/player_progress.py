@@ -160,6 +160,24 @@ class PlayerSlammer(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     sweet_spot: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
 
+class PlayerHand(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
+    """Owned hand cosmetic. Bought once; no charges and no slam mastery."""
+
+    __tablename__ = "player_hands"
+    __table_args__ = (
+        UniqueConstraint("user_id", "design_id", name="uq_player_hands_user_design"),
+    )
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    design_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    source: Mapped[str] = mapped_column(String(32), nullable=False, default="market")
+
+
 class PlayerTrove(Base, UUIDPrimaryKeyMixin, CreatedAtMixin):
     """Minted Legacy Slammers (personal physical seal). Arcori no longer mint here."""
 

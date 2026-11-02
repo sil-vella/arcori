@@ -2,7 +2,7 @@
 
 **Status**: In Progress  
 **Created**: 2026-10-28  
-**Last Updated**: 2026-10-30
+**Last Updated**: 2026-10-31
 
 ## Objective
 
@@ -19,13 +19,13 @@ Sell Gold Fragments through Google Play and the App Store at the same pack sizes
 
 ## Current Progress
 
-Code path is in the app. Both store catalogs exist for `fragments_100` through `fragments_3500`. A real charge still cannot credit a wallet until `GOOGLE_PLAY_*` and `APPLE_IAP_*` are set on the API host. Until then, verify returns `store/not_configured`.
+Code path is in the app. Both store catalogs exist for `fragments_100` through `fragments_3500`. Image `1.0.12-aa49342` is on the VPS. The Apple team purchase key is at `/opt/apps/arcori/data/secrets/apple-iap-key.p8`, mounted at `/app/secrets`, and `apple_billing_configured()` is true for Apple ID `6821932832`. `GOOGLE_PLAY_*` is still unset. A license-test purchase is not confirmed yet.
 
 The products are created, not submitted for sale. Apple reviews the first consumable together with a new app version. Play products are Active on the closed-testing app.
 
 ## Next Steps
 
-Point the API at package and bundle `com.reignofplay.arcori` (not Dutch) and confirm a license-test purchase. Do not submit the App Store packs until that app version is ready.
+Confirm a license-test purchase on iOS. Set `GOOGLE_PLAY_*` the same way. The App Store draft already holds iOS 1.0 build 13 and the six fragment packs. Submit that draft only after the license-test purchase credits the wallet.
 
 ## Files Modified
 
@@ -34,6 +34,8 @@ Point the API at package and bundle `com.reignofplay.arcori` (not Dutch) and con
 - `app_codebase/python_base_05/alembic/versions/034_store_fragment_purchases.py`
 - `app_codebase/flutter_base_06/lib/modules/store/`
 - `app_codebase/flutter_base_06/lib/modules/market/screens/market_screen.dart`
+- `automation/production/docker-compose.vps.yml` (read-only `/app/secrets` mount)
+- `automation/production/deploy_vps.py` (creates `data/secrets` on deploy)
 
 ## Notes
 
@@ -42,6 +44,8 @@ Product IDs are `fragments_100` through `fragments_3500`, not Dutch’s `coins_*
 Play consume runs after the wallet credit commits. A repeated token returns the same credit without adding fragments again. Apple JWS is checked with `app-store-server-library` against the bundled Apple root certificates.
 
 The app itself is a paid download. The requested price was **$2.59**. App Store Connect has no $2.59 point, so both stores use **$2.99**. The Play download price is not entered yet. Fragment pack prices are unchanged.
+
+The Apple In-App Purchase key is the existing team key (the one named Dutch Card Game Server Verify). It was already on the VPS for Dutch. A copy now lives at `/opt/apps/arcori/data/secrets/apple-iap-key.p8`, mode 600, same bytes as the Dutch file. The API container reads it at `/app/secrets/apple-iap-key.p8`. Bundle is `com.reignofplay.arcori`. Apple ID is `6821932832`.
 
 ### How the catalogs were created
 

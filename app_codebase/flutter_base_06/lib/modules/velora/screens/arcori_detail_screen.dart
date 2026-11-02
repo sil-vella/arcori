@@ -6,6 +6,8 @@ import '../../../core/screen/screen.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_chrome.dart';
 import '../../../core/widgets/app_mark_icon.dart';
+import '../../market/hand_art.dart';
+import '../../market/hand_market_action.dart';
 import '../../market/slammer_market_action.dart';
 import '../velora_chrome.dart';
 import '../velora_models.dart';
@@ -29,6 +31,12 @@ class ArcoriDetailScreen extends ConsumerStatefulWidget {
 }
 
 enum _DetailTab { details, standings }
+
+bool _isHand(DesignDetail design) {
+  final type = (design.type ?? '').trim().toLowerCase();
+  final code = (design.themeCode ?? '').trim().toUpperCase();
+  return type == 'hand' || code == 'HND';
+}
 
 bool _isSlammer(DesignDetail design) {
   final type = (design.type ?? '').trim().toLowerCase();
@@ -165,14 +173,18 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen> {
       if ((seriesLabel ?? '').isNotEmpty) seriesLabel,
     ].join(' · ');
 
-    final slammer = design != null && _isSlammer(design);
+    final hand = design != null && _isHand(design);
+    final slammer = design != null && !hand && _isSlammer(design);
     if (slammer) _ensureStandings();
 
     return ModuleScreenRegistrar(
       appBarItems: [
         AppBarTitle(
           text: title,
-          iconAsset: slammer ? AppMarks.slammers : AppMarks.arcori,
+          icon: hand ? Icons.back_hand_outlined : null,
+          iconAsset: hand
+              ? null
+              : (slammer ? AppMarks.slammers : AppMarks.arcori),
         ),
       ],
       child: AppChromePage(
@@ -209,7 +221,36 @@ class _ArcoriDetailScreenState extends ConsumerState<ArcoriDetailScreen> {
                   AppSpacing.xxl,
                 ),
                 children: [
-                  if (design != null && slammer) ...[
+                  if (design != null && hand) ...[
+                    AppChromeSection(
+                      title: 'Hand',
+                      icon: Icons.back_hand_outlined,
+                      goldFrame: true,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Center(
+                            child: HandArt(
+                              imageUrl: design.imageUrl,
+                              width: 280,
+                              height: 180,
+                            ),
+                          ),
+                          AppSpacing.gapSm,
+                          Text(
+                            subtitle,
+                            textAlign: TextAlign.center,
+                            style: context.appTypography.body.copyWith(
+                              color: AppChrome.onSurfaceMuted,
+                            ),
+                          ),
+                          HandMarketAction(designId: widget.internalId),
+                          AppSpacing.gapMd,
+                          ..._detailRows(context, design),
+                        ],
+                      ),
+                    ),
+                  ] else if (design != null && slammer) ...[
                     _slammerHero(summary, subtitle),
                     AppSpacing.gapMd,
                     AppChromeSection(

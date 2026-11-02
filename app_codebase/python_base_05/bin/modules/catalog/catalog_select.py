@@ -465,10 +465,10 @@ def _is_playable_match_arcori(design: dict[str, Any]) -> bool:
     if not _is_circulating(design):
         return False
     theme_code = str(design.get("themeCode") or "").strip().upper()
-    if theme_code in {"SLM", "KIN"}:
+    if theme_code in {"SLM", "KIN", "HND"}:
         return False
     dtype = str(design.get("type") or "").strip().lower()
-    if dtype in {"slammer"}:
+    if dtype in {"slammer", "hand"}:
         return False
     return True
 

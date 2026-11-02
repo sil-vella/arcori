@@ -14,6 +14,7 @@ import '../../../core/widgets/economy_icon.dart';
 import '../../hub/hub_bottom_nav.dart';
 import '../../match/widgets/arcori_cylinder.dart';
 import '../../match/widgets/arcori_look.dart';
+import '../hand_art.dart';
 import '../market_api.dart';
 
 /// Market hub — Shop slammers (buy / recharge). Starter is not sold.
@@ -27,6 +28,8 @@ class MarketScreen extends ConsumerStatefulWidget {
 class _MarketScreenState extends ConsumerState<MarketScreen> {
   final _api = MarketApiClient();
   MarketSlammersList? _list;
+  List<MarketHandSku> _hands = const [];
+  String? _handsError;
   bool _loading = true;
   String? _error;
 
@@ -53,6 +56,7 @@ class _MarketScreenState extends ConsumerState<MarketScreen> {
       _error = null;
     });
     final outcome = await _api.fetchSlammers(accessToken: token);
+    final handsOutcome = await _api.fetchHands(accessToken: token);
     if (!mounted) return;
     if (!outcome.isSuccess) {
       setState(() {
@@ -66,6 +70,14 @@ class _MarketScreenState extends ConsumerState<MarketScreen> {
     setState(() {
       _loading = false;
       _list = outcome.data;
+      _hands = handsOutcome.isSuccess
+          ? (handsOutcome.data?.hands ?? const [])
+          : const [];
+      _handsError = handsOutcome.isSuccess
+          ? null
+          : (handsOutcome.isNetworkError
+                ? 'Network error'
+                : (handsOutcome.error?.message ?? 'Could not load hands'));
     });
   }
 
@@ -214,6 +226,18 @@ class _MarketScreenState extends ConsumerState<MarketScreen> {
                       ),
                     ),
                   ),
+                const SizedBox(height: AppSpacing.md),
+                _HandsShelf(
+                  hands: _hands,
+                  error: _handsError,
+                  onOpen: (sku) {
+                    final location =
+                        '${AppPaths.arcoriDetail}?id=${Uri.encodeQueryComponent(sku.designId)}';
+                    GoRouter.of(context).push(location).then((_) {
+                      if (mounted) _load();
+                    });
+                  },
+                ),
               ],
             ],
           ),
@@ -492,6 +516,124 @@ class _SlammerTile extends StatelessWidget {
                   ownedLine,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: context.appTypography.bodySmall.copyWith(
+                    color: sku.owned
+                        ? AppChrome.accentGold
+                        : AppChrome.onSurfaceMuted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HandsShelf extends StatelessWidget {
+  const _HandsShelf({
+    required this.hands,
+    required this.error,
+    required this.onOpen,
+  });
+
+  final List<MarketHandSku> hands;
+  final String? error;
+  final void Function(MarketHandSku sku) onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppChromeSection(
+      title: 'Hands',
+      icon: Icons.back_hand_outlined,
+      goldFrame: true,
+      child: error != null
+          ? Text(
+              error!,
+              style: context.appTypography.body.copyWith(
+                color: AppChrome.onSurfaceMuted,
+              ),
+            )
+          : hands.isEmpty
+          ? Text(
+              'No hands for sale yet.',
+              style: context.appTypography.body.copyWith(
+                color: AppChrome.onSurfaceMuted,
+              ),
+            )
+          : Column(
+              children: [
+                for (var i = 0; i < hands.length; i += 2) ...[
+                  if (i > 0) const SizedBox(height: AppSpacing.sm),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _HandTile(
+                          sku: hands[i],
+                          onOpen: () => onOpen(hands[i]),
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: i + 1 < hands.length
+                            ? _HandTile(
+                                sku: hands[i + 1],
+                                onOpen: () => onOpen(hands[i + 1]),
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+    );
+  }
+}
+
+class _HandTile extends StatelessWidget {
+  const _HandTile({required this.sku, required this.onOpen});
+
+  final MarketHandSku sku;
+  final VoidCallback onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final line = sku.owned
+        ? 'Owned'
+        : '${sku.shopPriceGoldArcori} Gold Arcori';
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onOpen,
+        borderRadius: BorderRadius.circular(AppRadii.lg),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppChrome.panelFill,
+            borderRadius: BorderRadius.circular(AppRadii.lg),
+            border: Border.all(color: AppChrome.panelBorderGold),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.sm),
+            child: Column(
+              children: [
+                HandArt(imageUrl: sku.imageUrl, width: 120, height: 80),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  sku.displayName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: context.appTypography.subtitle.copyWith(
+                    color: AppChrome.accentGold,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xxs),
+                Text(
+                  line,
                   textAlign: TextAlign.center,
                   style: context.appTypography.bodySmall.copyWith(
                     color: sku.owned

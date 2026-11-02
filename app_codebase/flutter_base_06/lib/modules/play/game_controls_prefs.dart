@@ -30,6 +30,7 @@ class GameControlsPrefs {
             );
 
   static const equippedSlammerKey = 'arcori_equipped_slammer_id';
+  static const equippedHandKey = 'arcori_equipped_hand_id';
   static const slamControlModeKey = 'arcori_slam_control_mode';
 
   final FlutterSecureStorage _storage;
@@ -48,6 +49,29 @@ class GameControlsPrefs {
     final trimmed = ensureGen001DesignId(id.trim());
     if (trimmed.isEmpty) return;
     await _storage.write(key: equippedSlammerKey, value: trimmed);
+  }
+
+  /// Empty means no hand. A hand is optional; a slammer is not.
+  Future<String> readEquippedHandId() async {
+    final v = await _storage.read(key: equippedHandKey);
+    if (v == null || v.trim().isEmpty) return '';
+    final canonical = ensureGen001DesignId(v);
+    if (canonical != v) {
+      await _storage.write(key: equippedHandKey, value: canonical);
+    }
+    return canonical;
+  }
+
+  Future<void> writeEquippedHandId(String id) async {
+    final trimmed = id.trim();
+    if (trimmed.isEmpty) {
+      await _storage.delete(key: equippedHandKey);
+      return;
+    }
+    await _storage.write(
+      key: equippedHandKey,
+      value: ensureGen001DesignId(trimmed),
+    );
   }
 
   Future<SlamControlMode> readSlamControlMode({
@@ -77,27 +101,34 @@ final gameControlsPrefsProvider = Provider<GameControlsPrefs>((ref) {
 class GameControlsState {
   const GameControlsState({
     required this.equippedSlammerId,
+    required this.equippedHandId,
     required this.slamControlMode,
     required this.loaded,
   });
 
   final String equippedSlammerId;
+
+  /// Catalog hand id, or empty when no hand is equipped.
+  final String equippedHandId;
   final SlamControlMode slamControlMode;
   final bool loaded;
 
   static const initial = GameControlsState(
     equippedSlammerId: stubSlammerId,
+    equippedHandId: '',
     slamControlMode: SlamControlMode.touch,
     loaded: false,
   );
 
   GameControlsState copyWith({
     String? equippedSlammerId,
+    String? equippedHandId,
     SlamControlMode? slamControlMode,
     bool? loaded,
   }) {
     return GameControlsState(
       equippedSlammerId: equippedSlammerId ?? this.equippedSlammerId,
+      equippedHandId: equippedHandId ?? this.equippedHandId,
       slamControlMode: slamControlMode ?? this.slamControlMode,
       loaded: loaded ?? this.loaded,
     );
@@ -116,12 +147,21 @@ class GameControlsNotifier extends Notifier<GameControlsState> {
   Future<void> _load() async {
     final motion = await probeSlamShakeAvailable();
     final slammer = await _prefs.readEquippedSlammerId();
+    final hand = await _prefs.readEquippedHandId();
     final mode = await _prefs.readSlamControlMode(motionAvailable: motion);
     state = GameControlsState(
       equippedSlammerId: slammer,
+      equippedHandId: hand,
       slamControlMode: mode,
       loaded: true,
     );
+  }
+
+  Future<void> setEquippedHandId(String id) async {
+    final trimmed = id.trim();
+    final canonical = trimmed.isEmpty ? '' : ensureGen001DesignId(trimmed);
+    await _prefs.writeEquippedHandId(canonical);
+    state = state.copyWith(equippedHandId: canonical, loaded: true);
   }
 
   Future<void> setEquippedSlammerId(String id) async {

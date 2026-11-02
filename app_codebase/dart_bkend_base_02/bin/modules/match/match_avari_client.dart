@@ -103,6 +103,78 @@ class MatchAvariClient {
     }
   }
 
+  /// userId → earliest owned hand design id. Users with no hand are omitted.
+  Future<Map<String, String>> ownedHands({
+    required List<String> userIds,
+  }) async {
+    final uri = Uri.parse('${_fastApi.baseUrl}/service/avari/owned_hands');
+    try {
+      final response = await _fastApi.client
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Service-Key': serviceKey(),
+            },
+            body: jsonEncode({'userIds': userIds}),
+          )
+          .timeout(const Duration(seconds: 10));
+      final body = jsonDecode(response.body);
+      if (body is! Map) {
+        throw AppError(
+          matchCatalogFreezeFailed,
+          message: 'Invalid owned_hands response',
+        );
+      }
+      final map = Map<String, dynamic>.from(body);
+      if (response.statusCode < 200 ||
+          response.statusCode >= 300 ||
+          map['ok'] != true) {
+        final err = map['error'];
+        final message = err is Map
+            ? (err['message']?.toString() ?? matchCatalogFreezeFailed.message)
+            : matchCatalogFreezeFailed.message;
+        throw AppError(matchCatalogFreezeFailed, message: message);
+      }
+      final data = map['data'];
+      if (data is! Map) {
+        throw AppError(
+          matchCatalogFreezeFailed,
+          message: 'owned_hands data missing',
+        );
+      }
+      final raw = data['hands'];
+      if (raw is! List) {
+        throw AppError(
+          matchCatalogFreezeFailed,
+          message: 'owned_hands list missing',
+        );
+      }
+      final out = <String, String>{};
+      for (final item in raw) {
+        if (item is! Map) continue;
+        final userId = item['userId']?.toString().trim() ?? '';
+        final handId = item['handId']?.toString().trim() ?? '';
+        if (userId.isEmpty || handId.isEmpty) continue;
+        out[userId] = handId;
+      }
+      if (LOGGING_SWITCH) {
+        customlog('match avari owned_hands ok count=${out.length}');
+      }
+      return out;
+    } on AppError {
+      rethrow;
+    } catch (e) {
+      if (LOGGING_SWITCH) {
+        customlog('match avari owned_hands error: $e');
+      }
+      throw AppError(
+        matchCatalogFreezeFailed,
+        message: 'owned_hands request failed: $e',
+      );
+    }
+  }
+
   /// Deduct one charge for a slam. Permanent / missing → noop success.
   /// Throws [matchSlammerNoCharges] when the equipped slammer is empty.
   Future<void> spendSlammerCharge({

@@ -14,6 +14,7 @@ from modules.avari import avari_repository as avari_repo
 from modules.avari.gold_economy import normalize_wallet
 from modules.catalog import catalog_repository as catalog_repo
 from modules.catalog.catalog_errors import NOT_FOUND as CATALOG_NOT_FOUND
+from modules.catalog.catalog_ids import ensure_typed_id
 from modules.catalog.catalog_service import get_design
 from modules.catalog.current_series import list_series_catalog
 from modules.market.market_errors import (
@@ -25,8 +26,10 @@ from modules.market.market_errors import (
     PERMANENT_NO_RECHARGE,
 )
 from modules.market.market_skus import (
+    is_shop_hand,
     is_shop_slammer,
     parse_slammer_economy,
+    shop_hand_price,
 )
 
 LOGGING_SWITCH = True
@@ -58,6 +61,26 @@ def _shop_slammer_ids(session: Session) -> list[str]:
         iid = str(row.internal_id or "").strip()
         design = dict(row.design_json or {})
         if is_shop_slammer(design, design_id=iid):
+            ids.append(iid)
+
+    def _serial(iid: str) -> tuple[int, str]:
+        tail = iid.rsplit("-", 1)[-1]
+        try:
+            return (int(tail), iid)
+        except ValueError:
+            return (10**9, iid)
+
+    ids.sort(key=_serial)
+    return ids
+
+
+def _shop_hand_ids(session: Session) -> list[str]:
+    """Catalog Shop hands, stable id order."""
+    ids: list[str] = []
+    for row in catalog_repo.list_by_theme_code(session, "HND"):
+        iid = str(row.internal_id or "").strip()
+        design = dict(row.design_json or {})
+        if is_shop_hand(design, design_id=iid):
             ids.append(iid)
 
     def _serial(iid: str) -> tuple[int, str]:
@@ -176,6 +199,94 @@ def list_market_slammers(session: Session, *, user_id: str) -> dict[str, Any]:
             )
         )
     return {"slammers": items, "goldArcori": gold_a, "goldFragments": gold_f}
+
+
+def list_market_hands(session: Session, *, user_id: str) -> dict[str, Any]:
+    """Hands for sale. Owned means a player_hands row, not a slammer row."""
+    avari = _ensure_avari(session, user_id)
+    gold_a, gold_f = normalize_wallet(
+        int(avari.gold_arcori), int(avari.gold_fragments)
+    )
+    owned_ids = {
+        str(row.design_id).strip() for row in avari_repo.list_hands(session, user_id)
+    }
+    items: list[dict[str, Any]] = []
+    for design_id in _shop_hand_ids(session):
+        design = _design_or_raise(design_id)
+        price = shop_hand_price(design)
+        if price is None:
+            continue
+        owned = design_id in owned_ids
+        display = str(design.get("design") or design_id).strip() or design_id
+        items.append(
+            {
+                "designId": design_id,
+                "displayName": display,
+                "series": _series_label(design),
+                "seriesOrder": _series_order(design),
+                "imageUrl": design.get("imageUrl"),
+                "color": design.get("color"),
+                "shopPriceGoldArcori": price,
+                "owned": owned,
+                "permanent": True,
+                "goldArcori": gold_a,
+                "canAffordPurchase": (not owned) and gold_a >= price,
+            }
+        )
+    return {"hands": items, "goldArcori": gold_a, "goldFragments": gold_f}
+
+
+def purchase_hand(
+    session: Session, *, user_id: str, design_id: str
+) -> dict[str, Any]:
+    raw = (design_id or "").strip()
+    if not raw:
+        raise AppError(INVALID_QUERY, message="designId required")
+    try:
+        did = ensure_typed_id(raw)
+    except ValueError as err:
+        raise AppError(INVALID_QUERY, message="designId required") from err
+
+    design = _design_or_raise(did)
+    price = shop_hand_price(design)
+    if price is None or not is_shop_hand(design, design_id=did):
+        raise AppError(NOT_FOR_SALE, message="That hand is not available in the Market")
+
+    owned = {
+        str(row.design_id).strip() for row in avari_repo.list_hands(session, user_id)
+    }
+    if did in owned:
+        raise AppError(ALREADY_OWNED, message="You already own this hand")
+
+    avari = _ensure_avari(session, user_id)
+    gold_a, gold_f = normalize_wallet(
+        int(avari.gold_arcori), int(avari.gold_fragments)
+    )
+    if gold_a < price:
+        raise AppError(
+            INSUFFICIENT_GOLD,
+            message=f"Need {price} Gold Arcori to buy this hand",
+        )
+    avari.gold_arcori = gold_a - price
+    avari.gold_fragments = gold_f
+    avari_repo.ensure_hand(
+        session,
+        user_id=user_id,
+        design_id=did,
+        source="market",
+    )
+    session.flush()
+    if LOGGING_SWITCH:
+        customlog(
+            f"market: purchase hand user={user_id} design={did} cost={price} "
+            f"goldArcori={avari.gold_arcori}"
+        )
+    return {
+        "designId": did,
+        "goldArcoriSpent": price,
+        "goldArcori": int(avari.gold_arcori),
+        "goldFragments": int(avari.gold_fragments),
+    }
 
 
 def purchase_slammer(

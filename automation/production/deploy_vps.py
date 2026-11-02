@@ -427,6 +427,7 @@ def main() -> None:
         f"{app_root}/data/postgres/tls",
         f"{app_root}/data/redis",
         f"{app_root}/data/uploads",
+        f"{app_root}/data/secrets",
         f"{app_root}/data/catalog-arcori",
         f"{app_root}/data/catalog-velora",
         f"{app_root}/data/catalog-kin",

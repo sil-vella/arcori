@@ -238,6 +238,14 @@
       "loreDescription": "Organized groups of makers, builders, traders, keepers, healers, or specialists."
     },
     {
+      "theme": "Hands",
+      "themeCode": "HND",
+      "subthemes": [
+        "Avari"
+      ],
+      "loreDescription": "Glowing hands an Avari can buy and wear on a slam."
+    },
+    {
       "theme": "Harbors",
       "themeCode": "HBR",
       "subthemes": [

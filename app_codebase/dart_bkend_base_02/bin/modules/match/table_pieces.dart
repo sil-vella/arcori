@@ -42,6 +42,7 @@ MatchSeat _seatWithSlammerFace(
     imageUrl: imageUrl.isNotEmpty ? imageUrl : seat.imageUrl,
     lottieUrl: lottieUrl.isNotEmpty ? lottieUrl : seat.lottieUrl,
     color: color.isNotEmpty ? color : seat.color,
+    handId: seat.handId,
   );
 }
 

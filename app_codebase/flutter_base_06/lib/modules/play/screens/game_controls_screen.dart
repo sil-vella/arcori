@@ -16,7 +16,7 @@ import '../slam_control_mode_ui.dart';
 
 const bool LOGGING_SWITCH = true; // ignore: constant_identifier_names
 
-/// Equipped slammer + exclusive slam control mode (accel vs touch).
+/// Equipped slammer, equipped hand, and exclusive slam control mode.
 class GameControlsScreen extends ConsumerStatefulWidget {
   const GameControlsScreen({super.key});
 
@@ -28,6 +28,7 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
   bool _loadingInventory = true;
   String? _inventoryError;
   List<(String id, String label)> _slammers = const [];
+  List<(String id, String label)> _hands = const [];
   bool? _motionAvailable;
 
   @override
@@ -46,6 +47,7 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
     if (token == null || token.isEmpty) {
       setState(() {
         _slammers = const [];
+        _hands = const [];
         _inventoryError = 'Sign in to load your slammers';
         _loadingInventory = false;
       });
@@ -65,6 +67,7 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
       }
       setState(() {
         _slammers = const [];
+        _hands = const [];
         _inventoryError = msg;
         _loadingInventory = false;
       });
@@ -76,6 +79,11 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
       if (s.designId.isEmpty) continue;
       items.add((s.designId, s.displayName));
     }
+    final hands = <(String, String)>[];
+    for (final hand in state.profile!.hands) {
+      if (hand.designId.isEmpty) continue;
+      hands.add((hand.designId, hand.displayName));
+    }
 
     final equipped = ref.read(gameControlsProvider).equippedSlammerId.trim();
     if (items.isNotEmpty && items.every((e) => e.$1 != equipped)) {
@@ -83,10 +91,21 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
           .read(gameControlsProvider.notifier)
           .setEquippedSlammerId(items.first.$1);
     }
+    final equippedHand = ref.read(gameControlsProvider).equippedHandId.trim();
+    if (hands.isEmpty) {
+      if (equippedHand.isNotEmpty) {
+        await ref.read(gameControlsProvider.notifier).setEquippedHandId('');
+      }
+    } else if (hands.every((e) => e.$1 != equippedHand)) {
+      await ref
+          .read(gameControlsProvider.notifier)
+          .setEquippedHandId(hands.first.$1);
+    }
 
     if (!mounted) return;
     setState(() {
       _slammers = items;
+      _hands = hands;
       _inventoryError = items.isEmpty
           ? 'No slammers in your collection yet.'
           : null;
@@ -98,7 +117,15 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
   Widget build(BuildContext context) {
     final prefs = ref.watch(gameControlsProvider);
     final equipped = prefs.equippedSlammerId;
+    final equippedHand = prefs.equippedHandId;
     final mode = prefs.slamControlMode;
+    final handOptions = List<(String, String)>.from(_hands);
+    String? handDropdownValue;
+    if (handOptions.isNotEmpty) {
+      handDropdownValue = handOptions.any((e) => e.$1 == equippedHand)
+          ? equippedHand
+          : handOptions.first.$1;
+    }
     final motionOk = _motionAvailable ?? false;
 
     final slammerOptions = List<(String, String)>.from(_slammers);
@@ -170,6 +197,49 @@ class _GameControlsScreenState extends ConsumerState<GameControlsScreen> {
                       Text(_inventoryError!, style: muted),
                     ],
                   ],
+                ],
+              ),
+            ),
+            AppSpacing.gapMd,
+            AppChromeSection(
+              title: 'Equipped hand',
+              goldFrame: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'From your collection. Worn under your slammer.',
+                    style: muted,
+                  ),
+                  AppSpacing.gapSm,
+                  if (_loadingInventory)
+                    const Center(child: CircularProgressIndicator())
+                  else if (handOptions.isEmpty)
+                    Text('No hands in your collection yet.', style: muted)
+                  else
+                    DropdownButtonFormField<String>(
+                      value: handDropdownValue,
+                      dropdownColor: AppChrome.fieldFill,
+                      style: context.appTypography.body.copyWith(
+                        color: AppChrome.onSurface,
+                      ),
+                      items: [
+                        for (final hand in handOptions)
+                          DropdownMenuItem(
+                            value: hand.$1,
+                            child: Text(hand.$2),
+                          ),
+                      ],
+                      onChanged: (id) {
+                        if (id == null) return;
+                        unawaited(
+                          ref
+                              .read(gameControlsProvider.notifier)
+                              .setEquippedHandId(id),
+                        );
+                      },
+                      decoration: AppChrome.inputDecoration(context),
+                    ),
                 ],
               ),
             ),

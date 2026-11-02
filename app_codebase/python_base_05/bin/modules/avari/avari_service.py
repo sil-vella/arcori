@@ -837,6 +837,7 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         sync_player_access_pool(session, uid)
         access_rows = repo.list_design_access(session, uid)
         slammer_rows = repo.list_slammers(session, uid)
+        hand_rows = repo.list_hands(session, uid)
         trove_rows = repo.list_trove(session, uid)
         closed_gen_rows = repo.list_closed_generations(session, uid)
 
@@ -1145,6 +1146,24 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
                     )
                     entry["rechargeCharges"] = DEFAULT_RECHARGE_CHARGES
             slammer_payload.append(entry)
+        hand_payload: list[dict[str, Any]] = []
+        seen_hands: set[str] = set()
+        for row in hand_rows:
+            design_id = str(row.design_id or "").strip()
+            if not design_id or design_id in seen_hands:
+                continue
+            seen_hands.add(design_id)
+            card = catalog_card_for_design(design_id) or {}
+            hand_payload.append(
+                {
+                    "designId": design_id,
+                    "displayName": card.get("displayName") or design_id,
+                    "imageUrl": card.get("imageUrl"),
+                    "color": card.get("color"),
+                    "source": row.source,
+                    "permanent": True,
+                }
+            )
         trove_payload = []
         for row in trove_rows:
             design_id = str(row.design_id or "").strip()
@@ -1295,6 +1314,7 @@ def get_avari_profile(user_id: str) -> dict[str, Any]:
         "preferences": preferences,
         "access": access_payload,
         "slammers": slammer_payload,
+        "hands": hand_payload,
         "trove": trove_payload,
         "closedGenerations": closed_generations_payload,
         "preservationWindows": preservation_windows_payload,

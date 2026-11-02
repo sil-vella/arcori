@@ -40,6 +40,7 @@ SERIES_MEDIA_FOLDERS: dict[str, str] = {
     "the_unrecognized": "005_the_unrecognized",
     "the_deadcats": "006_the_deadcats",
     "mushroom_deadcat": "007_mushroom_deadcat",
+    "avari_hands": "008_avari_hands",
 }
 
 # --- bump here when opening the next series for newly minted non-Kin Arcori ---

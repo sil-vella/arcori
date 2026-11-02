@@ -102,6 +102,64 @@ class MarketSlammersList {
   final int goldFragments;
 }
 
+class MarketHandSku {
+  const MarketHandSku({
+    required this.designId,
+    required this.displayName,
+    required this.series,
+    required this.shopPriceGoldArcori,
+    required this.owned,
+    this.imageUrl,
+    this.color,
+    this.canAffordPurchase = false,
+  });
+
+  factory MarketHandSku.fromJson(Map<String, dynamic> json) {
+    return MarketHandSku(
+      designId: json['designId']?.toString() ?? '',
+      displayName: json['displayName']?.toString() ?? '',
+      series: json['series']?.toString().trim() ?? '',
+      shopPriceGoldArcori: MarketSlammerSku._asInt(json['shopPriceGoldArcori']) ?? 0,
+      owned: json['owned'] == true,
+      imageUrl: json['imageUrl']?.toString(),
+      color: json['color']?.toString(),
+      canAffordPurchase: json['canAffordPurchase'] == true,
+    );
+  }
+
+  final String designId;
+  final String displayName;
+  final String series;
+  final int shopPriceGoldArcori;
+  final bool owned;
+  final String? imageUrl;
+  final String? color;
+  final bool canAffordPurchase;
+}
+
+class MarketHandsList {
+  const MarketHandsList({required this.hands, required this.goldArcori});
+
+  factory MarketHandsList.fromJson(Map<String, dynamic> json) {
+    final raw = json['hands'];
+    final list = <MarketHandSku>[];
+    if (raw is List) {
+      for (final item in raw) {
+        if (item is Map) {
+          list.add(MarketHandSku.fromJson(Map<String, dynamic>.from(item)));
+        }
+      }
+    }
+    return MarketHandsList(
+      hands: list,
+      goldArcori: MarketSlammerSku._asInt(json['goldArcori']) ?? 0,
+    );
+  }
+
+  final List<MarketHandSku> hands;
+  final int goldArcori;
+}
+
 class MarketPurchaseResult {
   const MarketPurchaseResult({
     required this.designId,
@@ -149,6 +207,35 @@ class MarketApiClient {
       }
       rethrow;
     }
+  }
+
+  Future<AvariApiOutcome<MarketHandsList>> fetchHands({
+    required String accessToken,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/authuser/market/hands');
+    try {
+      final response = await _client.get(
+        uri,
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
+      return _parseHands(response);
+    } on Exception catch (e) {
+      if (_isNetworkError(e)) {
+        return const AvariApiOutcome.networkFailure();
+      }
+      rethrow;
+    }
+  }
+
+  Future<AvariApiOutcome<MarketPurchaseResult>> purchaseHand({
+    required String accessToken,
+    required String designId,
+  }) async {
+    return _postDesign(
+      path: '/authuser/market/hands/purchase',
+      accessToken: accessToken,
+      designId: designId,
+    );
   }
 
   Future<AvariApiOutcome<MarketPurchaseResult>> purchase({
@@ -223,6 +310,35 @@ class MarketApiClient {
     }
     return AvariApiOutcome.success(
       MarketSlammersList.fromJson(Map<String, dynamic>.from(data)),
+    );
+  }
+
+  AvariApiOutcome<MarketHandsList> _parseHands(http.Response response) {
+    final envelope = _decodeEnvelope(response.body);
+    if (envelope == null) {
+      return AvariApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    if (envelope['ok'] != true) {
+      return AvariApiOutcome.failure(error: ApiError.fromEnvelope(envelope));
+    }
+    final data = envelope['data'];
+    if (data is! Map) {
+      return AvariApiOutcome.failure(
+        error: ApiError(
+          code: CoreApiErrorCode.internalError,
+          message: 'Invalid server response',
+          rawCode: 'internal_error',
+        ),
+      );
+    }
+    return AvariApiOutcome.success(
+      MarketHandsList.fromJson(Map<String, dynamic>.from(data)),
     );
   }
 

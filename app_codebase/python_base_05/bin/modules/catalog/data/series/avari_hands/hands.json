@@ -1,0 +1,138 @@
+{
+  "catalog": "Avari Hands",
+  "theme": "Hands",
+  "series": "Avari Hands",
+  "themeCode": "HND",
+  "version": 1,
+  "designs": [
+    {
+      "internalId": "ARC-HND-CLG-SER008-GEN001-0001",
+      "themeCode": "HND",
+      "designCode": "CLG",
+      "designFamily": "CELESTIAL_GOLD_HAND",
+      "design": "Celestial Gold Hand",
+      "inspiration": null,
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Hand",
+      "theme": "Hands",
+      "subtheme": "Avari",
+      "style": "Luminous",
+      "finish": "Celestial",
+      "color": "#E0B88B",
+      "effect": "Glow",
+      "selectionWeight": 0.01,
+      "origin": "Shop",
+      "series": "Avari Hands",
+      "worldState": "Cosmetic",
+      "seasonState": "Active",
+      "economy": {
+        "permanent": true,
+        "shopPriceGoldArcori": 4
+      },
+      "artworkPrompt": "Glowing celestial gold hand, transparent background, webp HND-CLG-SER008-0001.webp",
+      "loreDescription": "A celestial gold hand. Worn on a slam. It does not change the strike."
+    },
+    {
+      "internalId": "ARC-HND-CPR-SER008-GEN001-0002",
+      "themeCode": "HND",
+      "designCode": "CPR",
+      "designFamily": "COPPER_ARCANE_HAND",
+      "design": "Copper Arcane Hand",
+      "inspiration": null,
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Hand",
+      "theme": "Hands",
+      "subtheme": "Avari",
+      "style": "Arcane",
+      "finish": "Copper",
+      "color": "#AF653A",
+      "effect": "Glow",
+      "selectionWeight": 0.01,
+      "origin": "Shop",
+      "series": "Avari Hands",
+      "worldState": "Cosmetic",
+      "seasonState": "Active",
+      "economy": {
+        "permanent": true,
+        "shopPriceGoldArcori": 4
+      },
+      "artworkPrompt": "Glowing copper arcane hand, transparent background, webp HND-CPR-SER008-0002.webp",
+      "loreDescription": "A copper arcane hand. Worn on a slam. It does not change the strike."
+    },
+    {
+      "internalId": "ARC-HND-LCY-SER008-GEN001-0003",
+      "themeCode": "HND",
+      "designCode": "LCY",
+      "designFamily": "LUMINOUS_CYBERNETIC_HAND",
+      "design": "Luminous Cybernetic Hand",
+      "inspiration": null,
+      "location": {
+        "regionCode": null,
+        "locationCode": null,
+        "latitude": null,
+        "longitude": null,
+        "radiusMeters": null
+      },
+      "affinity": [],
+      "hostility": [],
+      "generation": {
+        "roman": "I",
+        "number": 1,
+        "creator": {
+          "type": "system",
+          "playerId": null
+        }
+      },
+      "type": "Hand",
+      "theme": "Hands",
+      "subtheme": "Avari",
+      "style": "Cybernetic",
+      "finish": "Luminous",
+      "color": "#6B6561",
+      "effect": "Glow",
+      "selectionWeight": 0.01,
+      "origin": "Shop",
+      "series": "Avari Hands",
+      "worldState": "Cosmetic",
+      "seasonState": "Active",
+      "economy": {
+        "permanent": true,
+        "shopPriceGoldArcori": 4
+      },
+      "artworkPrompt": "Luminous arcane cybernetic hand, transparent background, webp HND-LCY-SER008-0003.webp",
+      "loreDescription": "A luminous cybernetic hand. Worn on a slam. It does not change the strike."
+    }
+  ]
+}

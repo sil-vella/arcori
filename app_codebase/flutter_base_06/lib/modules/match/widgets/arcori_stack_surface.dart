@@ -15,6 +15,7 @@ import '../input/turn_pacing.dart';
 import 'arcori_disc.dart' show ArcoriDisc, faceUpFromQuat;
 import 'arcori_look.dart';
 import 'arena_pov_backdrop.dart';
+import 'hand_under_slammer.dart';
 import 'match_player_chrome.dart';
 import 'slammer_strike_overlay.dart';
 
@@ -37,6 +38,9 @@ class ArcoriStackSurface extends StatefulWidget {
     this.worldScale = 1.0,
     this.strikeLook,
     this.strikeLottieUrl,
+    this.strikeHandImageUrl,
+    this.strikeHandAspect = 768 / 512,
+    this.strikeHandDock = SlammerDockSide.top,
     this.strikeFrom = Alignment.bottomCenter,
     this.strikeHomeOffset,
     this.strikeToken,
@@ -73,6 +77,11 @@ class ArcoriStackSurface extends StatefulWidget {
   /// Equipped slammer look for the pre-scatter strike beat.
   final ArcoriLook? strikeLook;
   final String? strikeLottieUrl;
+
+  /// Hand worn under [strikeLook]. Empty leaves the disc bare.
+  final String? strikeHandImageUrl;
+  final double strikeHandAspect;
+  final SlammerDockSide strikeHandDock;
   final Alignment strikeFrom;
 
   /// Pixel offset from stack center to rest beside the acting player's avatar
@@ -972,6 +981,9 @@ class _ArcoriStackSurfaceState extends State<ArcoriStackSurface>
                           qz: _slammerQuat.z,
                           qw: _slammerQuat.w,
                           size: slammerSize,
+                          handImageUrl: widget.strikeHandImageUrl,
+                          handAspect: widget.strikeHandAspect,
+                          handDock: widget.strikeHandDock,
                           faceUpOverride: _slammerPhase ==
                                       SlammerArenaPhase.scatter ||
                                   _slammerPhase == SlammerArenaPhase.returnHome

@@ -77,3 +77,41 @@ def is_shop_slammer(design: dict[str, Any] | None, *, design_id: str = "") -> bo
     if theme == "SLM" or dtype == "slammer" or iid.upper().startswith("SLM-"):
         return True
     return False
+
+
+def shop_hand_price(design: dict[str, Any] | None) -> int | None:
+    """Explicit Gold Arcori price. Missing price stays off the shelf."""
+    if not isinstance(design, dict):
+        return None
+    eco = design.get("economy") if isinstance(design.get("economy"), dict) else {}
+    value = eco.get("shopPriceGoldArcori")
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, int):
+        return value if value >= 0 else None
+    if isinstance(value, float):
+        return int(value) if value >= 0 else None
+    if isinstance(value, str) and value.strip().isdigit():
+        return int(value.strip())
+    return None
+
+
+def is_shop_hand(design: dict[str, Any] | None, *, design_id: str = "") -> bool:
+    """True when this catalog design is a hand sold once on the Market.
+
+    Hands are permanent cosmetics. They are not shop slammers and have no charges.
+    """
+    if not isinstance(design, dict):
+        return False
+    if is_shop_slammer(design, design_id=design_id):
+        return False
+    iid = (design_id or str(design.get("internalId") or "")).strip()
+    origin = str(design.get("origin") or "").strip().lower()
+    if origin != "shop":
+        return False
+    theme = str(design.get("themeCode") or "").strip().upper()
+    dtype = str(design.get("type") or "").strip().lower()
+    upper = iid.upper()
+    if theme != "HND" and dtype != "hand" and "-HND-" not in upper:
+        return False
+    return shop_hand_price(design) is not None
